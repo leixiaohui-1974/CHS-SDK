@@ -1,24 +1,37 @@
 """
-Simulation model for a Gate.
+Simulation model for a Gate that can be controlled via a MessageBus.
 """
-from typing import Any
+from typing import Any, Optional
 from swp.core.interfaces import Simulatable, State, Parameters
+from swp.central_coordination.collaboration.message_bus import MessageBus, Message
 
 class Gate(Simulatable):
     """
     Represents a gate, a fundamental control object in a water system.
 
-    Its state is typically its opening percentage. The control action is the
-    command to change the opening. The gate's behavior (e.g., discharge)
-    depends on its own state and the state of connected objects (e.g., upstream
-    and downstream water levels).
+    This version is enhanced to be a more autonomous component. It can subscribe
+    to an action topic on the message bus to receive control commands, making it
+    suitable for a decoupled, event-driven MAS architecture.
     """
 
-    def __init__(self, gate_id: str, initial_state: State, params: Parameters):
+    def __init__(self, gate_id: str, initial_state: State, params: Parameters,
+                 message_bus: Optional[MessageBus] = None, action_topic: Optional[str] = None):
         self.gate_id = gate_id
         self._state = initial_state
         self._params = params
+        self._action = {'target_opening': initial_state.get('opening', 0)} # Initialize with current state
         print(f"Gate '{self.gate_id}' created with initial state {self._state}.")
+
+        if message_bus and action_topic:
+            message_bus.subscribe(action_topic, self.handle_action_message)
+            print(f"Gate '{self.gate_id}' subscribed to action topic '{action_topic}'.")
+
+    def handle_action_message(self, message: Message):
+        """Callback to handle incoming control action messages."""
+        target_opening = message.get('control_signal')
+        if target_opening is not None:
+            self._action['target_opening'] = target_opening
+            # print(f"[{self.gate_id}] Received new action: {self._action}")
 
     def step(self, action: Any, dt: float) -> State:
         """
@@ -34,8 +47,9 @@ class Gate(Simulatable):
         Returns:
             The updated state of the gate.
         """
-        # Placeholder logic: gate moves towards target opening at a max rate
-        target_opening = action.get('target_opening', self._state.get('opening', 0))
+        # In this event-driven version, the action is received from the message bus
+        # and stored in self._action, so the 'action' parameter is ignored.
+        target_opening = self._action.get('target_opening', self._state.get('opening', 0))
         current_opening = self._state.get('opening', 0)
         max_rate = self._params.get('max_rate_of_change', 0.05) # 5% per second
 

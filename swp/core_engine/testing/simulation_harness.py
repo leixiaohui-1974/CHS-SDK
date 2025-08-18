@@ -31,18 +31,79 @@ class SimulationHarness:
                     time step, and components involved.
         """
         self.sim_config = config
-        # In a real implementation, the components would be passed in or built by a factory
         self.components = []
-        self.controllers = {} # Maps controlled object id to a controller
+        self.agents = []
+        self.controllers = {} # Kept for backward compatibility with run_simulation
         print("SimulationHarness created.")
 
     def add_component(self, component: Any):
         """Adds a simulatable component to the harness."""
         self.components.append(component)
 
+    def add_agent(self, agent: Any):
+        """Adds an agent to the harness."""
+        self.agents.append(agent)
+
     def add_controller(self, controlled_object_id: str, controller: Any):
         """Adds a controller and links it to a component."""
         self.controllers[controlled_object_id] = controller
+
+    def run_mas_simulation(self):
+        """
+        Executes a true Multi-Agent System (MAS) simulation.
+
+        In this mode, the harness is only a timekeeper and physics engine.
+        - It calls `run()` on all agents, which triggers their communication.
+        - It calls `step()` on all physical models, which have received their
+          actions via the message bus.
+        This decouples all components and relies on event-driven communication.
+        """
+        duration = self.sim_config.get('duration', 100)
+        dt = self.sim_config.get('dt', 1)
+        num_steps = int(duration / dt)
+
+        print(f"Starting MAS simulation: Duration={duration}s, TimeStep={dt}s")
+
+        # --- Main Simulation Loop ---
+        for i in range(num_steps):
+            current_time = i * dt
+            print(f"\n--- MAS Simulation Step {i+1}, Time: {current_time:.2f}s ---")
+
+            # 1. Run all agents. This is the "thinking" phase.
+            # DigitalTwinAgents will publish their state.
+            # LocalControlEvents will receive state and publish actions.
+            print("  Phase 1: Running Agents (Thinking)")
+            for agent in self.agents:
+                agent.run()
+
+            # 2. Step all physical models. This is the "acting" phase.
+            # Models will use the actions they've received from the message bus.
+            print("  Phase 2: Stepping Physical Models (Acting)")
+            # A fixed inflow is assumed for the reservoir for this example
+            inflow = 50
+            outflow = 0
+
+            # This interaction logic is still simplified.
+            # A full implementation might have the reservoir subscribe to an outflow topic.
+            reservoir = next((c for c in self.components if isinstance(c, Reservoir)), None)
+            gate = next((c for c in self.components if isinstance(c, Gate)), None)
+
+            if gate and reservoir:
+                # Gate calculates its discharge based on its own state and upstream level
+                outflow = gate.calculate_discharge(reservoir.get_state().get('water_level', 0), 0)
+                print(f"  Interaction: Calculated discharge from '{gate.gate_id}' = {outflow:.3f} m^3/s")
+                reservoir_action = {'inflow': inflow, 'outflow': outflow}
+                reservoir.step(reservoir_action, dt)
+
+            # The gate step is simple as it received its action from the bus
+            if gate:
+                gate.step(None, dt) # Action is ignored, uses internal state from bus message
+
+            print(f"  State Update: Reservoir level = {reservoir.get_state().get('water_level'):.3f}m, Gate opening = {gate.get_state().get('opening'):.3f}")
+
+            time.sleep(0.01)
+
+        print("\nMAS Simulation finished.")
 
     def run_simulation(self):
         """

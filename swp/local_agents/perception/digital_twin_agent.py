@@ -1,50 +1,52 @@
 """
-Digital Twin Agent for state synchronization.
+Digital Twin Agent for state synchronization and publication.
 """
 from swp.core.interfaces import Agent, Simulatable, State
+from swp.central_coordination.collaboration.message_bus import MessageBus, Message
 
 class DigitalTwinAgent(Agent):
     """
     A Perception Agent that acts as a digital twin for a physical object.
 
-    Its primary responsibility is to maintain an internal simulation model
-    and keep its state synchronized with the real physical system by processing
-    incoming sensor data. It provides the most up-to-date state estimate
-    to other agents (e.g., control agents).
+    Its primary responsibility is to maintain an internal simulation model and
+    publish its state to the message bus, simulating a real-world sensor feed.
+    It can also subscribe to topics to update its state from other sources if needed.
     """
 
-    def __init__(self, agent_id: str, simulated_object: Simulatable):
+    def __init__(self, agent_id: str, simulated_object: Simulatable, message_bus: MessageBus, state_topic: str):
+        """
+        Initializes the DigitalTwinAgent.
+
+        Args:
+            agent_id: The unique ID of this agent.
+            simulated_object: The simulation model this agent is a twin of.
+            message_bus: The system's message bus for communication.
+            state_topic: The topic on which to publish the object's state.
+        """
         super().__init__(agent_id)
         self.model = simulated_object
-        print(f"DigitalTwinAgent '{self.agent_id}' created for model '{getattr(simulated_object, 'id', 'N/A')}'.")
+        self.bus = message_bus
+        self.state_topic = state_topic
+        # Get the ID from the model, which could be 'reservoir_id', 'gate_id', etc.
+        model_id = getattr(self.model, next((attr for attr in dir(self.model) if '_id' in attr), 'id'))
+        print(f"DigitalTwinAgent '{self.agent_id}' created for model '{model_id}'. Will publish state to '{self.state_topic}'.")
 
-    def update_state_from_sensor(self, sensor_data: State):
+    def publish_state(self):
         """
-        Updates the internal model's state based on new sensor data.
-
-        In a real system, this would involve data fusion, filtering (e.g., Kalman filter),
-        and might trigger online parameter identification.
+        Fetches the current state from the internal model and publishes it.
         """
-        print(f"[{self.agent_id}] Received sensor data: {sensor_data}. Updating model state.")
-        self.model.set_state(sensor_data)
-
-    def get_current_state(self) -> State:
-        """
-        Provides the current best estimate of the object's state.
-        """
-        return self.model.get_state()
+        current_state = self.model.get_state()
+        message: Message = current_state
+        # print(f"[{self.agent_id}] Publishing state to '{self.state_topic}': {message}")
+        self.bus.publish(self.state_topic, message)
 
     def run(self):
         """
-        The main loop for the agent.
+        The main execution logic for the agent.
 
-        In a real deployment, this would run continuously, listening for sensor data
-        from a message bus or other data source.
+        In a simulation context, this method would be called at each time step
+        by the harness to make the agent publish its current state. This simulates
+        a sensor broadcasting its reading periodically.
         """
-        print(f"DigitalTwinAgent '{self.agent_id}' is running.")
-        # This is a placeholder. A real agent would have a loop here, e.g.:
-        # while True:
-        #   sensor_data = self.message_bus.listen()
-        #   self.update_state_from_sensor(sensor_data)
-        #   time.sleep(1)
-        pass
+        # print(f"DigitalTwinAgent '{self.agent_id}' run() called.")
+        self.publish_state()
