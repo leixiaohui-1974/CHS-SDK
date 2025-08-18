@@ -77,7 +77,8 @@ def run_reservoir_control_example():
     # This demonstrates the "pluggable" nature of the architecture.
     harness.add_component(reservoir)
     harness.add_component(gate)
-    harness.add_controller(controlled_object_id="reservoir_1", controller=pid_controller)
+    # The new harness associates the controller directly with the component it controls.
+    harness.add_controller(controlled_object_id="gate_1", controller=pid_controller)
 
     # 5. Run the simulation
     harness.run_simulation()
