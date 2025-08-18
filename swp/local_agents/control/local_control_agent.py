@@ -4,6 +4,7 @@ via a message bus.
 """
 from swp.core.interfaces import Agent, Controller, State
 from swp.central_coordination.collaboration.message_bus import MessageBus, Message
+from typing import Optional
 
 class LocalControlAgent(Agent):
     """
@@ -12,11 +13,12 @@ class LocalControlAgent(Agent):
     This agent formalizes the concept of a controller in a Multi-Agent System.
     It wraps a specific control algorithm (a `Controller` implementation) and
     handles the communication (subscribing to sensor data, publishing actions)
-    needed for it to operate.
+    needed for it to operate. It can also subscribe to a command topic to
+    receive high-level directives from a central dispatcher.
     """
 
     def __init__(self, agent_id: str, controller: Controller, message_bus: MessageBus,
-                 observation_topic: str, action_topic: str):
+                 observation_topic: str, action_topic: str, command_topic: Optional[str] = None):
         """
         Initializes the LocalControlAgent.
 
@@ -26,6 +28,7 @@ class LocalControlAgent(Agent):
             message_bus: The system's message bus for communication.
             observation_topic: The topic to listen to for state updates.
             action_topic: The topic to publish control actions to.
+            command_topic: The topic to listen to for high-level commands.
         """
         super().__init__(agent_id)
         self.controller = controller
@@ -33,10 +36,19 @@ class LocalControlAgent(Agent):
         self.observation_topic = observation_topic
         self.action_topic = action_topic
 
-        # The agent subscribes to its observation topic upon creation
         self.bus.subscribe(self.observation_topic, self.handle_observation)
+        print(f"LocalControlAgent '{self.agent_id}' created. Subscribed to observation topic '{observation_topic}'.")
 
-        print(f"LocalControlAgent '{self.agent_id}' created. Subscribed to '{observation_topic}'.")
+        if command_topic:
+            self.bus.subscribe(command_topic, self.handle_command_message)
+            print(f"LocalControlAgent '{self.agent_id}' also subscribed to command topic '{command_topic}'.")
+
+    def handle_command_message(self, message: Message):
+        """Callback to handle incoming high-level commands."""
+        new_setpoint = message.get('new_setpoint')
+        if new_setpoint is not None and hasattr(self.controller, 'set_setpoint'):
+            print(f"[{self.agent_id}] Received new command: Set setpoint to {new_setpoint}")
+            self.controller.set_setpoint(new_setpoint)
 
     def handle_observation(self, message: Message):
         """

@@ -55,3 +55,16 @@ class PIDController(Controller):
 
         # print(f"PID: Setpoint={self.setpoint}, PV={process_variable}, Output={output}")
         return output
+
+    def set_setpoint(self, new_setpoint: float):
+        """
+        Updates the controller's setpoint.
+
+        Args:
+            new_setpoint: The new target value for the system state.
+        """
+        print(f"PIDController setpoint updated from {self.setpoint} to {new_setpoint}.")
+        self.setpoint = new_setpoint
+        # Reset integral and derivative terms to prevent sudden jumps in output
+        self._integral = 0
+        self._previous_error = 0

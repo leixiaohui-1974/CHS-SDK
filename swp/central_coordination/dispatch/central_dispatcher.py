@@ -1,56 +1,73 @@
 """
-Central Dispatcher Agent for high-level coordination.
+Central Dispatcher Agent for hierarchical, high-level coordination.
 """
-from typing import List
-from swp.core.interfaces import Agent
+from swp.core.interfaces import Agent, State
+from swp.central_coordination.collaboration.message_bus import MessageBus, Message
+from typing import Dict
 
 class CentralDispatcher(Agent):
     """
     The central coordinating agent for the entire water system.
 
-    It is responsible for:
-    - High-level strategic planning (e.g., setting water level targets for reservoirs).
-    - Multi-objective optimization (e.g., balancing water supply, flood control, and power generation).
-    - Tasking and coordinating local control agents.
+    It operates at a higher level than local controllers. It subscribes to key
+    system state information and uses a high-level strategy (e.g., rules, optimization)
+    to send updated commands (like new setpoints) to the local agents.
     """
 
-    def __init__(self, agent_id: str, controlled_agents: List[Agent]):
+    def __init__(self, agent_id: str, message_bus: MessageBus, state_subscriptions: Dict[str, str],
+                 command_topics: Dict[str, str], rules: Dict):
+        """
+        Initializes the CentralDispatcher.
+
+        Args:
+            agent_id: The unique ID for this agent.
+            message_bus: The system's message bus.
+            state_subscriptions: A dict mapping state names to topic names this agent should listen to.
+                                 e.g., {'reservoir_level': 'state.reservoir.level'}
+            command_topics: A dict mapping command names to the topics to publish them on.
+                            e.g., {'gate1_command': 'command.gate1'}
+            rules: A dictionary defining the high-level control strategy.
+        """
         super().__init__(agent_id)
-        self.controlled_agents = controlled_agents
-        print(f"CentralDispatcher '{self.agent_id}' created to coordinate {len(controlled_agents)} agents.")
+        self.bus = message_bus
+        self.command_topics = command_topics
+        self.rules = rules
+        self.latest_state = {}
+
+        for state_name, topic in state_subscriptions.items():
+            # Use a lambda to capture the state_name for the handler
+            self.bus.subscribe(topic, lambda msg, name=state_name: self.handle_state_message(msg, name))
+
+        print(f"CentralDispatcher '{self.agent_id}' created.")
+
+    def handle_state_message(self, message: Message, state_name: str):
+        """Stores the latest received state from a subscribed topic."""
+        self.latest_state[state_name] = message
+        # print(f"[{self.agent_id}] Updated state '{state_name}': {message}")
 
     def run(self):
         """
-        The main execution loop for the dispatcher.
+        The main execution loop for the dispatcher. At each step, it evaluates
+        its rules based on the latest state and publishes new commands if necessary.
+        """
+        reservoir_level = self.latest_state.get('reservoir_level', {}).get('water_level')
 
-        In a real system, this would run periodically (e.g., every hour) to
-        re-evaluate the system state and issue new high-level commands.
-        """
-        print(f"CentralDispatcher '{self.agent_id}' is running.")
-        self.perform_global_optimization()
+        if reservoir_level is None:
+            # Not enough information to make a decision yet
+            return
 
-    def perform_global_optimization(self):
-        """
-        Performs a system-wide optimization to determine optimal strategy.
+        # Simple rule-based logic for demonstration
+        # IF reservoir level is high, take conservative action.
+        # ELSE, aim for the normal operating level.
+        flood_threshold = self.rules.get('flood_threshold', 20.0)
+        normal_setpoint = self.rules.get('normal_setpoint', 15.0)
+        flood_setpoint = self.rules.get('flood_setpoint', 12.0)
 
-        This would involve complex algorithms like Model Predictive Control (MPC)
-        or Reinforcement Learning (RL) applied to the entire system model.
-        """
-        print(f"[{self.agent_id}] Performing global optimization...")
-        # Placeholder: Generate new high-level commands for local agents.
-        # For example, tell a local controller to change its setpoint.
-        for agent in self.controlled_agents:
-            # This is a conceptual interaction. In a real system, this would
-            # be done via a message bus.
-            new_setpoint = self.calculate_new_setpoint_for(agent)
-            print(f"[{self.agent_id}] Sending new setpoint {new_setpoint} to agent '{agent.agent_id}'.")
-            # agent.update_setpoint(new_setpoint) # Conceptual method call
+        target_setpoint = flood_setpoint if reservoir_level > flood_threshold else normal_setpoint
 
-    def calculate_new_setpoint_for(self, agent: Agent) -> float:
-        """
-        Calculates a new optimal setpoint for a given local agent.
-        Placeholder implementation.
-        """
-        # In a real system, this would be the result of the optimization.
-        # For now, just a dummy value.
-        return 10.0 # e.g., target water level of 10.0 meters
+        command_message: Message = {'new_setpoint': target_setpoint}
+        command_topic = self.command_topics.get('gate1_command')
+
+        if command_topic:
+            print(f"[{self.agent_id}] Reservoir level is {reservoir_level:.2f}m. Commanding setpoint: {target_setpoint:.2f}m")
+            self.bus.publish(command_topic, command_message)
