@@ -21,7 +21,6 @@ from swp.simulation_identification.physical_objects.gate import Gate
 from swp.local_agents.control.pid_controller import PIDController
 from swp.local_agents.control.local_control_agent import LocalControlAgent
 from swp.local_agents.perception.digital_twin_agent import DigitalTwinAgent
-from swp.central_coordination.collaboration.message_bus import MessageBus
 from swp.core_engine.testing.simulation_harness import SimulationHarness
 
 def run_mas_example():
@@ -30,31 +29,36 @@ def run_mas_example():
     """
     print("--- Setting up the MAS Example ---")
 
-    # 1. Create the central communication channel
-    message_bus = MessageBus()
+    # The harness now creates and owns the message bus
+    simulation_config = {'duration': 300, 'dt': 1.0}
+    harness = SimulationHarness(config=simulation_config)
+    message_bus = harness.message_bus # Get a reference to the bus
 
     # 2. Define topics for communication
-    # Topics are strings that agents use to filter messages.
     RESERVOIR_STATE_TOPIC = "state.reservoir.level"
     GATE_ACTION_TOPIC = "action.gate.opening"
 
     # 3. Create the physical components
-    # The Gate is now message-bus-aware and subscribes to its action topic.
+    gate_params = {
+        'max_rate_of_change': 0.1,
+        'discharge_coefficient': 0.6,
+        'width': 10,
+        'max_opening': 1.0
+    }
     reservoir = Reservoir(
         reservoir_id="reservoir_1",
-        initial_state={'volume': 15e6, 'water_level': 10.0},
+        initial_state={'volume': 21e6, 'water_level': 14.0}, # Start high
         params={'surface_area': 1.5e6}
     )
     gate = Gate(
         gate_id="gate_1",
         initial_state={'opening': 0.1},
-        params={'max_rate_of_change': 0.05, 'discharge_coefficient': 0.6, 'width': 10},
-        message_bus=message_bus,
+        params=gate_params,
+        message_bus=message_bus, # The gate needs the bus to get actions
         action_topic=GATE_ACTION_TOPIC
     )
 
     # 4. Create the Agents
-    # The DigitalTwinAgent will publish the reservoir's state.
     twin_agent = DigitalTwinAgent(
         agent_id="twin_agent_reservoir_1",
         simulated_object=reservoir,
@@ -62,25 +66,25 @@ def run_mas_example():
         state_topic=RESERVOIR_STATE_TOPIC
     )
 
-    # The LocalControlAgent wraps a PID controller and communicates for it.
-    pid_controller = PIDController(Kp=0.4, Ki=0.02, Kd=0.1, setpoint=12.0)
+    # Controller is reverse-acting (opening gate lowers level)
+    pid_controller = PIDController(
+        Kp=-0.5, Ki=-0.01, Kd=-0.1, setpoint=12.0,
+        min_output=0.0, max_output=gate_params['max_opening']
+    )
+
     control_agent = LocalControlAgent(
         agent_id="control_agent_gate_1",
         controller=pid_controller,
         message_bus=message_bus,
         observation_topic=RESERVOIR_STATE_TOPIC,
-        action_topic=GATE_ACTION_TOPIC
+        observation_key='water_level', # Important: tell agent what to look for
+        action_topic=GATE_ACTION_TOPIC,
+        dt=harness.dt # Agent needs to know the time step
     )
 
-    # 5. Set up the Simulation Harness in MAS mode
-    simulation_config = {'duration': 300, 'dt': 1.0}
-    harness = SimulationHarness(config=simulation_config)
-
-    # Add the physical models (components that are "Simulatable")
+    # 5. Add components and agents to the harness
     harness.add_component(reservoir)
     harness.add_component(gate)
-
-    # Add the agents
     harness.add_agent(twin_agent)
     harness.add_agent(control_agent)
 

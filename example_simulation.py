@@ -31,8 +31,8 @@ def run_reservoir_control_example():
         'surface_area': 1.5e6, # m^2
     }
     reservoir_initial_state = {
-        'volume': 15e6, # m^3
-        'water_level': 10.0 # m
+        'volume': 21e6, # m^3, equivalent to 14m * 1.5e6 m^2
+        'water_level': 14.0 # m, start above the setpoint
     }
     reservoir = Reservoir(
         reservoir_id="reservoir_1",
@@ -58,11 +58,15 @@ def run_reservoir_control_example():
     # 2. Define the controller
 
     # PID Controller to maintain the reservoir water level at 12 meters
+    # The gains are negative because it's a reverse-acting process
+    # (opening the gate lowers the water level).
     pid_controller = PIDController(
-        Kp=0.5, # Proportional gain
-        Ki=0.01, # Integral gain
-        Kd=0.1,  # Derivative gain
-        setpoint=12.0 # Target water level in meters
+        Kp=-0.5, # Proportional gain
+        Ki=-0.01, # Integral gain
+        Kd=-0.1,  # Derivative gain
+        setpoint=12.0, # Target water level in meters
+        min_output=0.0,
+        max_output=1.0 # Gate opening is a percentage
     )
 
     # 3. Set up the Simulation Harness
@@ -77,8 +81,14 @@ def run_reservoir_control_example():
     # This demonstrates the "pluggable" nature of the architecture.
     harness.add_component(reservoir)
     harness.add_component(gate)
-    # The new harness associates the controller directly with the component it controls.
-    harness.add_controller(controlled_object_id="gate_1", controller=pid_controller)
+    # Add the controller and define its wiring
+    harness.add_controller(
+        controller_id="pid_for_gate1",
+        controller=pid_controller,
+        controlled_id="gate_1",
+        observed_id="reservoir_1",
+        observation_key="water_level"
+    )
 
     # 5. Run the simulation
     harness.run_simulation()

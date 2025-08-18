@@ -8,7 +8,7 @@ In our previous examples, the `SimulationHarness` acted as a central orchestrato
 
 The MAS architecture changes this paradigm:
 - **Agents are independent**: They don't know about each other; they only know about the `MessageBus`.
-- **Communication is asynchronous**: Agents publish information (messages) to named "topics" and subscribe to the topics they care about. This is known as the **Publish/Subscribe** pattern.
+- **Communication is event-driven**: Agents publish information (messages) to named "topics" and subscribe to the topics they care about. This is known as the **Publish/Subscribe** pattern.
 - **The Harness is simplified**: The `SimulationHarness` becomes a simple timekeeper and physics engine. It no longer contains control logic.
 
 This is a powerful concept that mirrors how real-world distributed control systems are built.
@@ -18,32 +18,11 @@ This is a powerful concept that mirrors how real-world distributed control syste
 Let's look at the new and upgraded components that make this possible.
 
 ### 2.1. The `MessageBus`
-The `MessageBus` is the central nervous system of our platform. All agents connect to it. An agent can `publish` a message to a specific topic (e.g., `"state.reservoir.level"`) and `subscribe` to any topic it's interested in. When a message is published to a topic, the bus ensures all subscribers to that topic receive the message.
+The `MessageBus` is the central nervous system of our platform. All agents and message-aware components connect to it. An agent can `publish` a message to a specific topic (e.g., `"state.reservoir.level"`) and `subscribe` to any topic it's interested in. When a message is published to a topic, the bus ensures all subscribers to that topic receive the message immediately.
 
-### 2.2. The `LocalControlAgent`
-In `example_mas_simulation.py`, we no longer use a `PIDController` directly. We wrap it in a `LocalControlAgent`.
-
+### 2.2. The `DigitalTwinAgent`
+This agent's role is to act as a "digital twin" for a physical component, reporting its state to the rest of the system.
 ```python
-# from swp.local_agents.control.local_control_agent import LocalControlAgent
-
-control_agent = LocalControlAgent(
-    agent_id="control_agent_gate_1",
-    controller=pid_controller,
-    message_bus=message_bus,
-    observation_topic=RESERVOIR_STATE_TOPIC,
-    action_topic=GATE_ACTION_TOPIC
-)
-```
-This agent is a true, independent component. Its sole job is to:
-1.  **Listen** for messages on its `observation_topic` (`state.reservoir.level`).
-2.  When a message arrives, it passes the data to its internal `pid_controller`.
-3.  It takes the controller's output and **publishes** it as a new message to its `action_topic` (`action.gate.opening`).
-
-### 2.3. The Upgraded `DigitalTwinAgent`
-This agent now acts as a proper sensor feed.
-```python
-# from swp.local_agents.perception.digital_twin_agent import DigitalTwinAgent
-
 twin_agent = DigitalTwinAgent(
     agent_id="twin_agent_reservoir_1",
     simulated_object=reservoir,
@@ -51,14 +30,32 @@ twin_agent = DigitalTwinAgent(
     state_topic=RESERVOIR_STATE_TOPIC
 )
 ```
-Its `run()` method now has a purpose: at each simulation step, it reads the state of its physical model (`reservoir`) and **publishes** that state to the `state_topic`.
+Its `run()` method now has a clear purpose: at each simulation step, the harness calls `run()`, and the agent reads the state of its physical model (`reservoir`) and **publishes** that state to its `state_topic`.
 
-### 2.4. Message-Aware Physical Models
-For the system to be fully decoupled, the physical models must also react to messages. We upgraded the `Gate` model to do this.
+### 2.3. The `LocalControlAgent`
+In `example_mas_simulation.py`, the `PIDController` is wrapped by a `LocalControlAgent`. This agent handles all the communication, allowing the controller to focus purely on its algorithm.
 
 ```python
-# from swp.simulation_identification.physical_objects.gate import Gate
+control_agent = LocalControlAgent(
+    agent_id="control_agent_gate_1",
+    controller=pid_controller,
+    message_bus=message_bus,
+    observation_topic=RESERVOIR_STATE_TOPIC,
+    observation_key='water_level', # Tell the agent which part of the message to use
+    action_topic=GATE_ACTION_TOPIC,
+    dt=harness.dt # The agent needs to know the simulation time step
+)
+```
+This agent's job is to:
+1.  **Listen** for messages on its `observation_topic`.
+2.  When a message arrives, it uses the `observation_key` to extract the relevant value (e.g., `14.0`).
+3.  It passes this value and the simulation time step (`dt`) to its internal `pid_controller`.
+4.  It takes the controller's output and **publishes** it as a new message to its `action_topic`.
 
+### 2.4. Message-Aware Physical Models
+For the system to be fully decoupled, the physical models themselves can react to messages. We've made the `Gate` model message-aware.
+
+```python
 gate = Gate(
     gate_id="gate_1",
     ...,
@@ -66,21 +63,21 @@ gate = Gate(
     action_topic=GATE_ACTION_TOPIC
 )
 ```
-When instantiated, the `Gate` now **subscribes** to its `action_topic`. When the `control_agent` publishes a new command, the gate receives it and updates its internal target opening. When the harness later calls the `gate.step()` method, the gate already knows what its target is.
+When instantiated, the `Gate` now **subscribes** to its `action_topic`. When the `control_agent` publishes a new command, the gate's `handle_action_message` method is triggered, and it updates its internal target opening. When the harness later calls the `gate.step()` method, the gate already knows where it's supposed to move.
 
 ## 3. The MAS Simulation Loop
 
-The `SimulationHarness` now has a new method, `run_mas_simulation()`. At each time step, it performs a clean, two-phase process:
+The `SimulationHarness` now uses the `run_mas_simulation()` method. At each time step, it performs a clean, two-phase process:
 
-1.  **Phase 1: Run Agents (Thinking)**: The harness calls the `run()` method on every agent.
-    - `twin_agent` publishes the reservoir's current state.
-    - The `message_bus` immediately delivers this state message to the `control_agent` (because it's a subscriber).
+1.  **Phase 1: Perception & Action Cascade**: The harness calls the `run()` method on the `DigitalTwinAgent`.
+    - The twin publishes the reservoir's current state.
+    - The synchronous `message_bus` immediately delivers this state message to the `control_agent`.
     - The `control_agent`'s `handle_observation` method is triggered, it computes a new control signal, and publishes it to the action topic.
-    - The `message_bus` delivers the action message to the `gate` model. The gate's `handle_action_message` method is triggered, and it updates its internal action.
+    - The bus delivers the action message to the `gate` model, which updates its internal target.
 
-2.  **Phase 2: Step Physical Models (Acting)**: The harness calls the `step()` method on every physical model.
-    - The `gate` executes its `step` logic using the action it just received from the bus.
-    - The harness calculates the resulting outflow and tells the `reservoir` to execute its `step` logic.
+2.  **Phase 2: Physical Step**: The harness calls the `step()` method on every physical model.
+    - The harness calculates the physical interaction (the discharge from the gate).
+    - It steps the `reservoir` and `gate`, updating their states based on the physics and the actions received in Phase 1.
 
 This loop beautifully illustrates the separation of concerns: agents think, models act.
 
