@@ -19,9 +19,11 @@ The system operates on two nested control loops:
 ## 3. Code Breakdown
 
 ### 3.1. Upgrading the `LocalControlAgent`
-- A look at the new `command_topic` parameter in the agent's constructor.
+- A look at the new `command_topic` and `feedback_topic` parameters in the agent's constructor.
+- **Direct State Feedback**: Explaining why it's important for an agent to get feedback from the actuator it controls. We'll discuss how the `gate_twin_agent` publishes the gate's actual state and how the `control_agent` subscribes to it.
 - Explanation of the `handle_command_message` method, which allows the agent to be controlled from above.
 - How the `PIDController`'s `set_setpoint` method enables this dynamic goal adjustment.
+- A discussion of the robust, time-aware `PIDController` with anti-windup, and why it's necessary for stable control.
 
 ### 3.2. Implementing the `CentralDispatcher`
 - How the dispatcher subscribes to system state topics (e.g., `state.reservoir.level`).

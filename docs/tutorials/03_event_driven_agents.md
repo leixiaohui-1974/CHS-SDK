@@ -86,6 +86,6 @@ This loop beautifully illustrates the separation of concerns: agents think, mode
 
 ## 4. Why This Architecture Matters
 
-- **Scalability**: We can add dozens of new agents, sensors, and controllers without changing any existing components. We just need to define new topics and ensure they subscribe to the right ones.
-- **Decoupling**: The control logic is fully separated from the physical models. We could replace the PID controller inside the `control_agent` with a more advanced algorithm, and nothing else in the system would need to change.
+- **Scalability**: New agents and components can be added to the system without modifying the existing ones. We just need to define new topics and ensure they subscribe to the right ones.
+- **Decoupling**: The control logic is fully separated from the physical models, allowing for easy swapping of algorithms.
 - **Realism**: This architecture is much closer to how real-world distributed control systems are built, paving the way for more advanced features like network latency simulation and hardware-in-the-loop testing.

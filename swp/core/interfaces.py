@@ -117,12 +117,13 @@ class Controller(ABC):
     """
 
     @abstractmethod
-    def compute_control_action(self, observation: State) -> Any:
+    def compute_control_action(self, observation: State, dt: float) -> Any:
         """
         Compute the next control action based on the current system observation.
 
         Args:
             observation: The current state or observation of the system to be controlled.
+            dt: The time step duration in seconds.
 
         Returns:
             The computed control action to be sent to the actuator.
