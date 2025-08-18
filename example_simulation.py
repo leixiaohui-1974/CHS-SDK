@@ -77,10 +77,11 @@ def run_reservoir_control_example():
     }
     harness = SimulationHarness(config=simulation_config)
 
-    # 4. Add components and controllers to the harness
-    # This demonstrates the "pluggable" nature of the architecture.
+    # 4. Add components, define topology, and add controllers
     harness.add_component(reservoir)
     harness.add_component(gate)
+    harness.add_connection("reservoir_1", "gate_1")
+
     # Add the controller and define its wiring
     harness.add_controller(
         controller_id="pid_for_gate1",
@@ -90,7 +91,9 @@ def run_reservoir_control_example():
         observation_key="water_level"
     )
 
-    # 5. Run the simulation
+    # 5. Build and run the simulation
+    print("\nBuilding simulation harness...")
+    harness.build()
     harness.run_simulation()
 
 if __name__ == "__main__":

@@ -99,15 +99,24 @@ def run_branched_network_example():
     )
 
     # Central Dispatcher to manage high-level goals
-    dispatcher_logic = {
-        "res1": {"topic": "command.res1.setpoint", "initial_setpoint": 12.0},
-        "res2": {"topic": "command.res2.setpoint", "initial_setpoint": 18.0}
+    # Note: The logic for this dispatcher is simplified for this example.
+    # A real-world dispatcher would have more complex, coordinated rules.
+    dispatcher_rules = {
+        'res1_normal_setpoint': 12.0,
+        'res2_normal_setpoint': 18.0,
     }
     dispatcher = CentralDispatcher(
         agent_id="central_dispatcher",
         message_bus=message_bus,
-        observation_topics={"res1_level": "state.res1.level", "res2_level": "state.res2.level"},
-        dispatcher_logic=dispatcher_logic
+        state_subscriptions={
+            "res1_level": "state.res1.level",
+            "res2_level": "state.res2.level"
+        },
+        command_topics={
+            "res1_command": "command.res1.setpoint",
+            "res2_command": "command.res2.setpoint"
+        },
+        rules=dispatcher_rules
     )
 
     all_agents = twin_agents + [lca1, lca2, dispatcher]

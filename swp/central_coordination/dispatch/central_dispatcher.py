@@ -15,59 +15,69 @@ class CentralDispatcher(Agent):
     """
 
     def __init__(self, agent_id: str, message_bus: MessageBus,
-                 observation_topics: Dict[str, str], dispatcher_logic: Dict[str, Any]):
+                 state_subscriptions: Dict[str, str], command_topics: Dict[str, str],
+                 rules: Any):
         """
         Initializes the CentralDispatcher.
 
         Args:
             agent_id: The unique ID for this agent.
             message_bus: The system's message bus.
-            observation_topics: A dict mapping local names to state topics to subscribe to.
-                                e.g., {'res1_level': 'state.res1.level'}
-            dispatcher_logic: A dict defining the control strategy for each managed component.
-                              e.g., {'res1': {'topic': 'command.res1.setpoint', 'initial_setpoint': 12.0}}
+            state_subscriptions: A dict mapping local names to state topics to subscribe to.
+                                 e.g., {'reservoir_level': 'state.reservoir.level'}
+            command_topics: A dict mapping local command names to command topics.
+                            e.g., {'gate1_command': 'command.gate1.setpoint'}
+            rules: A set of rules or a function that defines the dispatch logic.
         """
         super().__init__(agent_id)
         self.bus = message_bus
-        self.logic = dispatcher_logic
-        self.latest_observations: Dict[str, State] = {}
+        self.command_topics = command_topics
+        self.rules = rules
+        self.latest_states: Dict[str, State] = {}
+        self.has_run_initial = False
 
-        for name, topic in observation_topics.items():
+        for name, topic in state_subscriptions.items():
             # Use a lambda to capture the state_name for the handler
-            self.bus.subscribe(topic, lambda msg, name=name: self.handle_observation_message(msg, name))
+            self.bus.subscribe(topic, lambda msg, name=name: self.handle_state_message(msg, name))
 
         print(f"CentralDispatcher '{self.agent_id}' created.")
 
-    def handle_observation_message(self, message: Message, name: str):
+    def handle_state_message(self, message: Message, name: str):
         """Stores the latest received state from a subscribed topic."""
-        self.latest_observations[name] = message
-        # print(f"[{self.agent_id}] Updated observation '{name}': {message}")
+        self.latest_states[name] = message
+        # print(f"[{self.agent_id}] Updated state '{name}': {message}")
 
     def run(self, current_time: float):
         """
         The main execution loop for the dispatcher. At each step, it evaluates
-        its logic for each managed entity and publishes new commands if necessary.
+        its rules and publishes new commands if necessary.
 
         Args:
             current_time: The current simulation time.
         """
-        # On the first step, publish all initial setpoints
-        if current_time == 0:
-            for entity, logic in self.logic.items():
-                command_topic = logic.get('topic')
-                initial_setpoint = logic.get('initial_setpoint')
-                if command_topic and initial_setpoint is not None:
-                    print(f"[{self.agent_id}] Sending initial setpoint for '{entity}' to {initial_setpoint:.2f}")
-                    self.bus.publish(command_topic, {'new_setpoint': initial_setpoint})
+        # This is a generic, data-driven rule evaluator.
+        # It can be extended with more sophisticated logic.
 
-        # Example of a dynamic rule: if res1 is too high, lower res2's setpoint
-        # This demonstrates system-wide coordination.
-        res1_level = self.latest_observations.get('res1_level', {}).get('water_level')
-        if res1_level and res1_level > 13.0:
-             # This logic is arbitrary for demonstration purposes.
-             res2_logic = self.logic.get('res2')
-             if res2_logic:
-                command_topic = res2_logic.get('topic')
-                emergency_setpoint = 17.0 # lower than the initial 18.0
-                print(f"[{self.agent_id}] EMERGENCY: res1 level is high ({res1_level:.2f}m)! Lowering res2 setpoint to {emergency_setpoint}m.")
-                self.bus.publish(command_topic, {'new_setpoint': emergency_setpoint})
+        # On the first run, send all initial setpoints
+        if not self.has_run_initial:
+            for command_name, topic in self.command_topics.items():
+                # Assumes rule key is like 'res1_normal_setpoint' for command 'res1_command'
+                entity_name = command_name.replace('_command', '')
+                rule_key = f"{entity_name}_normal_setpoint"
+                if rule_key in self.rules:
+                    setpoint = self.rules[rule_key]
+                    print(f"[{self.agent_id}] Sending initial setpoint for '{entity_name}' to {setpoint:.2f}")
+                    self.bus.publish(topic, {'new_setpoint': setpoint})
+            self.has_run_initial = True
+
+
+        # --- Example-specific rule logic ---
+        # This section can be replaced by a more generic rule engine.
+
+        # Logic for the hierarchical control example
+        if 'flood_threshold' in self.rules:
+            reservoir_level = self.latest_states.get('reservoir_level', {}).get('water_level')
+            if reservoir_level is not None and reservoir_level > self.rules['flood_threshold']:
+                print(f"[{self.agent_id}] FLOOD ALERT: Reservoir level ({reservoir_level:.2f}m) is above threshold! "
+                      f"Sending new setpoint: {self.rules['flood_setpoint']:.2f}m")
+                self.bus.publish(self.command_topics['gate1_command'], {'new_setpoint': self.rules['flood_setpoint']})
