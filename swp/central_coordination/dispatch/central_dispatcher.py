@@ -3,7 +3,7 @@ Central Dispatcher Agent for hierarchical, high-level coordination.
 """
 from swp.core.interfaces import Agent, State
 from swp.central_coordination.collaboration.message_bus import MessageBus, Message
-from typing import Dict
+from typing import Dict, Any
 
 class CentralDispatcher(Agent):
     """
@@ -14,60 +14,60 @@ class CentralDispatcher(Agent):
     to send updated commands (like new setpoints) to the local agents.
     """
 
-    def __init__(self, agent_id: str, message_bus: MessageBus, state_subscriptions: Dict[str, str],
-                 command_topics: Dict[str, str], rules: Dict):
+    def __init__(self, agent_id: str, message_bus: MessageBus,
+                 observation_topics: Dict[str, str], dispatcher_logic: Dict[str, Any]):
         """
         Initializes the CentralDispatcher.
 
         Args:
             agent_id: The unique ID for this agent.
             message_bus: The system's message bus.
-            state_subscriptions: A dict mapping state names to topic names this agent should listen to.
-                                 e.g., {'reservoir_level': 'state.reservoir.level'}
-            command_topics: A dict mapping command names to the topics to publish them on.
-                            e.g., {'gate1_command': 'command.gate1'}
-            rules: A dictionary defining the high-level control strategy.
+            observation_topics: A dict mapping local names to state topics to subscribe to.
+                                e.g., {'res1_level': 'state.res1.level'}
+            dispatcher_logic: A dict defining the control strategy for each managed component.
+                              e.g., {'res1': {'topic': 'command.res1.setpoint', 'initial_setpoint': 12.0}}
         """
         super().__init__(agent_id)
         self.bus = message_bus
-        self.command_topics = command_topics
-        self.rules = rules
-        self.latest_state = {}
+        self.logic = dispatcher_logic
+        self.latest_observations: Dict[str, State] = {}
 
-        for state_name, topic in state_subscriptions.items():
+        for name, topic in observation_topics.items():
             # Use a lambda to capture the state_name for the handler
-            self.bus.subscribe(topic, lambda msg, name=state_name: self.handle_state_message(msg, name))
+            self.bus.subscribe(topic, lambda msg, name=name: self.handle_observation_message(msg, name))
 
         print(f"CentralDispatcher '{self.agent_id}' created.")
 
-    def handle_state_message(self, message: Message, state_name: str):
+    def handle_observation_message(self, message: Message, name: str):
         """Stores the latest received state from a subscribed topic."""
-        self.latest_state[state_name] = message
-        # print(f"[{self.agent_id}] Updated state '{state_name}': {message}")
+        self.latest_observations[name] = message
+        # print(f"[{self.agent_id}] Updated observation '{name}': {message}")
 
     def run(self, current_time: float):
         """
         The main execution loop for the dispatcher. At each step, it evaluates
-        its rules based on the latest state and publishes new commands if necessary.
+        its logic for each managed entity and publishes new commands if necessary.
 
         Args:
-            current_time: The current simulation time (ignored by this agent).
+            current_time: The current simulation time.
         """
-        reservoir_level = self.latest_state.get('reservoir_level', {}).get('water_level')
+        # On the first step, publish all initial setpoints
+        if current_time == 0:
+            for entity, logic in self.logic.items():
+                command_topic = logic.get('topic')
+                initial_setpoint = logic.get('initial_setpoint')
+                if command_topic and initial_setpoint is not None:
+                    print(f"[{self.agent_id}] Sending initial setpoint for '{entity}' to {initial_setpoint:.2f}")
+                    self.bus.publish(command_topic, {'new_setpoint': initial_setpoint})
 
-        if reservoir_level is None:
-            return
-
-        flood_threshold = self.rules.get('flood_threshold', 20.0)
-        normal_setpoint = self.rules.get('normal_setpoint', 15.0)
-        flood_setpoint = self.rules.get('flood_setpoint', 12.0)
-
-        target_setpoint = flood_setpoint if reservoir_level > flood_threshold else normal_setpoint
-
-        command_message: Message = {'new_setpoint': target_setpoint}
-        command_topic = self.command_topics.get('gate1_command')
-
-        if command_topic:
-            # To avoid spamming, we could add logic to only publish if the command changes
-            print(f"[{self.agent_id}] Reservoir level is {reservoir_level:.2f}m. Commanding setpoint: {target_setpoint:.2f}m")
-            self.bus.publish(command_topic, command_message)
+        # Example of a dynamic rule: if res1 is too high, lower res2's setpoint
+        # This demonstrates system-wide coordination.
+        res1_level = self.latest_observations.get('res1_level', {}).get('water_level')
+        if res1_level and res1_level > 13.0:
+             # This logic is arbitrary for demonstration purposes.
+             res2_logic = self.logic.get('res2')
+             if res2_logic:
+                command_topic = res2_logic.get('topic')
+                emergency_setpoint = 17.0 # lower than the initial 18.0
+                print(f"[{self.agent_id}] EMERGENCY: res1 level is high ({res1_level:.2f}m)! Lowering res2 setpoint to {emergency_setpoint}m.")
+                self.bus.publish(command_topic, {'new_setpoint': emergency_setpoint})

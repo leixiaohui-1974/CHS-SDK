@@ -27,8 +27,9 @@ class RiverChannel(Simulatable):
         Simulates the river channel's change over a single time step.
 
         Args:
-            action: A dictionary of flows, e.g., {'inflow': 50}. The outflow is
-                    calculated based on the current state.
+            action: A dictionary of flows. For a river channel, the key 'inflow'
+                    represents the total aggregated inflow from all upstream sources
+                    as calculated by the simulation harness.
             dt: The time step duration in seconds.
 
         Returns:

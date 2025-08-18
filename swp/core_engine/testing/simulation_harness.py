@@ -1,12 +1,10 @@
 """
 A testing and simulation harness for running the Smart Water Platform.
 """
+from collections import deque
 from swp.core.interfaces import Simulatable, Agent, Controller
 from swp.central_coordination.collaboration.message_bus import MessageBus
-from swp.local_agents.perception.digital_twin_agent import DigitalTwinAgent
-from swp.simulation_identification.physical_objects.reservoir import Reservoir
 from swp.simulation_identification.physical_objects.gate import Gate
-from swp.simulation_identification.physical_objects.river_channel import RiverChannel
 from typing import List, Dict, Any, NamedTuple
 
 class ControllerSpec(NamedTuple):
@@ -18,7 +16,7 @@ class ControllerSpec(NamedTuple):
 
 class SimulationHarness:
     """
-    Manages the setup and execution of a simulation scenario.
+    Manages the setup and execution of a simulation scenario using a graph-based topology.
     """
 
     def __init__(self, config: Dict[str, Any]):
@@ -30,16 +28,34 @@ class SimulationHarness:
         self.agents: List[Agent] = []
         self.controllers: Dict[str, ControllerSpec] = {}
 
+        # Graph representation: adjacency lists for downstream and upstream connections
+        self.topology: Dict[str, List[str]] = {}
+        self.inverse_topology: Dict[str, List[str]] = {}
+        self.sorted_components: List[str] = []
+
         self.message_bus = MessageBus()
         print("SimulationHarness created.")
 
     def add_component(self, component: Simulatable):
         """Adds a physical or logical component to the simulation."""
-        component_id = getattr(component, 'reservoir_id', getattr(component, 'gate_id', getattr(component, 'channel_id', None)))
-        if component_id:
-            self.components[component_id] = component
-        else:
-            self.components[f"component_{len(self.components)}"] = component
+        component_id = getattr(component, 'reservoir_id', getattr(component, 'gate_id', getattr(component, 'channel_id', "un-id-ed_component")))
+        if component_id in self.components:
+            raise ValueError(f"Component with ID '{component_id}' already exists.")
+        self.components[component_id] = component
+        self.topology[component_id] = []
+        self.inverse_topology[component_id] = []
+        print(f"Component '{component_id}' added.")
+
+    def add_connection(self, upstream_id: str, downstream_id: str):
+        """Adds a directional connection between two components."""
+        if upstream_id not in self.components:
+            raise ValueError(f"Upstream component '{upstream_id}' not found.")
+        if downstream_id not in self.components:
+            raise ValueError(f"Downstream component '{downstream_id}' not found.")
+
+        self.topology[upstream_id].append(downstream_id)
+        self.inverse_topology[downstream_id].append(upstream_id)
+        print(f"Connection added: {upstream_id} -> {downstream_id}")
 
     def add_agent(self, agent: Agent):
         """Adds an agent to the simulation."""
@@ -51,10 +67,101 @@ class SimulationHarness:
         self.controllers[controller_id] = spec
         print(f"Controller '{controller_id}' associated with component '{controlled_id}'.")
 
+    def _topological_sort(self):
+        """
+        Performs a topological sort of the components graph.
+        This determines the correct order for stepping through the physical models.
+        """
+        in_degree = {u: 0 for u in self.topology}
+        for u in self.topology:
+            for v in self.topology[u]:
+                in_degree[v] += 1
+
+        queue = deque([u for u in self.topology if in_degree[u] == 0])
+
+        self.sorted_components = []
+        while queue:
+            u = queue.popleft()
+            self.sorted_components.append(u)
+
+            for v in self.topology[u]:
+                in_degree[v] -= 1
+                if in_degree[v] == 0:
+                    queue.append(v)
+
+        if len(self.sorted_components) != len(self.components):
+            raise Exception("Graph has at least one cycle, which is not allowed in a water system topology.")
+
+        print("Topological sort complete. Update order determined.")
+
+    def build(self):
+        """Finalizes the harness setup by sorting the component graph."""
+        self._topological_sort()
+        print("Simulation harness build complete and ready to run.")
+
+    def _step_physical_models(self, dt: float, actions: Dict[str, Any] = None):
+        """
+        Private helper to step through all physical models using a two-phase update.
+        This correctly handles the inter-dependencies between components like reservoirs and gates.
+        """
+        if actions is None:
+            actions = {}
+
+        # Phase 1: Update all gate openings and then calculate their new discharge.
+        # This is based on the system's state from the *previous* time step (t),
+        # to determine the flows for the current time step (t+dt).
+        for component_id, component in self.components.items():
+            if isinstance(component, Gate):
+                gate_action = {}
+                # Pass controller signal if it exists for this gate
+                if component_id in actions:
+                    gate_action['control_signal'] = actions[component_id]
+
+                # Provide the upstream water level needed for discharge calculation
+                if self.inverse_topology[component_id]:
+                    # Assuming a gate has one primary upstream component for its level reading
+                    upstream_id = self.inverse_topology[component_id][0]
+                    upstream_component = self.components[upstream_id]
+
+                    gate_action['upstream_level'] = upstream_component.get_state().get('water_level', 0)
+
+                # Step the gate to update its opening and calculate its discharge
+                component.step(gate_action, dt)
+
+        # Phase 2: Update the state of non-gate components (reservoirs, channels)
+        # in topological order.
+        for component_id in self.sorted_components:
+            if isinstance(self.components[component_id], Gate):
+                continue  # Gates have already been updated in Phase 1
+
+            component = self.components[component_id]
+
+            # Aggregate total inflow from the states of all upstream components
+            total_inflow = 0
+            for upstream_id in self.inverse_topology[component_id]:
+                upstream_state = self.components[upstream_id].get_state()
+                inflow = upstream_state.get('outflow', upstream_state.get('discharge', 0))
+                total_inflow += inflow
+
+            # For reservoirs and channels, their effective outflow is the sum of the
+            # discharges of all gates directly downstream from them.
+            total_outflow = 0
+            for downstream_id in self.topology[component_id]:
+                if isinstance(self.components[downstream_id], Gate):
+                    downstream_gate_state = self.components[downstream_id].get_state()
+                    total_outflow += downstream_gate_state.get('discharge', 0)
+
+            # Step the component with the calculated total in/outflows
+            step_action = {'inflow': total_inflow, 'outflow': total_outflow}
+            component.step(step_action, dt)
+
     def run_simulation(self):
         """
-        Runs a simple, centralized control simulation loop.
+        Runs a simple, centralized control simulation loop using the graph topology.
         """
+        if not self.sorted_components:
+            raise Exception("Harness has not been built. Call harness.build() before running.")
+
         num_steps = int(self.duration / self.dt)
         print(f"Starting simple simulation: Duration={self.duration}s, TimeStep={self.dt}s\n")
 
@@ -62,6 +169,7 @@ class SimulationHarness:
             current_time = i * self.dt
             print(f"--- Simulation Step {i+1}, Time: {current_time:.2f}s ---")
 
+            # 1. Compute control actions
             actions = {}
             for cid, spec in self.controllers.items():
                 observed_component = self.components.get(spec.observed_id)
@@ -75,35 +183,24 @@ class SimulationHarness:
                     actions[spec.controlled_id] = control_signal
                     print(f"  Controller '{cid}': Target for '{spec.controlled_id}' = {control_signal:.2f}")
 
-            for component_id, action_signal in actions.items():
-                if component_id in self.components and hasattr(self.components[component_id], 'handle_action_message'):
-                    self.components[component_id].handle_action_message({'control_signal': action_signal})
+            # 2. Step the physical models in order
+            self._step_physical_models(self.dt, actions)
 
-            # Hardcoded physics for different topologies
-            reservoir = self.components.get("reservoir_1")
-            gate1 = self.components.get("gate_1")
-            channel = self.components.get("channel_1")
-            gate2 = self.components.get("gate_2")
-
-            if reservoir and gate1 and channel and gate2:
-                g1_discharge = gate1.calculate_discharge(reservoir.get_state()['water_level'], 0)
-                reservoir.step({'inflow': 50, 'outflow': g1_discharge}, self.dt)
-                gate1.step({}, self.dt)
-                channel.step({'inflow': g1_discharge, 'outflow_gate_opening': actions.get('gate_2', 0)}, self.dt)
-                gate2.step({}, self.dt)
-                print(f"  State Update: Res Level={reservoir.get_state()['water_level']:.2f}m, "
-                      f"Chan Vol={channel.get_state()['volume']:.2f}m^3, "
-                      f"G1 Open={gate1.get_state()['opening']:.2f}, G2 Open={gate2.get_state()['opening']:.2f}\n")
-            elif reservoir and gate1:
-                discharge = gate1.calculate_discharge(reservoir.get_state()['water_level'], 0)
-                reservoir.step({'inflow': 0, 'outflow': discharge}, self.dt)
-                gate1.step({}, self.dt)
-                print(f"  State Update: Reservoir water level = {reservoir.get_state()['water_level']:.3f}m\n")
+            # 3. Print state summary (optional)
+            # You can customize this to print states of interest
+            print("  State Update:")
+            for cid in self.sorted_components:
+                state = self.components[cid].get_state()
+                print(f"    {cid}: {state}")
+            print("")
 
     def run_mas_simulation(self):
         """
-        Runs a full Multi-Agent System (MAS) simulation.
+        Runs a full Multi-Agent System (MAS) simulation using the graph topology.
         """
+        if not self.sorted_components:
+            raise Exception("Harness has not been built. Call harness.build() before running.")
+
         num_steps = int(self.duration / self.dt)
         print(f"Starting MAS simulation: Duration={self.duration}s, TimeStep={self.dt}s\n")
 
@@ -113,25 +210,16 @@ class SimulationHarness:
 
             print("  Phase 1: Triggering agent perception and action cascade.")
             for agent in self.agents:
-                # The harness passes the current time to each agent
                 agent.run(current_time)
 
             print("  Phase 2: Stepping physical models with interactions.")
-            reservoir = self.components.get("reservoir_1")
-            gate = self.components.get("gate_1")
+            self._step_physical_models(self.dt)
 
-            if reservoir and gate:
-                upstream_level = reservoir.get_state()['water_level']
-                discharge = gate.calculate_discharge(upstream_level=upstream_level, downstream_level=0)
-                reservoir.step({'inflow': 0, 'outflow': discharge}, self.dt)
-                gate.step({}, self.dt)
-            else:
-                for component in self.components.values():
-                    component.step({}, self.dt)
-
-            reservoir_level = reservoir.get_state()['water_level'] if reservoir else 'N/A'
-            gate_opening = gate.get_state()['opening'] if gate else 'N/A'
-            print(f"  State Update: Reservoir level = {reservoir_level:.3f}m, "
-                  f"Gate opening = {gate_opening:.3f}m\n")
+            # Print state summary (optional)
+            print("  State Update:")
+            for cid in self.sorted_components:
+                state_str = ", ".join(f"{k}={v:.2f}" for k, v in self.components[cid].get_state().items())
+                print(f"    {cid}: {state_str}")
+            print("")
 
         print("MAS Simulation finished.")
