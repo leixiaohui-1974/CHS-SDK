@@ -94,9 +94,12 @@ class LocalControlAgent(Agent):
         # print(f"[{self.agent_id}] Publishing action to '{self.action_topic}': {action_message}")
         self.bus.publish(self.action_topic, action_message)
 
-    def run(self):
+    def run(self, current_time: float):
         """
         The main execution loop for the agent. For this event-driven agent,
         this method is a no-op as logic is triggered by message callbacks.
+
+        Args:
+            current_time: The current simulation time (ignored by this agent).
         """
         pass

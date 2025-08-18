@@ -40,13 +40,16 @@ class DigitalTwinAgent(Agent):
         # print(f"[{self.agent_id}] Publishing state to '{self.state_topic}': {message}")
         self.bus.publish(self.state_topic, message)
 
-    def run(self):
+    def run(self, current_time: float):
         """
         The main execution logic for the agent.
 
-        In a simulation context, this method would be called at each time step
+        In a simulation context, this method is called at each time step
         by the harness to make the agent publish its current state. This simulates
         a sensor broadcasting its reading periodically.
+
+        Args:
+            current_time: The current simulation time (ignored by this agent).
         """
         # print(f"DigitalTwinAgent '{self.agent_id}' run() called.")
         self.publish_state()

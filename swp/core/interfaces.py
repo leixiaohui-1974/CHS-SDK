@@ -101,9 +101,12 @@ class Agent(ABC):
         self.agent_id = agent_id
 
     @abstractmethod
-    def run(self):
+    def run(self, current_time: float):
         """
         The main execution loop or entry point for the agent's behavior.
+
+        Args:
+            current_time: The current simulation time in seconds.
         """
         pass
 

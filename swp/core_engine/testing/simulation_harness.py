@@ -113,8 +113,8 @@ class SimulationHarness:
 
             print("  Phase 1: Triggering agent perception and action cascade.")
             for agent in self.agents:
-                if isinstance(agent, DigitalTwinAgent):
-                    agent.run()
+                # The harness passes the current time to each agent
+                agent.run(current_time)
 
             print("  Phase 2: Stepping physical models with interactions.")
             reservoir = self.components.get("reservoir_1")

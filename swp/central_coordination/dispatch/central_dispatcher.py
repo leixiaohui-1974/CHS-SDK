@@ -45,20 +45,19 @@ class CentralDispatcher(Agent):
         self.latest_state[state_name] = message
         # print(f"[{self.agent_id}] Updated state '{state_name}': {message}")
 
-    def run(self):
+    def run(self, current_time: float):
         """
         The main execution loop for the dispatcher. At each step, it evaluates
         its rules based on the latest state and publishes new commands if necessary.
+
+        Args:
+            current_time: The current simulation time (ignored by this agent).
         """
         reservoir_level = self.latest_state.get('reservoir_level', {}).get('water_level')
 
         if reservoir_level is None:
-            # Not enough information to make a decision yet
             return
 
-        # Simple rule-based logic for demonstration
-        # IF reservoir level is high, take conservative action.
-        # ELSE, aim for the normal operating level.
         flood_threshold = self.rules.get('flood_threshold', 20.0)
         normal_setpoint = self.rules.get('normal_setpoint', 15.0)
         flood_setpoint = self.rules.get('flood_setpoint', 12.0)
@@ -69,5 +68,6 @@ class CentralDispatcher(Agent):
         command_topic = self.command_topics.get('gate1_command')
 
         if command_topic:
+            # To avoid spamming, we could add logic to only publish if the command changes
             print(f"[{self.agent_id}] Reservoir level is {reservoir_level:.2f}m. Commanding setpoint: {target_setpoint:.2f}m")
             self.bus.publish(command_topic, command_message)
