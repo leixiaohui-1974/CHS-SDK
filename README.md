@@ -42,14 +42,16 @@ A central `swp.core` package defines the abstract interfaces that ensure all com
 
 The repository includes several end-to-end examples.
 
-A simple reservoir-gate control system can be run with:
+To run the examples, execute them as modules from the root directory of the repository.
+
+For example, to run the hydropower simulation:
 ```bash
-python3 example_simulation.py
+python3 -m swp.examples.example_hydropower_simulation
 ```
 
-A more complex hydropower simulation involving a lake, turbine, and canal can be run with:
+To run the multi-agent branched network example:
 ```bash
-python3 swp/examples/example_hydropower_simulation.py
+python3 -m swp.examples.example_branched_network
 ```
 
 These examples serve as a clear demonstration of the framework's core principles and a starting point for developing more complex systems.
