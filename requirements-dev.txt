@@ -1,7 +1,7 @@
 # Test dependencies
 pytest
 
-# Dependencies for notebooks
+# Dependencies for notebooks and core components
 numpy
 pandas
 matplotlib
