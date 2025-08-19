@@ -6,3 +6,5 @@ numpy
 pandas
 matplotlib
 statsmodels
+torch
+scikit-learn
