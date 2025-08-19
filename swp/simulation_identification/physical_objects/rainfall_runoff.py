@@ -1,6 +1,8 @@
 """
 Simulation model for a Rainfall-Runoff process.
 """
+import numpy as np
+from scipy.optimize import minimize
 from swp.core.interfaces import PhysicalObjectInterface, State, Parameters
 from swp.central_coordination.collaboration.message_bus import MessageBus, Message
 from typing import Dict, Any, Optional
@@ -36,11 +38,9 @@ class RainfallRunoff(PhysicalObjectInterface):
         self.rainfall_topic = rainfall_topic
         self.rainfall_intensity = 0.0  # m/s
 
-        if not self.bus or not self.rainfall_topic:
-            raise ValueError("RainfallRunoff requires a message_bus and a rainfall_topic.")
-
-        self.bus.subscribe(self.rainfall_topic, self.handle_rainfall_message)
-        print(f"RainfallRunoff model '{self.name}' subscribed to rainfall topic '{self.rainfall_topic}'.")
+        if self.bus and self.rainfall_topic:
+            self.bus.subscribe(self.rainfall_topic, self.handle_rainfall_message)
+            print(f"RainfallRunoff model '{self.name}' subscribed to rainfall topic '{self.rainfall_topic}'.")
 
     def handle_rainfall_message(self, message: Message):
         """Callback to handle incoming rainfall data messages."""
@@ -83,3 +83,61 @@ class RainfallRunoff(PhysicalObjectInterface):
         # This model's output depends only on the current input (rainfall),
         # not on past states. Therefore, it is stateless.
         return False
+
+    def set_parameters(self, parameters: Parameters):
+        """Allows updating the model's parameters."""
+        self._params.update(parameters)
+        print(f"[{self.name}] Parameters updated: {parameters}")
+
+    def identify_parameters(self, data: Dict[str, np.ndarray], method: str = 'offline') -> Parameters:
+        """
+        Identifies the runoff_coefficient parameter from data.
+
+        Args:
+            data: A dictionary containing 'rainfall' and 'observed_runoff' numpy arrays.
+            method: The identification method (currently only 'offline' is supported).
+
+        Returns:
+            A dictionary with the identified parameter.
+        """
+        if method != 'offline':
+            raise NotImplementedError("Only 'offline' identification is currently supported.")
+
+        rainfall_series = data['rainfall']
+        observed_runoff = data['observed_runoff']
+
+        def objective_func(param_to_optimize):
+            """The function to minimize: RMSE between simulated and observed runoff."""
+            test_coeff = param_to_optimize[0]
+
+            # Simulate runoff with the test coefficient
+            catchment_area = self._params['catchment_area']
+            simulated_runoff = test_coeff * rainfall_series * catchment_area
+
+            # Calculate RMSE
+            rmse = np.sqrt(np.mean((simulated_runoff - observed_runoff) ** 2))
+            return rmse
+
+        # Initial guess for the runoff coefficient
+        initial_guess = [self._params.get('runoff_coefficient', 0.5)]
+
+        # Bounds for the coefficient (0 to 1)
+        bnds = [(0.0, 1.0)]
+
+        # Run the optimization
+        result = minimize(
+            objective_func,
+            initial_guess,
+            method='SLSQP',
+            bounds=bnds
+        )
+
+        if result.success:
+            identified_coeff = result.x[0]
+            print(f"[{self.name}] Parameter identification successful. Identified runoff_coefficient: {identified_coeff:.4f}")
+            new_params = {'runoff_coefficient': identified_coeff}
+            self.set_parameters(new_params)
+            return new_params
+        else:
+            print(f"[{self.name}] WARNING: Parameter identification failed. Reason: {result.message}")
+            return self.get_parameters()

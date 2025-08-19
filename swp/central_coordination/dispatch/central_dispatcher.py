@@ -59,40 +59,51 @@ class CentralDispatcher(Agent):
 
     def run(self, current_time: float):
         """
-        The main execution loop for the dispatcher. At each step, it evaluates
-        its rules based on the latest states and forecasts, then publishes new
-        commands if necessary.
+        Evaluates the system state against a set of rules and activates a
+        corresponding control profile. This version supports multiple reservoirs.
         """
-        # --- Proactive Control Logic ---
-        # This logic decides which setpoint profile is active.
-        new_setpoint_name = "normal" # Default to normal operations
+        flood_alert_count = 0
+        drought_alert_count = 0
 
-        # Check for an inflow forecast that might trigger a proactive change
-        inflow_forecast = self.forecasts.get("inflow_forecast")
-        if inflow_forecast and inflow_forecast.get("trend") == "increasing":
-            new_setpoint_name = "proactive_flood"
+        # Rule evaluation for each managed reservoir
+        for name, state in self.latest_states.items():
+            # Assumes state messages contain level, max_volume, etc.
+            # And that the rule keys match the state names (e.g., 'res1').
+            level = state.get('water_level')
+            max_level = self.rules.get(f"{name}_max_level", float('inf'))
 
-        # --- Reactive Control Logic (can override proactive) ---
-        # This logic checks current state for immediate danger
-        if 'flood_threshold' in self.rules:
-            reservoir_level = self.latest_states.get('reservoir_level', {}).get('water_level')
-            if reservoir_level is not None and reservoir_level > self.rules['flood_threshold']:
-                new_setpoint_name = "reactive_flood"
+            if level is None:
+                continue
+
+            if level > self.rules.get(f"{name}_flood_threshold", max_level):
+                flood_alert_count += 1
+            elif level < self.rules.get(f"{name}_drought_threshold", 0):
+                drought_alert_count += 1
+
+        # Determine the system-wide control profile
+        new_setpoint_name = "normal"
+        if flood_alert_count > 0:
+            new_setpoint_name = "system_flood"
+        elif drought_alert_count > 0:
+            new_setpoint_name = "system_drought"
 
         # --- Publish Commands ---
         # Only publish if the overall setpoint profile has changed
         if new_setpoint_name != self.active_setpoint_name:
             self.active_setpoint_name = new_setpoint_name
-            print(f"  [{self.agent_id}] Event detected. Switching to '{self.active_setpoint_name}' control profile.")
+            print(f"  [{current_time}s] [{self.agent_id}] System state change. Activating '{self.active_setpoint_name}' profile.")
 
-            # Iterate through all command topics and send the appropriate setpoint
-            # based on the active profile.
+            # Send a new setpoint command for each managed entity
             for command_name, topic in self.command_topics.items():
-                # Assumes rule key is like 'gate1_proactive_flood_setpoint'
-                entity_name = command_name.replace('_command', '')
+                # e.g., command_name 'res1_control' -> entity_name 'res1'
+                entity_name = command_name.replace('_control', '')
+
+                # Rule key is like 'res1_system_flood_setpoint'
                 rule_key = f"{entity_name}_{self.active_setpoint_name}_setpoint"
 
                 if rule_key in self.rules:
                     setpoint = self.rules[rule_key]
-                    print(f"  [{self.agent_id}] Sending new setpoint for '{entity_name}' to {setpoint:.2f}")
+                    print(f"  [{self.agent_id}] -> Sending new setpoint for '{entity_name}': {setpoint}")
+                    # The message could contain a target level for an MPC controller
+                    # or a direct value for a simpler controller.
                     self.bus.publish(topic, {'new_setpoint': setpoint})
