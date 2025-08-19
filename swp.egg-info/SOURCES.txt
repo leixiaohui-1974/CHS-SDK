@@ -19,7 +19,10 @@ swp/core_engine/data_management/__init__.py
 swp/core_engine/lifecycle/__init__.py
 swp/core_engine/testing/__init__.py
 swp/core_engine/testing/simulation_harness.py
+swp/data_access/__init__.py
+swp/data_access/csv_data_source.py
 swp/examples/example_branched_network.py
+swp/examples/example_data_driven_simulation.py
 swp/examples/example_hierarchical_control.py
 swp/examples/example_hydropower_simulation.py
 swp/examples/example_mas_simulation.py
@@ -34,8 +37,12 @@ swp/local_agents/control/local_control_agent.py
 swp/local_agents/control/pid_controller.py
 swp/local_agents/perception/__init__.py
 swp/local_agents/perception/digital_twin_agent.py
+swp/local_agents/prediction/__init__.py
+swp/local_agents/prediction/forecasting_agent.py
 swp/simulation_identification/__init__.py
 swp/simulation_identification/disturbances/__init__.py
+swp/simulation_identification/disturbances/csv_reader_agent.py
+swp/simulation_identification/disturbances/dynamic_rainfall_agent.py
 swp/simulation_identification/disturbances/rainfall_agent.py
 swp/simulation_identification/disturbances/weather.py
 swp/simulation_identification/identification/__init__.py
@@ -46,6 +53,7 @@ swp/simulation_identification/physical_objects/gate.py
 swp/simulation_identification/physical_objects/lake.py
 swp/simulation_identification/physical_objects/pipe.py
 swp/simulation_identification/physical_objects/pump.py
+swp/simulation_identification/physical_objects/rainfall_runoff.py
 swp/simulation_identification/physical_objects/reservoir.py
 swp/simulation_identification/physical_objects/river_channel.py
 swp/simulation_identification/physical_objects/valve.py
