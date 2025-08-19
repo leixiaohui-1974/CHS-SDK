@@ -1,0 +1,7 @@
+# Test dependencies
+pytest
+
+# Dependencies for notebooks
+numpy
+pandas
+matplotlib
