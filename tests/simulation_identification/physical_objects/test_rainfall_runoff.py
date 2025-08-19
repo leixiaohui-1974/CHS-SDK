@@ -1,4 +1,5 @@
 import pytest
+import numpy as np
 
 from swp.simulation_identification.physical_objects.rainfall_runoff import RainfallRunoff
 from swp.central_coordination.collaboration.message_bus import MessageBus
@@ -97,3 +98,34 @@ def test_rainfall_runoff_resets_intensity():
 
     # 4. Assertion - Outflow should be zero in the second step
     assert second_step_state['outflow'] == pytest.approx(0.0)
+
+def test_identify_parameters_recovers_known_coefficient():
+    """
+    Tests if the identify_parameters method can correctly find a known
+    runoff coefficient from synthetic data.
+    """
+    # 1. Setup: Define true parameters and generate synthetic data
+    true_coeff = 0.65
+    catchment_area = 1000
+    np.random.seed(42)
+    # Generate a realistic rainfall series
+    rainfall_series = np.random.rand(100) * 0.01 # Rainfall up to 36 mm/hr
+    # Generate "observed" runoff using the true coefficient
+    observed_runoff = true_coeff * rainfall_series * catchment_area
+
+    # 2. Instantiate the model with a "wrong" initial parameter
+    initial_wrong_coeff = 0.2
+    model_params = {'catchment_area': catchment_area, 'runoff_coefficient': initial_wrong_coeff}
+    # The bus is not needed for offline identification
+    runoff_model = RainfallRunoff(name="test_identify", parameters=model_params)
+
+    # 3. Run the identification
+    identification_data = {'rainfall': rainfall_series, 'observed_runoff': observed_runoff}
+    identified_params = runoff_model.identify_parameters(identification_data)
+
+    # 4. Assertion
+    assert 'runoff_coefficient' in identified_params
+    # Check that the identified coefficient is very close to the true one
+    assert identified_params['runoff_coefficient'] == pytest.approx(true_coeff, abs=1e-4)
+    # Check that the model's internal parameter was also updated
+    assert runoff_model.get_parameters()['runoff_coefficient'] == pytest.approx(true_coeff, abs=1e-4)
