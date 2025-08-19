@@ -16,7 +16,16 @@ The entire architecture is designed to be modular, pluggable, and extensible, dr
 The platform is built on a layered, modular architecture organized into four main product categories:
 
 1.  **`swp.simulation_identification`**:
-    - **Water System Simulation & Identification**: Contains all hydrodynamic simulation models (for rivers, reservoirs, gates, pipes, valves, and pumps) and system identification modules for model calibration. See the [models documentation](./docs/models) for more details.
+    - **Water System Simulation & Identification**: Contains all hydrodynamic simulation models. See the [models documentation](./docs/models) for more details on all available models, including:
+        - `Reservoir`
+        - `Gate`
+        - `Pipe`
+        - `Valve`
+        - `Pump`
+        - `RiverChannel`
+        - `Canal`
+        - `Lake`
+        - `WaterTurbine`
 
 2.  **`swp.local_agents`**:
     - **Local Agent & Control**: Includes Perception Agents (digital twins) and Local Control modules (implementing algorithms like PID, MPC, etc.).
@@ -31,19 +40,19 @@ A central `swp.core` package defines the abstract interfaces that ensure all com
 
 ## Getting Started
 
-The repository includes a simple, end-to-end example of a reservoir-gate control system. To run it, execute the following command from the root directory:
+The repository includes several end-to-end examples.
 
+A simple reservoir-gate control system can be run with:
 ```bash
 python3 example_simulation.py
 ```
 
-This script will:
-1.  Instantiate a `Reservoir` and a `Gate` model.
-2.  Instantiate a `PIDController` to maintain the reservoir's water level at a target setpoint.
-3.  Assemble these components in the `SimulationHarness`.
-4.  Run a 300-second simulation, printing the state of the system at each time step.
+A more complex hydropower simulation involving a lake, turbine, and canal can be run with:
+```bash
+python3 swp/examples/example_hydropower_simulation.py
+```
 
-This example serves as a clear demonstration of the framework's core principles and a starting point for developing more complex systems.
+These examples serve as a clear demonstration of the framework's core principles and a starting point for developing more complex systems.
 
 ## Future Development
 

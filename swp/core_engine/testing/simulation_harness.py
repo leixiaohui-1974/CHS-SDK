@@ -39,12 +39,14 @@ class SimulationHarness:
 
     def add_component(self, component: Simulatable):
         """Adds a physical or logical component to the simulation."""
-        # Find the component's ID attribute (e.g., 'reservoir_id', 'pipe_id')
+        # Try to get ID from a `_id` attribute, otherwise fall back to `name`
         id_attr = next((attr for attr in dir(component) if attr.endswith('_id')), None)
-        if id_attr is None:
-            raise ValueError("Component does not have a valid ID attribute (e.g., 'pipe_id').")
-
-        component_id = getattr(component, id_attr)
+        if id_attr:
+            component_id = getattr(component, id_attr)
+        elif hasattr(component, 'name'):
+            component_id = component.name
+        else:
+            raise ValueError("Component does not have a valid ID attribute (e.g., 'pipe_id') or a 'name' attribute.")
         if component_id in self.components:
             raise ValueError(f"Component with ID '{component_id}' already exists.")
         self.components[component_id] = component
@@ -110,70 +112,48 @@ class SimulationHarness:
             controller_actions = {}
 
         new_states = {}
+        current_step_outflows = {}
 
         for component_id in self.sorted_components:
             component = self.components[component_id]
-            step_action = {}
+            action = {'control_signal': controller_actions.get(component_id)}
 
-            # 1. Aggregate inflows from upstream components (using their state from the *previous* timestep)
             total_inflow = 0
-            for upstream_id in self.inverse_topology[component_id]:
-                # To maintain consistency within a time step, all calculations should be based on the state at time T.
-                # So we use the state before this step began.
-                upstream_state = self.components[upstream_id].get_state()
-                total_inflow += upstream_state.get('outflow', upstream_state.get('discharge', 0))
-            step_action['inflow'] = total_inflow
+            for upstream_id in self.inverse_topology.get(component_id, []):
+                total_inflow += current_step_outflows.get(upstream_id, 0)
 
-            # 2. Add controller signals
-            if component_id in controller_actions:
-                step_action['control_signal'] = controller_actions[component_id]
+            component.set_inflow(total_inflow)
 
-            # 3. Provide head/level information from neighbors (based on state at time T)
-            if self.inverse_topology[component_id]:
-                upstream_id = self.inverse_topology[component_id][0]
-                upstream_state = self.components[upstream_id].get_state()
-                step_action['upstream_head'] = upstream_state.get('water_level', upstream_state.get('head', 0))
-                step_action['upstream_level'] = step_action['upstream_head']
-
-            if self.topology[component_id]:
-                downstream_id = self.topology[component_id][0]
-                downstream_state = self.components[downstream_id].get_state()
-                step_action['downstream_head'] = downstream_state.get('water_level', downstream_state.get('head', 0))
-
-            # 4. SPECIAL HANDLING for stateful components that need to know their outflow (e.g., Reservoir).
-            # We calculate the outflow by "pre-stepping" the immediate downstream components
-            # to determine how much water they will draw in this timestep.
-            if isinstance(component, Reservoir):
+            if hasattr(component, 'is_stateful') and component.is_stateful:
                 total_outflow = 0
-                for downstream_id in self.topology[component_id]:
+                for downstream_id in self.topology.get(component_id, []):
                     downstream_comp = self.components[downstream_id]
-
-                    # Create a *specific* action for this downstream component to calculate its prospective flow.
                     downstream_action = {}
-
-                    # Its upstream head is the current component's water level.
                     downstream_action['upstream_head'] = component.get_state().get('water_level', 0)
-                    downstream_action['upstream_level'] = downstream_action['upstream_head']
 
-                    # Its downstream head needs to be found from its own downstream neighbor.
                     if self.topology.get(downstream_id):
                         dds_id = self.topology[downstream_id][0]
-                        dds_state = self.components[dds_id].get_state()
-                        downstream_action['downstream_head'] = dds_state.get('water_level', dds_state.get('head', 0))
+                        downstream_action['downstream_head'] = self.components[dds_id].get_state().get('water_level', 0)
 
-                    # Pre-calculate the flow of the downstream component with the correct action.
-                    # The returned state contains the calculated flow/discharge for this step.
-                    # This does not get applied yet; it's just to get the value.
-                    temp_next_state = downstream_comp.step(downstream_action, dt)
-                    total_outflow += temp_next_state.get('outflow', temp_next_state.get('discharge', 0))
+                    import copy
+                    temp_downstream_comp = copy.deepcopy(downstream_comp)
 
-                # Add the calculated outflow to the action for the current component (the reservoir).
-                step_action['outflow'] = total_outflow
+                    temp_next_state = temp_downstream_comp.step(downstream_action, dt)
+                    total_outflow += temp_next_state.get('outflow', 0)
 
-            # 5. Step the component with the fully constructed action and store its new state.
-            new_states[component_id] = component.step(step_action, dt)
+                action['outflow'] = total_outflow
 
-        # 6. After calculating all new states based on the state at time T, apply them all at once.
+            else:
+                if self.inverse_topology.get(component_id):
+                    up_id = self.inverse_topology[component_id][0]
+                    action['upstream_head'] = self.components[up_id].get_state().get('water_level', 0)
+                if self.topology.get(component_id):
+                    down_id = self.topology[component_id][0]
+                    action['downstream_head'] = self.components[down_id].get_state().get('water_level', 0)
+
+            new_states[component_id] = component.step(action, dt)
+            current_step_outflows[component_id] = new_states[component_id].get('outflow', 0)
+
         for component_id, state in new_states.items():
             self.components[component_id].set_state(state)
 

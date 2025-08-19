@@ -28,14 +28,14 @@ def setup_hierarchical_control_system(message_bus, simulation_dt):
         'max_opening': 5.0
     }
     reservoir = Reservoir(
-        reservoir_id="reservoir_1",
+        name="reservoir_1",
         initial_state={'volume': 28.5e6, 'water_level': 19.0},
-        params={'surface_area': 1.5e6}
+        parameters={'surface_area': 1.5e6}
     )
     gate = Gate(
-        gate_id="gate_1",
+        name="gate_1",
         initial_state={'opening': 0.1},
-        params=gate_params,
+        parameters=gate_params,
         message_bus=message_bus,
         action_topic=GATE_ACTION_TOPIC
     )
@@ -91,3 +91,16 @@ def setup_hierarchical_control_system(message_bus, simulation_dt):
     agents = [reservoir_twin_agent, gate_twin_agent, control_agent, dispatcher]
 
     return components, agents
+
+
+import logging
+
+def setup_logging():
+    """Sets up basic logging for the examples."""
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+def print_simulation_results(results):
+    """Prints the final state of all components in a structured way."""
+    for component_name, state in results.items():
+        state_str = ", ".join(f"{k}={v:.2f}" for k, v in state.items() if isinstance(v, (int, float)))
+        print(f"  {component_name}: {state_str}")

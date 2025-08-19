@@ -27,8 +27,8 @@ class DigitalTwinAgent(Agent):
         self.model = simulated_object
         self.bus = message_bus
         self.state_topic = state_topic
-        # Get the ID from the model, which could be 'reservoir_id', 'gate_id', etc.
-        model_id = getattr(self.model, next((attr for attr in dir(self.model) if '_id' in attr), 'id'))
+        # Get the ID from the model's 'name' attribute, which is part of the PhysicalObjectInterface
+        model_id = self.model.name
         print(f"DigitalTwinAgent '{self.agent_id}' created for model '{model_id}'. Will publish state to '{self.state_topic}'.")
 
     def publish_state(self):

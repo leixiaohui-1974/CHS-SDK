@@ -134,6 +134,62 @@ class Controller(ABC):
         pass
 
 
+class PhysicalObjectInterface(Simulatable, Identifiable, ABC):
+    """
+    A specialized interface for a physical object in the water system.
+
+    This combines the `Simulatable` and `Identifiable` interfaces and adds
+    a `name` property, as all physical components must have a unique identifier
+    within the simulation harness.
+    """
+
+    def __init__(self, name: str, initial_state: State, parameters: Parameters):
+        self._name = name
+        self._state = initial_state
+        self._params = parameters
+        self._inflow = 0.0  # Transient variable to store inflow from the previous component
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    def get_state(self) -> State:
+        return self._state.copy()
+
+    def set_state(self, state: State):
+        self._state = state
+
+    def get_parameters(self) -> Parameters:
+        return self._params.copy()
+
+    def set_inflow(self, inflow: float):
+        """
+        Sets the inflow for the current time step. This is called by the harness.
+        """
+        self._inflow = inflow
+
+    def identify_parameters(self, data: Any, method: str = 'offline') -> Parameters:
+        """
+        Default implementation for parameter identification.
+        Can be overridden by subclasses for specific models.
+        """
+        # A basic implementation might just return the current parameters
+        # or raise a NotImplementedError if identification is required but not implemented.
+        print(f"Parameter identification for {self.name} is not implemented. Returning current parameters.")
+        return self.get_parameters()
+
+    @property
+    def is_stateful(self) -> bool:
+        """
+        Returns True if the component stores a volume of water, False otherwise.
+        This helps the harness determine how to calculate flow. Stateful components
+        (like reservoirs) have their outflow determined by downstream demand, while
+        non-stateful components (like pipes or valves) have their outflow determined
+        by their inflow and internal properties.
+        """
+        return False  # Default to False for components like valves, pipes, etc.
+
+
 class Disturbance(ABC):
     """
     An interface for a disturbance model.
