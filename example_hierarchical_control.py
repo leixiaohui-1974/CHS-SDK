@@ -45,6 +45,11 @@ def run_hierarchical_control_example():
     for agent in agents:
         harness.add_agent(agent)
 
+    # 4. Define topology and build the harness
+    harness.add_connection("reservoir_1", "gate_1")
+    harness.build()
+
+    # 5. Run the simulation
     harness.run_mas_simulation()
 
 if __name__ == "__main__":

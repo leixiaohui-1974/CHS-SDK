@@ -88,7 +88,11 @@ def run_mas_example():
     harness.add_agent(twin_agent)
     harness.add_agent(control_agent)
 
-    # 6. Run the MAS simulation
+    # Define topology
+    harness.add_connection("reservoir_1", "gate_1")
+
+    # 6. Build and run the MAS simulation
+    harness.build()
     harness.run_mas_simulation()
 
 if __name__ == "__main__":

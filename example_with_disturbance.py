@@ -55,6 +55,10 @@ def run_disturbance_example():
         harness.add_agent(agent)
     harness.add_agent(rainfall_agent)
 
+    # Define topology and build the harness
+    harness.add_connection("reservoir_1", "gate_1")
+    harness.build()
+
     # 5. Run the MAS simulation
     harness.run_mas_simulation()
 

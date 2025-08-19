@@ -84,7 +84,13 @@ def run_multi_gate_river_example():
         observation_key="volume"
     )
 
-    # 5. Run the simulation
+    # 5. Define Topology
+    harness.add_connection("reservoir_1", "gate_1")
+    harness.add_connection("gate_1", "channel_1")
+    harness.add_connection("channel_1", "gate_2")
+
+    # 6. Build and run the simulation
+    harness.build()
     harness.run_simulation()
 
 if __name__ == "__main__":
