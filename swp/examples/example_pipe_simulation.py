@@ -18,15 +18,15 @@ def run_pipe_example():
 
     # 1. Define the components
     reservoir = Reservoir(
-        reservoir_id="res1",
+        name="res1",
         initial_state={'volume': 25e6, 'water_level': 15.0},
-        params={'surface_area': 1.5e6}
+        parameters={'surface_area': 1.5e6}
     )
 
     pipe = Pipe(
-        pipe_id="pipe1",
-        initial_state={'flow': 0},
-        params={
+        name="pipe1",
+        initial_state={'outflow': 0},
+        parameters={
             'length': 1000, # 1 km
             'diameter': 1.5, # m
             'friction_factor': 0.02
@@ -35,9 +35,9 @@ def run_pipe_example():
 
     # This gate is uncontrolled and just provides a downstream boundary condition
     gate = Gate(
-        gate_id="g1",
+        name="g1",
         initial_state={'opening': 0.3}, # 30% open
-        params={'width': 10, 'max_opening': 1.0, 'discharge_coefficient': 0.6}
+        parameters={'width': 10, 'max_opening': 1.0, 'discharge_coefficient': 0.6}
     )
 
     # 2. Set up the Simulation Harness
