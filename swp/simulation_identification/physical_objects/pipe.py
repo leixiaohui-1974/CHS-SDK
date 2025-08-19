@@ -60,19 +60,27 @@ class Pipe(Simulatable):
         Returns:
             The updated state of the pipe.
         """
-        upstream_head = action.get('upstream_head', 0)
-        downstream_head = action.get('downstream_head', 0)
+        inflow = action.get('inflow', 0)
 
-        head_difference = upstream_head - downstream_head
-
-        if head_difference > 0:
-            # Flow is positive (downstream)
-            flow = self.flow_coefficient * math.sqrt(head_difference)
-            self._state['head_loss'] = head_difference
+        if inflow > 0:
+            # If there's an active inflow from an upstream component (like a pump),
+            # that dictates the flow rate.
+            flow = inflow
+            # We can then calculate the head loss caused by this flow.
+            # Q = C * sqrt(H_f) => H_f = (Q/C)^2
+            self._state['head_loss'] = (flow / self.flow_coefficient)**2
         else:
-            # No flow or reverse flow (simplified to no flow)
-            flow = 0
-            self._state['head_loss'] = 0
+            # Otherwise, in a passive/gravity-fed scenario, calculate flow from head difference.
+            upstream_head = action.get('upstream_head', 0)
+            downstream_head = action.get('downstream_head', 0)
+            head_difference = upstream_head - downstream_head
+
+            if head_difference > 0:
+                flow = self.flow_coefficient * math.sqrt(head_difference)
+                self._state['head_loss'] = head_difference
+            else:
+                flow = 0
+                self._state['head_loss'] = 0
 
         self._state['flow'] = flow
         # In this model, outflow is the same as flow

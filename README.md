@@ -16,7 +16,7 @@ The entire architecture is designed to be modular, pluggable, and extensible, dr
 The platform is built on a layered, modular architecture organized into four main product categories:
 
 1.  **`swp.simulation_identification`**:
-    - **Water System Simulation & Identification**: Contains all hydrodynamic simulation models (for rivers, reservoirs, gates, pipes, pumps) and system identification modules for model calibration. See the [models documentation](./docs/models) for more details.
+    - **Water System Simulation & Identification**: Contains all hydrodynamic simulation models (for rivers, reservoirs, gates, pipes, valves, and pumps) and system identification modules for model calibration. See the [models documentation](./docs/models) for more details.
 
 2.  **`swp.local_agents`**:
     - **Local Agent & Control**: Includes Perception Agents (digital twins) and Local Control modules (implementing algorithms like PID, MPC, etc.).
