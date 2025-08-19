@@ -24,6 +24,7 @@ class SimulationHarness:
         self.config = config
         self.duration = config.get('duration', 100)
         self.dt = config.get('dt', 1.0)
+        self.history = []
 
         self.components: Dict[str, Simulatable] = {}
         self.agents: List[Agent] = []
@@ -167,6 +168,7 @@ class SimulationHarness:
         num_steps = int(self.duration / self.dt)
         print(f"Starting simple simulation: Duration={self.duration}s, TimeStep={self.dt}s\n")
 
+        self.history = []
         for i in range(num_steps):
             current_time = i * self.dt
             print(f"--- Simulation Step {i+1}, Time: {current_time:.2f}s ---")
@@ -188,7 +190,13 @@ class SimulationHarness:
             # 2. Step the physical models in order
             self._step_physical_models(self.dt, actions)
 
-            # 3. Print state summary (optional)
+            # 3. Store history
+            step_history = {'time': current_time}
+            for cid in self.sorted_components:
+                step_history[cid] = self.components[cid].get_state()
+            self.history.append(step_history)
+
+            # 4. Print state summary (optional)
             # You can customize this to print states of interest
             print("  State Update:")
             for cid in self.sorted_components:
@@ -206,6 +214,7 @@ class SimulationHarness:
         num_steps = int(self.duration / self.dt)
         print(f"Starting MAS simulation: Duration={self.duration}s, TimeStep={self.dt}s\n")
 
+        self.history = []
         for i in range(num_steps):
             current_time = i * self.dt
             print(f"--- MAS Simulation Step {i+1}, Time: {current_time:.2f}s ---")
@@ -216,6 +225,12 @@ class SimulationHarness:
 
             print("  Phase 2: Stepping physical models with interactions.")
             self._step_physical_models(self.dt)
+
+            # Store history
+            step_history = {'time': current_time}
+            for cid in self.sorted_components:
+                step_history[cid] = self.components[cid].get_state()
+            self.history.append(step_history)
 
             # Print state summary (optional)
             print("  State Update:")
