@@ -145,8 +145,8 @@ class PhysicalObjectInterface(Simulatable, Identifiable, ABC):
 
     def __init__(self, name: str, initial_state: State, parameters: Parameters):
         self._name = name
-        self._state = initial_state
-        self._params = parameters
+        self._state = initial_state.copy()
+        self._params = parameters.copy()
         self._inflow = 0.0  # Transient variable to store inflow from the previous component
 
     @property
