@@ -1,6 +1,8 @@
 import math
+from typing import Optional
 
 from swp.core.interfaces import PhysicalObjectInterface, State
+from swp.central_coordination.collaboration.message_bus import MessageBus, Message
 
 
 class Canal(PhysicalObjectInterface):
@@ -10,6 +12,9 @@ class Canal(PhysicalObjectInterface):
     This model simulates the water flow and volume changes in a canal segment.
     The outflow is calculated based on the hydraulic properties derived from the
     current water level.
+
+    It can now also subscribe to a message bus topic to receive additional,
+    data-driven inflow (e.g., from a rainfall forecast).
 
     State Variables:
         - volume (float): The current volume of water in the canal (m^3).
@@ -24,7 +29,8 @@ class Canal(PhysicalObjectInterface):
         - manning_n (float): Manning's roughness coefficient.
     """
 
-    def __init__(self, name: str, initial_state: State, parameters: dict):
+    def __init__(self, name: str, initial_state: State, parameters: dict,
+                 message_bus: Optional[MessageBus] = None, inflow_topic: Optional[str] = None):
         super().__init__(name, initial_state, parameters)
         # Parameters are accessed via self._params, but can be copied to attributes for convenience
         self.bottom_width = self._params['bottom_width']
@@ -33,12 +39,33 @@ class Canal(PhysicalObjectInterface):
         self.side_slope_z = self._params['side_slope_z']
         self.manning_n = self._params['manning_n']
 
+        # For data-driven inflow from the message bus
+        self.bus = message_bus
+        self.inflow_topic = inflow_topic
+        self.data_inflow = 0.0
+
+        if self.bus and self.inflow_topic:
+            self.bus.subscribe(self.inflow_topic, self.handle_inflow_message)
+            print(f"Canal '{self.name}' subscribed to data inflow topic '{self.inflow_topic}'.")
+
+    def handle_inflow_message(self, message: Message):
+        """Callback to handle incoming data-driven inflow messages."""
+        inflow_rate = message.get('inflow_rate')
+        if inflow_rate is not None:
+            self.data_inflow = float(inflow_rate)
+        else:
+            # Reset if a message without the key is sent, or handle as needed
+            self.data_inflow = 0.0
+
     def step(self, action: any, dt: float) -> State:
         """
         Advances the canal simulation for one time step.
         """
-        # Inflow is set by the harness via set_inflow()
-        inflow = self._inflow
+        # Physical inflow is set by the harness from upstream components
+        physical_inflow = self._inflow
+
+        # Total inflow is the sum of physical inflow and data-driven inflow
+        inflow = physical_inflow + self.data_inflow
 
         # Approximate water level from volume. For a trapezoid, this is more complex.
         # V = L * (b*y + z*y^2) -> z*y^2 + b*y - V/L = 0
