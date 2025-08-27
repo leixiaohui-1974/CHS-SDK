@@ -1,22 +1,22 @@
-# Training 1: Building a Basic Simulation
+# 培训 1: 构建一个基础仿真
 
-This tutorial will guide you through the process of building a simple simulation from scratch using the Smart Water Platform. We will build the hydropower simulation that is in `swp/examples/example_hydropower_simulation.py`.
+本教程将指导您使用智能水务平台从零开始构建一个简单的仿真。我们将构建一个水电站仿真，其代码示例位于 `swp/examples/example_hydropower_simulation.py`。
 
-## 1. Core Concepts
+## 1. 核心概念
 
-The platform is built around a few core concepts:
+该平台围绕几个核心概念构建：
 
--   **Physical Models**: These are Python classes that represent physical components in a water system, like a `Lake`, `Pipe`, or `Gate`. They must inherit from `PhysicalObjectInterface`.
--   **Simulation Harness**: This is the main engine that manages the simulation. You add your physical models to the harness, define how they are connected, and then run the simulation.
--   **State and Parameters**: Each model has a `state` (e.g., current water volume) which changes over time, and `parameters` (e.g., pipe diameter) which are static.
+-   **物理模型 (Physical Models)**: 这些是代表水系统中物理组件的Python类，例如 `湖泊 (Lake)`、`管道 (Pipe)` 或 `闸门 (Gate)`。它们必须继承自 `PhysicalObjectInterface`。
+-   **仿真平台 (Simulation Harness)**: 这是管理仿真的主引擎。您可以将您的物理模型添加到平台中，定义它们之间的连接方式，然后运行仿真。
+-   **状态 (State) 和 参数 (Parameters)**: 每个模型都有一个随时间变化的 `状态` (例如，当前水量)，以及静态的 `参数` (例如，管道直径)。
 
-## 2. Setting up the Simulation File
+## 2. 设置仿真文件
 
-First, create a new Python file. Let's call it `my_first_simulation.py`.
+首先，创建一个新的Python文件。我们称之为 `my_first_simulation.py`。
 
-## 3. Importing Necessary Classes
+## 3. 导入必要的类
 
-You will need to import the `SimulationHarness` and the physical models you want to use.
+您需要导入 `SimulationHarness` 以及您想要使用的物理模型。
 
 ```python
 from swp.core_engine.testing.simulation_harness import SimulationHarness
@@ -25,42 +25,42 @@ from swp.simulation_identification.physical_objects.water_turbine import WaterTu
 from swp.simulation_identification.physical_objects.canal import Canal
 ```
 
-## 4. Initializing the Simulation Harness
+## 4. 初始化仿真平台
 
-The harness is initialized with a configuration dictionary that specifies the `duration` of the simulation (in seconds) and the `dt` (time step in seconds).
+仿真平台通过一个配置字典进行初始化，该字典指定了仿真的 `duration` (持续时间，单位为秒) 和 `dt` (时间步长，单位为秒)。
 
 ```python
-# Simulate for 1 day with 1-hour time steps
+# 模拟1天，时间步长为1小时
 config = {'duration': 86400, 'dt': 3600}
 harness = SimulationHarness(config)
 ```
 
-## 5. Creating Physical Models
+## 5. 创建物理模型
 
-Now, create instances of the models you want to simulate. Each model needs a unique `name`, an `initial_state` dictionary, and a `parameters` dictionary.
+现在，创建您想要仿真的模型的实例。每个模型都需要一个唯一的 `name` (名称)，一个 `initial_state` (初始状态) 字典，以及一个 `parameters` (参数) 字典。
 
 ```python
-# Upper Lake
+# 上游湖泊
 initial_lake_volume = 40e6
 lake_surface_area = 2e6
 upper_lake = Lake(
     name="upper_lake",
     initial_state={'volume': initial_lake_volume, 'water_level': initial_lake_volume / lake_surface_area},
-    parameters={'surface_area': lake_surface_area, 'max_volume': 50e6}
+    params={'surface_area': lake_surface_area, 'max_volume': 50e6}
 )
 
-# Hydropower Turbine
+# 水轮机
 turbine = WaterTurbine(
     name="turbine_1",
     initial_state={'power': 0, 'outflow': 0},
-    parameters={'efficiency': 0.85, 'max_flow_rate': 150}
+    params={'efficiency': 0.85, 'max_flow_rate': 150}
 )
 
-# Tailrace Canal
+# 尾水渠
 tailrace_canal = Canal(
     name="tailrace_canal",
     initial_state={'volume': 100000, 'water_level': 2.1},
-    parameters={
+    params={
         'bottom_width': 20,
         'length': 5000,
         'slope': 0.0002,
@@ -70,9 +70,9 @@ tailrace_canal = Canal(
 )
 ```
 
-## 6. Adding Components to the Harness
+## 6. 向平台添加组件
 
-Add your created models to the harness.
+将您创建的模型添加到仿真平台中。
 
 ```python
 harness.add_component(upper_lake)
@@ -80,22 +80,22 @@ harness.add_component(turbine)
 harness.add_component(tailrace_canal)
 ```
 
-## 7. Defining the Topology
+## 7. 定义拓扑结构
 
-Define how the components are connected. The connections represent the direction of water flow.
+定义组件之间的连接方式。这些连接代表了水的流向。
 
 ```python
 harness.add_connection("upper_lake", "turbine_1")
 harness.add_connection("turbine_1", "tailrace_canal")
 ```
 
-## 8. Building and Running the Simulation
+## 8. 构建并运行仿真
 
-Finally, build the harness (which calculates the correct order to run the models in) and run the simulation.
+最后，构建平台（它会计算出运行模型的正确顺序）并运行仿真。
 
 ```python
 harness.build()
 harness.run_simulation()
 ```
 
-And that's it! You have built and run your first simulation. The `run_simulation` method will print the state of each component at each time step.
+就是这样！您已经成功构建并运行了您的第一个仿真。`run_simulation` 方法将在每个时间步打印出每个组件的状态。

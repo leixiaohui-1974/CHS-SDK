@@ -1,5 +1,5 @@
 """
-A Model Predictive Control (MPC) controller.
+一个模型预测控制（MPC）控制器。
 """
 import numpy as np
 from scipy.optimize import minimize
@@ -9,24 +9,24 @@ from swp.core.interfaces import Controller, State
 
 class MPCController(Controller):
     """
-    A Model Predictive Controller enhanced to use an Integral-Delay (ID) model
-    for system predictions, as described in the design document for a "现地MPC".
+    一个增强的模型预测控制器，使用积分-时滞（ID）模型进行系统预测，
+    依据“现地MPC”的设计文档进行实现。
     """
 
     def __init__(self, horizon: int, dt: float, config: Dict[str, Any]):
         """
-        Initializes the MPCController.
+        初始化MPC控制器。
 
-        Args:
-            horizon: The number of time steps to look ahead (prediction horizon).
-            dt: The simulation time step in seconds.
-            config: A dictionary with MPC parameters:
-                - target_level: The desired water level.
-                - q_weight: Weight for deviations from the target level.
-                - r_weight: Weight for control action magnitude/change.
-                - bounds: A tuple (min, max) for the control action.
-                - id_model_gain (K): The gain of the Integral-Delay model.
-                - id_model_delay_steps (tau): The time delay in discrete steps.
+        参数:
+            horizon: 向前看的时间步数（预测时域）。
+            dt: 仿真时间步长（秒）。
+            config: 包含MPC参数的字典：
+                - target_level: 期望的水位。
+                - q_weight: 偏离目标水位的权重（成本）。
+                - r_weight: 控制动作大小/变化的权重（成本）。
+                - bounds: 控制动作的元组（最小值, 最大值）。
+                - id_model_gain (K): 积分-时滞模型的增益。
+                - id_model_delay_steps (tau): 以离散步数表示的时间延迟。
         """
         self.horizon = horizon
         self.dt = dt
@@ -35,11 +35,11 @@ class MPCController(Controller):
         self.r_weight = config.get("r_weight", 0.1)
         self.bounds = config.get("bounds", (0, 1))
 
-        # ID Model parameters
+        # ID模型参数
         self.K = config["id_model_gain"]
-        self.tau = int(config["id_model_delay_steps"]) # Delay in number of steps
+        self.tau = int(config["id_model_delay_steps"]) # 以步数表示的延迟
 
-        # Store a history of control actions to handle the delay
+        # 存储控制动作历史以处理延迟
         self.control_history = deque([0.0] * self.tau, maxlen=self.tau)
 
     def _objective_function(self, control_sequence: np.ndarray,
@@ -47,51 +47,47 @@ class MPCController(Controller):
                             disturbance_forecast: List[float],
                             past_controls: List[float]) -> float:
         """
-        The function to be minimized. Calculates the total cost for a given
-        control sequence using the ID model.
+        要最小化的函数。使用ID模型计算给定控制序列的总成本。
         """
         cost = 0.0
         predicted_level = current_level
 
-        # The full control sequence available for prediction includes
-        # historical actions and the new candidate sequence.
+        # 用于预测的完整控制输入序列包括历史动作和新的候选序列。
         full_control_input = past_controls + list(control_sequence)
 
         num_steps = min(len(control_sequence), len(disturbance_forecast))
 
         for i in range(num_steps):
-            # The control action that affects the current step 'i' was
-            # taken 'tau' steps ago.
-            # Index is i + tau (for past_controls) - tau = i
+            # 影响当前步骤'i'的控制动作是在'tau'个步骤前执行的。
+            # 索引是 i + tau (对于past_controls) - tau = i
             effective_control_action = full_control_input[i]
 
-            # ID Model: Change in level is proportional to the delayed control action,
-            # minus any external disturbances (e.g., forecasted outflow/demand).
+            # ID模型：水位的变化与延迟的控制动作成正比，减去任何外部扰动（例如，预测的出流量/需求）。
             change_in_level = self.K * effective_control_action - disturbance_forecast[i]
 
             predicted_level += change_in_level * self.dt
 
-            # Cost calculation
-            # 1. Cost for deviating from the target level
+            # 成本计算
+            # 1. 偏离目标水位的成本
             cost += self.q_weight * ((predicted_level - self.target_level) ** 2)
 
-            # 2. Cost for control action magnitude
+            # 2. 控制动作大小的成本
             cost += self.r_weight * (control_sequence[i] ** 2)
 
         return cost
 
     def compute_control_action(self, observation: State, dt: float) -> Any:
         """
-        Computes the optimal control action using MPC with the ID model.
+        使用带有ID模型的MPC计算最优控制动作。
         """
         current_level = observation.get("water_level")
-        # The 'disturbance_forecast' can be net inflow (inflow - base_outflow) or similar
+        # 'disturbance_forecast'可以是净入流量（入流量 - 基础出流量）或类似值
         disturbance_forecast = observation.get("disturbance_forecast", [0.0] * self.horizon)
 
         if current_level is None:
-            raise ValueError("Observation must contain 'water_level'.")
+            raise ValueError("观测值必须包含'water_level'。")
 
-        # Ensure forecast matches horizon length
+        # 确保预测与时域长度匹配
         if len(disturbance_forecast) < self.horizon:
             last_value = disturbance_forecast[-1] if disturbance_forecast else 0
             disturbance_forecast.extend([last_value] * (self.horizon - len(disturbance_forecast)))
@@ -99,7 +95,7 @@ class MPCController(Controller):
         initial_guess = np.zeros(self.horizon)
         bnds = [self.bounds] * self.horizon
 
-        # Pass the history of controls needed to simulate the delay
+        # 传递模拟延迟所需的控制历史
         past_controls_for_prediction = list(self.control_history)
 
         result = minimize(
@@ -112,7 +108,7 @@ class MPCController(Controller):
 
         optimal_action = result.x[0] if result.success else initial_guess[0]
 
-        # Update control history with the chosen action
+        # 用选择的动作更新控制历史
         self.control_history.append(optimal_action)
 
         return {'opening': float(optimal_action)}

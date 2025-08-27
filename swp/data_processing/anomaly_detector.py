@@ -1,48 +1,45 @@
 #-*- coding: utf-8 -*-
 """
-This module provides wrappers for anomaly detection algorithms.
+本模块为异常检测算法提供封装器。
 """
 import pandas as pd
 from sklearn.ensemble import IsolationForest
 
 class IsolationForestAnomalyDetector:
     """
-    A wrapper for the scikit-learn IsolationForest model to provide a consistent
-    interface for anomaly detection within the SWP project.
+    对scikit-learn的IsolationForest模型进行封装，以便在SWP项目中为异常检测提供一致的接口。
     """
 
     def __init__(self, n_estimators=100, contamination='auto', random_state=42):
         """
-        Initializes the anomaly detector.
+        初始化异常检测器。
 
-        Args:
-            n_estimators (int): The number of base estimators in the ensemble.
-            contamination (float or 'auto'): The amount of contamination of the data set, i.e.,
-                the proportion of outliers in the data set.
-            random_state (int): Controls the pseudo-randomness of the selection of the feature
-                and split values for each branching decision.
+        参数:
+            n_estimators (int): 集成中的基础估计器数量。
+            contamination (float or 'auto'): 数据集的污染程度，即数据集中异常值的比例。
+            random_state (int): 控制特征选择和每个分支决策中分割值的伪随机性。
         """
         self.model = IsolationForest(
             n_estimators=n_estimators,
             contamination=contamination,
             random_state=random_state,
-            n_jobs=-1  # Use all available processors
+            n_jobs=-1  # 使用所有可用的处理器
         )
 
     def fit_predict(self, data: pd.DataFrame) -> pd.Series:
         """
-        Fits the model to the data and predicts the labels (1 for inliers, -1 for outliers).
+        将模型拟合到数据并预测标签（1为正常值，-1为异常值）。
 
-        Args:
-            data (pd.DataFrame): The input data to fit the model to and predict.
-                The data should be a DataFrame where each column is a feature.
+        参数:
+            data (pd.DataFrame): 用于拟合模型和预测的输入数据。
+                数据应为一个DataFrame，其中每列都是一个特征。
 
-        Returns:
-            pd.Series: A series containing the predictions, where 1 indicates an inlier
-                       and -1 indicates an outlier. The series index will match the input data.
+        返回:
+            pd.Series: 包含预测结果的Series，其中1表示正常值，-1表示异常值。
+                       该Series的索引将与输入数据匹配。
         """
         if not isinstance(data, pd.DataFrame):
-            raise TypeError("Input data must be a pandas DataFrame.")
+            raise TypeError("输入数据必须是pandas DataFrame。")
         if data.empty:
             return pd.Series(dtype=int)
 
