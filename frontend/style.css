@@ -1,0 +1,329 @@
+/* style.css - 通用算法测试界面的样式文件 */
+:root {
+    --panel-padding: 20px;
+    --panel-margin: 5px;
+    --border-radius: 8px;
+    --background-color: #f0f2f5;
+    --panel-background: #ffffff;
+    --shadow: 0 2px 4px rgba(0,0,0,0.1);
+    --text-color: #333;
+    --header-border-color: #eee;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    margin: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.main-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.panel {
+    background-color: var(--panel-background);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    margin: 0 var(--panel-margin);
+    padding: var(--panel-padding);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+#config-panel {
+    flex: 1 1 350px; /* flex-grow, flex-shrink, flex-basis */
+}
+
+#visual-panel {
+    flex: 3 1 60%;
+}
+
+#results-panel {
+    flex: 1 1 350px;
+}
+
+h2 {
+    text-align: center;
+    color: var(--text-color);
+    border-bottom: 1px solid var(--header-border-color);
+    padding-bottom: 10px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+}
+
+/* --- Styles for Config Panel --- */
+.config-section {
+    margin-bottom: 25px;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 15px;
+}
+
+.config-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.config-section h3 {
+    font-size: 1em;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #555;
+}
+
+.config-section h4 {
+    font-size: 0.9em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: #666;
+}
+
+#config-panel label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 0.9em;
+}
+
+#config-panel input[type="number"],
+#config-panel select,
+#config-panel textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+#config-panel button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 5px;
+}
+
+#config-panel button:hover {
+    background-color: #0056b3;
+}
+
+#water-network-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    align-items: center;
+}
+
+#water-network-form label {
+    margin-bottom: 0;
+}
+
+#disturbance-timeline {
+    min-height: 50px;
+    border: 1px dashed #ccc;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+.control-panel {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.control-panel h3 {
+    width: 100%;
+}
+
+/* --- Styles for Visual Panel --- */
+#visual-panel {
+    justify-content: space-between;
+}
+
+#animation-container {
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.water-body {
+    background-color: #e0f7fa;
+    border: 2px solid #4dd0e1;
+    width: 40%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+#upstream-pool {
+    border-right: none;
+    border-top-left-radius: var(--border-radius);
+    border-bottom-left-radius: var(--border-radius);
+}
+
+#downstream-pool {
+    border-left: none;
+    border-top-right-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+}
+
+.water-level {
+    background-color: #00bcd4;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    transition: height 0.5s ease-in-out;
+    height: 60%; /* Example height */
+}
+
+.gate-container {
+    width: 5%;
+    min-width: 40px;
+    height: 105%;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    position: relative;
+    bottom: -2px;
+}
+
+.gate {
+    background-color: #795548;
+    width: 10px;
+    height: 100%; /* Example height */
+    position: absolute;
+    bottom: 0;
+    transition: height 0.5s ease-in-out;
+}
+
+.pool-label, .gate-label {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255,255,255,0.7);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+}
+
+#chart-container {
+    flex-grow: 1;
+    position: relative; /* Needed for chart.js responsiveness */
+}
+
+/* --- Styles for Results Panel --- */
+.results-section {
+    margin-bottom: 25px;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 15px;
+}
+
+.results-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.results-section h3 {
+    font-size: 1em;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #555;
+}
+
+#results-panel label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 0.9em;
+}
+
+#results-panel textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+#results-panel button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #28a745;
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 5px;
+}
+
+#results-panel button:hover {
+    background-color: #218838;
+}
+
+#kpi-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+}
+
+#kpi-table th, #kpi-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#kpi-table thead {
+    background-color: #f8f9fa;
+}
+
+#replayer-controls {
+    display: flex;
+    gap: 10px;
+}
+
+#replayer-controls button {
+    background-color: #6c757d;
+}
+
+#replayer-controls button:hover {
+    background-color: #5a6268;
+}
+
+#diagnosis-report {
+    min-height: 100px;
+    border: 1px solid #eee;
+    background-color: #fdfdfd;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 0.9em;
+    white-space: pre-wrap; /* To respect newlines in the report */
+}
