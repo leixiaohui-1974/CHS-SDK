@@ -1,66 +1,66 @@
-# Smart Water Platform (SWP) - A Digital Twin & MAS Framework
+# 智能水务平台 (SWP) - 数字孪生与多代理系统框架
 
-This repository contains the foundational framework for a forward-looking "Smart Water System Digital Twin and Collaborative Control Platform". The project is conceived as a "Mother Machine"—a meta-platform for simulating, generating, testing, and managing complex water systems using a multi-agent system (MAS) approach.
+本代码库包含一个前瞻性的“智慧水务系统数字孪生与协同控制平台”的基础框架。该项目被构想为一个“母体机器”——一个用于模拟、生成、测试和管理复杂水务系统的元平台，其核心采用了多代理系统（MAS）的方法。
 
-The entire architecture is designed to be modular, pluggable, and extensible, drawing inspiration from Simulink's block-based modeling paradigm. Every component is intended to be a composable backend algorithm and engine.
+整个架构被设计为模块化、可插拔和可扩展的，其灵感来源于Simulink的基于模块的建模范式。每一个组件都被设计成一个可组合的后端算法和引擎。
 
 ## 宏观愿景 (High-Level Vision)
 
-- **数字孪生平台 (Digital Twin Platform)**: Builds a real-time digital reflection of physical water systems by integrating live monitoring data.
-- **智能体工厂 (Agent Factory)**: Automatically generates and configures multi-agent systems from simulation models.
-- **在环测试沙盒 (In-the-Loop Sandbox)**: Acts as its own testing environment for rigorous, automated testing of generated agents.
-- **全生命周期管理 (Lifecycle Management)**: Manages agent versioning, performance evaluation, and adaptive updates.
+- **数字孪生平台 (Digital Twin Platform)**: 通过整合实时监测数据，构建物理水务系统的实时数字映像。
+- **智能体工厂 (Agent Factory)**: 从仿真模型中自动生成并配置多代理系统。
+- **在环测试沙盒 (In-the-Loop Sandbox)**: 作为其自身的测试环境，对生成的代理进行严格、自动化的测试。
+- **全生命周期管理 (Lifecycle Management)**: 管理代理的版本控制、性能评估和自适应更新。
 
 ## 技术架构 (Technical Architecture)
 
-The platform is built on a layered, modular architecture organized into four main product categories:
+该平台建立在一个分层的、模块化的架构之上，分为四个主要的产品类别：
 
 1.  **`swp.simulation_identification`**:
-    - **Water System Simulation & Identification**: Contains all hydrodynamic simulation models. See the [models documentation](./docs/models) for more details on all available models, including:
-        - `Reservoir`
-        - `Gate`
-        - `Pipe`
-        - `Valve`
-        - `Pump`
-        - `RiverChannel`
-        - `Canal`
-        - `Lake`
-        - `WaterTurbine`
+    - **水系统仿真与辨识**: 包含所有的水动力学仿真模型。请参阅[模型文档](./docs/models)以获取所有可用模型的更多详细信息，包括：
+        - `水库 (Reservoir)`
+        - `闸门 (Gate)`
+        - `管道 (Pipe)`
+        - `阀门 (Valve)`
+        - `水泵 (Pump)`
+        - `河道 (RiverChannel)`
+        - `渠道 (Canal)`
+        - `湖泊 (Lake)`
+        - `水轮机 (WaterTurbine)`
 
 2.  **`swp.local_agents`**:
-    - **Local Agent & Control**: Includes Perception Agents (digital twins) and Local Control modules (implementing algorithms like PID, MPC, etc.).
+    - **本地代理与控制**: 包括感知代理（数字孪生）和本地控制模块（实现如PID、MPC等算法）。
 
 3.  **`swp.central_coordination`**:
-    - **Central Coordination & Dispatch**: Features the central dispatcher "brain" and the multi-agent collaboration library (e.g., message bus).
+    - **中央协调与调度**: 包含中央调度“大脑”和多代理协作库（例如，消息总线）。
 
 4.  **`swp.core_engine`**:
-    - **Core Platform Engine**: The "Mother Machine" itself. Contains the Agent Factory, Lifecycle Manager, and the In-the-Loop Testing Harness.
+    - **核心平台引擎**: “母体机器”本身。包含代理工厂、生命周期管理器和在环测试平台。
 
-A central `swp.core` package defines the abstract interfaces that ensure all components are "pluggable".
+一个中心的 `swp.core` 包定义了确保所有组件“可插拔”的抽象接口。
 
-## Getting Started
+## 快速入门 (Getting Started)
 
-The repository includes several end-to-end examples.
+本代码库包含了几个端到端的示例。
 
-To run the examples, execute them as modules from the root directory of the repository.
+要运行这些示例，请从代码库的根目录以模块方式执行它们。
 
-For example, to run the hydropower simulation:
+例如，要运行水电站仿真：
 ```bash
 python3 -m swp.examples.example_hydropower_simulation
 ```
 
-To run the multi-agent branched network example:
+要运行多代理分支网络示例：
 ```bash
 python3 -m swp.examples.example_branched_network
 ```
 
-These examples serve as a clear demonstration of the framework's core principles and a starting point for developing more complex systems.
+这些示例清晰地展示了框架的核心原则，并为开发更复杂的系统提供了一个起点。
 
-## Future Development
+## 未来发展 (Future Development)
 
-The current codebase provides a robust architectural skeleton. Future work will involve:
-- Implementing detailed, physics-based hydrodynamic models.
-- Adding more advanced control algorithms (MPC, Reinforcement Learning).
-- Developing the multi-agent communication and negotiation protocols.
-- Building out the agent lifecycle management features.
-- Creating comprehensive tutorials and documentation.
+当前的代码库提供了一个强大的架构骨架。未来的工作将包括：
+- 实现更精细的、基于物理的水动力学模型。
+- 添加更先进的控制算法（MPC、强化学习）。
+- 开发多代理通信和协商协议。
+- 构建代理生命周期管理功能。
+- 创建全面的教程和文档。
