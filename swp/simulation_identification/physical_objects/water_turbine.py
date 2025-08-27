@@ -1,12 +1,14 @@
 from swp.core.interfaces import PhysicalObjectInterface, State
+from swp.central_coordination.collaboration.message_bus import MessageBus, Message
+from typing import Optional, Dict, Any
 
 class WaterTurbine(PhysicalObjectInterface):
     """
     Represents a water turbine for hydropower generation.
 
     This model calculates the power generated based on the flow rate and
-    hydraulic head difference. It is a non-stateful model in terms of water
-    volume (inflow equals outflow up to its maximum capacity).
+    hydraulic head difference. It can be controlled by setting a target outflow
+    via the message bus.
 
     State Variables:
         - outflow (float): The flow of water passing through the turbine (m^3/s).
@@ -17,7 +19,9 @@ class WaterTurbine(PhysicalObjectInterface):
         - max_flow_rate (float): The maximum flow rate the turbine can handle (m^3/s).
     """
 
-    def __init__(self, name: str, initial_state: State, parameters: dict):
+    def __init__(self, name: str, initial_state: State, parameters: dict,
+                 message_bus: Optional[MessageBus] = None, action_topic: Optional[str] = None,
+                 action_key: str = 'target_outflow'):
         super().__init__(name, initial_state, parameters)
         self.efficiency = self._params['efficiency']
         self.max_flow_rate = self._params['max_flow_rate']
@@ -28,6 +32,20 @@ class WaterTurbine(PhysicalObjectInterface):
         self._state.setdefault('outflow', 0.0)
         self._state.setdefault('power', 0.0)
 
+        self.bus = message_bus
+        self.action_topic = action_topic
+        self.action_key = action_key
+        self.target_outflow = self._state.get('outflow', 0.0)
+
+        if self.bus and self.action_topic:
+            self.bus.subscribe(self.action_topic, self.handle_action_message)
+            print(f"Turbine '{self.name}' subscribed to action topic '{self.action_topic}'.")
+
+    def handle_action_message(self, message: Message):
+        """Callback to handle incoming action messages from the bus."""
+        if self.action_key in message:
+            self.target_outflow = message[self.action_key]
+
     def step(self, action: dict, dt: float) -> State:
         """
         Calculates the turbine's outflow and power generation for one time step.
@@ -35,9 +53,8 @@ class WaterTurbine(PhysicalObjectInterface):
         # The harness provides inflow and head information in the action dictionary
         inflow = self._inflow
 
-        # The turbine's outflow is constrained by its max flow rate and the incoming flow.
-        # It doesn't store water, so outflow is the processed inflow.
-        outflow = min(inflow, self.max_flow_rate)
+        # The turbine's outflow is constrained by inflow, its max flow rate, and the agent's target.
+        outflow = min(inflow, self.max_flow_rate, self.target_outflow)
         self._state['outflow'] = outflow
 
         # The harness provides head levels from adjacent components
