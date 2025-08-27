@@ -86,18 +86,24 @@ class Canal(PhysicalObjectInterface):
 
         self._state['water_level'] = water_level
 
-        # Calculate hydraulic properties for a trapezoidal channel
-        if water_level > 0:
-            area = (self.bottom_width + self.side_slope_z * water_level) * water_level
-            wetted_perimeter = self.bottom_width + 2 * water_level * math.sqrt(1 + self.side_slope_z**2)
-            hydraulic_radius = area / wetted_perimeter if wetted_perimeter > 0 else 0
+        # If the harness provides an outflow value (for stateful components), use it.
+        # Otherwise, calculate it using Manning's equation (for open-ended components).
+        if action and action.get('outflow') is not None:
+            outflow = action['outflow']
         else:
-            area = 0
-            hydraulic_radius = 0
+            # Calculate hydraulic properties for a trapezoidal channel
+            if water_level > 0:
+                area = (self.bottom_width + self.side_slope_z * water_level) * water_level
+                wetted_perimeter = self.bottom_width + 2 * water_level * math.sqrt(1 + self.side_slope_z**2)
+                hydraulic_radius = area / wetted_perimeter if wetted_perimeter > 0 else 0
+            else:
+                area = 0
+                hydraulic_radius = 0
 
-        # Calculate outflow using Manning's equation
-        # Q = (1/n) * A * R_h^(2/3) * S^(1/2)
-        outflow = (1 / self.manning_n) * area * (hydraulic_radius**(2/3)) * (self.slope**0.5) if area > 0 else 0
+            # Calculate outflow using Manning's equation
+            # Q = (1/n) * A * R_h^(2/3) * S^(1/2)
+            outflow = (1 / self.manning_n) * area * (hydraulic_radius**(2/3)) * (self.slope**0.5) if area > 0 else 0
+
         self._state['outflow'] = outflow
 
         # Update volume based on inflow and outflow using mass balance
@@ -105,3 +111,8 @@ class Canal(PhysicalObjectInterface):
         self._state['volume'] = max(0, self._state['volume']) # Volume cannot be negative
 
         return self.get_state()
+
+    @property
+    def is_stateful(self) -> bool:
+        """A canal stores water, so it is a stateful component."""
+        return True
