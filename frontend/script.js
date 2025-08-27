@@ -25,6 +25,13 @@ const ALGORITHM_PARAMS = {
             { id: 'window_size', label: '滑动窗口大小', type: 'number', value: 5, step: 1 },
             { id: 'std_dev_threshold', label: '标准差阈值', type: 'number', value: 3, step: 0.5 },
         ]
+    },
+    kalman_filter: {
+        name: '卡尔曼滤波算法',
+        params: [
+            { id: 'process_noise_q', label: '过程噪声 (Q)', type: 'number', value: 0.01, step: 0.01 },
+            { id: 'measurement_noise_r', label: '测量噪声 (R)', type: 'number', value: 1.0, step: 0.1 },
+        ]
     }
 };
 
