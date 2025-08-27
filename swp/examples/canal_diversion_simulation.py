@@ -30,6 +30,7 @@ from swp.core_engine.testing.simulation_harness import SimulationHarness
 from swp.central_coordination.collaboration.message_bus import MessageBus
 from swp.simulation_identification.physical_objects.canal import Canal
 from swp.simulation_identification.physical_objects.gate import Gate
+from swp.local_agents.io.physical_io_agent import PhysicalIOAgent
 from swp.local_agents.control.pid_controller import PIDController
 from swp.local_agents.control.local_control_agent import LocalControlAgent
 from swp.local_agents.perception.digital_twin_agent import DigitalTwinAgent
@@ -92,9 +93,8 @@ def run_simulation():
             'discharge_coefficient': 0.8,
             'width': 15,
             'max_opening': 10.0
-        },
-        message_bus=message_bus,
-        action_topic=GATE_ACTION_TOPIC
+        }
+        # Decoupled from message_bus
     )
 
     downstream_canal = Canal(
@@ -204,14 +204,27 @@ def run_simulation():
         config=rainfall_config
     )
 
-    # Water Use Disturbance Agent
+    # Water Use Disturbance Agent - now message-based
+    water_use_config = {
+        "topic": UPSTREAM_INFLOW_DATA_TOPIC, # Publish to the same topic as rain
+        "start_time": 0,
+        "duration": simulation_duration,
+        "demand_rate": 20.0 # m^3/s
+    }
     water_use_agent = WaterUseAgent(
         agent_id="water_use_agent",
-        canal_to_affect=upstream_canal,
-        start_time=0,
-        duration=400, # Active for the whole simulation
-        diversion_rate=20.0, # m^3/s
-        dt=simulation_dt
+        message_bus=message_bus,
+        config=water_use_config
+    )
+
+    # IO Agent
+    io_agent = PhysicalIOAgent(
+        agent_id="io_agent_1",
+        message_bus=message_bus,
+        sensors_config={}, # Handled by DigitalTwin
+        actuators_config={
+            'gate_actuator': {'obj': control_gate, 'target_attr': 'target_opening', 'topic': GATE_ACTION_TOPIC, 'control_key': 'control_signal'}
+        }
     )
 
     agent_components = [
@@ -221,7 +234,8 @@ def run_simulation():
         rainfall_forecaster,
         inflow_source_agent,
         rainfall_agent,
-        water_use_agent
+        water_use_agent,
+        io_agent
     ]
 
     print("Agent components configured.")
@@ -250,49 +264,58 @@ def run_simulation():
     # The final step will be to plot these results
     return results
 
-def plot_results(results):
+def plot_results(harness: SimulationHarness):
     """
     Processes and plots the results from the simulation.
     """
     print("\n--- Plotting Simulation Results ---")
 
-    # Extract data series
-    time = results['time']
-    upstream_level = results['upstream_canal']['water_level']
-    gate_opening = results['control_gate']['opening']
-    upstream_inflow = results['upstream_canal']['inflow']
-    upstream_outflow = results['upstream_canal']['outflow']
+    history = harness.history
+    if not history:
+        print("No history to plot.")
+        return
 
-    # We need to get the setpoint history from the PID controller's internal log
-    pid_history = results['agents']['gate_control_agent']['history']
-    setpoints = [h.get('setpoint', np.nan) for h in pid_history]
+    # 1. 将物理组件的历史记录转换为DataFrame
+    import pandas as pd
+    flat_history = []
+    for step in history:
+        row = {'time': step['time']}
+        for component_name, states in step.items():
+            if component_name == 'time' or not isinstance(states, dict): continue
+            for state_key, value in states.items():
+                row[f"{component_name}.{state_key}"] = value
+        flat_history.append(row)
+    results = pd.DataFrame(flat_history).set_index('time')
 
     fig, axs = plt.subplots(3, 1, figsize=(12, 15), sharex=True)
     fig.suptitle('Canal Diversion Simulation Results', fontsize=16)
 
     # Plot 1: Upstream Water Level and PID Setpoint
-    axs[0].plot(time, upstream_level, label='Upstream Water Level (m)', color='b')
-    axs[0].plot(time, setpoints, label='PID Setpoint (m)', color='r', linestyle='--')
-    axs[0].axvline(x=100, color='grey', linestyle=':', label='Disturbance Start')
-    axs[0].axvline(x=200, color='grey', linestyle=':', label='Disturbance End')
+    axs[0].plot(results.index, results['upstream_canal.water_level'], label='Upstream Water Level (m)', color='b')
+    # Setpoint is not easily available without a logger, so we omit it in this refactored version.
+    axs[0].axhline(y=5.0, color='grey', linestyle=':', label='Normal Setpoint')
+    axs[0].axhline(y=4.0, color='red', linestyle=':', label='Emergency Setpoint')
+    axs[0].axvline(x=100, color='k', linestyle='--', label='Disturbance Start')
+    axs[0].axvline(x=200, color='k', linestyle='--')
     axs[0].set_ylabel('Water Level (m)')
     axs[0].legend()
     axs[0].grid(True)
-    axs[0].set_title('Upstream Canal Water Level vs. Control Setpoint')
+    axs[0].set_title('Upstream Canal Water Level')
 
     # Plot 2: Gate Opening
-    axs[1].plot(time, gate_opening, label='Gate Opening (%)', color='g')
-    # Convert opening to percentage for the label
-    axs[1].fill_between(time, 0, gate_opening, color='g', alpha=0.2)
-    axs[1].set_ylabel('Opening (%)')
+    axs[1].plot(results.index, results['control_gate.opening'], label='Gate Opening (m)', color='g')
+    axs[1].fill_between(results.index, 0, results['control_gate.opening'], color='g', alpha=0.2)
+    axs[1].set_ylabel('Opening (m)')
     axs[1].legend()
     axs[1].grid(True)
     axs[1].set_title('Control Gate Opening')
 
     # Plot 3: Inflows and Outflows
-    axs[2].plot(time, upstream_inflow, label='Total Inflow (m³/s)', color='c')
-    axs[2].plot(time, upstream_outflow, label='Natural Outflow (m³/s)', color='m')
-    # Note: The diversion outflow is not explicitly logged, but it's reflected in the inflow
+    axs[2].plot(results.index, results['upstream_canal.outflow'], label='Upstream Canal Outflow (m³/s)', color='m')
+    # Inflow is now a disturbance, not part of the state. We can reconstruct it for plotting.
+    inflow = [150 if t < 100 else 200 if t < 200 else 150 for t in results.index]
+    inflow = [val - 20 for val in inflow] # Subtract water use
+    axs[2].plot(results.index, inflow, label='Net Inflow (m³/s)', color='c')
     axs[2].set_xlabel('Time (s)')
     axs[2].set_ylabel('Flow Rate (m³/s)')
     axs[2].legend()
@@ -308,6 +331,6 @@ def plot_results(results):
 
 
 if __name__ == "__main__":
-    simulation_results = run_simulation()
-    if simulation_results:
-        plot_results(simulation_results)
+    harness = run_simulation()
+    if harness:
+        plot_results(harness)

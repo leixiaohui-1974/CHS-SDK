@@ -24,6 +24,7 @@ from swp.central_coordination.collaboration.message_bus import MessageBus
 from swp.simulation_identification.physical_objects.reservoir import Reservoir
 from swp.simulation_identification.physical_objects.canal import Canal
 from swp.simulation_identification.physical_objects.gate import Gate
+from swp.local_agents.io.physical_io_agent import PhysicalIOAgent
 from swp.local_agents.perception.digital_twin_agent import DigitalTwinAgent
 from swp.local_agents.control.pid_controller import PIDController
 from swp.local_agents.control.local_control_agent import LocalControlAgent
@@ -71,37 +72,39 @@ def setup_system(bus: MessageBus, sim_dt: float, user_params: dict):
     DISTURBANCE_TOPIC = "disturbance/upstream/inflow"
 
     # 1. 物理组件
-    # 使用水库模型代替渠道来正确地进行水位控制
-    # 基于原始渠道几何形状估算物理参数
-    canal_length = 5000
-    canal_bottom_width = 20
-    canal_side_slope = 2
+    # Note: Using the now-fixed Canal class instead of Reservoir
+    canal_params = {
+        'bottom_width': 20, 'length': 5000, 'slope': 0.0001,
+        'side_slope_z': 2, 'manning_n': 0.03
+    }
     normal_water_level = 5.0
-    surface_area = canal_length * (canal_bottom_width + canal_side_slope * normal_water_level)
+    surface_area = canal_params['length'] * (canal_params['bottom_width'] + canal_params['side_slope_z'] * normal_water_level)
+    # V = L * (b*y + z*y^2) - Or more simply, Area * Level
     initial_volume = surface_area * normal_water_level
 
-    reservoir_params = {'surface_area': surface_area}
     gate_params = {'discharge_coefficient': 0.8, 'width': 5, 'max_opening': 3.0, 'max_rate_of_change': 0.1}
 
     # sink_canal 仍然是一个渠道，因为它的出流是自由的
     sink_canal_params = {'bottom_width': 20, 'length': 1000, 'slope': 0.001, 'side_slope_z': 2, 'manning_n': 0.025}
 
-    upstream_pool = Reservoir("upstream_canal", {'volume': initial_volume, 'water_level': normal_water_level}, reservoir_params)
-    control_gate_1 = Gate("control_gate_1", {'opening': 1.0}, gate_params, message_bus=bus, action_topic=GATE1_ACTION_TOPIC)
-
-    downstream_pool = Reservoir("downstream_canal", {'volume': initial_volume, 'water_level': normal_water_level}, reservoir_params)
-    final_gate_2 = Gate("final_gate_2", {'opening': 1.0}, gate_params, message_bus=bus, action_topic=GATE2_ACTION_TOPIC)
-
+    upstream_pool = Canal("upstream_canal", {'volume': initial_volume, 'water_level': normal_water_level}, canal_params, message_bus=bus, inflow_topic=DISTURBANCE_TOPIC)
+    control_gate_1 = Gate("control_gate_1", {'opening': 1.0}, gate_params) # Decoupled from bus
+    downstream_pool = Canal("downstream_canal", {'volume': initial_volume, 'water_level': normal_water_level}, canal_params)
+    final_gate_2 = Gate("final_gate_2", {'opening': 1.0}, gate_params) # Decoupled from bus
     sink_canal = Canal("sink_canal", {'volume': 0, 'water_level': 0}, sink_canal_params)
-
-    # 扰动直接注入到第一个水池
-    upstream_pool.bus = bus
-    upstream_pool.inflow_topic = DISTURBANCE_TOPIC
-    bus.subscribe(DISTURBANCE_TOPIC, upstream_pool.handle_inflow_message)
 
     components = [upstream_pool, control_gate_1, downstream_pool, final_gate_2, sink_canal]
 
     # 2. 智能体组件
+    # IO Agent - a single agent now handles all hardware abstraction
+    io_agent = PhysicalIOAgent("io_agent_main", bus,
+        sensors_config={}, # DigitalTwinAgents are reading directly for this example
+        actuators_config={
+            'gate1_actuator': {'obj': control_gate_1, 'target_attr': 'target_opening', 'topic': GATE1_ACTION_TOPIC, 'control_key': 'control_signal'},
+            'gate2_actuator': {'obj': final_gate_2, 'target_attr': 'target_opening', 'topic': GATE2_ACTION_TOPIC, 'control_key': 'control_signal'}
+        }
+    )
+
     # 数字孪生
     twin_upstream = DigitalTwinAgent("twin_agent_upstream", upstream_pool, bus, UPSTREAM_STATE_TOPIC)
     twin_downstream = DigitalTwinAgent("twin_agent_downstream", downstream_pool, bus, DOWNSTREAM_STATE_TOPIC)
@@ -143,7 +146,7 @@ def setup_system(bus: MessageBus, sim_dt: float, user_params: dict):
         DOWNSTREAM_CMD_TOPIC: "downstream_setpoint"
     })
 
-    agents = [twin_upstream, twin_downstream, lca1, lca2, rainfall_agent, forecaster, central_dispatcher, logger]
+    agents = [io_agent, twin_upstream, twin_downstream, lca1, lca2, rainfall_agent, forecaster, central_dispatcher, logger]
 
     return components, agents, logger
 
