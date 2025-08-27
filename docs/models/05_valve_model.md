@@ -1,52 +1,52 @@
-# Valve Model
+# 阀门模型 (Valve Model)
 
-The `Valve` model represents a controllable valve within the water network. It simulates the flow of water through a pipe segment where the flow can be throttled. The valve's primary control parameter is its opening percentage, which ranges from 0% (fully closed) to 100% (fully open).
+`阀门` (Valve) 模型代表了水网中一个可控的阀门。它模拟水流过一个可以被节流的管段。阀门的主要控制参数是其开启百分比，范围从0%（全关）到100%（全开）。
 
-## Physics
+## 物理原理
 
-The flow through the valve is calculated using a simplified orifice flow equation:
+通过阀门的流量使用简化的孔口流量方程计算：
 
 `Q = C_d_eff * A * sqrt(2 * g * Δh)`
 
-Where:
-- `Q` is the volumetric flow rate (m³/s).
-- `C_d_eff` is the effective discharge coefficient. This is calculated by scaling the valve's maximum `discharge_coefficient` by its current opening percentage. For example, a valve that is 50% open will have a `C_d_eff` that is half of its maximum.
-- `A` is the cross-sectional area of the pipe, determined by the `diameter` parameter.
-- `g` is the acceleration due to gravity (9.81 m/s²).
-- `Δh` is the head difference between the valve's upstream and downstream nodes.
+其中:
+- `Q` 是体积流量 (m³/s)。
+- `C_d_eff` 是有效流量系数。该值是通过将阀门的最大 `discharge_coefficient` (流量系数) 与其当前开启百分比进行缩放计算得出的。例如，一个开启50%的阀门的 `C_d_eff` 将是其最大值的一半。
+- `A` 是管道的横截面积，由 `diameter` (直径) 参数确定。
+- `g` 是重力加速度 (9.81 m/s²)。
+- `Δh` 是阀门上游和下游节点之间的水头差。
 
-The model assumes that flow only occurs in the downstream direction (i.e., when `Δh > 0`).
+该模型假设水流只在下游方向发生 (即，当 `Δh > 0` 时)。
 
-## Parameters
+## 参数
 
-- `diameter` (float): The diameter of the pipe where the valve is installed, in meters.
-- `discharge_coefficient` (float): The maximum discharge coefficient of the valve when it is fully open. This is a dimensionless value, typically between 0.6 and 0.9.
+- `diameter` (float): 安装阀门的管道直径，单位为米。
+- `discharge_coefficient` (float): 阀门在全开状态下的最大流量系数。这是一个无量纲值，通常在0.6到0.9之间。
 
-## State
+## 状态
 
-- `opening` (float): The current opening of the valve, as a percentage (0-100).
-- `flow_rate` (float): The calculated flow rate through the valve for the current time step, in m³/s.
+- `opening` (float): 阀门的当前开启度，以百分比表示 (0-100)。
+- `flow_rate` (float): 当前时间步内计算出的通过阀门的流量，单位为 m³/s。
 
-## Control
+## 控制
 
-The `Valve` is message-aware and can be controlled by an agent publishing to its designated `action_topic`. The control message should contain a `control_signal` with the desired opening percentage.
+`阀门`模型能感知消息，可以由一个代理（agent）通过发布到其指定的 `action_topic` (动作主题) 来进行控制。控制消息应包含一个带有期望开启百分比的 `control_signal` (控制信号)。
 
-## Example Usage
+## 使用示例
 
-Here is how to create a `Valve` instance in a simulation script:
+以下是如何在仿真脚本中创建一个 `Valve` 实例：
 
 ```python
 from swp.simulation_identification.physical_objects.valve import Valve
 from swp.central_coordination.collaboration.message_bus import MessageBus
 
-# A message bus is needed for agent-based control
+# 基于代理的控制需要一个消息总线
 message_bus = MessageBus()
 
-# Define valve parameters and initial state
+# 定义阀门参数和初始状态
 valve_params = {'diameter': 0.5, 'discharge_coefficient': 0.9}
-valve_state = {'opening': 0} # Initially closed
+valve_state = {'opening': 0} # 初始状态为关闭
 
-# Create the valve instance
+# 创建阀门实例
 valve = Valve(
     valve_id="valve1",
     initial_state=valve_state,
@@ -55,6 +55,6 @@ valve = Valve(
     action_topic="action.valve1.opening"
 )
 
-# An agent can now control the valve by publishing to "action.valve1.opening"
+# 现在，一个代理可以通过向 "action.valve1.opening" 发布消息来控制阀门
 # message_bus.publish("action.valve1.opening", Message(content={'control_signal': 50}))
 ```

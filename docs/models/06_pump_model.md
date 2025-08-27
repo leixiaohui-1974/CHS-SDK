@@ -1,48 +1,48 @@
-# Pump Model
+# 水泵模型 (Pump Model)
 
-The `Pump` model represents a water pump that adds energy to the system to move water from a lower elevation to a higher one. It is a fundamental component for simulating water transfer against a natural hydraulic gradient.
+`水泵` (Pump) 模型代表一个为水系统增加能量以将水从低海拔输送到高海拔的水泵。它是模拟逆自然水力梯度输水的基础组件。
 
-## Physics
+## 物理原理
 
-The current `Pump` model is a simplified representation with a fixed-rate operation. Its behavior is governed by the following rules:
+当前的 `水泵` 模型是一个简化的、具有固定速率运行的表示。其行为由以下规则控制：
 
-1.  **On/Off State:** The pump has two primary states: 'on' (`status` = 1) and 'off' (`status` = 0).
-2.  **Flow Rate:** When the pump is 'on', it delivers its `max_flow_rate`, as long as the operational constraints are met. When 'off', the flow rate is zero.
-3.  **Head Constraint:** The pump can only operate if the required head lift (the difference between the downstream and upstream water levels) is less than or equal to its `max_head` parameter. If the required head exceeds the maximum, the flow rate drops to zero even if the pump is 'on'.
-4.  **Power Consumption:** When the pump is 'on' and successfully producing flow, it draws a fixed amount of power specified by `power_consumption_kw`.
+1.  **开关状态:** 水泵有两个主要状态：'开' (`status` = 1) 和 '关' (`status` = 0)。
+2.  **流量:** 当水泵处于'开'状态时，只要满足运行约束条件，它就会提供其 `max_flow_rate` (最大流量)。当处于'关'状态时，流量为零。
+3.  **扬程约束:** 只有当所需的扬程（下游和上游水位之差）小于或等于其 `max_head` (最大扬程) 参数时，水泵才能运行。如果所需扬程超过最大值，即使水泵处于'开'状态，流量也会降至零。
+4.  **功耗:** 当水泵处于'开'状态并成功产生流量时，它会消耗由 `power_consumption_kw` (千瓦功耗) 指定的固定功率。
 
-This model is designed to be extended in the future to support more complex physics, such as variable speed drives or pump performance curves (flow vs. head).
+该模型旨在将来进行扩展，以支持更复杂的物理特性，例如变速驱动或水泵性能曲线（流量 vs. 扬程）。
 
-## Parameters
+## 参数
 
-- `max_flow_rate` (float): The fixed flow rate in m³/s that the pump provides when it is on and operating within its head limit.
-- `max_head` (float): The maximum head difference (in meters) that the pump can overcome.
-- `power_consumption_kw` (float): The power in kilowatts that the pump consumes when it is active and producing flow.
+- `max_flow_rate` (float): 当水泵开启并在其扬程限制内运行时，提供的固定流量，单位为 m³/s。
+- `max_head` (float): 水泵可以克服的最大扬程差，单位为米。
+- `power_consumption_kw` (float): 当水泵活动并产生流量时消耗的功率，单位为千瓦。
 
-## State
+## 状态
 
-- `status` (int): The operational status of the pump. 0 for 'off', 1 for 'on'.
-- `flow_rate` (float): The calculated flow rate produced by the pump for the current time step, in m³/s.
-- `power_draw_kw` (float): The power consumed by the pump in the current time step, in kilowatts.
+- `status` (int): 水泵的运行状态。0代表'关'，1代表'开'。
+- `flow_rate` (float): 当前时间步内由水泵产生的计算流量，单位为 m³/s。
+- `power_draw_kw` (float): 当前时间步内水泵消耗的功率，单位为千瓦。
 
-## Control
+## 控制
 
-The `Pump` is message-aware. It can be turned on or off by an agent publishing a message to its `action_topic`. The `control_signal` in the message should be `1` to turn the pump on and `0` to turn it off.
+`水泵`模型能感知消息。代理（agent）可以通过向其 `action_topic` (动作主题) 发布消息来开启或关闭它。消息中的 `control_signal` (控制信号) 应为 `1` 以开启水泵，为 `0` 以关闭水泵。
 
-## Example Usage
+## 使用示例
 
 ```python
 from swp.simulation_identification.physical_objects.pump import Pump
 from swp.central_coordination.collaboration.message_bus import MessageBus
 
-# A message bus is needed for agent-based control
+# 基于代理的控制需要一个消息总线
 message_bus = MessageBus()
 
-# Define pump parameters and initial state
+# 定义水泵参数和初始状态
 pump_params = {'max_flow_rate': 5, 'max_head': 20, 'power_consumption_kw': 75}
-pump_state = {'status': 0} # Initially off
+pump_state = {'status': 0} # 初始状态为关闭
 
-# Create the pump instance
+# 创建水泵实例
 pump = Pump(
     pump_id="pump1",
     initial_state=pump_state,
@@ -51,6 +51,6 @@ pump = Pump(
     action_topic="action.pump1.status"
 )
 
-# An agent can now turn the pump on
+# 现在，一个代理可以开启水泵
 # message_bus.publish("action.pump1.status", Message(content={'control_signal': 1}))
 ```

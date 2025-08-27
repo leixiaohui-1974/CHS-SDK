@@ -1,38 +1,38 @@
-# Tutorial 4: Hierarchical Control with a Central Dispatcher
+# 教程 4: 使用中央调度器的分层控制
 
-Welcome to the final tutorial in our introductory series. Here, we will build on the event-driven concepts from Tutorial 3 to create a **hierarchical control system**. This is a powerful pattern where a high-level "supervisor" agent manages the objectives of one or more low-level "operator" agents.
+欢迎来到我们入门系列的最后一个教程。在这里，我们将在教程3的事件驱动概念的基础上，创建一个**分层控制系统 (hierarchical control system)**。这是一种强大的模式，其中一个高层的“主管”代理管理一个或多个低层“操作员”代理的目标。
 
-We will explore the `example_hierarchical_control.py` script, which is the most advanced example of the platform's capabilities.
+我们将探索 `example_hierarchical_control.py` 脚本，这是平台功能最先进的示例。
 
-## 1. Scenario Overview
+## 1. 场景概述
 
-The scenario demonstrates a two-level control hierarchy:
-- **Low-Level Loop (The "Operator")**: A `LocalControlAgent` is responsible for the direct, real-time control of a gate. Its goal is to maintain a specific water level in a reservoir, which it does by listening to the reservoir's state and adjusting the gate opening.
-- **High-Level Loop (The "Supervisor")**: A `CentralDispatcher` agent acts as a system-wide supervisor. It also listens to the reservoir's state, but its job is to make strategic decisions. If it detects a "flood condition" (the water level is too high), it will issue a command to the `LocalControlAgent`, telling it to aim for a new, lower water level setpoint.
+该场景演示了一个两级控制层次结构：
+- **低层循环 (The "Operator")**: 一个 `LocalControlAgent` (本地控制代理) 负责对一个闸门进行直接的、实时的控制。其目标是维持水库的特定水位，它通过监听水库的状态并调节闸门开启度来实现这一目标。
+- **高层循环 (The "Supervisor")**: 一个 `CentralDispatcher` (中央调度器) 代理充当系统范围的主管。它也监听水库的状态，但它的工作是做出战略决策。如果它检测到“洪水状况” (水位过高)，它将向 `LocalControlAgent` 发出命令，告知其采用一个新的、更低的水位设定点。
 
-This creates a dynamic system where a central "brain" can manage the objectives of local controllers in response to the overall system state.
+这创建了一个动态系统，其中一个中央“大脑”可以根据整体系统状态来管理本地控制器的目标。
 
-## 2. The Two-Level Control Loop
+## 2. 两级控制循环
 
-The system operates on two nested, event-driven loops that communicate via the `MessageBus`:
-1.  **Low-Level State/Action Loop**:
-    - `twin_agent_reservoir_1` publishes the reservoir's state to `state.reservoir.level`.
-    - `control_agent_gate_1` receives this state, computes an action with its PID controller, and publishes it to `action.gate.opening`.
-    - The `gate_1` model receives the action and updates its target.
-2.  **High-Level State/Command Loop**:
-    - `central_dispatcher_1` also receives the state from `state.reservoir.level`.
-    - It applies its internal rules and decides if the setpoint needs to change.
-    - If a change is needed, it publishes a new setpoint message to the `command.gate1.setpoint` topic.
-    - `control_agent_gate_1`, which is also subscribed to this command topic, receives the new setpoint and updates its internal PID controller's goal.
+该系统在两个通过 `MessageBus` (消息总线) 通信的、嵌套的、事件驱动的循环上运行：
+1.  **低层状态/动作循环**:
+    - `twin_agent_reservoir_1` 将水库的状态发布到 `state.reservoir.level` 主题。
+    - `control_agent_gate_1` 接收此状态，用其PID控制器计算一个动作，并将其发布到 `action.gate.opening` 主题。
+    - `gate_1` 模型接收到该动作并更新其目标。
+2.  **高层状态/命令循环**:
+    - `central_dispatcher_1` 也从 `state.reservoir.level` 主题接收状态。
+    - 它应用其内部规则并决定设定点是否需要更改。
+    - 如果需要更改，它会向 `command.gate1.setpoint` 主题发布一条新的设定点消息。
+    - `control_agent_gate_1` (它也订阅了这个命令主题) 接收到新的设定点，并更新其内部PID控制器的目标。
 
-## 3. Code Breakdown
+## 3. 代码分解
 
-Let's examine the new and updated parts of `example_hierarchical_control.py`.
+让我们来检查 `example_hierarchical_control.py` 中新的和更新的部分。
 
-### 3.1. Upgrading the `LocalControlAgent`
-The `LocalControlAgent` is now instantiated with two new topics:
-- `command_topic`: The topic to listen for new commands from the supervisor.
-- `feedback_topic`: The topic to listen for state updates from the component it is controlling (in this case, the gate itself). This creates a complete closed loop.
+### 3.1. 升级 `LocalControlAgent`
+`LocalControlAgent` 现在用两个新的主题进行实例化：
+- `command_topic`: 用于监听来自主管的新命令的主题。
+- `feedback_topic`: 用于监听其所控制的组件（在本例中是闸门本身）的状态更新的主题。这创建了一个完整的闭环。
 
 ```python
 control_agent = LocalControlAgent(
@@ -47,16 +47,16 @@ control_agent = LocalControlAgent(
     feedback_topic=GATE_STATE_TOPIC
 )
 ```
-The agent's internal logic now has a `handle_command_message` method to process incoming commands and a `handle_feedback_message` to receive updates from its controlled actuator.
+该代理的内部逻辑现在有一个 `handle_command_message` 方法来处理传入的命令，以及一个 `handle_feedback_message` 方法来接收来自其控制的执行器的更新。
 
-### 3.2. Implementing the `CentralDispatcher`
-This is a new type of agent that represents a higher level of intelligence. It subscribes to one or more state topics and publishes to one or more command topics. Its core logic is defined by a set of rules.
+### 3.2. 实现 `CentralDispatcher`
+这是一种新型的代理，代表了更高层次的智能。它订阅一个或多个状态主题，并向一个或多个命令主题发布消息。其核心逻辑由一组规则定义。
 
 ```python
 dispatcher_rules = {
-    'flood_threshold': 18.0,   # If level > 18m, it's a flood risk
-    'normal_setpoint': 15.0, # Normal target level
-    'flood_setpoint': 12.0   # Emergency target level to lower the water
+    'flood_threshold': 18.0,   # 如果水位 > 18米，则有洪水风险
+    'normal_setpoint': 15.0, # 正常目标水位
+    'flood_setpoint': 12.0   # 紧急目标水位，以降低水量
 }
 dispatcher = CentralDispatcher(
     agent_id="central_dispatcher_1",
@@ -66,31 +66,31 @@ dispatcher = CentralDispatcher(
     rules=dispatcher_rules
 )
 ```
-In this example, the dispatcher's rule is simple: if the `reservoir_level` goes above the `flood_threshold` of 18.0m, it will publish a command to the `gate1_command` topic, telling the local agent to adopt the `flood_setpoint` of 12.0m.
+在这个例子中，调度器的规则很简单：如果 `reservoir_level` (水库水位) 超过 `flood_threshold` (洪水阈值) 18.0米，它将向 `gate1_command` 主题发布一个命令，告知本地代理采用 `flood_setpoint` (洪水设定点) 12.0米。
 
-## 4. Running the Simulation and Interpreting the Results
+## 4. 运行仿真并解读结果
 
-Execute the script from your terminal:
+在您的终端中执行该脚本：
 ```bash
 python3 example_hierarchical_control.py
 ```
-The log output clearly shows the hierarchy in action.
+日志输出清楚地显示了层次结构的运作。
 
-**Step 1: The Supervisor Intervenes**
-At the very start, the water level is 19.0m, which is above the 18.0m flood threshold.
+**第1步: 主管介入**
+在最开始，水位是19.0米，高于18.0米的洪水阈值。
 ```
 --- MAS Simulation Step 1, Time: 0.00s ---
   Phase 1: Triggering agent perception and action cascade.
 PIDController setpoint updated from 15.0 to 12.0.
 ```
-Before the first step is even complete, the `CentralDispatcher` has already received the initial state, evaluated its rules, and published a command. The `LocalControlAgent` receives this command and immediately updates its PID controller's setpoint from the default 15.0 to the new, emergency setpoint of 12.0.
+在第一步完成之前，`CentralDispatcher` 就已经收到了初始状态，评估了其规则，并发布了一个命令。`LocalControlAgent` 接收到这个命令，并立即将其PID控制器的设定点从默认的15.0更新为新的紧急设定点12.0。
 
-**Step 2: The Operator Executes**
-Now using the new setpoint, the `LocalControlAgent` gets to work.
+**第2步: 操作员执行**
+现在，使用新的设定点，`LocalControlAgent` 开始工作。
 ```
   Phase 2: Stepping physical models with interactions.
   State Update: Reservoir level = 19.000m, Gate opening = 0.600m
 ```
-Because the level (19.0m) is far above the new target (12.0m), the PID controller commands the gate to open. Over the next several steps, the gate continues to open until it reaches its maximum, and the reservoir level steadily decreases.
+因为水位 (19.0m) 远高于新的目标 (12.0m)，PID控制器命令闸门开启。在接下来的几个步骤中，闸门持续开启直到达到其最大值，水库水位稳步下降。
 
-This example provides the foundation for building truly intelligent, multi-layered control systems where strategic, system-wide goals can be translated into concrete, robustly executed actions for local controllers.
+这个例子为构建真正智能的、多层次的控制系统提供了基础，在这样的系统中，战略性的、系统范围的目标可以被转化为本地控制器具体、稳健执行的动作。

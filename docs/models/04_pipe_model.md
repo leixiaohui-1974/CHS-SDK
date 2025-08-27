@@ -1,63 +1,63 @@
-# Physical Models: Pipe
+# 物理模型: 管道 (Pipe)
 
-The `Pipe` model simulates the flow of water through a pressurized pipe. It connects two nodes in the water system and calculates the flow rate based on the head difference between them.
+`管道` (Pipe) 模型用于模拟水在承压管道中的流动。它连接水系统中的两个节点，并根据它们之间的水头差计算流量。
 
-## Physical Principles
+## 物理原理
 
-The model uses a simplified form of the **Darcy-Weisbach equation** to relate head loss to flow rate. The head loss ($H_f$) due to friction in a pipe is given by:
+该模型使用简化形式的 **达西-韦斯巴赫方程** (Darcy-Weisbach equation) 来关联水头损失与流量。管道中由摩擦引起的水头损失 ($H_f$) 由以下公式给出：
 
 $H_f = f \frac{L}{D} \frac{V^2}{2g}$
 
-Where:
-- $f$ is the Darcy friction factor.
-- $L$ is the length of the pipe.
-- $D$ is the diameter of the pipe.
-- $V$ is the average velocity of the water.
-- $g$ is the acceleration due to gravity.
+其中:
+- $f$ 是达西摩擦系数。
+- $L$ 是管道的长度。
+- $D$ 是管道的直径。
+- $V$ 是水的平均速度。
+- $g$ 是重力加速度。
 
-Since flow rate $Q = V \cdot A$ (where $A$ is the cross-sectional area), we can rearrange the equation to solve for $Q$:
+由于流量 $Q = V \cdot A$ (其中 $A$ 是横截面积)，我们可以重新整理方程以求解 $Q$：
 
 $Q = A \sqrt{\frac{2 g D H_f}{f L}}$
 
-For simulation purposes, we pre-calculate a `flow_coefficient` ($C$) that groups the constant physical parameters:
+为了方便仿真计算，我们预先计算一个`流量系数` ($C$)，该系数整合了所有恒定的物理参数：
 
 $C = A \sqrt{\frac{2 g D}{f L}}$
 
-This simplifies the flow calculation in each simulation step to:
+这将每个仿真步骤中的流量计算简化为：
 
 $Q = C \sqrt{H_f}$
 
-The model assumes that the flow is turbulent and that it stabilizes within a single time step. It currently does not account for reverse flow; if the downstream head is higher than the upstream head, the flow is set to zero.
+该模型假设水流为湍流，并且在一个时间步内达到稳定状态。目前，它不考虑反向流动；如果下游水头高于上游水头，则流量设置为零。
 
-## State and Parameters
+## 状态与参数
 
-### State
+### 状态
 
--   `flow` (m³/s): The calculated flow rate through the pipe.
--   `outflow` (m³/s): Same as `flow`. This is the value used by downstream components.
--   `head_loss` (m): The difference between the upstream and downstream head.
+-   `flow` (m³/s): 计算出的通过管道的流量。
+-   `outflow` (m³/s): 与 `flow` 相同。这是下游组件使用的值。
+-   `head_loss` (m): 上游和下游水头之间的差值。
 
-### Parameters
+### 参数
 
-When creating a `Pipe` instance, you must provide a `params` dictionary containing:
--   `length` (m): The length of the pipe.
--   `diameter` (m): The internal diameter of the pipe.
--   `friction_factor` (dimensionless): The Darcy friction factor for the pipe material (e.g., a typical value for cast iron is `0.02`).
+在创建一个 `Pipe` 实例时，您必须提供一个包含以下内容的 `params` 字典：
+-   `length` (m): 管道的长度。
+-   `diameter` (m): 管道的内径。
+-   `friction_factor` (无量纲): 管道材料的达西摩擦系数 (例如，铸铁的典型值为 `0.02`)。
 
-## Example Usage
+## 使用示例
 
-Here is how to create a `Pipe` instance:
+以下是如何创建一个 `Pipe` 实例：
 
 ```python
 pipe = Pipe(
     pipe_id="pipe1",
     initial_state={'flow': 0},
     params={
-        'length': 1000,  # 1 km
-        'diameter': 1.5, # m
+        'length': 1000,  # 1公里
+        'diameter': 1.5, # 米
         'friction_factor': 0.02
     }
 )
 ```
 
-In the `SimulationHarness`, the `Pipe`'s `step()` method is called with an `action` dictionary that must contain the `upstream_head` and `downstream_head`, which the harness calculates from the connected components.
+在 `SimulationHarness` (仿真平台) 中，`Pipe` 的 `step()` 方法被调用时，会传入一个 `action` 字典，该字典必须包含 `upstream_head` 和 `downstream_head`，这两个值由仿真平台根据相连的组件计算得出。
