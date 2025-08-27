@@ -11,12 +11,13 @@ const ALGORITHM_PARAMS = {
         ]
     },
     dmpc_controller: {
-        name: 'DMPC 控制算法',
+        name: 'DMPC 控制算法 (ID 模型)',
         params: [
             { id: 'prediction_horizon', label: '预测时域 (步)', type: 'number', value: 10, step: 1 },
-            { id: 'control_horizon', label: '控制时域 (步)', type: 'number', value: 3, step: 1 },
-            { id: 'q_weight', label: 'Q (状态权重)', type: 'number', value: 1, step: 0.5 },
-            { id: 'r_weight', label: 'R (控制权重)', type: 'number', value: 0.1, step: 0.1 },
+            { id: 'q_weight', label: 'Q (状态权重)', type: 'number', value: 1.0, step: 0.1 },
+            { id: 'r_weight', label: 'R (控制权重)', type: 'number', value: 0.1, step: 0.05 },
+            { id: 'id_model_gain', label: 'ID模型增益 (K)', type: 'number', value: 0.5, step: 0.1 },
+            { id: 'id_model_delay_steps', label: 'ID模型时滞 (τ 步)', type: 'number', value: 2, step: 1 },
         ]
     },
     data_cleaning_algorithm: {
