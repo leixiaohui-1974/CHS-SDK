@@ -39,6 +39,13 @@ const ALGORITHM_PARAMS = {
             { id: 'n_estimators', label: '估计器数量', type: 'number', value: 100, step: 10 },
             { id: 'contamination', label: '异常比例', type: 'number', value: 0.05, step: 0.01 },
         ]
+    },
+    rls_estimator: {
+        name: 'RLS在线辨识',
+        params: [
+            { id: 'lambda', label: '遗忘因子 (λ)', type: 'number', value: 0.99, step: 0.01, min: 0.9, max: 1.0 },
+            { id: 'num_params', label: '参数数量', type: 'number', value: 3, step: 1, min: 1 },
+        ]
     }
 };
 
