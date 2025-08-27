@@ -32,6 +32,13 @@ const ALGORITHM_PARAMS = {
             { id: 'process_noise_q', label: '过程噪声 (Q)', type: 'number', value: 0.01, step: 0.01 },
             { id: 'measurement_noise_r', label: '测量噪声 (R)', type: 'number', value: 1.0, step: 0.1 },
         ]
+    },
+    isolation_forest: {
+        name: '孤立森林异常检测',
+        params: [
+            { id: 'n_estimators', label: '估计器数量', type: 'number', value: 100, step: 10 },
+            { id: 'contamination', label: '异常比例', type: 'number', value: 0.05, step: 0.01 },
+        ]
     }
 };
 
