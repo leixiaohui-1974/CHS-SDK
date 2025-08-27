@@ -1,53 +1,53 @@
-# Agent Development Guidelines for the Smart Water Platform
+# 智能水务平台 Agent 开发指南
 
-This document provides instructions and conventions for AI agents working on this codebase. The primary goal is to maintain the modular, extensible, and robust architecture established in the initial design.
+本文档为在此代码库上工作的AI代理提供了说明和约定。主要目标是维护初始设计中建立的模块化、可扩展和健壮的架构。
 
-## 1. Core Architectural Principles
+## 1. 核心架构原则
 
-- **Modularity is Paramount**: Every new piece of functionality, whether it's a simulation model, a control algorithm, or a data processing utility, should be designed as a self-contained module.
-- **Adhere to Interfaces**: All major components **must** inherit from the appropriate abstract base class defined in `swp/core/interfaces.py`. This is non-negotiable as it ensures the "pluggable" nature of the system.
-  - `Simulatable`: For all dynamic models (physical or logical).
-  - `Controller`: For all control algorithms.
-  - `Agent`: For all autonomous agents.
-- **Decouple Components**: Components should not have hard-coded dependencies on each other. Interaction should be mediated by the `SimulationHarness` (for simulation-time coupling) or the `MessageBus` (for inter-agent communication). Avoid direct method calls between components that are not tightly coupled by design.
-- **Configuration-Driven**: Do not hard-code parameters or system structures. The `AgentFactory` (`swp/core_engine/agent_factory/factory.py`) is designed to build systems from configuration dictionaries. When adding new components, extend the factory to support them.
+- **模块化至上 (Modularity is Paramount)**: 每一个新功能，无论是仿真模型、控制算法还是数据处理工具，都应被设计为一个自包含的模块。
+- **遵守接口 (Adhere to Interfaces)**: 所有主要组件**必须**继承自 `swp/core/interfaces.py` 中定义的相应抽象基类。这是不可协商的，因为它确保了系统的“可插拔”特性。
+  - `Simulatable`: 用于所有动态模型（物理或逻辑）。
+  - `Controller`: 用于所有控制算法。
+  - `Agent`: 用于所有自治代理。
+- **解耦组件 (Decouple Components)**: 组件之间不应有硬编码的依赖关系。交互应通过 `SimulationHarness` (用于仿真时耦合) 或 `MessageBus` (用于代理间通信) 进行协调。避免在非设计紧密耦合的组件之间直接进行方法调用。
+- **配置驱动 (Configuration-Driven)**: 不要硬编码参数或系统结构。`AgentFactory` (`swp/core_engine/agent_factory/factory.py`) 被设计为从配置字典中构建系统。在添加新组件时，请扩展该工厂以支持它们。
 
-## 2. How to Add New Components
+## 2. 如何添加新组件
 
-### Adding a New Physical Model (e.g., a Pipe)
+### 添加新的物理模型 (例如，管道 Pipe)
 
-1.  **Create the class file**: `swp/simulation_identification/physical_objects/pipe.py`.
-2.  **Implement the `Simulatable` interface**:
+1.  **创建类文件**: `swp/simulation_identification/physical_objects/pipe.py`。
+2.  **实现 `Simulatable` 接口**:
     ```python
     from swp.core.interfaces import Simulatable, State, Parameters
 
     class Pipe(Simulatable):
-        # ... implement all abstract methods: step, get_state, set_state, get_parameters
+        # ... 实现所有抽象方法: step, get_state, set_state, get_parameters
     ```
-3.  **Extend the `AgentFactory`**: Modify `swp/core_engine/agent_factory/factory.py` to recognize and build the `Pipe` model from a configuration block.
-4.  **Write a Unit Test**: Create a test file in a new `tests/` directory (e.g., `tests/simulation/test_pipe.py`) to verify the model's behavior in isolation.
-5.  **Update Documentation**: Add the `Pipe` model to the `README.md` and any relevant tutorial documents.
+3.  **扩展 `AgentFactory`**: 修改 `swp/core_engine/agent_factory/factory.py` 以识别并从配置块中构建 `Pipe` 模型。
+4.  **编写单元测试**: 在新的 `tests/` 目录中创建一个测试文件 (例如, `tests/simulation/test_pipe.py`)，以在隔离环境中验证模型的行为。
+5.  **更新文档**: 将 `Pipe` 模型添加到 `README.md` 和任何相关的教程文档中。
 
-### Adding a New Control Algorithm (e.g., MPC)
+### 添加新的控制算法 (例如，模型预测控制 MPC)
 
-1.  **Create the class file**: `swp/local_agents/control/mpc_controller.py`.
-2.  **Implement the `Controller` interface**:
+1.  **创建类文件**: `swp/local_agents/control/mpc_controller.py`。
+2.  **实现 `Controller` 接口**:
     ```python
     from swp.core.interfaces import Controller, State
 
     class MPCController(Controller):
-        # ... implement compute_control_action
+        # ... 实现 compute_control_action
     ```
-3.  **Extend the `AgentFactory`**: Update the factory to support creating the `MPCController` from a configuration block.
-4.  **Update the `SimulationHarness` (if necessary)**: The harness may need to be updated to provide the more complex state predictions required by an MPC controller.
-5.  **Create an Example**: Add a new example script or extend the existing one to show how the `MPCController` can be used.
+3.  **扩展 `AgentFactory`**: 更新工厂以支持从配置块中创建 `MPCController`。
+4.  **更新 `SimulationHarness` (如果需要)**: 可能需要更新平台以提供MPC控制器所需的更复杂的状态预测。
+5.  **创建示例**: 添加一个新的示例脚本或扩展现有脚本，以展示如何使用 `MPCController`。
 
-## 3. Testing and Verification
+## 3. 测试与验证
 
-- **Run the Example**: Before submitting any changes, always run the `example_simulation.py` script to ensure you have not broken the core integration.
+- **运行示例**: 在提交任何更改之前，始终运行 `example_simulation.py` 脚本，以确保您没有破坏核心集成。
   ```bash
   python3 example_simulation.py
   ```
-- **Add Tests**: For any new functionality, add corresponding unit tests. The goal is to build a comprehensive test suite that can be run automatically.
+- **添加测试**: 对于任何新功能，添加相应的单元测试。目标是构建一个可以自动运行的全面测试套件。
 
-By following these guidelines, we can ensure the platform evolves in a structured and maintainable way, fulfilling its vision as a true "Mother Machine" for intelligent water systems.
+通过遵循这些指南，我们可以确保平台以一种结构化和可维护的方式发展，实现其作为智能水务系统真正的“母体机器”的愿景。
