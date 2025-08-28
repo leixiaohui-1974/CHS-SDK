@@ -1,0 +1,70 @@
+{
+    "description": "Mission 1.2: Physical I/O Agent. Demonstrates an agent sensing a physical state, publishing it, and actuating a component based on a received command.",
+    "simulation_settings": {
+        "dt": 1.0,
+        "duration": 50
+    },
+    "topics": {
+        "state_topic": "state/canal/level",
+        "action_topic": "action/gate/opening"
+    },
+    "components": [
+        {
+            "name": "upstream_canal",
+            "type": "Canal",
+            "parameters": {
+                "bottom_width": 20.0, "length": 1000.0, "slope": 0.001, "side_slope_z": 2.0, "manning_n": 0.025
+            },
+            "initial_state": {
+                "volume": 100000, "water_level": 4.22, "outflow": 0
+            }
+        },
+        {
+            "name": "control_gate",
+            "type": "Gate",
+            "parameters": {
+                "discharge_coefficient": 0.8, "width": 10.0, "max_opening": 3.0, "max_rate_of_change": 0.05
+            },
+            "initial_state": {
+                "opening": 0.2
+            }
+        }
+    ],
+    "agents": [
+        {
+            "name": "io_agent_1",
+            "type": "PhysicalIOAgent",
+            "sensors_config": {
+                "canal_level_sensor": {
+                    "component": "upstream_canal",
+                    "state_key": "water_level",
+                    "topic": "state_topic",
+                    "noise_std": 0.02
+                }
+            },
+            "actuators_config": {
+                "gate_actuator": {
+                    "component": "control_gate",
+                    "target_attr": "target_opening",
+                    "topic": "action_topic",
+                    "control_key": "target_opening"
+                }
+            }
+        }
+    ],
+    "scenario": {
+        "events": [
+            {
+                "time": 5,
+                "type": "publish_command",
+                "topic": "action_topic",
+                "payload": {
+                    "target_opening": 0.5
+                }
+            }
+        ]
+    },
+    "output_settings": {
+        "history_file": "output/mission_1_2_results.csv"
+    }
+}

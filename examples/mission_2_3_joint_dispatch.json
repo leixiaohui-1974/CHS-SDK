@@ -1,0 +1,49 @@
+{
+    "description": "Mission 2.3: Joint Watershed Dispatch. A rule-based central dispatcher manages a hydropower station and a downstream user during a flood.",
+    "harness_config": { "duration": 259200, "dt": 3600 },
+    "topics": {
+        "reservoir_state": "state/reservoir/all",
+        "inflow_disturbance": "disturbance/inflow/reservoir",
+        "water_demand": "disturbance/outflow/diversion",
+        "hydro_command": "command/hydro_station/outflow",
+        "turbine_action": "action/turbine/flow",
+        "flood_gate_action": "action/gate/flow",
+        "diversion_command": "command/diversion/gate",
+        "diversion_action": "action/diversion/opening"
+    },
+    "components": [
+        { "name": "upper_reservoir", "type": "Reservoir", "initial_state": {"volume": 35000000, "water_level": 17.5}, "parameters": {"surface_area": 2e6, "max_volume": 50e6}, "inflow_topic": "inflow_disturbance" },
+        { "name": "station_turbine", "type": "WaterTurbine", "initial_state": {"power": 0, "outflow": 0}, "parameters": {"efficiency": 0.9, "max_flow_rate": 150}, "action_topic": "turbine_action", "action_key": "turbine_target_outflow" },
+        { "name": "station_flood_gate", "type": "Gate", "initial_state": {"opening": 0.0}, "parameters": {"discharge_coefficient": 0.6, "width": 10, "max_opening": 3.0, "max_rate_of_change": 0.5}, "action_topic": "flood_gate_action" },
+        { "name": "tailrace_canal", "type": "Canal", "initial_state": {"volume": 100000, "water_level": 2.1}, "parameters": {"bottom_width": 50, "length": 5000, "slope": 0.001, "side_slope_z": 2, "manning_n": 0.025} },
+        { "name": "diversion_gate", "type": "Gate", "initial_state": {"opening": 1.0}, "parameters": {"discharge_coefficient": 0.8, "width": 5, "max_opening": 2.0}, "action_topic": "diversion_action", "action_key": "opening" },
+        { "name": "diversion_canal", "type": "Canal", "initial_state": {"volume": 50000, "water_level": 1.5}, "parameters": {"bottom_width": 50, "length": 5000, "slope": 0.001, "side_slope_z": 2, "manning_n": 0.025}, "inflow_topic": "water_demand" }
+    ],
+    "connections": [
+        ["upper_reservoir", "station_turbine"], ["upper_reservoir", "station_flood_gate"],
+        ["station_turbine", "tailrace_canal"], ["station_flood_gate", "tailrace_canal"],
+        ["tailrace_canal", "diversion_gate"], ["diversion_gate", "diversion_canal"]
+    ],
+    "controllers": [
+        { "name": "hydro_ctrl_1", "type": "HydropowerController", "parameters": { "turbine_max_flow": 150, "setpoint": 100 } },
+        { "name": "diversion_ctrl_1", "type": "DirectGateController", "parameters": { "setpoint": 1.0 } }
+    ],
+    "agents": [
+        { "name": "flood_event", "type": "RainfallAgent", "config": { "topic": "inflow_disturbance", "start_time": 43200, "duration": 86400, "inflow_rate": 300 } },
+        { "name": "water_user", "type": "WaterUseAgent", "topic": "water_demand", "start_time": 64800, "duration": 43200, "demand_rate": 50 },
+        { "name": "reservoir_twin", "type": "DigitalTwinAgent", "simulated_object": "upper_reservoir", "state_topic": "reservoir_state" },
+        { "name": "hydro_station_agent", "type": "LocalControlAgent", "controller": "hydro_ctrl_1", "observation_topic": "reservoir_state", "action_topic": ["turbine_action", "flood_gate_action"], "command_topic": "hydro_command" },
+        { "name": "diversion_agent", "type": "LocalControlAgent", "controller": "diversion_ctrl_1", "action_topic": "diversion_action", "command_topic": "diversion_command" },
+        { "name": "central_dispatcher", "type": "CentralDispatcher",
+          "state_subscriptions": { "reservoir": "reservoir_state" },
+          "command_topics": { "hydro_station_control": "hydro_command", "diversion_gate_control": "diversion_command" },
+          "ruleset": "joint_dispatch_rules"
+        }
+    ],
+    "verification": {
+        "type": "check_max_value",
+        "history_key": "upper_reservoir_water_level",
+        "condition": "less_than",
+        "value": 25.0
+    }
+}

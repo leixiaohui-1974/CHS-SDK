@@ -1,0 +1,40 @@
+{
+    "description": "Mission 2.1: Local Closed-Loop Control. A full system with a PID agent maintaining a canal water level at a setpoint.",
+    "harness_config": {
+        "duration": 2000,
+        "dt": 10.0
+    },
+    "topics": {
+        "upstream_level_topic": "state/canal_upstream/level",
+        "gate_action_topic": "action/gate/opening",
+        "inflow_topic": "disturbance/inflow"
+    },
+    "components": [
+        { "name": "upstream_canal", "type": "Canal", "initial_state": {"volume": 112100}, "parameters": {"bottom_width": 20.0, "length": 1000.0, "slope": 0.001, "side_slope_z": 2.0, "manning_n": 0.025}, "inflow_topic": "inflow_topic" },
+        { "name": "downstream_canal", "type": "Canal", "initial_state": {"volume": 50000}, "parameters": {"bottom_width": 20.0, "length": 1000.0, "slope": 0.001, "side_slope_z": 2.0, "manning_n": 0.025} },
+        { "name": "control_gate", "type": "Gate", "initial_state": {"opening": 0.38}, "parameters": {"discharge_coefficient": 0.8, "width": 10.0, "max_opening": 3.0, "max_rate_of_change": 0.05} }
+    ],
+    "connections": [
+        ["upstream_canal", "control_gate"],
+        ["control_gate", "downstream_canal"]
+    ],
+    "controllers": [
+        { "name": "pid_1", "type": "PIDController", "parameters": { "Kp": -0.8, "Ki": -0.002, "Kd": 0.0, "setpoint": 4.0, "min_output": 0.0, "max_output": 3.0 } }
+    ],
+    "agents": [
+        { "name": "pid_agent_1", "type": "LocalControlAgent", "controller": "pid_1", "observation_topic": "upstream_level_topic", "observation_key": "water_level", "action_topic": "gate_action_topic" },
+        { "name": "io_agent_1", "type": "PhysicalIOAgent",
+          "sensors_config": { "canal_level_sensor": { "component": "upstream_canal", "state_key": "water_level", "topic": "upstream_level_topic", "noise_std": 0.01 }},
+          "actuators_config": { "gate_actuator": { "component": "control_gate", "target_attr": "target_opening", "topic": "gate_action_topic", "control_key": "control_signal" }}
+        },
+        { "name": "inflow_disturbance_1", "type": "RainfallAgent", "config": { "topic": "inflow_topic", "start_time": 0, "duration": 2000, "inflow_rate": 15.0 } }
+    ],
+    "verification": {
+        "type": "check_final_state",
+        "component": "upstream_canal",
+        "state_key": "water_level",
+        "condition": "close_to",
+        "value": 4.0,
+        "tolerance": 0.1
+    }
+}
