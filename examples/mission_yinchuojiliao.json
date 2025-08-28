@@ -34,9 +34,10 @@
     ],
     "agents": [
         { "name": "csv_inflow", "type": "CsvInflowAgent", "component": "wendegen_reservoir", "csv_path": "data/historical_inflow.csv", "time_col": "time", "data_col": "inflow" },
-
         { "name": "emergency_agent", "type": "EmergencyAgent", "listen_topics": ["state/pipe_1/pressure", "state/pipe_2/pressure"], "pressure_threshold": 0.3, "command_topic": "intake_gate_cmd" },
-        { "name": "central_dispatcher", "type": "CentralDispatcherAgent", "listen_topic": "state/terminal_pool/water_level", "command_topic": "intake_gate_cmd", "config": {"low_level": 212.0, "high_level": 213.0, "low_setpoint": 349.8, "high_setpoint": 349.2} },
+        { "name": "central_dispatcher", "type": "CentralDispatcherAgent", "listen_topic": "state/terminal_pool/water_level", "command_topic": "intake_gate_cmd", "low_level": 212.0, "high_level": 213.0, "low_setpoint": 349.8, "high_setpoint": 349.2 },
+
+        { "name": "perception_layer", "type": "DigitalTwinForEach", "topic_template": "state/{component_name}/{state_key}" },
 
         { "name": "pid_ctrl_intake", "type": "LocalControlAgent", "controller": "pid_intake_gate", "observation_topic": "state/tunnel_1/water_level", "action_topic": "action/water_intake_gate/opening", "command_topic": "intake_gate_cmd"},
         { "name": "io_intake", "type": "PhysicalIOAgent", "sensors_config": {"s1": {"component":"tunnel_1", "state_key":"water_level", "topic":"state/tunnel_1/water_level"}}, "actuators_config": {"a1": {"component":"water_intake_gate", "target_attr":"target_opening", "topic":"action/water_intake_gate/opening", "control_key":"control_signal"}} },

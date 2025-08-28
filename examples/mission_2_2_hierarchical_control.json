@@ -27,9 +27,9 @@
         { "name": "pid_1", "type": "PIDController", "parameters": { "Kp": -0.6, "Ki": -0.00005, "Kd": -0.1, "setpoint": 4.0, "min_output": 0.0, "max_output": 5.0 } }
     ],
     "agents": [
-        { "name": "base_flow_1", "type": "RainfallAgent", "config": { "topic": "inflow_disturbance", "start_time": 0, "duration": 43200, "inflow_rate": 20 } },
-        { "name": "rainfall_1", "type": "RainfallAgent", "config": { "topic": "inflow_disturbance", "start_time": 18000, "duration": 25200, "inflow_rate": 100 } },
-        { "name": "water_user_1", "type": "WaterUseAgent", "config": { "topic": "water_use_disturbance", "start_time": 21600, "duration": 14400, "demand_rate": 40 } },
+        { "name": "base_flow_1", "type": "RainfallAgent", "topic": "inflow_disturbance", "start_time": 0, "duration": 43200, "inflow_rate": 20 },
+        { "name": "rainfall_1", "type": "RainfallAgent", "topic": "inflow_disturbance", "start_time": 18000, "duration": 25200, "inflow_rate": 100 },
+        { "name": "water_user_1", "type": "WaterUseAgent", "topic": "water_use_disturbance", "start_time": 21600, "duration": 14400, "demand_rate": 40 },
         { "name": "forecaster_1", "type": "InflowForecasterAgent", "topic": "inflow_forecast", "forecast_data": [20,20,20,20,20, 120,120,120,120,120,120,120] },
         { "name": "io_agent_1", "type": "PhysicalIOAgent",
           "sensors_config": {
@@ -40,16 +40,13 @@
         },
         { "name": "twin_agent_1", "type": "DigitalTwinAgent", "simulated_object": "upstream_canal", "state_topic": "smoothed_upstream_level", "smoothing_config": { "water_level": 0.4 } },
         { "name": "pid_agent_1", "type": "LocalControlAgent", "controller": "pid_1", "observation_topic": "raw_upstream_level", "observation_key": "water_level", "action_topic": "pid_action", "command_topic": "mpc_command" },
-        { "name": "mpc_dispatcher_1", "type": "CentralMPCAgent",
-          "config": {
-            "prediction_horizon": 12, "dt": 3600, "q_weight": 1.0, "r_weight": 0.8,
-            "state_keys": ["upstream", "downstream"],
-            "state_subscriptions": { "upstream": "raw_upstream_level", "downstream": "raw_downstream_level" },
-            "forecast_subscription": "inflow_forecast",
-            "command_topics": { "upstream_cmd": "mpc_command", "downstream_cmd": "dummy_topic" },
-            "normal_setpoints": [5.0, 5.0], "emergency_setpoint": 4.0, "flood_thresholds": [6.5, 6.0],
-            "canal_surface_areas": [2e5, 2e5], "outflow_coefficient": 1500
-          }
+        { "name": "mpc_dispatcher_1", "type": "CentralMPCAgent", "dt": 3600, "prediction_horizon": 12, "q_weight": 1.0, "r_weight": 0.8,
+          "state_keys": ["upstream", "downstream"],
+          "state_subscriptions": { "upstream": "raw_upstream_level", "downstream": "raw_downstream_level" },
+          "forecast_subscription": "inflow_forecast",
+          "command_topics": { "upstream_cmd": "mpc_command", "downstream_cmd": "dummy_topic" },
+          "normal_setpoints": [5.0, 5.0], "emergency_setpoint": 4.0, "flood_thresholds": [6.5, 6.0],
+          "canal_surface_areas": [2e5, 2e5], "outflow_coefficient": 1500
         }
     ],
     "verification": {
