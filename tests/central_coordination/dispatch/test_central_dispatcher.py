@@ -1,18 +1,48 @@
 import pytest
 from swp.central_coordination.dispatch.central_dispatcher import CentralDispatcher
-from swp.central_coordination.collaboration.message_bus import MessageBus, Message
+from swp.central_coordination.collaboration.message_bus import MessageBus
 
 @pytest.fixture
 def dispatcher_setup():
-    """Sets up a MessageBus and a CentralDispatcher with a standard rule set."""
+    """Sets up a dispatcher with a bus, profile-based rules, and command listeners."""
     bus = MessageBus()
-    rules = {
-        "res1_flood_threshold": 9.0, "res1_drought_threshold": 3.0,
-        "res1_normal_setpoint": 5.0, "res1_system_flood_setpoint": 4.0, "res1_system_drought_setpoint": 6.0,
 
-        "res2_flood_threshold": 19.0, "res2_drought_threshold": 12.0,
-        "res2_normal_setpoint": 15.0, "res2_system_flood_setpoint": 13.0, "res2_system_drought_setpoint": 17.0,
+    rules = {
+        "profiles": {
+            "flood": {
+                "condition": lambda states: states.get('res1', {}).get('water_level', 0) > 9.0,
+                "commands": {
+                    "res1_control": {"new_setpoint": 4.0, "mode": "emergency"},
+                    "res2_control": {"new_setpoint": 14.0}
+                }
+            },
+            "drought": {
+                "condition": lambda states: states.get('res2', {}).get('water_level', 0) < 12.0,
+                "commands": {
+                    "res1_control": {"new_setpoint": 6.0},
+                    "res2_control": {"new_setpoint": 16.0, "mode": "conserve"}
+                }
+            },
+            "normal": {
+                "condition": lambda states: True,
+                "commands": {
+                    "res1_control": {"new_setpoint": 5.0},
+                    "res2_control": {"new_setpoint": 15.0}
+                }
+            }
+        }
     }
+
+    commands = {'res1': None, 'res2': None}
+
+    def res1_command_listener(msg):
+        commands['res1'] = msg
+
+    def res2_command_listener(msg):
+        commands['res2'] = msg
+
+    bus.subscribe("command/res1", res1_command_listener)
+    bus.subscribe("command/res2", res2_command_listener)
 
     dispatcher = CentralDispatcher(
         agent_id="test_dispatcher",
@@ -22,66 +52,68 @@ def dispatcher_setup():
         rules=rules
     )
 
-    # Listener to capture commands
-    commands = {"res1": None, "res2": None}
-    bus.subscribe("command/res1", lambda msg: commands.update({"res1": msg['new_setpoint']}))
-    bus.subscribe("command/res2", lambda msg: commands.update({"res2": msg['new_setpoint']}))
-
     return bus, dispatcher, rules, commands
 
-def test_dispatcher_normal_state(dispatcher_setup):
-    """Tests that dispatcher sends 'normal' setpoints when levels are normal."""
+def test_dispatcher_switches_to_normal_state(dispatcher_setup):
+    """
+    Tests that the dispatcher correctly switches back to the 'normal' profile
+    and sends the appropriate commands.
+    """
     bus, dispatcher, rules, commands = dispatcher_setup
 
-    # Publish normal state messages
+    # 1. First, put the system in a flood state to move it away from the initial 'normal' state
+    bus.publish("state/res1", {'water_level': 9.5})
+    bus.publish("state/res2", {'water_level': 15.0})
+    dispatcher.run(current_time=0)
+    assert dispatcher.active_setpoint_name == "flood" # Verify it's in flood mode
+
+    # 2. Now, publish a normal state and check that it switches back and sends commands
     bus.publish("state/res1", {'water_level': 5.0})
     bus.publish("state/res2", {'water_level': 15.0})
+    dispatcher.run(current_time=1)
 
-    dispatcher.run(current_time=0)
+    assert dispatcher.active_setpoint_name == "normal"
+    assert commands["res1"] == rules["profiles"]["normal"]["commands"]["res1_control"]
+    assert commands["res2"] == rules["profiles"]["normal"]["commands"]["res2_control"]
 
-    # No commands should be sent as the state is 'normal' from the start
-    assert commands["res1"] is None
-    assert commands["res2"] is None
 
 def test_dispatcher_flood_state(dispatcher_setup):
-    """Tests that dispatcher sends 'system_flood' setpoints when one reservoir is high."""
+    """Tests that the dispatcher activates the 'flood' profile when conditions are met."""
     bus, dispatcher, rules, commands = dispatcher_setup
 
-    # res1 is in flood state
-    bus.publish("state/res1", {'water_level': 9.5})
+    bus.publish("state/res1", {'water_level': 9.5}) # Flood condition
     bus.publish("state/res2", {'water_level': 15.0})
 
     dispatcher.run(current_time=0)
 
-    # Check that flood setpoints were sent for BOTH reservoirs
-    assert commands["res1"] == rules["res1_system_flood_setpoint"]
-    assert commands["res2"] == rules["res2_system_flood_setpoint"]
+    assert commands["res1"] == rules["profiles"]["flood"]["commands"]["res1_control"]
+    assert commands["res2"] == rules["profiles"]["flood"]["commands"]["res2_control"]
+    assert dispatcher.active_setpoint_name == "flood"
 
 def test_dispatcher_drought_state(dispatcher_setup):
-    """Tests that dispatcher sends 'system_drought' setpoints when one reservoir is low."""
+    """Tests that the dispatcher activates the 'drought' profile when conditions are met."""
     bus, dispatcher, rules, commands = dispatcher_setup
 
-    # res2 is in drought state
     bus.publish("state/res1", {'water_level': 5.0})
-    bus.publish("state/res2", {'water_level': 11.0})
+    bus.publish("state/res2", {'water_level': 11.0}) # Drought condition
 
     dispatcher.run(current_time=0)
 
-    # Check that drought setpoints were sent
-    assert commands["res1"] == rules["res1_system_drought_setpoint"]
-    assert commands["res2"] == rules["res2_system_drought_setpoint"]
+    assert commands["res1"] == rules["profiles"]["drought"]["commands"]["res1_control"]
+    assert commands["res2"] == rules["profiles"]["drought"]["commands"]["res2_control"]
+    assert dispatcher.active_setpoint_name == "drought"
 
 def test_dispatcher_flood_overrides_drought(dispatcher_setup):
-    """Tests that a flood alert in one reservoir takes precedence over a drought in another."""
+    """Tests that the first matching profile in the rule definition wins."""
     bus, dispatcher, rules, commands = dispatcher_setup
 
-    # res1 is in flood, res2 is in drought
+    # Both flood and drought conditions are true
     bus.publish("state/res1", {'water_level': 9.5})
     bus.publish("state/res2", {'water_level': 11.0})
 
     dispatcher.run(current_time=0)
 
-    # Flood profile should be active, overriding the drought
-    assert dispatcher.active_setpoint_name == "system_flood"
-    assert commands["res1"] == rules["res1_system_flood_setpoint"]
-    assert commands["res2"] == rules["res2_system_flood_setpoint"]
+    # Since 'flood' is defined before 'drought' in the rules, it should be active.
+    assert dispatcher.active_setpoint_name == "flood"
+    assert commands["res1"] == rules["profiles"]["flood"]["commands"]["res1_control"]
+    assert commands["res2"] == rules["profiles"]["flood"]["commands"]["res2_control"]

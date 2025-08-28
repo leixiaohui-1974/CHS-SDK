@@ -59,40 +59,51 @@ class LocalControlAgent(Agent):
 
     def handle_command_message(self, message: Message):
         """Callback to handle incoming high-level commands."""
-        new_setpoint = message.get('new_setpoint')
-        if new_setpoint is not None and hasattr(self.controller, 'set_setpoint'):
-            # print(f"[{self.agent_id}] Received new command: Set setpoint to {new_setpoint}")
-            self.controller.set_setpoint(new_setpoint)
+        # This is a more generic way to update a controller's setpoint
+        if hasattr(self.controller, 'update_setpoint'):
+            self.controller.update_setpoint(message)
+        elif hasattr(self.controller, 'set_setpoint'):
+            new_setpoint = message.get('new_setpoint')
+            if new_setpoint is not None:
+                self.controller.set_setpoint(new_setpoint)
 
     def handle_observation(self, message: Message):
         """
         Callback executed when a new observation message is received.
         """
-        # print(f"[{self.agent_id}] Received observation: {message}")
+        observation_for_controller = None
+        # If observation_key is None, the controller wants the full state dictionary.
+        if self.observation_key is None:
+            observation_for_controller = message
+        else:
+            # Otherwise, extract the specific variable.
+            process_variable = message.get(self.observation_key)
+            if process_variable is None:
+                print(f"[{self.agent_id}] Warning: Key '{self.observation_key}' not found in observation message: {message}")
+                return
+            # And wrap it in the expected format for simple controllers.
+            observation_for_controller = {'process_variable': process_variable}
 
-        # Extract the specific process variable from the observation message
-        process_variable = message.get(self.observation_key)
-
-        if process_variable is None:
-            print(f"[{self.agent_id}] Warning: Key '{self.observation_key}' not found in observation message: {message}")
-            return
-
-        # Create a simplified state for the controller
-        observation_state: State = {'process_variable': process_variable}
-
-        # Compute the control action using the encapsulated controller
-        control_signal = self.controller.compute_control_action(observation_state, self.dt)
-
-        # Publish the computed action to the action topic
-        self.publish_action(control_signal)
+        if observation_for_controller is not None:
+            # Compute the control action using the encapsulated controller
+            control_signal = self.controller.compute_control_action(observation_for_controller, self.dt)
+            # Publish the computed action to the action topic(s)
+            self.publish_action(control_signal)
 
     def publish_action(self, control_signal: any):
         """
         Publishes the control action to the message bus.
+        If the action_topic is a list, it publishes the dict to all topics.
+        If the action_topic is a string, it wraps the signal in the legacy format.
         """
-        action_message: Message = {'control_signal': control_signal, 'agent_id': self.agent_id}
-        # print(f"[{self.agent_id}] Publishing action to '{self.action_topic}': {action_message}")
-        self.bus.publish(self.action_topic, action_message)
+        if isinstance(self.action_topic, list):
+            # The controller returned a dictionary of actions for multiple topics
+            for topic in self.action_topic:
+                self.bus.publish(topic, control_signal)
+        else:
+            # Legacy support for single action topic
+            action_message: Message = {'control_signal': control_signal, 'agent_id': self.agent_id}
+            self.bus.publish(self.action_topic, action_message)
 
     def run(self, current_time: float):
         """

@@ -60,50 +60,27 @@ class CentralDispatcher(Agent):
     def run(self, current_time: float):
         """
         Evaluates the system state against a set of rules and activates a
-        corresponding control profile. This version supports multiple reservoirs.
+        corresponding control profile. This is a generic, stateless implementation.
         """
-        flood_alert_count = 0
-        drought_alert_count = 0
+        # Determine which profile's conditions are met
+        active_profile_name = "normal" # Default profile
+        for profile_name, profile_data in self.rules.get("profiles", {}).items():
+            condition = profile_data.get("condition")
+            if condition and condition(self.latest_states):
+                active_profile_name = profile_name
+                break # First matching profile wins
 
-        # Rule evaluation for each managed reservoir
-        for name, state in self.latest_states.items():
-            # Assumes state messages contain level, max_volume, etc.
-            # And that the rule keys match the state names (e.g., 'res1').
-            level = state.get('water_level')
-            max_level = self.rules.get(f"{name}_max_level", float('inf'))
-
-            if level is None:
-                continue
-
-            if level > self.rules.get(f"{name}_flood_threshold", max_level):
-                flood_alert_count += 1
-            elif level < self.rules.get(f"{name}_drought_threshold", 0):
-                drought_alert_count += 1
-
-        # Determine the system-wide control profile
-        new_setpoint_name = "normal"
-        if flood_alert_count > 0:
-            new_setpoint_name = "system_flood"
-        elif drought_alert_count > 0:
-            new_setpoint_name = "system_drought"
-
-        # --- Publish Commands ---
-        # Only publish if the overall setpoint profile has changed
-        if new_setpoint_name != self.active_setpoint_name:
-            self.active_setpoint_name = new_setpoint_name
+        # If the active profile has changed, publish the new commands
+        if active_profile_name != self.active_setpoint_name:
+            self.active_setpoint_name = active_profile_name
             print(f"  [{current_time}s] [{self.agent_id}] System state change. Activating '{self.active_setpoint_name}' profile.")
 
-            # Send a new setpoint command for each managed entity
-            for command_name, topic in self.command_topics.items():
-                # e.g., command_name 'res1_control' -> entity_name 'res1'
-                entity_name = command_name.replace('_control', '')
+            # Get the commands for the active profile
+            commands_to_publish = self.rules.get("profiles", {}).get(active_profile_name, {}).get("commands", {})
 
-                # Rule key is like 'res1_system_flood_setpoint'
-                rule_key = f"{entity_name}_{self.active_setpoint_name}_setpoint"
-
-                if rule_key in self.rules:
-                    setpoint = self.rules[rule_key]
-                    print(f"  [{self.agent_id}] -> Sending new setpoint for '{entity_name}': {setpoint}")
-                    # The message could contain a target level for an MPC controller
-                    # or a direct value for a simpler controller.
-                    self.bus.publish(topic, {'new_setpoint': setpoint})
+            # Send a new command message for each managed entity in the profile
+            for command_name, message_body in commands_to_publish.items():
+                if command_name in self.command_topics:
+                    topic = self.command_topics[command_name]
+                    print(f"  [{self.agent_id}] -> Publishing to topic '{topic}': {message_body}")
+                    self.bus.publish(topic, message_body)

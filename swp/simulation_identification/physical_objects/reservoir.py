@@ -29,7 +29,7 @@ class Reservoir(PhysicalObjectInterface):
 
     def handle_inflow_message(self, message: Message):
         """Callback to handle incoming data-driven inflow messages."""
-        inflow_value = message.get('value')
+        inflow_value = message.get('inflow_rate')  # Corrected key
         if isinstance(inflow_value, (int, float)):
             self.data_inflow += inflow_value
 
