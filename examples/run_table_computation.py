@@ -123,7 +123,9 @@ if __name__ == "__main__":
         sys.exit(1)
 
     if df is not None and not df.empty:
-        output_path = config['output_settings']['csv_path']
+        # Save relative to the config file's location
+        base_dir = os.path.dirname(config_file_path)
+        output_path = os.path.join(base_dir, config['output_settings']['csv_path'])
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
         df.to_csv(output_path, index=False)
         print(f"\nSuccessfully generated and saved table to: {output_path}")
