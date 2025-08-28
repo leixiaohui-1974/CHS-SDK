@@ -1,0 +1,35 @@
+{
+    "description": "Disturbance scenario for Mission 2.2",
+    "agents": [
+        {
+            "name": "base_flow_1",
+            "type": "RainfallAgent",
+            "topic": "inflow_disturbance",
+            "start_time": 0,
+            "duration": 43200,
+            "inflow_rate": 20
+        },
+        {
+            "name": "rainfall_1",
+            "type": "RainfallAgent",
+            "topic": "inflow_disturbance",
+            "start_time": 18000,
+            "duration": 25200,
+            "inflow_rate": 100
+        },
+        {
+            "name": "water_user_1",
+            "type": "WaterUseAgent",
+            "topic": "water_use_disturbance",
+            "start_time": 21600,
+            "duration": 14400,
+            "demand_rate": 40
+        },
+        {
+            "name": "forecaster_1",
+            "type": "InflowForecasterAgent",
+            "topic": "inflow_forecast",
+            "forecast_data": [20,20,20,20,20, 120,120,120,120,120,120,120]
+        }
+    ]
+}

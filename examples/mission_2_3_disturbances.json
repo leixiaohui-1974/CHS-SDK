@@ -1,0 +1,21 @@
+{
+    "description": "Disturbance scenario for Mission 2.3",
+    "agents": [
+        {
+            "name": "flood_event",
+            "type": "RainfallAgent",
+            "topic": "inflow_disturbance",
+            "start_time": 43200,
+            "duration": 86400,
+            "inflow_rate": 300
+        },
+        {
+            "name": "water_user",
+            "type": "WaterUseAgent",
+            "topic": "water_demand",
+            "start_time": 64800,
+            "duration": 43200,
+            "demand_rate": 50
+        }
+    ]
+}
