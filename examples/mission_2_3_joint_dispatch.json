@@ -29,10 +29,10 @@
         { "name": "diversion_ctrl_1", "type": "DirectGateController", "parameters": { "setpoint": 1.0 } }
     ],
     "agents": [
-        { "name": "flood_event", "type": "RainfallAgent", "config": { "topic": "inflow_disturbance", "start_time": 43200, "duration": 86400, "inflow_rate": 300 } },
+        { "name": "flood_event", "type": "RainfallAgent", "topic": "inflow_disturbance", "start_time": 43200, "duration": 86400, "inflow_rate": 300 },
         { "name": "water_user", "type": "WaterUseAgent", "topic": "water_demand", "start_time": 64800, "duration": 43200, "demand_rate": 50 },
         { "name": "reservoir_twin", "type": "DigitalTwinAgent", "simulated_object": "upper_reservoir", "state_topic": "reservoir_state" },
-        { "name": "hydro_station_agent", "type": "LocalControlAgent", "controller": "hydro_ctrl_1", "observation_topic": "reservoir_state", "action_topic": ["turbine_action", "flood_gate_action"], "command_topic": "hydro_command" },
+        { "name": "hydro_station_agent", "type": "LocalControlAgent", "controller": "hydro_ctrl_1", "observation_topic": "reservoir_state", "action_topic": ["turbine_action", "flood_gate_action"], "command_topic": "hydro_command", "observation_key": null },
         { "name": "diversion_agent", "type": "LocalControlAgent", "controller": "diversion_ctrl_1", "action_topic": "diversion_action", "command_topic": "diversion_command" },
         { "name": "central_dispatcher", "type": "CentralDispatcher",
           "state_subscriptions": { "reservoir": "reservoir_state" },

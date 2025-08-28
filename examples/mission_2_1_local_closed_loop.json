@@ -27,7 +27,7 @@
           "sensors_config": { "canal_level_sensor": { "component": "upstream_canal", "state_key": "water_level", "topic": "upstream_level_topic", "noise_std": 0.01 }},
           "actuators_config": { "gate_actuator": { "component": "control_gate", "target_attr": "target_opening", "topic": "gate_action_topic", "control_key": "control_signal" }}
         },
-        { "name": "inflow_disturbance_1", "type": "RainfallAgent", "config": { "topic": "inflow_topic", "start_time": 0, "duration": 2000, "inflow_rate": 15.0 } }
+        { "name": "inflow_disturbance_1", "type": "RainfallAgent", "topic": "inflow_topic", "start_time": 0, "duration": 2000, "inflow_rate": 15.0 }
     ],
     "verification": {
         "type": "check_final_state",

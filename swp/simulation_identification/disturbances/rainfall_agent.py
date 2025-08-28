@@ -14,30 +14,30 @@ class RainfallAgent(Agent):
     resilience of the control system to external disturbances.
     """
 
-    def __init__(self, agent_id: str, message_bus: MessageBus, config: Dict[str, Any]):
+    def __init__(self, agent_id: str, message_bus: MessageBus, topic: str,
+                 start_time: float, duration: float, inflow_rate: float, **kwargs):
         """
         Initializes the RainfallAgent.
 
         Args:
             agent_id: The unique ID for this agent.
             message_bus: The system's message bus.
-            config: A dictionary containing the disturbance parameters:
-                - topic: The topic to publish the disturbance to.
-                - start_time: The simulation time to start the rainfall.
-                - duration: The duration of the rainfall event in seconds.
-                - inflow_rate: The inflow rate (m^3/s) during the event.
+            topic: The topic to publish the disturbance to.
+            start_time: The simulation time to start the rainfall.
+            duration: The duration of the rainfall event in seconds.
+            inflow_rate: The constant inflow rate during the event (m^3/s).
         """
         super().__init__(agent_id)
         self.bus = message_bus
-        self.topic = config.get("topic")
-        self.start_time = config.get("start_time", 0)
-        self.duration = config.get("duration", 0)
-        self.inflow_rate = config.get("inflow_rate", 0)
+        self.topic = topic
+        self.start_time = start_time
+        self.duration = duration
+        self.inflow_rate = inflow_rate
         self.end_time = self.start_time + self.duration
         self.is_active = False
 
         if not self.topic:
-            raise ValueError("RainfallAgent requires a 'topic' in its config.")
+            raise ValueError("RainfallAgent requires a 'topic'.")
 
         print(f"RainfallAgent '{self.agent_id}' created. Will trigger at t={self.start_time}s on topic '{self.topic}'.")
 
