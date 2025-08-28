@@ -1,0 +1,31 @@
+{
+    "description": "Plotting configuration for Mission 2.2",
+    "figure": {
+        "title": "Mission 2.2: Hierarchical Control Results",
+        "figsize": [12, 8],
+        "filename": "hierarchical_control_results.png"
+    },
+    "subplots": [
+        {
+            "title": "Upstream Canal Water Level",
+            "y_label": "Water Level (m)",
+            "grid": true,
+            "series": [
+                { "y_key": "upstream_canal_water_level", "label": "Actual Water Level" }
+            ],
+            "annotations": [
+                { "type": "hline", "y": 6.5, "label": "Flood Threshold (6.5m)", "color": "r", "linestyle": "--" },
+                { "type": "hline", "y": 4.0, "label": "Emergency Setpoint (4.0m)", "color": "g", "linestyle": "--" }
+            ]
+        },
+        {
+            "title": "Gate Opening",
+            "y_label": "Opening (m)",
+            "x_label": "Time (hours)",
+            "grid": true,
+            "series": [
+                { "y_key": "control_gate_opening", "label": "Gate Opening" }
+            ]
+        }
+    ]
+}

@@ -70,33 +70,33 @@ def load_and_run(config_path: str):
     # Load disturbance config if specified
     disturbance_agents_config = []
     if 'disturbance_file' in sim_config:
-        dist_path = os.path.join(os.path.dirname(config_path), os.path.basename(sim_config['disturbance_file']))
+        # Assume disturbance file is relative to the main config file
+        base_dir = os.path.dirname(config_path)
+        dist_path = os.path.join(base_dir, sim_config['disturbance_file'])
         with open(dist_path, 'r') as f:
             disturbance_config = json.load(f)
             disturbance_agents_config = disturbance_config.get('agents', [])
 
-    # Combine control agents and disturbance agents
     all_agents_config = sim_config.get('agents', []) + disturbance_agents_config
 
-    # --- Build the system from config ---
     components = {}
     for comp_config in sim_config.get('components', []):
         comp_type = comp_config.pop('type')
+        comp_name = comp_config.pop('name')
         if 'inflow_topic' in comp_config: comp_config['message_bus'] = bus
-        components[comp_config['name']] = COMPONENT_MAP[comp_type](**comp_config)
-        harness.add_component(components[comp_config['name']])
+        components[comp_name] = COMPONENT_MAP[comp_type](name=comp_name, **comp_config)
+        harness.add_component(components[comp_name])
 
     for conn in sim_config.get('connections', []):
         harness.add_connection(conn[0], conn[1])
 
-    controllers = {c['name']: CONTROLLER_MAP[c['type']](**c['parameters']) for c in sim_config.get('controllers', [])}
+    controllers = {c.pop('name'): CONTROLLER_MAP[c.pop('type')](**c['parameters']) for c in sim_config.get('controllers', [])}
 
     for agent_config in all_agents_config:
         agent_type = agent_config.pop('type')
         agent_name = agent_config.pop('name')
         cls = AGENT_MAP[agent_type]
 
-        # Resolve object references and special parameters
         if agent_type == "PhysicalIOAgent":
             for s in agent_config.get('sensors_config', {}).values(): s['obj'] = components[s.pop('component')]
             for a in agent_config.get('actuators_config', {}).values(): a['obj'] = components[a.pop('component')]
@@ -109,6 +109,10 @@ def load_and_run(config_path: str):
             agent_config['rules'] = RULE_SETS[agent_config.pop('ruleset')]
         elif agent_type == "CsvInflowAgent":
             agent_config['target_component'] = components[agent_config.pop('target_component')]
+        elif agent_type == "CentralMPCAgent":
+            # This agent expects its params in a nested 'config' dict
+            harness.add_agent(cls(agent_id=agent_name, message_bus=bus, config=agent_config))
+            continue
 
         harness.add_agent(cls(agent_id=agent_name, message_bus=bus, **agent_config))
 
@@ -119,7 +123,7 @@ def load_and_run(config_path: str):
     print("Simulation finished.")
 
     # --- Save standardized output ---
-    output_dir = sim_config.get('output_dir', 'output/default/')
+    output_dir = os.path.join(os.path.dirname(config_path), sim_config.get('output_dir', 'output/'))
     os.makedirs(output_dir, exist_ok=True)
 
     if harness.history:
@@ -128,9 +132,8 @@ def load_and_run(config_path: str):
         history_df.to_csv(os.path.join(output_dir, 'history.csv'), index=False)
         print(f"Standardized history saved to {os.path.join(output_dir, 'history.csv')}")
 
-    # Copy the plot config to the output directory for the visualizer
     if 'plot_config_file' in sim_config:
-        plot_config_path = os.path.join(os.path.dirname(config_path), os.path.basename(sim_config['plot_config_file']))
+        plot_config_path = os.path.join(os.path.dirname(config_path), sim_config['plot_config_file'])
         if os.path.exists(plot_config_path):
             import shutil
             shutil.copy(plot_config_path, os.path.join(output_dir, 'plots.json'))
