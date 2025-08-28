@@ -2,7 +2,6 @@ import json
 import os
 import sys
 import pandas as pd
-import numpy as np
 from typing import Dict, Any
 
 # --- Add project root to Python path ---
@@ -55,35 +54,44 @@ CONTROLLER_MAP = {
     "PIDController": PIDController, "HydropowerController": HydropowerController, "DirectGateController": DirectGateController
 }
 
-def run_harness_simulation(config_path):
+def load_and_run(config_path: str):
+    """
+    Loads a simulation config, its linked disturbance config, and runs the simulation.
+    """
     with open(config_path, 'r') as f:
-        config = json.load(f)
+        sim_config = json.load(f)
 
-    print(f"--- Running Harness Simulation from Config: {os.path.basename(config_path)} ---")
-    print(f"--- {config.get('description', 'No description provided.')} ---")
+    print(f"--- Running Simulation from Config: {os.path.basename(config_path)} ---")
+    print(f"--- {sim_config.get('description', 'No description provided.')} ---")
 
-    harness = SimulationHarness(config=config.get('harness_config', {}))
+    harness = SimulationHarness(config=sim_config.get('harness_config', {}))
     bus = harness.message_bus
 
-    json_str = json.dumps(config)
-    if 'topics' in config:
-        for key, value in config['topics'].items():
-            json_str = json_str.replace(f'"{key}"', f'"{value}"')
-    config = json.loads(json_str)
+    # Load disturbance config if specified
+    disturbance_agents_config = []
+    if 'disturbance_file' in sim_config:
+        dist_path = os.path.join(os.path.dirname(config_path), os.path.basename(sim_config['disturbance_file']))
+        with open(dist_path, 'r') as f:
+            disturbance_config = json.load(f)
+            disturbance_agents_config = disturbance_config.get('agents', [])
 
+    # Combine control agents and disturbance agents
+    all_agents_config = sim_config.get('agents', []) + disturbance_agents_config
+
+    # --- Build the system from config ---
     components = {}
-    for comp_config in config.get('components', []):
+    for comp_config in sim_config.get('components', []):
         comp_type = comp_config.pop('type')
         if 'inflow_topic' in comp_config: comp_config['message_bus'] = bus
         components[comp_config['name']] = COMPONENT_MAP[comp_type](**comp_config)
         harness.add_component(components[comp_config['name']])
 
-    for conn in config.get('connections', []):
+    for conn in sim_config.get('connections', []):
         harness.add_connection(conn[0], conn[1])
 
-    controllers = {c['name']: CONTROLLER_MAP[c['type']](**c['parameters']) for c in config.get('controllers', [])}
+    controllers = {c['name']: CONTROLLER_MAP[c['type']](**c['parameters']) for c in sim_config.get('controllers', [])}
 
-    for agent_config in config.get('agents', []):
+    for agent_config in all_agents_config:
         agent_type = agent_config.pop('type')
         agent_name = agent_config.pop('name')
         cls = AGENT_MAP[agent_type]
@@ -99,12 +107,8 @@ def run_harness_simulation(config_path):
             agent_config['simulated_object'] = components[agent_config.pop('simulated_object')]
         elif agent_type == "CentralDispatcher":
             agent_config['rules'] = RULE_SETS[agent_config.pop('ruleset')]
-        elif agent_type == "CentralMPCAgent":
-            # This agent also expects a single 'config' dictionary
-            harness.add_agent(cls(agent_id=agent_name, message_bus=bus, config=agent_config))
-            continue
         elif agent_type == "CsvInflowAgent":
-            agent_config['component'] = components[agent_config.pop('component')]
+            agent_config['target_component'] = components[agent_config.pop('target_component')]
 
         harness.add_agent(cls(agent_id=agent_name, message_bus=bus, **agent_config))
 
@@ -114,18 +118,26 @@ def run_harness_simulation(config_path):
     harness.run_mas_simulation()
     print("Simulation finished.")
 
-    # Process history and save output
+    # --- Save standardized output ---
+    output_dir = sim_config.get('output_dir', 'output/default/')
+    os.makedirs(output_dir, exist_ok=True)
+
     if harness.history:
         flat_history = [{'time': s['time'], **{f"{k}_{sk}": sv for k,v in s.items() if isinstance(v,dict) for sk,sv in v.items()}} for s in harness.history]
         history_df = pd.DataFrame(flat_history)
-        if 'output_settings' in config and 'history_file' in config['output_settings']:
-            output_path = config['output_settings']['history_file']
-            os.makedirs(os.path.dirname(output_path), exist_ok=True)
-            history_df.to_csv(output_path, index=False)
-            print(f"History saved to {output_path}")
+        history_df.to_csv(os.path.join(output_dir, 'history.csv'), index=False)
+        print(f"Standardized history saved to {os.path.join(output_dir, 'history.csv')}")
+
+    # Copy the plot config to the output directory for the visualizer
+    if 'plot_config_file' in sim_config:
+        plot_config_path = os.path.join(os.path.dirname(config_path), os.path.basename(sim_config['plot_config_file']))
+        if os.path.exists(plot_config_path):
+            import shutil
+            shutil.copy(plot_config_path, os.path.join(output_dir, 'plots.json'))
+            print(f"Plot config copied to {os.path.join(output_dir, 'plots.json')}")
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print(f"Usage: python {sys.argv[0]} <path_to_config.json>")
+        print(f"Usage: python {sys.argv[0]} <path_to_sim_config.json>", file=sys.stderr)
         sys.exit(1)
-    run_harness_simulation(sys.argv[1])
+    load_and_run(sys.argv[1])
