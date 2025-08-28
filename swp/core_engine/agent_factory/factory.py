@@ -19,6 +19,7 @@ from swp.local_agents.control.pid_controller import PIDController
 from swp.local_agents.control.pump_station_control_agent import PumpStationControlAgent
 from swp.local_agents.control.valve_station_control_agent import ValveStationControlAgent
 from swp.local_agents.control.hydropower_station_control_agent import HydropowerStationControlAgent
+from swp.central_coordination.perception.central_perception_agent import CentralPerceptionAgent
 from swp.central_coordination.collaboration.message_bus import MessageBus
 
 
@@ -234,6 +235,19 @@ class AgentFactory:
                     else:
                         # Placeholder for other control agents
                         pass
+
+        # 4. Create Central Agents (if specified)
+        if 'central_agents' in config:
+            for ca_config in config['central_agents']:
+                ca_type = ca_config.get('type')
+                if ca_type == 'CentralPerceptionAgent':
+                    central_agent = CentralPerceptionAgent(
+                        agent_id=ca_config['agent_id'],
+                        message_bus=self.bus,
+                        subscribed_topics=ca_config['subscribed_topics'],
+                        global_state_topic=ca_config['global_state_topic']
+                    )
+                    agents.append(central_agent)
 
         print(f"System created with {len(agents)} agents and {len(models)} models.")
         return agents, models
