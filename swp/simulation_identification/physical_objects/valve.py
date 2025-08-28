@@ -77,3 +77,38 @@ class Valve(PhysicalObjectInterface):
         self._state['outflow'] = outflow
 
         return self.get_state()
+
+
+class ValveStation(PhysicalObjectInterface):
+    """
+    Represents a valve station, which is a collection of individual valves.
+    It aggregates the flow of all valves within it. The control of individual
+    valves is handled by an external agent.
+    """
+
+    def __init__(self, name: str, initial_state: State, parameters: Parameters, valves: list[Valve]):
+        super().__init__(name, initial_state, parameters)
+        self.valves = valves
+        self._state.setdefault('total_outflow', 0.0)
+        self._state.setdefault('valve_count', len(self.valves))
+        print(f"ValveStation '{self.name}' created with {len(self.valves)} valves.")
+
+    def step(self, action: Dict[str, Any], dt: float) -> State:
+        """
+        Steps each valve in the station and aggregates their states.
+        The `action` dict (containing upstream/downstream heads) is passed to each valve.
+        """
+        total_outflow = 0.0
+
+        for valve in self.valves:
+            # Individual valve control signals are received via their own message bus subscriptions.
+            valve_state = valve.step(action, dt)
+            total_outflow += valve_state.get('outflow', 0)
+
+        self._state['total_outflow'] = total_outflow
+
+        return self._state
+
+    @property
+    def is_stateful(self) -> bool:
+        return False

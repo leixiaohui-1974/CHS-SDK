@@ -7,11 +7,14 @@ from swp.simulation_identification.physical_objects.reservoir import Reservoir
 from swp.simulation_identification.physical_objects.gate import Gate
 from swp.simulation_identification.physical_objects.pipe import Pipe
 from swp.simulation_identification.physical_objects.pump import Pump, PumpStation
+from swp.simulation_identification.physical_objects.valve import Valve, ValveStation
 from swp.local_agents.perception.digital_twin_agent import DigitalTwinAgent
 from swp.local_agents.perception.pipeline_perception_agent import PipelinePerceptionAgent
 from swp.local_agents.perception.pump_station_perception_agent import PumpStationPerceptionAgent
+from swp.local_agents.perception.valve_station_perception_agent import ValveStationPerceptionAgent
 from swp.local_agents.control.pid_controller import PIDController
 from swp.local_agents.control.pump_station_control_agent import PumpStationControlAgent
+from swp.local_agents.control.valve_station_control_agent import ValveStationControlAgent
 from swp.central_coordination.collaboration.message_bus import MessageBus
 
 
@@ -88,6 +91,23 @@ class AgentFactory:
                         parameters=model_config['params'],
                         pumps=pumps
                     )
+                elif model_type == 'ValveStation':
+                    valves = []
+                    for valve_config in model_config['valves']:
+                        valve = Valve(
+                            name=valve_config['id'],
+                            initial_state=valve_config['initial_state'],
+                            parameters=valve_config['params'],
+                            message_bus=self.bus,
+                            action_topic=valve_config.get('action_topic')
+                        )
+                        valves.append(valve)
+                    model = ValveStation(
+                        name=model_id,
+                        initial_state=model_config['initial_state'],
+                        parameters=model_config['params'],
+                        valves=valves
+                    )
                 else:
                     print(f"Warning: Unknown model type '{model_type}' in config. Skipping.")
                     continue
@@ -114,6 +134,13 @@ class AgentFactory:
                             message_bus=self.bus,
                             state_topic=pa_topic
                         )
+                    elif isinstance(model, ValveStation):
+                        perception_agent = ValveStationPerceptionAgent(
+                            agent_id=pa_id,
+                            valve_station_model=model,
+                            message_bus=self.bus,
+                            state_topic=pa_topic
+                        )
                     else:
                         # Use the generic DigitalTwinAgent for other models
                         perception_agent = DigitalTwinAgent(
@@ -130,19 +157,28 @@ class AgentFactory:
                     ca_type = ca_config.get('type')
 
                     if ca_type == 'PumpStationControlAgent' and isinstance(model, PumpStation):
-                        # Extract the action topics from the model config for the pumps
                         pump_action_topics = [p_conf.get('action_topic') for p_conf in model_config.get('pumps', [])]
-
                         control_agent = PumpStationControlAgent(
                             agent_id=ca_config['agent_id'],
                             message_bus=self.bus,
                             goal_topic=ca_config['goal_topic'],
-                            state_topic=comp_config['perception_agent']['state_topic'], # Reuse from perception agent
+                            state_topic=comp_config['perception_agent']['state_topic'],
                             pump_action_topics=pump_action_topics
                         )
                         agents.append(control_agent)
+                    elif ca_type == 'ValveStationControlAgent' and isinstance(model, ValveStation):
+                        valve_action_topics = [v_conf.get('action_topic') for v_conf in model_config.get('valves', [])]
+                        control_agent = ValveStationControlAgent(
+                            agent_id=ca_config['agent_id'],
+                            message_bus=self.bus,
+                            goal_topic=ca_config['goal_topic'],
+                            state_topic=comp_config['perception_agent']['state_topic'],
+                            valve_action_topics=valve_action_topics,
+                            kp=ca_config.get('kp', 0.1)
+                        )
+                        agents.append(control_agent)
                     else:
-                        # Placeholder for other control agents like PID-based ones
+                        # Placeholder for other control agents
                         pass
 
         print(f"System created with {len(agents)} agents and {len(models)} models.")
