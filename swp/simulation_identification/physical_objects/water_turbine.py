@@ -53,8 +53,9 @@ class WaterTurbine(PhysicalObjectInterface):
         # The harness provides inflow and head information in the action dictionary
         inflow = self._inflow
 
-        # The turbine's outflow is constrained by inflow, its max flow rate, and the agent's target.
-        outflow = min(inflow, self.max_flow_rate, self.target_outflow)
+        # The turbine's outflow is constrained by its max flow rate and the agent's target.
+        # For a turbine connected to a large reservoir, the inflow from the reservoir isn't the primary constraint.
+        outflow = min(self.max_flow_rate, self.target_outflow)
         self._state['outflow'] = outflow
 
         # The harness provides head levels from adjacent components
