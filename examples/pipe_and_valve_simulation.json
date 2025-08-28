@@ -1,0 +1,21 @@
+{
+  "pipe_params": {
+    "length": 1000,
+    "diameter": 0.5,
+    "friction_factor": 0.02
+  },
+  "valve_params": {
+    "diameter": 0.5,
+    "discharge_coefficient": 0.8
+  },
+  "boundary_conditions": {
+    "upstream_head": 100.0,
+    "downstream_head": 50.0
+  },
+  "simulation_scenarios": {
+    "valve_openings": [100, 75, 50, 25, 10]
+  },
+  "solver_settings": {
+    "iterations": 30
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "data_generation": {
+    "total_points": 250,
+    "time_steps_end": 125.66,
+    "sin_wave_multiplier": 20,
+    "trend_multiplier": 0.01,
+    "noise_multiplier": 5,
+    "base_value": 100
+  },
+  "agent_config": {
+    "observation_topic": "data/inflow",
+    "observation_key": "value",
+    "forecast_topic": "forecast/inflow",
+    "history_size": 200,
+    "refit_interval": 200,
+    "input_window_size": 40,
+    "output_window_size": 10,
+    "epochs": 100,
+    "learning_rate": 0.005,
+    "hidden_size": 64,
+    "num_layers": 2
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "simulation": {
+    "dt": 5.0,
+    "theta": 0.6,
+    "num_steps": 100,
+    "output_filename": "plant_data.csv"
+  },
+  "initial_conditions": {
+    "depth": 4.0,
+    "flow": 100.0
+  },
+  "components": {
+    "upstream_reach": {
+      "length": 5000,
+      "num_points": 51,
+      "bottom_width": 20,
+      "side_slope_z": 2,
+      "manning_n": 0.03,
+      "slope": 0.001
+    },
+    "downstream_reach": {
+      "length": 100,
+      "num_points": 2,
+      "bottom_width": 20,
+      "side_slope_z": 2,
+      "manning_n": 0.03,
+      "slope": 0.001,
+      "initial_depth_offset": -0.5
+    },
+    "control_gate": {
+      "width": 20,
+      "discharge_coeff": 0.7,
+      "initial_opening": 0.8
+    }
+  },
+  "control_events": [
+    {
+      "time_step": 20,
+      "action": "set_opening",
+      "value": 0.4
+    }
+  ]
+}

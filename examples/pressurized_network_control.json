@@ -1,0 +1,38 @@
+{
+  "simulation": {
+    "dt": 10,
+    "num_steps": 60
+  },
+  "components": {
+    "upstream_reservoir": {
+      "initial_water_level": 10
+    },
+    "pump_station": {
+      "num_pumps": 3,
+      "pump_params": {
+        "max_flow_rate": 1.5,
+        "max_head": 38,
+        "power_consumption_kw": 60
+      }
+    },
+    "pipe": {
+      "length": 150,
+      "diameter": 0.8,
+      "friction_factor": 0.025
+    },
+    "demand_valve": {
+      "diameter": 0.8,
+      "discharge_coefficient": 0.9,
+      "initial_opening": 50.0
+    }
+  },
+  "agent_config": {
+    "control_topic_prefix": "pumps/control",
+    "min_pressure": 40.0,
+    "max_pressure": 45.0
+  },
+  "demand_changes": [
+    { "time_step": 10, "opening": 60.0 },
+    { "time_step": 40, "opening": 30.0 }
+  ]
+}
