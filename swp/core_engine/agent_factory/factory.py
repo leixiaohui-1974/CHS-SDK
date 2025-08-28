@@ -11,6 +11,7 @@ from swp.simulation_identification.physical_objects.valve import Valve, ValveSta
 from swp.simulation_identification.physical_objects.water_turbine import WaterTurbine
 from swp.simulation_identification.physical_objects.hydropower_station import HydropowerStation
 from swp.local_agents.perception.digital_twin_agent import DigitalTwinAgent
+from swp.local_agents.perception.reservoir_perception_agent import ReservoirPerceptionAgent
 from swp.local_agents.perception.pipeline_perception_agent import PipelinePerceptionAgent
 from swp.local_agents.perception.pump_station_perception_agent import PumpStationPerceptionAgent
 from swp.local_agents.perception.valve_station_perception_agent import ValveStationPerceptionAgent
@@ -153,7 +154,14 @@ class AgentFactory:
                     pa_id = pa_config['agent_id']
                     pa_topic = pa_config['state_topic']
 
-                    if isinstance(model, Pipe):
+                    if isinstance(model, Reservoir):
+                        perception_agent = ReservoirPerceptionAgent(
+                            agent_id=pa_id,
+                            reservoir_model=model,
+                            message_bus=self.bus,
+                            state_topic=pa_topic
+                        )
+                    elif isinstance(model, Pipe):
                         perception_agent = PipelinePerceptionAgent(
                             agent_id=pa_id,
                             pipe_model=model,
