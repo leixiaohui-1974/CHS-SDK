@@ -1,0 +1,61 @@
+{
+    "description": "Mission 2.2: Hierarchical Control. A full multi-layer system with a central MPC agent responding to a forecasted flood.",
+    "harness_config": {
+        "duration": 43200,
+        "dt": 3600
+    },
+    "topics": {
+        "raw_upstream_level": "state/canal_upstream/level/raw",
+        "smoothed_upstream_level": "state/canal_upstream/level/smoothed",
+        "raw_downstream_level": "state/canal_downstream/level/raw",
+        "inflow_disturbance": "disturbance/inflow/upstream",
+        "water_use_disturbance": "disturbance/outflow/downstream",
+        "inflow_forecast": "forecast/inflow/upstream",
+        "mpc_command": "command/pid/setpoint",
+        "pid_action": "action/gate/opening"
+    },
+    "components": [
+        { "name": "upstream_canal", "type": "Canal", "initial_state": {"volume": 652500, "water_level": 4.5}, "parameters": {"bottom_width": 20.0, "length": 5000.0, "slope": 0.0001, "side_slope_z": 2.0, "manning_n": 0.03}, "inflow_topic": "inflow_disturbance" },
+        { "name": "downstream_canal", "type": "Canal", "initial_state": {"volume": 400000}, "parameters": {"bottom_width": 20.0, "length": 5000.0, "slope": 0.0001, "side_slope_z": 2.0, "manning_n": 0.03}, "inflow_topic": "water_use_disturbance" },
+        { "name": "control_gate", "type": "Gate", "initial_state": {"opening": 0.3}, "parameters": {"discharge_coefficient": 0.7, "width": 15.0, "max_opening": 5.0, "max_rate_of_change": 0.5} }
+    ],
+    "connections": [
+        ["upstream_canal", "control_gate"],
+        ["control_gate", "downstream_canal"]
+    ],
+    "controllers": [
+        { "name": "pid_1", "type": "PIDController", "parameters": { "Kp": -0.6, "Ki": -0.00005, "Kd": -0.1, "setpoint": 4.0, "min_output": 0.0, "max_output": 5.0 } }
+    ],
+    "agents": [
+        { "name": "base_flow_1", "type": "RainfallAgent", "config": { "topic": "inflow_disturbance", "start_time": 0, "duration": 43200, "inflow_rate": 20 } },
+        { "name": "rainfall_1", "type": "RainfallAgent", "config": { "topic": "inflow_disturbance", "start_time": 18000, "duration": 25200, "inflow_rate": 100 } },
+        { "name": "water_user_1", "type": "WaterUseAgent", "config": { "topic": "water_use_disturbance", "start_time": 21600, "duration": 14400, "demand_rate": 40 } },
+        { "name": "forecaster_1", "type": "InflowForecasterAgent", "topic": "inflow_forecast", "forecast_data": [20,20,20,20,20, 120,120,120,120,120,120,120] },
+        { "name": "io_agent_1", "type": "PhysicalIOAgent",
+          "sensors_config": {
+              "upstream_sensor": { "component": "upstream_canal", "state_key": "water_level", "topic": "raw_upstream_level", "noise_std": 0.05 },
+              "downstream_sensor": { "component": "downstream_canal", "state_key": "water_level", "topic": "raw_downstream_level", "noise_std": 0.05 }
+          },
+          "actuators_config": { "gate_actuator": { "component": "control_gate", "target_attr": "target_opening", "topic": "pid_action", "control_key": "control_signal" }}
+        },
+        { "name": "twin_agent_1", "type": "DigitalTwinAgent", "simulated_object": "upstream_canal", "state_topic": "smoothed_upstream_level", "smoothing_config": { "water_level": 0.4 } },
+        { "name": "pid_agent_1", "type": "LocalControlAgent", "controller": "pid_1", "observation_topic": "raw_upstream_level", "observation_key": "water_level", "action_topic": "pid_action", "command_topic": "mpc_command" },
+        { "name": "mpc_dispatcher_1", "type": "CentralMPCAgent",
+          "config": {
+            "prediction_horizon": 12, "dt": 3600, "q_weight": 1.0, "r_weight": 0.8,
+            "state_keys": ["upstream", "downstream"],
+            "state_subscriptions": { "upstream": "raw_upstream_level", "downstream": "raw_downstream_level" },
+            "forecast_subscription": "inflow_forecast",
+            "command_topics": { "upstream_cmd": "mpc_command", "downstream_cmd": "dummy_topic" },
+            "normal_setpoints": [5.0, 5.0], "emergency_setpoint": 4.0, "flood_thresholds": [6.5, 6.0],
+            "canal_surface_areas": [2e5, 2e5], "outflow_coefficient": 1500
+          }
+        }
+    ],
+    "verification": {
+        "type": "check_max_value",
+        "history_key": "upstream_canal_water_level",
+        "condition": "less_than",
+        "value": 6.5
+    }
+}

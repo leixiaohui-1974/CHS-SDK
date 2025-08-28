@@ -16,51 +16,104 @@
 该平台建立在一个分层的、模块化的架构之上，分为四个主要的产品类别：
 
 1.  **`swp.simulation_identification`**:
-    - **水系统仿真与辨识**: 包含所有的水动力学仿真模型。请参阅[模型文档](./docs/models)以获取所有可用模型的更多详细信息，包括：
-        - `水库 (Reservoir)`
-        - `闸门 (Gate)`
-        - `管道 (Pipe)`
-        - `阀门 (Valve)`
-        - `水泵 (Pump)`
-        - `河道 (RiverChannel)`
-        - `渠道 (Canal)`
-        - `湖泊 (Lake)`
-        - `水轮机 (WaterTurbine)`
-
+    - **水系统仿真与辨识**: 包含所有的水动力学仿真模型。
 2.  **`swp.local_agents`**:
     - **本地代理与控制**: 包括感知代理（数字孪生）和本地控制模块（实现如PID、MPC等算法）。
-
 3.  **`swp.central_coordination`**:
     - **中央协调与调度**: 包含中央调度“大脑”和多代理协作库（例如，消息总线）。
-
 4.  **`swp.core_engine`**:
     - **核心平台引擎**: “母体机器”本身。包含代理工厂、生命周期管理器和在环测试平台。
 
 一个中心的 `swp.core` 包定义了确保所有组件“可插拔”的抽象接口。
 
-## 快速入门 (Getting Started)
+## 示例 (Examples)
 
-本代码库包含了几个端到端的示例。
+本项目包含一系列配置驱动的示例，展示了平台从基础组件到复杂系统的各项功能。所有示例都位于 `/examples` 目录中。
 
-要运行这些示例，请从代码库的根目录以模块方式执行它们。
+### 运行示例的方法
 
-例如，要运行水电站仿真：
+所有示例都通过一个运行器脚本和一个JSON配置文件来执行。您可以通过修改JSON文件来调整仿真的参数、拓扑结构或场景。
+
+例如，要运行一个示例，请使用以下命令格式：
 ```bash
-python3 -m swp.examples.example_hydropower_simulation
+python3 examples/<runner_script_name>.py examples/<mission_config_name>.json
 ```
 
-要运行多代理分支网络示例：
-```bash
-python3 -m swp.examples.example_branched_network
-```
+---
 
-这些示例清晰地展示了框架的核心原则，并为开发更复杂的系统提供了一个起点。
+### 1. 智能体与控制系统示例
 
-## 未来发展 (Future Development)
+这些示例使用 `run_harness_from_config.py` 运行器，展示了基于多智能体系统（MAS）的监控和控制应用。
 
-当前的代码库提供了一个强大的架构骨架。未来的工作将包括：
-- 实现更精细的、基于物理的水动力学模型。
-- 添加更先进的控制算法（MPC、强化学习）。
-- 开发多代理通信和协商协议。
-- 构建代理生命周期管理功能。
-- 创建全面的教程和文档。
+- **引绰济辽工程全系统仿真 (Yin Chuo Ji Liao Project Simulation)**
+  - **配置**: [`mission_yinchuojiliao.json`](./examples/mission_yinchuojiliao.json)
+  - **命令**: `python3 examples/run_harness_from_config.py examples/mission_yinchuojiliao.json`
+
+- **分层分布式控制 (Hierarchical Control)**
+  - **描述**: 演示一个由中央MPC智能体和本地PID智能体组成的多层控制系统，以应对预报的洪水事件。
+  - **配置**: [`mission_2_2_hierarchical_control.json`](./examples/mission_2_2_hierarchical_control.json)
+  - **命令**: `python3 examples/run_harness_from_config.py examples/mission_2_2_hierarchical_control.json`
+
+- **流域联合调度 (Joint Watershed Dispatch)**
+  - **描述**: 演示一个基于规则的中央调度器，用于协调水电站和下游用户以应对洪水。
+  - **配置**: [`mission_2_3_joint_dispatch.json`](./examples/mission_2_3_joint_dispatch.json)
+  - **命令**: `python3 examples/run_harness_from_config.py examples/mission_2_3_joint_dispatch.json`
+
+- **多机协调与电网交互 (Multi-Turbine Coordination)**
+  - **描述**: 演示一个本地控制智能体如何协调6台水轮机以满足发电目标，并响应电网的限制事件。
+  - **配置**: [`mission_5_2_multi_turbine_grid.json`](./examples/mission_5_2_multi_turbine_grid.json)
+  - **命令**: `python3 examples/run_harness_from_config.py examples/mission_5_2_multi_turbine_grid.json`
+
+- **现地闭环控制 (Local Closed-Loop Control)**
+  - **描述**: 一个完整的本地PID闭环控制系统，用于将渠池水位稳定在设定点。
+  - **配置**: [`mission_2_1_local_closed_loop.json`](./examples/mission_2_1_local_closed_loop.json)
+  - **命令**: `python3 examples/run_harness_from_config.py examples/mission_2_1_local_closed_loop.json`
+
+---
+
+### 2. 独立智能体功能示例
+
+这些示例使用 `run_mission_from_config.py` 运行器（一个简化的、手动步进的仿真器），用于独立测试单个智能体的行为。
+
+- **中央MPC调度智能体 (Central MPC Agent)**
+  - **配置**: [`mission_1_5_central_dispatcher.json`](./examples/mission_1_5_central_dispatcher.json)
+  - **命令**: `python3 examples/run_mission_from_config.py examples/mission_1_5_central_dispatcher.json`
+
+- **数字孪生智能体 (Digital Twin Agent)**
+  - **配置**: [`mission_1_4_digital_twin_agent.json`](./examples/mission_1_4_digital_twin_agent.json)
+  - **命令**: `python3 examples/run_mission_from_config.py examples/mission_1_4_digital_twin_agent.json`
+
+- **闸站控制智能体 (Gate Control Agent)**
+  - **配置**: [`mission_1_3_gate_control_agent.json`](./examples/mission_1_3_gate_control_agent.json)
+  - **命令**: `python3 examples/run_mission_from_config.py examples/mission_1_3_gate_control_agent.json`
+
+- **传感器与执行器仿真智能体 (Physical I/O Agent)**
+  - **配置**: [`mission_1_2_physical_io_agent.json`](./examples/mission_1_2_physical_io_agent.json)
+  - **命令**: `python3 examples/run_mission_from_config.py examples/mission_1_2_physical_io_agent.json`
+
+---
+
+### 3. 物理模型与数据生成示例
+
+#### 物理网络仿真
+
+这个示例使用 `run_network_solver_from_config.py` 运行器，展示了基于 `NetworkSolver` 的纯物理网络仿真。
+
+- **水轮机与闸门的物理行为 (Turbine & Gate Physics)**
+  - **描述**: 演示水轮机和闸门在尾水水位抬高（顶托）影响下的物理行为。
+  - **配置**: [`mission_5_1_turbine_gate.json`](./examples/mission_5_1_turbine_gate.json)
+  - **命令**: `python3 examples/run_network_solver_from_config.py examples/mission_5_1_turbine_gate.json`
+
+#### 数据表生成
+
+这些脚本用于生成可供控制智能体使用的查找表（Lookup Tables）。
+
+- **水轮机经济调度表 (Turbine Economic Dispatch Table)**
+  - **描述**: 通过优化计算，生成在不同工况下6台不同特性的水轮机的最优功率分配方案。
+  - **配置**: [`mission_5_3_compute_turbine_table.json`](./examples/mission_5_3_compute_turbine_table.json)
+  - **命令**: `python3 examples/run_table_computation.py examples/mission_5_3_compute_turbine_table.json`
+
+- **闸门流量分配表 (Gate Flow Allocation Table)**
+  - **描述**: 根据一系列运行规则，计算5个溢洪道闸门在不同工況下的联合开启方式。
+  - **配置**: [`mission_5_4_compute_gate_table.json`](./examples/mission_5_4_compute_gate_table.json)
+  - **命令**: `python3 examples/run_table_computation.py examples/mission_5_4_compute_gate_table.json`

@@ -1,0 +1,20 @@
+{
+    "description": "Mission 5.4: Spillway Gate Flow Allocation Table. Computes individual gate openings based on a total flow target and operational rules.",
+    "computation_type": "gate_allocation",
+    "gate_params": {
+        "num_gates": 5,
+        "width": 10.0,
+        "discharge_coeff": 0.65,
+        "max_opening": 5.0
+    },
+    "operational_rules": {
+        "sequence": [[2], [1, 3], [0, 4]]
+    },
+    "calculation_grid": {
+        "head_m": { "start": 10, "stop": 15.5, "step": 0.5 },
+        "flow_m3s": { "start": 0, "stop": 2501, "step": 10 }
+    },
+    "output_settings": {
+        "csv_path": "swp/mission/data/gate_flow_allocation_table.csv"
+    }
+}
