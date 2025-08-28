@@ -1,0 +1,91 @@
+{
+  "simulation_settings": {
+    "duration": 400,
+    "dt": 1.0,
+    "normal_inflow": 150
+  },
+  "messaging_topics": {
+    "upstream_state": "state/canal/upstream",
+    "upstream_inflow_prediction": "prediction/inflow/upstream",
+    "upstream_inflow_data": "data/inflow/upstream",
+    "gate_control_setpoint": "command/gate/setpoint",
+    "gate_action": "action/gate/opening"
+  },
+  "components": {
+    "upstream_canal": {
+      "initial_water_level": 5.0,
+      "params": {
+        "length": 5000,
+        "bottom_width": 20,
+        "side_slope_z": 2,
+        "manning_n": 0.030,
+        "slope": 0.001
+      }
+    },
+    "control_gate": {
+      "initial_state": { "opening": 0.5 },
+      "params": {
+        "max_rate_of_change": 0.1,
+        "discharge_coefficient": 0.8,
+        "width": 15,
+        "max_opening": 10.0
+      }
+    },
+    "downstream_canal": {
+      "initial_state": { "volume_ratio": 0.5, "level_ratio": 0.5, "outflow": 0 },
+      "params": {
+        "length": 5000,
+        "bottom_width": 20,
+        "side_slope_z": 2,
+        "manning_n": 0.030,
+        "slope": 0.001
+      }
+    }
+  },
+  "agents": {
+    "twin_agent_upstream": {
+      "type": "DigitalTwinAgent"
+    },
+    "gate_control_agent": {
+      "type": "LocalControlAgent",
+      "pid_controller": {
+        "Kp": -0.5, "Ki": -0.1, "Kd": -0.05,
+        "setpoint": 5.0
+      }
+    },
+    "central_dispatcher": {
+      "type": "CentralDispatcher",
+      "rules": {
+        "flood_threshold": 6.0,
+        "normal_setpoint": 5.0,
+        "emergency_setpoint": 4.0,
+        "prediction_horizon": 10
+      }
+    },
+    "rainfall_forecaster": {
+      "type": "ARIMAForecaster",
+      "config": {
+        "observation_key": "inflow",
+        "history_size": 100,
+        "arima_order": [1, 1, 0],
+        "forecast_steps": 10,
+        "refit_interval": 20
+      }
+    },
+    "inflow_source_agent": {
+      "type": "RainfallAgent",
+      "config": { "start_time": 0, "duration": 400, "inflow_rate": 150 }
+    },
+    "rainfall_disturbance_agent": {
+      "type": "RainfallAgent",
+      "config": { "start_time": 100, "duration": 100, "inflow_rate": 50.0 }
+    },
+    "water_use_agent": {
+      "type": "WaterUseAgent",
+      "config": { "start_time": 0, "duration": 400, "demand_rate": 20.0 }
+    },
+    "io_agent": {
+      "type": "PhysicalIOAgent"
+    }
+  }
+}

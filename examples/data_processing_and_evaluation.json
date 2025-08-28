@@ -1,0 +1,16 @@
+{
+  "data_generation": {
+    "num_points": 100,
+    "sin_wave_end": 10,
+    "sin_wave_multiplier": 10,
+    "base_value": 50
+  },
+  "imperfections": {
+    "missing_indices": [10, 25, 40, 60, 85],
+    "outliers": [
+      { "index": 15, "value": 100 },
+      { "index": 50, "value": 0 },
+      { "index": 75, "operation": "multiply", "value": 0.5 }
+    ]
+  }
+}

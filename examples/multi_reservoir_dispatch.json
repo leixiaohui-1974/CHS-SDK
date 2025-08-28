@@ -1,0 +1,30 @@
+{
+  "simulation": {
+    "dt": 3600,
+    "inflows_res1": [50, 50, 50, 500, 500, 500, 10, 10, 10, 10]
+  },
+  "messaging_topics": {
+    "res1_state": "state/res1",
+    "res2_state": "state/res2",
+    "res1_command": "command/res1",
+    "res2_command": "command/res2"
+  },
+  "dispatcher_rules": {
+    "res1_flood_threshold": 5.5, "res1_drought_threshold": 4.5,
+    "res1_normal_setpoint": 5.0, "res1_system_flood_setpoint": 4.0, "res1_system_drought_setpoint": 6.0,
+    "res2_flood_threshold": 11.0, "res2_drought_threshold": 9.0,
+    "res2_normal_setpoint": 10.0, "res2_system_flood_setpoint": 8.0, "res2_system_drought_setpoint": 12.0
+  },
+  "reservoir1": {
+    "initial_state": { "volume": 5e6, "water_level": 5.0 },
+    "params": { "surface_area": 1e6 },
+    "gate_params": { "width": 5, "discharge_coeff": 0.8 },
+    "pid_params": { "Kp": 0.5, "Ki": 0.1, "Kd": 0.05, "max_output": 1 }
+  },
+  "reservoir2": {
+    "initial_state": { "volume": 10e6, "water_level": 10.0 },
+    "params": { "surface_area": 1e6 },
+    "gate_params": { "width": 8, "discharge_coeff": 0.8 },
+    "pid_params": { "Kp": 0.5, "Ki": 0.1, "Kd": 0.05, "max_output": 1 }
+  }
+}

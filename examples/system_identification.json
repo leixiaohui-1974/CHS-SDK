@@ -1,0 +1,14 @@
+{
+  "data_source": {
+    "input_filename": "plant_data.csv"
+  },
+  "curve_fitting": {
+    "initial_guesses": {
+      "T_divisor": 3,
+      "tau": 5.0
+    }
+  },
+  "output": {
+    "plot_filename": "identification_results.png"
+  }
+}

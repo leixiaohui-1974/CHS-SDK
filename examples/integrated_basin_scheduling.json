@@ -1,0 +1,50 @@
+{
+  "simulation": {
+    "dt": 3600,
+    "num_steps": 48
+  },
+  "components": {
+    "reservoir": {
+      "surface_area": 1e7,
+      "initial_volume": 200e6
+    },
+    "turbine_gate": {
+      "width": 5,
+      "discharge_coefficient": 0.8,
+      "max_opening": 2.0
+    },
+    "flood_gate": {
+      "width": 15,
+      "discharge_coefficient": 0.8,
+      "max_opening": 2.0
+    },
+    "supply_gate": {
+      "width": 3,
+      "discharge_coefficient": 0.8,
+      "max_opening": 2.0
+    },
+    "river_channel": {
+      "k": 0.0001,
+      "initial_volume": 50000,
+      "initial_outflow": 5
+    }
+  },
+  "agents": {
+    "hydropower_agent": {
+      "normal_level": 20.0,
+      "flood_warning_level": 22.0,
+      "min_supply_opening": 0.1
+    },
+    "dispatcher_agent": {
+      "emergency_flood_level": 23.5
+    }
+  },
+  "disturbance": {
+    "base_inflow": 50,
+    "flood_pulse": {
+      "start_hour": 10,
+      "duration_hours": 24,
+      "magnitude": 600
+    }
+  }
+}
