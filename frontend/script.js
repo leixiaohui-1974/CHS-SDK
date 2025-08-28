@@ -54,6 +54,7 @@ const ALGORITHM_PARAMS = {
 let simulationChart;
 let simulationInterval;
 let currentTime = 0;
+let network = null; // To hold the vis.js network instance
 
 // --- DOM Ready ---
 document.addEventListener('DOMContentLoaded', () => {
@@ -61,16 +62,88 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize UI components
     initializeChart();
     initializeEventListeners();
-    // Set default state
-    updateAlgorithmParams();
+    // Load examples from the backend
+    loadExamples();
 });
 
 // --- Initializers ---
 function initializeEventListeners() {
-    document.getElementById('algorithm-selector').addEventListener('change', updateAlgorithmParams);
+    // document.getElementById('algorithm-selector').addEventListener('change', updateAlgorithmParams);
     document.getElementById('run-test-btn').addEventListener('click', runTest);
     document.getElementById('generate-disturbance-btn').addEventListener('click', generateDisturbance);
     document.getElementById('generate-report-btn').addEventListener('click', generateDiagnosisReport);
+}
+
+async function loadExamples() {
+    const list = document.getElementById('example-list');
+    try {
+        const response = await fetch('http://127.0.0.1:5001/api/examples');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const examples = await response.json();
+
+        list.innerHTML = ''; // Clear the placeholder
+        if (examples.length === 0) {
+            list.innerHTML = '<li class="placeholder">服务器上没有找到案例。</li>';
+            return;
+        }
+
+        examples.forEach(example => {
+            const item = document.createElement('li');
+            item.dataset.exampleId = example.id;
+            item.innerHTML = `<strong>${example.name}</strong><br><small>${example.description}</small>`;
+            item.addEventListener('click', () => loadTopology(example.id));
+            list.appendChild(item);
+        });
+
+    } catch (error) {
+        console.error("Could not fetch examples:", error);
+        list.innerHTML = '<li class="placeholder" style="color: red;">加载案例失败。请确保后端服务正在运行。</li>';
+    }
+}
+
+async function loadTopology(exampleId) {
+    console.log(`Fetching topology for ${exampleId}...`);
+    try {
+        const response = await fetch(`http://127.0.0.1:5001/api/examples/${exampleId}`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+
+        // 1. Transform data for Vis.js
+        const nodes = new vis.DataSet(data.components.map(c => ({
+            id: c.id,
+            label: `${c.id}\n(${c.type})`,
+            shape: 'box',
+            color: c.type === 'GateNode' ? '#f0a30a' : '#97c2fc'
+        })));
+
+        const edges = new vis.DataSet(data.connections.map(e => ({
+            from: e.from,
+            to: e.to,
+            arrows: 'to'
+        })));
+
+        // 2. Create the network
+        const container = document.getElementById('topology-container');
+        const networkData = { nodes: nodes, edges: edges };
+        const options = {
+            layout: {
+                hierarchical: {
+                    direction: "LR", // Left-to-Right layout
+                    sortMethod: "directed"
+                }
+            },
+            physics: false // Turn off physics for a static layout
+        };
+        network = new vis.Network(container, networkData, options);
+        console.log("Topology rendered successfully.");
+
+    } catch (error) {
+        console.error(`Failed to load topology for ${exampleId}:`, error);
+        const container = document.getElementById('topology-container');
+        container.innerHTML = `<p style="color: red; text-align: center; padding: 20px;">加载拓扑失败。</p>`;
+    }
 }
 
 function initializeChart() {
@@ -163,10 +236,6 @@ function resetSimulation() {
         dataset.data = [];
     });
     simulationChart.update();
-    // Reset animation
-    document.querySelector('#upstream-pool .water-level').style.height = `60%`;
-    document.querySelector('#downstream-pool .water-level').style.height = `50%`;
-    document.querySelector('#gate').style.height = `80%`;
     // Reset KPIs
     document.querySelector('[data-kpi="overshoot"]').textContent = '-';
     document.querySelector('[data-kpi="recovery_time"]').textContent = '-';
@@ -190,11 +259,6 @@ function simulationStep() {
     simulationChart.data.datasets[2].data.push(gateOpening.toFixed(2));
     simulationChart.data.datasets[3].data.push(inflow.toFixed(2));
     simulationChart.update();
-
-    // Update Animation
-    document.querySelector('#upstream-pool .water-level').style.height = `${(upstreamLevel / 5) * 100}%`;
-    document.querySelector('#downstream-pool .water-level').style.height = `${(downstreamLevel / 5) * 100}%`;
-    document.querySelector('#gate').style.height = `${100 - gateOpening}%`;
 }
 
 function updateKpiTable() {

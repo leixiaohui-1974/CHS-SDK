@@ -1,0 +1,75 @@
+{
+  "metadata": {
+    "name": "Simple Gate Control Example",
+    "description": "A single gate controlling flow between two canal reaches. Based on the original example_branched_network.py.",
+    "version": "1.0"
+  },
+  "simulation_settings": {
+    "dt": 10.0,
+    "theta": 0.8,
+    "num_steps": 20
+  },
+  "components": [
+    {
+      "id": "reach1",
+      "type": "StVenantReach",
+      "params": {
+        "length": 1000,
+        "num_points": 11,
+        "bottom_width": 20,
+        "side_slope_z": 2,
+        "manning_n": 0.03,
+        "slope": 0.001,
+        "initial_H": 5.0,
+        "initial_Q": 150.0
+      }
+    },
+    {
+      "id": "gate1",
+      "type": "GateNode",
+      "params": {
+        "width": 20,
+        "discharge_coeff": 0.6,
+        "initial_opening": 0.5
+      }
+    },
+    {
+      "id": "reach2",
+      "type": "StVenantReach",
+      "params": {
+        "length": 2000,
+        "num_points": 21,
+        "bottom_width": 20,
+        "side_slope_z": 2,
+        "manning_n": 0.03,
+        "slope": 0.001,
+        "initial_H": 5.0,
+        "initial_Q": 150.0
+      }
+    }
+  ],
+  "connections": [
+    {
+      "from": "reach1",
+      "to": "gate1"
+    },
+    {
+      "from": "gate1",
+      "to": "reach2"
+    }
+  ],
+  "boundary_conditions": [
+    {
+      "component_id": "reach1",
+      "variable": "H",
+      "index": 0,
+      "value": 5.0
+    },
+    {
+      "component_id": "reach2",
+      "variable": "H",
+      "index": -1,
+      "value": 5.0
+    }
+  ]
+}

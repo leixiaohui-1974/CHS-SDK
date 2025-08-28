@@ -121,6 +121,43 @@ h2 {
     background-color: #0056b3;
 }
 
+#example-browser-container {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 5px;
+    background-color: #f8f9fa;
+}
+
+#example-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#example-list li {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+    font-size: 0.9em;
+    transition: background-color 0.2s;
+}
+
+#example-list li:last-child {
+    border-bottom: none;
+}
+
+#example-list li:hover {
+    background-color: #e9ecef;
+}
+
+#example-list li.placeholder {
+    color: #888;
+    font-style: italic;
+    cursor: default;
+}
+
 #water-network-form {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -154,81 +191,12 @@ h2 {
     justify-content: space-between;
 }
 
-#animation-container {
-    height: 200px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    background-color: #f8f9fa;
+#topology-container {
+    height: 300px; /* Give it more height than the old animation */
     border: 1px solid #e9ecef;
     border-radius: var(--border-radius);
-    padding: 20px;
     margin-bottom: 20px;
-    position: relative;
-}
-
-.water-body {
-    background-color: #e0f7fa;
-    border: 2px solid #4dd0e1;
-    width: 40%;
-    height: 100%;
-    position: relative;
-    overflow: hidden;
-}
-
-#upstream-pool {
-    border-right: none;
-    border-top-left-radius: var(--border-radius);
-    border-bottom-left-radius: var(--border-radius);
-}
-
-#downstream-pool {
-    border-left: none;
-    border-top-right-radius: var(--border-radius);
-    border-bottom-right-radius: var(--border-radius);
-}
-
-.water-level {
-    background-color: #00bcd4;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    transition: height 0.5s ease-in-out;
-    height: 60%; /* Example height */
-}
-
-.gate-container {
-    width: 5%;
-    min-width: 40px;
-    height: 105%;
     background-color: #f8f9fa;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: center;
-    position: relative;
-    bottom: -2px;
-}
-
-.gate {
-    background-color: #795548;
-    width: 10px;
-    height: 100%; /* Example height */
-    position: absolute;
-    bottom: 0;
-    transition: height 0.5s ease-in-out;
-}
-
-.pool-label, .gate-label {
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(255,255,255,0.7);
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 0.8em;
 }
 
 #chart-container {

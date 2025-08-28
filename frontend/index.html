@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>通用算法测试界面</title>
+    <title>智能水网仿真与控制可视化界面</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/vis-network/styles/vis-network.min.css" type="text/css" />
 </head>
 <body>
     <div class="main-container">
@@ -12,15 +13,12 @@
             <h2>测试配置区</h2>
 
             <div class="config-section">
-                <label for="algorithm-selector">1.1 测试对象选择器</label>
-                <select id="algorithm-selector" name="algorithm_selector">
-                    <option value="pid_controller">PID控制算法</option>
-                    <option value="dmpc_controller">DMPC控制算法</option>
-                    <option value="data_cleaning_algorithm">数据清洗算法</option>
-                    <option value="kalman_filter">卡尔曼滤波算法</option>
-                    <option value="isolation_forest">孤立森林异常检测</option>
-                    <option value="rls_estimator">RLS在线辨识</option>
-                </select>
+                <h3>1.1 案例浏览器</h3>
+                <div id="example-browser-container">
+                    <ul id="example-list">
+                        <li class="placeholder">正在从服务器加载案例...</li>
+                    </ul>
+                </div>
             </div>
 
             <div class="config-section">
@@ -66,20 +64,9 @@
             </div>
         </aside>
         <main id="visual-panel" class="panel">
-            <h2>测试过程可视化区</h2>
-            <div id="animation-container">
-                <div class="water-body" id="upstream-pool">
-                    <div class="water-level"></div>
-                    <span class="pool-label">上游渠池</span>
-                </div>
-                <div class="gate-container">
-                    <div class="gate" id="gate"></div>
-                    <span class="gate-label">闸门</span>
-                </div>
-                <div class="water-body" id="downstream-pool">
-                    <div class="water-level"></div>
-                     <span class="pool-label">下游渠池</span>
-                </div>
+            <h2>水网拓扑与仿真可视化</h2>
+            <div id="topology-container">
+                <!-- Vis.js network will be rendered here -->
             </div>
             <div id="chart-container">
                 <canvas id="simulation-chart"></canvas>
@@ -139,6 +126,7 @@
         </aside>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
