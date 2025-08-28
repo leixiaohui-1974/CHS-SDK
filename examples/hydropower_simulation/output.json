@@ -1,0 +1,1226 @@
+[
+    {
+        "time": 0,
+        "upper_lake": {
+            "volume": 39999833.68,
+            "water_level": 19.99991684,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 3600,
+        "upper_lake": {
+            "volume": 39999667.36,
+            "water_level": 19.99983368,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 7200,
+        "upper_lake": {
+            "volume": 39999501.04,
+            "water_level": 19.99975052,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 10800,
+        "upper_lake": {
+            "volume": 39999334.72,
+            "water_level": 19.99966736,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 14400,
+        "upper_lake": {
+            "volume": 39999168.4,
+            "water_level": 19.999584199999997,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 18000,
+        "upper_lake": {
+            "volume": 39999002.08,
+            "water_level": 19.99950104,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 21600,
+        "upper_lake": {
+            "volume": 39998835.76,
+            "water_level": 19.99941788,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 25200,
+        "upper_lake": {
+            "volume": 39998669.44,
+            "water_level": 19.99933472,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 28800,
+        "upper_lake": {
+            "volume": 39998503.12,
+            "water_level": 19.999251559999998,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 32400,
+        "upper_lake": {
+            "volume": 39998336.8,
+            "water_level": 19.9991684,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 36000,
+        "upper_lake": {
+            "volume": 39998170.48,
+            "water_level": 19.99908524,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 39600,
+        "upper_lake": {
+            "volume": 39998004.16,
+            "water_level": 19.999002079999997,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 43200,
+        "upper_lake": {
+            "volume": 39997837.839999996,
+            "water_level": 19.998918919999998,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 46800,
+        "upper_lake": {
+            "volume": 39997671.519999996,
+            "water_level": 19.99883576,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 50400,
+        "upper_lake": {
+            "volume": 39997505.199999996,
+            "water_level": 19.998752599999996,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 54000,
+        "upper_lake": {
+            "volume": 39997338.879999995,
+            "water_level": 19.998669439999997,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 57600,
+        "upper_lake": {
+            "volume": 39997172.559999995,
+            "water_level": 19.998586279999998,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 61200,
+        "upper_lake": {
+            "volume": 39997006.239999995,
+            "water_level": 19.99850312,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 64800,
+        "upper_lake": {
+            "volume": 39996839.919999994,
+            "water_level": 19.998419959999996,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 68400,
+        "upper_lake": {
+            "volume": 39996673.599999994,
+            "water_level": 19.998336799999997,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 72000,
+        "upper_lake": {
+            "volume": 39996507.279999994,
+            "water_level": 19.998253639999998,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 75600,
+        "upper_lake": {
+            "volume": 39996340.95999999,
+            "water_level": 19.998170479999995,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 79200,
+        "upper_lake": {
+            "volume": 39996174.63999999,
+            "water_level": 19.998087319999996,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 82800,
+        "upper_lake": {
+            "volume": 39996008.31999999,
+            "water_level": 19.998004159999997,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 86400,
+        "upper_lake": {
+            "volume": 39995841.99999999,
+            "water_level": 19.997920999999995,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 90000,
+        "upper_lake": {
+            "volume": 39995675.67999999,
+            "water_level": 19.997837839999995,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 93600,
+        "upper_lake": {
+            "volume": 39995509.35999999,
+            "water_level": 19.997754679999996,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 97200,
+        "upper_lake": {
+            "volume": 39995343.03999999,
+            "water_level": 19.997671519999997,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 100800,
+        "upper_lake": {
+            "volume": 39995176.71999999,
+            "water_level": 19.997588359999995,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 104400,
+        "upper_lake": {
+            "volume": 39995010.39999999,
+            "water_level": 19.997505199999996,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 108000,
+        "upper_lake": {
+            "volume": 39994844.07999999,
+            "water_level": 19.997422039999996,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 111600,
+        "upper_lake": {
+            "volume": 39994677.75999999,
+            "water_level": 19.997338879999994,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 115200,
+        "upper_lake": {
+            "volume": 39994511.43999999,
+            "water_level": 19.997255719999995,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 118800,
+        "upper_lake": {
+            "volume": 39994345.11999999,
+            "water_level": 19.997172559999996,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 122400,
+        "upper_lake": {
+            "volume": 39994178.79999999,
+            "water_level": 19.997089399999993,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 126000,
+        "upper_lake": {
+            "volume": 39994012.47999999,
+            "water_level": 19.997006239999994,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 129600,
+        "upper_lake": {
+            "volume": 39993846.15999999,
+            "water_level": 19.996923079999995,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 133200,
+        "upper_lake": {
+            "volume": 39993679.83999999,
+            "water_level": 19.996839919999996,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 136800,
+        "upper_lake": {
+            "volume": 39993513.51999999,
+            "water_level": 19.996756759999993,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 140400,
+        "upper_lake": {
+            "volume": 39993347.19999999,
+            "water_level": 19.996673599999994,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 144000,
+        "upper_lake": {
+            "volume": 39993180.87999999,
+            "water_level": 19.996590439999995,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 147600,
+        "upper_lake": {
+            "volume": 39993014.55999999,
+            "water_level": 19.996507279999992,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 151200,
+        "upper_lake": {
+            "volume": 39992848.23999999,
+            "water_level": 19.996424119999993,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 154800,
+        "upper_lake": {
+            "volume": 39992681.91999999,
+            "water_level": 19.996340959999994,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 158400,
+        "upper_lake": {
+            "volume": 39992515.59999999,
+            "water_level": 19.99625779999999,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 162000,
+        "upper_lake": {
+            "volume": 39992349.27999999,
+            "water_level": 19.996174639999992,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 165600,
+        "upper_lake": {
+            "volume": 39992182.959999986,
+            "water_level": 19.996091479999993,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 169200,
+        "upper_lake": {
+            "volume": 39992016.639999986,
+            "water_level": 19.996008319999994,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 172800,
+        "upper_lake": {
+            "volume": 39991850.319999985,
+            "water_level": 19.99592515999999,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 176400,
+        "upper_lake": {
+            "volume": 39991683.999999985,
+            "water_level": 19.995841999999993,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 180000,
+        "upper_lake": {
+            "volume": 39991517.679999985,
+            "water_level": 19.995758839999993,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 183600,
+        "upper_lake": {
+            "volume": 39991351.359999985,
+            "water_level": 19.99567567999999,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 187200,
+        "upper_lake": {
+            "volume": 39991185.039999984,
+            "water_level": 19.99559251999999,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 190800,
+        "upper_lake": {
+            "volume": 39991018.719999984,
+            "water_level": 19.995509359999993,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 194400,
+        "upper_lake": {
+            "volume": 39990852.39999998,
+            "water_level": 19.99542619999999,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 198000,
+        "upper_lake": {
+            "volume": 39990686.07999998,
+            "water_level": 19.99534303999999,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 201600,
+        "upper_lake": {
+            "volume": 39990519.75999998,
+            "water_level": 19.995259879999992,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 205200,
+        "upper_lake": {
+            "volume": 39990353.43999998,
+            "water_level": 19.995176719999993,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 208800,
+        "upper_lake": {
+            "volume": 39990187.11999998,
+            "water_level": 19.99509355999999,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 212400,
+        "upper_lake": {
+            "volume": 39990020.79999998,
+            "water_level": 19.99501039999999,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 216000,
+        "upper_lake": {
+            "volume": 39989854.47999998,
+            "water_level": 19.994927239999992,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 219600,
+        "upper_lake": {
+            "volume": 39989688.15999998,
+            "water_level": 19.99484407999999,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 223200,
+        "upper_lake": {
+            "volume": 39989521.83999998,
+            "water_level": 19.99476091999999,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 226800,
+        "upper_lake": {
+            "volume": 39989355.51999998,
+            "water_level": 19.99467775999999,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 230400,
+        "upper_lake": {
+            "volume": 39989189.19999998,
+            "water_level": 19.99459459999999,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 234000,
+        "upper_lake": {
+            "volume": 39989022.87999998,
+            "water_level": 19.99451143999999,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 237600,
+        "upper_lake": {
+            "volume": 39988856.55999998,
+            "water_level": 19.99442827999999,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 241200,
+        "upper_lake": {
+            "volume": 39988690.23999998,
+            "water_level": 19.99434511999999,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 244800,
+        "upper_lake": {
+            "volume": 39988523.91999998,
+            "water_level": 19.99426195999999,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 248400,
+        "upper_lake": {
+            "volume": 39988357.59999998,
+            "water_level": 19.99417879999999,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 252000,
+        "upper_lake": {
+            "volume": 39988191.27999998,
+            "water_level": 19.99409563999999,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    },
+    {
+        "time": 255600,
+        "upper_lake": {
+            "volume": 39988024.95999998,
+            "water_level": 19.994012479999988,
+            "outflow": 0.0
+        },
+        "turbine_1": {
+            "power": 0.0,
+            "outflow": 0.0
+        },
+        "tailrace_canal": {
+            "volume": 100000.0,
+            "water_level": 0.9160797830996161,
+            "outflow": 0
+        }
+    }
+]
