@@ -8,13 +8,17 @@ from swp.simulation_identification.physical_objects.gate import Gate
 from swp.simulation_identification.physical_objects.pipe import Pipe
 from swp.simulation_identification.physical_objects.pump import Pump, PumpStation
 from swp.simulation_identification.physical_objects.valve import Valve, ValveStation
+from swp.simulation_identification.physical_objects.water_turbine import WaterTurbine
+from swp.simulation_identification.physical_objects.hydropower_station import HydropowerStation
 from swp.local_agents.perception.digital_twin_agent import DigitalTwinAgent
 from swp.local_agents.perception.pipeline_perception_agent import PipelinePerceptionAgent
 from swp.local_agents.perception.pump_station_perception_agent import PumpStationPerceptionAgent
 from swp.local_agents.perception.valve_station_perception_agent import ValveStationPerceptionAgent
+from swp.local_agents.perception.hydropower_station_perception_agent import HydropowerStationPerceptionAgent
 from swp.local_agents.control.pid_controller import PIDController
 from swp.local_agents.control.pump_station_control_agent import PumpStationControlAgent
 from swp.local_agents.control.valve_station_control_agent import ValveStationControlAgent
+from swp.local_agents.control.hydropower_station_control_agent import HydropowerStationControlAgent
 from swp.central_coordination.collaboration.message_bus import MessageBus
 
 
@@ -108,6 +112,34 @@ class AgentFactory:
                         parameters=model_config['params'],
                         valves=valves
                     )
+                elif model_type == 'HydropowerStation':
+                    turbines = []
+                    for turbine_config in model_config['turbines']:
+                        turbine = WaterTurbine(
+                            name=turbine_config['id'],
+                            initial_state=turbine_config['initial_state'],
+                            parameters=turbine_config['params'],
+                            message_bus=self.bus,
+                            action_topic=turbine_config.get('action_topic')
+                        )
+                        turbines.append(turbine)
+                    gates = []
+                    for gate_config in model_config['gates']:
+                        gate = Gate(
+                            name=gate_config['id'],
+                            initial_state=gate_config['initial_state'],
+                            parameters=gate_config['params'],
+                            message_bus=self.bus,
+                            action_topic=gate_config.get('action_topic')
+                        )
+                        gates.append(gate)
+                    model = HydropowerStation(
+                        name=model_id,
+                        initial_state=model_config['initial_state'],
+                        parameters=model_config['params'],
+                        turbines=turbines,
+                        gates=gates
+                    )
                 else:
                     print(f"Warning: Unknown model type '{model_type}' in config. Skipping.")
                     continue
@@ -138,6 +170,13 @@ class AgentFactory:
                         perception_agent = ValveStationPerceptionAgent(
                             agent_id=pa_id,
                             valve_station_model=model,
+                            message_bus=self.bus,
+                            state_topic=pa_topic
+                        )
+                    elif isinstance(model, HydropowerStation):
+                        perception_agent = HydropowerStationPerceptionAgent(
+                            agent_id=pa_id,
+                            hydropower_station_model=model,
                             message_bus=self.bus,
                             state_topic=pa_topic
                         )
@@ -175,6 +214,21 @@ class AgentFactory:
                             state_topic=comp_config['perception_agent']['state_topic'],
                             valve_action_topics=valve_action_topics,
                             kp=ca_config.get('kp', 0.1)
+                        )
+                        agents.append(control_agent)
+                    elif ca_type == 'HydropowerStationControlAgent' and isinstance(model, HydropowerStation):
+                        turbine_action_topics = [t_conf.get('action_topic') for t_conf in model_config.get('turbines', [])]
+                        gate_action_topics = [g_conf.get('action_topic') for g_conf in model_config.get('gates', [])]
+                        # A simplified assumption that all turbines have the same efficiency from the station's params
+                        efficiency = model_config['params'].get('turbine_efficiency', 0.85)
+                        control_agent = HydropowerStationControlAgent(
+                            agent_id=ca_config['agent_id'],
+                            message_bus=self.bus,
+                            goal_topic=ca_config['goal_topic'],
+                            state_topic=comp_config['perception_agent']['state_topic'],
+                            turbine_action_topics=turbine_action_topics,
+                            gate_action_topics=gate_action_topics,
+                            turbine_efficiency=efficiency
                         )
                         agents.append(control_agent)
                     else:
