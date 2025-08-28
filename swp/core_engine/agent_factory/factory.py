@@ -1,12 +1,19 @@
 """
 Agent Factory for automated generation of agents and systems.
 """
-from typing import Dict, Any, List
-from swp.core.interfaces import Agent
+from typing import Dict, Any, List, Tuple
+from swp.core.interfaces import Agent, Simulatable
 from swp.simulation_identification.physical_objects.reservoir import Reservoir
 from swp.simulation_identification.physical_objects.gate import Gate
+from swp.simulation_identification.physical_objects.pipe import Pipe
+from swp.simulation_identification.physical_objects.pump import Pump, PumpStation
 from swp.local_agents.perception.digital_twin_agent import DigitalTwinAgent
+from swp.local_agents.perception.pipeline_perception_agent import PipelinePerceptionAgent
+from swp.local_agents.perception.pump_station_perception_agent import PumpStationPerceptionAgent
 from swp.local_agents.control.pid_controller import PIDController
+from swp.local_agents.control.pump_station_control_agent import PumpStationControlAgent
+from swp.central_coordination.collaboration.message_bus import MessageBus
+
 
 class AgentFactory:
     """
@@ -18,10 +25,11 @@ class AgentFactory:
     and automated system generation.
     """
 
-    def __init__(self):
-        print("AgentFactory created.")
+    def __init__(self, message_bus: MessageBus):
+        self.bus = message_bus
+        print("AgentFactory created and linked with a message bus.")
 
-    def create_system_from_config(self, config: Dict[str, Any]) -> List[Agent]:
+    def create_system_from_config(self, config: Dict[str, Any]) -> Tuple[List[Agent], Dict[str, Simulatable]]:
         """
         Builds an entire system of agents and models from a config dictionary.
 
@@ -29,45 +37,113 @@ class AgentFactory:
             config: A dictionary describing the system to be built.
 
         Returns:
-            A list of all agents created for the system.
+            A tuple containing:
+            - A list of all agents created for the system.
+            - A dictionary of all models created, keyed by their ID.
         """
         print("Creating system from configuration...")
-        agents = []
+        agents: List[Agent] = []
+        models: Dict[str, Simulatable] = {}
 
-        # Example of creating a local control agent setup from config
-        if 'local_control_setups' in config:
-            for setup_config in config['local_control_setups']:
+        if 'components' in config:
+            for comp_config in config['components']:
                 # 1. Create the physical object model
-                if setup_config['model']['type'] == 'Reservoir':
+                model_config = comp_config['model']
+                model_type = model_config['type']
+                model_id = model_config['id']
+                model: Simulatable
+
+                if model_type == 'Reservoir':
                     model = Reservoir(
-                        reservoir_id=setup_config['model']['id'],
-                        initial_state=setup_config['model']['initial_state'],
-                        params=setup_config['model']['params']
+                        name=model_id,
+                        initial_state=model_config['initial_state'],
+                        parameters=model_config['params']
                     )
-                elif setup_config['model']['type'] == 'Gate':
+                elif model_type == 'Gate':
                     model = Gate(
-                        gate_id=setup_config['model']['id'],
-                        initial_state=setup_config['model']['initial_state'],
-                        params=setup_config['model']['params']
+                        name=model_id,
+                        initial_state=model_config['initial_state'],
+                        parameters=model_config['params']
+                    )
+                elif model_type == 'Pipe':
+                    model = Pipe(
+                        name=model_id,
+                        initial_state=model_config['initial_state'],
+                        parameters=model_config['params']
+                    )
+                elif model_type == 'PumpStation':
+                    pumps = []
+                    for pump_config in model_config['pumps']:
+                        pump = Pump(
+                            name=pump_config['id'],
+                            initial_state=pump_config['initial_state'],
+                            parameters=pump_config['params'],
+                            message_bus=self.bus,
+                            action_topic=pump_config.get('action_topic')
+                        )
+                        pumps.append(pump)
+                    model = PumpStation(
+                        name=model_id,
+                        initial_state=model_config['initial_state'],
+                        parameters=model_config['params'],
+                        pumps=pumps
                     )
                 else:
-                    continue # Skip unknown model types
+                    print(f"Warning: Unknown model type '{model_type}' in config. Skipping.")
+                    continue
 
-                # 2. Create the Digital Twin (Perception Agent)
-                twin_agent = DigitalTwinAgent(
-                    agent_id=f"twin_{model.reservoir_id if hasattr(model, 'reservoir_id') else model.gate_id}",
-                    simulated_object=model
-                )
-                agents.append(twin_agent)
+                models[model_id] = model
 
-                # 3. Create the Controller
-                if setup_config['controller']['type'] == 'PID':
-                    controller = PIDController(
-                        **setup_config['controller']['params']
-                    )
+                # 2. Create the Perception Agent (if specified)
+                if 'perception_agent' in comp_config:
+                    pa_config = comp_config['perception_agent']
+                    pa_id = pa_config['agent_id']
+                    pa_topic = pa_config['state_topic']
 
-                # Here you would create a LocalControlAgent that USES the controller.
-                # For simplicity in this stub, we won't define a separate LocalControlAgent class yet.
+                    if isinstance(model, Pipe):
+                        perception_agent = PipelinePerceptionAgent(
+                            agent_id=pa_id,
+                            pipe_model=model,
+                            message_bus=self.bus,
+                            state_topic=pa_topic
+                        )
+                    elif isinstance(model, PumpStation):
+                        perception_agent = PumpStationPerceptionAgent(
+                            agent_id=pa_id,
+                            pump_station_model=model,
+                            message_bus=self.bus,
+                            state_topic=pa_topic
+                        )
+                    else:
+                        # Use the generic DigitalTwinAgent for other models
+                        perception_agent = DigitalTwinAgent(
+                            agent_id=pa_id,
+                            simulated_object=model,
+                            message_bus=self.bus,
+                            state_topic=pa_topic
+                        )
+                    agents.append(perception_agent)
 
-        print(f"System created with {len(agents)} agents.")
-        return agents
+                # 3. Create the Control Agent (if specified)
+                if 'control_agent' in comp_config:
+                    ca_config = comp_config['control_agent']
+                    ca_type = ca_config.get('type')
+
+                    if ca_type == 'PumpStationControlAgent' and isinstance(model, PumpStation):
+                        # Extract the action topics from the model config for the pumps
+                        pump_action_topics = [p_conf.get('action_topic') for p_conf in model_config.get('pumps', [])]
+
+                        control_agent = PumpStationControlAgent(
+                            agent_id=ca_config['agent_id'],
+                            message_bus=self.bus,
+                            goal_topic=ca_config['goal_topic'],
+                            state_topic=comp_config['perception_agent']['state_topic'], # Reuse from perception agent
+                            pump_action_topics=pump_action_topics
+                        )
+                        agents.append(control_agent)
+                    else:
+                        # Placeholder for other control agents like PID-based ones
+                        pass
+
+        print(f"System created with {len(agents)} agents and {len(models)} models.")
+        return agents, models
