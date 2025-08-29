@@ -55,35 +55,23 @@
 *   **[27_control_examples.md](./27_control_examples.md)**
 *   **[28_testing_examples.md](./28_testing_examples.md)**
 
+## 数据模型 (Data Models)
+
+这部分文档深入到数据持久层，为每个核心模块提供了推荐的数据表结构或时序数据模型。
+
+*   **[./data_models/01_simulation_datamodel.md](./data_models/01_simulation_datamodel.md)**
+*   **[./data_models/02_identification_datamodel.md](./data_models/02_identification_datamodel.md)**
+*   **[./data_models/03_twinning_datamodel.md](./data_models/03_twinning_datamodel.md)**
+*   **[./data_models/04_diagnosis_datamodel.md](./data_models/04_diagnosis_datamodel.md)**
+*   **[./data_models/05_evaluation_datamodel.md](./data_models/05_evaluation_datamodel.md)**
+*   **[./data_models/06_prediction_datamodel.md](./data_models/06_prediction_datamodel.md)**
+*   **[./data_models/07_scheduling_datamodel.md](./data_models/07_scheduling_datamodel.md)**
+*   **[./data_models/08_testing_datamodel.md](./data_models/08_testing_datamodel.md)**
+
 ## 文件列表
 
 *   `00_overview.md`
 *   `01_simulation_object.md`
-*   `02_simulation_methods.md`
-*   `03_identification_object.md`
-*   `04_identification_methods.md`
-*   `05_twinning_object.md`
-*   `06_twinning_methods.md`
-*   `07_diagnosis_object.md`
-*   `08_diagnosis_methods.md`
-*   `09_evaluation_object.md`
-*   `10_evaluation_methods.md`
-*   `11_prediction_object.md`
-*   `12_prediction_methods.md`
-*   `13_scheduling_object.md`
-*   `14_scheduling_methods.md`
-*   `15_control_object.md`
-*   `16_control_methods.md`
-*   `17_testing_object.md`
-*   `18_testing_methods.md`
-*   `19_integration.md`
-*   `20_simulation_examples.md`
-*   `21_identification_examples.md`
-*   `22_twinning_examples.md`
-*   `23_diagnosis_examples.md`
-*   `24_evaluation_examples.md`
-*   `25_prediction_examples.md`
-*   `26_scheduling_examples.md`
-*   `27_control_examples.md`
-*   `28_testing_examples.md`
+*   ... (and 27 more files)
+*   `data_models/` (目录)
 *   `README.md` (本文件)
