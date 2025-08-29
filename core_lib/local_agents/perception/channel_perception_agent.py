@@ -1,15 +1,18 @@
 import time
 from collections import deque
-from .base_agent import BaseAgent
-from communication.pubsub_broker import PubSubBroker
 
-class ChannelPerceptionAgent(BaseAgent):
+from ...core.interfaces import Agent
+from ...central_coordination.collaboration.message_bus import MessageBus
+
+
+class ChannelPerceptionAgent(Agent):
     """
     2. 渠道感知智能体 (分布式孪生)
     将渠道本体仿真模型转化为具备自我认知、诊断、辨识和预测能力的孪生体。
     """
-    def __init__(self, agent_id: str, broker: PubSubBroker, channel_id: str):
-        super().__init__(agent_id, broker)
+    def __init__(self, agent_id: str, broker: MessageBus, channel_id: str):
+        super().__init__(agent_id)
+        self.broker = broker
         self.channel_id = channel_id
 
         # 数据缓存和清洗
