@@ -1,15 +1,17 @@
 import random
 import time
-from .base_agent import BaseAgent
-from communication.pubsub_broker import PubSubBroker
+from ..core.interfaces import Agent
+from ..central_coordination.collaboration.message_bus import MessageBus
 
-class OntologySimulationAgent(BaseAgent):
+
+class OntologySimulationAgent(Agent):
     """
     1. 本体仿真智能体
     作为高保真的虚拟物理世界，为其他智能体提供“真实”的仿真环境。
     """
-    def __init__(self, agent_id: str, broker: PubSubBroker, initial_state: dict):
-        super().__init__(agent_id, broker)
+    def __init__(self, agent_id: str, broker: MessageBus, initial_state: dict):
+        super().__init__(agent_id)
+        self.broker = broker
         # 物理状态
         self.upstream_level = initial_state.get('upstream_level', 5.0)  # m
         self.downstream_level = initial_state.get('downstream_level', 4.5) # m
