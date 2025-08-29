@@ -8,6 +8,10 @@
 
 此仿真场景模拟了从**文得根水库**（`wendegen_reservoir`）取水，经过一系列隧洞、管道和控制闸门，最终将水输送至末端水池（`terminal_pool`）的全过程。
 
+此目录包含两种运行方式：
+1.  **数据驱动方式**: 通过 `run_scenario.py` 脚本加载本目录下的YAML配置文件来运行。
+2.  **代码驱动方式**: 直接运行 `yinchuojiliao_main.py` 脚本。
+
 ## 系统构成
 
 该仿真模型主要由以下几部分构成：
@@ -33,10 +37,20 @@
 
 ## 如何运行
 
+### 方式一：数据驱动
+
 在项目根目录下执行以下命令来运行此仿真场景：
 
 ```bash
 python run_scenario.py mission/scenarios/yinchuojiliao
 ```
 
-仿真结束后，输出结果将保存在 `mission/scenarios/yinchuojiliao/output.yml` 文件中。
+### 方式二：代码驱动
+
+直接运行场景目录下的Python脚本：
+
+```bash
+python mission/scenarios/yinchuojiliao/yinchuojiliao_main.py
+```
+
+仿真结束后，两种方式的输出结果都将保存在 `mission/scenarios/yinchuojiliao/output.yml` 文件中。
