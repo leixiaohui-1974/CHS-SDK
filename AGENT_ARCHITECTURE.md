@@ -89,7 +89,7 @@
 | `ForecastingAgent` | 预测通用代理。 | `core_lib/local_agents/prediction/forecasting_agent.py` |
 | `InflowForecasterAgent` | 入流预测，基于历史数据和模型预测未来的入流量。 | `core_lib/local_agents/prediction/inflow_forecaster_agent.py` |
 | `WaterUseAgent` | 用水模拟，模拟城市或农业的用水行为。 | `core_lib/local_agents/disturbances/water_use_agent.py` |
-| `PhysicalIOAgent` | 物理I/O模拟，模拟与硬件（PLC、RTU）的交互。 | `core_lib/local_agents/io/physical_io_agent.py` |
+| `PhysicalIOAgent` | 物理I/O模拟，作为物理层和数字层的桥梁。模拟传感器（可带噪声）和执行器，响应控制指令。 | `core_lib/local_agents/io/physical_io_agent.py` |
 | `InflowAgent` | 入流数据提供者，通用任务代理。 | `core_lib/mission/agents/inflow_agent.py` |
 | `CsvReaderAgent` | CSV数据读取器，通用的CSV文件解析代理。 | `core_lib/disturbances/csv_reader_agent.py` |
 | `OntologySimulationAgent` | 物理仿真本体，驱动物理模型进行仿真计算。 | `core_lib/local_agents/ontology_simulation_agent.py` |
