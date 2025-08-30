@@ -1,10 +1,10 @@
-# 核心智能体: 简单控制智能体
+# Core Agents: Simple Control Agents (核心智能体: 简单控制智能体)
 
-本篇文档介绍一系列用于实现对单个设备（如阀门、闸门）进行直接控制的简单控制智能体。
+This document introduces a series of simple control agents designed for direct control of individual devices such as valves, gates, and pumps.
 
-## 1. 核心理念：`LocalControlAgent`的轻量级实现
+## 1. Core Concept: Lightweight Implementation of `LocalControlAgent`
 
-与“感知智能体”是对 `DigitalTwinAgent` 的专一化实现类似，`GateControlAgent` 和 `ValveControlAgent` 是对核心控制基类 `LocalControlAgent` 的轻量级、专一化的实现。
+Similar to how "Perception Agents" are specialized implementations of `DigitalTwinAgent`, agents like `GateControlAgent`, `ValveControlAgent`, and `PumpControlAgent` are lightweight, specialized versions of the core control base class, `LocalControlAgent`.
 
 它们的设计模式是：
 1.  **继承 `LocalControlAgent`**: 它们都直接继承自 `LocalControlAgent` 类。这意味着它们天生就具备了 `LocalControlAgent` 的所有核心功能，包括：
@@ -14,30 +14,52 @@
     -   将控制信号发布到动作主题（`action_topic`）。
 2.  **构造函数的统一**: 它们使用与 `LocalControlAgent` 完全相同的构造函数。通过在初始化时传入不同的配置（如不同的主题名、不同的控制器实例），就可以实现对不同设备的控制。
 
-将它们实现为独立的类，主要是为了**提升架构的清晰度和代码的可读性**。在构建一个复杂的系统时，使用 `GateControlAgent(...)` 能够比使用 `LocalControlAgent(...)` 更明确地表示该智能体的用途是控制一个闸门。
+Implementing them as separate classes primarily serves to **enhance architectural clarity and code readability**. When constructing a complex system, using `GateControlAgent(...)` more clearly indicates the agent's purpose is to control a gate than using a generic `LocalControlAgent(...)`.
 
-## 2. 已实现的简单控制智能体
+## 2. Implemented Simple Control Agents
 
-以下是当前已实现的、遵循上述模式的简单控制智能体。它们的功能和工作机制与 `LocalControlAgent` 完全一致，其具体的控制逻辑由初始化时注入的**控制器**决定。
+Below are the simple control agents currently implemented following the pattern described above. Their functionality and operational mechanics are identical to `LocalControlAgent`, with their specific control logic determined by the **controller** injected during initialization.
 
 ---
 
 ### `GateControlAgent`
-*   **源代码**: `core_lib/local_agents/control/gate_control_agent.py`
-*   **对应物理模型**: `Gate`
-*   **职责**: 对单个**闸门**进行闭环或开环控制。
-*   **典型应用**:
-    -   **目标水位控制**: 注入一个PID控制器，观测上游或下游水位 (`observation_topics`)，将其与一个设定的目标水位比较，自动计算并发布闸门的目标开度 (`action_topic`)。
-    -   **流量控制**: 观测过闸流量，将其与目标流量比较，自动调整闸门开度。
-    -   **直接开度控制**: 接收外部指令，直接将指令设置为闸门的目标开度。
+*   **Source Code**: `core_lib/local_agents/control/gate_control_agent.py`
+*   **Corresponding Physical Model**: `Gate`
+*   **Responsibility**: To perform closed-loop or open-loop control of a single **gate**.
+*   **Typical Applications**:
+    -   **Target Water Level Control**: Inject a PID controller to observe upstream or downstream water levels (`observation_topics`), compare it to a setpoint, and automatically calculate and publish the target gate opening (`action_topic`).
+    -   **Flow Rate Control**: Observe the flow through the gate and adjust the gate opening to meet a target flow rate.
+    -   **Direct Opening Control**: Receive external commands to directly set the gate's target opening.
 
 ---
 
 ### `ValveControlAgent`
-*   **源代码**: `core_lib/local_agents/control/valve_control_agent.py`
-*   **对应物理模型**: `Valve`
-*   **职责**: 对单个**阀门**进行闭环或开环控制。
-*   **典型应用**:
-    -   **压力控制**: 注入一个PID控制器，观测管道某点的压力，通过调节阀门开度来将压力维持在目标值。
-    -   **流量控制**: 观测管道流量，通过调节阀门开度来实现目标流量。
-    -   **直接开度控制**: 接收外部指令，直接将指令设置为阀门的目标开度。
+*   **Source Code**: `core_lib/local_agents/control/valve_control_agent.py`
+*   **Corresponding Physical Model**: `Valve`
+*   **Responsibility**: To perform closed-loop or open-loop control of a single **valve**.
+*   **Typical Applications**:
+    -   **Pressure Control**: Inject a PID controller to observe pressure at a point in a pipeline and adjust the valve opening to maintain the pressure at a target value.
+    -   **Flow Rate Control**: Observe the pipeline flow rate and adjust the valve opening to achieve a target flow.
+    -   **Direct Opening Control**: Receive external commands to directly set the valve's target opening.
+
+---
+
+### `PumpControlAgent`
+*   **Source Code**: `core_lib/local_agents/control/pump_control_agent.py`
+*   **Corresponding Physical Model**: `Pump`
+*   **Responsibility**: To perform closed-loop or open-loop control of a single **pump**.
+*   **Typical Applications**:
+    -   **Flow Rate Control**: Inject a PID controller to observe the outflow of a pump and adjust its speed or status to meet a target flow rate.
+    -   **Water Level Control**: Control the pump to maintain a water level in a connected reservoir or tank.
+    -   **Direct Speed/Status Control**: Receive external commands to directly set the pump's operational status (on/off) or speed.
+
+---
+
+### `WaterTurbineControlAgent`
+*   **Source Code**: `core_lib/local_agents/control/water_turbine_control_agent.py`
+*   **Corresponding Physical Model**: `WaterTurbine`
+*   **Responsibility**: To perform closed-loop or open-loop control of a single **water turbine**.
+*   **Typical Applications**:
+    -   **Power Generation Control**: Observe generated power and adjust the turbine's target outflow to meet a power demand setpoint.
+    -   **Water Level Control**: Control the turbine's outflow to help maintain a specific water level in an upstream reservoir.
+    -   **Flow Rate Control**: Adjust the turbine's operation to achieve a specific downstream flow requirement.
