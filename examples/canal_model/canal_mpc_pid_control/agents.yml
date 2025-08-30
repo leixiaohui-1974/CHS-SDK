@@ -1,0 +1,80 @@
+# Agents for the MPC+PID Control Example
+agents:
+  # --- Control Agents ---
+
+  - id: central_mpc_agent
+    class: LocalControlAgent
+    controller:
+      class: core_lib.local_agents.control.mpc_controller.MPCController
+      horizon: 10
+      target_level: 5.0
+      q_weight: 1.0
+      r_weight: 0.5
+      bounds: [4.5, 5.5]
+      id_model_gain: 0.001
+      id_model_delay_steps: 30
+    observation_topic: canal_1_state
+    observation_key: water_level
+    action_topic: gate_1_pid_setpoint
+
+  - id: gate_1_pid_agent
+    class: LocalControlAgent
+    controller:
+      class: PIDController
+      Kp: 0.5
+      Ki: 0.05
+      Kd: 0.1
+      setpoint: 5.0
+      min_output: 0.1
+      max_output: 1.0
+    observation_topic: canal_1_state
+    observation_key: water_level
+    command_topic: gate_1_pid_setpoint
+    action_topic: gate_1_control
+
+  - id: gate_2_pid_agent
+    class: LocalControlAgent
+    controller:
+      class: PIDController
+      Kp: 0.6
+      Ki: 0.07
+      Kd: 0.1
+      setpoint: 4.8
+      min_output: 0.1
+      max_output: 1.0
+    observation_topic: canal_1_state
+    observation_key: water_level
+    action_topic: gate_2_control
+
+  # --- Disturbance Agents (Reverted to use loader's special handling) ---
+
+  - id: headwater_disturbance_agent
+    class: CsvInflowAgent
+    csv_file: headwater_inflow_disturbance.csv
+    time_column: 'time'
+    value_column: 'value'
+    output_topic: reservoir_inflow_control
+    data_id: 'inflow'
+
+  - id: diversion_1_disturbance_agent
+    class: CsvInflowAgent
+    csv_file: diversion_1_disturbance.csv
+    time_column: 'time'
+    value_column: 'value'
+    output_topic: diversion_1_control
+    data_id: 'outflow'
+
+  - id: diversion_2_disturbance_agent
+    class: CsvInflowAgent
+    csv_file: diversion_2_disturbance.csv
+    time_column: 'time'
+    value_column: 'value'
+    output_topic: diversion_2_control
+    data_id: 'outflow'
+
+  # --- Perception Agents ---
+
+  - id: canal_1_perception_agent
+    class: DigitalTwinAgent
+    simulated_object_id: canal_1
+    state_topic: canal_1_state
