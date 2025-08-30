@@ -57,7 +57,7 @@ actuators_config = {
         'obj': control_gate,                # 需要控制的闸门对象
         'target_attr': 'target_opening',    # 设置该对象的 'target_opening' 属性
         'topic': 'action.gate.opening',     # 在此主题上监听指令
-        'control_key': 'target_opening'     # 指令消息中将包含此键
+        'control_key': 'control_signal'     # 指令消息中用于查找控制值的键
     }
 }
 ```
