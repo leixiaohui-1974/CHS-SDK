@@ -1,8 +1,12 @@
+import sys
 import os
 import yaml
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+sys.path.insert(0, project_root)
 
 from core_lib.io.yaml_loader import SimulationLoader
 

@@ -6,6 +6,9 @@ components:
       water_level: 10.0  # meters
     parameters:
       area: 1000.0      # m^2
+      storage_curve:
+        - [0, 0]
+        - [10000, 10]
       inflow: 50.0       # Constant inflow in m^3/s
 
   - id: control_gate

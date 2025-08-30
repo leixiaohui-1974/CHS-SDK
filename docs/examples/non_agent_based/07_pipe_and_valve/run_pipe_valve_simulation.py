@@ -77,16 +77,19 @@ def run_pipe_valve_simulation():
         # Then, calculate valve flow based on pipe's output head. This isn't physically perfect
         # but demonstrates the component behaviors for an example.
 
-        # Let's assume the valve is the primary control of flow.
-        # We'll calculate its flow first, assuming the full head difference is across it.
+        # In a real system, the flow would be the same through both components,
+        # and the total head loss would be the sum of the losses in the pipe and valve.
+        # To solve this requires an iterative solver. For this example, we'll make a
+        # simplification: we calculate the flow as if the valve were the only component,
+        # and then use that flow to determine the head loss in the pipe.
+
+        # Calculate the potential flow through the valve given the total head difference
         valve_action = {'upstream_head': upstream_head, 'downstream_head': downstream_head}
         valve_state = valve.step(valve_action, dt)
-        valve_outflow = valve_state['outflow']
+        flow = valve_state['outflow']
 
-        # Now, the pipe's outflow must equal the valve's outflow.
-        # We can use this to calculate the head loss in the pipe.
-        pipe.set_inflow(valve_outflow)
-        pipe_action = {} # Not used when inflow is set
+        # Now, use this flow to calculate the head loss in the pipe
+        pipe_action = {'outflow': flow}
         pipe_state = pipe.step(pipe_action, dt)
 
         if int(current_time) % 30 == 0:

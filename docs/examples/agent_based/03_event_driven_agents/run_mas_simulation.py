@@ -40,7 +40,7 @@ def run_mas_simulation():
     reservoir = Reservoir(
         name="reservoir_1",
         initial_state={'volume': 21e6, 'water_level': 14.0},
-        parameters={'surface_area': 1.5e6}
+        parameters={'surface_area': 1.5e6, 'storage_curve': [[0, 0], [30e6, 20]]}
     )
     gate_params = {
         'max_rate_of_change': 0.1,

@@ -16,15 +16,16 @@ class Reservoir(PhysicalObjectInterface):
     """
 
     def __init__(self, name: str, initial_state: State, parameters: Parameters,
-                 message_bus: Optional[MessageBus] = None, **kwargs):
+                 message_bus: Optional[MessageBus] = None, inflow_topic: Optional[str] = None, **kwargs):
         super().__init__(name, initial_state, parameters)
+        self._initial_state = initial_state.copy()
 
         self._state.setdefault('outflow', 0) # 确保状态中有outflow键
 
-        if 'storage_curve' not in self._params:
-            raise ValueError("水库参数必须包含 'storage_curve'。")
-
-        self._validate_and_prepare_storage_curve()
+        if 'storage_curve' in self._params:
+            self._validate_and_prepare_storage_curve()
+        elif 'surface_area' not in self._params and 'area' not in self._params:
+            raise ValueError("Reservoir parameters must include either 'storage_curve' or 'surface_area'/'area'.")
 
         self.bus = message_bus
         # 为了灵活性，从构造函数参数或parameters字典中获取入流主题
@@ -60,12 +61,28 @@ class Reservoir(PhysicalObjectInterface):
             raise ValueError("'storage_curve' 中的库容值必须是严格递增的。")
 
     def _get_level_from_volume(self, volume: float) -> float:
-        """使用库容曲线通过库容插值计算水位。"""
-        return np.interp(volume, self._volumes, self._levels)
+        """Calculates water level from volume, using storage curve if available, otherwise assuming a linear relationship."""
+        if hasattr(self, 'storage_curve_np'):
+            return np.interp(volume, self._volumes, self._levels)
+        else:
+            area = self._params.get('surface_area', self._params.get('area', 1.0))
+            if area <= 0:
+                return 0.0
+            # If initial state for level is provided, use it as a reference.
+            initial_level = self._initial_state.get('water_level', 0)
+            initial_volume = self._initial_state.get('volume', 0)
+            return initial_level + (volume - initial_volume) / area
 
     def _get_volume_from_level(self, level: float) -> float:
-        """使用库容曲线通过水位插值计算库容。"""
-        return np.interp(level, self._levels, self._volumes)
+        """Calculates volume from water level, using storage curve if available, otherwise assuming a linear relationship."""
+        if hasattr(self, 'storage_curve_np'):
+            return np.interp(level, self._levels, self._volumes)
+        else:
+            area = self._params.get('surface_area', self._params.get('area', 1.0))
+            # If initial state for level is provided, use it as a reference.
+            initial_level = self._initial_state.get('water_level', 0)
+            initial_volume = self._initial_state.get('volume', 0)
+            return initial_volume + (level - initial_level) * area
 
     def set_parameters(self, parameters: Parameters):
         """重写该方法，以便在参数更新时重新验证库容曲线。"""
@@ -127,7 +144,7 @@ class Reservoir(PhysicalObjectInterface):
         self._state['volume'] = new_volume
         self._state['water_level'] = self._get_level_from_volume(new_volume)
 
-        self._state['outflow'] = outflow
+        self._state['outflow'] = total_outflow
         self._state['inflow'] = total_inflow # 将总入流添加到状态中，供感知智能体使用
 
         # 为下一个时间步重置数据驱动的入流
@@ -157,6 +174,9 @@ class Reservoir(PhysicalObjectInterface):
         Returns:
             一个包含新辨识出的 'storage_curve' 的字典。
         """
+        if not hasattr(self, 'storage_curve_np'):
+            raise NotImplementedError("Parameter identification is only supported for reservoirs with a defined 'storage_curve'.")
+
         if not all(k in data for k in ['inflows', 'outflows', 'levels']):
             raise ValueError("辨识数据必须包含 'inflows', 'outflows', 和 'levels'.")
 

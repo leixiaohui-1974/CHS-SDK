@@ -35,10 +35,10 @@ def run_branched_network_simulation():
 
     # 2. --- Physical Components ---
     print("Initializing physical components...")
-    res1 = Reservoir(name="res1", initial_state={'volume': 15e6, 'water_level': 10.0}, parameters={'surface_area': 1.5e6})
+    res1 = Reservoir(name="res1", initial_state={'volume': 15e6, 'water_level': 10.0}, parameters={'surface_area': 1.5e6, 'storage_curve': [[0, 0], [30e6, 20]]})
     g1 = Gate(name="g1", initial_state={'opening': 0.1}, parameters={'width': 10, 'max_rate_of_change': 0.1}, message_bus=message_bus, action_topic="action.g1.opening", action_key='control_signal')
     trib_chan = RiverChannel(name="trib_chan", initial_state={'volume': 2e5, 'water_level': 2.0}, parameters={'k': 0.0002})
-    res2 = Reservoir(name="res2", initial_state={'volume': 30e6, 'water_level': 20.0}, parameters={'surface_area': 1.5e6})
+    res2 = Reservoir(name="res2", initial_state={'volume': 30e6, 'water_level': 20.0}, parameters={'surface_area': 1.5e6, 'storage_curve': [[0, 0], [30e6, 20]]})
     g2 = Gate(name="g2", initial_state={'opening': 0.1}, parameters={'width': 15, 'max_rate_of_change': 0.1}, message_bus=message_bus, action_topic="action.g2.opening", action_key='control_signal')
     main_chan = RiverChannel(name="main_chan", initial_state={'volume': 8e5, 'water_level': 8.0}, parameters={'k': 0.0001})
     g3 = Gate(name="g3", initial_state={'opening': 0.5}, parameters={'width': 20})
