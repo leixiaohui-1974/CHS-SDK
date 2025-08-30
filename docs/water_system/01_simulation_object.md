@@ -16,23 +16,32 @@
 
 *   **`name` (String):**
     *   **描述:** 仿真的名称，用于人类可读的识别。
-    *   **示例:** `"城市主干管网压力仿真"`
+    *   **示例:** `"某流域“闸-泵-站-河-库”联合调度仿真"`
 
 *   **`description` (String):**
     *   **描述:** 对仿真的详细描述。
-    *   **示例:** `"本仿真用于模拟在高峰用水期间，城市主干管网的压力分布情况。"`
+    *   **示例:** `"本仿真用于模拟汛期上游来水增加时，通过联合调度，确保下游控制断面水位不超警戒水位。"`
 
-*   **`network` (Network):**
-    *   **描述:** 水系统的管网拓扑结构。这是一个复杂的对象，通常包含节点（`Node`）、管段（`Pipe`）、水泵（`Pump`）、阀门（`Valve`）和水库（`Reservoir`）等元素的集合。
+*   **`system_topology` (SystemTopology):**
+    *   **描述:** 水系统的拓扑结构。这是一个复杂的对象，现在可以同时包含承压管网和开放渠系的对象，例如节点(`Node`)、管道(`Pipe`)、河道(`Reach`)、闸门(`Gate`)、水泵(`Pump`)、阀门(`Valve`)和水库(`Reservoir`)等。
     *   **数据结构 (示例):**
         ```json
         {
           "nodes": [
-            { "id": "n1", "elevation": 10.5, "demand": 0.1 },
-            { "id": "n2", "elevation": 12.0, "demand": 0.2 }
+            { "id": "n1", "type": "junction", "elevation": 10.5 },
+            { "id": "n2", "type": "storage_node", "bed_elevation": 12.0 }
           ],
           "pipes": [
             { "id": "p1", "from_node": "n1", "to_node": "n2", "length": 100, "diameter": 0.3 }
+          ],
+          "reaches": [
+            { "id": "r1", "from_node": "n_upstream", "to_node": "n_downstream", "length": 5000, "manning_n": 0.03, "cross_section": { "type": "trapezoidal", "bottom_width": 20, "slope": 1.0 } }
+          ],
+          "gates": [
+            { "id": "g1", "from_node": "n_gate_in", "to_node": "n_gate_out", "type": "sluice", "height": 5, "width": 10, "discharge_coeff": 0.6 }
+          ],
+          "hydropower_stations": [
+            { "id": "hydro1", "node_id": "n_dam", "max_flow": 1500, "efficiency_curve": { "...": "..." } }
           ]
         }
         ```
@@ -80,15 +89,15 @@
 
 ### 设计理念
 
-`Simulation` 对象的设计遵循了“配置与执行分离”的原则。用户首先通过设置 `network`, `time_settings`, 和 `solver_options` 等属性来完整地定义一个仿真场景。然后，通过调用 `run()` 方法来启动仿真计算。这种设计使得仿真场景的定义和复用变得非常方便。
+`Simulation` 对象的设计遵循了“配置与执行分离”的原则。用户首先通过设置 `system_topology`, `time_settings`, 和 `solver_options` 等属性来完整地定义一个仿真场景。然后，通过调用 `run()` 方法来启动仿真计算。这种设计使得仿真场景的定义和复用变得非常方便。
 
 此外，将仿真结果 `results` 设计为一个独立的对象，有助于在不影响仿真配置的情况下，对结果进行独立的分析、可视化和存储。
 
 ## 关联对象
 
-### `Network` 对象
+### `SystemTopology` 对象
 
-`Network` 对象定义了水系统的物理结构，是仿真的基础。它通常从外部文件（如 EPANET INP 文件）导入，或通过 API 动态构建。
+`SystemTopology` 对象定义了水系统的物理结构，是仿真的基础。它现在是一个更通用的概念，可以同时描述传统的承压管网和包含河道、闸门、水电站等的开放渠系。它通常从外部文件（如 EPANET INP, HEC-RAS 文件）导入，或通过 API 动态构建。
 
 ### `TimeSettings` 对象
 
