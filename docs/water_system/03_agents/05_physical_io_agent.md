@@ -117,34 +117,34 @@ actuators_config = {
 
 ```mermaid
 graph TD
-    subgraph 物理世界
-        A[物理模型<br>(e.g., Canal)]
+    subgraph "物理世界"
+        A["物理模型<br>(e.g., Canal)"]
     end
 
-    subgraph 硬件接口层
-        B(PhysicalIOAgent)
+    subgraph "硬件接口层"
+        B("PhysicalIOAgent")
     end
 
-    subgraph 数字世界
-        subgraph 原始数据总线
-            C[MessageBus<br>(e.g., state.raw.level)]
+    subgraph "数字世界"
+        subgraph "原始数据总线"
+            C["MessageBus<br>(e.g., state.raw.level)"]
         end
-        subgraph 认知层
-            D(DigitalTwinAgent)
+        subgraph "认知层"
+            D("DigitalTwinAgent")
         end
-        subgraph 清洁数据总线
-            E[MessageBus<br>(e.g., state.twin.level)]
+        subgraph "清洁数据总线"
+            E["MessageBus<br>(e.g., state.twin.level)"]
         end
-        subgraph 决策层
-            F[控制智能体<br>(如 LocalControlAgent)]
+        subgraph "决策层"
+            F["控制智能体<br>(如 LocalControlAgent)"]
         end
     end
 
-    A -- get_state() --> B;
-    B -- "发布原始、带噪声数据" --> C;
-    C -- "订阅原始数据" --> D;
-    D -- "发布清洁、平滑数据" --> E;
-    E -- "订阅清洁数据" --> F;
+    A -- "get_state()" --> B
+    B -- "发布原始、带噪声数据" --> C
+    C -- "订阅原始数据" --> D
+    D -- "发布清洁、平滑数据" --> E
+    E -- "订阅清洁数据" --> F
 ```
 
 **总结**: `PhysicalIOAgent` 负责“感知”，而 `DigitalTwinAgent` 负责“认知”。这种关注点分离的模式，使得整个系统架构更加清晰，也更贴近真实世界中数据从采集到应用的处理流程。
