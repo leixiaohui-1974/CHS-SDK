@@ -1,0 +1,13 @@
+# This file configures the agents for the simple simulation scenario.
+agents:
+  # There is only one agent in this simple scenario. Its job is to read
+  # inflow data from a CSV file and publish it to a topic that the
+  # reservoir component is listening to.
+  - id: inflow_agent_1
+    class: core_lib.data_access.csv_inflow_agent.CsvInflowAgent
+    config:
+      csv_file: inflow.csv
+      time_column: time
+      value_column: inflow_rate
+      output_topic: inflow_topic
+      data_id: inflow_1

@@ -1,0 +1,54 @@
+# This file configures all agents for the joint pump-valve control scenario.
+# The architecture models the entire system as agents to faithfully reproduce
+# the logic of the original script.
+
+agents:
+  # Agent 1: Provides an uncontrollable outflow disturbance from a CSV file.
+  - id: disturbance_outflow_agent
+    class: core_lib.data_access.csv_inflow_agent.CsvInflowAgent
+    config:
+      csv_file: disturbance.csv
+      time_column: time
+      value_column: outflow_rate
+      output_topic: disturbance_outflow_topic
+      data_id: disturbance_1
+
+  # Agent 2: The Coordinator. This is a wrapper around the original custom agent.
+  # It contains the core PID logic and decides the target inflow and outflow.
+  - id: coordinator_agent
+    class: examples.watertank_refactored.05_joint_control.agents.BusAwareCoordinatorAgent
+    config:
+      # This nested config is passed directly to the original JointControlCoordinatorAgent
+      coordinator_config:
+        pid_params:
+          setpoint: 10.0
+          Kp: 1.8
+          Ki: 0.15
+          Kd: 0.05
+          min_output: -10.0
+          max_output: 10.0
+        actuator_limits:
+          max_inflow: 8.0
+          max_outflow: 8.0
+        # These are the topics the *internal* coordinator logic uses.
+        # It subscribes to state_topic and publishes to the command topics.
+        messaging_params:
+          state_topic: water_level_topic # The coordinator listens to this
+          pump_command_topic: pump_command_topic # The coordinator publishes to this
+          valve_command_topic: valve_command_topic # And to this
+
+  # Agent 3: The Reservoir Simulator. This agent contains the physics.
+  # It listens to all flow commands and calculates the resulting water level.
+  - id: reservoir_sim_agent
+    class: examples.watertank_refactored.05_joint_control.agents.ReservoirSimulationAgent
+    config:
+      initial_state:
+        water_level: 8.0
+      parameters:
+        surface_area: 2.5
+      # It listens to the outputs of the coordinator and the disturbance agent
+      pump_inflow_topic: pump_command_topic
+      valve_outflow_topic: valve_command_topic
+      disturbance_outflow_topic: disturbance_outflow_topic
+      # It publishes the new state, which is read by the coordinator, closing the loop.
+      state_output_topic: water_level_topic

@@ -1,0 +1,27 @@
+# This file defines the physical components for the outlet valve PID control scenario.
+# The system consists of a reservoir with a controllable valve at its outlet.
+components:
+  # Component 1: The reservoir being controlled.
+  # Its inflow is determined by a disturbance agent.
+  - id: reservoir_1
+    class: core_lib.physical_objects.reservoir.Reservoir
+    name: "valve_controlled_tank"
+    inflow_topic: inflow_disturbance_topic # Subscribes to the disturbance agent
+    initial_state:
+      water_level: 12.0 # Starts above the setpoint
+    parameters:
+      surface_area: 1.8
+
+  # Component 2: The outlet valve.
+  # Its opening is controlled by a PID agent to regulate the reservoir's water level.
+  - id: valve_1
+    class: core_lib.physical_objects.valve.Valve
+    name: "outlet_valve"
+    # This valve is controlled by an agent publishing to this topic.
+    action_topic: valve_command_topic
+    initial_state:
+      opening: 10.0 # Initial opening in percent
+    parameters:
+      # These are example physical parameters for the valve.
+      discharge_coefficient: 0.7
+      diameter: 0.5
