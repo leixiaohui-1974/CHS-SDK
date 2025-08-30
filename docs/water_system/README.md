@@ -44,5 +44,6 @@
     *   `02_local_control_agent.md`
     *   `03_central_mpc_agent.md`
     *   `04_parameter_identification_agent.md`
+    *   `05_physical_io_agent.md`
 *   `04_scenarios.md`: 介绍如何通过YAML配置文件定义和运行仿真。
 *   `README.md`: 本目录文件。
