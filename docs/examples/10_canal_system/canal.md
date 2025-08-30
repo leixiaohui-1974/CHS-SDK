@@ -1,35 +1,35 @@
 # 渠道模型 (Canal Model)
 
-`渠道` (Canal) 模型代表一段具有梯形横截面的渠道。它使用曼宁方程 (Manning's equation) 来模拟水流。
+> [!NOTE]
+> 从 v2.0 开始, 旧的 `Canal` 模型已被弃用。请使用 `UnifiedCanal` 模型并设置 `model_type='integral'`。
+
+`UnifiedCanal` 模型可以用来代表一段渠道。当 `model_type` 设置为 `'integral'` 时，它使用简单的水量平衡方法来模拟水流。
 
 ## 状态变量
 
--   `volume` (float): 渠道段当前的水量 (m³)。
 -   `water_level` (float): 渠道当前的水位 (m)。
+-   `inflow` (float): 当前时间步的入流量 (m³/s)。
 -   `outflow` (float): 当前时间步内计算出的渠道出流量 (m³/s)。
 
 ## 参数
 
--   `bottom_width` (float): 渠道底部的宽度 (m)。
--   `length` (float): 渠道段的长度 (m)。
--   `slope` (float): 渠道河床的纵向坡度 (无量纲)。
--   `side_slope_z` (float): 渠道边坡的坡度 (z:1 中的 z，水平:垂直)。
--   `manning_n` (float): 曼宁糙率系数。
+当 `model_type='integral'` 时，主要参数为:
+-   `surface_area` (float): 渠道的水面面积 (m²)。
+-   `outlet_coefficient` (float): 出流系数，用于根据水位计算出流。
 
 ## 使用示例
 
 ```python
-from swp.simulation_identification.physical_objects.canal import Canal
+from core_lib.physical_objects.unified_canal import UnifiedCanal
 
-canal = Canal(
-    name="my_canal",
-    initial_state={'volume': 100000, 'water_level': 2.1, 'outflow': 0},
-    params={
-        'bottom_width': 20,
-        'length': 5000,
-        'slope': 0.0002,
-        'side_slope_z': 2,
-        'manning_n': 0.025
+# 使用统一渠道模型，并指定模型类型为'integral'
+unified_canal = UnifiedCanal(
+    name="my_unified_canal",
+    initial_state={'water_level': 5.0, 'inflow': 50.0, 'outflow': 50.0},
+    parameters={
+        'model_type': 'integral',
+        'surface_area': 10000,
+        'outlet_coefficient': 5.0
     }
 )
 ```
