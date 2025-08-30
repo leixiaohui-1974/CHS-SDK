@@ -78,8 +78,7 @@ class SimulationLoader:
             # Physical Components
             "Reservoir": "core_lib.physical_objects.reservoir.Reservoir",
             "Gate": "core_lib.physical_objects.gate.Gate",
-            "Canal": "core_lib.physical_objects.canal.Canal",
-            "IntegralDelayCanal": "core_lib.physical_objects.integral_delay_canal.IntegralDelayCanal",
+            "UnifiedCanal": "core_lib.physical_objects.unified_canal.UnifiedCanal",
             "Pipe": "core_lib.physical_objects.pipe.Pipe",
             "Valve": "core_lib.physical_objects.valve.Valve",
 

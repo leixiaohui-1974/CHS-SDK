@@ -38,7 +38,7 @@
 
 ### `ChannelPerceptionAgent`
 *   **源代码**: `core_lib/local_agents/perception/channel_perception_agent.py`
-*   **对应物理模型**: `Canal` 或 `RiverChannel`
+*   **对应物理模型**: `UnifiedCanal(model_type='integral')` 或 `RiverChannel`
 *   **职责**: 模拟对一段**明渠或河道**的感知，发布其水位、流量等状态。
 
 ---

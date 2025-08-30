@@ -8,7 +8,7 @@
 
 ## 核心职责
 
-1.  **模拟传感器 (Sensing)**: 从物理模型对象（如 `Canal`）读取“真值”状态，选择性地加入高斯噪声以模拟传感器的不精确性，然后将处理后的数据发布到 `MessageBus`，供其他智能体使用。
+1.  **模拟传感器 (Sensing)**: 从物理模型对象（如 `UnifiedCanal(model_type='integral')`）读取“真值”状态，选择性地加入高斯噪声以模拟传感器的不精确性，然后将处理后的数据发布到 `MessageBus`，供其他智能体使用。
 2.  **模拟执行器 (Actuating)**: 订阅 `MessageBus` 上的特定“动作”主题。当收到控制指令（如“设置闸门开度为0.5米”）时，它会将该指令转化为对相应物理模型对象属性的直接修改（例如，设置 `Gate` 对象的 `target_opening` 属性）。
 
 ## 配置
@@ -24,7 +24,7 @@
 
 该字典的键是每个传感器的唯一名称，值是包含以下键的另一字典：
 
--   `obj` (PhysicalObjectInterface): 需要读取状态的物理对象实例（如 `Canal` 或 `Reservoir` 对象）。
+-   `obj` (PhysicalObjectInterface): 需要读取状态的物理对象实例（如 `UnifiedCanal(model_type='integral')` 或 `Reservoir` 对象）。
 -   `state_key` (str): 从物理对象的 `get_state()` 方法返回的状态字典中，用于查找目标值的键。
 -   `topic` (str): 用于发布传感器读数的 `MessageBus` 主题。
 -   `noise_std` (float, optional): 添加到真值上的高斯噪声的标准差。默认为 `0.0`。
@@ -72,7 +72,7 @@ actuators_config = {
 
 在这种模式下，系统由多个独立的、可组合的模块构成：
 -   **`SimulationHarness`**: 扮演“世界引擎”的角色。它管理仿真时钟，并按顺序驱动一个两阶段（智能体阶段 -> 物理阶段）的循环。
--   **物理模型 (`Gate`, `Canal` 等)**: 是被动的、包含自身物理逻辑的独立对象。它们的 `step()` 方法由 `SimulationHarness` 在物理阶段调用。
+-   **物理模型 (`Gate`, `UnifiedCanal(model_type='integral')` 等)**: 是被动的、包含自身物理逻辑的独立对象。它们的 `step()` 方法由 `SimulationHarness` 在物理阶段调用。
 -   **`PhysicalIOAgent`**: 在此架构中，它**是必需的**。
     -   在“智能体阶段”，`PhysicalIOAgent` 的 `run()` 方法被调用，它从物理模型中读取状态，并发布到消息总线。
     -   它异步地监听来自其他控制智能体的指令，并更新物理模型的目标属性（如 `target_opening`）。
@@ -93,7 +93,7 @@ actuators_config = {
 | 架构模式 | `SimulationHarness` 模式 | `OntologySimulationAgent` 模式 |
 | :--- | :--- | :--- |
 | **核心** | `SimulationHarness` (世界引擎) | `OntologySimulationAgent` (世界本身) |
-| **物理** | 独立的被动对象 (`Gate`, `Canal`) | 硬编码在 `OntologySimulationAgent` 内部 |
+| **物理** | 独立的被动对象 (`Gate`, `UnifiedCanal(model_type='integral')`) | 硬编码在 `OntologySimulationAgent` 内部 |
 | **`PhysicalIOAgent`角色** | **必需的**，作为物理层和智能体层之间的I/O桥梁 | **不需要**，其功能已由 `OntologySimulationAgent` 实现 |
 | **适用场景** | 构建、仿真和研究**任意结构**的复杂水系统 | 在**标准、固定**的环境中测试单个智能体的性能 |
 

@@ -6,7 +6,7 @@ import numpy as np
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 from core_lib.central_coordination.collaboration.message_bus import MessageBus
-from core_lib.physical_objects.canal import Canal
+from core_lib.physical_objects.unified_canal import UnifiedCanal
 from core_lib.local_agents.perception.digital_twin_agent import DigitalTwinAgent
 
 def run_digital_twin_agent_example():
@@ -19,9 +19,17 @@ def run_digital_twin_agent_example():
 
     # 1. 初始化 MessageBus 和一个基础物理模型
     bus = MessageBus()
-    canal_params = {'bottom_width': 20.0, 'length': 1000.0, 'slope': 0.001, 'side_slope_z': 2.0, 'manning_n': 0.025}
+    canal_params = {
+        'bottom_width': 20.0, 'length': 1000.0, 'slope': 0.001, 'side_slope_z': 2.0, 'manning_n': 0.025,
+        'surface_area': 20000, 'outlet_coefficient': 5.0
+    }
     # The agent only needs the model for its get_state method, so initial state can be simple.
-    upstream_canal = Canal(name="upstream_canal", initial_state={'water_level': 10.0}, parameters=canal_params)
+    upstream_canal = UnifiedCanal(
+        name="upstream_canal",
+        initial_state={'water_level': 10.0},
+        parameters=canal_params,
+        model_type='integral'
+    )
 
     # 2. 创建并配置 DigitalTwinAgent，启用平滑功能
     SMOOTHED_STATE_TOPIC = "state/canal/level/smoothed"

@@ -16,7 +16,7 @@ components:
       discharge_coefficient: 0.6
 
   - id: tunnel_1
-    class: Canal
+    class: UnifiedCanal
     initial_state:
       water_level: 349.0
       volume: 7.0e+7
@@ -34,7 +34,7 @@ components:
     parameters: {}
 
   - id: tunnel_2
-    class: Canal
+    class: UnifiedCanal
     initial_state:
       water_level: 325.0
       volume: 8.0e+6
@@ -52,7 +52,7 @@ components:
     parameters: {}
 
   - id: tunnel_3
-    class: Canal
+    class: UnifiedCanal
     initial_state:
       water_level: 322.0
       volume: 1.0e+8

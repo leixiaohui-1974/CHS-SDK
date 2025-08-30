@@ -6,7 +6,7 @@ import time
 # Add project root to Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from core_lib.physical_objects.canal import Canal
+from core_lib.physical_objects.unified_canal import UnifiedCanal
 from core_lib.physical_objects.gate import Gate
 from core_lib.central_coordination.collaboration.message_bus import MessageBus
 from core_lib.local_agents.io.physical_io_agent import PhysicalIOAgent
@@ -149,10 +149,10 @@ if __name__ == "__main__":
 
     initial_volume = 100000
     initial_state = {'volume': initial_volume, 'outflow': 0}
-    temp_canal_for_init = Canal(name="temp", initial_state=initial_state, parameters=canal_params)
+    temp_canal_for_init = UnifiedCanal(model_type='integral', name="temp", initial_state=initial_state, parameters=canal_params)
     initial_level = _recalculate_level_from_volume(temp_canal_for_init)
     initial_state['water_level'] = initial_level
-    upstream_canal = Canal(name="upstream_canal", initial_state=initial_state, parameters=canal_params)
+    upstream_canal = UnifiedCanal(model_type='integral', name="upstream_canal", initial_state=initial_state, parameters=canal_params)
 
     # 2. Pass them to the simulation function
     run_physical_io_agent_example(upstream_canal, control_gate, bus)

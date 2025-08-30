@@ -10,7 +10,7 @@ from core_lib.core_engine.testing.simulation_harness import SimulationHarness
 from core_lib.physical_objects.reservoir import Reservoir
 from core_lib.physical_objects.water_turbine import WaterTurbine
 from core_lib.physical_objects.gate import Gate
-from core_lib.physical_objects.canal import Canal
+from core_lib.physical_objects.unified_canal import UnifiedCanal
 from core_lib.examples.helpers import setup_logging
 
 # Imports for agents and controllers
@@ -127,7 +127,7 @@ def run_joint_dispatch_example():
 
     # c. Tailrace Canal (enlarged to handle flood discharge)
     canal_params = {'bottom_width': 50, 'length': 5000, 'slope': 0.001, 'side_slope_z': 2, 'manning_n': 0.025}
-    tailrace_canal = Canal(
+    tailrace_canal = UnifiedCanal(model_type='integral',
         name="tailrace_canal",
         parameters=canal_params,
         initial_state={'volume': 100000, 'water_level': 2.1}
@@ -142,7 +142,7 @@ def run_joint_dispatch_example():
         action_topic=DIVERSION_ACTION_TOPIC,
         action_key='opening'
     )
-    diversion_canal = Canal(
+    diversion_canal = UnifiedCanal(model_type='integral',
         name="diversion_canal",
         parameters=canal_params,
         initial_state={'volume': 50000, 'water_level': 1.5},

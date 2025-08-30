@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.sparse import lil_matrix
 from scipy.sparse.linalg import spsolve
-from core_lib.physical_objects.st_venant_reach import StVenantReach
+from core_lib.physical_objects.unified_canal import UnifiedCanal
 from core_lib.hydro_nodes.base_node import HydroNode
 
 class NetworkSolver:
@@ -28,12 +28,14 @@ class NetworkSolver:
     def add_component(self, component):
         """Adds a reach or a node to the network."""
         self.components.append(component)
-        if isinstance(component, StVenantReach):
+        if isinstance(component, UnifiedCanal) and component.model_type == 'st_venant':
             self.reaches.append(component)
         elif isinstance(component, HydroNode):
             self.nodes.append(component)
         else:
-            raise TypeError(f"Unsupported component type: {type(component)}")
+            # We can either raise an error or just ignore other types
+            # For now, let's be strict.
+            raise TypeError(f"NetworkSolver only supports 'st_venant' UnifiedCanal and HydroNode components, not {type(component)}")
 
     def add_boundary_condition(self, component, var: str, point_idx: int, value_func):
         """

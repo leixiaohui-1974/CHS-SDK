@@ -57,7 +57,7 @@ turbine = WaterTurbine(
 )
 
 # 尾水渠
-tailrace_canal = Canal(
+tailrace_canal = UnifiedCanal(model_type='integral',
     name="tailrace_canal",
     initial_state={'volume': 100000, 'water_level': 2.1},
     params={
