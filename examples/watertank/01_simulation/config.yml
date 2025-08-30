@@ -1,0 +1,4 @@
+# Global simulation settings
+simulation:
+  duration: 100  # seconds
+  dt: 1.0      # second
