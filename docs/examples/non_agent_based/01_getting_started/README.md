@@ -1,6 +1,6 @@
 # 教程 1: 您的第一个仿真 - 一个简单的水库-闸门系统
 
-欢迎来到智能水务平台！本教程将指导您完成设置并运行您的第一个仿真。我们将以 `example_simulation.py` 脚本为指南。
+欢迎来到智能水务平台！本教程将指导您完成设置并运行您的第一个仿真。我们将以 `run_simulation.py` 脚本为指南。
 
 本场景的目标是模拟一个水位过高的单一水库。我们将使用一个PID控制器来调节下游的闸门，通过开启闸门放水，使水位降低到期望的设定值。
 
@@ -11,11 +11,11 @@
 
 ## 第1步: 理解组件
 
-让我们来分解 `example_simulation.py` 中的代码。
+让我们来分解 `run_simulation.py` 中的代码。
 
 ### `水库 (Reservoir)` 模型
 ```python
-from swp.simulation_identification.physical_objects.reservoir import Reservoir
+from core_lib.physical_objects.reservoir import Reservoir
 
 reservoir_params = {
     'surface_area': 1.5e6, # 平方米
@@ -34,7 +34,7 @@ reservoir = Reservoir(
 
 ### `闸门 (Gate)` 模型
 ```python
-from swp.simulation_identification.physical_objects.gate import Gate
+from core_lib.physical_objects.gate import Gate
 
 gate_params = {
     'max_rate_of_change': 0.1,
@@ -54,7 +54,7 @@ gate = Gate(
 
 ### `PID控制器 (PIDController)`
 ```python
-from swp.local_agents.control.pid_controller import PIDController
+from core_lib.local_agents.control.pid_controller import PIDController
 
 # 对于一个反作用过程 (开启闸门会降低水位),
 # 控制器的增益必须为负。
@@ -76,7 +76,7 @@ pid_controller = PIDController(
 `SimulationHarness` (仿真平台) 是运行仿真的引擎。我们配置它，添加我们的组件和控制器，然后命令它运行。
 
 ```python
-from swp.core_engine.testing.simulation_harness import SimulationHarness
+from core_lib.core_engine.testing.simulation_harness import SimulationHarness
 
 simulation_config = {
     'duration': 300, # 模拟300秒
@@ -101,7 +101,7 @@ harness.run_simulation()
 ```
 要运行整个脚本，请在您的终端中导航到项目的根目录并执行：
 ```bash
-python3 example_simulation.py
+python3 run_simulation.py
 ```
 
 ## 第4步: 解读输出

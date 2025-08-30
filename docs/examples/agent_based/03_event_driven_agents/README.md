@@ -1,6 +1,6 @@
 # 教程 3: 事件驱动的代理与消息总线
 
-本教程介绍了智能水务平台最重要的架构演进：**多代理系统 (Multi-Agent System, MAS)** 架构。我们将从前两个示例中使用的集中式 `SimulationHarness` (仿真平台) 逻辑，转向探索一个使用 `example_mas_simulation.py` 脚本的、真正解耦的、事件驱动的系统。
+本教程介绍了智能水务平台最重要的架构演进：**多代理系统 (Multi-Agent System, MAS)** 架构。我们将从前两个示例中使用的集中式 `SimulationHarness` (仿真平台) 逻辑，转向探索一个使用 `run_mas_simulation.py` 脚本的、真正解耦的、事件驱动的系统。
 
 ## 1. 新架构：从编排到协作
 

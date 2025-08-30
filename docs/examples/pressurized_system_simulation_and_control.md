@@ -52,9 +52,9 @@
 **任务**：
 
 1.  创建一个带有缺失值（NaN）和异常值的模拟时间序列数据。
-2.  使用 `swp.data_processing.cleaner.fill_missing_with_interpolation` 函数对数据进行清洗。
+2.  使用 `core_lib.data_processing.cleaner.fill_missing_with_interpolation` 函数对数据进行清洗。
 3.  创建一个模拟的“真值”数据序列。
-4.  使用 `swp.data_processing.evaluator` 模块中的 `calculate_rmse`, `calculate_nse`, `calculate_kge` 函数，对清洗后的数据与真值进行对比，并打印出评价指标。
+4.  使用 `core_lib.data_processing.evaluator` 模块中的 `calculate_rmse`, `calculate_nse`, `calculate_kge` 函数，对清洗后的数据与真值进行对比，并打印出评价指标。
 
 **核心功能点**：展示平台在数据质量管理和模型性能诊断方面的基础能力。
 
