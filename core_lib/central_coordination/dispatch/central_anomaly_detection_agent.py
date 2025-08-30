@@ -12,6 +12,8 @@ class CentralAnomalyDetectionAgent(Agent):
     This agent subscribes to state topics from various perception agents,
     analyzes the combined data for inconsistencies or unexpected patterns,
     and publishes alerts if an anomaly is detected.
+
+    The current implementation uses a simple rule-based approach for demonstration.
     """
     def __init__(self, agent_id: str, message_bus: MessageBus, topics_to_monitor: List[str], alert_topic: str):
         """
@@ -43,19 +45,35 @@ class CentralAnomalyDetectionAgent(Agent):
         The main execution logic, called at each time step.
         Analyzes the collected data to detect anomalies.
         """
-        # Placeholder for anomaly detection logic
-        # For example, check if a reservoir level is unexpectedly high
-        # while its upstream gate is closed.
-        pass
+        self.run_time = current_time
+        self.detect_anomalies()
 
     def detect_anomalies(self):
         """
         Analyzes the current snapshot of data to find anomalies.
+
+        This is a simple rule-based example. A real implementation would use
+        more sophisticated methods.
         """
-        # This is where a more complex algorithm would go.
-        # e.g., using machine learning, statistical methods, or rule-based systems.
-        print(f"[{self.agent_id} at {self.run_time}] Analyzing data for anomalies...")
-        # if anomaly_detected:
-        #     alert_message = {"timestamp": self.run_time, "anomaly": "Description of anomaly"}
-        #     self.bus.publish(self.alert_topic, alert_message)
-        pass
+        # Example rule: if reservoir 'res1' level > 95 and gate 'g1' is closed (opening < 0.01)
+        res1_topic = 'res1.state'
+        g1_topic = 'g1.state'
+
+        anomaly_detected = False
+        description = ""
+
+        if res1_topic in self.latest_data and g1_topic in self.latest_data:
+            res1_data = self.latest_data[res1_topic]
+            g1_data = self.latest_data[g1_topic]
+
+            reservoir_level = res1_data.get('level', 0)
+            gate_opening = g1_data.get('opening', 0)
+
+            if reservoir_level > 95.0 and gate_opening < 0.01:
+                anomaly_detected = True
+                description = f"High water level ({reservoir_level}m) in reservoir 'res1' while upstream gate 'g1' is closed."
+
+        if anomaly_detected:
+            alert_message = {"timestamp": self.run_time, "anomaly": description}
+            self.bus.publish(self.alert_topic, alert_message)
+            print(f"[{self.agent_id} at {self.run_time}] ANOMALY DETECTED: {description}")
