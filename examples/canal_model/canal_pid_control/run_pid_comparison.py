@@ -5,85 +5,77 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sys
 from pathlib import Path
+import copy
 
 # Add the project root to the Python path
 project_root = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(project_root))
 
+from core_lib.core_engine.testing.simulation_harness import SimulationHarness
 from core_lib.io.yaml_loader import SimulationLoader
+from core_lib.local_agents.control.local_control_agent import LocalControlAgent
+from core_lib.local_agents.control.pid_controller import PIDController
+from core_lib.central_coordination.collaboration.message_bus import MessageBus
 
-def run_scenario(scenario_name, agent_ids, config_path):
+def run_scenario(scenario_name, config, base_components, agent_configs):
     """
-    Runs a single simulation scenario and saves the results.
-    This function temporarily modifies the agents.yml file for the scenario.
-
-    NOTE: This file renaming approach is fragile and not ideal for production use.
-    A better approach would be to modify the SimulationLoader to accept the agent
-    configuration directly as an argument.
+    Runs a single simulation scenario with a specific agent configuration.
     """
     print(f"--- Running Scenario: {scenario_name} ---")
 
-    original_agents_path = os.path.join(config_path, 'agents.yml')
-    backup_agents_path = os.path.join(config_path, 'agents.yml.bak')
+    bus = MessageBus()
 
-    # Ensure no backup file exists from a previous failed run
-    if os.path.exists(backup_agents_path):
-        os.remove(backup_agents_path)
+    # Deepcopy base components to avoid state leaking between scenarios
+    components = copy.deepcopy(base_components)
 
-    try:
-        # Backup the original agents.yml
-        os.rename(original_agents_path, backup_agents_path)
+    # Instantiate agents for the current scenario
+    agents = []
+    for agent_config in agent_configs:
+        controller = PIDController(agent_config['id'] + "_pid", agent_config['controller_config'])
+        agent = LocalControlAgent(
+            agent_id=agent_config['id'],
+            message_bus=bus,
+            controller=controller,
+            observation_topic=agent_config['observation_topic'],
+            action_topic=agent_config['action_topic'],
+            observation_key=agent_config['observation_key'],
+            dt=config['simulation']['time_step']
+        )
+        agents.append(agent)
 
-        # Create a new agents.yml for the current scenario
-        with open(backup_agents_path, 'r') as f:
-            all_agents_config = yaml.safe_load(f)
+    harness = SimulationHarness(
+        components=components,
+        connections=config['connections'],
+        agents=agents,
+        message_bus=bus,
+        config=config['simulation']
+    )
 
-        scenario_agents_config = {
-            'agents': [agent for agent in all_agents_config['agents'] if agent['id'] in agent_ids]
-        }
-        with open(original_agents_path, 'w') as f:
-            yaml.dump(scenario_agents_config, f)
+    harness.run_mas_simulation()
 
-        # Load and run the simulation
-        loader = SimulationLoader(scenario_path=config_path)
-        harness = loader.load()
-        harness.run_mas_simulation()
+    history = harness.history
+    if not history:
+        print(f"Warning: No history recorded for scenario {scenario_name}")
+        return
 
-        # Process and save results
-        history = harness.history
-        if not history:
-            print(f"Warning: No history recorded for scenario {scenario_name}")
-            return
+    flat_data = []
+    for time_step_data in history:
+        row = {'time': time_step_data['time']}
+        for component_id, component_state in time_step_data.items():
+            if component_id != 'time':
+                for key, value in component_state.items():
+                    row[f"{component_id}_{key}"] = value
+        flat_data.append(row)
 
-        flat_data = []
-        for step_data in history:
-            row = {'time': step_data['time']}
-            for comp_id, state in step_data.items():
-                if comp_id != 'time':
-                    for key, value in state.items():
-                        row[f"{comp_id}_{key}"] = value
-            flat_data.append(row)
-
-        df = pd.DataFrame(flat_data)
-        scenario_output_filename = f"results_{scenario_name}.csv"
-        df.to_csv(os.path.join(config_path, scenario_output_filename), index=False)
-        print(f"Results for {scenario_name} saved to {scenario_output_filename}")
-
-    finally:
-        # Clean up: restore original agents.yml from backup
-        if os.path.exists(original_agents_path):
-            os.remove(original_agents_path)
-        if os.path.exists(backup_agents_path):
-            os.rename(backup_agents_path, original_agents_path)
+    df = pd.DataFrame(flat_data)
+    scenario_output_filename = f"results_{scenario_name}.csv"
+    df.to_csv(os.path.join(os.path.dirname(__file__), scenario_output_filename), index=False)
+    print(f"Results for {scenario_name} saved to {scenario_output_filename}")
 
 
 def plot_results(scenarios, config_path):
-    """
-    Plots the results from all scenarios for comparison.
-    """
     plt.style.use('seaborn-v0_8-whitegrid')
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(18, 12), sharex=True)
-
     colors = plt.cm.viridis(np.linspace(0, 1, len(scenarios) * 2))
     line_styles = ['-', '--', ':']
 
@@ -92,57 +84,63 @@ def plot_results(scenarios, config_path):
         if not os.path.exists(filepath):
             print(f"Results file not found for scenario: {scenario_name}")
             continue
-
         df = pd.read_csv(filepath)
-
-        # Plot water levels
         ax1.plot(df['time'], df['canal_1_water_level'], label=f'Canal 1 ({scenario_name})', linestyle=line_styles[i], color=colors[i*2])
         ax1.plot(df['time'], df['canal_2_water_level'], label=f'Canal 2 ({scenario_name})', linestyle=line_styles[i], color=colors[i*2+1])
         ax1.plot(df['time'], df['canal_3_water_level'], label=f'Canal 3 ({scenario_name})', linestyle='-.', color=colors[i*2])
-
-        # Plot gate openings
         ax2.plot(df['time'], df['gate_1_opening'], label=f'Gate 1 ({scenario_name})', linestyle=line_styles[i], color=colors[i*2])
         ax2.plot(df['time'], df['gate_2_opening'], label=f'Gate 2 ({scenario_name})', linestyle=line_styles[i], color=colors[i*2+1])
 
-    # Add setpoint lines
     ax1.axhline(y=5.0, color='gray', linestyle='--', label='Setpoint Canal 1 (5.0m)')
     ax1.axhline(y=4.5, color='black', linestyle='--', label='Setpoint Canal 2 (4.5m)')
     ax1.axhline(y=4.0, color='gray', linestyle=':', label='Setpoint Canal 3 (4.0m)')
-
-
-    ax1.set_title('Canal Water Levels Comparison', fontsize=16)
-    ax1.set_ylabel('Water Level (m)')
+    ax1.set_title('PID控制策略的水位对比', fontsize=16)
+    ax1.set_ylabel('水位 (m)')
     ax1.legend(loc='upper right')
     ax1.grid(True)
-
-    ax2.set_title('Gate Openings Comparison', fontsize=16)
-    ax2.set_ylabel('Gate Opening (0-1)')
-    ax2.set_xlabel('Time (s)')
+    ax2.set_title('闸门开度对比', fontsize=16)
+    ax2.set_ylabel('开度 (0-1)')
+    ax2.set_xlabel('时间 (s)')
     ax2.legend(loc='upper right')
     ax2.grid(True)
-
     plt.tight_layout()
     plot_path = os.path.join(config_path, 'pid_comparison_results.png')
     plt.savefig(plot_path)
-    print(f"Comparison plot saved to {plot_path}")
-
+    print(f"比较图已保存至 {plot_path}")
 
 def main():
-    """Main function to run all scenarios and plot results."""
     config_path = os.path.dirname(__file__)
 
-    scenarios = {
-        "local_upstream": ["gate1_local_controller", "gate2_local_controller"],
-        "distant_downstream": ["gate1_distant_controller", "gate2_distant_controller"],
-        "mixed_control": ["gate1_mixed_controller", "gate2_mixed_controller"]
+    with open(os.path.join(config_path, 'config.yml'), 'r') as f:
+        config = yaml.safe_load(f)
+    with open(os.path.join(config_path, 'components.yml'), 'r') as f:
+        components_config = yaml.safe_load(f)['components']
+    with open(os.path.join(config_path, 'topology.yml'), 'r') as f:
+        config['connections'] = yaml.safe_load(f)['connections']
+
+    loader = SimulationLoader(scenario_path=config_path)
+    components = [loader.create_component(c) for c in components_config]
+
+    agent_scenarios = {
+        "local_upstream": [
+            {'id': 'gate1_local_controller', 'controller_config': {'Kp': 0.5, 'Ki': 0.05, 'Kd': 0.1, 'setpoint': 5.0, 'min_output': 0, 'max_output': 1}, 'observation_topic': 'canal_1', 'observation_key': 'water_level', 'action_topic': 'gate_1'},
+            {'id': 'gate2_local_controller', 'controller_config': {'Kp': 0.5, 'Ki': 0.05, 'Kd': 0.1, 'setpoint': 4.5, 'min_output': 0, 'max_output': 1}, 'observation_topic': 'canal_2', 'observation_key': 'water_level', 'action_topic': 'gate_2'}
+        ],
+        "distant_downstream": [
+            {'id': 'gate1_distant_controller', 'controller_config': {'Kp': 0.4, 'Ki': 0.02, 'Kd': 0.1, 'setpoint': 4.5, 'min_output': 0, 'max_output': 1}, 'observation_topic': 'canal_2', 'observation_key': 'water_level', 'action_topic': 'gate_1'},
+            {'id': 'gate2_distant_controller', 'controller_config': {'Kp': 0.4, 'Ki': 0.02, 'Kd': 0.1, 'setpoint': 4.0, 'min_output': 0, 'max_output': 1}, 'observation_topic': 'canal_3', 'observation_key': 'water_level', 'action_topic': 'gate_2'}
+        ],
+        "mixed_control": [
+            {'id': 'gate1_mixed_controller', 'controller_config': {'Kp': 0.5, 'Ki': 0.05, 'Kd': 0.1, 'setpoint': 5.0, 'min_output': 0, 'max_output': 1}, 'observation_topic': 'canal_1', 'observation_key': 'water_level', 'action_topic': 'gate_1'},
+            {'id': 'gate2_mixed_controller', 'controller_config': {'Kp': 0.4, 'Ki': 0.02, 'Kd': 0.1, 'setpoint': 4.0, 'min_output': 0, 'max_output': 1}, 'observation_topic': 'canal_3', 'observation_key': 'water_level', 'action_topic': 'gate_2'}
+        ]
     }
 
-    for name, agents in scenarios.items():
-        run_scenario(name, agents, config_path)
+    for name, agent_configs in agent_scenarios.items():
+        run_scenario(name, config, components, agent_configs)
 
-    plot_results(list(scenarios.keys()), config_path)
-    print("All scenarios executed and results plotted.")
-
+    plot_results(list(agent_scenarios.keys()), config_path)
+    print("所有场景执行完毕，并已绘制结果。")
 
 if __name__ == "__main__":
     main()

@@ -1,4 +1,4 @@
-# Components for the Linear Reservoir Canal Model
+# Base Components for the Canal Model Comparison Example
 components:
   - id: upstream_reservoir
     class: Reservoir
@@ -14,13 +14,6 @@ components:
     parameters:
       width: 5.0
       discharge_coefficient: 0.8
-  - id: canal
-    class: RiverChannel
-    initial_state:
-      water_level: 5.0
-    parameters:
-      storage_constant: 1000.0
-      num_segments: 1
   - id: downstream_reservoir
     class: Reservoir
     initial_state:

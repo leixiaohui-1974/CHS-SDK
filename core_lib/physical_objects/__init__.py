@@ -18,6 +18,7 @@ from .water_turbine import WaterTurbine
 from .rainfall_runoff import RainfallRunoff
 from .integral_delay_canal import IntegralDelayCanal
 from .integral_delay_zero_canal import IntegralDelayZeroCanal
+from .unified_canal import UnifiedCanal
 
 __all__ = [
     'Reservoir',
@@ -25,13 +26,10 @@ __all__ = [
     'Gate',
     'Pump',
     'Valve',
-    'Canal',
-    'RiverChannel',
     'StVenantReach',
     'HydropowerStation',
     'Lake',
     'WaterTurbine',
     'RainfallRunoff',
-    'IntegralDelayCanal',
-    'IntegralDelayZeroCanal'
+    'UnifiedCanal'
 ]

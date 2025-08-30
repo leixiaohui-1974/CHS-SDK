@@ -5,8 +5,13 @@ from core_lib.core.interfaces import PhysicalObjectInterface, State
 from core_lib.central_coordination.collaboration.message_bus import MessageBus, Message
 
 
+import warnings
+
 class Canal(PhysicalObjectInterface):
     """
+    DEPRECATED: This class is deprecated in favor of the UnifiedCanal class.
+    Use `UnifiedCanal(model_type='integral')` instead.
+
     Represents a canal with a trapezoidal cross-section using Manning's equation for flow.
 
     This model simulates the water flow and volume changes in a canal segment.
