@@ -1,0 +1,13 @@
+# Defines all physical components in the simulation
+components:
+  - id: tank1
+    class: Reservoir
+    # This component needs to listen to the message bus for its inflow data
+    inflow_topic: inflow/tank1
+    initial_state:
+      water_level: 5.0
+      # The initial volume must be consistent with water_level and surface_area
+      volume: 7.5 # 5.0m * 1.5m^2
+    parameters:
+      surface_area: 1.5
+      outlet_coeff: 0.5

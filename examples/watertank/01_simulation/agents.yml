@@ -1,0 +1,13 @@
+# Defines all agents in the simulation
+agents:
+  # This agent reads inflow data from a CSV and applies it to the reservoir.
+  # This is the primary driver for this open-loop simulation.
+  - id: inflow_driver
+    class: CsvInflowAgent
+    config:
+      # The ID of the component to apply the inflow to.
+      target_component_id: tank1
+      # Path is relative to the scenario directory.
+      csv_file: data/inflow.csv
+      time_column: time
+      data_column: inflow

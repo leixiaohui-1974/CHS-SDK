@@ -133,10 +133,11 @@ class SimulationLoader:
             }
 
             # Some components might need the message bus at init time
-            if 'Reservoir' in comp_class_name: # Example for future use
+            if 'Reservoir' in comp_class_name:
                  args['message_bus'] = self.message_bus
-                 # In a more complex scenario, we would also pass the inflow_topic here
-                 # args['inflow_topic'] = f"inflow/{comp_id}"
+                 # If an inflow_topic is specified in the component's config, pass it.
+                 if 'inflow_topic' in comp_conf:
+                     args['inflow_topic'] = comp_conf['inflow_topic']
 
             instance = CompClass(**args)
 

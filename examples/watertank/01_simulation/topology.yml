@@ -1,0 +1,3 @@
+# Defines the physical connections between components
+# This scenario has only one component, so there are no connections.
+connections: []
