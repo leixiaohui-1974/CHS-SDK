@@ -44,17 +44,29 @@ class ParameterIdentificationAgent(Agent):
         self.new_data_count = 0
 
         # Subscribe to all necessary data topics
-        for model_key, topic in self.data_map.items():
-            # The lambda captures the 'model_key' for the handler
-            self.bus.subscribe(topic, lambda msg, key=model_key: self.handle_data_message(msg, key))
-            print(f"[{self.agent_id}] Subscribed to topic '{topic}' for data key '{model_key}'.")
+        for model_key, data_config in self.data_map.items():
+            topic = data_config['topic']
+            # The key to find the data within the message payload
+            data_key = data_config['key']
+            # The lambda captures the necessary arguments for the handler
+            callback = lambda msg, m_key=model_key, d_key=data_key: self.handle_data_message(msg, m_key, d_key)
+            self.bus.subscribe(topic, callback)
+            print(f"[{self.agent_id}] Subscribed to topic '{topic}' for model key '{model_key}' using data key '{data_key}'.")
 
-    def handle_data_message(self, message: Message, model_key: str):
-        """Callback to store incoming data."""
-        value = message.get("value") # Assuming a simple {'value': ...} message
+    def handle_data_message(self, message: Message, model_key: str, data_key: str):
+        """
+        Callback to store incoming data.
+
+        Args:
+            message: The message from the bus.
+            model_key: The key this data corresponds to in the model's identify method (e.g., 'observed_flows').
+            data_key: The key to extract the data from the message payload (e.g., 'outflow').
+        """
+        value = message.get(data_key)
         if isinstance(value, (int, float)):
             self.data_history[model_key].append(value)
-            if model_key == list(self.data_map.keys())[0]: # Increment counter only for one stream
+            # Increment counter only for the first data stream to avoid overcounting
+            if model_key == list(self.data_map.keys())[0]:
                 self.new_data_count += 1
 
     def run(self, current_time: float):

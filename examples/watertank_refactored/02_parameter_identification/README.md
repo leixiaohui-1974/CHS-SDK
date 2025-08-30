@@ -1,27 +1,38 @@
-# 示例 2: 水箱出口系数参数辨识 (重构版)
+# 示例 2: 阀门流量系数辨识 (标准库版)
 
 ## 1. 场景目标
 
-本示例演示了一个经典的参数辨识场景。我们假设有一个物理世界中的“真实”水库，其部分物理参数（如此处的**出口系数 `outlet_coeff`**）是未知的。
+本示例旨在演示如何使用本仿真框架的**标准参数辨识智能体** (`ParameterIdentificationAgent`)，在线辨识一个**标准物理组件** (`Valve`) 的内部参数。
 
-我们的目标是创建一个该水库的“数字孪生”模型，并让这个孪生模型通过在线学习，持续观测真实水库的输入（入流量）和输出（水位），动态调整自身的出口系数值，使其最终收敛到真实水库的系数值。
+具体来说，我们想要辨识出水阀的 **`discharge_coefficient` (流量系数)**。这是一个关键的物理参数，决定了在一定的水头差和开度下，阀门的过流能力。
 
-这个过程对于修正模型误差、提高数字孪生仿真精度至关重要。
+## 2. 架构设计 (核心库增强)
 
-## 2. 架构设计 (重构说明)
+根据用户的指示，本场景的实现依赖于对核心库 (`core_lib`) 的两项重要增强：
+1.  为 `core_lib/physical_objects/valve.py` 中的 `Valve` 类增加了参数辨识能力。
+2.  改进了 `core_lib/identification/identification_agent.py` 中的 `ParameterIdentificationAgent`，使其能够从复杂消息中提取数据。
 
-本示例是 对 `examples/watertank/02_parameter_identification` 中原有脚本式实现的**场景驱动式重构**。重构的核心思想是将原Python脚本中的仿真循环和硬编码的智能体连接，转换为由配置文件驱动的、基于消息总线的标准架构。
+基于此，本场景的架构非常标准和清晰：
 
-### 关键智能体
+### 物理系统 (`components.yml` & `topology.yml`)
+我们搭建了两套并行的“水库->阀门”系统：
+-   **真实系统**: `real_reservoir` -> `real_valve`。其中 `real_valve` 的流量系数被设为我们想要辨识的“真实值”（如 0.8）。
+-   **孪生系统**: `twin_reservoir` -> `twin_valve`。其中 `twin_valve` 的流量系数被设为一个错误的“初始猜测值”（如 0.2）。
 
--   `CsvInflowAgent`: 从 `inflow.csv` 文件中读取预设的入流数据，并将其发布到消息总线的 `inflow_topic` 主题上。
--   `BusAwareReservoirAgent`: (定义于本目录的 `agents.py` 中) 扮演“**真实水库**”的角色。它订阅 `inflow_topic` 获取入流量，使用一个**固定不变的真实出口系数 (0.8)** 进行仿真，并将其产生的水位发布到 `real_water_level_topic` 主题。
--   `BusAwareTwinAgent`: (定义于本目录的 `agents.py` 中) 扮演“**数字孪生水库**”的角色。
-    -   它同样订阅 `inflow_topic` 以保证输入与真实水库一致。
-    -   它还订阅 `real_water_level_topic` 来“观测”真实水库的水位。
-    -   在每个时间步，它使用自己当前的出口系数（**初始猜测值为 0.2**）进行仿真，然后将仿真水位与观测到的真实水位进行比较。
-    -   根据两者之间的误差，它采用简单的梯度下降法来更新自己的出口系数值。
-    -   最后，它将自己估算出的系数发布到 `estimated_coeff_log_topic` 主题，以便我们观察辨识过程。
+### 智能体 (`agents.yml`)
+
+1.  **数据输入智能体**:
+    -   `CsvInflowAgent`: 为两个水库提供完全相同的入流，保证了输入条件的一致性。
+    -   `ConstantValueAgent`: 提供一个恒为0的下游水位，作为阀门出流计算的基准。
+
+2.  **感知智能体 (`DigitalTwinAgent`)**:
+    -   我们用了三个独立的感知智能体，分别用于发布“真实阀门”的状态（观测流量）、“孪生阀门”的状态（开度）和“孪生水库”的状态（上游水位）。
+
+3.  **辨识智能体 (`ParameterIdentificationAgent`)**:
+    -   **核心**: 这是本场景的大脑。
+    -   **目标**: 它的辨识目标被配置为 `twin_valve` 组件。
+    -   **数据**: 它订阅上述所有感知智能体发布的主题，以收集辨识所需的所有数据（观测流量、开度、上下游水位）。
+    -   **动作**: 每隔50个时间步，它会调用 `twin_valve` 自身新增的 `identify_parameters` 方法，来更新其内部的 `discharge_coefficient` 参数。
 
 ## 3. 如何运行
 
@@ -33,10 +44,6 @@ python run_scenario.py examples/watertank_refactored/02_parameter_identification
 
 ## 4. 预期结果
 
-仿真运行结束后，会在本目录下生成一个 `output.yml` 文件，其中记录了消息总线上所有主题在每个时间步的数据。
-
-您可以重点关注以下几个主题的记录：
-
--   `real_water_level_topic`: “真实”水库的水位变化。
--   `twin_water_level_log_topic`: “孪生”水库的水位变化。随着辨识的进行，它会越来越接近真实水位。
--   `estimated_coeff_log_topic`: **辨识出的出口系数值**。您可以观察到，它的值会从初始的 `0.2` 逐步增加，并最终在真实值 `0.8` 附近稳定下来，证明参数辨识取得了成功。
+仿真结束后，`twin_valve` 组件的 `discharge_coefficient` 参数会从初始的 0.2 逐步收敛到 `real_valve` 的真实值 0.8。您可以通过以下方式验证：
+-   检查仿真过程中打印的日志，其中会包含类似 `Identification complete. New discharge_coefficient: 0.xxx` 的信息。
+-   分析 `output.yml` 文件中 `twin_valve_state_topic` 的数据，查看其 `discharge_coefficient` 随时间的变化。
