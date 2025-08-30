@@ -98,3 +98,53 @@ actuators_config = {
 | **适用场景** | 构建、仿真和研究**任意结构**的复杂水系统 | 在**标准、固定**的环境中测试单个智能体的性能 |
 
 因此，您会根据您的任务目标选择其中一种架构，而`PhysicalIOAgent`仅在第一种模块化架构中扮演核心角色。
+
+### `PhysicalIOAgent` vs `DigitalTwinAgent`：职责分工
+
+在更精细的 `SimulationHarness` 架构中，`PhysicalIOAgent` 和 `DigitalTwinAgent` 共同协作，代表了从物理世界到数字世界的两个不同抽象层次。
+
+-   **`PhysicalIOAgent` (硬件I/O层)**:
+    -   **角色**: 模拟最底层的硬件，如PLC或RTU。
+    -   **职责**: 它的任务是“忠实但有缺陷地”读取。它直接从物理模型获取“真值”，通过**添加噪声**来模拟真实传感器的物理限制，然后将这些原始、带噪声的数据发布到消息总线。它不进行任何数据清洗或处理。
+
+-   **`DigitalTwinAgent` (数字认知层)**:
+    -   **角色**: 物理资产的“数字镜像”或“数字大脑”。
+    -   **职责**: 它的任务是“理解并提炼”。它**订阅**由 `PhysicalIOAgent` 发布的原始数据，利用其“认知增强”能力（如指数移动平均滤波）对数据进行**清洗、平滑和校正**，最终发布一个高质量、可信的“官方”状态给系统中的其他决策智能体使用。
+
+#### 数据流管道
+
+这种分层设计形成了一个清晰、真实的数据处理管道：
+
+```mermaid
+graph TD
+    subgraph 物理世界
+        A[物理模型<br>(如 Canal)]
+    end
+
+    subgraph 硬件接口层
+        B(PhysicalIOAgent)
+    end
+
+    subgraph 数字世界
+        subgraph 原始数据总线
+            C[MessageBus<br>(e.g., state.raw.level)]
+        end
+        subgraph 认知层
+            D(DigitalTwinAgent)
+        end
+        subgraph 清洁数据总线
+            E[MessageBus<br>(e.g., state.twin.level)]
+        end
+        subgraph 决策层
+            F[控制智能体<br>(如 LocalControlAgent)]
+        end
+    end
+
+    A -- get_state() --> B;
+    B -- "发布原始、带噪声数据" --> C;
+    C -- "订阅原始数据" --> D;
+    D -- "发布清洁、平滑数据" --> E;
+    E -- "订阅清洁数据" --> F;
+```
+
+**总结**: `PhysicalIOAgent` 负责“感知”，而 `DigitalTwinAgent` 负责“认知”。这种关注点分离的模式，使得整个系统架构更加清晰，也更贴近真实世界中数据从采集到应用的处理流程。
