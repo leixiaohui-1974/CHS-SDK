@@ -134,13 +134,29 @@ class Controller(ABC):
         pass
 
 
-class PhysicalObjectInterface(Simulatable, Identifiable, ABC):
+class Updatable(ABC):
+    """
+    An interface for models whose parameters can be updated at runtime.
+    """
+
+    @abstractmethod
+    def update_parameters(self, new_params: Parameters):
+        """
+        Updates the internal parameters of the model.
+
+        Args:
+            new_params: A dictionary of new parameter values to apply.
+        """
+        pass
+
+
+class PhysicalObjectInterface(Simulatable, Identifiable, Updatable, ABC):
     """
     A specialized interface for a physical object in the water system.
 
-    This combines the `Simulatable` and `Identifiable` interfaces and adds
-    a `name` property, as all physical components must have a unique identifier
-    within the simulation harness.
+    This combines the `Simulatable`, `Identifiable`, and `Updatable` interfaces
+    and adds a `name` property, as all physical components must have a unique
+    identifier within the simulation harness.
     """
 
     def __init__(self, name: str, initial_state: State, parameters: Parameters):
@@ -177,6 +193,14 @@ class PhysicalObjectInterface(Simulatable, Identifiable, ABC):
         # or raise a NotImplementedError if identification is required but not implemented.
         print(f"Parameter identification for {self.name} is not implemented. Returning current parameters.")
         return self.get_parameters()
+
+    def update_parameters(self, new_params: Parameters):
+        """
+        Default implementation for updating parameters.
+        Merges the new parameters into the existing parameter set.
+        """
+        print(f"Updating parameters for {self.name} with: {new_params}")
+        self._params.update(new_params)
 
     @property
     def is_stateful(self) -> bool:
