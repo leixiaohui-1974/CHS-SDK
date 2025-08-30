@@ -3,7 +3,7 @@ from pathlib import Path
 import yaml
 import numpy as np
 
-# Add the project root to the Python path to allow imports from core_lib
+# 将项目根目录添加到Python路径，以允许从core_lib导入
 project_root = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(project_root))
 
@@ -16,11 +16,11 @@ from core_lib.identification.identification_agent import ParameterIdentification
 from core_lib.identification.model_updater_agent import ModelUpdaterAgent
 
 def print_curve_comparison(title, true_curve, initial_curve, final_curve):
-    """Helper function to print a comparison of the storage curves."""
+    """用于打印库容曲线对比结果的辅助函数。"""
     print("-" * 65)
     print(title)
     print("-" * 65)
-    print(f"{'Volume (m^3)':<15} | {'True Level (m)':<15} | {'Initial Level (m)':<18} | {'Final Level (m)':<15}")
+    print(f"{'库容 (m^3)':<15} | {'真实水位 (m)':<15} | {'初始水位 (m)':<18} | {'最终水位 (m)':<15}")
     print("-" * 65)
     for i in range(len(true_curve)):
         vol = true_curve[i][0]
@@ -31,11 +31,13 @@ def print_curve_comparison(title, true_curve, initial_curve, final_curve):
     print("-" * 65)
 
 def plot_curves(true_curve, initial_curve, final_curve):
-    """Plots the storage curves for visual comparison."""
+    """绘制库容曲线以进行可视化比较。"""
     try:
         import matplotlib.pyplot as plt
+        plt.rcParams['font.sans-serif'] = ['SimHei']  # 指定默认字体
+        plt.rcParams['axes.unicode_minus'] = False  # 解决保存图像是负号'-'显示为方块的问题
     except ImportError:
-        print("\nMatplotlib not found. Skipping plot.")
+        print("\n未找到Matplotlib，跳过绘图步骤。")
         return
 
     true_vols = true_curve[:, 0]
@@ -43,30 +45,31 @@ def plot_curves(true_curve, initial_curve, final_curve):
     initial_levels = initial_curve[:, 1]
     final_levels = final_curve[:, 1]
 
-    plt.figure(figsize=(10, 6))
-    plt.plot(true_vols, true_levels, 'g-o', label='True Curve', linewidth=3, markersize=8)
-    plt.plot(true_vols, initial_levels, 'r--x', label='Initial Guess', markersize=8)
-    plt.plot(true_vols, final_levels, 'b-^', label='Identified Curve')
+    plt.figure(figsize=(12, 7))
+    plt.plot(true_vols, true_levels, 'g-o', label='真实曲线', linewidth=3, markersize=8)
+    plt.plot(true_vols, initial_levels, 'r--x', label='初始猜测曲线', markersize=8)
+    plt.plot(true_vols, final_levels, 'b-^', label='辨识后曲线')
 
-    plt.title('Storage Curve Identification Results')
-    plt.xlabel('Volume (m^3)')
-    plt.ylabel('Water Level (m)')
+    plt.title('库容曲线辨识结果')
+    plt.xlabel('库容 (m^3)')
+    plt.ylabel('水位 (m)')
     plt.legend()
     plt.grid(True)
 
     output_path = "identification_results.png"
     plt.savefig(output_path)
-    print(f"\nPlot saved to {output_path}")
+    print(f"\n对比图已保存至 {output_path}")
+
 
 def main():
     """
-    Main function to run the reservoir identification scenario.
+    运行水库辨识场景的主函数。
     """
-    print("Starting reservoir storage curve identification example...")
+    print("开始执行水库库容曲线辨识示例...")
 
     scenario_path = Path(__file__).parent
 
-    # --- 1. Load Configuration from YAML Files ---
+    # --- 1. 从YAML文件加载配置 ---
     with open(scenario_path / 'config.yml', 'r') as f:
         config = yaml.safe_load(f)
     with open(scenario_path / 'components.yml', 'r') as f:
@@ -74,10 +77,10 @@ def main():
     with open(scenario_path / 'agents.yml', 'r') as f:
         agents_config = yaml.safe_load(f)
 
-    # --- 2. Manually Instantiate Objects ---
+    # --- 2. 手动实例化所有对象 ---
     bus = MessageBus()
 
-    # Create components
+    # 创建组件
     true_res_conf = components_config['true_reservoir']
     true_reservoir = Reservoir(
         name='true_reservoir',
@@ -96,7 +99,7 @@ def main():
 
     components = [true_reservoir, twin_reservoir]
 
-    # Create agents
+    # 创建智能体
     inflow_agent_conf = agents_config['inflow_agent']['parameters']
     inflow_agent = CsvInflowAgent(
         agent_id='inflow_agent',
@@ -142,41 +145,40 @@ def main():
 
     agents = [inflow_agent, observation_agent, twin_perception_agent, identification_agent, model_updater]
 
-    # --- 3. Store Initial Parameters for Comparison ---
+    # --- 3. 存储初始参数用于最终对比 ---
     true_curve = np.array(true_reservoir.get_parameters()['storage_curve'])
     initial_twin_curve = np.array(twin_reservoir.get_parameters()['storage_curve'])
 
-    # --- 4. Initialize and Run Simulation Harness ---
-    print("\nInitializing simulation harness...")
-    # Correctly initialize the harness
+    # --- 4. 初始化并运行仿真平台 ---
+    print("\n正在初始化仿真平台...")
     harness = SimulationHarness(config=config['simulation'])
-    harness.message_bus = bus # Share the same message bus
+    harness.message_bus = bus # 确保所有对象共享同一个消息总线
 
-    # Add components and agents to the harness
+    # 向仿真平台添加组件和智能体
     for comp in components:
         harness.add_component(comp)
     for agent in agents:
         harness.add_agent(agent)
 
-    # Build the harness (for topological sort, etc.)
+    # 构建仿真平台（例如，进行拓扑排序）
     harness.build()
 
-    print("Running MAS simulation...")
+    print("开始多智能体仿真...")
     harness.run_mas_simulation()
-    print("Simulation finished.")
+    print("仿真结束。")
 
-    # --- 5. Get Final Parameters and Show Results ---
+    # --- 5. 获取最终参数并展示结果 ---
     final_twin_curve = np.array(twin_reservoir.get_parameters()['storage_curve'])
 
-    print("\nIdentification process complete. Comparing results...")
+    print("\n辨识过程完成，正在对比结果...")
     print_curve_comparison(
-        "Reservoir Storage Curve Identification",
+        "水库库容曲线辨识结果",
         true_curve,
         initial_twin_curve,
         final_twin_curve
     )
 
-    # --- 6. Plot Results for Visual Inspection ---
+    # --- 6. 绘制结果图用于可视化检查 ---
     plot_curves(true_curve, initial_twin_curve, final_twin_curve)
 
 

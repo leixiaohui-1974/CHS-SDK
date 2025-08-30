@@ -1,5 +1,5 @@
 """
-Digital Twin Agent for state synchronization, enhancement, and publication.
+用于状态同步、增强和发布的数字孪生智能体。
 """
 from core_lib.core.interfaces import Agent, Simulatable, State
 from core_lib.central_coordination.collaboration.message_bus import MessageBus, Message
@@ -7,11 +7,10 @@ from typing import Optional, Dict, Any
 
 class DigitalTwinAgent(Agent):
     """
-    A Perception Agent that acts as a digital twin for a physical object.
+    一个感知智能体，作为物理对象的数字孪生。
 
-    Its primary responsibility is to maintain an internal simulation model and
-    publish its state to the message bus. It can also perform "cognitive"
-    enhancements on the raw state, such as smoothing noisy data.
+    其主要职责是维护一个内部仿真模型，并将其状态发布到消息总线。
+    它还可以对原始状态执行“认知”增强，例如平滑噪声数据。
     """
 
     def __init__(self,
@@ -22,17 +21,16 @@ class DigitalTwinAgent(Agent):
                  smoothing_config: Optional[Dict[str, float]] = None,
                  **kwargs):
         """
-        Initializes the DigitalTwinAgent.
+        初始化 DigitalTwinAgent。
 
         Args:
-            agent_id: The unique ID of this agent.
-            simulated_object: The simulation model this agent is a twin of.
-            message_bus: The system's message bus for communication.
-            state_topic: The topic on which to publish the object's state.
-            smoothing_config: Optional config for applying EMA smoothing.
-                Example: {'water_level': 0.3, 'outflow': 0.5}
-                The value is the alpha (smoothing factor).
-            **kwargs: Catches any other arguments from the YAML config, like 'log_data'.
+            agent_id: 该智能体的唯一ID。
+            simulated_object: 该智能体所孪生的仿真模型。
+            message_bus: 用于通信的系统消息总线。
+            state_topic: 用于发布对象状态的主题。
+            smoothing_config: (可选) 应用指数移动平均（EMA）平滑的配置。
+                示例: {'water_level': 0.3, 'outflow': 0.5}
+                值是alpha（平滑因子）。
         """
         super().__init__(agent_id)
         self.model = simulated_object
@@ -42,12 +40,12 @@ class DigitalTwinAgent(Agent):
         self.smoothed_states: Dict[str, float] = {}
 
         model_id = self.model.name
-        print(f"DigitalTwinAgent '{self.agent_id}' created for model '{model_id}'. Will publish state to '{self.state_topic}'.")
+        print(f"DigitalTwinAgent '{self.agent_id}' 已为模型 '{model_id}' 创建。将向主题 '{self.state_topic}' 发布状态。")
         if self.smoothing_config:
-            print(f"  - Smoothing enabled for keys: {list(self.smoothing_config.keys())}")
+            print(f"  - 已为以下键启用平滑处理: {list(self.smoothing_config.keys())}")
 
     def _apply_smoothing(self, state: State) -> State:
-        """Applies Exponential Moving Average (EMA) smoothing to configured state variables."""
+        """对配置的状态变量应用指数移动平均（EMA）平滑。"""
         if not self.smoothing_config:
             return state
 
@@ -55,7 +53,7 @@ class DigitalTwinAgent(Agent):
         for key, alpha in self.smoothing_config.items():
             if key in smoothed_state:
                 raw_value = smoothed_state[key]
-                last_smoothed = self.smoothed_states.get(key, raw_value) # Initialize with first raw value
+                last_smoothed = self.smoothed_states.get(key, raw_value) # 用第一个原始值进行初始化
                 new_smoothed = alpha * raw_value + (1 - alpha) * last_smoothed
                 smoothed_state[key] = new_smoothed
                 self.smoothed_states[key] = new_smoothed
@@ -63,18 +61,17 @@ class DigitalTwinAgent(Agent):
 
     def publish_state(self):
         """
-        Fetches the current state, applies enhancements, and publishes each
-        state variable on its own sub-topic for granular consumption.
+        获取当前状态，应用增强功能，并为每个状态变量在其自己的子主题上发布。
         """
         raw_state = self.model.get_state()
         enhanced_state = self._apply_smoothing(raw_state)
 
-        # Publish the full state dictionary to the base topic
+        # 将完整的状态字典发布到基础主题
         self.bus.publish(self.state_topic, enhanced_state)
 
-        # Also publish each key-value pair to its own sub-topic
-        # This allows agents like ParameterIdentificationAgent to subscribe to just the data they need
-        # in the simple {'value': ...} format they expect.
+        # 同时，将每个键值对发布到其自己的子主题
+        # 这允许像ParameterIdentificationAgent这样的智能体只订阅它们需要的数据，
+        # 并使用它们期望的简单 {'value': ...} 格式。
         for key, value in enhanced_state.items():
             if isinstance(value, (int, float)):
                 sub_topic = f"{self.state_topic}/{key}"
@@ -83,13 +80,13 @@ class DigitalTwinAgent(Agent):
 
     def run(self, current_time: float):
         """
-        The main execution logic for the agent.
+        智能体的主要执行逻辑。
 
-        In a simulation context, this method is called at each time step
-        by the harness to make the agent publish its current state.
+        在仿真环境中，此方法在每个时间步由仿真平台调用，
+        以使智能体发布其当前状态。
 
         Args:
-            current_time: The current simulation time (ignored by this agent).
+            current_time: 当前仿真时间（该智能体忽略此参数）。
         """
         # print(f"  [Debug DTA] Agent '{self.agent_id}' running at time {current_time}.")
         self.publish_state()

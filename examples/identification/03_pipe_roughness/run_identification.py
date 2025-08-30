@@ -3,7 +3,7 @@ from pathlib import Path
 import yaml
 import numpy as np
 
-# Add project root to Python path
+# 将项目根目录添加到Python路径
 project_root = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(project_root))
 
@@ -18,13 +18,13 @@ from core_lib.identification.model_updater_agent import ModelUpdaterAgent
 
 def main():
     """
-    Main function to run the pipe roughness identification scenario.
+    运行管道糙率辨识场景的主函数。
     """
-    print("Starting pipe roughness (Manning's n) identification example...")
+    print("开始执行管道糙率 (曼宁 n) 辨识示例...")
 
     scenario_path = Path(__file__).parent
 
-    # --- 1. Load Configuration ---
+    # --- 1. 从YAML文件加载配置 ---
     with open(scenario_path / 'config.yml', 'r') as f:
         config = yaml.safe_load(f)
     with open(scenario_path / 'components.yml', 'r') as f:
@@ -34,10 +34,10 @@ def main():
     with open(scenario_path / 'topology.yml', 'r') as f:
         topology_config = yaml.safe_load(f)
 
-    # --- 2. Manually Instantiate Objects ---
+    # --- 2. 手动实例化所有对象 ---
     bus = MessageBus()
 
-    # Create components
+    # 创建组件
     up_res_conf = components_config['upstream_reservoir']
     upstream_reservoir = Reservoir(name='upstream_reservoir',
                                    initial_state=up_res_conf['initial_state'],
@@ -60,7 +60,7 @@ def main():
 
     components = [upstream_reservoir, downstream_reservoir, true_pipe, twin_pipe]
 
-    # Create agents
+    # 创建智能体
     agents = []
     all_models = {c.name: c for c in components}
 
@@ -79,12 +79,12 @@ def main():
     updater_conf = agents_config['model_updater']['parameters']
     agents.append(ModelUpdaterAgent('model_updater', bus, f"identified_parameters/{updater_conf['target_model_name']}", all_models))
 
-    # --- 3. Store Initial Parameters for Comparison ---
+    # --- 3. 存储初始参数用于最终对比 ---
     true_n = true_pipe.get_parameters()['manning_n']
     initial_twin_n = twin_pipe.get_parameters()['manning_n']
 
-    # --- 4. Initialize and Run Simulation Harness ---
-    print("\nInitializing simulation harness...")
+    # --- 4. 初始化并运行仿真平台 ---
+    print("\n正在初始化仿真平台...")
     harness = SimulationHarness(config=config['simulation'])
     harness.message_bus = bus
 
@@ -97,20 +97,20 @@ def main():
 
     harness.build()
 
-    print("Running MAS simulation...")
+    print("开始多智能体仿真...")
     harness.run_mas_simulation()
-    print("Simulation finished.")
+    print("仿真结束。")
 
-    # --- 5. Get Final Parameters and Show Results ---
+    # --- 5. 获取最终参数并展示结果 ---
     final_twin_n = twin_pipe.get_parameters()['manning_n']
 
-    print("\nIdentification process complete. Comparing results...")
+    print("\n辨识过程完成，正在对比结果...")
     print("-" * 50)
-    print("Pipe Roughness (Manning's n) Identification")
+    print("管道糙率 (曼宁 n) 辨识结果")
     print("-" * 50)
-    print(f"True Value:      {true_n:.6f}")
-    print(f"Initial Guess:   {initial_twin_n:.6f}")
-    print(f"Final Identified:{final_twin_n:.6f}")
+    print(f"真实值:      {true_n:.6f}")
+    print(f"初始猜测值:   {initial_twin_n:.6f}")
+    print(f"最终辨识值:  {final_twin_n:.6f}")
     print("-" * 50)
 
 if __name__ == "__main__":
