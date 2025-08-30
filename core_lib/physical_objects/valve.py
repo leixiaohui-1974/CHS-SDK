@@ -2,11 +2,12 @@
 Simulation model for a Valve.
 """
 import math
-from core_lib.core.interfaces import PhysicalObjectInterface, State, Parameters
+import numpy as np
+from core_lib.core.interfaces import PhysicalObjectInterface, State, Parameters, Identifiable
 from core_lib.central_coordination.collaboration.message_bus import MessageBus, Message
 from typing import Dict, Any, Optional
 
-class Valve(PhysicalObjectInterface):
+class Valve(PhysicalObjectInterface, Identifiable):
     """
     Represents a controllable valve in a water system.
     """
@@ -15,6 +16,8 @@ class Valve(PhysicalObjectInterface):
                  message_bus: Optional[MessageBus] = None, action_topic: Optional[str] = None):
         super().__init__(name, initial_state, parameters)
         self._state.setdefault('outflow', 0)
+        self._params.setdefault('discharge_coefficient', 0.6)
+        self._params.setdefault('diameter', 0.5)
         self.bus = message_bus
         self.action_topic = action_topic
         self.target_opening = self._state.get('opening', 100.0)
@@ -29,12 +32,14 @@ class Valve(PhysicalObjectInterface):
         """
         Calculates the flow through the valve using a modified orifice equation.
         """
-        C_d_max = self._params.get('discharge_coefficient', 0.8)
-        diameter = self._params.get('diameter', 0.5)
+        C_d = self._params['discharge_coefficient']
+        diameter = self._params['diameter']
         g = 9.81
 
         opening_percent = self._state.get('opening', 0)
-        effective_C_d = C_d_max * (opening_percent / 100.0)
+        # The discharge coefficient is now the parameter to be identified.
+        # It's scaled by the opening.
+        effective_C_d = C_d * (opening_percent / 100.0)
 
         area = math.pi * (diameter / 2)**2
         head_diff = upstream_level - downstream_level
@@ -44,6 +49,60 @@ class Valve(PhysicalObjectInterface):
 
         flow = effective_C_d * area * (2 * g * head_diff)**0.5
         return flow
+
+    def identify_parameters(self, data: Dict[str, np.ndarray]):
+        """
+        Identifies the `discharge_coefficient` parameter.
+
+        Args:
+            data: A dictionary containing historical data, expecting:
+                  - 'openings': Valve opening percentages.
+                  - 'upstream_levels': Upstream water levels.
+                  - 'downstream_levels': Downstream water levels.
+                  - 'observed_flows': Corresponding observed valve flows.
+        """
+        print(f"[{self.name}] Starting parameter identification for 'discharge_coefficient'.")
+        # Extract data from the dictionary
+        openings = data.get('openings')
+        up_levels = data.get('upstream_levels')
+        down_levels = data.get('downstream_levels')
+        obs_flows = data.get('observed_flows')
+
+        if any(d is None for d in [openings, up_levels, down_levels, obs_flows]):
+            print(f"[{self.name}] ERROR: Missing data for identification.")
+            return
+
+        # Valve equation: flow = C_d * (opening/100) * A * sqrt(2*g*H)
+        # So, C_d = flow / [(opening/100) * A * sqrt(2*g*H)]
+        # We can calculate an estimated C_d for each data point and average them.
+
+        g = 9.81
+        area = math.pi * (self._params['diameter'] / 2)**2
+
+        # Vectorized calculation to find C_d for each time step
+        head_diff = up_levels - down_levels
+        # Avoid division by zero or sqrt of negative
+        valid_indices = (head_diff > 0) & (openings > 0)
+
+        if not np.any(valid_indices):
+            print(f"[{self.name}] No valid data points for identification (head difference and opening must be positive).")
+            return
+
+        denominator = (openings[valid_indices] / 100.0) * area * np.sqrt(2 * g * head_diff[valid_indices])
+
+        # Avoid division by zero in the denominator
+        valid_denominator = denominator > 1e-6
+
+        estimated_coeffs = obs_flows[valid_indices][valid_denominator] / denominator[valid_denominator]
+
+        # A simple approach is to take the mean of all calculated coefficients
+        if len(estimated_coeffs) > 0:
+            new_coeff = np.mean(estimated_coeffs)
+            self._params['discharge_coefficient'] = new_coeff
+            print(f"[{self.name}] Identification complete. New discharge_coefficient: {new_coeff:.4f}")
+        else:
+            print(f"[{self.name}] Identification skipped, no valid data points resulted in a valid coefficient.")
+
 
     def handle_action_message(self, message: Message):
         """Callback to handle incoming action messages from the bus."""
