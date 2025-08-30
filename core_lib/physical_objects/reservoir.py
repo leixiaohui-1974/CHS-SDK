@@ -16,8 +16,9 @@ class Reservoir(PhysicalObjectInterface):
     """
 
     def __init__(self, name: str, initial_state: State, parameters: Parameters,
-                 message_bus: Optional[MessageBus] = None, inflow_topic: Optional[str] = None):
+                 message_bus: Optional[MessageBus] = None, **kwargs):
         super().__init__(name, initial_state, parameters)
+
         self._state.setdefault('outflow', 0) # 确保状态中有outflow键
 
         if 'storage_curve' not in self._params:
@@ -29,6 +30,14 @@ class Reservoir(PhysicalObjectInterface):
         # 为了灵活性，从构造函数参数或parameters字典中获取入流主题
         self.inflow_topic = inflow_topic or self._params.get('inflow_topic')
         self.data_inflow = 0.0
+        # For new flexible topic subscriptions
+        self.topic_inflows = {}
+        self.topic_outflows = {}
+
+        if self.bus:
+            # New flexible way to subscribe from lists in parameters
+            self._subscribe_from_config('inflow_topics', self.topic_inflows)
+            self._subscribe_from_config('outflow_topics', self.topic_outflows)
 
         if self.bus and self.inflow_topic:
             self.bus.subscribe(self.inflow_topic, self.handle_inflow_message)
@@ -64,6 +73,32 @@ class Reservoir(PhysicalObjectInterface):
         if 'storage_curve' in parameters:
             self._validate_and_prepare_storage_curve()
 
+
+    def _subscribe_from_config(self, config_key: str, storage: Dict[str, float]):
+        """Reads topic configurations from parameters and subscribes handlers."""
+        topic_configs = self._params.get(config_key, [])
+        if not isinstance(topic_configs, list):
+            print(f"Warning: Reservoir '{self.name}' expects '{config_key}' to be a list.")
+            return
+
+        for config in topic_configs:
+            topic = config.get('topic')
+            key = config.get('key', 'value')
+            if not topic:
+                continue
+
+            storage[topic] = 0.0
+            # Use a closure to capture topic-specific variables correctly for the handler
+            def create_handler(topic_name, msg_key, storage_dict):
+                def handler(message: Message):
+                    value = message.get(msg_key, 0.0)
+                    if isinstance(value, (int, float)):
+                        storage_dict[topic_name] = value
+                return handler
+
+            self.bus.subscribe(topic, create_handler(topic, key, storage))
+            print(f"Reservoir '{self.name}' subscribed to {config_key.replace('_', ' ')} '{topic}' with key '{key}'.")
+
     def handle_inflow_message(self, message: Message):
         """处理数据驱动入流消息的回调函数。"""
         inflow_value = message.get('control_signal') or message.get('inflow_rate')
@@ -72,22 +107,35 @@ class Reservoir(PhysicalObjectInterface):
 
     def step(self, action: Dict[str, Any], dt: float) -> State:
         """模拟水库在单个时间步内的状态变化。"""
+
         physical_inflow = self._inflow
-        total_inflow = physical_inflow + self.data_inflow
-        outflow = action.get('outflow', 0)
+        legacy_data_inflow = self.data_inflow
+        topic_based_inflow = sum(self.topic_inflows.values())
+        total_inflow = physical_inflow + legacy_data_inflow + topic_based_inflow
 
+        # Sum outflows from all sources
+        action_outflow = action.get('outflow', 0)
+        topic_based_outflow = sum(self.topic_outflows.values())
+        total_outflow = action_outflow + topic_based_outflow
+
+        # Calculate water balance
         current_volume = self._state.get('volume', 0)
-
-        delta_volume = (total_inflow - outflow) * dt
+        delta_volume = (total_inflow - total_outflow) * dt
         new_volume = max(0, current_volume + delta_volume)
 
+        # Update state
         self._state['volume'] = new_volume
         self._state['water_level'] = self._get_level_from_volume(new_volume)
+
         self._state['outflow'] = outflow
         self._state['inflow'] = total_inflow # 将总入流添加到状态中，供感知智能体使用
 
         # 为下一个时间步重置数据驱动的入流
         self.data_inflow = 0.0
+        for topic in self.topic_inflows:
+            self.topic_inflows[topic] = 0.0
+        for topic in self.topic_outflows:
+            self.topic_outflows[topic] = 0.0
 
         return self._state
 

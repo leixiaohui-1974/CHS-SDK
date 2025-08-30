@@ -18,7 +18,7 @@ agents:
   # Agent 2: Publishes a constant value of 0 for the downstream water level.
   # This is required by the Valve's identification method.
   - id: downstream_level_publisher
-    class: examples.watertank_refactored.02_parameter_identification.agents.ConstantValueAgent
+    class: core_lib.local_agents.utility.ConstantValueAgent
     config:
       topic: downstream_level_topic
       value: 0.0

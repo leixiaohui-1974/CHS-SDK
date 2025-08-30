@@ -69,45 +69,43 @@ class SimulationLoader:
         return self.harness
 
     def _get_class(self, class_path: str):
-        """Dynamically imports and returns a class object from a string path."""
+        """
+        Dynamically imports and returns a class object from a string path.
+        It first checks a map of short names and then falls back to importing
+        the path directly.
+        """
+        CLASS_MAP = {
+            # Physical Components
+            "Reservoir": "core_lib.physical_objects.reservoir.Reservoir",
+            "Gate": "core_lib.physical_objects.gate.Gate",
+            "Canal": "core_lib.physical_objects.canal.Canal",
+            "IntegralDelayCanal": "core_lib.physical_objects.integral_delay_canal.IntegralDelayCanal",
+            "Pipe": "core_lib.physical_objects.pipe.Pipe",
+            "Valve": "core_lib.physical_objects.valve.Valve",
+
+            # Controllers
+            "PIDController": "core_lib.local_agents.control.pid_controller.PIDController",
+
+            # Agents
+            "LocalControlAgent": "core_lib.local_agents.control.local_control_agent.LocalControlAgent",
+            "DigitalTwinAgent": "core_lib.local_agents.perception.digital_twin_agent.DigitalTwinAgent",
+            "EmergencyAgent": "core_lib.local_agents.supervisory.emergency_agent.EmergencyAgent",
+            "CentralDispatcherAgent": "core_lib.local_agents.supervisory.central_dispatcher_agent.CentralDispatcherAgent",
+            "CsvInflowAgent": "core_lib.data_access.csv_inflow_agent.CsvInflowAgent",
+            "ParameterIdentificationAgent": "core_lib.identification.identification_agent.ParameterIdentificationAgent",
+            "ModelUpdaterAgent": "core_lib.identification.model_updater_agent.ModelUpdaterAgent",
+            "ConstantValueAgent": "core_lib.local_agents.utility.constant_value_agent.ConstantValueAgent",
+        }
+
+        full_class_path = CLASS_MAP.get(class_path, class_path)
+
         try:
-            # We need to map the short class names from YAML (e.g., "Reservoir")
-            # to their full Python paths (e.g., "core_lib.physical_objects.reservoir.Reservoir").
-            # This is a hardcoded but clear mapping. A more complex system could use reflection.
-
-            # This mapping translates short names from YAML to full Python class paths.
-            CLASS_MAP = {
-                # Physical Components
-                "Reservoir": "core_lib.physical_objects.reservoir.Reservoir",
-                "Gate": "core_lib.physical_objects.gate.Gate",
-                "Canal": "core_lib.physical_objects.canal.Canal",
-                "IntegralDelayCanal": "core_lib.physical_objects.integral_delay_canal.IntegralDelayCanal",
-                "Pipe": "core_lib.physical_objects.pipe.Pipe",
-                "Valve": "core_lib.physical_objects.valve.Valve",
-
-                # Controllers
-                "PIDController": "core_lib.local_agents.control.pid_controller.PIDController",
-
-                # Agents
-                "LocalControlAgent": "core_lib.local_agents.control.local_control_agent.LocalControlAgent",
-                "DigitalTwinAgent": "core_lib.local_agents.perception.digital_twin_agent.DigitalTwinAgent",
-                "EmergencyAgent": "core_lib.local_agents.supervisory.emergency_agent.EmergencyAgent",
-                "CentralDispatcherAgent": "core_lib.local_agents.supervisory.central_dispatcher_agent.CentralDispatcherAgent",
-                "CsvInflowAgent": "core_lib.data_access.csv_inflow_agent.CsvInflowAgent",
-                "ParameterIdentificationAgent": "core_lib.identification.identification_agent.ParameterIdentificationAgent",
-                "ModelUpdaterAgent": "core_lib.identification.model_updater_agent.ModelUpdaterAgent",
-            }
-
-            if class_path not in CLASS_MAP:
-                raise ImportError(f"Class '{class_path}' not found in CLASS_MAP.")
-
-            full_class_path = CLASS_MAP[class_path]
             module_name, class_name = full_class_path.rsplit('.', 1)
             module = importlib.import_module(module_name)
             return getattr(module, class_name)
-        except (ImportError, AttributeError) as e:
-            logging.error(f"Could not find or import class '{class_path}': {e}")
-            raise
+        except (ImportError, AttributeError, ValueError) as e:
+            logging.error(f"Could not find or import class '{class_path}' from path '{full_class_path}': {e}")
+            raise ImportError(f"Could not find or import class '{class_path}'") from e
 
     def _setup_infrastructure(self):
         """Initializes the message bus and simulation harness."""
@@ -120,27 +118,14 @@ class SimulationLoader:
         """Loads and instantiates all physical components."""
         logging.info("Loading physical components...")
         for comp_conf in self.components_config.get('components', []):
-            comp_id = comp_conf['id']
-            comp_class_name = comp_conf['class']
+            comp_id = comp_conf.pop('id')
+            comp_class_name = comp_conf.pop('class')
 
             logging.info(f"  - Creating component '{comp_id}' of class '{comp_class_name}'")
-
             CompClass = self._get_class(comp_class_name)
 
-            # Prepare constructor arguments
-            args = {
-                'name': comp_id,
-                'initial_state': comp_conf.get('initial_state', {}),
-                'parameters': comp_conf.get('parameters', {})
-            }
-
-            # Some components might need the message bus at init time
-            if 'Reservoir' in comp_class_name:
-                 args['message_bus'] = self.message_bus
-                 # If an inflow_topic is specified in the component's config, pass it.
-                 if 'inflow_topic' in comp_conf:
-                     args['inflow_topic'] = comp_conf['inflow_topic']
-
+            # Pass all remaining yaml keys as kwargs to the constructor
+            args = { 'name': comp_id, 'message_bus': self.message_bus, **comp_conf }
             instance = CompClass(**args)
 
             self.harness.add_component(instance)
@@ -162,68 +147,48 @@ class SimulationLoader:
         """Loads and instantiates all agents and controllers."""
         logging.info("Loading agents and controllers...")
 
-        # Load controllers
-        for ctrl_conf in self.agents_config.get('controllers', []):
-            ctrl_id = ctrl_conf['id']
-            ctrl_class_name = ctrl_conf['class']
-            logging.info(f"  - Creating controller '{ctrl_id}' of class '{ctrl_class_name}'")
-
-            CtrlClass = self._get_class(ctrl_class_name)
-            instance = CtrlClass(**ctrl_conf.get('config', {}))
-
-            self.harness.add_controller(
-                controller_id=ctrl_id,
-                controller=instance,
-                controlled_id=ctrl_conf['controlled_id'],
-                observed_id=ctrl_conf['observed_id'],
-                observation_key=ctrl_conf['observation_key']
-            )
-
-        # Load agents
         for agent_conf in self.agents_config.get('agents', []):
-            agent_id = agent_conf['id']
-            agent_class_name = agent_conf['class']
-            config = agent_conf.get('config', {})
-            logging.info(f"  - Creating agent '{agent_id}' of class '{agent_class_name}'")
+            agent_id = agent_conf.pop('id')
+            agent_class_name = agent_conf.pop('class')
 
+            logging.info(f"  - Creating agent '{agent_id}' of class '{agent_class_name}'")
             AgentClass = self._get_class(agent_class_name)
 
-            # Prepare constructor arguments dynamically based on agent type
-            args = {'agent_id': agent_id, 'message_bus': self.message_bus}
+            # Unpack the 'config' block if it exists
+            if 'config' in agent_conf:
+                config_block = agent_conf.pop('config')
+                agent_conf.update(config_block)
 
-            if agent_class_name == 'LocalControlAgent':
-                controller_conf = config.pop('controller')
-                CtrlClass = self._get_class(controller_conf['class'])
-                controller = CtrlClass(**controller_conf['config'])
-                args.update(config)
-                args['controller'] = controller
+            # --- Handle all special argument adaptations before calling the constructor ---
+            if 'simulated_object_id' in agent_conf:
+                sim_obj_id = agent_conf.pop('simulated_object_id')
+                agent_conf['simulated_object'] = self.component_instances[sim_obj_id]
 
-            elif agent_class_name == 'DigitalTwinAgent':
-                sim_obj_id = config['simulated_object_id']
-                args['simulated_object'] = self.component_instances[sim_obj_id]
-                args['state_topic'] = config['state_topic']
+            if 'target_component_id' in agent_conf:
+                target_comp_id = agent_conf.pop('target_component_id')
+                agent_conf['target_component'] = self.component_instances[target_comp_id]
 
-            elif agent_class_name == 'EmergencyAgent':
-                args['subscribed_topics'] = config['subscribed_topics']
-                args['pressure_threshold'] = config['pressure_threshold']
-                args['action_topic'] = config['action_topic']
+            if agent_class_name == 'core_lib.data_access.csv_inflow_agent.CsvInflowAgent':
+                if 'csv_file' in agent_conf:
+                    agent_conf['csv_file_path'] = str(self.scenario_path / agent_conf.pop('csv_file'))
+                if 'value_column' in agent_conf:
+                    agent_conf['data_column'] = agent_conf.pop('value_column')
+                if 'output_topic' in agent_conf:
+                    agent_conf['inflow_topic'] = agent_conf.pop('output_topic')
+                agent_conf.pop('data_id', None)
 
-            elif agent_class_name == 'CentralDispatcherAgent':
-                args['subscribed_topic'] = config['subscribed_topic']
-                args['observation_key'] = config['observation_key']
-                args['command_topic'] = config['command_topic']
-                args['dispatcher_params'] = config['dispatcher_params']
-
-            elif agent_class_name == 'CsvInflowAgent':
-                target_comp_id = config['target_component_id']
-                args['target_component'] = self.component_instances[target_comp_id]
-                # Resolve path relative to scenario directory
-                csv_path = self.scenario_path / config['csv_file']
-                args['csv_file_path'] = str(csv_path)
-                args['time_column'] = config['time_column']
-                args['data_column'] = config['data_column']
-
-            instance = AgentClass(**args)
+            # Special handling for ParameterIdentificationAgent constructor
+            if agent_class_name == 'core_lib.identification.identification_agent.ParameterIdentificationAgent':
+                target_model_id = agent_conf.pop('target_model_id')
+                target_model_instance = self.component_instances[target_model_id]
+                instance = AgentClass(
+                    agent_id=agent_id,
+                    message_bus=self.message_bus,
+                    target_model=target_model_instance,
+                    config=agent_conf
+                )
+            else:
+                instance = AgentClass(agent_id=agent_id, message_bus=self.message_bus, **agent_conf)
             self.harness.add_agent(instance)
 
         logging.info("Agents and controllers loaded.")

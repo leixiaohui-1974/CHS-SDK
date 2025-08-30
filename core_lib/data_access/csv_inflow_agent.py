@@ -17,33 +17,35 @@ class CsvInflowAgent(Agent):
     def __init__(self,
                  agent_id: str,
                  message_bus: MessageBus,
-                 target_component: Simulatable,
                  csv_file_path: str,
                  time_column: str,
                  data_column: str,
-                 inflow_topic: Optional[str] = None):
+                 inflow_topic: Optional[str] = None,
+                 target_component: Optional[Simulatable] = None,
+                 **kwargs):
         """
         Initializes the CsvInflowAgent.
 
         Args:
             agent_id: The unique ID for the agent.
             message_bus: The system's message bus.
-            target_component: The simulation component to which the inflow is conceptually applied.
-                              The agent will publish to this component's specific inflow topic.
             csv_file_path: The path to the CSV file.
             time_column: The name of the column in the CSV file that contains the time data.
             data_column: The name of the column that contains the inflow data.
-            inflow_topic: The specific topic to publish inflow data on. If None, a default
-                          is constructed e.g., 'inflow/{component_name}'.
+            inflow_topic: The specific topic to publish inflow data on. If None, target_component
+                          must be provided to construct a default topic.
+            target_component: Optional simulation component to which the inflow is conceptually applied.
         """
         super().__init__(agent_id)
         self.bus = message_bus
-        self.target_component_name = target_component.name
+
+        if not inflow_topic and not target_component:
+            raise ValueError(f"[{agent_id}] CsvInflowAgent requires either 'inflow_topic' or 'target_component'.")
 
         if inflow_topic:
             self.inflow_topic = inflow_topic
         else:
-            self.inflow_topic = f"inflow/{self.target_component_name}"
+            self.inflow_topic = f"inflow/{target_component.name}"
 
         try:
             self.data = pd.read_csv(csv_file_path)

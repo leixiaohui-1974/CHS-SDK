@@ -18,7 +18,8 @@ class DigitalTwinAgent(Agent):
                  simulated_object: Simulatable,
                  message_bus: MessageBus,
                  state_topic: str,
-                 smoothing_config: Optional[Dict[str, float]] = None):
+                 smoothing_config: Optional[Dict[str, float]] = None,
+                 **kwargs):
         """
         初始化 DigitalTwinAgent。
 

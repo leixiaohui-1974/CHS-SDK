@@ -1,15 +1,18 @@
 # This file defines the physical components for the actuator disturbance scenario.
-# It uses a custom Reservoir subclass that is aware of a disturbance topic.
+# It uses the standard Reservoir class, configured to subscribe to a disturbance topic.
 components:
   - id: reservoir_1
-    # This custom class will be defined in the local agents.py file
-    class: examples.watertank_refactored.07_actuator_disturbance.agents.DisturbanceAwareReservoir
-    # The NoisyPhysicalIOAgent will set the data_inflow attribute directly.
-    # The custom reservoir class will subscribe to the disturbance topic.
-    disturbance_outflow_topic: disturbance_outflow_topic
-    # Parameters for the reservoir
+    class: core_lib.physical_objects.reservoir.Reservoir
     name: "noisy_actuator_tank"
     initial_state:
       water_level: 5.0
     parameters:
       surface_area: 2.0
+      # A simple linear storage curve to match the original agent's logic
+      storage_curve:
+        - [0, 0]
+        - [20, 10] # volume = level * surface_area (10 * 2.0)
+      # The enhanced Reservoir can subscribe to outflow topics
+      outflow_topics:
+        - topic: disturbance_outflow_topic
+          key: value
