@@ -1,64 +1,82 @@
-# Agents for the MPC+PID Control Example
+# Agents for the MIMO MPC+PID Control Example
 agents:
-  # --- Control Agents ---
+  # --- Central MIMO MPC Agent ---
   - id: central_mpc_agent
     class: LocalControlAgent
     controller:
       class: core_lib.local_agents.control.mpc_controller.MPCController
-      # The buggy loader will ignore these top-level keys
-      horizon: 10
-      dt: 10
-      # It will only look at this config block
       config:
         horizon: 10
         dt: 10
-        target_level: 5.0
-        q_weight: 1.0
-        r_weight: 0.5
-        bounds: [4.5, 5.5]
-        id_model_gain: 0.001
-        id_model_delay_steps: 30
+        model_config:
+          canal_area: 20000
+        objective_config:
+          target_level: 5.0
+          q_weight: 1.0
+          r_weight: 0.01
+        control_config:
+          num_actuators: 2
+          bounds:
+            - [0, 60]
+            - [0, 60]
+          action_topics:
+            - gate_1_flow_setpoint
+            - gate_2_flow_setpoint
     observation_topic: canal_1_state
     observation_key: water_level
-    action_topic: gate_1_pid_setpoint
+    action_topic: mpc_actions
 
-  - id: gate_1_pid_agent
+  # --- Local Flow-Control PID Agents ---
+  - id: gate_1_flow_pid_agent
     class: LocalControlAgent
     controller:
       class: PIDController
       config:
-        Kp: 0.5
-        Ki: 0.05
-        Kd: 0.1
-        setpoint: 5.0
+        Kp: 0.1
+        Ki: 0.02
+        Kd: 0.01
+        setpoint: 50.0
         min_output: 0.1
         max_output: 1.0
-    observation_topic: canal_1_state
-    observation_key: water_level
-    command_topic: gate_1_pid_setpoint
+    observation_topic: gate_1_state
+    observation_key: outflow
+    command_topic: gate_1_flow_setpoint
     action_topic: gate_1_control
 
-  - id: gate_2_pid_agent
+  - id: gate_2_flow_pid_agent
     class: LocalControlAgent
     controller:
       class: PIDController
       config:
-        Kp: 0.6
-        Ki: 0.07
-        Kd: 0.1
-        setpoint: 4.8
+        Kp: 0.1
+        Ki: 0.02
+        Kd: 0.01
+        setpoint: 45.0
         min_output: 0.1
         max_output: 1.0
-    observation_topic: canal_1_state
-    observation_key: water_level
+    observation_topic: gate_2_state
+    observation_key: outflow
+    command_topic: gate_2_flow_setpoint
     action_topic: gate_2_control
 
-  # --- Perception Agent ---
+  # --- Perception Agents ---
   - id: canal_1_perception_agent
     class: DigitalTwinAgent
     config:
       simulated_object_id: canal_1
       state_topic: canal_1_state
+
+  - id: gate_1_perception_agent
+    class: DigitalTwinAgent
+    config:
+      simulated_object_id: gate_1
+      state_topic: gate_1_state
+
+  - id: gate_2_perception_agent
+    class: DigitalTwinAgent
+    config:
+      simulated_object_id: gate_2
+      state_topic: gate_2_state
 
   # --- Scenario and Disturbance Agent ---
   - id: disturbance_scenario_agent
