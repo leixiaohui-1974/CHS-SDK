@@ -1,0 +1,60 @@
+# Physical Components for the MPC+PID Control Example
+components:
+  - id: upstream_reservoir
+    class: Reservoir
+    initial_state:
+      water_level: 10.0
+    parameters:
+      area: 10000.0
+      inflow: 50.0
+    action_topic: reservoir_inflow_control
+    action_key: inflow
+
+  - id: diversion_before_gate1
+    class: core_lib.physical_objects.disturbance_node.DisturbanceNode
+    initial_state:
+      outflow: 0.0
+    parameters: {}
+    action_topic: diversion_1_control
+
+  - id: gate_1
+    class: Gate
+    initial_state:
+      opening: 0.5
+    parameters:
+      width: 5.0
+      discharge_coefficient: 0.8
+    action_topic: gate_1_control
+
+  - id: canal_1
+    class: UnifiedCanal
+    initial_state:
+      water_level: 5.0
+    parameters:
+      model_type: 'integral_delay'
+      gain: 0.001
+      delay: 300
+    action_topic: canal_1_state # For perception
+
+  - id: diversion_before_gate2
+    class: core_lib.physical_objects.disturbance_node.DisturbanceNode
+    initial_state:
+      outflow: 0.0
+    parameters: {}
+    action_topic: diversion_2_control
+
+  - id: gate_2
+    class: Gate
+    initial_state:
+      opening: 0.5
+    parameters:
+      width: 5.0
+      discharge_coefficient: 0.8
+    action_topic: gate_2_control
+
+  - id: tail_user
+    class: core_lib.physical_objects.disturbance_node.DisturbanceNode
+    initial_state:
+      outflow: 45.0
+    parameters: {}
+    action_topic: tail_user_control

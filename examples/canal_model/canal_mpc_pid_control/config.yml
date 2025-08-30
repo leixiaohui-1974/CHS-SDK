@@ -1,0 +1,4 @@
+# Simulation Configuration for the MPC+PID Control Example
+simulation:
+  duration: 7200 # 2 hours
+  dt: 10 # seconds

@@ -1,0 +1,14 @@
+# Topology for the MPC+PID Control Example with Disturbances
+connections:
+  - upstream: upstream_reservoir
+    downstream: diversion_before_gate1
+  - upstream: diversion_before_gate1
+    downstream: gate_1
+  - upstream: gate_1
+    downstream: canal_1
+  - upstream: canal_1
+    downstream: diversion_before_gate2
+  - upstream: diversion_before_gate2
+    downstream: gate_2
+  - upstream: gate_2
+    downstream: tail_user
