@@ -35,6 +35,25 @@ class SimulationLoader:
 
         logging.info(f"SimulationLoader initialized for scenario: {self.scenario_path.name}")
 
+    def _instantiate_object(self, config: dict) -> object:
+        """
+        Instantiates an object from a configuration dictionary that has a 'class' key.
+        """
+        class_name = config['class']
+        ObjectClass = self._get_class(class_name)
+
+        object_config = config.get('config', {})
+
+        import inspect
+        final_args = object_config.copy()
+        sig = inspect.signature(ObjectClass.__init__)
+
+        # Inject dependencies like message_bus if the constructor needs them
+        if 'message_bus' in sig.parameters:
+            final_args['message_bus'] = self.message_bus
+
+        return ObjectClass(**final_args)
+
     def _load_yaml(self, file_name: str):
         """Loads a single YAML file from the scenario directory."""
         file_path = self.scenario_path / file_name
@@ -185,6 +204,12 @@ class SimulationLoader:
                     agent_conf['inflow_topic'] = agent_conf.pop('output_topic')
                 agent_conf.pop('data_id', None)
 
+            # Recursively instantiate any nested components (like controllers)
+            for key, value in agent_conf.items():
+                if isinstance(value, dict) and 'class' in value:
+                    logging.info(f"    - Found nested object '{key}' of class '{value['class']}'")
+                    agent_conf[key] = self._instantiate_object(value)
+
             # Special handling for ParameterIdentificationAgent constructor
             if agent_class_name == 'ParameterIdentificationAgent':
                 target_model_id = agent_conf.pop('target_model_id')
@@ -196,7 +221,17 @@ class SimulationLoader:
                     config=agent_conf
                 )
             else:
-                instance = AgentClass(agent_id=agent_id, message_bus=self.message_bus, **agent_conf)
+                # --- Generic constructor call with argument adaptation ---
+                final_args = {'agent_id': agent_id, 'message_bus': self.message_bus, **agent_conf}
+
+                # Inject 'dt' from global sim config if the agent constructor accepts it
+                import inspect
+                sig = inspect.signature(AgentClass.__init__)
+                if 'dt' in sig.parameters and 'dt' not in final_args:
+                    if self.harness.config and 'dt' in self.harness.config:
+                        final_args['dt'] = self.harness.config['dt']
+
+                instance = AgentClass(**final_args)
             self.harness.add_agent(instance)
 
         for ctrl_conf in self.agents_config.get('controllers', []):

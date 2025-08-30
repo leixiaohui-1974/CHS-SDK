@@ -92,18 +92,29 @@ class LocalControlAgent(Agent):
 
     def publish_action(self, control_signal: any):
         """
-        Publishes the control action to the message bus.
-        If the action_topic is a list, it publishes the dict to all topics.
-        If the action_topic is a string, it wraps the signal in the legacy format.
+        Publishes the control action(s) to the message bus.
+
+        This method supports two modes of operation:
+        1. Single Action Mode: If the controller returns a single value, this method
+           publishes it to the `action_topic` defined in the agent's constructor.
+           The message is a dictionary: {'control_signal': value}.
+
+        2. Multi-Action Mode: If the controller returns a dictionary, this method
+           treats each key-value pair as `topic: signal`. It iterates through the
+           dictionary and publishes each signal to its corresponding topic. This is
+           useful for controllers that manage multiple actuators.
         """
-        if isinstance(self.action_topic, list):
-            # The controller returned a dictionary of actions for multiple topics
-            for topic in self.action_topic:
-                self.bus.publish(topic, control_signal)
+        if isinstance(control_signal, dict):
+            # Multi-Action Mode: Controller provided a dictionary of topic -> signal
+            for topic, signal_value in control_signal.items():
+                if topic is not None and signal_value is not None:
+                    action_message: Message = {'control_signal': signal_value, 'agent_id': self.agent_id}
+                    self.bus.publish(topic, action_message)
         else:
-            # Legacy support for single action topic
-            action_message: Message = {'control_signal': control_signal, 'agent_id': self.agent_id}
-            self.bus.publish(self.action_topic, action_message)
+            # Single Action Mode: Publish a single control signal to the pre-configured topic
+            if self.action_topic is not None:
+                action_message: Message = {'control_signal': control_signal, 'agent_id': self.agent_id}
+                self.bus.publish(self.action_topic, action_message)
 
     def run(self, current_time: float):
         """

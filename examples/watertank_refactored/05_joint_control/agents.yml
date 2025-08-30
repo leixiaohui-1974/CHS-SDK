@@ -7,35 +7,35 @@ agents:
   - id: disturbance_outflow_agent
     class: core_lib.data_access.csv_inflow_agent.CsvInflowAgent
     config:
-      csv_file: disturbance.csv
-      time_column: time
-      value_column: outflow_rate
-      output_topic: disturbance_outflow_topic
-      data_id: disturbance_1
+      csv_file_path: "examples/watertank_refactored/05_joint_control/disturbance.csv"
+      time_column: "time"
+      data_column: "outflow_rate"
+      inflow_topic: "disturbance_outflow_topic"
 
-  # Agent 2: The Coordinator. This is a wrapper around the original custom agent.
-  # It contains the core PID logic and decides the target inflow and outflow.
+  # Agent 2: The Coordinator. A generic LocalControlAgent using a custom JointPIDController.
+  # The controller has the PID logic and splits the output for the pump and valve.
   - id: coordinator_agent
-    class: examples.watertank_refactored.05_joint_control.agents.BusAwareCoordinatorAgent
+    class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
     config:
-      # This nested config is passed directly to the original JointControlCoordinatorAgent
-      coordinator_config:
-        pid_params:
-          setpoint: 10.0
-          Kp: 1.8
-          Ki: 0.15
-          Kd: 0.05
-          min_output: -10.0
-          max_output: 10.0
-        actuator_limits:
-          max_inflow: 8.0
-          max_outflow: 8.0
-        # These are the topics the *internal* coordinator logic uses.
-        # It subscribes to state_topic and publishes to the command topics.
-        messaging_params:
-          state_topic: water_level_topic # The coordinator listens to this
-          pump_command_topic: pump_command_topic # The coordinator publishes to this
-          valve_command_topic: valve_command_topic # And to this
+      observation_topic: water_level_topic
+      observation_key: 'water_level' # The key in the state dict published by the DigitalTwinAgent
+      action_topic: null # Not needed, as the controller specifies output topics
+      controller:
+        class: core_lib.local_agents.control.custom_controllers.JointPIDController
+        config:
+          pid_params:
+            setpoint: 10.0
+            Kp: 1.8
+            Ki: 0.15
+            Kd: 0.05
+            min_output: -10.0
+            max_output: 10.0
+          actuator_limits:
+            max_inflow: 8.0
+            max_outflow: 8.0
+          messaging_params:
+            pump_command_topic: pump_command_topic
+            valve_command_topic: valve_command_topic
 
   # Agent 3: Publishes the state of the Reservoir component.
   # This makes the water level available on a topic for the coordinator to read.
