@@ -1,0 +1,5 @@
+# Simulation Configuration
+simulation:
+  start_time: 0
+  end_time: 3600 # 1 hour
+  time_step: 10 # seconds

@@ -1,0 +1,8 @@
+# Topology Definition for the Canal Model Comparison Example
+connections:
+  - upstream: upstream_reservoir
+    downstream: gate_1
+  - upstream: gate_1
+    downstream: canal
+  - upstream: canal
+    downstream: downstream_reservoir
