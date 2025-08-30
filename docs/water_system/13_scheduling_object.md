@@ -12,34 +12,37 @@
 
 *   **`id` (String):**
     *   **描述:** 优化调度任务的唯一标识符。
-    *   **示例:** `"sched_pump_station_A_24h"`
+    *   **示例:** `"sched_flood_control_main_river_24h"`
 
 *   **`name` (String):**
     *   **描述:** 调度任务的名称。
-    *   **示例:** `"A泵站未来24小时优化调度"`
+    *   **示例:** `"干流流域未来24小时防洪优化调度"`
 
 *   **`target_simulation_model` (Simulation):**
-    *   **描述:** 调度优化所基于的水力模型。优化器需要利用这个模型来推演不同控制方案（如开启某台水泵）对系统状态（如压力、流量）的影响。这个模型通常是经过校准的，以保证准确性。
+    *   **描述:** 调度优化所基于的通用化水力模型。优化器需要利用这个模型来推演不同控制方案对系统状态（如水位、流量）的影响。
 
 *   **`control_variables` (Array<ControlVariable>):**
-    *   **描述:** 定义了在优化过程中可以被控制的设备及其操作范围。
+    *   **描述:** 定义了在优化过程中可以被控制的设备及其操作范围。现在可以包含闸门、水电站等。
     *   **数据结构 (示例):**
         ```json
         [
           {
             "element_type": "pump",
-            "element_id": "pump_A1",
-            "control_type": "status" // 控制类型: status (启停), speed (转速)
+            "element_id": "pump_station_1",
+            "control_type": "flow_rate",
+            "max_value": 150
           },
           {
-            "element_type": "pump",
-            "element_id": "pump_A2",
-            "control_type": "status"
+            "element_type": "gate",
+            "element_id": "g1",
+            "control_type": "opening_height",
+            "max_value": 5.0
           },
           {
-            "element_type": "valve",
-            "element_id": "valve_V3",
-            "control_type": "setting" // 例如，减压阀的出口压力设定
+            "element_type": "hydropower_station",
+            "element_id": "hydro1",
+            "control_type": "turbine_flow",
+            "max_value": 1500
           }
         ]
         ```
@@ -58,21 +61,24 @@
         ```
 
 *   **`constraints` (Array<Constraint>):**
-    *   **描述:** 定义了在优化过程中必须满足的约束条件，以保证供水安全。
+    *   **描述:** 定义了在优化过程中必须满足的约束条件，以保证供水安全或满足调度目标。
     *   **数据结构 (示例):**
         ```json
         [
           {
-            "type": "node_pressure",
-            "node_id": "node_critical_1",
-            "min_pressure": 22.0,
-            "max_pressure": 45.0
+            "type": "node_water_level",
+            "node_id": "n_downstream_city",
+            "max_level": 55.0  // m, 保证下游城市断面水位不超过警戒水位
           },
           {
             "type": "reservoir_level",
-            "reservoir_id": "reservoir_R1",
-            "min_level": 3.0,
-            "end_of_period_target_level": 4.5 // 要求在调度周期结束时，水库水位不低于某个值
+            "node_id": "n_dam",
+            "min_level": 145.0, // m, 保证水库运行在死水位之上
+            "end_of_period_target_level": 150.0
+          },
+          {
+            "type": "total_power_generation",
+            "min_gwh": 200 // GWh, 水电站日发电量目标
           }
         ]
         ```
@@ -97,12 +103,14 @@
           "start_time": "2023-09-01T16:00:00Z",
           "time_steps": ["2023-09-01T16:00:00Z", "2023-09-01T17:00:00Z", ...],
           "control_plan": {
-            "pump_A1": { "status": [1, 1, 0, 0, ...] }, // 1=开, 0=关
-            "pump_A2": { "status": [0, 1, 1, 1, ...] },
-            "valve_V3": { "setting": [28.0, 28.0, 27.5, ...] }
+            "pump_station_1": { "flow_rate": [50.5, 60.0, ...] },
+            "g1": { "opening_height": [2.5, 2.8, 3.0, ...] },
+            "hydro1": { "turbine_flow": [800, 950, 1200, ...] }
           },
-          "expected_cost": 1250.75,
-          "expected_kpis": { "avg_pressure": 28.5 }
+          "expected_kpis": {
+            "max_downstream_level": 54.8,
+            "total_power_gwh": 210
+          }
         }
         ```
 

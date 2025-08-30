@@ -58,7 +58,7 @@ CREATE TABLE control_schedules (
     schedule_end_time TIMESTAMPTZ NOT NULL,
 
     -- 详细的控制计划，使用JSONB存储
-    -- 结构: {"pump_A1": {"status": [1,1,0,...]}, "valve_V3": {"setting": [28.0, 28.0, ...]}}
+    -- 结构: {"pump_station_1": {"flow_rate": [...]}, "g1": {"opening_height": [...]}, "hydro1": {"turbine_flow": [...]}}
     control_plan JSONB,
 
     -- 预期的成本和KPI
