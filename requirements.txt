@@ -3,3 +3,4 @@ matplotlib
 pyyaml
 numpy
 scipy
+scikit-learn

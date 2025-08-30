@@ -18,7 +18,8 @@ class ReservoirPerceptionAgent(DigitalTwinAgent):
                  agent_id: str,
                  reservoir_model: Reservoir,
                  message_bus: MessageBus,
-                 state_topic: str):
+                 state_topic: str,
+                 **kwargs):
         """
         Initializes the ReservoirPerceptionAgent.
 
@@ -27,10 +28,13 @@ class ReservoirPerceptionAgent(DigitalTwinAgent):
             reservoir_model: The Reservoir simulation model this agent is a twin of.
             message_bus: The system's message bus for communication.
             state_topic: The topic on which to publish the reservoir's state.
+            **kwargs: Additional keyword arguments to be passed to the DigitalTwinAgent base class,
+                      such as 'cognitive_config'.
         """
         super().__init__(agent_id=agent_id,
                          simulated_object=reservoir_model,
                          message_bus=message_bus,
-                         state_topic=state_topic)
+                         state_topic=state_topic,
+                         **kwargs)
 
         print(f"ReservoirPerceptionAgent '{self.agent_id}' created for Reservoir '{reservoir_model.name}'.")
