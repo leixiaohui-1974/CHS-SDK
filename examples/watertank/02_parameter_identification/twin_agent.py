@@ -1,48 +1,33 @@
 # -*- coding: utf-8 -*-
-import math
 import sys
 import os
+import math
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'base')))
-
 from base_agent import BaseAgent
 
 class TwinAgent(BaseAgent):
     """
-    水箱的孪生智能体，用于参数辨识。
-    它包含一个与水库智能体结构相同的模型，但其出口系数是可调的。
+    数字孪生智能体，用于辨识“真实”水库的出口系数。
     """
     def __init__(self, agent_id, config, identification_config):
-        """
-        初始化孪生模型。
-
-        :param agent_id: 智能体ID。
-        :param config: 包含 'twin_params' 的配置字典。
-        :param identification_config: 包含辨识算法参数的字典。
-        """
         super().__init__(agent_id, config)
         self.area = self.config['area']
         self.water_level = self.config['initial_level']
-        # 出口系数是可变的，从初始猜测值开始
+        # The parameter to be identified, with an initial guess
         self.outlet_coeff = self.config['initial_outlet_coeff']
         self.learning_rate = identification_config['learning_rate']
         self.outflow = 0
 
     def step(self, observation):
         """
-        孪生智能体执行一步，包括仿真和参数调整。
-
-        :param observation: 一个字典，应包含：
-                          'inflow': 进水流量 (m^3/s)
-                          'dt': 时间步长 (s)
-                          'real_water_level': 真实水库的水位 (m)
-        :return: None
+        运行一步仿真，并根据与真实世界的误差来更新参数。
         """
         inflow = observation['inflow']
         dt = observation['dt']
         real_water_level = observation['real_water_level']
 
-        # 1. 使用当前参数进行仿真，预测自己的水位
+        # 1. 使用当前的参数进行仿真
         if self.water_level > 0:
             self.outflow = self.outlet_coeff * math.sqrt(self.water_level)
         else:
@@ -54,28 +39,23 @@ class TwinAgent(BaseAgent):
         if self.water_level < 0:
             self.water_level = 0
 
-        # 2. 与真实水位进行比较，计算误差
-        error = self.water_level - real_water_level
+        # 2. 计算与真实水位的误差
+        error = real_water_level - self.water_level
 
-        # 3. 根据误差调整出口系数 (简化的梯度下降思想)
-        # 如果孪生水位偏高 (error > 0)，说明模型出流偏小，应增大系数。
-        # 如果孪生水位偏低 (error < 0)，说明模型出流偏大，应减小系数。
-        # 调整量与误差成正比。
-        # 注意：这里的梯度方向是简化的，真实梯度计算更复杂。
-        # 我们用 error 本身作为调整方向的指示。
-        adjustment = self.learning_rate * error
+        # 3. 根据误差更新出口系数 (简单的梯度下降法)
+        # 如果真实水位更高，说明我们的模型出流太大了（或进流太小），
+        # 意味着 outlet_coeff 可能偏大，所以要减小它。
+        # 这里用一个简化的更新规则，error > 0 意味着 real > twin,
+        # 即 twin 的水位偏低，可能是coeff太大导致出流过多，所以要减小coeff。
+        # 更新量与误差成正比。
+        update = -self.learning_rate * error
+        self.outlet_coeff += update
 
-        # 更新系数，确保其不为负
-        self.outlet_coeff += adjustment
+        # 确保系数不为负
         if self.outlet_coeff < 0:
             self.outlet_coeff = 0
 
     def get_state(self):
-        """
-        获取孪生智能体的当前状态。
-
-        :return: 包含当前水位和估计的出口系数的字典。
-        """
         return {
             "water_level": self.water_level,
             "estimated_coeff": self.outlet_coeff

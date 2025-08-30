@@ -1,0 +1,40 @@
+{
+    "tank_params": {
+        "name": "tank_noisy_sensor",
+        "initial_state": { "water_level": 5.0 },
+        "parameters": { "surface_area": 2.0 }
+    },
+    "pid_params": {
+        "setpoint": 10.0,
+        "Kp": 1.2,
+        "Ki": 0.1,
+        "Kd": 0.05,
+        "min_output": 0,
+        "max_output": 5
+    },
+    "noise_params": {
+        "mean": 0.0,
+        "std_dev": 0.25
+    },
+    "simulation_params": {
+        "total_time": 300,
+        "time_step": 1.0
+    },
+    "disturbance_params": {
+        "outflow_pattern": [
+            {"duration": 50, "outflow": 0.5},
+            {"duration": 80, "outflow": 1.5},
+            {"duration": 70, "outflow": 0.8},
+            {"duration": 100, "outflow": 2.0}
+        ]
+    },
+    "messaging_params": {
+        "state_topic": "tank/noisy_state",
+        "command_topic": "pump/command"
+    },
+    "logging_params": {
+        "log_dir": "logs/06_sensor_disturbance",
+        "log_file": "sensor_disturbance_log.csv",
+        "log_headers": ["time", "setpoint", "true_water_level", "noisy_water_level", "inflow_control", "outflow_disturbance"]
+    }
+}

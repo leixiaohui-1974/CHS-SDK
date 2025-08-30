@@ -48,18 +48,20 @@
 | `ValveStationPerceptionAgent` | 阀门/水闸站感知，提供上下游水位、总流量等站级状态 | `core_lib/local_agents/perception/valve_station_perception_agent.py` |
 
 ### 3.2 水系统控制对象代理 (Control Object Agents)
-*   **继承关系**：继承自 `LocalControlAgent` 或其他自定义控制基类。
-*   **核心功能**：接收指令，执行本地控制逻辑。
+*   **继承关系**：大多继承自 `LocalControlAgent`。此类智能体通过封装一个**控制器**（例如PID）来实现具体的控制逻辑，因此非常灵活。
+*   **核心功能**：接收指令和观测值，执行本地闭环或开环控制。
 
 | 智能体名称 | 功能描述 | 源码路径 |
 | :--- | :--- | :--- |
+| `LocalControlAgent` | **本地控制通用基类**，封装了控制器，并通过消息总线处理观测和动作。是实现大多数本地控制任务的核心。 | `core_lib/local_agents/control/local_control_agent.py` |
+| `PumpControlAgent` | 控制一个**泵站**（PumpStation），根据流量需求决定开启或关闭站内**多个离散水泵**。(*注意: 该代理直接继承自 Agent，而非 LocalControlAgent*) | `core_lib/local_agents/control/pump_control_agent.py` |
+| `ValveControlAgent` | 控制单个阀门。它本身是 `LocalControlAgent` 的一个轻量级实现，需在初始化时配置具体的控制器（如PID）。 | `core_lib/local_agents/control/valve_control_agent.py` |
+| `GateControlAgent` | 控制单个闸门，与 `ValveControlAgent` 类似，是 `LocalControlAgent` 的轻量级实现。 | `core_lib/local_agents/control/gate_control_agent.py` |
+| `PumpStationControlAgent` | 泵站控制的**站级代理**，负责站级总调度（如决定总流量），并将指令下发给机组级代理（如 `PumpControlAgent`）。 | `core_lib/local_agents/control/pump_station_control_agent.py` |
+| `ValveStationControlAgent` | 阀门站控制的**站级代理**，负责实现站级流量或水位目标，并将计算出的开度指令下发给站内每个阀门。 | `core_lib/local_agents/control/valve_station_control_agent.py` |
 | `HydropowerStationAgent` | 水电站控制，负责制定站级策略，并向下游发布针对单个水轮机或水闸的控制指令。 | `core_lib/local_agents/control/hydropower_station_agent.py` |
 | `HydropowerStationControlAgent` | 水电站控制，同上。 | `core_lib/local_agents/control/hydropower_station_control_agent.py` |
-| `PumpStationControlAgent` | 泵站控制，负责站级总调度（如决定开启泵的数量），并将指令下发给 `PumpControlAgent`。 | `core_lib/local_agents/control/pump_station_control_agent.py` |
-| `PumpControlAgent` | 单个水泵控制，接收上级指令，负责单个水泵的启停、变频等具体操作。 | `core_lib/local_agents/control/pump_control_agent.py` |
-| `ValveStationControlAgent` | 水闸站控制，负责实现站级流量或水位目标，并将计算出的开度指令下发给站内每个阀门。 | `core_lib/local_agents/control/valve_station_control_agent.py` |
-| `LocalControlAgent` | 本地控制通用基类，定义了本地控制单元的基本行为。 | `core_lib/local_agents/control/local_control_agent.py` |
-| `PressureControlAgent` | 压力控制，专用于需要维持特定压力的控制场景。 | `core_lib/local_agents/control/pressure_control_agent.py` |
+| `PressureControlAgent` | 压力控制，一个 `LocalControlAgent` 的应用实例，专用于需要维持特定压力的控制场景。 | `core_lib/local_agents/control/pressure_control_agent.py` |
 
 ### 3.3 中央协调代理 (Central Agents)
 *   **继承关系**：无统一基类，为逻辑分组。

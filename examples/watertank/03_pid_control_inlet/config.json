@@ -1,14 +1,16 @@
 {
     "tank_params": {
-        "area": 2.0,
-        "initial_level": 5.0
+        "name": "tank1_refactored",
+        "initial_state": { "water_level": 5.0 },
+        "parameters": { "surface_area": 2.0 }
     },
     "pid_params": {
         "setpoint": 10.0,
-        "kp": 1.2,
-        "ki": 0.1,
-        "kd": 0.05,
-        "output_limits": [0, 5]
+        "Kp": 1.2,
+        "Ki": 0.1,
+        "Kd": 0.05,
+        "min_output": 0,
+        "max_output": 5
     },
     "simulation_params": {
         "total_time": 300,
@@ -21,6 +23,10 @@
             {"duration": 70, "outflow": 0.8},
             {"duration": 100, "outflow": 2.0}
         ]
+    },
+    "messaging_params": {
+        "state_topic": "tank/state",
+        "command_topic": "pump/command"
     },
     "logging_params": {
         "log_dir": "logs/03_pid_control_inlet",
