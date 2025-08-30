@@ -1,0 +1,5 @@
+# In this specific scenario, the entire system, including the reservoir
+# physics, is modeled using agents to faithfully replicate the logic
+# of the original script-based example.
+# Therefore, there are no physical components.
+components: []

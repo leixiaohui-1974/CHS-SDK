@@ -1,0 +1,58 @@
+# This file configures all agents for the PID control scenario.
+# The goal is to control the water level of a reservoir by adjusting the
+# inflow from a pump, while an external outflow disturbance is active.
+
+agents:
+  # Agent 1: Perceives the state of the physical reservoir and publishes its
+  # water level to the message bus for other agents to use.
+  - id: reservoir_perception_agent
+    class: core_lib.local_agents.perception.digital_twin_agent.DigitalTwinAgent
+    config:
+      simulated_object_id: reservoir_1 # The ID of the component in components.yml
+      state_topic: tank_water_level_topic
+      log_data: True # Ensure its output is logged
+
+  # Agent 2: Reads a time-series outflow disturbance from a CSV file.
+  # The values are negative because they represent water leaving the system.
+  - id: disturbance_agent
+    class: core_lib.data_access.csv_inflow_agent.CsvInflowAgent
+    config:
+      csv_file: disturbance.csv
+      time_column: time
+      value_column: outflow_rate
+      output_topic: disturbance_signal_topic
+      data_id: disturbance_1
+
+  # Agent 3: The PID controller for the inlet pump.
+  # It observes the water level, compares it to a setpoint, and calculates
+  # the required pump inflow, publishing it as a control signal.
+  - id: pump_pid_controller_agent
+    class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
+    config:
+      observation_topic: tank_water_level_topic # Listens to the perception agent
+      observation_key: value # The key in the message from the perception agent
+      action_topic: control_signal_topic # Publishes its control action here
+      dt: 1.0
+      # The controller logic is defined as a nested object. The YAML loader
+      # will instantiate this class and pass it to the LocalControlAgent.
+      controller:
+        class: core_lib.local_agents.control.pid_controller.PIDController
+        config:
+          setpoint: 10.0
+          Kp: 1.2
+          Ki: 0.1
+          Kd: 0.05
+          min_output: 0.0
+          max_output: 5.0
+
+  # Agent 4: The custom aggregator agent.
+  # It listens to the control signal (positive inflow) and the disturbance
+  # signal (negative outflow), sums them, and publishes the net inflow.
+  # The reservoir component listens to this final aggregated topic.
+  - id: inflow_aggregator_agent
+    class: examples.watertank_refactored.03_pid_control_inlet.agents.SignalAggregatorAgent
+    config:
+      input_topics:
+        - control_signal_topic
+        - disturbance_signal_topic
+      output_topic: aggregated_inflow_topic

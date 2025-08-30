@@ -1,0 +1,12 @@
+# This file defines the physical components for the simple simulation scenario.
+components:
+  - id: reservoir_1
+    class: core_lib.physical_objects.reservoir.Reservoir
+    # The reservoir's inflow is provided by the CsvInflowAgent.
+    inflow_topic: inflow_topic
+    # Parameters for the reservoir
+    name: "simple_tank"
+    initial_state:
+      water_level: 2.0
+    parameters:
+      surface_area: 10.0

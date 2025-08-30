@@ -1,0 +1,46 @@
+# This file configures all the agents for the parameter identification scenario.
+# It uses custom wrapper agents defined in `agents.py` to adapt the original
+# script-based logic to the message-bus architecture.
+
+agents:
+  # Agent 1: Reads inflow data from a CSV file and publishes it to the message bus.
+  - id: inflow_data_agent
+    class: core_lib.data_access.csv_inflow_agent.CsvInflowAgent
+    config:
+      csv_file: inflow.csv
+      time_column: time
+      value_column: inflow_rate
+      output_topic: inflow_topic # Publishes to this topic
+      data_id: inflow_1
+
+  # Agent 2: The "real" reservoir. It runs a simulation with a fixed, "true"
+  # outlet coefficient. It subscribes to the inflow and publishes its water level.
+  - id: real_reservoir_agent
+    # This is a custom wrapper agent defined in this scenario's directory
+    class: examples.watertank_refactored.02_parameter_identification.agents.BusAwareReservoirAgent
+    config:
+      inflow_topic: inflow_topic # Subscribes to inflow
+      output_topic: real_water_level_topic # Publishes its water level here
+      reservoir_params:
+        area: 1.5
+        initial_level: 2.0
+        outlet_coeff: 0.8 # The "true" parameter
+
+  # Agent 3: The "twin" reservoir. It starts with an incorrect outlet coefficient
+  # and tries to identify the true value by comparing its simulated water level
+  # to the real one.
+  - id: identifying_twin_agent
+    # This is the second custom wrapper agent
+    class: examples.watertank_refactored.02_parameter_identification.agents.BusAwareTwinAgent
+    config:
+      inflow_topic: inflow_topic # Subscribes to the same inflow
+      real_level_topic: real_water_level_topic # Subscribes to the real reservoir's output
+      # It publishes its own state to separate topics for clear logging
+      twin_level_topic: twin_water_level_log_topic
+      estimated_coeff_topic: estimated_coeff_log_topic
+      twin_params:
+        area: 1.5
+        initial_level: 2.0
+        initial_outlet_coeff: 0.2 # The initial "wrong" guess
+      identification_params:
+        learning_rate: 0.01

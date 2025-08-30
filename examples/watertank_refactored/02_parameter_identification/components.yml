@@ -1,0 +1,5 @@
+# In this specific scenario, both the "real" and "twin" reservoirs
+# are implemented as stateful agents rather than physical components.
+# This is done to directly reuse the logic from the original script-based
+# example without modifying the core library. Therefore, this file is empty.
+components: []
