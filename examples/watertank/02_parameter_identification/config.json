@@ -1,0 +1,30 @@
+{
+    "reservoir_params": {
+        "area": 1.5,
+        "initial_level": 2.0,
+        "outlet_coeff": 0.8
+    },
+    "twin_params": {
+        "area": 1.5,
+        "initial_level": 2.0,
+        "initial_outlet_coeff": 0.2
+    },
+    "identification_params": {
+        "learning_rate": 0.01
+    },
+    "simulation_params": {
+        "total_time": 200,
+        "time_step": 1.0,
+        "inflow_pattern": [
+            {"duration": 50, "inflow": 1.5},
+            {"duration": 50, "inflow": 0.8},
+            {"duration": 50, "inflow": 2.0},
+            {"duration": 50, "inflow": 1.2}
+        ]
+    },
+    "logging_params": {
+        "log_dir": "logs/02_parameter_identification",
+        "log_file": "identification_log.csv",
+        "log_headers": ["time", "real_water_level", "twin_water_level", "estimated_coeff", "error"]
+    }
+}

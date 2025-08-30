@@ -1,0 +1,30 @@
+{
+    "tank_params": {
+        "area": 2.0,
+        "initial_level": 5.0
+    },
+    "pid_params": {
+        "setpoint": 10.0,
+        "kp": 1.2,
+        "ki": 0.1,
+        "kd": 0.05,
+        "output_limits": [0, 5]
+    },
+    "simulation_params": {
+        "total_time": 300,
+        "time_step": 1.0
+    },
+    "disturbance_params": {
+        "outflow_pattern": [
+            {"duration": 50, "outflow": 0.5},
+            {"duration": 80, "outflow": 1.5},
+            {"duration": 70, "outflow": 0.8},
+            {"duration": 100, "outflow": 2.0}
+        ]
+    },
+    "logging_params": {
+        "log_dir": "logs/03_pid_control_inlet",
+        "log_file": "pid_control_log.csv",
+        "log_headers": ["time", "setpoint", "water_level", "inflow_control", "outflow_disturbance"]
+    }
+}
