@@ -1,5 +1,5 @@
 """
-Simulation model for a Gate.
+闸门的仿真模型。
 """
 import math
 from typing import Dict, Any, Optional
@@ -10,8 +10,8 @@ from core_lib.central_coordination.collaboration.message_bus import MessageBus, 
 
 class Gate(PhysicalObjectInterface):
     """
-    Represents a controllable gate in a water system.
-    Its outflow is calculated based on the upstream and downstream water levels.
+    代表水务系统中的一个可控闸门。
+    其出流量根据上游和下游的水位计算得出。
     """
 
     def __init__(self, name: str, initial_state: State, parameters: Parameters,
@@ -23,17 +23,17 @@ class Gate(PhysicalObjectInterface):
         self.action_topic = action_topic
         self.action_key = action_key
         self.target_opening = self._state.get('opening', 0)
-        self.last_head_diff = 1 # Store last known head diff for inverse calculation
+        self.last_head_diff = 1 # 存储上一次的水头差，用于反向计算
 
         if self.bus and self.action_topic:
             self.bus.subscribe(self.action_topic, self.handle_action_message)
-            print(f"Gate '{self.name}' subscribed to action topic '{self.action_topic}'.")
+            print(f"闸门 '{self.name}' 已订阅动作主题 '{self.action_topic}'.")
 
-        print(f"Gate '{self.name}' created with initial state {self._state}.")
+        print(f"闸门 '{self.name}' 已创建，初始状态为 {self._state}.")
 
     def _calculate_outflow(self, upstream_level: float, opening: float, downstream_level: float = 0, C: Optional[float] = None) -> float:
         """
-        Calculates the outflow through the gate using the orifice equation.
+        使用孔口出流公式计算通过闸门的流量。
         Q = C * A * sqrt(2 * g * h)
         """
         if C is None:
@@ -48,33 +48,35 @@ class Gate(PhysicalObjectInterface):
         return C * area * math.sqrt(2 * g * head)
 
     def _calculate_opening_for_flow(self, target_flow: float) -> float:
-        """Inverse of the orifice equation to find the required gate opening for a given flow."""
+        """孔口公式的反向计算，用于根据目标流量计算所需的闸门开度。"""
         C = self._params.get('discharge_coefficient', 0.6)
         width = self._params.get('width', 2.0)
         g = 9.81
         if self.last_head_diff <= 0:
-            return 0
+            return 0 # 没有水头差则无法实现流动
         denominator = C * width * math.sqrt(2 * g * self.last_head_diff)
         if denominator == 0:
-            return self._params.get('max_opening', 1.0)
+            return self._params.get('max_opening', 1.0) # 无法计算，如果需要流量则全开
         return target_flow / denominator
 
     def handle_action_message(self, message: Message):
-        """Callback to handle incoming action messages from the bus."""
+        """处理总线传入的动作消息的回调函数。"""
+        # 处理直接的开度指令
         if self.action_key in message:
             new_target = message.get(self.action_key)
             if new_target is not None:
                 self.target_opening = float(new_target)
+        # 处理目标出流量指令
         elif 'gate_target_outflow' in message:
             target_flow = message.get('gate_target_outflow')
             if target_flow is not None:
                 self.target_opening = self._calculate_opening_for_flow(float(target_flow))
 
     def step(self, action: Dict[str, Any], dt: float) -> State:
-        """Updates the gate's state over a single time step."""
+        """更新闸门在单个时间步内的状态。"""
         if 'control_signal' in action and action['control_signal'] is not None:
             self.target_opening = action['control_signal']
-        max_roc = self._params.get('max_rate_of_change', 0.05)
+        max_roc = self._params.get('max_rate_of_change', 0.05) # 最大变化速率
         current_opening = self._state.get('opening', 0)
         if self.target_opening > current_opening:
             new_opening = min(current_opening + max_roc * dt, self.target_opening)
@@ -89,11 +91,11 @@ class Gate(PhysicalObjectInterface):
 
     def identify_parameters(self, data: Dict[str, np.ndarray], method: str = 'offline') -> Parameters:
         """
-        Identifies the discharge coefficient (C) for the gate.
+        辨识闸门的流量系数 (C)。
         """
         required_keys = ['upstream_levels', 'downstream_levels', 'openings', 'observed_flows']
         if not all(k in data for k in required_keys):
-            raise ValueError(f"Identification data must contain {required_keys}.")
+            raise ValueError(f"辨识数据必须包含 {required_keys}。")
 
         up_levels = data['upstream_levels']
         down_levels = data['downstream_levels']
@@ -101,7 +103,7 @@ class Gate(PhysicalObjectInterface):
         obs_flows = data['observed_flows']
 
         def _simulation_error(c_param: np.ndarray) -> float:
-            """Objective function for the optimizer."""
+            """优化器的目标函数。"""
             C = c_param[0]
             simulated_flows = np.zeros_like(obs_flows)
             for i in range(len(obs_flows)):
@@ -111,7 +113,7 @@ class Gate(PhysicalObjectInterface):
                     opening=openings[i],
                     C=C
                 )
-            # Calculate RMSE
+            # 计算均方根误差 (RMSE)
             rmse = np.sqrt(np.mean((simulated_flows - obs_flows)**2))
             return rmse
 
@@ -119,14 +121,14 @@ class Gate(PhysicalObjectInterface):
         result = minimize(
             _simulation_error,
             initial_guess,
-            method='Nelder-Mead', # Good for simple, single-variable optimization
-            bounds=[(0.1, 1.0)] # Physical bounds for C
+            method='Nelder-Mead', # 适用于简单的单变量优化
+            bounds=[(0.1, 1.0)] # C值的物理边界
         )
 
         if result.success:
             new_c = result.x[0]
-            print(f"Parameter identification successful for '{self.name}'. New C = {new_c:.4f}")
+            print(f"为 '{self.name}' 进行的参数辨识成功。 新 C = {new_c:.4f}")
             return {'discharge_coefficient': new_c}
         else:
-            print(f"Warning: Parameter identification failed for '{self.name}': {result.message}")
+            print(f"警告: 为 '{self.name}' 进行的参数辨识失败: {result.message}")
             return {}
