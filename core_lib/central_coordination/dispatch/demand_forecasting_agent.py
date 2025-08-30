@@ -12,6 +12,8 @@ class DemandForecastingAgent(Agent):
     This agent can use historical data, weather forecasts, and other external
     factors to predict future water needs, providing crucial input for
     the central dispatch and MPC agents.
+
+    The current implementation uses a simple averaging model for demonstration.
     """
     def __init__(self, agent_id: str, message_bus: MessageBus, historical_data_topics: List[str], forecast_topic: str):
         """
@@ -36,26 +38,39 @@ class DemandForecastingAgent(Agent):
 
     def handle_data(self, message: Message, topic: str):
         """Callback to collect historical data."""
-        self.historical_data[topic].append(message)
+        if 'demand' in message:
+            self.historical_data[topic].append(message['demand'])
 
     def run(self, current_time: float):
         """
         The main execution logic. Periodically generates and publishes a new forecast.
         """
-        # Placeholder for forecasting logic
         # For example, run the forecast every 24 hours (86400 seconds)
-        if int(current_time) % 86400 == 0:
+        if int(current_time) > 0 and int(current_time) % 86400 == 0:
             self.generate_forecast(current_time)
 
     def generate_forecast(self, current_time: float):
         """
         Generates a demand forecast based on the collected historical data.
+
+        This is a simple averaging model. A real implementation would use
+        a more sophisticated forecasting model (e.g., ARIMA, LSTM).
         """
-        # This is where a forecasting model (e.g., ARIMA, LSTM) would be used.
         print(f"[{self.agent_id} at {current_time}] Generating new demand forecast...")
 
-        # Placeholder forecast
-        forecast = {"start_time": current_time, "horizon": 24, "demands": [10, 11, 10.5]} # Example
+        all_demands = []
+        for topic in self.historical_data_topics:
+            all_demands.extend(self.historical_data[topic])
+
+        if not all_demands:
+            # No historical data, use a default forecast
+            forecast_demands = [10.0] * 24 # Default forecast for 24 hours
+        else:
+            # Simple average of all historical demands
+            avg_demand = sum(all_demands) / len(all_demands)
+            forecast_demands = [avg_demand] * 24 # Forecast the average for the next 24 hours
+
+        forecast = {"start_time": current_time, "horizon": 24, "demands": forecast_demands}
 
         self.bus.publish(self.forecast_topic, forecast)
-        print(f"[{self.agent_id}] Published new forecast to '{self.forecast_topic}'.")
+        print(f"[{self.agent_id}] Published new forecast to '{self.forecast_topic}': {forecast_demands}")
