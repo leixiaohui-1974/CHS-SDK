@@ -13,15 +13,12 @@ class MPCController(Controller):
     for system prediction.
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, horizon: int, dt: float, config: Dict[str, Any]):
         """
-        Initializes the MPC controller from a dictionary of arguments.
+        Initializes the MPC controller.
         """
-        self.horizon = kwargs.pop('horizon')
-        self.dt = kwargs.pop('dt', 10.0) # Default dt if not provided
-
-        config = kwargs # The rest are config
-
+        self.horizon = horizon
+        self.dt = dt
         self.target_level = config["target_level"]
         self.q_weight = config.get("q_weight", 1.0)
         self.r_weight = config.get("r_weight", 0.1)
@@ -48,7 +45,7 @@ class MPCController(Controller):
         return cost
 
     def compute_control_action(self, observation: State, dt: float) -> Any:
-        self.dt = dt # Always use the dt from the harness
+        self.dt = dt
         current_level = observation.get("water_level")
         disturbance_forecast = observation.get("disturbance_forecast", [0.0] * self.horizon)
 
@@ -73,5 +70,4 @@ class MPCController(Controller):
 
         optimal_action = result.x[0] if result.success else initial_guess[0]
         self.control_history.append(optimal_action)
-        # The MPC for the canal should output a new SETPOINT for the PID
         return {'new_setpoint': float(optimal_action)}
