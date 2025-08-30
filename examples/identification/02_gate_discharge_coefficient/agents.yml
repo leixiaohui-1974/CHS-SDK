@@ -1,0 +1,41 @@
+# Agents for the Gate Identification Example
+
+# Perception agent for the upstream reservoir
+upstream_observer:
+  type: DigitalTwinAgent
+  parameters:
+    target_model: "upstream_reservoir"
+    publish_topic: "state/upstream_reservoir"
+
+# Perception agent for the downstream reservoir
+downstream_observer:
+  type: DigitalTwinAgent
+  parameters:
+    target_model: "downstream_reservoir"
+    publish_topic: "state/downstream_reservoir"
+
+# Perception agent for the true gate to get its opening and observed flow
+gate_observer:
+  type: DigitalTwinAgent
+  parameters:
+    target_model: "true_gate"
+    publish_topic: "state/true_gate"
+
+# The core identification agent targeting the twin gate
+identification_agent:
+  type: ParameterIdentificationAgent
+  parameters:
+    target_model: "twin_gate"
+    identification_interval: 50 # Run identification more frequently
+    identification_data_map:
+      # Data needed by Gate.identify_parameters()
+      upstream_levels: "state/upstream_reservoir/water_level"
+      downstream_levels: "state/downstream_reservoir/water_level"
+      openings: "state/true_gate/opening"
+      observed_flows: "state/true_gate/outflow" # Corrected key to 'outflow'
+
+# Agent to apply the identified parameters back to the twin gate
+model_updater:
+  type: ModelUpdaterAgent
+  parameters:
+    target_model_name: "twin_gate"

@@ -1,0 +1,43 @@
+# Components for the Pipe Roughness Identification Example
+
+# An upstream reservoir to provide a water source with a high head
+upstream_reservoir:
+  type: Reservoir
+  parameters:
+    storage_curve:
+      - [0, 150.0]
+      - [10000000, 160.0]
+  initial_state:
+    volume: 8000000
+
+# A downstream reservoir to provide a downstream water level with a lower head
+downstream_reservoir:
+  type: Reservoir
+  parameters:
+    storage_curve:
+      - [0, 90.0]
+      - [10000000, 100.0]
+  initial_state:
+    volume: 1000000
+
+# The "true" pipe with the correct roughness coefficient
+true_pipe:
+  type: Pipe
+  parameters:
+    calculation_method: manning
+    length: 1000.0 # meters
+    diameter: 1.0   # meters
+    manning_n: 0.012 # The "true" value we want to identify
+  initial_state:
+    flow: 0
+
+# The "twin" pipe with an incorrect initial guess
+twin_pipe:
+  type: Pipe
+  parameters:
+    calculation_method: manning
+    length: 1000.0
+    diameter: 1.0
+    manning_n: 0.018 # The initial incorrect guess
+  initial_state:
+    flow: 0

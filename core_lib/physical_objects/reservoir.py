@@ -27,7 +27,8 @@ class Reservoir(PhysicalObjectInterface):
         self._validate_and_prepare_storage_curve()
 
         self.bus = message_bus
-        self.inflow_topic = inflow_topic
+        # Get inflow topic from direct argument or from the parameters dictionary for flexibility
+        self.inflow_topic = inflow_topic or self._params.get('inflow_topic')
         self.data_inflow = 0.0
 
         if self.bus and self.inflow_topic:
@@ -84,8 +85,11 @@ class Reservoir(PhysicalObjectInterface):
         self._state['volume'] = new_volume
         self._state['water_level'] = self._get_level_from_volume(new_volume)
         self._state['outflow'] = outflow
+        self._state['inflow'] = total_inflow # Add inflow to state for perception
 
+        # Reset the data-driven inflow for the next step
         self.data_inflow = 0.0
+
         return self._state
 
     @property

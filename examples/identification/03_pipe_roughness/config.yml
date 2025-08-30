@@ -1,0 +1,13 @@
+# Main configuration for the simulation run.
+
+simulation:
+  duration: 20000
+  dt: 100
+
+output:
+  - topic: "state/twin_pipe"
+    file: "twin_pipe_log.csv"
+  - topic: "state/true_pipe"
+    file: "true_pipe_log.csv"
+  - topic: "identified_parameters/twin_pipe"
+    file: "identified_params_log.json"

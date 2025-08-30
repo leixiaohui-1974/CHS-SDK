@@ -1,0 +1,13 @@
+# Main configuration for the simulation run.
+
+simulation:
+  duration: 20000
+  dt: 100
+
+output:
+  - topic: "state/twin_gate"
+    file: "twin_gate_log.csv"
+  - topic: "state/true_gate"
+    file: "true_gate_log.csv"
+  - topic: "identified_parameters/twin_gate"
+    file: "identified_params_log.json"

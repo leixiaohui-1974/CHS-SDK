@@ -1,0 +1,15 @@
+# Main configuration for the simulation run.
+
+simulation:
+  duration: 720000 # 200 hours * 3600 s/hr
+  dt: 3600      # 1 hour in seconds
+
+# Configuration for the output of the simulation.
+# We can log the state of the twin_reservoir to see how its parameters change.
+output:
+  - topic: "state/twin_reservoir"
+    file: "twin_reservoir_log.csv"
+  - topic: "state/true_reservoir"
+    file: "true_reservoir_log.csv"
+  - topic: "identified_parameters/twin_reservoir"
+    file: "identified_params_log.json"

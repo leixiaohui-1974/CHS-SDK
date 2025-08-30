@@ -79,10 +79,28 @@ class ParameterIdentificationAgent(Agent):
             # Prepare data for the model
             # The model's identify_parameters expects numpy arrays
             import numpy as np
-            data_for_model = {key: np.array(values) for key, values in self.data_history.items()}
 
-            # Trigger identification
-            self.target_model.identify_parameters(data_for_model)
+            # Find the minimum length across all data streams to prevent IndexErrors
+            min_len = min(len(v) for v in self.data_history.values())
+            if min_len < 1:
+                print(f"  [{current_time}s] [{self.agent_id}] Not enough data to run identification (min_len={min_len}). Skipping.")
+                return
+
+            # Truncate all data streams to the minimum length
+            data_for_model = {key: np.array(values[:min_len]) for key, values in self.data_history.items()}
+
+            # Trigger identification and get the result
+            new_params = self.target_model.identify_parameters(data_for_model)
+
+            # Publish the new parameters for the ModelUpdaterAgent to consume
+            if new_params:
+                message = {
+                    "model_name": self.target_model.name,
+                    "parameters": new_params
+                }
+                publish_topic = f"identified_parameters/{self.target_model.name}"
+                self.bus.publish(publish_topic, message)
+                print(f"  [{current_time}s] [{self.agent_id}] Published new parameters for '{self.target_model.name}' to topic '{publish_topic}'.")
 
             # Reset for the next batch
             self.clear_history()
