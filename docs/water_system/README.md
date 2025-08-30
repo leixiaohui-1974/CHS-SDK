@@ -12,6 +12,7 @@
 2.  **核心概念 (`01_concepts/`)**
     *   **[./01_concepts/01_simulation_harness.md](./01_concepts/01_simulation_harness.md)**: 了解驱动所有仿真的“世界引擎”。
     *   **[./01_concepts/02_message_bus.md](./01_concepts/02_message_bus.md)**: 理解智能体之间解耦通信的关键。
+    *   **[./01_concepts/03_architectural_patterns.md](./01_concepts/03_architectural_patterns.md)**: 深入理解两种仿真世界（Harness vs OntologyAgent）的设计哲学。
 
 3.  **物理模型 (`02_physical_models/`)**
     *   接下来，浏览此目录下的文档，了解系统中可用的各种水力对象的数学模型。
@@ -30,6 +31,7 @@
 *   `01_concepts/`: 存放核心架构概念的文档。
     *   `01_simulation_harness.md`
     *   `02_message_bus.md`
+    *   `03_architectural_patterns.md`
 *   `02_physical_models/`: 存放各类物理实体模型的详细说明。
     *   `01_pipe.md`
     *   `02_river_channel.md`
