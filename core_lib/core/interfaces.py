@@ -66,6 +66,16 @@ class Simulatable(ABC):
         """
         pass
 
+    @abstractmethod
+    def set_parameters(self, parameters: Parameters):
+        """
+        Set the model parameters of the component.
+
+        Args:
+            parameters: A dictionary of the new parameters to apply.
+        """
+        pass
+
 
 class Identifiable(ABC):
     """
@@ -161,6 +171,14 @@ class PhysicalObjectInterface(Simulatable, Identifiable, ABC):
 
     def get_parameters(self) -> Parameters:
         return self._params.copy()
+
+    def set_parameters(self, parameters: Parameters):
+        """
+        Updates the model's parameters. It merges the new parameters with the
+        existing ones, allowing for partial updates.
+        """
+        self._params.update(parameters)
+        print(f"Parameters for '{self.name}' updated with: {parameters}")
 
     def set_inflow(self, inflow: float):
         """
