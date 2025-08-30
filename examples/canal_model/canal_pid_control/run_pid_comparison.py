@@ -15,29 +15,35 @@ from core_lib.io.yaml_loader import SimulationLoader
 def run_scenario(scenario_name, agent_ids, config_path):
     """
     Runs a single simulation scenario and saves the results.
+    This function temporarily modifies the agents.yml file for the scenario.
+
+    NOTE: This file renaming approach is fragile and not ideal for production use.
+    A better approach would be to modify the SimulationLoader to accept the agent
+    configuration directly as an argument.
     """
     print(f"--- Running Scenario: {scenario_name} ---")
 
-    # Create a temporary agents.yml for the current scenario
-    with open(os.path.join(config_path, 'agents.yml'), 'r') as f:
-        all_agents_config = yaml.safe_load(f)
-
-    scenario_agents_config = {
-        'agents': [agent for agent in all_agents_config['agents'] if agent['id'] in agent_ids]
-    }
-
-    temp_agents_path = os.path.join(config_path, 'temp_agents.yml')
-    with open(temp_agents_path, 'w') as f:
-        yaml.dump(scenario_agents_config, f)
-
-    # The SimulationLoader needs to be pointed to a directory where it can find
-    # components.yml, topology.yml, config.yml, and the (temporary) agents.yml.
-    # We rename our temp file to what the loader expects.
     original_agents_path = os.path.join(config_path, 'agents.yml')
-    os.rename(original_agents_path, original_agents_path + '.bak')
-    os.rename(temp_agents_path, original_agents_path)
+    backup_agents_path = os.path.join(config_path, 'agents.yml.bak')
+
+    # Ensure no backup file exists from a previous failed run
+    if os.path.exists(backup_agents_path):
+        os.remove(backup_agents_path)
 
     try:
+        # Backup the original agents.yml
+        os.rename(original_agents_path, backup_agents_path)
+
+        # Create a new agents.yml for the current scenario
+        with open(backup_agents_path, 'r') as f:
+            all_agents_config = yaml.safe_load(f)
+
+        scenario_agents_config = {
+            'agents': [agent for agent in all_agents_config['agents'] if agent['id'] in agent_ids]
+        }
+        with open(original_agents_path, 'w') as f:
+            yaml.dump(scenario_agents_config, f)
+
         # Load and run the simulation
         loader = SimulationLoader(scenario_path=config_path)
         harness = loader.load()
@@ -64,11 +70,11 @@ def run_scenario(scenario_name, agent_ids, config_path):
         print(f"Results for {scenario_name} saved to {scenario_output_filename}")
 
     finally:
-        # Clean up: restore original agents.yml and delete temp file
-        os.rename(original_agents_path, temp_agents_path) # rename back to temp
-        os.rename(original_agents_path + '.bak', original_agents_path) # restore original
-        if os.path.exists(temp_agents_path):
-             os.remove(temp_agents_path)
+        # Clean up: restore original agents.yml from backup
+        if os.path.exists(original_agents_path):
+            os.remove(original_agents_path)
+        if os.path.exists(backup_agents_path):
+            os.rename(backup_agents_path, original_agents_path)
 
 
 def plot_results(scenarios, config_path):

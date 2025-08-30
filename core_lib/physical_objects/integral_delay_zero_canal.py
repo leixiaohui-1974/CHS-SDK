@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 from collections import deque
-from core_lib.core.interfaces import PhysicalObjectInterface
+from core_lib.core.interfaces import PhysicalObjectInterface, State, Parameters
 
 class IntegralDelayZeroCanal(PhysicalObjectInterface):
     """
@@ -13,61 +13,58 @@ class IntegralDelayZeroCanal(PhysicalObjectInterface):
     q_out(t) = q_in(t-τ) + Tz * (q_in(t-τ) - q_in(t-τ-dt)) / dt
     where τ is the delay and Tz is the time constant of the zero.
     """
-    def __init__(self, name, **kwargs):
-        super().__init__(name, **kwargs)
-        self.gain = kwargs.get('gain', 0.001)
-        self.delay = kwargs.get('delay', 300) # seconds
-        self.zero_time_constant = kwargs.get('zero_time_constant', 50) # seconds
-        self.water_level = kwargs.get('initial_water_level', 5.0)
-        self.inflow = 0.0
-        self.outflow = 0.0
+    def __init__(self, name: str, initial_state: State, parameters: Parameters, **kwargs):
+        super().__init__(name, initial_state, parameters)
+        self.gain = self._params.get('gain', 0.001)
+        self.delay = self._params.get('delay', 300) # seconds
+        self.zero_time_constant = self._params.get('zero_time_constant', 50) # seconds
 
-        self.time_step = kwargs.get('dt', 10) # Default timestep of 10s
-        if self.time_step > 0:
-            # We need one extra history point for the zero term calculation
-            self.history_size = int(self.delay / self.time_step) + 1
-        else:
-            self.history_size = 2
+        self._state['water_level'] = initial_state.get('water_level', 5.0)
+        self._state['inflow'] = initial_state.get('inflow', 0.0)
+        self._state['outflow'] = initial_state.get('outflow', 0.0)
 
-        initial_inflow = kwargs.get('initial_inflow', 0.0)
-        self.inflow_history = deque([initial_inflow] * self.history_size, maxlen=self.history_size)
+        self.inflow_history = None
+        self.history_size = 0
 
-    def update_state(self, new_inflow):
+    def step(self, action: any, dt: float) -> State:
         """
-        Updates the canal state based on the new inflow.
+        Advances the canal simulation for one time step.
         """
-        self.inflow = new_inflow
+        if self.inflow_history is None:
+            if dt > 0:
+                self.history_size = int(self.delay / dt) + 2
+            else:
+                self.history_size = 2
+
+            initial_inflow = self._state.get('inflow', 0.0)
+            self.inflow_history = deque([initial_inflow] * self.history_size, maxlen=self.history_size)
+
+        inflow = self._inflow
+        self._state['inflow'] = inflow
 
         if len(self.inflow_history) == self.history_size:
             q_in_delayed = self.inflow_history[1]
             q_in_delayed_previous = self.inflow_history[0]
 
             # Outflow calculation with zero term
-            derivative_term = (q_in_delayed - q_in_delayed_previous) / self.time_step
-            self.outflow = q_in_delayed + self.zero_time_constant * derivative_term
+            if dt > 0:
+                derivative_term = (q_in_delayed - q_in_delayed_previous) / dt
+                self._state['outflow'] = q_in_delayed + self.zero_time_constant * derivative_term
+            else:
+                self._state['outflow'] = q_in_delayed
         else:
             # Not enough history yet, assume zero outflow
-            self.outflow = 0
+            self._state['outflow'] = 0
 
         # Add the current inflow to the history for the next step
-        self.inflow_history.append(self.inflow)
+        self.inflow_history.append(inflow)
 
         # Update water level based on the integral action
-        self.water_level += self.gain * (self.inflow - self.outflow) * self.time_step
+        self._state['water_level'] += self.gain * (inflow - self._state['outflow']) * dt
+        self._state['water_level'] = max(0, self._state['water_level'])
 
+        return self.get_state()
 
-    def get_state(self):
-        """Returns the current state of the canal."""
-        return {
-            'water_level': self.water_level,
-            'inflow': self.inflow,
-            'outflow': self.outflow
-        }
-
-    def set_inflow(self, inflow):
-        """Callback to receive inflow from an upstream object."""
-        self.update_state(inflow)
-
-    def connect(self, upstream_object):
-        """Connects to an upstream object that provides inflow."""
-        pass # Connections are handled by the simulation harness
+    @property
+    def is_stateful(self) -> bool:
+        return True
