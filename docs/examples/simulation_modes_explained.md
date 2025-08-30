@@ -17,7 +17,7 @@
 这是最基础的仿真层次，仅模拟系统中各个物理组件（如水库、管道、闸门）的行为，完全遵循预设的物理和水力学规律。此模式下不涉及任何智能决策或主动控制，旨在观察系统在给定输入和边界条件下的自然演化过程。
 
 **代码实现 (Code Implementation):**
-- **物理模型**: 所有物理组件的数学模型都定义在 `core_lib/physical_objects/` 目录下（例如 `Reservoir`, `Canal`, `Gate`）。这些类都实现了 `Simulatable` 接口。
+- **物理模型**: 所有物理组件的数学模型都定义在 `core_lib/physical_objects/` 目录下（例如 `Reservoir`, `UnifiedCanal(model_type='integral')`, `Gate`）。这些类都实现了 `Simulatable` 接口。
 - **拓扑与加载**: `SimulationLoader` 根据 `components.yml` 和 `topology.yml` 文件实例化物理组件，并构建它们之间的连接关系图。
 - **仿真引擎**: 核心驱动逻辑位于 `SimulationHarness._step_physical_models()` 方法中。该方法会按照拓扑排序（保证水流方向的计算正确性）依次调用每个物理组件的 `.step()` 方法，更新其状态。
 

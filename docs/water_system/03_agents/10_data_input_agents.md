@@ -43,7 +43,7 @@
 **不同点**:
 -   **意图更明确**: 它的命名和参数（如 `target_component`）都清晰地表明其用途是提供“入流”。
 -   **主题构造**: 如果不显式提供 `inflow_topic`，它会根据 `target_component` 的名称自动构造一个主题，如 `inflow/my_reservoir`。这有助于维持系统消息主题的规范性。
--   **消息格式**: 它发布的消息格式是固定的 `{'inflow_rate': float(inflow_value)}`。这使得需要订阅入流数据的物理组件（如 `Canal`）可以依赖一个统一的消息接口。
+-   **消息格式**: 它发布的消息格式是固定的 `{'inflow_rate': float(inflow_value)}`。这使得需要订阅入流数据的物理组件（如 `UnifiedCanal(model_type='integral')`）可以依赖一个统一的消息接口。
 -   **时间处理**: `CsvInflowAgent` 的时间匹配逻辑更灵活，它会查找小于或等于当前仿真时间的最接近的数据点，这使得它能更好地处理仿真步长与数据时间粒度不一致的情况。而 `CsvReaderAgent` 要求时间完全精确匹配。
 
 ### 总结

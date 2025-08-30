@@ -9,16 +9,14 @@ from .pipe import Pipe
 from .gate import Gate
 from .pump import Pump
 from .valve import Valve
-from .canal import Canal
 from .river_channel import RiverChannel
-from .st_venant_reach import StVenantReach
 from .hydropower_station import HydropowerStation
 from .lake import Lake
 from .water_turbine import WaterTurbine
 from .rainfall_runoff import RainfallRunoff
 # from .integral_delay_canal import IntegralDelayCanal
 # from .integral_delay_zero_canal import IntegralDelayZeroCanal
-# from .unified_canal import UnifiedCanal
+from .unified_canal import UnifiedCanal
 
 __all__ = [
     'Reservoir',
@@ -26,12 +24,10 @@ __all__ = [
     'Gate',
     'Pump',
     'Valve',
-    'StVenantReach',
     'HydropowerStation',
     'Lake',
     'WaterTurbine',
     'RainfallRunoff',
-    'Canal',
     'RiverChannel',
-    # 'UnifiedCanal'
+    'UnifiedCanal'
 ]

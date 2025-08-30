@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../.
 
 # All necessary imports
 from core_lib.core_engine.testing.simulation_harness import SimulationHarness
-from core_lib.physical_objects.canal import Canal
+from core_lib.physical_objects.unified_canal import UnifiedCanal
 from core_lib.physical_objects.gate import Gate
 from core_lib.local_agents.io.physical_io_agent import PhysicalIOAgent
 from core_lib.local_agents.control.pid_controller import PIDController
@@ -78,8 +78,8 @@ def run_hierarchical_control_example():
     initial_upstream_volume = 652500 # This corresponds to ~4.5m
     initial_upstream_level = _recalculate_level_from_volume(initial_upstream_volume, canal_params)
 
-    upstream_canal = Canal(name="upstream_canal", initial_state={'volume': initial_upstream_volume, 'water_level': initial_upstream_level}, parameters=canal_params, message_bus=bus, inflow_topic=INFLOW_DISTURBANCE_TOPIC)
-    downstream_canal = Canal(name="downstream_canal", initial_state={'volume': 400000}, parameters=canal_params)
+    upstream_canal = UnifiedCanal(model_type='integral', name="upstream_canal", initial_state={'volume': initial_upstream_volume, 'water_level': initial_upstream_level}, parameters=canal_params, message_bus=bus, inflow_topic=INFLOW_DISTURBANCE_TOPIC)
+    downstream_canal = UnifiedCanal(model_type='integral', name="downstream_canal", initial_state={'volume': 400000}, parameters=canal_params)
 
     gate_params = {'discharge_coefficient': 0.7, 'width': 15.0, 'max_opening': 5.0, 'max_rate_of_change': 0.5}
     control_gate = Gate(name="control_gate", initial_state={'opening': 0.3}, parameters=gate_params)

@@ -6,7 +6,7 @@ import numpy as np
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 from core_lib.core_engine.testing.simulation_harness import SimulationHarness
-from core_lib.physical_objects.canal import Canal
+from core_lib.physical_objects.unified_canal import UnifiedCanal
 from core_lib.physical_objects.gate import Gate
 from core_lib.local_agents.io.physical_io_agent import PhysicalIOAgent
 from core_lib.local_agents.control.pid_controller import PIDController
@@ -40,14 +40,14 @@ def run_local_closed_loop_example():
     pid_setpoint = 4.0 # Target water level in meters
     initial_volume = 112100.0 # Volume corresponding to ~4.0m level
 
-    upstream_canal = Canal(
+    upstream_canal = UnifiedCanal(model_type='integral',
         name="upstream_canal",
         initial_state={'volume': initial_volume},
         parameters=canal_params,
         message_bus=bus,
         inflow_topic=INFLOW_TOPIC
     )
-    downstream_canal = Canal(
+    downstream_canal = UnifiedCanal(model_type='integral',
         name="downstream_canal",
         initial_state={'volume': 50000},
         parameters=canal_params

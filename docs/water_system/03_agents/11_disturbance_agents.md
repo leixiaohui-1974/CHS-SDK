@@ -15,7 +15,7 @@
 ### 工作机制
 
 1.  **初始化**:
-    -   `topic`: 发布降雨消息的目标主题。这个主题通常会被某个物理模型（如 `Canal`）或 `RainfallRunoff` 模型订阅。
+    -   `topic`: 发布降雨消息的目标主题。这个主题通常会被某个物理模型（如 `UnifiedCanal(model_type='integral')`）或 `RainfallRunoff` 模型订阅。
     -   `start_time`: 降雨事件的开始时间 (s)。
     -   `duration`: 降雨事件的持续时间 (s)。
     -   `inflow_rate`: 降雨期间恒定的入流量 (m³/s)。

@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 # Physical Components
 from core_lib.physical_objects.reservoir import Reservoir
 from core_lib.physical_objects.gate import Gate
-from core_lib.physical_objects.canal import Canal
+from core_lib.physical_objects.unified_canal import UnifiedCanal
 from core_lib.physical_objects.pipe import Pipe
 from core_lib.physical_objects.valve import Valve
 
@@ -50,11 +50,11 @@ def run_simulation():
     components = [
         Reservoir(name="wendegen_reservoir", initial_state={'water_level': 350.0}, parameters={'surface_area': 5e7}),
         Gate(name="water_intake_gate", initial_state={'opening': 0.5}, parameters={'width': 15, 'discharge_coefficient': 0.6}),
-        Canal(name="tunnel_1", initial_state={'water_level': 349.0, 'volume': 7e7}, parameters={'length': 70000, 'bottom_width': 20, 'slope': 0.0001, 'side_slope_z': 2, 'manning_n': 0.03}),
+        UnifiedCanal(model_type='integral', name="tunnel_1", initial_state={'water_level': 349.0, 'volume': 7e7}, parameters={'length': 70000, 'bottom_width': 20, 'slope': 0.0001, 'side_slope_z': 2, 'manning_n': 0.03}),
         Gate(name="taoriver_gate", initial_state={'opening': 0.6}, parameters={}),
-        Canal(name="tunnel_2", initial_state={'water_level': 325.0, 'volume': 8e6}, parameters={'length': 8000, 'bottom_width': 20, 'slope': 0.0001, 'side_slope_z': 2, 'manning_n': 0.03}),
+        UnifiedCanal(model_type='integral', name="tunnel_2", initial_state={'water_level': 325.0, 'volume': 8e6}, parameters={'length': 8000, 'bottom_width': 20, 'slope': 0.0001, 'side_slope_z': 2, 'manning_n': 0.03}),
         Gate(name="guiliu_gate", initial_state={'opening': 0.6}, parameters={}),
-        Canal(name="tunnel_3", initial_state={'water_level': 322.0, 'volume': 1e8}, parameters={'length': 100000, 'bottom_width': 20, 'slope': 0.0001, 'side_slope_z': 2, 'manning_n': 0.03}),
+        UnifiedCanal(model_type='integral', name="tunnel_3", initial_state={'water_level': 322.0, 'volume': 1e8}, parameters={'length': 100000, 'bottom_width': 20, 'slope': 0.0001, 'side_slope_z': 2, 'manning_n': 0.03}),
         Reservoir(name="connection_pool", initial_state={'water_level': 320.0}, parameters={'surface_area': 1e4}),
         Pipe(name="pipe_1", initial_state={'flow': 15.0, 'pressure': 0.8}, parameters={'length': 20000, 'diameter': 3.0, 'friction_factor': 0.015}),
         Valve(name="online_valve", initial_state={'setting': 0.7}, parameters={}),

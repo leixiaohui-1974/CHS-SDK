@@ -18,7 +18,7 @@
 
 1.  **物理组件 (`components.yml`)**:
     *   **水库**: 文得根水库 (`wendegen_reservoir`), 连接池 (`connection_pool`), 末端水池 (`terminal_pool`)。
-    *   **隧洞/渠道 (`Canal`)**: `tunnel_1`, `tunnel_2`, `tunnel_3`。
+    *   **隧洞/渠道 (`UnifiedCanal(model_type='integral')`)**: `tunnel_1`, `tunnel_2`, `tunnel_3`。
     *   **管道 (`Pipe`)**: `pipe_1`, `pipe_2`。
     *   **闸门/阀门 (`Gate`/`Valve`)**: 沿线分布的多个闸门和阀门，用于控制水流。
 

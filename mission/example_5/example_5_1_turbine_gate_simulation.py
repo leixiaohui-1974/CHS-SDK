@@ -16,7 +16,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from core_lib.core_engine.solver.network_solver import NetworkSolver
-from core_lib.physical_objects.st_venant_reach import StVenantReach
+from core_lib.physical_objects.unified_canal import UnifiedCanal
 from core_lib.hydro_nodes.turbine_node import TurbineNode
 from core_lib.hydro_nodes.gate_node import GateNode
 
@@ -35,17 +35,27 @@ def run_single_component_simulation(component_type: str):
     initial_inflow = 150.0
 
     # --- 3. Create Components ---
-    forebay = StVenantReach(
-        name="forebay", length=1000, num_points=11,
-        bottom_width=20, side_slope_z=2, manning_n=0.03, slope=0.001,
-        initial_H=np.full(11, initial_depth),
-        initial_Q=np.full(11, initial_inflow)
+    forebay = UnifiedCanal(
+        name="forebay",
+        initial_state={},
+        model_type='st_venant',
+        parameters={
+            "length": 1000, "num_points": 11, "bottom_width": 20,
+            "side_slope_z": 2, "manning_n": 0.03, "slope": 0.001,
+            "initial_H": np.full(11, initial_depth),
+            "initial_Q": np.full(11, initial_inflow)
+        }
     )
-    tailrace = StVenantReach(
-        name="tailrace", length=1000, num_points=11,
-        bottom_width=20, side_slope_z=2, manning_n=0.03, slope=0.001,
-        initial_H=np.full(11, initial_depth - 5.0), # Start with a 5m head diff
-        initial_Q=np.full(11, initial_inflow)
+    tailrace = UnifiedCanal(
+        name="tailrace",
+        initial_state={},
+        model_type='st_venant',
+        parameters={
+            "length": 1000, "num_points": 11, "bottom_width": 20,
+            "side_slope_z": 2, "manning_n": 0.03, "slope": 0.001,
+            "initial_H": np.full(11, initial_depth - 5.0),
+            "initial_Q": np.full(11, initial_inflow)
+        }
     )
 
     if component_type == 'turbine':

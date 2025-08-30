@@ -6,7 +6,7 @@ import os
 # This is necessary for the script to find the 'core_lib' module
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from core_lib.physical_objects.canal import Canal
+from core_lib.physical_objects.unified_canal import UnifiedCanal
 from core_lib.physical_objects.gate import Gate
 
 def run_physical_model_example():
@@ -32,7 +32,7 @@ def run_physical_model_example():
         'water_level': 2.0,     # 初始水位 (m) - 将由蓄水量重新计算
         'outflow': 0            # 初始出流量 (m^3/s)
     }
-    upstream_canal = Canal(
+    upstream_canal = UnifiedCanal(model_type='integral',
         name="upstream_canal",
         initial_state=initial_canal_state,
         parameters=canal_params
