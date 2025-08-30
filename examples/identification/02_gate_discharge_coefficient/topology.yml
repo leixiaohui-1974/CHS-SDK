@@ -1,0 +1,12 @@
+# Defines the physical connections for the "true" system
+# The twin gate is not physically connected; it will be driven by data.
+
+nodes:
+  - upstream_reservoir
+  - downstream_reservoir
+  - true_gate
+  - twin_gate
+
+links:
+  - { upstream: upstream_reservoir, downstream: true_gate }
+  - { upstream: true_gate, downstream: downstream_reservoir }

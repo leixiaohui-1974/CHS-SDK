@@ -61,14 +61,23 @@ class DigitalTwinAgent(Agent):
 
     def publish_state(self):
         """
-        Fetches the current state, applies enhancements (e.g., smoothing),
-        and publishes it.
+        Fetches the current state, applies enhancements, and publishes each
+        state variable on its own sub-topic for granular consumption.
         """
         raw_state = self.model.get_state()
         enhanced_state = self._apply_smoothing(raw_state)
 
-        message: Message = enhanced_state
-        self.bus.publish(self.state_topic, message)
+        # Publish the full state dictionary to the base topic
+        self.bus.publish(self.state_topic, enhanced_state)
+
+        # Also publish each key-value pair to its own sub-topic
+        # This allows agents like ParameterIdentificationAgent to subscribe to just the data they need
+        # in the simple {'value': ...} format they expect.
+        for key, value in enhanced_state.items():
+            if isinstance(value, (int, float)):
+                sub_topic = f"{self.state_topic}/{key}"
+                message: Message = {'value': value}
+                self.bus.publish(sub_topic, message)
 
     def run(self, current_time: float):
         """
@@ -80,4 +89,5 @@ class DigitalTwinAgent(Agent):
         Args:
             current_time: The current simulation time (ignored by this agent).
         """
+        # print(f"  [Debug DTA] Agent '{self.agent_id}' running at time {current_time}.")
         self.publish_state()

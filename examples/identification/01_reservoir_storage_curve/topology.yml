@@ -1,0 +1,10 @@
+# This file defines the physical connections between components.
+# In this scenario, there are no direct physical connections.
+# Data is exchanged via the message bus, configured in agents.yml.
+
+nodes:
+  - true_reservoir
+  - twin_reservoir
+  - inflow_data_source
+
+links: []

@@ -94,6 +94,8 @@ class SimulationLoader:
                 "EmergencyAgent": "core_lib.local_agents.supervisory.emergency_agent.EmergencyAgent",
                 "CentralDispatcherAgent": "core_lib.local_agents.supervisory.central_dispatcher_agent.CentralDispatcherAgent",
                 "CsvInflowAgent": "core_lib.data_access.csv_inflow_agent.CsvInflowAgent",
+                "ParameterIdentificationAgent": "core_lib.identification.identification_agent.ParameterIdentificationAgent",
+                "ModelUpdaterAgent": "core_lib.identification.model_updater_agent.ModelUpdaterAgent",
             }
 
             if class_path not in CLASS_MAP:

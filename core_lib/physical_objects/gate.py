@@ -1,10 +1,12 @@
 """
 Simulation model for a Gate.
 """
+import math
+from typing import Dict, Any, Optional
+import numpy as np
+from scipy.optimize import minimize
 from core_lib.core.interfaces import PhysicalObjectInterface, State, Parameters
 from core_lib.central_coordination.collaboration.message_bus import MessageBus, Message
-from typing import Dict, Any, Optional
-import math
 
 class Gate(PhysicalObjectInterface):
     """
@@ -21,8 +23,7 @@ class Gate(PhysicalObjectInterface):
         self.action_topic = action_topic
         self.action_key = action_key
         self.target_opening = self._state.get('opening', 0)
-        # Store last known head diff for inverse calculation
-        self.last_head_diff = 1
+        self.last_head_diff = 1 # Store last known head diff for inverse calculation
 
         if self.bus and self.action_topic:
             self.bus.subscribe(self.action_topic, self.handle_action_message)
@@ -30,79 +31,102 @@ class Gate(PhysicalObjectInterface):
 
         print(f"Gate '{self.name}' created with initial state {self._state}.")
 
-    def _calculate_outflow(self, upstream_level: float, downstream_level: float = 0) -> float:
+    def _calculate_outflow(self, upstream_level: float, opening: float, downstream_level: float = 0, C: Optional[float] = None) -> float:
         """
         Calculates the outflow through the gate using the orifice equation.
         Q = C * A * sqrt(2 * g * h)
         """
-        C = self._params.get('discharge_coefficient', 0.6)
-        width = self._params.get('width', 10)
+        if C is None:
+            C = self._params.get('discharge_coefficient', 0.6)
+        width = self._params.get('width', 2.0)
         g = 9.81
-
-        opening = self._state.get('opening', 0)
         area = opening * width
-
         head = upstream_level - downstream_level
-        self.last_head_diff = head # Cache for inverse calculation
+        self.last_head_diff = head
         if head <= 0:
             return 0
-
-        outflow = C * area * (2 * g * head)**0.5
-        return outflow
+        return C * area * math.sqrt(2 * g * head)
 
     def _calculate_opening_for_flow(self, target_flow: float) -> float:
-        """
-        Inverse of the orifice equation to find the required gate opening for a given flow.
-        opening = Q / (C * width * sqrt(2 * g * h))
-        """
+        """Inverse of the orifice equation to find the required gate opening for a given flow."""
         C = self._params.get('discharge_coefficient', 0.6)
-        width = self._params.get('width', 10)
+        width = self._params.get('width', 2.0)
         g = 9.81
-
         if self.last_head_diff <= 0:
-            return 0 # Cannot achieve flow with no head difference
-
+            return 0
         denominator = C * width * math.sqrt(2 * g * self.last_head_diff)
         if denominator == 0:
-            return self._params.get('max_opening', 1.0) # Cannot calculate, open fully if flow is desired
-
+            return self._params.get('max_opening', 1.0)
         return target_flow / denominator
 
     def handle_action_message(self, message: Message):
         """Callback to handle incoming action messages from the bus."""
-        # Handle direct opening commands
         if self.action_key in message:
             new_target = message.get(self.action_key)
             if new_target is not None:
                 self.target_opening = float(new_target)
-
-        # Handle target outflow commands
         elif 'gate_target_outflow' in message:
             target_flow = message.get('gate_target_outflow')
             if target_flow is not None:
                 self.target_opening = self._calculate_opening_for_flow(float(target_flow))
 
     def step(self, action: Dict[str, Any], dt: float) -> State:
-        """
-        Updates the gate's state over a single time step.
-        """
-        # Direct control via action dict for non-MAS simulations
+        """Updates the gate's state over a single time step."""
         if 'control_signal' in action and action['control_signal'] is not None:
             self.target_opening = action['control_signal']
-
         max_roc = self._params.get('max_rate_of_change', 0.05)
         current_opening = self._state.get('opening', 0)
-
         if self.target_opening > current_opening:
             new_opening = min(current_opening + max_roc * dt, self.target_opening)
         else:
             new_opening = max(current_opening - max_roc * dt, self.target_opening)
-
         max_opening = self._params.get('max_opening', 1.0)
         self._state['opening'] = max(0.0, min(new_opening, max_opening))
-
         upstream_level = action.get('upstream_head', 0)
         downstream_level = action.get('downstream_head', 0)
-        self._state['outflow'] = self._calculate_outflow(upstream_level, downstream_level)
-
+        self._state['outflow'] = self._calculate_outflow(upstream_level, self._state['opening'], downstream_level)
         return self.get_state()
+
+    def identify_parameters(self, data: Dict[str, np.ndarray], method: str = 'offline') -> Parameters:
+        """
+        Identifies the discharge coefficient (C) for the gate.
+        """
+        required_keys = ['upstream_levels', 'downstream_levels', 'openings', 'observed_flows']
+        if not all(k in data for k in required_keys):
+            raise ValueError(f"Identification data must contain {required_keys}.")
+
+        up_levels = data['upstream_levels']
+        down_levels = data['downstream_levels']
+        openings = data['openings']
+        obs_flows = data['observed_flows']
+
+        def _simulation_error(c_param: np.ndarray) -> float:
+            """Objective function for the optimizer."""
+            C = c_param[0]
+            simulated_flows = np.zeros_like(obs_flows)
+            for i in range(len(obs_flows)):
+                simulated_flows[i] = self._calculate_outflow(
+                    upstream_level=up_levels[i],
+                    downstream_level=down_levels[i],
+                    opening=openings[i],
+                    C=C
+                )
+            # Calculate RMSE
+            rmse = np.sqrt(np.mean((simulated_flows - obs_flows)**2))
+            return rmse
+
+        initial_guess = np.array([self._params.get('discharge_coefficient', 0.6)])
+        result = minimize(
+            _simulation_error,
+            initial_guess,
+            method='Nelder-Mead', # Good for simple, single-variable optimization
+            bounds=[(0.1, 1.0)] # Physical bounds for C
+        )
+
+        if result.success:
+            new_c = result.x[0]
+            print(f"Parameter identification successful for '{self.name}'. New C = {new_c:.4f}")
+            return {'discharge_coefficient': new_c}
+        else:
+            print(f"Warning: Parameter identification failed for '{self.name}': {result.message}")
+            return {}

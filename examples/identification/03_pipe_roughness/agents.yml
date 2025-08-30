@@ -1,0 +1,40 @@
+# Agents for the Pipe Roughness Identification Example
+
+# Perception agent for the upstream reservoir
+upstream_observer:
+  type: DigitalTwinAgent
+  parameters:
+    target_model: "upstream_reservoir"
+    publish_topic: "state/upstream_reservoir"
+
+# Perception agent for the downstream reservoir
+downstream_observer:
+  type: DigitalTwinAgent
+  parameters:
+    target_model: "downstream_reservoir"
+    publish_topic: "state/downstream_reservoir"
+
+# Perception agent for the true pipe to get its observed flow
+pipe_observer:
+  type: DigitalTwinAgent
+  parameters:
+    target_model: "true_pipe"
+    publish_topic: "state/true_pipe"
+
+# The core identification agent targeting the twin pipe
+identification_agent:
+  type: ParameterIdentificationAgent
+  parameters:
+    target_model: "twin_pipe"
+    identification_interval: 100
+    identification_data_map:
+      # Data needed by Pipe.identify_parameters()
+      upstream_levels: "state/upstream_reservoir/water_level"
+      downstream_levels: "state/downstream_reservoir/water_level"
+      observed_flows: "state/true_pipe/flow"
+
+# Agent to apply the identified parameters back to the twin pipe
+model_updater:
+  type: ModelUpdaterAgent
+  parameters:
+    target_model_name: "twin_pipe"

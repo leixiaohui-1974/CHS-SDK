@@ -1,0 +1,44 @@
+# This file defines the agents that drive the simulation and identification logic.
+
+# Agent to read inflow data from the CSV source and publish it to the message bus.
+inflow_agent:
+  type: CsvInflowAgent
+  parameters:
+    topic: "data/inflow"
+    filepath: "inflow_data.csv"
+    data_column: "inflow"
+    time_column: "time"
+
+# A perception agent that observes the "true" reservoir's state.
+observation_agent:
+  type: DigitalTwinAgent
+  parameters:
+    target_model: "true_reservoir"
+    publish_topic: "observed_state/true_reservoir"
+
+# A perception agent that observes the "twin" reservoir's state.
+# This is needed to get the inflow/outflow data for the identification agent.
+twin_perception_agent:
+  type: DigitalTwinAgent
+  parameters:
+    target_model: "twin_reservoir"
+    publish_topic: "state/twin_reservoir"
+
+# The core agent for parameter identification.
+identification_agent:
+  type: ParameterIdentificationAgent
+  parameters:
+    target_model: "twin_reservoir"
+    identification_interval: 100
+    identification_data_map:
+      # Data now comes from the perception agents
+      inflows: "state/twin_reservoir/inflow"
+      outflows: "state/twin_reservoir/outflow"
+      levels: "observed_state/true_reservoir/water_level"
+
+# Agent to apply the identified parameters back to the digital twin model.
+model_updater:
+  type: ModelUpdaterAgent
+  parameters:
+    # This agent listens on the default topic: identified_parameters/{target_model_name}
+    target_model_name: "twin_reservoir"

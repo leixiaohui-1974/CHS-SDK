@@ -1,0 +1,12 @@
+# Defines the physical connections for the "true" system
+# The twin pipe is not physically connected; it will be driven by data.
+
+nodes:
+  - upstream_reservoir
+  - downstream_reservoir
+  - true_pipe
+  - twin_pipe
+
+links:
+  - { upstream: upstream_reservoir, downstream: true_pipe }
+  - { upstream: true_pipe, downstream: downstream_reservoir }

@@ -1,0 +1,41 @@
+# Components for the Gate Discharge Coefficient Identification Example
+
+# An upstream reservoir to provide a water source
+upstream_reservoir:
+  type: Reservoir
+  parameters:
+    storage_curve:
+      - [0, 100.0]
+      - [10000000, 110.0] # Large reservoir, so level is nearly constant
+  initial_state:
+    volume: 5000000
+
+# A downstream reservoir to provide a downstream water level
+downstream_reservoir:
+  type: Reservoir
+  parameters:
+    storage_curve:
+      - [0, 90.0]
+      - [10000000, 100.0]
+  initial_state:
+    volume: 1000000
+
+# The "true" gate with the correct discharge coefficient
+true_gate:
+  type: Gate
+  parameters:
+    discharge_coefficient: 0.8 # The "true" value we want to identify
+    width: 2.0 # meters
+    height: 2.0 # meters
+  initial_state:
+    opening: 0.5 # Start half open
+
+# The "twin" gate with an incorrect initial guess
+twin_gate:
+  type: Gate
+  parameters:
+    discharge_coefficient: 0.6 # The initial incorrect guess
+    width: 2.0
+    height: 2.0
+  initial_state:
+    opening: 0.5
