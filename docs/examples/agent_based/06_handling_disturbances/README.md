@@ -26,11 +26,11 @@
 - **本地控制代理 (Local Control Agent)** 作为第一道防线，立即对由扰动引起的与设定点的微小偏差做出反应。
 - **中央调度器 (Central Dispatcher)** 监控整个系统的状态。如果扰动足够大，以至于将系统推向危险状态 (例如，超过 `flood_threshold` (洪水阈值))，调度器可以通过向本地代理发布一个新的、更安全的设定点来进行干预。
 
-## 示例: `example_with_disturbance.py`
+## 示例: `run_disturbance_simulation.py`
 
 该脚本直接建立在分层控制示例的基础上。
 
-[include-code: example_with_disturbance.py]
+[include-code: run_disturbance_simulation.py]
 
 ### 设置
 

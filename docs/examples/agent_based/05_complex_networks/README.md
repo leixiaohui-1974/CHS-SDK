@@ -34,7 +34,7 @@
 
 ## 示例：一个分支的河流网络
 
-理解这一点的最佳方式是通读新的 `example_branched_network.py` 脚本，该脚本现在包含一个完整的多代理控制系统。
+理解这一点的最佳方式是通读新的 `run_branched_network_simulation.py` 脚本，该脚本现在包含一个完整的多代理控制系统。
 
 该示例模拟了以下网络：
 - **水库1** -> **闸门1** -> **支流河道**
@@ -46,14 +46,14 @@
 
 ### 1. 导入和样板代码
 ```python
-from swp.simulation_identification.physical_objects.reservoir import Reservoir
-from swp.simulation_identification.physical_objects.gate import Gate
-from swp.simulation_identification.physical_objects.river_channel import RiverChannel
-from swp.core_engine.testing.simulation_harness import SimulationHarness
-from swp.local_agents.perception.digital_twin_agent import DigitalTwinAgent
-from swp.local_agents.control.pid_controller import PIDController
-from swp.local_agents.control.local_control_agent import LocalControlAgent
-from swp.central_coordination.dispatch.central_dispatcher import CentralDispatcher
+from core_lib.physical_objects.reservoir import Reservoir
+from core_lib.physical_objects.gate import Gate
+from core_lib.physical_objects.river_channel import RiverChannel
+from core_lib.core_engine.testing.simulation_harness import SimulationHarness
+from core_lib.local_agents.perception.digital_twin_agent import DigitalTwinAgent
+from core_lib.local_agents.control.pid_controller import PIDController
+from core_lib.local_agents.control.local_control_agent import LocalControlAgent
+from core_lib.central_coordination.dispatch.central_dispatcher import CentralDispatcher
 
 def run_branched_network_example():
     # ...

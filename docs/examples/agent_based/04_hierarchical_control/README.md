@@ -2,7 +2,7 @@
 
 欢迎来到我们入门系列的最后一个教程。在这里，我们将在教程3的事件驱动概念的基础上，创建一个**分层控制系统 (hierarchical control system)**。这是一种强大的模式，其中一个高层的“主管”代理管理一个或多个低层“操作员”代理的目标。
 
-我们将探索 `example_hierarchical_control.py` 脚本，这是平台功能最先进的示例。
+我们将探索 `run_hierarchical_simulation.py` 脚本，这是平台功能最先进的示例。
 
 ## 1. 场景概述
 
@@ -27,7 +27,7 @@
 
 ## 3. 代码分解
 
-让我们来检查 `example_hierarchical_control.py` 中新的和更新的部分。
+让我们来检查 `run_hierarchical_simulation.py` 中新的和更新的部分。
 
 ### 3.1. 升级 `LocalControlAgent`
 `LocalControlAgent` 现在用两个新的主题进行实例化：
@@ -72,7 +72,7 @@ dispatcher = CentralDispatcher(
 
 在您的终端中执行该脚本：
 ```bash
-python3 example_hierarchical_control.py
+python3 run_hierarchical_simulation.py
 ```
 日志输出清楚地显示了层次结构的运作。
 

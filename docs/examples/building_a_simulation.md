@@ -1,6 +1,6 @@
 # 培训 1: 构建一个基础仿真
 
-本教程将指导您使用智能水务平台从零开始构建一个简单的仿真。我们将构建一个水电站仿真，其代码示例位于 `swp/examples/example_hydropower_simulation.py`。
+本教程将指导您使用智能水务平台从零开始构建一个简单的仿真。我们将构建一个水电站仿真，其代码示例位于 `docs/examples/agent_based/09_hydropower_plant/run_hydropower_simulation.py`。
 
 ## 1. 核心概念
 
@@ -19,10 +19,10 @@
 您需要导入 `SimulationHarness` 以及您想要使用的物理模型。
 
 ```python
-from swp.core_engine.testing.simulation_harness import SimulationHarness
-from swp.simulation_identification.physical_objects.lake import Lake
-from swp.simulation_identification.physical_objects.water_turbine import WaterTurbine
-from swp.simulation_identification.physical_objects.canal import Canal
+from core_lib.core_engine.testing.simulation_harness import SimulationHarness
+from core_lib.physical_objects.lake import Lake
+from core_lib.physical_objects.water_turbine import WaterTurbine
+from core_lib.physical_objects.canal import Canal
 ```
 
 ## 4. 初始化仿真平台
