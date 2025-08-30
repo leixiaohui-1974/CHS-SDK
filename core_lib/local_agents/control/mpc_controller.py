@@ -12,13 +12,21 @@ class MPCController(Controller):
     A MIMO (Multiple-Input Multiple-Output) Model Predictive Controller.
     """
 
-    def __init__(self, **kwargs):
-        self.dt = kwargs.pop('dt', 10.0)
-        self.horizon = kwargs.pop('horizon')
-        self.model_config = kwargs.pop('model_config')
-        self.objective_config = kwargs.pop('objective_config')
-        self.control_config = kwargs.pop('control_config')
+    def __init__(self, config: Dict[str, Any]):
+        """
+        Initializes the MIMO MPC controller.
+        """
+        self.dt = config.pop('dt', 10.0)
+        self.horizon = config.pop('horizon')
+        self.model_config = config.pop('model_config')
+        self.objective_config = config.pop('objective_config')
+        self.control_config = config.pop('control_config')
+
         self.num_actuators = self.control_config['num_actuators']
+        if len(self.control_config['bounds']) != self.num_actuators:
+            raise ValueError("Length of 'bounds' must match 'num_actuators'.")
+        if len(self.control_config['action_topics']) != self.num_actuators:
+            raise ValueError("Length of 'action_topics' must match 'num_actuators'.")
 
     def _objective_function(self, control_sequence: np.ndarray, current_level: float) -> float:
         cost = 0.0
@@ -39,9 +47,9 @@ class MPCController(Controller):
 
     def compute_control_action(self, observation: State, dt: float) -> Any:
         self.dt = dt
-        current_level = observation.get("process_variable") # Changed from water_level
+        current_level = observation.get("process_variable")
         if current_level is None:
-            raise ValueError("Observation from LocalControlAgent must contain 'process_variable'.")
+            raise ValueError("Observation must contain 'process_variable'.")
 
         initial_guess = np.zeros(self.horizon * self.num_actuators)
         bnds = self.control_config['bounds'] * self.horizon
