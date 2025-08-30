@@ -19,7 +19,8 @@ class DigitalTwinAgent(Agent):
                  simulated_object: Simulatable,
                  message_bus: MessageBus,
                  state_topic: str,
-                 smoothing_config: Optional[Dict[str, float]] = None):
+                 smoothing_config: Optional[Dict[str, float]] = None,
+                 **kwargs):
         """
         Initializes the DigitalTwinAgent.
 
@@ -31,6 +32,7 @@ class DigitalTwinAgent(Agent):
             smoothing_config: Optional config for applying EMA smoothing.
                 Example: {'water_level': 0.3, 'outflow': 0.5}
                 The value is the alpha (smoothing factor).
+            **kwargs: Catches any other arguments from the YAML config, like 'log_data'.
         """
         super().__init__(agent_id)
         self.model = simulated_object

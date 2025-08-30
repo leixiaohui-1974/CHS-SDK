@@ -12,6 +12,9 @@ components:
       water_level: 2.0
     parameters:
       surface_area: 1.5
+      storage_curve:
+        - [0, 0]
+        - [15, 10]
 
   - id: real_valve
     class: core_lib.physical_objects.valve.Valve
@@ -33,6 +36,9 @@ components:
       water_level: 2.0
     parameters:
       surface_area: 1.5
+      storage_curve:
+        - [0, 0]
+        - [15, 10]
 
   - id: twin_valve
     class: core_lib.physical_objects.valve.Valve

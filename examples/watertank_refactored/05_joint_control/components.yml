@@ -1,5 +1,21 @@
-# In this specific scenario, the entire system, including the reservoir
-# physics, is modeled using agents to faithfully replicate the logic
-# of the original script-based example.
-# Therefore, there are no physical components.
-components: []
+components:
+  - id: reservoir_1
+    name: main_reservoir
+    class: core_lib.physical_objects.reservoir.Reservoir
+    initial_state:
+      water_level: 8.0
+    parameters:
+      surface_area: 2.5
+      # A simple linear storage curve consistent with the original agent's logic
+      storage_curve:
+        - [0, 0]
+        - [25, 10] # volume = level * surface_area (10 * 2.5)
+      # --- Topic-based inputs for the new flexible Reservoir ---
+      inflow_topics:
+        - topic: pump_command_topic
+          key: value
+      outflow_topics:
+        - topic: valve_command_topic
+          key: value
+        - topic: disturbance_outflow_topic
+          key: value

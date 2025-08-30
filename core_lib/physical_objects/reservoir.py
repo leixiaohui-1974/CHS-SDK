@@ -17,23 +17,31 @@ class Reservoir(PhysicalObjectInterface):
     """
 
     def __init__(self, name: str, initial_state: State, parameters: Parameters,
-                 message_bus: Optional[MessageBus] = None, inflow_topic: Optional[str] = None):
+                 message_bus: Optional[MessageBus] = None, **kwargs):
         super().__init__(name, initial_state, parameters)
-        self._state.setdefault('outflow', 0) # Ensure outflow is in the state
+        self._state.setdefault('outflow', 0)
 
         if 'storage_curve' not in self._params:
             raise ValueError("Reservoir parameters must include a 'storage_curve'.")
-
         self._validate_and_prepare_storage_curve()
 
         self.bus = message_bus
-        # Get inflow topic from direct argument or from the parameters dictionary for flexibility
-        self.inflow_topic = inflow_topic or self._params.get('inflow_topic')
+        # For backward compatibility with single inflow_topic
         self.data_inflow = 0.0
+        # For new flexible topic subscriptions
+        self.topic_inflows = {}
+        self.topic_outflows = {}
 
-        if self.bus and self.inflow_topic:
-            self.bus.subscribe(self.inflow_topic, self.handle_inflow_message)
-            print(f"Reservoir '{self.name}' subscribed to data inflow topic '{self.inflow_topic}'.")
+        if self.bus:
+            # New flexible way to subscribe from lists in parameters
+            self._subscribe_from_config('inflow_topics', self.topic_inflows)
+            self._subscribe_from_config('outflow_topics', self.topic_outflows)
+
+            # Old way for backward compatibility
+            inflow_topic = kwargs.get('inflow_topic') or self._params.get('inflow_topic')
+            if inflow_topic:
+                self.bus.subscribe(inflow_topic, self._handle_legacy_inflow_message)
+                print(f"Reservoir '{self.name}' subscribed to legacy data inflow topic '{inflow_topic}'.")
 
         print(f"Reservoir '{self.name}' created with initial state {self._state}.")
 
@@ -65,30 +73,67 @@ class Reservoir(PhysicalObjectInterface):
         if 'storage_curve' in parameters:
             self._validate_and_prepare_storage_curve()
 
-    def handle_inflow_message(self, message: Message):
-        """Callback to handle incoming data-driven inflow messages."""
+    def _subscribe_from_config(self, config_key: str, storage: Dict[str, float]):
+        """Reads topic configurations from parameters and subscribes handlers."""
+        topic_configs = self._params.get(config_key, [])
+        if not isinstance(topic_configs, list):
+            print(f"Warning: Reservoir '{self.name}' expects '{config_key}' to be a list.")
+            return
+
+        for config in topic_configs:
+            topic = config.get('topic')
+            key = config.get('key', 'value')
+            if not topic:
+                continue
+
+            storage[topic] = 0.0
+            # Use a closure to capture topic-specific variables correctly for the handler
+            def create_handler(topic_name, msg_key, storage_dict):
+                def handler(message: Message):
+                    value = message.get(msg_key, 0.0)
+                    if isinstance(value, (int, float)):
+                        storage_dict[topic_name] = value
+                return handler
+
+            self.bus.subscribe(topic, create_handler(topic, key, storage))
+            print(f"Reservoir '{self.name}' subscribed to {config_key.replace('_', ' ')} '{topic}' with key '{key}'.")
+
+    def _handle_legacy_inflow_message(self, message: Message):
+        """Callback for the old `inflow_topic` parameter to ensure backward compatibility."""
         inflow_value = message.get('control_signal') or message.get('inflow_rate')
         if isinstance(inflow_value, (int, float)):
             self.data_inflow += inflow_value
 
     def step(self, action: Dict[str, Any], dt: float) -> State:
         """Simulates the reservoir's change over a single time step."""
+        # Sum inflows from all sources
         physical_inflow = self._inflow
-        total_inflow = physical_inflow + self.data_inflow
-        outflow = action.get('outflow', 0)
+        legacy_data_inflow = self.data_inflow
+        topic_based_inflow = sum(self.topic_inflows.values())
+        total_inflow = physical_inflow + legacy_data_inflow + topic_based_inflow
 
+        # Sum outflows from all sources
+        action_outflow = action.get('outflow', 0)
+        topic_based_outflow = sum(self.topic_outflows.values())
+        total_outflow = action_outflow + topic_based_outflow
+
+        # Calculate water balance
         current_volume = self._state.get('volume', 0)
-
-        delta_volume = (total_inflow - outflow) * dt
+        delta_volume = (total_inflow - total_outflow) * dt
         new_volume = max(0, current_volume + delta_volume)
 
+        # Update state
         self._state['volume'] = new_volume
         self._state['water_level'] = self._get_level_from_volume(new_volume)
-        self._state['outflow'] = outflow
-        self._state['inflow'] = total_inflow # Add inflow to state for perception
+        self._state['outflow'] = total_outflow
+        self._state['inflow'] = total_inflow
 
-        # Reset the data-driven inflow for the next step
+        # Reset data-driven values for the next step to avoid using stale data
         self.data_inflow = 0.0
+        for topic in self.topic_inflows:
+            self.topic_inflows[topic] = 0.0
+        for topic in self.topic_outflows:
+            self.topic_outflows[topic] = 0.0
 
         return self._state
 
