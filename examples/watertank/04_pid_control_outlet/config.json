@@ -1,14 +1,17 @@
 {
     "tank_params": {
-        "area": 1.8,
-        "initial_level": 12.0
+        "name": "tank2",
+        "initial_state": { "water_level": 12.0 },
+        "parameters": { "surface_area": 1.8 }
     },
     "pid_params": {
+        "note": "Gains are negative because this is a reverse-acting loop (high level -> high outflow).",
         "setpoint": 10.0,
-        "kp": 1.5,
-        "ki": 0.1,
-        "kd": 0.08,
-        "output_limits": [0, 6]
+        "Kp": -1.5,
+        "Ki": -0.1,
+        "Kd": -0.08,
+        "min_output": 0,
+        "max_output": 6
     },
     "simulation_params": {
         "total_time": 300,
@@ -21,6 +24,11 @@
             {"duration": 80, "inflow": 1.5},
             {"duration": 70, "inflow": 2.5}
         ]
+    },
+    "messaging_params": {
+        "state_topic": "tank/state",
+        "command_topic": "valve/command",
+        "disturbance_topic": "tank/inflow_disturbance"
     },
     "logging_params": {
         "log_dir": "logs/04_pid_control_outlet",

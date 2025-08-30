@@ -1,0 +1,42 @@
+{
+    "tank_params": {
+        "name": "tank_joint_control",
+        "initial_state": { "water_level": 8.0 },
+        "parameters": { "surface_area": 2.5 }
+    },
+    "pid_params": {
+        "note": "This is the main PID for the coordinator agent.",
+        "setpoint": 10.0,
+        "Kp": 1.8,
+        "Ki": 0.15,
+        "Kd": 0.05,
+        "min_output": -10.0,
+        "max_output": 10.0
+    },
+    "actuator_limits": {
+        "max_inflow": 8.0,
+        "max_outflow": 8.0
+    },
+    "simulation_params": {
+        "total_time": 400,
+        "time_step": 1.0
+    },
+    "disturbance_params": {
+        "note": "This is an unmeasured disturbance, e.g., a leak or side usage.",
+        "pattern": [
+            {"duration": 100, "flow": 0.0},
+            {"duration": 150, "flow": 2.5},
+            {"duration": 150, "flow": 1.0}
+        ]
+    },
+    "messaging_params": {
+        "state_topic": "tank/state",
+        "pump_command_topic": "pump/command",
+        "valve_command_topic": "valve/command"
+    },
+    "logging_params": {
+        "log_dir": "logs/05_joint_control",
+        "log_file": "joint_control_log.csv",
+        "log_headers": ["time", "setpoint", "water_level", "pump_inflow", "valve_outflow", "disturbance"]
+    }
+}
