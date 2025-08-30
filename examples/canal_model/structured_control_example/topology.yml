@@ -1,0 +1,11 @@
+# Topology Definition for the Structured Control Agent Example
+# Structure: reservoir -> gate_1 -> canal_1 -> gate_2 -> canal_2
+connections:
+  - upstream: upstream_reservoir
+    downstream: gate_1
+  - upstream: gate_1
+    downstream: canal_1
+  - upstream: canal_1
+    downstream: gate_2
+  - upstream: gate_2
+    downstream: canal_2

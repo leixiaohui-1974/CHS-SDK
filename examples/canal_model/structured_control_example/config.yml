@@ -1,0 +1,4 @@
+# Simulation Configuration for the Structured Control Agent Example
+simulation:
+  duration: 3600 # 1 hour
+  dt: 10 # seconds
