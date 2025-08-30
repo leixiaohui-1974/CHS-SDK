@@ -15,6 +15,10 @@ from core_lib.io.yaml_loader import SimulationLoader
 def run_scenario(scenario_name, config_path, components_file):
     """
     Runs a single simulation scenario and saves the results.
+
+    NOTE: This file renaming approach is fragile and not ideal for production use.
+    A better approach would be to modify the SimulationLoader to accept the
+    components file path directly as an argument.
     """
     print(f"--- Running Scenario: {scenario_name} ---")
 

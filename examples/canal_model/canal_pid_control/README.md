@@ -1,48 +1,48 @@
-# PID Control Strategy Comparison for a Canal System
+# 渠道系统PID控制策略对比
 
-This example demonstrates and compares three different PID control strategies for regulating water levels in a canal system with two gates and three canal reaches in series.
+本示例演示并比较了三种不同的PID控制策略，用于调节一个由两个闸门和三个串联渠段组成的渠道系统中的水位。
 
-## System Description
+## 系统描述
 
-The simulated system consists of:
-- An `upstream_reservoir` providing a constant source of water.
-- Two `gates` (`gate_1`, `gate_2`) that control the flow.
-- Three `canal reaches` (`canal_1`, `canal_2`, `canal_3`) that are modeled using a custom `IntegralDelayCanal` physical model. This model simulates the storage and time delay characteristics of a real canal.
+模拟的系统包括：
+- 一个`upstream_reservoir`（上游水库），提供稳定的水源。
+- 两个`gates`（闸门）（`gate_1`, `gate_2`），用于控制流量。
+- 三个`canal reaches`（渠段）（`canal_1`, `canal_2`, `canal_3`），使用`IntegralDelayCanal`（积分延迟渠道）物理模型进行建模。该模型模拟了真实渠道的蓄水和时滞特性。
 
-The components are connected in a series:
-`Reservoir -> Gate 1 -> Canal 1 -> Canal 2 -> Gate 2 -> Canal 3`
+这些组件串联连接：
+`水库 -> 闸门1 -> 渠道1 -> 渠道2 -> 闸门2 -> 渠道3`
 
-## Control Strategies Compared
+## 控制策略比较
 
-The core of this example is to compare how different control architectures handle the coupling and delays in this series system. We evaluate three distinct strategies:
+本示例的核心是比较不同的控制架构如何处理这个串联系统中的耦合和延迟。我们评估了三种不同的策略：
 
-### 1. Local Upstream Control
-- **Gate 1** controls the water level in **Canal 1**.
-- **Gate 2** controls the water level in **Canal 2**.
-This is a fully decentralized strategy. Each controller only uses local information. It is simple to implement but may perform poorly due to ignoring downstream dynamics.
+### 1. 本地上游控制 (Local Upstream Control)
+- **闸门1** 控制 **渠道1** 的水位。
+- **闸门2** 控制 **渠道2** 的水位。
+这是一种完全分散的策略。每个控制器只使用本地信息。这种策略实现简单，但由于忽略了下游动态，性能可能不佳。
 
-### 2. Distant Downstream Control
-- **Gate 1** controls the water level in **Canal 2**.
-- **Gate 2** controls the water level in **Canal 3**.
-This strategy attempts to control levels further downstream, which can provide more stable system-wide regulation but is more challenging to tune due to the long time delays.
+### 2. 远程下游控制 (Distant Downstream Control)
+- **闸门1** 控制 **渠道2** 的水位。
+- **闸门2** 控制 **渠道3** 的水位。
+该策略试图控制更下游的水位，可以提供更稳定的全系统调节，但由于存在较长的时滞，整定难度更大。
 
-### 3. Mixed Control
-- **Gate 1** controls the water level in **Canal 1** (Local).
-- **Gate 2** controls the water level in **Canal 3** (Distant).
-This is a hybrid approach, combining elements of both local and distant control.
+### 3. 混合控制 (Mixed Control)
+- **闸门1** 控制 **渠道1** 的水位（本地）。
+- **闸门2** 控制 **渠道3** 的水位（远程）。
+这是一种混合方法，结合了本地控制和远程控制的元素。
 
-## How to Run the Example
+## 如何运行示例
 
-To run the simulation and generate the comparison plot, execute the following command from the root of the repository:
+要运行模拟并生成比较图，请从代码库的根目录执行以下命令：
 
 ```bash
 python examples/canal_model/canal_pid_control/run_pid_comparison.py
 ```
 
-The script will run all three scenarios sequentially and save the results to `results_local_upstream.csv`, `results_distant_downstream.csv`, and `results_mixed_control.csv`. It will also generate a comparison plot named `pid_comparison_results.png`.
+该脚本将依次运行所有三个场景，并将结果保存到`results_local_upstream.csv`、`results_distant_downstream.csv`和`results_mixed_control.csv`。它还将生成一个名为`pid_comparison_results.png`的比较图。
 
-## Expected Results
+## 预期结果
 
-The generated plot will show the water levels in the three canals and the openings of the two gates for each of the three control strategies. This allows for a visual comparison of their performance in terms of stability, response time, and ability to maintain the desired setpoints.
+生成的图表将显示三种控制策略下三个渠道的水位和两个闸门的开度。这使得可以直观地比较它们在稳定性、响应时间和维持期望设定值方面的性能。
 
 ![Comparison Results](pid_comparison_results.png)

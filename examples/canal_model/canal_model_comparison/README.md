@@ -1,39 +1,39 @@
-# Canal Model Comparison Example
+# 渠道模型比较示例
 
-This example demonstrates and compares four different simplified models for simulating water flow in a canal reach.
+本示例演示并比较了四种用于模拟渠道水流的简化模型。
 
-## Description
+## 描述
 
-The simulation is set up with a single canal reach between two reservoirs with fixed water levels. An upstream gate controls the inflow to the canal. The simulation starts in a steady state, and then a step change is introduced in the upstream gate opening to observe the dynamic response of the canal's water level.
+该模拟设置了一个位于两个固定水位水库之间的单一渠道段。一个上游闸门控制流入渠道的水量。模拟从稳态开始，然后通过对上游闸门开度进行阶跃改变，来观察渠道水位的动态响应。
 
-This example runs the same scenario four times, each time using a different mathematical model for the canal. The results are then plotted together for comparison.
+本示例将同一场景运行四次，每次使用不同的数学模型来描述渠道。然后将结果绘制在一起进行比较。
 
-## Canal Models
+## 渠道模型
 
-The four canal models compared are:
+比较的四种渠道模型是：
 
-1.  **Integral Model (`Canal`)**: This is the simplest model, representing the canal as a single reservoir where the water level is the integral of the net flow (inflow - outflow). It does not account for wave travel time. The governing equation is:
+1.  **积分模型 (`Canal`)**: 这是最简单的模型，将渠道表示为单个水库，其中水位是净流量（流入量 - 流出量）的积分。它不考虑波的传播时间。其控制方程为：
     `dh/dt = (1/A) * (q_in - q_out)`
-    where `h` is water level, `A` is the surface area, `q_in` is inflow, and `q_out` is outflow.
+    其中 `h` 是水位，`A` 是表面积，`q_in` 是流入量，`q_out` 是流出量。
 
-2.  **Integral-Delay Model (`IntegralDelayCanal`)**: This model adds a time delay to the inflow, which represents the travel time of water from the upstream end to the downstream end. The outflow is a delayed version of the inflow. This is a common and simple way to model the transport delay in canals. The model is:
+2.  **积分-延迟模型 (`IntegralDelayCanal`)**: 该模型在入流中增加了一个时间延迟，代表水从上游端到下游端的传播时间。出流量是入流量的延迟版本。这是模拟渠道中输送延迟的一种常用且简单的方法。其模型为：
     `q_out(t) = q_in(t - τ)`
     `dh/dt = K * (q_in(t) - q_out(t))`
 
-3.  **Integral-Delay-Zero Model (`IntegralDelayZeroCanal`)**: This is an extension of the integral-delay model that adds a "zero" to the transfer function. This term can help to better approximate the initial response of the canal to a change in flow. The outflow is a function of the delayed inflow and its rate of change:
+3.  **积分-延迟-零点模型 (`IntegralDelayZeroCanal`)**: 这是积分-延迟模型的扩展，在传递函数中增加了一个“零点”。该项有助于更好地逼近渠道对流量变化的初始响应。出流量是延迟入流及其变化率的函数：
     `q_out(t) = q_in(t - τ) + Tz * d/dt(q_in(t - τ))`
 
-4.  **Linear Reservoir Model (`RiverChannel`)**: This model, often used for river reaches, represents the canal as a series of linear reservoirs. The outflow of each reservoir is proportional to the storage. This model can capture some of the diffusive effects of wave propagation. The governing equation for a single segment is:
+4.  **线性水库模型 (`RiverChannel`)**: 该模型常用于河流段，将渠道表示为一系列线性水库。每个水库的出流量与蓄水量成正比。该模型可以捕捉波传播的某些扩散效应。单个段的控制方程为：
     `dS/dt = q_in - q_out`
     `S = k * q_out`
-    where `S` is storage and `k` is the storage constant.
+    其中 `S` 是蓄水量，`k` 是蓄水常数。
 
-## How to Run
+## 如何运行
 
-To run the example, execute the following command from the root of the repository:
+要运行本示例，请从代码库的根目录执行以下命令：
 
 ```bash
 python examples/canal_model/canal_model_comparison/run_model_comparison.py
 ```
 
-This will run all four simulations, save the results to CSV files in the current directory, and generate a plot `model_comparison_results.png` showing the water level responses of the different models.
+这将运行所有四个模拟，将结果保存到当前目录的CSV文件中，并生成一个名为`model_comparison_results.png`的图表，显示不同模型的水位响应。
