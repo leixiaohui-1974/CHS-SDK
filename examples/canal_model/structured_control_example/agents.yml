@@ -1,0 +1,27 @@
+# Agent definitions for the Structured Control Agent Example
+agents:
+  - id: gate1_dd_controller
+    class: core_lib.local_agents.control.structured_control_agent.StructuredControlAgent
+    config:
+      controlled_element_id: 'gate_1'
+      control_mode: 'dd'
+      controller_config:
+        Kp: 0.5
+        Ki: 0.05
+        Kd: 0.1
+        setpoint: 5.0
+        min_output: 0.0
+        max_output: 1.0
+
+  - id: gate2_lu_controller
+    class: core_lib.local_agents.control.structured_control_agent.StructuredControlAgent
+    config:
+      controlled_element_id: 'gate_2'
+      control_mode: 'lu'
+      controller_config:
+        Kp: 0.6
+        Ki: 0.07
+        Kd: 0.1
+        setpoint: 5.0
+        min_output: 0.0
+        max_output: 1.0

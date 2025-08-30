@@ -21,7 +21,28 @@ class MessageBus:
 
     def __init__(self):
         self._subscriptions: Dict[str, List[Listener]] = {}
+        self._component_topology: Dict[str, Dict[str, str]] = {}
         print("MessageBus created.")
+
+    def set_component_topology(self, topology: Dict[str, Dict[str, str]]):
+        """
+        Stores the component connection topology.
+
+        Args:
+            topology: A dictionary representing the connections, e.g.,
+                      {'gate_1': {'downstream': 'canal_1'}, 'canal_1': {'upstream': 'gate_1'}}
+        """
+        self._component_topology = topology
+        print("Component topology set on MessageBus.")
+
+    def get_component_topology(self) -> Dict[str, Dict[str, str]]:
+        """
+        Retrieves the component connection topology.
+
+        Returns:
+            The topology dictionary.
+        """
+        return self._component_topology
 
     def subscribe(self, topic: str, listener: Listener):
         """
@@ -33,8 +54,26 @@ class MessageBus:
         """
         if topic not in self._subscriptions:
             self._subscriptions[topic] = []
-        self._subscriptions[topic].append(listener)
-        print(f"New subscription to topic '{topic}'.")
+        # Avoid adding the same listener multiple times
+        if listener not in self._subscriptions[topic]:
+            self._subscriptions[topic].append(listener)
+            print(f"New subscription to topic '{topic}' for listener {listener}.")
+        else:
+            print(f"Listener {listener} already subscribed to topic '{topic}'.")
+
+    def unsubscribe(self, topic: str, listener: Listener):
+        """
+        Unsubscribes a listener function from a topic.
+
+        Args:
+            topic: The topic to unsubscribe from.
+            listener: The listener object to remove.
+        """
+        if topic in self._subscriptions and listener in self._subscriptions[topic]:
+            self._subscriptions[topic].remove(listener)
+            print(f"Unsubscribed listener {listener} from topic '{topic}'.")
+            if not self._subscriptions[topic]:
+                del self._subscriptions[topic]
 
     def publish(self, topic: str, message: Message):
         """

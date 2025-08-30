@@ -141,8 +141,30 @@ class SimulationLoader:
     def _load_topology(self):
         """Loads and defines the connections between components."""
         logging.info("Loading topology...")
+        topology_for_bus = {}
         for conn_conf in self.topology_config.get('connections', []):
+
             self.harness.add_connection(conn_conf['upstream'], conn_conf['downstream'])
+
+            upstream_id = conn_conf['upstream']
+            downstream_id = conn_conf['downstream']
+
+            logging.info(f"  - Connecting '{upstream_id}' -> '{downstream_id}'")
+            self.harness.add_connection(upstream_id, downstream_id)
+
+            # Build a topology map suitable for the message bus
+            if upstream_id not in topology_for_bus:
+                topology_for_bus[upstream_id] = {}
+            if downstream_id not in topology_for_bus:
+                topology_for_bus[downstream_id] = {}
+
+            topology_for_bus[upstream_id]['downstream'] = downstream_id
+            topology_for_bus[downstream_id]['upstream'] = upstream_id
+
+        # Set the topology on the message bus so agents can query it
+        self.message_bus.set_component_topology(topology_for_bus)
+
+
         logging.info("Topology loaded.")
 
     def _load_agents_and_controllers(self):
