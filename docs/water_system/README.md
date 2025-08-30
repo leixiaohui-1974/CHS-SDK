@@ -37,13 +37,24 @@
     *   `02_river_channel.md`
     *   `03_gate.md`
     *   `04_reservoir.md`
-    *   `05_pump.md`
+    *   `05_pump.md` (水泵与泵站)
     *   `06_st_venant_reach.md`
+    *   `07_canal.md` (渠池)
+    *   `08_hydropower_station.md` (水电站)
+    *   `09_lake.md` (湖泊)
+    *   `10_valve.md` (阀门与阀门站)
+    *   `11_rainfall_runoff.md` (降雨径流)
 *   `03_agents/`: 存放各类核心智能体的详细说明。
     *   `01_digital_twin_agent.md`
     *   `02_local_control_agent.md`
     *   `03_central_mpc_agent.md`
     *   `04_parameter_identification_agent.md`
     *   `05_physical_io_agent.md`
+    *   `06_perception_agents.md` (感知智能体)
+    *   `07_simple_control_agents.md` (简单控制智能体)
+    *   `08_complex_control_agents.md` (复杂/站级控制智能体)
+    *   `09_central_agents.md` (中央协调智能体)
+    *   `10_data_input_agents.md` (数据输入智能体)
+    *   `11_disturbance_agents.md` (扰动智能体)
 *   `04_scenarios.md`: 介绍如何通过YAML配置文件定义和运行仿真。
 *   `README.md`: 本目录文件。
