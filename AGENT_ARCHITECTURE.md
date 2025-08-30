@@ -46,6 +46,10 @@
 | `HydropowerStationPerceptionAgent` | 水电站感知，提供上下游水位、总发电量等状态 | `core_lib/local_agents/perception/hydropower_station_perception_agent.py` |
 | `PumpStationPerceptionAgent` | 泵站感知，提供集水池水位、总流量等站级状态 | `core_lib/local_agents/perception/pump_station_perception_agent.py` |
 | `ValveStationPerceptionAgent` | 阀门/水闸站感知，提供上下游水位、总流量等站级状态 | `core_lib/local_agents/perception/valve_station_perception_agent.py` |
+| `RiverChannelPerceptionAgent` | 专注于不规则断面河道的感知，处理更复杂的河道水力学模型。 | `core_lib/local_agents/perception/river_channel_perception_agent.py` |
+| `GatePerceptionAgent`| 针对单个闸门的感知，实现更细粒度的数字孪生和故障诊断。 | `core_lib/local_agents/perception/gate_perception_agent.py` |
+| `PumpPerceptionAgent`| 针对单个水泵的感知，实现更细粒度的数字孪生和故障诊断。 | `core_lib/local_agents/perception/pump_perception_agent.py` |
+| `ValvePerceptionAgent`| 针对单个阀门的感知，实现更细粒度的数字孪生和故障诊断。 | `core_lib/local_agents/perception/valve_perception_agent.py` |
 
 ### 3.2 水系统控制对象代理 (Control Object Agents)
 *   **继承关系**：大多继承自 `LocalControlAgent`。此类智能体通过封装一个**控制器**（例如PID）来实现具体的控制逻辑，因此非常灵活。
@@ -69,9 +73,11 @@
 
 | 智能体名称 | 功能描述 | 源码路径 |
 | :--- | :--- | :--- |
-| `CentralDispatcherAgent` | 中央调度，系统的最高决策者，负责全局优化和指令分发。 | `core_lib/central_coordination/dispatch/central_dispatcher_agent.py`<br>`core_lib/local_agents/supervisory/central_dispatcher_agent.py` |
+| `CentralDispatcherAgent` | 中央调度，系统的最高决策者，负责全局优化和指令分发。 | `core_lib/central_coordination/dispatch/central_dispatcher_agent.py`|
 | `CentralMPCAgent` | 中央MPC控制，采用模型预测控制（MPC）算法进行全局优化调度。 | `core_lib/central_coordination/dispatch/central_mpc_agent.py` |
 | `CentralPerceptionAgent` | 中央感知，汇集所有本地感知信息，形成全局态势图。 | `core_lib/central_coordination/perception/central_perception_agent.py` |
+| `CentralAnomalyDetectionAgent` | 订阅所有本地感知状态，利用全局算法（如图论、机器学习）识别跨区域的复杂异常模式。 | `core_lib/central_coordination/dispatch/central_anomaly_detection_agent.py` |
+| `DemandForecastingAgent` | 预测整个水系统的用水需求，为中央调度提供前瞻性的决策依据。 | `core_lib/central_coordination/dispatch/demand_forecasting_agent.py` |
 
 ### 3.4 任务与模拟支持智能体 (Task & Simulation Support Agents)
 *   **继承关系**：大多直接继承自 `Agent` 或 `BaseAgent`。
@@ -81,42 +87,16 @@
 | :--- | :--- | :--- |
 | `CsvInflowAgent` | 从CSV文件读取并提供入流数据。 | `core_lib/data_access/csv_inflow_agent.py` |
 | `EmergencyAgent` | 应急响应，监测特定条件并触发应急预案。 | `core_lib/local_agents/supervisory/emergency_agent.py` |
-| `GridCommunicationAgent` | 电网通信，模拟或实际对接电网，获取电价或调度指令。 | `core_lib/local_agents/supervisory/grid_communication_agent.py` |
-| `SupervisorAgent` | 监督/启动代理，负责启动和监控其他智能体。 | `core_lib/local_agents/supervisory/supervisor_agent.py` |
 | `IdentificationAgent` | 参数辨识，在线或离线辨识物理模型的参数。 | `core_lib/identification/identification_agent.py` |
 | `RainfallAgent` | 降雨模拟，根据预设模式提供降雨数据。 | `core_lib/disturbances/rainfall_agent.py` |
 | `DynamicRainfallAgent` | 动态降雨模拟，可根据外部输入动态调整降雨过程。 | `core_lib/disturbances/dynamic_rainfall_agent.py` |
 | `ForecastingAgent` | 预测通用代理。 | `core_lib/local_agents/prediction/forecasting_agent.py` |
 | `InflowForecasterAgent` | 入流预测，基于历史数据和模型预测未来的入流量。 | `core_lib/local_agents/prediction/inflow_forecaster_agent.py` |
-| `WaterUseAgent` | 用水模拟，模拟城市或农业的用水行为。 | `core_lib/local_agents/disturbances/water_use_agent.py` |
+| `WaterUseAgent` | 用水模拟，模拟城市或农业的用水行为。 | `core_lib/disturbances/water_use_agent.py` |
 | `PhysicalIOAgent` | 物理I/O模拟，作为物理层和数字层的桥梁。模拟传感器（可带噪声）和执行器，响应控制指令。 | `core_lib/local_agents/io/physical_io_agent.py` |
-| `InflowAgent` | 入流数据提供者，通用任务代理。 | `core_lib/mission/agents/inflow_agent.py` |
 | `CsvReaderAgent` | CSV数据读取器，通用的CSV文件解析代理。 | `core_lib/disturbances/csv_reader_agent.py` |
 | `OntologySimulationAgent` | 物理仿真本体，驱动物理模型进行仿真计算。 | `core_lib/local_agents/ontology_simulation_agent.py` |
+| `ModelUpdaterAgent` | 订阅 `IdentificationAgent` 的输出，自动将新参数更新到相应的数字孪生模型中。 | `core_lib/identification/model_updater_agent.py` |
+| `ScenarioAgent` | 根据预设脚本，在特定时间协调并触发各种扰动（如洪水、故障），用于自动化测试和应急演练。 | `core_lib/mission/scenario_agent.py` |
 
 
-## 4. 建议新增的智能体
-为了使平台功能更完善、架构更清晰，建议基于现有原则新增以下智能体：
-
-### 4.1 水系统被控对象代理
-| 建议新增智能体 | 设计目的与职责 | 与现有架构的关联 |
-| :--- | :--- | :--- |
-| `RiverChannelPerceptionAgent` | 专注于不规则断面河道的感知，处理更复杂的河道水力学模型。 | 对应 `core_lib/physical_objects/river_channel.py` 物理模型，是 `ChannelPerceptionAgent` 在复杂场景下的特化与补充。 |
-| `GatePerceptionAgent`<br>`PumpPerceptionAgent`<br>`ValvePerceptionAgent` | 针对单个闸门、水泵、阀门的感知，实现更细粒度的数字孪生和故障诊断。 | 将站级感知（如 `PumpStationPerceptionAgent`）细化到机组级，为精细化控制和运维提供数据基础。 |
-
-### 4.2 水系统控制对象代理
-| 建议新增智能体 | 设计目的与职责 | 与现有架构的关联 |
-| :--- | :--- | :--- |
-| `GateControlAgent`<br>`ValveControlAgent` | 负责单个闸门或阀门的独立控制，接收开度、流量等指令并执行。 | 与已有的 `PumpControlAgent` 形成对等，完善了机组级控制层，使站级控制代理（如 `ValveStationControlAgent`）可作为协调者，实现更清晰的分层控制。 |
-
-### 4.3 中央协调代理
-| 建议新增智能体 | 设计目的与职责 | 与现有架构的关联 |
-| :--- | :--- | :--- |
-| `CentralAnomalyDetectionAgent` | 订阅所有本地感知状态，利用全局算法（如图论、机器学习）识别跨区域的复杂异常模式。 | 提供比单个 `EmergencyAgent` 更全面的预警能力，是系统安全保障的高级补充。 |
-| `DemandForecastingAgent` | 预测整个水系统的用水需求，为中央调度提供前瞻性的决策依据。 | 与专注于“来水”预测的 `InflowForecasterAgent` 形成互补，共同构成水量平衡预测的关键部分。 |
-
-### 4.4 任务与模拟支持智能体
-| 建议新增智能体 | 设计目的与职责 | 与现有架构的关联 |
-| :--- | :--- | :--- |
-| `ModelUpdaterAgent` | 订阅 `IdentificationAgent` 的输出，自动将新参数更新到相应的数字孪生模型中。 | 填补了“参数辨识”与“模型应用”之间的逻辑闭环，实现模型的在线自适应校准。 |
-| `ScenarioAgent` | 根据预设脚本，在特定时间协调并触发各种扰动（如洪水、故障），用于自动化测试和应急演练。 | 作为 `RainfallAgent`、`WaterUseAgent` 等独立扰动智能体的更高层封装和协调器，提升了系统的测试和演练能力。 |
