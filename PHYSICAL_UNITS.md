@@ -2,7 +2,7 @@
 
 | **文档状态** | **版本号** | **最后更新日期** |
 | :--- | :--- | :--- |
-| 正式发布 | 1.0 | 2023-10-27 |
+| 正式发布 | 1.1 | 2025-08-30 |
 
 ## 1. 简介
 
@@ -22,7 +22,9 @@
 
 ---
 
-## 3. 物理单元清单
+## 3. 物理单元清单 (智能体)
+
+本章节清单主要描述与物理单元关联的**智能体 (Agent)**。
 
 ### 3.1 被控对象 (Controlled Objects)
 
@@ -56,3 +58,66 @@
 | 水电站（控制） | `HydropowerStationAgent` | 水电站控制，负责制定站级策略，并向下游发布针对单个水轮机或水闸的控制指令。 | `core_lib/local_agents/control/hydropower_station_agent.py` |
 | 水电站（控制） | `HydropowerStationControlAgent` | 水电站控制，同上。 | `core_lib/local_agents/control/hydropower_station_control_agent.py` |
 | 压力控制器 | `PressureControlAgent` | 压力控制，一个 `LocalControlAgent` 的应用实例，专用于需要维持特定压力的控制场景。 | `core_lib/local_agents/control/pressure_control_agent.py` |
+
+---
+
+## 4. 物理模型清单 (Physical Model Inventory)
+
+本章节清单详细描述了仿真平台中的**物理模型**，它们是物理单元在数字世界中的数学表达。
+
+### 4.1 水库、湖泊与水池 (Reservoirs, Lakes & Ponds)
+
+| 模型/类名称 | 功能描述 | 状态变量 | 模型参数 | 备注 |
+| :--- | :--- | :--- | :--- | :--- |
+| `Reservoir` | **通用蓄水池**。基于水量平衡方程，模拟蓄水单元的水位和体积变化。适用于水库、调节池等。 | `volume`, `water_level`, `outflow` | `surface_area` | 基础的蓄水模型。 |
+| `Lake` | **考虑蒸发的湖泊**。在 `Reservoir` 模型基础上增加了蒸发损失计算。适用于模拟地表开阔的湖泊或水库。 | `volume`, `water_level`, `outflow` | `surface_area`, `max_volume`, `evaporation_rate_m_per_s` | 可用于模拟任何有显著蒸发损失的水体，例如**水池**。 |
+
+### 4.2 管道 (Pipes)
+
+| 模型/类名称 | 功能描述 | 状态变量 | 模型参数 | 备注 |
+| :--- | :--- | :--- | :--- | :--- |
+| `Pipe` | **有压管道**。使用达西-韦史巴赫公式计算流量。可工作在两种模式下：1. 由上游水泵等提供强制灌输流量。2. 根据上下游压差（水头）计算自由流。 | `outflow`, `head_loss` | `diameter`, `friction_factor`, `length` | 核心的有压输水模型。 |
+
+### 4.3 渠道与河道 (Canals & Rivers)
+
+| 模型/类名称 | 功能描述 | 状态变量 | 模型参数 | 备注 |
+| :--- | :--- | :--- | :--- | :--- |
+| `UnifiedCanal` | **统一渠道模型**。一个灵活的渠道/河道模型，通过 `model_type` 参数支持多种不同的水流演算方法。 | `water_level`, `inflow`, `outflow` | `model_type` (e.g., 'integral', 'integral_delay'), 及各类型对应参数 | **推荐使用**。这是当前所有无压渠道和河道模拟的核心。 |
+| `Canal` | (已弃用) 梯形断面渠道。 | `volume`, `water_level`, `outflow` | `bottom_width`, `length`, `slope`, `side_slope_z`, `manning_n` | **已弃用**。请使用 `UnifiedCanal` 代替。 |
+| `RiverChannel` | (已弃用) 线性水库河道。 | `volume`, `outflow` | `k` | **已弃用**。请使用 `UnifiedCanal(model_type='linear_reservoir')` 代替。 |
+
+#### `UnifiedCanal` 模型类型
+
+| `model_type` | 描述 | 所需额外参数 |
+| :--- | :--- | :--- |
+| `integral` | 积分模型，类似一个简单的水库。 | `surface_area`, `outlet_coefficient` |
+| `integral_delay` | 积分延迟模型，考虑水流传播的纯时间延迟。 | `gain`, `delay` |
+| `integral_delay_zero` | 积分零点延迟模型，更复杂的延迟模型，包含导数项。 | `gain`, `delay`, `zero_time_constant` |
+| `linear_reservoir` | 线性水库模型，类似马斯京根法。 | `storage_constant`, `level_storage_ratio` |
+
+### 4.4 水闸 (Gates)
+
+| 模型/类名称 | 功能描述 | 状态变量 | 模型参数 | 备注 |
+| :--- | :--- | :--- | :--- | :--- |
+| `Gate` | **可控闸门**。基于孔口出流公式 (`Q = C*A*sqrt(2gh)`) 计算流量。闸门开度变化受最大变动速率限制。 | `opening`, `outflow` | `discharge_coefficient`, `width`, `max_opening`, `max_rate_of_change` | 核心的水量控制设备模型。 |
+
+### 4.5 水泵 (Pumps)
+
+| 模型/类名称 | 功能描述 | 状态变量 | 模型参数 | 备注 |
+| :--- | :--- | :--- | :--- | :--- |
+| `Pump` | **离心泵**。一个简化的开关模型。当开启且扬程在允许范围内时，提供恒定的流量。 | `status` (0/1), `outflow`, `power_draw_kw` | `max_head`, `max_flow_rate`, `power_consumption_kw` | 用于模拟单个的、定速的水泵。 |
+| `PumpStation` | **泵站**。作为多个 `Pump` 对象的容器，聚合其总流量和总功耗。 | `total_outflow`, `active_pumps`, `total_power_draw_kw` | (无) | 自身无水力学逻辑，仅作为管理和状态聚合单元。 |
+
+### 4.6 阀门 (Valves)
+
+| 模型/类名称 | 功能描述 | 状态变量 | 模型参数 | 备注 |
+| :--- | :--- | :--- | :--- | :--- |
+| `Valve` | **可控阀门**。基于修正的孔口出流公式计算流量，其有效出流系数与开度百分比相关。 | `opening` (%), `outflow` | `discharge_coefficient`, `diameter` | 核心的压力和流量控制设备模型。 |
+| `ValveStation` | **阀门站**。作为多个 `Valve` 对象的容器，聚合其总流量。 | `total_outflow`, `valve_count` | (无) | 自身无水力学逻辑，仅作为管理和状态聚合单元。 |
+
+### 4.7 水电站 (Hydropower Stations)
+
+| 模型/类名称 | 功能描述 | 状态变量 | 模型参数 | 备注 |
+| :--- | :--- | :--- | :--- | :--- |
+| `HydropowerStation` | **水电站**。作为 `WaterTurbine` 和 `Gate` 对象的容器，聚合其总出流量和总发电功率。 | `total_outflow`, `total_power_generation`, `turbine_outflow`, `spillway_outflow` | (无) | 自身无水力学和发电逻辑，仅作为管理和状态聚合单元。 |
+| `WaterTurbine` | **水轮机**。基于水电方程 (`P = η*ρ*g*Q*H`) 计算发电功率。出流量受可用水量和最大流量限制。 | `outflow`, `power` | `efficiency`, `max_flow_rate` | 核心的发电单元模型。 |
