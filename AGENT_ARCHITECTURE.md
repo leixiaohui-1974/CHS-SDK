@@ -73,8 +73,7 @@
 
 | 智能体名称 | 功能描述 | 源码路径 |
 | :--- | :--- | :--- |
-| `CentralDispatcherAgent` | 中央调度，系统的最高决策者，负责全局优化和指令分发。 | `core_lib/central_coordination/dispatch/central_dispatcher_agent.py`|
-| `CentralMPCAgent` | 中央MPC控制，采用模型预测控制（MPC）算法进行全局优化调度。 | `core_lib/central_coordination/dispatch/central_mpc_agent.py` |
+| `CentralDispatcherAgent` | **统一中央调度智能体**，可在多种模式（应急、规则、MPC）下工作，负责全局优化和指令分发。 | `core_lib/central_coordination/dispatch/central_dispatcher.py`|
 | `CentralPerceptionAgent` | 中央感知，汇集所有本地感知信息，形成全局态势图。 | `core_lib/central_coordination/perception/central_perception_agent.py` |
 | `CentralAnomalyDetectionAgent` | 订阅所有本地感知状态，利用全局算法（如图论、机器学习）识别跨区域的复杂异常模式。 | `core_lib/central_coordination/dispatch/central_anomaly_detection_agent.py` |
 | `DemandForecastingAgent` | 预测整个水系统的用水需求，为中央调度提供前瞻性的决策依据。 | `core_lib/central_coordination/dispatch/demand_forecasting_agent.py` |
