@@ -1,0 +1,8 @@
+# This script defines the timed events for the simulation scenario.
+# It will be loaded by the ScenarioAgent.
+scenario_script:
+  - time: 100
+    topic: "control.gate_1"
+    message:
+      command: "set_opening"
+      value: 0.7
