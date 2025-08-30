@@ -12,17 +12,17 @@ project_root = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(project_root))
 
 from core_lib.core_engine.testing.simulation_harness import SimulationHarness
-from core_lib.io.yaml_loader import SimulationLoader
 from core_lib.physical_objects.unified_canal import UnifiedCanal
 from core_lib.central_coordination.collaboration.message_bus import MessageBus
+from core_lib.mission.scenario_agent import ScenarioAgent
+from core_lib.physical_objects.reservoir import Reservoir
+from core_lib.physical_objects.gate import Gate
 
-def run_scenario(scenario_name, config, base_components, canal_params):
+def run_scenario(scenario_name, config, base_components, canal_params, config_path):
     """
     Runs a single simulation scenario with a specific canal model configuration.
     """
     print(f"--- Running Scenario: {scenario_name} ---")
-
-    bus = MessageBus()
 
     # Deepcopy base components to avoid state leaking between scenarios
     current_components = copy.deepcopy(base_components)
@@ -32,27 +32,40 @@ def run_scenario(scenario_name, config, base_components, canal_params):
 
     all_components = current_components + [canal]
 
-    harness = SimulationHarness(
-        components=all_components,
-        connections=[
-            {'upstream': 'upstream_reservoir', 'downstream': 'gate_1'},
-            {'upstream': 'gate_1', 'downstream': 'canal'},
-            {'upstream': 'canal', 'downstream': 'downstream_reservoir'}
-        ],
-        agents=[],
+    connections = [
+        {'upstream': 'upstream_reservoir', 'downstream': 'gate_1'},
+        {'upstream': 'gate_1', 'downstream': 'canal'},
+        {'upstream': 'canal', 'downstream': 'downstream_reservoir'}
+    ]
+
+    # --- Correctly instantiate and configure the SimulationHarness ---
+    harness = SimulationHarness(config=config['simulation'])
+
+    # Use the message bus created by the harness
+    bus = harness.message_bus
+
+    # Load the scenario events script and create the agent
+    with open(os.path.join(config_path, 'event_scenario.yml'), 'r') as f:
+        event_config = yaml.safe_load(f)
+    scenario_agent = ScenarioAgent(
+        agent_id='scenario_agent',
         message_bus=bus,
-        config=config['simulation']
+        scenario_script=event_config['scenario_script']
     )
 
-    def step_change_event(time, harness_instance):
-        if time == 100:
-            gate = harness_instance.get_component('gate_1')
-            gate.step({'command': 'set_opening', 'value': 0.7}, 0)
-            print(f"[{time}s] Step change applied to gate_1 opening.")
+    # Add all simulation objects to the harness
+    for component in all_components:
+        harness.add_component(component)
 
-    harness.add_event_hook(step_change_event)
+    for conn in connections:
+        harness.add_connection(conn['upstream'], conn['downstream'])
 
-    harness.run_simulation()
+    harness.add_agent(scenario_agent)
+
+    # Build the harness (e.g., for topological sort) and run the simulation
+    harness.build()
+    # We must use run_mas_simulation because we are using an agent
+    harness.run_mas_simulation()
 
     history = harness.history
     if not history:
@@ -75,6 +88,7 @@ def run_scenario(scenario_name, config, base_components, canal_params):
     print(f"Results for {scenario_name} saved to {scenario_output_filename}")
 
 def plot_results(scenarios, config_path):
+    # This function remains unchanged
     plt.style.use('seaborn-v0_8-whitegrid')
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(18, 12), sharex=True)
     colors = plt.cm.viridis(np.linspace(0, 1, len(scenarios)))
@@ -109,8 +123,19 @@ def main():
 
     with open(os.path.join(config_path, 'config.yml'), 'r') as f:
         config = yaml.safe_load(f)
-    with open(os.path.join(config_path, 'components.yml'), 'r') as f:
-        base_components_config = yaml.safe_load(f)['components']
+
+    # Manually define base components
+    base_components = [
+        Reservoir(name='upstream_reservoir',
+                  initial_state={'water_level': 10.0},
+                  parameters={'area': 10000.0, 'inflow': 50.0}),
+        Gate(name='gate_1',
+             initial_state={'opening': 0.5},
+             parameters={'width': 5.0, 'discharge_coefficient': 0.8}),
+        Reservoir(name='downstream_reservoir',
+                  initial_state={'water_level': 4.0},
+                  parameters={'area': 10000.0, 'inflow': 0.0})
+    ]
 
     scenarios = {
         "integral": {'model_type': 'integral', 'surface_area': 10000},
@@ -120,10 +145,7 @@ def main():
     }
 
     for name, params in scenarios.items():
-        # Instantiate base components fresh for each scenario
-        loader = SimulationLoader(scenario_path=config_path)
-        base_components = [loader.create_component(c) for c in base_components_config]
-        run_scenario(name, config, base_components, params)
+        run_scenario(name, config, base_components, params, config_path)
 
     plot_results(list(scenarios.keys()), config_path)
     print("所有场景执行完毕，并已绘制结果。")
