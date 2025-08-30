@@ -31,7 +31,7 @@ def run_scenario(scenario_name, config, base_components, agent_configs):
     # Instantiate agents for the current scenario
     agents = []
     for agent_config in agent_configs:
-        controller = PIDController(agent_config['id'] + "_pid", agent_config['controller_config'])
+        controller = PIDController(**agent_config['controller_config'])
         agent = LocalControlAgent(
             agent_id=agent_config['id'],
             message_bus=bus,
@@ -39,17 +39,28 @@ def run_scenario(scenario_name, config, base_components, agent_configs):
             observation_topic=agent_config['observation_topic'],
             action_topic=agent_config['action_topic'],
             observation_key=agent_config['observation_key'],
-            dt=config['simulation']['time_step']
+            dt=config['simulation']['dt']
         )
         agents.append(agent)
 
-    harness = SimulationHarness(
-        components=components,
-        connections=config['connections'],
-        agents=agents,
-        message_bus=bus,
-        config=config['simulation']
-    )
+    # Instantiate the harness
+    harness = SimulationHarness(config=config['simulation'])
+    harness.message_bus = bus # Manually assign the bus
+
+    # Add components to the harness
+    for component in components:
+        harness.add_component(component)
+
+    # Add connections to the harness
+    for connection in config['connections']:
+        harness.add_connection(connection['upstream'], connection['downstream'])
+
+    # Add agents to the harness
+    for agent in agents:
+        harness.add_agent(agent)
+
+    # Build the harness after all elements are added
+    harness.build()
 
     harness.run_mas_simulation()
 
@@ -85,15 +96,16 @@ def plot_results(scenarios, config_path):
             print(f"Results file not found for scenario: {scenario_name}")
             continue
         df = pd.read_csv(filepath)
+        # Plot water levels for canal 1 and 2
         ax1.plot(df['time'], df['canal_1_water_level'], label=f'Canal 1 ({scenario_name})', linestyle=line_styles[i], color=colors[i*2])
         ax1.plot(df['time'], df['canal_2_water_level'], label=f'Canal 2 ({scenario_name})', linestyle=line_styles[i], color=colors[i*2+1])
-        ax1.plot(df['time'], df['canal_3_water_level'], label=f'Canal 3 ({scenario_name})', linestyle='-.', color=colors[i*2])
+        # Plot gate openings
         ax2.plot(df['time'], df['gate_1_opening'], label=f'Gate 1 ({scenario_name})', linestyle=line_styles[i], color=colors[i*2])
         ax2.plot(df['time'], df['gate_2_opening'], label=f'Gate 2 ({scenario_name})', linestyle=line_styles[i], color=colors[i*2+1])
 
+    # Add setpoint lines for canal 1 and 2
     ax1.axhline(y=5.0, color='gray', linestyle='--', label='Setpoint Canal 1 (5.0m)')
     ax1.axhline(y=4.5, color='black', linestyle='--', label='Setpoint Canal 2 (4.5m)')
-    ax1.axhline(y=4.0, color='gray', linestyle=':', label='Setpoint Canal 3 (4.0m)')
     ax1.set_title('PID控制策略的水位对比', fontsize=16)
     ax1.set_ylabel('水位 (m)')
     ax1.legend(loc='upper right')
@@ -118,21 +130,45 @@ def main():
     with open(os.path.join(config_path, 'topology.yml'), 'r') as f:
         config['connections'] = yaml.safe_load(f)['connections']
 
-    loader = SimulationLoader(scenario_path=config_path)
-    components = [loader.create_component(c) for c in components_config]
+    # Manually map class names to the actual classes
+    from core_lib.physical_objects.reservoir import Reservoir
+    from core_lib.physical_objects.gate import Gate
+    from core_lib.physical_objects.unified_canal import UnifiedCanal
+    CLASS_MAP = {
+        "Reservoir": Reservoir,
+        "Gate": Gate,
+        "UnifiedCanal": UnifiedCanal,
+    }
 
+    # Manually instantiate components
+    components = []
+    for c_conf in components_config:
+        CompClass = CLASS_MAP[c_conf['class']]
+        # The constructor expects 'name' and unpacks other dicts.
+        instance = CompClass(
+            name=c_conf['id'],
+            initial_state=c_conf.get('initial_state', {}),
+            parameters=c_conf.get('parameters', {})
+        )
+        components.append(instance)
+
+    # "Adjacent Downstream Control" is a more descriptive name for the classic "Upstream Control"
+    # method, where a gate regulates the water level of the canal reach immediately downstream.
+    # Scenarios implemented according to the user's specific definitions.
+    # New Topology: reservoir -> gate_1 -> canal_1 -> gate_2 -> canal_2
     agent_scenarios = {
-        "local_upstream": [
-            {'id': 'gate1_local_controller', 'controller_config': {'Kp': 0.5, 'Ki': 0.05, 'Kd': 0.1, 'setpoint': 5.0, 'min_output': 0, 'max_output': 1}, 'observation_topic': 'canal_1', 'observation_key': 'water_level', 'action_topic': 'gate_1'},
-            {'id': 'gate2_local_controller', 'controller_config': {'Kp': 0.5, 'Ki': 0.05, 'Kd': 0.1, 'setpoint': 4.5, 'min_output': 0, 'max_output': 1}, 'observation_topic': 'canal_2', 'observation_key': 'water_level', 'action_topic': 'gate_2'}
+        # User's Definition of "Local Upstream Control":
+        # - Gate 2 controls the water level of the canal IN FRONT of it (canal_1).
+        # - Gate 1 has a fixed opening (no controller).
+        "local_upstream_user_def": [
+            {'id': 'gate2_local_upstream_controller', 'controller_config': {'Kp': 0.6, 'Ki': 0.07, 'Kd': 0.1, 'setpoint': 5.0, 'min_output': 0, 'max_output': 1}, 'observation_topic': 'canal_1', 'observation_key': 'water_level', 'action_topic': 'gate_2'}
         ],
-        "distant_downstream": [
-            {'id': 'gate1_distant_controller', 'controller_config': {'Kp': 0.4, 'Ki': 0.02, 'Kd': 0.1, 'setpoint': 4.5, 'min_output': 0, 'max_output': 1}, 'observation_topic': 'canal_2', 'observation_key': 'water_level', 'action_topic': 'gate_1'},
-            {'id': 'gate2_distant_controller', 'controller_config': {'Kp': 0.4, 'Ki': 0.02, 'Kd': 0.1, 'setpoint': 4.0, 'min_output': 0, 'max_output': 1}, 'observation_topic': 'canal_3', 'observation_key': 'water_level', 'action_topic': 'gate_2'}
-        ],
-        "mixed_control": [
-            {'id': 'gate1_mixed_controller', 'controller_config': {'Kp': 0.5, 'Ki': 0.05, 'Kd': 0.1, 'setpoint': 5.0, 'min_output': 0, 'max_output': 1}, 'observation_topic': 'canal_1', 'observation_key': 'water_level', 'action_topic': 'gate_1'},
-            {'id': 'gate2_mixed_controller', 'controller_config': {'Kp': 0.4, 'Ki': 0.02, 'Kd': 0.1, 'setpoint': 4.0, 'min_output': 0, 'max_output': 1}, 'observation_topic': 'canal_3', 'observation_key': 'water_level', 'action_topic': 'gate_2'}
+        # User's Definition of "Remote Downstream Control":
+        # - Gate 1 controls the water level of the canal AFTER it (canal_1).
+        # - Gate 2 controls the water level of the canal AFTER it (canal_2).
+        "distant_downstream_user_def": [
+            {'id': 'gate1_distant_downstream_controller', 'controller_config': {'Kp': 0.5, 'Ki': 0.05, 'Kd': 0.1, 'setpoint': 5.0, 'min_output': 0, 'max_output': 1}, 'observation_topic': 'canal_1', 'observation_key': 'water_level', 'action_topic': 'gate_1'},
+            {'id': 'gate2_distant_downstream_controller', 'controller_config': {'Kp': 0.5, 'Ki': 0.05, 'Kd': 0.1, 'setpoint': 4.5, 'min_output': 0, 'max_output': 1}, 'observation_topic': 'canal_2', 'observation_key': 'water_level', 'action_topic': 'gate_2'}
         ]
     }
 

@@ -42,11 +42,3 @@ components:
       width: 5.0
       discharge_coefficient: 0.8
 
-  - id: canal_3
-    class: UnifiedCanal
-    initial_state:
-      water_level: 4.0
-    parameters:
-      model_type: 'integral_delay'
-      gain: 0.0008
-      delay: 450 # 7.5 minutes
