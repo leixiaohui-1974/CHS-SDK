@@ -1,0 +1,49 @@
+# This file configures all agents for the outlet valve PID control scenario.
+# The goal is to control the water level of a reservoir by adjusting an
+# outlet valve, while the inflow is subject to an external disturbance.
+
+agents:
+  # Agent 1: Reads a time-series inflow disturbance from a CSV file and
+  # publishes it to a topic that the reservoir component subscribes to.
+  - id: inflow_disturbance_agent
+    class: core_lib.data_access.csv_inflow_agent.CsvInflowAgent
+    config:
+      csv_file: inflow_disturbance.csv
+      time_column: time
+      value_column: inflow_rate
+      output_topic: inflow_disturbance_topic
+      data_id: inflow_disturbance_1
+
+  # Agent 2: Perceives the state of the physical reservoir and publishes its
+  # water level to the message bus for the controller to use.
+  - id: reservoir_perception_agent
+    class: core_lib.local_agents.perception.digital_twin_agent.DigitalTwinAgent
+    config:
+      simulated_object_id: reservoir_1 # The ID from components.yml
+      state_topic: water_level_topic
+      log_data: True
+
+  # Agent 3: The PID controller for the outlet valve.
+  # It observes the water level, compares it to a setpoint, and calculates
+  # the required valve opening percentage (0-100).
+  - id: valve_pid_control_agent
+    class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
+    config:
+      observation_topic: water_level_topic
+      observation_key: value
+      action_topic: valve_command_topic # The valve component listens to this
+      dt: 1.0
+      controller:
+        class: core_lib.local_agents.control.pid_controller.PIDController
+        config:
+          # NOTE: We use POSITIVE gains here.
+          # The original script used negative gains because its output was directly
+          # the outflow. Here, the output is valve opening (0-100), which is a
+          # direct-acting relationship: higher level requires higher opening.
+          setpoint: 10.0
+          Kp: 1.5
+          Ki: 0.1
+          Kd: 0.08
+          # The output range is the valve opening percentage
+          min_output: 0.0
+          max_output: 100.0

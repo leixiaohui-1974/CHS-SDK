@@ -1,0 +1,5 @@
+# This file defines the physical connections between components.
+# The reservoir's outflow is determined by the downstream valve.
+connections:
+  - upstream: reservoir_1
+    downstream: valve_1
