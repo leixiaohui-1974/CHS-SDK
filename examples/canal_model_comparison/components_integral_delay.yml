@@ -1,0 +1,30 @@
+# Components for the Integral Delay Canal Model
+components:
+  - id: upstream_reservoir
+    class: Reservoir
+    initial_state:
+      water_level: 10.0
+    parameters:
+      area: 10000.0
+      inflow: 50.0
+  - id: gate_1
+    class: Gate
+    initial_state:
+      opening: 0.5
+    parameters:
+      width: 5.0
+      discharge_coefficient: 0.8
+  - id: canal
+    class: IntegralDelayCanal
+    initial_state:
+      water_level: 5.0
+    parameters:
+      gain: 0.001
+      delay: 300
+  - id: downstream_reservoir
+    class: Reservoir
+    initial_state:
+      water_level: 4.0
+    parameters:
+      area: 10000.0
+      inflow: 0.0
