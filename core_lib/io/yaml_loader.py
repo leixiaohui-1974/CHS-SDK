@@ -189,6 +189,9 @@ class SimulationLoader:
             args = {'agent_id': agent_id, 'message_bus': self.message_bus}
 
             if agent_class_name == 'LocalControlAgent':
+                # The harness needs to listen for the actions this agent will publish
+                self.harness.subscribe_to_action(config['action_topic'])
+
                 controller_conf = config.pop('controller')
                 CtrlClass = self._get_class(controller_conf['class'])
                 controller = CtrlClass(**controller_conf['config'])

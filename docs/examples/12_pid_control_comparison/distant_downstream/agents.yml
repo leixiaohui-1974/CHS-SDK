@@ -1,0 +1,35 @@
+# Agents and Controllers Definition for the Distant Downstream Control Scenario
+agents:
+  - id: gate1_ctrl
+    class: LocalControlAgent
+    config:
+      controller:
+        class: PIDController
+        config:
+          Kp: 0.4
+          Ki: 0.02 # Smaller Ki for longer delay
+          Kd: 0.1
+          setpoint: 4.5 # Target water level for canal_2
+          min_output: 0.0
+          max_output: 1.0
+      observation_topic: "state.canal_2"
+      observation_key: "water_level"
+      action_topic: "control.gate_1"
+      dt: 10
+
+  - id: gate2_ctrl
+    class: LocalControlAgent
+    config:
+      controller:
+        class: PIDController
+        config:
+          Kp: 0.4
+          Ki: 0.02 # Smaller Ki for longer delay
+          Kd: 0.1
+          setpoint: 4.0 # Target water level for canal_3
+          min_output: 0.0
+          max_output: 1.0
+      observation_topic: "state.canal_3"
+      observation_key: "water_level"
+      action_topic: "control.gate_2"
+      dt: 10

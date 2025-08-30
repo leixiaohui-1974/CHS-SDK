@@ -1,0 +1,54 @@
+# Physical Components Definition for the PID Control Comparison Example
+components:
+  - id: upstream_reservoir
+    class: Reservoir
+    initial_state:
+      water_level: 10.0
+      outflow: 0.0
+    parameters:
+      surface_area: 1000000.0
+
+  - id: gate_1
+    class: Gate
+    initial_state:
+      opening: 0.5
+      outflow: 0.0
+    parameters:
+      width: 5.0
+      discharge_coefficient: 0.6
+
+  - id: canal_1
+    class: IntegralDelayCanal
+    initial_state:
+      water_level: 5.0
+      outflow: 0.0
+    parameters:
+      delay: 300
+      gain: 0.001
+
+  - id: canal_2
+    class: IntegralDelayCanal
+    initial_state:
+      water_level: 4.5
+      outflow: 0.0
+    parameters:
+      delay: 450
+      gain: 0.001
+
+  - id: gate_2
+    class: Gate
+    initial_state:
+      opening: 0.5
+      outflow: 0.0
+    parameters:
+      width: 5.0
+      discharge_coefficient: 0.6
+
+  - id: canal_3
+    class: IntegralDelayCanal
+    initial_state:
+      water_level: 4.0
+      outflow: 0.0
+    parameters:
+      delay: 600
+      gain: 0.001
