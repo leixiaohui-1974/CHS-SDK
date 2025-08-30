@@ -1,0 +1,36 @@
+# Physical Components Definition for the Manning Model
+components:
+  - id: us_reservoir
+    class: Reservoir
+    initial_state:
+      water_level: 10.0
+    parameters:
+      area: 1.0e9
+
+  - id: gate
+    class: Gate
+    initial_state:
+      opening: 0.5
+    parameters:
+      width: 5.0
+      discharge_coefficient: 0.8
+
+  - id: canal
+    class: Canal
+    initial_state:
+      volume: 500000
+      water_level: 5.0
+      outflow: 10.0
+    parameters:
+      bottom_width: 10.0
+      length: 10000.0
+      slope: 0.0001
+      side_slope_z: 2.0
+      manning_n: 0.03
+
+  - id: ds_reservoir
+    class: Reservoir
+    initial_state:
+      water_level: 2.0
+    parameters:
+      area: 1.0e9

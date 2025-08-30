@@ -1,0 +1,8 @@
+# Topology Definition for the Model Comparison Example
+connections:
+  - upstream: us_reservoir
+    downstream: gate
+  - upstream: gate
+    downstream: canal
+  - upstream: canal
+    downstream: ds_reservoir

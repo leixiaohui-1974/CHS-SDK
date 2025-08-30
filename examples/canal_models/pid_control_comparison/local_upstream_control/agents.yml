@@ -1,0 +1,18 @@
+# Agents and Controllers Definition for Local Upstream Control
+agents:
+  - id: gate1_local_controller
+    class: LocalControlAgent
+    config:
+      controller:
+        class: PIDController
+        config:
+          Kp: 0.2
+          Ki: 0.01
+          Kd: 0.05
+          setpoint: 5.0 # Target water level for canal1
+          min_output: 0.0
+          max_output: 1.0
+      observation_topic: "canal1.state"
+      observation_key: "water_level"
+      action_topic: "gate1.action"
+      dt: 60 # Must match simulation time_step

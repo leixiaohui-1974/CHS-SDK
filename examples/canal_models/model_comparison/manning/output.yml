@@ -1,0 +1,9601 @@
+simulation_history:
+- time: 0
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 60
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 120
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 180
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 240
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 300
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 360
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 420
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 480
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 540
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 600
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 660
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 720
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 780
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 840
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 900
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 960
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 1020
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 1080
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 1140
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 1200
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 1260
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 1320
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 1380
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 1440
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 1500
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 1560
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 1620
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 1680
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 1740
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 1800
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 1860
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 1920
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 1980
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 2040
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 2100
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 2160
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 2220
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 2280
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 2340
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 2400
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 2460
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 2520
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 2580
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 2640
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 2700
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 2760
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 2820
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 2880
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 2940
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 3000
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 3060
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 3120
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 3180
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 3240
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 3300
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 3360
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 3420
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 3480
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 3540
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 3600
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 3660
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 3720
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 3780
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 3840
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 3900
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 3960
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 4020
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 4080
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 4140
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 4200
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 4260
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 4320
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 4380
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 4440
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 4500
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 4560
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 4620
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 4680
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 4740
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 4800
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 4860
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 4920
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 4980
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 5040
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 5100
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 5160
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 5220
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 5280
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 5340
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 5400
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 5460
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 5520
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 5580
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 5640
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 5700
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 5760
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 5820
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 5880
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 5940
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 6000
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 6060
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 6120
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 6180
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 6240
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 6300
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 6360
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 6420
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 6480
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 6540
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 6600
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 6660
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 6720
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 6780
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 6840
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 6900
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 6960
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 7020
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 7080
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 7140
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 7200
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 7260
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 7320
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 7380
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 7440
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 7500
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 7560
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 7620
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 7680
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 7740
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 7800
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 7860
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 7920
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 7980
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 8040
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 8100
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 8160
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 8220
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 8280
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 8340
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 8400
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 8460
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 8520
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 8580
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 8640
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 8700
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 8760
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 8820
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 8880
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 8940
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 9000
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 9060
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 9120
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 9180
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 9240
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 9300
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 9360
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 9420
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 9480
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 9540
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 9600
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 9660
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 9720
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 9780
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 9840
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 9900
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 9960
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 10020
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 10080
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 10140
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 10200
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 10260
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 10320
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 10380
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 10440
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 10500
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 10560
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 10620
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 10680
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 10740
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 10800
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 10860
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 10920
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 10980
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 11040
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 11100
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 11160
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 11220
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 11280
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 11340
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 11400
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 11460
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 11520
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 11580
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 11640
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 11700
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 11760
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 11820
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 11880
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 11940
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 12000
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 12060
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 12120
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 12180
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 12240
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 12300
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 12360
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 12420
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 12480
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 12540
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 12600
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 12660
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 12720
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 12780
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 12840
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 12900
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 12960
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 13020
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 13080
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 13140
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 13200
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 13260
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 13320
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 13380
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 13440
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 13500
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 13560
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 13620
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 13680
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 13740
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 13800
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 13860
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 13920
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 13980
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 14040
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 14100
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 14160
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 14220
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 14280
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 14340
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 14400
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 14460
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 14520
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 14580
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 14640
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 14700
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 14760
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 14820
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 14880
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 14940
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 15000
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 15060
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 15120
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 15180
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 15240
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 15300
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 15360
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 15420
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 15480
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 15540
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 15600
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 15660
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 15720
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 15780
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 15840
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 15900
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 15960
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 16020
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 16080
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 16140
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 16200
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 16260
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 16320
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 16380
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 16440
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 16500
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 16560
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 16620
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 16680
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 16740
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 16800
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 16860
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 16920
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 16980
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 17040
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 17100
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 17160
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 17220
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 17280
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 17340
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 17400
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 17460
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 17520
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 17580
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 17640
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 17700
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 17760
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 17820
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 17880
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 17940
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 18000
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 18060
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 18120
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 18180
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 18240
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 18300
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 18360
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 18420
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 18480
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 18540
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 18600
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 18660
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 18720
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 18780
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 18840
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 18900
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 18960
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 19020
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 19080
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 19140
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 19200
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 19260
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 19320
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 19380
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 19440
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 19500
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 19560
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 19620
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 19680
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 19740
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 19800
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 19860
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 19920
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 19980
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 20040
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 20100
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 20160
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 20220
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 20280
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 20340
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 20400
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 20460
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 20520
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 20580
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 20640
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 20700
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 20760
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 20820
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 20880
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 20940
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 21000
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 21060
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 21120
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 21180
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 21240
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 21300
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 21360
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 21420
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 21480
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 21540
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 21600
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 21660
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 21720
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 21780
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 21840
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 21900
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 21960
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 22020
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 22080
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 22140
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 22200
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 22260
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 22320
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 22380
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 22440
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 22500
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 22560
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 22620
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 22680
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 22740
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 22800
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 22860
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 22920
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 22980
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 23040
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 23100
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 23160
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 23220
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 23280
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 23340
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 23400
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 23460
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 23520
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 23580
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 23640
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 23700
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 23760
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 23820
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 23880
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 23940
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 24000
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 24060
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 24120
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 24180
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 24240
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 24300
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 24360
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 24420
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 24480
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 24540
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 24600
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 24660
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 24720
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 24780
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 24840
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 24900
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 24960
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 25020
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 25080
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 25140
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 25200
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 25260
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 25320
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 25380
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 25440
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 25500
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 25560
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 25620
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 25680
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 25740
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 25800
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 25860
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 25920
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 25980
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 26040
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 26100
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 26160
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 26220
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 26280
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 26340
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 26400
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 26460
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 26520
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 26580
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 26640
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 26700
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 26760
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 26820
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 26880
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 26940
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 27000
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 27060
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 27120
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 27180
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 27240
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 27300
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 27360
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 27420
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 27480
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 27540
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 27600
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 27660
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 27720
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 27780
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 27840
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 27900
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 27960
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 28020
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 28080
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 28140
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 28200
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 28260
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 28320
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 28380
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 28440
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 28500
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 28560
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 28620
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 28680
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 28740
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 28800
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 28860
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 28920
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 28980
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 29040
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 29100
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 29160
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 29220
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 29280
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 29340
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 29400
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 29460
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 29520
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 29580
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 29640
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 29700
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 29760
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 29820
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 29880
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 29940
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 30000
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 30060
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 30120
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 30180
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 30240
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 30300
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 30360
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 30420
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 30480
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 30540
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 30600
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 30660
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 30720
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 30780
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 30840
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 30900
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 30960
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 31020
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 31080
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 31140
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 31200
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 31260
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 31320
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 31380
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 31440
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 31500
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 31560
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 31620
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 31680
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 31740
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 31800
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 31860
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 31920
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 31980
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 32040
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 32100
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 32160
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 32220
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 32280
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 32340
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 32400
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 32460
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 32520
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 32580
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 32640
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 32700
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 32760
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 32820
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 32880
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 32940
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 33000
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 33060
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 33120
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 33180
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 33240
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 33300
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 33360
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 33420
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 33480
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 33540
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 33600
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 33660
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 33720
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 33780
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 33840
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 33900
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 33960
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 34020
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 34080
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 34140
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 34200
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 34260
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 34320
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 34380
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 34440
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 34500
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 34560
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 34620
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 34680
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 34740
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 34800
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 34860
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 34920
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 34980
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 35040
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 35100
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 35160
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 35220
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 35280
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 35340
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 35400
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 35460
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 35520
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 35580
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 35640
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 35700
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 35760
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 35820
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 35880
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0
+- time: 35940
+  us_reservoir:
+    water_level: -0.001188545329383781
+    outflow: 0
+    volume: -1188.5453293837809
+  gate:
+    opening: 0.5
+    outflow: 0
+  canal:
+    volume: 500000.0
+    water_level: 3.0901699437494745
+    outflow: 0
+  ds_reservoir:
+    water_level: 0.0
+    outflow: 0
+    volume: 0.0

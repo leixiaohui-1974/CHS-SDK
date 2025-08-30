@@ -1,0 +1,31 @@
+# Physical Components Definition for the Linear Reservoir Model
+components:
+  - id: us_reservoir
+    class: Reservoir
+    initial_state:
+      water_level: 10.0
+    parameters:
+      area: 1.0e9
+
+  - id: gate
+    class: Gate
+    initial_state:
+      opening: 0.5
+    parameters:
+      width: 5.0
+      discharge_coefficient: 0.8
+
+  - id: canal
+    class: RiverChannel
+    initial_state:
+      volume: 100000
+      outflow: 10.0
+    parameters:
+      k: 0.0001 # Storage coefficient
+
+  - id: ds_reservoir
+    class: Reservoir
+    initial_state:
+      water_level: 2.0
+    parameters:
+      area: 1.0e9

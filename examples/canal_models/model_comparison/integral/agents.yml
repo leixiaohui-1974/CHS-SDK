@@ -1,0 +1,8 @@
+# Agents and Controllers Definition for the Model Comparison Example
+agents:
+  - id: gate_stepper
+    class: StepAgent
+    config:
+      action_topic: "gate.action"
+      action_time: 3600
+      action_value: 0.7

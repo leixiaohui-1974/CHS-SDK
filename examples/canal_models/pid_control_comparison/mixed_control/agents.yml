@@ -1,0 +1,35 @@
+# Agents and Controllers Definition for Mixed Control
+agents:
+  - id: gate1_distant_controller
+    class: LocalControlAgent
+    config:
+      controller:
+        class: PIDController
+        config:
+          Kp: 0.1
+          Ki: 0.005
+          Kd: 0.02
+          setpoint: 4.6 # Target water level for canal3
+          min_output: 0.0
+          max_output: 1.0
+      observation_topic: "canal3.state"
+      observation_key: "water_level"
+      action_topic: "gate1.action"
+      dt: 60 # Must match simulation time_step
+
+  - id: gate2_local_controller
+    class: LocalControlAgent
+    config:
+      controller:
+        class: PIDController
+        config:
+          Kp: -0.1 # Negative gain because opening gate2 lowers the water level
+          Ki: -0.005
+          Kd: -0.02
+          setpoint: 4.6 # Target water level for canal3
+          min_output: 0.0
+          max_output: 1.0
+      observation_topic: "canal3.state"
+      observation_key: "water_level"
+      action_topic: "gate2.action"
+      dt: 60 # Must match simulation time_step

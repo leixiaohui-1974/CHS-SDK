@@ -1,0 +1,4 @@
+# Simulation Configuration for the Model Comparison Example
+simulation:
+  duration: 36000 # 10 hours
+  dt: 60 # 1 minute

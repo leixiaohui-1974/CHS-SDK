@@ -1,0 +1,14 @@
+# Topology Definition for the PID Control Comparison Example
+connections:
+  - upstream: us_reservoir
+    downstream: gate1
+  - upstream: gate1
+    downstream: canal1
+  - upstream: canal1
+    downstream: canal2
+  - upstream: canal2
+    downstream: canal3
+  - upstream: canal3
+    downstream: gate2
+  - upstream: gate2
+    downstream: ds_reservoir

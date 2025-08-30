@@ -81,6 +81,7 @@ class SimulationLoader:
                 "Reservoir": "core_lib.physical_objects.reservoir.Reservoir",
                 "Gate": "core_lib.physical_objects.gate.Gate",
                 "Canal": "core_lib.physical_objects.canal.Canal",
+                "RiverChannel": "core_lib.physical_objects.river_channel.RiverChannel",
                 "IntegralDelayCanal": "core_lib.physical_objects.integral_delay_canal.IntegralDelayCanal",
                 "Pipe": "core_lib.physical_objects.pipe.Pipe",
                 "Valve": "core_lib.physical_objects.valve.Valve",
@@ -94,6 +95,7 @@ class SimulationLoader:
                 "EmergencyAgent": "core_lib.local_agents.supervisory.emergency_agent.EmergencyAgent",
                 "CentralDispatcherAgent": "core_lib.local_agents.supervisory.central_dispatcher_agent.CentralDispatcherAgent",
                 "CsvInflowAgent": "core_lib.data_access.csv_inflow_agent.CsvInflowAgent",
+                "StepAgent": "core_lib.local_agents.control.step_agent.StepAgent",
             }
 
             if class_path not in CLASS_MAP:
@@ -220,6 +222,9 @@ class SimulationLoader:
                 args['csv_file_path'] = str(csv_path)
                 args['time_column'] = config['time_column']
                 args['data_column'] = config['data_column']
+
+            elif agent_class_name == 'StepAgent':
+                args.update(config)
 
             instance = AgentClass(**args)
             self.harness.add_agent(instance)
