@@ -1,0 +1,64 @@
+# Agents for the "MPC-by-Level" control scheme comparison.
+# This configuration demonstrates the control conflict issue.
+agents:
+  # --- Local Water-Level PID Agents ---
+
+  - id: gate_1_level_pid_agent
+    class: LocalControlAgent
+    controller:
+      class: PIDController
+      config:
+        Kp: 0.5
+        Ki: 0.05
+        Kd: 0.1
+        setpoint: 5.0 # Initial setpoint, will be updated by mock MPC
+        min_output: 0.1
+        max_output: 1.0
+    # Both PIDs observe the SAME water level
+    observation_topic: canal_1_state
+    observation_key: water_level
+    # Both PIDs receive commands on the SAME topic
+    command_topic: mpc_level_setpoint
+    action_topic: gate_1_control
+
+  - id: gate_2_level_pid_agent
+    class: LocalControlAgent
+    controller:
+      class: PIDController
+      config:
+        Kp: 0.6 # Different gain to make the conflict more visible
+        Ki: 0.07
+        Kd: 0.1
+        setpoint: 5.0 # Initial setpoint
+        min_output: 0.1
+        max_output: 1.0
+    # Both PIDs observe the SAME water level
+    observation_topic: canal_1_state
+    observation_key: water_level
+    # Both PIDs receive commands on the SAME topic
+    command_topic: mpc_level_setpoint
+    action_topic: gate_2_control
+
+  # --- Perception Agents ---
+  - id: canal_1_perception_agent
+    class: DigitalTwinAgent
+    config:
+      simulated_object_id: canal_1
+      state_topic: canal_1_state
+
+  # --- Scenario Agent (acting as a mock MPC) ---
+  - id: mock_mpc_and_disturbance_agent
+    class: core_lib.mission.scenario_agent.ScenarioAgent
+    config:
+      scenario_script:
+        # Disturbances
+        - { time: 1000, topic: reservoir_inflow_control, message: { inflow: 55 } }
+        - { time: 2000, topic: diversion_1_control, message: { outflow: 5 } }
+
+        # Mock MPC commands (changing the water level setpoint)
+        # This will likely cause oscillations as both PIDs fight each other.
+        - { time: 3000, topic: mpc_level_setpoint, message: { new_setpoint: 5.2 } }
+        - { time: 5000, topic: mpc_level_setpoint, message: { new_setpoint: 4.8 } }
+
+        # More disturbances
+        - { time: 6000, topic: reservoir_inflow_control, message: { inflow: 40 } }
