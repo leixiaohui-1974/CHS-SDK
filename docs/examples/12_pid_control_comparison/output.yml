@@ -1,0 +1,12 @@
+# Output Configuration for the PID Control Comparison Example
+output:
+  - component: canal_1
+    variable: water_level
+  - component: canal_2
+    variable: water_level
+  - component: canal_3
+    variable: water_level
+  - component: gate_1
+    variable: opening
+  - component: gate_2
+    variable: opening

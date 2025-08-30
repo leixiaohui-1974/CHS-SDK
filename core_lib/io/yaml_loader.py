@@ -81,6 +81,7 @@ class SimulationLoader:
                 "Reservoir": "core_lib.physical_objects.reservoir.Reservoir",
                 "Gate": "core_lib.physical_objects.gate.Gate",
                 "Canal": "core_lib.physical_objects.canal.Canal",
+                "IntegralDelayCanal": "core_lib.physical_objects.integral_delay_canal.IntegralDelayCanal",
                 "Pipe": "core_lib.physical_objects.pipe.Pipe",
                 "Valve": "core_lib.physical_objects.valve.Valve",
 
@@ -88,6 +89,7 @@ class SimulationLoader:
                 "PIDController": "core_lib.local_agents.control.pid_controller.PIDController",
 
                 # Agents
+                "LocalControlAgent": "core_lib.local_agents.control.local_control_agent.LocalControlAgent",
                 "DigitalTwinAgent": "core_lib.local_agents.perception.digital_twin_agent.DigitalTwinAgent",
                 "EmergencyAgent": "core_lib.local_agents.supervisory.emergency_agent.EmergencyAgent",
                 "CentralDispatcherAgent": "core_lib.local_agents.supervisory.central_dispatcher_agent.CentralDispatcherAgent",
@@ -186,7 +188,14 @@ class SimulationLoader:
             # Prepare constructor arguments dynamically based on agent type
             args = {'agent_id': agent_id, 'message_bus': self.message_bus}
 
-            if agent_class_name == 'DigitalTwinAgent':
+            if agent_class_name == 'LocalControlAgent':
+                controller_conf = config.pop('controller')
+                CtrlClass = self._get_class(controller_conf['class'])
+                controller = CtrlClass(**controller_conf['config'])
+                args.update(config)
+                args['controller'] = controller
+
+            elif agent_class_name == 'DigitalTwinAgent':
                 sim_obj_id = config['simulated_object_id']
                 args['simulated_object'] = self.component_instances[sim_obj_id]
                 args['state_topic'] = config['state_topic']

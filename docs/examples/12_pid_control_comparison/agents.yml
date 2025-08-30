@@ -1,0 +1,106 @@
+# Agents and Controllers Definition for the PID Control Comparison Example
+agents:
+  # Strategy 1: Local Upstream Control
+  - id: gate1_local_controller
+    class: LocalControlAgent
+    config:
+      controller:
+        class: PIDController
+        config:
+          Kp: 0.5
+          Ki: 0.05
+          Kd: 0.1
+          setpoint: 5.0 # Target water level for canal_1
+          min_output: 0.0
+          max_output: 1.0
+      observation_topic: "canal_1.state"
+      observation_key: "water_level"
+      action_topic: "gate_1.action"
+      dt: 10 # Must match simulation time_step
+
+  - id: gate2_local_controller
+    class: LocalControlAgent
+    config:
+      controller:
+        class: PIDController
+        config:
+          Kp: 0.5
+          Ki: 0.05
+          Kd: 0.1
+          setpoint: 4.5 # Target water level for canal_2
+          min_output: 0.0
+          max_output: 1.0
+      observation_topic: "canal_2.state"
+      observation_key: "water_level"
+      action_topic: "gate_2.action"
+      dt: 10
+
+  # Strategy 2: Distant Downstream Control
+  - id: gate1_distant_controller
+    class: LocalControlAgent
+    config:
+      controller:
+        class: PIDController
+        config:
+          Kp: 0.4
+          Ki: 0.02 # Smaller Ki for longer delay
+          Kd: 0.1
+          setpoint: 4.5 # Target water level for canal_2
+          min_output: 0.0
+          max_output: 1.0
+      observation_topic: "canal_2.state"
+      observation_key: "water_level"
+      action_topic: "gate_1.action"
+      dt: 10
+
+  - id: gate2_distant_controller
+    class: LocalControlAgent
+    config:
+      controller:
+        class: PIDController
+        config:
+          Kp: 0.4
+          Ki: 0.02 # Smaller Ki for longer delay
+          Kd: 0.1
+          setpoint: 4.0 # Target water level for canal_3
+          min_output: 0.0
+          max_output: 1.0
+      observation_topic: "canal_3.state"
+      observation_key: "water_level"
+      action_topic: "gate_2.action"
+      dt: 10
+
+  # Strategy 3: Mixed Control
+  - id: gate1_mixed_controller
+    class: LocalControlAgent
+    config:
+      controller:
+        class: PIDController
+        config:
+          Kp: 0.5
+          Ki: 0.05
+          Kd: 0.1
+          setpoint: 5.0
+          min_output: 0.0
+          max_output: 1.0
+      observation_topic: "canal_1.state"
+      observation_key: "water_level"
+      action_topic: "gate_1.action"
+      dt: 10
+
+  - id: gate2_mixed_controller
+    class: LocalControlAgent
+    config:
+      controller:
+        class: PIDController
+        config:
+          Kp: 0.4
+          Ki: 0.02
+          Kd: 0.1
+          setpoint: 4.0
+          min_output: 0.0
+          max_output: 1.0
+      observation_topic: "canal_3.state"
+      observation_key: "water_level"
+      action_topic: "gate_2.action"
+      dt: 10
