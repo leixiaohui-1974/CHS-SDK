@@ -1,4 +1,4 @@
-# Example 12: PID Control Strategy Comparison for a Canal System
+# PID Control Strategy Comparison for a Canal System
 
 This example demonstrates and compares three different PID control strategies for regulating water levels in a canal system with two gates and three canal reaches in series.
 
@@ -36,7 +36,7 @@ This is a hybrid approach, combining elements of both local and distant control.
 To run the simulation and generate the comparison plot, execute the following command from the root of the repository:
 
 ```bash
-python docs/examples/12_pid_control_comparison/run_pid_comparison.py
+python examples/canal_model/canal_pid_control/run_pid_comparison.py
 ```
 
 The script will run all three scenarios sequentially and save the results to `results_local_upstream.csv`, `results_distant_downstream.csv`, and `results_mixed_control.csv`. It will also generate a comparison plot named `pid_comparison_results.png`.
