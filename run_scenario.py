@@ -27,6 +27,7 @@ def main():
     """
     parser = argparse.ArgumentParser(description="Run a simulation scenario from a directory of YAML files.")
     parser.add_argument("scenario_path", type=str, help="The path to the scenario directory.")
+    parser.add_argument("--agents", type=str, default="agents.yml", help="The name of the agent configuration file to use (default: agents.yml).")
     args = parser.parse_args()
 
     scenario_path = Path(args.scenario_path)
@@ -36,28 +37,25 @@ def main():
 
     logging.info(f"--- Starting Simulation Scenario: {scenario_path.name} ---")
 
-    # 1. Initialize the loader with the path to our scenario
-    logging.info(f"Loading scenario from: {scenario_path}")
-    loader = SimulationLoader(scenario_path=str(scenario_path))
+    # Initialize the loader with the path and the specified agents file
+    logging.info(f"Loading scenario from: {scenario_path} using agents file: {args.agents}")
+    loader = SimulationLoader(scenario_path=str(scenario_path), agents_file=args.agents)
 
-    # 2. Load the simulation harness
-    # The loader reads the YAML files, instantiates all objects, and wires them up.
+    # Load the simulation harness
     harness = loader.load()
 
-    # 3. Run the simulation
-    # The original simulation had a manual pipe burst event. For now, we will run
-    # the simulation without it to test the data-driven setup. This can be
-    # added back later as a specialized "event injector" agent in agents.yml.
+    # Run the simulation
     logging.info("Starting MAS simulation run...")
     harness.run_mas_simulation()
-
     logging.info("Simulation run complete.")
 
-    # 4. Process and save results
+    # Process and save results
     history = harness.history
     logging.info(f"Simulation generated {len(history)} steps of history data.")
 
-    output_path = scenario_path / "output.yml"
+    # Create a unique output file name based on the agents file
+    output_filename = f"output_{Path(args.agents).stem}.yml"
+    output_path = scenario_path / output_filename
     save_history_to_yaml(history, str(output_path))
 
 if __name__ == "__main__":
