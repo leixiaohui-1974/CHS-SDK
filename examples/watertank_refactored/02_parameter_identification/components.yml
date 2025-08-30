@@ -1,5 +1,45 @@
-# In this specific scenario, both the "real" and "twin" reservoirs
-# are implemented as stateful agents rather than physical components.
-# This is done to directly reuse the logic from the original script-based
-# example without modifying the core library. Therefore, this file is empty.
-components: []
+# This file defines the physical components for the parameter identification scenario.
+# It sets up two parallel systems: a "real" one with true parameters, and a "twin"
+# one with initial guess parameters.
+
+components:
+  # --- Real System ---
+  - id: real_reservoir
+    class: core_lib.physical_objects.reservoir.Reservoir
+    name: "real_reservoir"
+    inflow_topic: inflow_topic # Both reservoirs listen to the same inflow
+    initial_state:
+      water_level: 2.0
+    parameters:
+      surface_area: 1.5
+
+  - id: real_valve
+    class: core_lib.physical_objects.valve.Valve
+    name: "real_valve"
+    initial_state:
+      opening: 100.0 # Assume valve is fully open
+    parameters:
+      # This is the "true" parameter we want to identify.
+      # The value is chosen to be equivalent to the original example's logic.
+      discharge_coefficient: 0.8
+      diameter: 1.0 # Set diameter to make calculations simple
+
+  # --- Twin System ---
+  - id: twin_reservoir
+    class: core_lib.physical_objects.reservoir.Reservoir
+    name: "twin_reservoir"
+    inflow_topic: inflow_topic
+    initial_state:
+      water_level: 2.0
+    parameters:
+      surface_area: 1.5
+
+  - id: twin_valve
+    class: core_lib.physical_objects.valve.Valve
+    name: "twin_valve"
+    initial_state:
+      opening: 100.0
+    parameters:
+      # This is the initial "wrong" guess for the parameter.
+      discharge_coefficient: 0.2
+      diameter: 1.0

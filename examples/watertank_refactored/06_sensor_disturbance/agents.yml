@@ -1,9 +1,8 @@
 # This file configures all agents for the sensor disturbance scenario.
-# The key agent here is the PhysicalIOAgent, which simulates a noisy sensor.
+# It uses the enhanced core PhysicalIOAgent to simulate a noisy sensor.
 
 agents:
   # Agent 1: The Disturbance Agent.
-  # Provides a time-varying outflow disturbance from a CSV file.
   - id: disturbance_agent
     class: core_lib.data_access.csv_inflow_agent.CsvInflowAgent
     config:
@@ -14,8 +13,6 @@ agents:
       data_id: disturbance_1
 
   # Agent 2: The PID Controller.
-  # It subscribes to the NOISY water level topic and makes decisions based
-  # on this corrupted information.
   - id: pump_pid_controller_agent
     class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
     config:
@@ -33,10 +30,9 @@ agents:
           min_output: 0.0
           max_output: 5.0
 
-  # Agent 3: The Signal Aggregator.
-  # Combines the pump control signal and the disturbance signal.
+  # Agent 3: The Signal Aggregator (now from the core library).
   - id: inflow_aggregator_agent
-    class: examples.watertank_refactored.06_sensor_disturbance.agents.SignalAggregatorAgent
+    class: core_lib.local_agents.utility.signal_aggregator_agent.SignalAggregatorAgent
     config:
       input_topics:
         - control_signal_topic
@@ -44,8 +40,6 @@ agents:
       output_topic: aggregated_inflow_topic
 
   # Agent 4: The Physical I/O Agent, simulating a noisy sensor.
-  # This agent reads the TRUE state from the reservoir and publishes a
-  # NOISY version for the controller to use.
   - id: pio_agent
     class: core_lib.local_agents.io.physical_io_agent.PhysicalIOAgent
     config:
@@ -54,15 +48,13 @@ agents:
         water_level_sensor_1:
           obj_id: reservoir_1
           state_key: 'water_level'
-          topic: noisy_water_level_topic # Publishes the NOISY signal here
+          topic: noisy_water_level_topic
           noise_std: 0.25
 
-  # Agent 5: A standard Digital Twin Agent.
-  # Its SOLE purpose in this scenario is to publish the CLEAN, true water level
-  # to a separate topic so it can be logged for comparison against the noisy signal.
+  # Agent 5: A standard Digital Twin Agent for logging the clean signal.
   - id: clean_sensor_logger
     class: core_lib.local_agents.perception.digital_twin_agent.DigitalTwinAgent
     config:
       simulated_object_id: reservoir_1
-      state_topic: true_water_level_topic # Publishes the CLEAN signal here
+      state_topic: true_water_level_topic
       log_data: True

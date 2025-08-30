@@ -37,6 +37,7 @@ class ParameterIdentificationAgent(Agent):
         self.data_history: Dict[str, List[float]] = {key: [] for key in self.data_map.keys()}
         self.new_data_count = 0
 
+
         # 订阅所有必需的数据主题
         for model_key, topic in self.data_map.items():
             # lambda 表达式捕获了每次循环的 'model_key' 以供处理函数使用
@@ -49,6 +50,18 @@ class ParameterIdentificationAgent(Agent):
         if isinstance(value, (int, float)):
             self.data_history[model_key].append(value)
             # 仅对一个数据流递增计数器，以确保同步
+
+        # Subscribe to all necessary data topics
+        for model_key, data_config in self.data_map.items():
+            topic = data_config['topic']
+            # The key to find the data within the message payload
+            data_key = data_config['key']
+            # The lambda captures the necessary arguments for the handler
+            callback = lambda msg, m_key=model_key, d_key=data_key: self.handle_data_message(msg, m_key, d_key)
+            self.bus.subscribe(topic, callback)
+            print(f"[{self.agent_id}] Subscribed to topic '{topic}' for model key '{model_key}' using data key '{data_key}'.")
+
+
             if model_key == list(self.data_map.keys())[0]:
                 self.new_data_count += 1
 

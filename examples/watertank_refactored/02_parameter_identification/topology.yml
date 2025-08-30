@@ -1,2 +1,7 @@
-# There are no physical components in this scenario, so there is no topology.
-connections: []
+# This file defines the physical connections for the two parallel systems.
+connections:
+  - upstream: real_reservoir
+    downstream: real_valve
+
+  - upstream: twin_reservoir
+    downstream: twin_valve

@@ -1,22 +1,18 @@
 # This file configures all agents for the actuator disturbance scenario.
-# It uses custom subclasses of core library components and agents to meet
-# the specific requirements of the scenario.
+# It uses the enhanced core PhysicalIOAgent to simulate a noisy actuator.
 
 agents:
   # Agent 1: The Disturbance Agent.
-  # Provides a time-varying outflow disturbance from a CSV file.
   - id: disturbance_agent
     class: core_lib.data_access.csv_inflow_agent.CsvInflowAgent
     config:
       csv_file: disturbance.csv
       time_column: time
       value_column: outflow_rate
-      # The custom reservoir component will subscribe to this topic
       output_topic: disturbance_outflow_topic
       data_id: disturbance_1
 
-  # Agent 2: The Perception Agent.
-  # In this scenario, perception is perfect.
+  # Agent 2: The Perception Agent (perfect sensor).
   - id: perception_agent
     class: core_lib.local_agents.perception.digital_twin_agent.DigitalTwinAgent
     config:
@@ -25,7 +21,7 @@ agents:
       log_data: True
 
   # Agent 3: The PID Controller.
-  # It publishes a clean, ideal command signal for the pump.
+  # Publishes a clean, ideal command signal.
   - id: pump_pid_controller_agent
     class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
     config:
@@ -43,21 +39,20 @@ agents:
           min_output: 0.0
           max_output: 5.0
 
-  # Agent 4: The Noisy Actuator Agent.
-  # This custom agent intercepts the clean command, adds noise/bias,
-  # logs the noisy command, and then acts on the reservoir.
+  # Agent 4: The standard PhysicalIOAgent, configured as a noisy actuator.
+  # It intercepts the clean command, adds noise, and acts on the reservoir.
   - id: noisy_actuator_agent
-    class: examples.watertank_refactored.07_actuator_disturbance.agents.NoisyPhysicalIOAgent
+    class: core_lib.local_agents.io.physical_io_agent.PhysicalIOAgent
     config:
-      noise_params:
-        bias: 0.95
-        std_dev: 0.1
-        log_topic: actual_inflow_topic # Publishes the noisy/actual inflow here for logging
-      sensors_config: {}
+      sensors_config: {} # Not used for sensing in this scenario
       actuators_config:
         pump_actuator_1:
           obj_id: reservoir_1
           topic: clean_pump_command_topic # Subscribes to the clean command
           control_key: 'control_signal'
-          # Directly sets the data_inflow attribute on the reservoir object
           target_attr: 'data_inflow'
+          # NEW: Configure noise directly in the standard agent
+          noise_params:
+            bias: 0.95
+            std_dev: 0.1
+            log_topic: actual_inflow_topic # Publishes the noisy/actual inflow for logging
