@@ -5,67 +5,78 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sys
 from pathlib import Path
+import copy
 
 # Add the project root to the Python path
 project_root = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(project_root))
 
+from core_lib.core_engine.testing.simulation_harness import SimulationHarness
 from core_lib.io.yaml_loader import SimulationLoader
+from core_lib.physical_objects.unified_canal import UnifiedCanal
+from core_lib.central_coordination.collaboration.message_bus import MessageBus
 
-def run_scenario(scenario_name, config_path, components_file):
+def run_scenario(scenario_name, config, base_components, canal_params):
     """
-    Runs a single simulation scenario and saves the results.
-
-    NOTE: This file renaming approach is fragile and not ideal for production use.
-    A better approach would be to modify the SimulationLoader to accept the
-    components file path directly as an argument.
+    Runs a single simulation scenario with a specific canal model configuration.
     """
     print(f"--- Running Scenario: {scenario_name} ---")
 
-    # The SimulationLoader needs to be pointed to a directory where it can find
-    # all the necessary .yml files. We will temporarily rename the components file
-    # for the current scenario to 'components.yml'.
-    original_components_path = os.path.join(config_path, 'components.yml')
-    scenario_components_path = os.path.join(config_path, components_file)
-    os.rename(scenario_components_path, original_components_path)
+    bus = MessageBus()
 
-    try:
-        # Load and run the simulation
-        loader = SimulationLoader(scenario_path=config_path)
-        harness = loader.load()
-        harness.run_mas_simulation()
+    # Deepcopy base components to avoid state leaking between scenarios
+    current_components = copy.deepcopy(base_components)
 
-        # Process and save results
-        history = harness.history
-        if not history:
-            print(f"Warning: No history recorded for scenario {scenario_name}")
-            return
+    canal_initial_state = {'water_level': 5.0, 'inflow': 25.0, 'outflow': 25.0} # Start in steady state
+    canal = UnifiedCanal(name='canal', initial_state=canal_initial_state, parameters=canal_params)
 
-        flat_data = []
-        for step_data in history:
-            row = {'time': step_data['time']}
-            for comp_id, state in step_data.items():
-                if comp_id != 'time':
-                    for key, value in state.items():
-                        row[f"{comp_id}_{key}"] = value
-            flat_data.append(row)
+    all_components = current_components + [canal]
 
-        df = pd.DataFrame(flat_data)
-        scenario_output_filename = f"results_{scenario_name}.csv"
-        df.to_csv(os.path.join(config_path, scenario_output_filename), index=False)
-        print(f"Results for {scenario_name} saved to {scenario_output_filename}")
+    harness = SimulationHarness(
+        components=all_components,
+        connections=[
+            {'upstream': 'upstream_reservoir', 'downstream': 'gate_1'},
+            {'upstream': 'gate_1', 'downstream': 'canal'},
+            {'upstream': 'canal', 'downstream': 'downstream_reservoir'}
+        ],
+        agents=[],
+        message_bus=bus,
+        config=config['simulation']
+    )
 
-    finally:
-        # Clean up: restore original components.yml name
-        os.rename(original_components_path, scenario_components_path)
+    def step_change_event(time, harness_instance):
+        if time == 100:
+            gate = harness_instance.get_component('gate_1')
+            gate.step({'command': 'set_opening', 'value': 0.7}, 0)
+            print(f"[{time}s] Step change applied to gate_1 opening.")
+
+    harness.add_event_hook(step_change_event)
+
+    harness.run_simulation()
+
+    history = harness.history
+    if not history:
+        print(f"Warning: No history recorded for scenario {scenario_name}")
+        return
+
+    # Correctly flatten the history data
+    flat_data = []
+    for time_step_data in history:
+        row = {'time': time_step_data['time']}
+        for component_id, component_state in time_step_data.items():
+            if component_id != 'time':
+                for key, value in component_state.items():
+                    row[f"{component_id}_{key}"] = value
+        flat_data.append(row)
+
+    df = pd.DataFrame(flat_data)
+    scenario_output_filename = f"results_{scenario_name}.csv"
+    df.to_csv(os.path.join(os.path.dirname(__file__), scenario_output_filename), index=False)
+    print(f"Results for {scenario_name} saved to {scenario_output_filename}")
 
 def plot_results(scenarios, config_path):
-    """
-    Plots the results from all scenarios for comparison.
-    """
     plt.style.use('seaborn-v0_8-whitegrid')
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(18, 12), sharex=True)
-
     colors = plt.cm.viridis(np.linspace(0, 1, len(scenarios)))
 
     for i, scenario_name in enumerate(scenarios):
@@ -75,48 +86,47 @@ def plot_results(scenarios, config_path):
             continue
 
         df = pd.read_csv(filepath)
-
-        # Plot water levels
         ax1.plot(df['time'], df['canal_water_level'], label=f'Canal Water Level ({scenario_name})', color=colors[i])
+        if i == 0:
+             ax2.plot(df['time'], df['gate_1_opening'], label='Gate 1 Opening', color='black')
 
-        # Plot gate openings
-        ax2.plot(df['time'], df['gate_1_opening'], label=f'Gate 1 Opening ({scenario_name})', color=colors[i])
-
-
-    ax1.set_title('Canal Water Level Comparison for Different Models', fontsize=16)
-    ax1.set_ylabel('Water Level (m)')
+    ax1.set_title('渠道模型的水位响应对比', fontsize=16)
+    ax1.set_ylabel('水位 (m)')
     ax1.legend(loc='upper right')
     ax1.grid(True)
-
-    ax2.set_title('Gate Opening', fontsize=16)
-    ax2.set_ylabel('Gate Opening (0-1)')
-    ax2.set_xlabel('Time (s)')
+    ax2.set_title('闸门开度', fontsize=16)
+    ax2.set_ylabel('开度 (0-1)')
+    ax2.set_xlabel('时间 (s)')
     ax2.legend(loc='upper right')
     ax2.grid(True)
-
     plt.tight_layout()
     plot_path = os.path.join(config_path, 'model_comparison_results.png')
     plt.savefig(plot_path)
-    print(f"Comparison plot saved to {plot_path}")
-
+    print(f"比较图已保存至 {plot_path}")
 
 def main():
-    """Main function to run all scenarios and plot results."""
     config_path = os.path.dirname(__file__)
 
+    with open(os.path.join(config_path, 'config.yml'), 'r') as f:
+        config = yaml.safe_load(f)
+    with open(os.path.join(config_path, 'components.yml'), 'r') as f:
+        base_components_config = yaml.safe_load(f)['components']
+
     scenarios = {
-        "integral": "components_integral.yml",
-        "integral_delay": "components_integral_delay.yml",
-        "integral_delay_zero": "components_integral_delay_zero.yml",
-        "linear_reservoir": "components_linear_reservoir.yml"
+        "integral": {'model_type': 'integral', 'surface_area': 10000},
+        "integral_delay": {'model_type': 'integral_delay', 'gain': 0.001, 'delay': 300},
+        "integral_delay_zero": {'model_type': 'integral_delay_zero', 'gain': 0.001, 'delay': 300, 'zero_time_constant': 50},
+        "linear_reservoir": {'model_type': 'linear_reservoir', 'storage_constant': 1200, 'level_storage_ratio': 0.005}
     }
 
-    for name, components_file in scenarios.items():
-        run_scenario(name, config_path, components_file)
+    for name, params in scenarios.items():
+        # Instantiate base components fresh for each scenario
+        loader = SimulationLoader(scenario_path=config_path)
+        base_components = [loader.create_component(c) for c in base_components_config]
+        run_scenario(name, config, base_components, params)
 
     plot_results(list(scenarios.keys()), config_path)
-    print("All scenarios executed and results plotted.")
-
+    print("所有场景执行完毕，并已绘制结果。")
 
 if __name__ == "__main__":
     main()

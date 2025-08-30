@@ -3,8 +3,13 @@ from typing import Optional
 
 from core_lib.core.interfaces import PhysicalObjectInterface, State
 
+import warnings
+
 class IntegralDelayCanal(PhysicalObjectInterface):
     """
+    DEPRECATED: This class is deprecated in favor of the UnifiedCanal class.
+    Use `UnifiedCanal(model_type='integral_delay')` instead.
+
     Represents a canal using an integral time-delay model.
 
     This model is a simple representation often used for designing controllers.

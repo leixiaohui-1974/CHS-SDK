@@ -4,8 +4,13 @@ Simulation model for a River Channel.
 from typing import Dict, Any
 from core_lib.core.interfaces import PhysicalObjectInterface, State, Parameters
 
+import warnings
+
 class RiverChannel(PhysicalObjectInterface):
     """
+    DEPRECATED: This class is deprecated in favor of the UnifiedCanal class.
+    Use `UnifiedCanal(model_type='linear_reservoir')` instead.
+
     Represents a segment of a river using a linear reservoir model.
     """
 
