@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-This module defines custom agents for the PID control scenario.
+This module contains the SignalAggregatorAgent.
 """
+from typing import List
 from core_lib.core.interfaces import Agent
 from core_lib.central_coordination.collaboration.message_bus import MessageBus, Message
-from typing import List
 
 class SignalAggregatorAgent(Agent):
     """
@@ -13,7 +13,7 @@ class SignalAggregatorAgent(Agent):
     output topic.
 
     This is useful for combining multiple inflows/outflows into a single
-    net inflow for a reservoir component that can only subscribe to one topic.
+    net inflow for a component that can only subscribe to one topic.
     """
     def __init__(self, agent_id: str, message_bus: MessageBus, config: dict):
         super().__init__(agent_id)
@@ -43,10 +43,6 @@ class SignalAggregatorAgent(Agent):
         """
         In each step, sum the last known values and publish the result.
         """
-        # Sum all the values we've received.
-        # If a message hasn't arrived for a topic in this step, its value from
-        # the previous step might be used, which is often acceptable for control signals.
-        # For this specific use case, control and disturbance happen every step.
         total_value = sum(self.last_received_values.values())
 
         # Publish the aggregated result

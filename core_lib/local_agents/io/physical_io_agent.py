@@ -1,4 +1,5 @@
 import numpy as np
+import random
 from typing import Dict, Any
 
 from core_lib.core.interfaces import Agent, PhysicalObjectInterface
@@ -10,9 +11,8 @@ class PhysicalIOAgent(Agent):
 
     - Simulates sensors by reading the true state from physical objects,
       adding noise, and publishing it to the message bus.
-    - Simulates actuators by subscribing to action topics and setting
-      target states on the physical objects, which then enact the change
-      in their `step` methods.
+    - Simulates actuators by subscribing to action topics, optionally adding
+      noise/bias to the command, and setting target states on physical objects.
     """
 
     def __init__(self,
@@ -26,22 +26,20 @@ class PhysicalIOAgent(Agent):
         Args:
             agent_id: The unique ID of the agent.
             message_bus: The system's message bus.
-            sensors_config: Configuration for sensors. Example:
+            sensors_config: Configuration for sensors.
+            actuators_config: Configuration for actuators. Can include noise.
+                Example with noise:
                 {
-                    'canal_level_sensor': {
-                        'obj': upstream_canal,
-                        'state_key': 'water_level',
-                        'topic': 'state.canal.level',
-                        'noise_std': 0.01
-                    }
-                }
-            actuators_config: Configuration for actuators. Example:
-                {
-                    'gate_actuator': {
-                        'obj': control_gate,
-                        'target_attr': 'target_opening',
-                        'topic': 'action.gate.opening',
-                        'control_key': 'control_signal'
+                    'noisy_pump_actuator': {
+                        'obj_id': 'reservoir_1',
+                        'target_attr': 'data_inflow',
+                        'topic': 'pump.command',
+                        'control_key': 'control_signal',
+                        'noise_params': {
+                            'bias': 0.95,
+                            'std_dev': 0.1,
+                            'log_topic': 'pump.actual_inflow'
+                        }
                     }
                 }
         """
@@ -59,8 +57,6 @@ class PhysicalIOAgent(Agent):
         """
         for name, config in self.actuators.items():
             topic = config['topic']
-            # Use a lambda with default argument to capture the correct config
-            # for each callback.
             callback = lambda message, cfg=config: self._handle_action(message, cfg)
             self.bus.subscribe(topic, callback)
             print(f"  - Subscribed to actuator topic '{topic}' for '{name}'.")
@@ -68,17 +64,33 @@ class PhysicalIOAgent(Agent):
     def _handle_action(self, message: Message, config: Dict[str, Any]):
         """
         Generic callback to handle an incoming action message.
+        If noise_params are present in the config, it corrupts the signal.
         """
         obj: PhysicalObjectInterface = config['obj']
         target_attr: str = config['target_attr']
         control_key: str = config['control_key']
 
-        control_signal = message.get(control_key)
-        if control_signal is not None:
-            # Set the target attribute on the physical object.
-            # e.g., control_gate.target_opening = 0.5
-            setattr(obj, target_attr, control_signal)
-            # print(f"[{self.agent_id}] Received action for '{obj.name}'. Setting '{target_attr}' to {control_signal}.")
+        commanded_signal = message.get(control_key)
+        if commanded_signal is None:
+            return
+
+        actual_signal = commanded_signal
+        noise_params = config.get('noise_params')
+
+        if noise_params:
+            bias = noise_params.get('bias', 1.0)
+            std_dev = noise_params.get('std_dev', 0.0)
+            log_topic = noise_params.get('log_topic')
+
+            noise = random.gauss(0, std_dev)
+            actual_signal = (commanded_signal * bias) + noise
+            if actual_signal < 0:
+                actual_signal = 0
+
+            if log_topic:
+                self.bus.publish(log_topic, Message(self.agent_id, {"value": actual_signal}))
+
+        setattr(obj, target_attr, actual_signal)
 
     def run(self, current_time: float):
         """

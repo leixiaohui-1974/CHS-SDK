@@ -45,12 +45,11 @@ agents:
           min_output: 0.0
           max_output: 5.0
 
-  # Agent 4: The custom aggregator agent.
+  # Agent 4: The standard Signal Aggregator agent from the core library.
   # It listens to the control signal (positive inflow) and the disturbance
   # signal (negative outflow), sums them, and publishes the net inflow.
-  # The reservoir component listens to this final aggregated topic.
   - id: inflow_aggregator_agent
-    class: examples.watertank_refactored.03_pid_control_inlet.agents.SignalAggregatorAgent
+    class: core_lib.local_agents.utility.signal_aggregator_agent.SignalAggregatorAgent
     config:
       input_topics:
         - control_signal_topic
