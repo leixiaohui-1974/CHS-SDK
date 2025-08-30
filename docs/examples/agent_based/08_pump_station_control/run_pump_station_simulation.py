@@ -54,8 +54,8 @@ def run_pump_station_simulation():
     CONTROL_TOPIC_PREFIX = "action.pump"
 
     # 3. --- Physical Components ---
-    source_reservoir = Reservoir("source_res", {'water_level': 10.0}, {})
-    downstream_reservoir = Reservoir("downstream_res", {'water_level': 25.0}, {})
+    source_reservoir = Reservoir("source_res", {'water_level': 10.0}, {'surface_area': 1.0e6})
+    downstream_reservoir = Reservoir("downstream_res", {'water_level': 25.0}, {'surface_area': 1.0e6})
 
     # Create three identical pumps
     pump_params = {'max_flow_rate': 10.0, 'max_head': 20.0, 'power_consumption_kw': 50}

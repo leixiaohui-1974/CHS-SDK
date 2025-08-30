@@ -38,7 +38,7 @@ def run_multi_component_simulation():
     reservoir = Reservoir(
         name="reservoir_1",
         initial_state={'water_level': 15.0, 'volume': 15.0 * 1e6},
-        parameters={'surface_area': 1e6}
+        parameters={'surface_area': 1e6, 'storage_curve': [[0, 0], [30e6, 30]]}
     )
 
     # Gate 1 (downstream of Reservoir)

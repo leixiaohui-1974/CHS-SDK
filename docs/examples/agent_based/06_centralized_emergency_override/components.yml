@@ -6,6 +6,9 @@ components:
       water_level: 98.0  # meters
     parameters:
       area: 1000.0      # m^2
+      storage_curve:
+        - [0, 0]
+        - [100000, 100]
       inflow: 100.0       # Constant inflow in m^3/s to make the level rise
 
   - id: flood_gate

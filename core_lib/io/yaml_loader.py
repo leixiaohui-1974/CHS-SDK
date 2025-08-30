@@ -125,7 +125,16 @@ class SimulationLoader:
             CompClass = self._get_class(comp_class_name)
 
             # Pass all remaining yaml keys as kwargs to the constructor
-            args = { 'name': comp_id, 'message_bus': self.message_bus, **comp_conf }
+            args = { 'name': comp_id, **comp_conf }
+
+            # Inspect constructor signature to see if it accepts message_bus
+            import inspect
+            sig = inspect.signature(CompClass.__init__)
+            has_kwargs = any(p.kind == p.VAR_KEYWORD for p in sig.parameters.values())
+
+            if 'message_bus' in sig.parameters or has_kwargs:
+                args['message_bus'] = self.message_bus
+
             instance = CompClass(**args)
 
             self.harness.add_component(instance)
@@ -168,7 +177,7 @@ class SimulationLoader:
                 target_comp_id = agent_conf.pop('target_component_id')
                 agent_conf['target_component'] = self.component_instances[target_comp_id]
 
-            if agent_class_name == 'core_lib.data_access.csv_inflow_agent.CsvInflowAgent':
+            if agent_class_name == 'CsvInflowAgent':
                 if 'csv_file' in agent_conf:
                     agent_conf['csv_file_path'] = str(self.scenario_path / agent_conf.pop('csv_file'))
                 if 'value_column' in agent_conf:
@@ -178,7 +187,7 @@ class SimulationLoader:
                 agent_conf.pop('data_id', None)
 
             # Special handling for ParameterIdentificationAgent constructor
-            if agent_class_name == 'core_lib.identification.identification_agent.ParameterIdentificationAgent':
+            if agent_class_name == 'ParameterIdentificationAgent':
                 target_model_id = agent_conf.pop('target_model_id')
                 target_model_instance = self.component_instances[target_model_id]
                 instance = AgentClass(
@@ -190,5 +199,28 @@ class SimulationLoader:
             else:
                 instance = AgentClass(agent_id=agent_id, message_bus=self.message_bus, **agent_conf)
             self.harness.add_agent(instance)
+
+        for ctrl_conf in self.agents_config.get('controllers', []):
+            ctrl_id = ctrl_conf.pop('id')
+            ctrl_class_name = ctrl_conf.pop('class')
+
+            logging.info(f"  - Creating controller '{ctrl_id}' of class '{ctrl_class_name}'")
+            CtrlClass = self._get_class(ctrl_class_name)
+
+            controlled_id = ctrl_conf.pop('controlled_id')
+            observed_id = ctrl_conf.pop('observed_id')
+            observation_key = ctrl_conf.pop('observation_key')
+
+            # The rest of the config goes into the controller's constructor
+            config = ctrl_conf.get('config', {})
+            controller_instance = CtrlClass(**config)
+
+            self.harness.add_controller(
+                controller_id=ctrl_id,
+                controller=controller_instance,
+                controlled_id=controlled_id,
+                observed_id=observed_id,
+                observation_key=observation_key
+            )
 
         logging.info("Agents and controllers loaded.")

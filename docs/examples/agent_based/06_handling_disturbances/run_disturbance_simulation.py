@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Example simulation script for Tutorial 4: A hierarchical control system.
+Example simulation script for Tutorial 5: Handling Disturbances.
 
-This script demonstrates a two-level hierarchical control system where a high-level
-supervisory agent manages the objectives of a low-level, local controller.
+This script demonstrates the resilience of the hierarchical control system when
+faced with an external disturbance from a RainfallAgent.
 """
 
 import sys
@@ -20,13 +20,14 @@ from core_lib.local_agents.control.local_control_agent import LocalControlAgent
 from core_lib.local_agents.perception.digital_twin_agent import DigitalTwinAgent
 from core_lib.central_coordination.dispatch.central_dispatcher import CentralDispatcher
 from core_lib.core_engine.testing.simulation_harness import SimulationHarness
-from core_lib.central_coordination.collaboration.message_bus import MessageBus
+from core_lib.disturbances.rainfall_agent import RainfallAgent
 
-def setup_hierarchical_control_system(harness):
+def setup_control_system(harness, inflow_topic=None):
     """
-    Initializes and connects all components for the hierarchical control simulation.
+    Initializes the control system components. This is based on the hierarchical
+    control example, modified to allow for a disturbance inflow topic.
     """
-    print("--- Initializing components for Hierarchical Control ---")
+    print("--- Initializing components for Control System ---")
 
     message_bus = harness.message_bus
     simulation_dt = harness.dt
@@ -38,10 +39,13 @@ def setup_hierarchical_control_system(harness):
     GATE_COMMAND_TOPIC = "command.gate1.setpoint"
 
     # --- Physical Components ---
+    # Reservoir is now configured to listen for disturbance inflows.
     reservoir = Reservoir(
         name="reservoir_1",
-        initial_state={'volume': 28.5e6, 'water_level': 19.0},
-        parameters={'surface_area': 1.5e6}
+        initial_state={'volume': 18e6, 'water_level': 12.0},
+        parameters={'surface_area': 1.5e6, 'storage_curve': [[0, 0], [30e6, 20]]},
+        message_bus=message_bus,
+        inflow_topic=inflow_topic
     )
     gate_params = {
         'max_rate_of_change': 0.5,
@@ -49,7 +53,6 @@ def setup_hierarchical_control_system(harness):
         'width': 10,
         'max_opening': 5.0
     }
-    # The Gate needs to listen for the 'control_signal' key from the LocalControlAgent.
     gate = Gate(
         name="gate_1",
         initial_state={'opening': 0.1},
@@ -66,16 +69,9 @@ def setup_hierarchical_control_system(harness):
         message_bus=message_bus,
         state_topic=RESERVOIR_STATE_TOPIC
     )
-    gate_twin = DigitalTwinAgent(
-        agent_id="twin_gate_1",
-        simulated_object=gate,
-        message_bus=message_bus,
-        state_topic=GATE_STATE_TOPIC
-    )
-
     pid = PIDController(
         Kp=-0.8, Ki=-0.1, Kd=-0.2,
-        setpoint=15.0,
+        setpoint=12.0,
         min_output=0.0,
         max_output=gate_params['max_opening']
     )
@@ -87,23 +83,21 @@ def setup_hierarchical_control_system(harness):
         observation_key='water_level',
         action_topic=GATE_ACTION_TOPIC,
         dt=simulation_dt,
-        command_topic=GATE_COMMAND_TOPIC,
-        feedback_topic=GATE_STATE_TOPIC
+        command_topic=GATE_COMMAND_TOPIC
     )
 
-    # --- Central Dispatcher with Corrected Message Key ---
     dispatcher_rules = {
         "profiles": {
             "flood_control": {
-                "condition": lambda states: states.get('reservoir_level', {}).get('water_level', 0) > 18.0,
+                "condition": lambda states: states.get('reservoir_level', {}).get('water_level', 0) > 13.0,
                 "commands": {
-                    "gate1_command": {'new_setpoint': 12.0}
+                    "gate1_command": {'new_setpoint': 11.0}
                 }
             },
             "normal_operation": {
                 "condition": lambda states: True,
                 "commands": {
-                    "gate1_command": {'new_setpoint': 15.0}
+                    "gate1_command": {'new_setpoint': 12.0}
                 }
             }
         }
@@ -116,38 +110,48 @@ def setup_hierarchical_control_system(harness):
         rules=dispatcher_rules
     )
 
-    # --- Add all components to the harness ---
     harness.add_component(reservoir)
     harness.add_component(gate)
     harness.add_agent(reservoir_twin)
-    harness.add_agent(gate_twin)
     harness.add_agent(lca)
     harness.add_agent(dispatcher)
     harness.add_connection("reservoir_1", "gate_1")
 
-
-def run_hierarchical_simulation():
+def run_disturbance_simulation():
     """
-    Sets up and runs the full hierarchical simulation.
+    Sets up and runs the full simulation with a rainfall disturbance.
     """
-    print("\n--- Setting up Tutorial 4: Hierarchical Control Simulation ---")
+    print("\n--- Setting up Tutorial 5: Handling Disturbances Simulation ---")
 
-    simulation_config = {'duration': 500, 'dt': 1.0}
+    simulation_config = {'duration': 800, 'dt': 1.0}
     harness = SimulationHarness(config=simulation_config)
 
-    setup_hierarchical_control_system(harness)
+    RAINFALL_TOPIC = "disturbance.rainfall.inflow"
+
+    # Setup the control system, telling the reservoir to listen for rainfall.
+    setup_control_system(harness, inflow_topic=RAINFALL_TOPIC)
+
+    # Create and add the disturbance agent
+    rainfall_agent = RainfallAgent(
+        agent_id="rainfall_agent_1",
+        message_bus=harness.message_bus,
+        topic=RAINFALL_TOPIC,
+        start_time=300,
+        duration=200,
+        inflow_rate=150
+    )
+    harness.add_agent(rainfall_agent)
 
     harness.build()
 
-    print("\n--- Running Hierarchical Simulation ---")
+    print("\n--- Running Simulation with Disturbance ---")
     harness.run_mas_simulation()
     print("\n--- Simulation Complete ---")
 
     final_level = harness.history[-1]['reservoir_1']['water_level']
-    final_opening = harness.history[-1]['gate_1']['opening']
+    max_level = max(h['reservoir_1']['water_level'] for h in harness.history)
     print(f"Final reservoir water level: {final_level:.2f} m")
-    print(f"Final gate opening: {final_opening:.2f} m")
-
+    print(f"Maximum reservoir water level during simulation: {max_level:.2f} m")
 
 if __name__ == "__main__":
-    run_hierarchical_simulation()
+    run_disturbance_simulation()

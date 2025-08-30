@@ -31,6 +31,7 @@ def run_getting_started_simulation():
     # Reservoir Model
     reservoir_params = {
         'surface_area': 1.5e6,  # m^2
+        'storage_curve': [[0, 0], [30e6, 20]]  # [[volume_m3, level_m], ...]
     }
     reservoir_initial_state = {
         'volume': 21e6,  # m^3, equivalent to 14m * 1.5e6 m^2
