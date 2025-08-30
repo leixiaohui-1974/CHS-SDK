@@ -118,7 +118,7 @@ actuators_config = {
 ```mermaid
 graph TD
     subgraph 物理世界
-        A[物理模型<br>(如 Canal)]
+        A[物理模型<br>(e.g., Canal)]
     end
 
     subgraph 硬件接口层
