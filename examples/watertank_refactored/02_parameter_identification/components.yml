@@ -7,7 +7,7 @@ components:
   - id: real_reservoir
     class: core_lib.physical_objects.reservoir.Reservoir
     name: "real_reservoir"
-    inflow_topic: inflow_topic # Both reservoirs listen to the same inflow
+    inflow_topic: "inflow_topic"
     initial_state:
       water_level: 2.0
     parameters:
@@ -31,7 +31,7 @@ components:
   - id: twin_reservoir
     class: core_lib.physical_objects.reservoir.Reservoir
     name: "twin_reservoir"
-    inflow_topic: inflow_topic
+    inflow_topic: "inflow_topic"
     initial_state:
       water_level: 2.0
     parameters:

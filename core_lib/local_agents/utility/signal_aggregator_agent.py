@@ -15,16 +15,16 @@ class SignalAggregatorAgent(Agent):
     This is useful for combining multiple inflows/outflows into a single
     net inflow for a component that can only subscribe to one topic.
     """
-    def __init__(self, agent_id: str, message_bus: MessageBus, config: dict):
+    def __init__(self, agent_id: str, message_bus: MessageBus, **kwargs):
         super().__init__(agent_id)
         self.bus = message_bus
 
-        self.input_topics: List[str] = config['input_topics']
-        self.output_topic: str = config['output_topic']
+        self.input_topics: List[str] = kwargs['input_topics']
+        self.output_topic: str = kwargs['output_topic']
         self.last_received_values: dict[str, float] = {topic: 0.0 for topic in self.input_topics}
 
         if not self.input_topics or not self.output_topic:
-            raise ValueError("SignalAggregatorAgent requires 'input_topics' and 'output_topic' in its config.")
+            raise ValueError("SignalAggregatorAgent requires 'input_topics' and 'output_topic' in its configuration.")
 
         # Subscribe the same handler to all input topics
         for topic in self.input_topics:
@@ -39,11 +39,11 @@ class SignalAggregatorAgent(Agent):
         if isinstance(value, (int, float)):
             self.last_received_values[topic] = value
 
-    def run(self, current_time: float, dt: float):
+    def run(self, current_time: float):
         """
         In each step, sum the last known values and publish the result.
         """
         total_value = sum(self.last_received_values.values())
 
         # Publish the aggregated result
-        self.bus.publish(self.output_topic, Message(self.agent_id, {"value": total_value}))
+        self.bus.publish(self.output_topic, {"value": total_value})

@@ -54,9 +54,10 @@ def main():
                             if class_path:
                                 params = get_class_signature(class_path)
                                 if params:
-                                    # We have a valid signature, now validate the item config
-                                    item_config = item.get("config", {})
-                                    errors = validate_item(item_id, item_config, params)
+                                    # For validation, we pass the whole item dictionary,
+                                    # as parameters can be at the top level (for components)
+                                    # or nested under 'config' (for agents). The validator handles it.
+                                    errors = validate_item(item_id, item, params)
                                     if errors:
                                         all_errors.append(
                                             (yaml_file, item_id, class_path, errors)
@@ -111,36 +112,58 @@ def get_class_signature(class_path: str) -> dict:
         # Don't print an error here, as the caller will report it.
         return None
 
-def validate_item(item_id: str, config: dict, signature_params: dict) -> list[str]:
+def validate_item(item_id: str, item_data: dict, signature_params: dict) -> list[str]:
     """
     Validates a single item's configuration against its class signature.
 
     Args:
         item_id: The ID of the item being validated.
-        config: The configuration dictionary from the YAML file.
+        item_data: The full dictionary for the item from the YAML file.
         signature_params: The parameter dictionary from inspect.signature().
 
     Returns:
         A list of error strings.
     """
     errors = []
-    config_keys = set(config.keys())
+    # Agents have their parameters nested under 'config', while physical
+    # components have them at the top level. We check for the 'config'
+    # key to decide which dictionary to use for validation.
+    config_to_validate = item_data.get("config", item_data)
+
+    config_keys = set(config_to_validate.keys())
     sig_keys = set(signature_params.keys())
 
-    # Rule 1: Check for unknown parameters in YAML
-    unknown_params = config_keys - sig_keys
-    for param in unknown_params:
-        # Ignore 'class' and 'id' as they are metadata, not constructor args
-        if param not in ['class', 'id']:
-            errors.append(f"Unknown parameter '{param}'")
+    # This map handles special cases where the YAML key is different from the __init__ parameter name
+    # due to dependency injection by the SimulationBuilder.
+    dependency_injection_map = {
+        "simulated_object": "simulated_object_id",
+        "target_model": "target_model_id",
+        "target_component": "target_component_id",
+        "obj": "obj_id",
+    }
+
+    # Rule 1: Check for unknown parameters in YAML, unless **kwargs is used
+    has_kwargs = any(p.kind == inspect.Parameter.VAR_KEYWORD for p in signature_params.values())
+    if not has_kwargs:
+        # The set of valid keys includes the signature keys plus the special keys from our map
+        valid_keys = sig_keys.union(set(dependency_injection_map.values()))
+        unknown_params = config_keys - valid_keys
+        for param in unknown_params:
+            if param not in ['class', 'id']:
+                errors.append(f"Unknown parameter '{param}'")
 
     # Rule 2: Check for missing required parameters in YAML
-    # These parameters are known to be injected by the ObjectFactory or are not relevant to config
     factory_injected_params = {'self', 'bus', 'message_bus', 'id', 'agent_id', 'kwargs', 'config'}
     for param_name, param_obj in signature_params.items():
         if param_obj.default == inspect.Parameter.empty and param_name not in factory_injected_params:
-            # This is a required parameter that should be in the YAML config
-            if param_name not in config_keys:
+            # This is a required parameter
+            if param_name in dependency_injection_map:
+                # Check if the corresponding '_id' key exists in the YAML
+                yaml_key = dependency_injection_map[param_name]
+                if yaml_key not in config_keys:
+                    errors.append(f"Missing required parameter '{param_name}' (expected '{yaml_key}' in YAML)")
+            elif param_name not in config_keys:
+                # Standard required parameter is missing
                 errors.append(f"Missing required parameter '{param_name}'")
 
     return errors

@@ -104,6 +104,7 @@ class SimulationBuilder(BaseYamlLoader):
             "CentralDispatcherAgent": "core_lib.central_coordination.dispatch.central_dispatcher.CentralDispatcherAgent",
             "CsvInflowAgent": "core_lib.data_access.csv_inflow_agent.CsvInflowAgent",
             "EmergencyAgent": "core_lib.local_agents.supervisory.emergency_agent.EmergencyAgent",
+            "TopicLoggerAgent": "core_lib.local_agents.utility.topic_logger_agent.TopicLoggerAgent",
         }
         self.object_factory = ObjectFactory(context, class_map=DEFAULT_CLASS_MAP)
 

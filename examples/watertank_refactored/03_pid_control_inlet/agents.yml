@@ -13,28 +13,22 @@ agents:
       log_data: True # Ensure its output is logged
 
   # Agent 2: Reads a time-series outflow disturbance from a CSV file.
-  # The values are negative because they represent water leaving the system.
   - id: disturbance_agent
     class: core_lib.data_access.csv_inflow_agent.CsvInflowAgent
     config:
-      csv_file: disturbance.csv
-      time_column: time
-      value_column: outflow_rate
-      output_topic: disturbance_signal_topic
-      data_id: disturbance_1
+      csv_file_path: "examples/watertank_refactored/03_pid_control_inlet/disturbance.csv"
+      time_column: "time"
+      data_column: "outflow_rate"
+      inflow_topic: "disturbance_signal_topic"
 
   # Agent 3: The PID controller for the inlet pump.
-  # It observes the water level, compares it to a setpoint, and calculates
-  # the required pump inflow, publishing it as a control signal.
   - id: pump_pid_controller_agent
     class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
     config:
-      observation_topic: tank_water_level_topic # Listens to the perception agent
-      observation_key: value # The key in the message from the perception agent
-      action_topic: control_signal_topic # Publishes its control action here
+      observation_topic: "tank_water_level_topic"
+      observation_key: "water_level" # Correct key for DigitalTwinAgent state
+      action_topic: "control_signal_topic"
       dt: 1.0
-      # The controller logic is defined as a nested object. The YAML loader
-      # will instantiate this class and pass it to the LocalControlAgent.
       controller:
         class: core_lib.local_agents.control.pid_controller.PIDController
         config:
@@ -46,12 +40,9 @@ agents:
           max_output: 5.0
 
   # Agent 4: The standard Signal Aggregator agent from the core library.
-  # It listens to the control signal (positive inflow) and the disturbance
-  # signal (negative outflow), sums them, and publishes the net inflow.
   - id: inflow_aggregator_agent
     class: core_lib.local_agents.utility.signal_aggregator_agent.SignalAggregatorAgent
-    config:
-      input_topics:
-        - control_signal_topic
-        - disturbance_signal_topic
-      output_topic: aggregated_inflow_topic
+    input_topics:
+      - "control_signal_topic"
+      - "disturbance_signal_topic"
+    output_topic: "aggregated_inflow_topic"

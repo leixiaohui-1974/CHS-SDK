@@ -78,7 +78,8 @@ class CsvInflowAgent(Agent):
                 closest_time = relevant_data.max()
                 inflow_value = self.data.loc[closest_time, self.data_column]
 
-                message: Message = {'inflow_rate': float(inflow_value)}
+                # Publish using the standard 'value' key
+                message: Message = {'value': float(inflow_value)}
                 self.bus.publish(self.inflow_topic, message)
                 # logging.debug(f"Agent '{self.agent_id}' published inflow {inflow_value} at time {current_time}")
 

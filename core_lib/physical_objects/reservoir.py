@@ -118,7 +118,7 @@ class Reservoir(PhysicalObjectInterface):
 
     def handle_inflow_message(self, message: Message):
         """处理数据驱动入流消息的回调函数。"""
-        inflow_value = message.get('control_signal') or message.get('inflow_rate')
+        inflow_value = message.get('value') # Standardized key
         if isinstance(inflow_value, (int, float)):
             self.data_inflow += inflow_value
 

@@ -49,12 +49,12 @@ class TestCsvInflowAgent(unittest.TestCase):
         # Run at time t=2
         self.agent.run(current_time=2.0)
         self.assertEqual(len(received_messages), 1)
-        self.assertAlmostEqual(received_messages[0]['inflow_rate'], 15.0)
+        self.assertAlmostEqual(received_messages[0]['value'], 15.0)
 
         # Run at time t=10
         self.agent.run(current_time=10.0)
         self.assertEqual(len(received_messages), 2)
-        self.assertAlmostEqual(received_messages[1]['inflow_rate'], 18.0)
+        self.assertAlmostEqual(received_messages[1]['value'], 18.0)
 
     def test_data_publication_at_intermediate_times(self):
         """
@@ -70,12 +70,12 @@ class TestCsvInflowAgent(unittest.TestCase):
         # Run at time t=3 (should get data from t=2)
         self.agent.run(current_time=3.0)
         self.assertEqual(len(received_messages), 1)
-        self.assertAlmostEqual(received_messages[0]['inflow_rate'], 15.0)
+        self.assertAlmostEqual(received_messages[0]['value'], 15.0)
 
         # Run at time t=7 (should get data from t=5)
         self.agent.run(current_time=7.0)
         self.assertEqual(len(received_messages), 2)
-        self.assertAlmostEqual(received_messages[1]['inflow_rate'], 20.0)
+        self.assertAlmostEqual(received_messages[1]['value'], 20.0)
 
     def test_no_publication_before_first_timestamp(self):
         """

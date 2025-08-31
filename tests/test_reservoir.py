@@ -95,7 +95,7 @@ class TestReservoir(unittest.TestCase):
         # Manually set initial level
         reservoir_with_bus._state['water_level'] = reservoir_with_bus._get_level_from_volume(self.initial_volume)
 
-        bus.publish("inflow/test", {'inflow_rate': 300.0})
+        bus.publish("inflow/test", {'value': 300.0})
 
         dt = 10.0
         reservoir_with_bus.set_inflow(500.0)

@@ -6,8 +6,7 @@ agents:
   - id: inflow_agent_1
     class: core_lib.data_access.csv_inflow_agent.CsvInflowAgent
     config:
-      csv_file: inflow.csv
-      time_column: time
-      value_column: inflow_rate
-      output_topic: inflow_topic
-      data_id: inflow_1
+      csv_file_path: "examples/watertank_refactored/01_simple_simulation/inflow.csv"
+      time_column: "time"
+      data_column: "inflow_rate"
+      inflow_topic: "inflow_topic"

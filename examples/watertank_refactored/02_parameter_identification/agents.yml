@@ -9,18 +9,16 @@ agents:
   - id: inflow_agent
     class: core_lib.data_access.csv_inflow_agent.CsvInflowAgent
     config:
-      csv_file: inflow.csv
-      time_column: time
-      value_column: inflow_rate
-      output_topic: inflow_topic
-      data_id: inflow_1
+      csv_file_path: "examples/watertank_refactored/02_parameter_identification/inflow.csv"
+      time_column: "time"
+      data_column: "inflow_rate"
+      inflow_topic: "inflow_topic"
 
   # Agent 2: Publishes a constant value of 0 for the downstream water level.
-  # This is required by the Valve's identification method.
   - id: downstream_level_publisher
     class: core_lib.local_agents.utility.ConstantValueAgent
     config:
-      topic: downstream_level_topic
+      topic: "downstream_level_topic"
       value: 0.0
 
   # --- Perception Agents ---
@@ -29,46 +27,40 @@ agents:
   - id: real_valve_perception
     class: core_lib.local_agents.perception.digital_twin_agent.DigitalTwinAgent
     config:
-      simulated_object_id: real_valve
-      state_topic: real_valve_state_topic
-      log_data: True
+      simulated_object_id: "real_valve"
+      state_topic: "real_valve_state_topic"
 
   # Agent 4: Publishes the state of the TWIN reservoir (for its upstream level).
   - id: twin_reservoir_perception
     class: core_lib.local_agents.perception.digital_twin_agent.DigitalTwinAgent
     config:
-      simulated_object_id: twin_reservoir
-      state_topic: twin_reservoir_level_topic
-      log_data: True
+      simulated_object_id: "twin_reservoir"
+      state_topic: "twin_reservoir_level_topic"
 
   # Agent 5: Publishes the state of the TWIN valve (for its opening).
   - id: twin_valve_perception
     class: core_lib.local_agents.perception.digital_twin_agent.DigitalTwinAgent
     config:
-      simulated_object_id: twin_valve
-      state_topic: twin_valve_state_topic
-      log_data: True
+      simulated_object_id: "twin_valve"
+      state_topic: "twin_valve_state_topic"
 
   # --- Identification Agent ---
 
   # Agent 6: The main identification agent.
   - id: identification_agent
     class: core_lib.identification.identification_agent.ParameterIdentificationAgent
-    config:
-      target_model_id: twin_valve # The component whose parameters will be updated
-      identification_interval: 50 # Run identification every 50 time steps
-      # Maps the inputs required by `Valve.identify_parameters` to the topics
-      # where that data can be found.
-      identification_data_map:
-        openings:
-          topic: twin_valve_state_topic
-          key: opening
-        upstream_levels:
-          topic: twin_reservoir_level_topic
-          key: water_level
-        downstream_levels:
-          topic: downstream_level_topic
-          key: value
-        observed_flows:
-          topic: real_valve_state_topic
-          key: outflow
+    target_model_id: "twin_valve"
+    identification_interval: 50
+    identification_data_map:
+      openings:
+        topic: "twin_valve_state_topic"
+        key: "opening"
+      upstream_levels:
+        topic: "twin_reservoir_level_topic"
+        key: "water_level"
+      downstream_levels:
+        topic: "downstream_level_topic"
+        key: "value"
+      observed_flows:
+        topic: "real_valve_state_topic"
+        key: "outflow"
