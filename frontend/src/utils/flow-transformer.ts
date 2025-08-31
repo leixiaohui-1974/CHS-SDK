@@ -63,11 +63,11 @@ export const transformToFlowData = (projectConfig: ProjectConfig): { nodes: Node
     });
 
     if (projectConfig && projectConfig.topology && projectConfig.topology.connections) {
-      projectConfig.topology.connections.forEach((connection, index) => {
+      projectConfig.topology.connections.forEach((connection) => {
         if (!connection || !connection.source || !connection.target) return; // Skip invalid connections
 
         edges.push({
-          id: `e-${connection.source}-${connection.target}-${index}`,
+          id: connection._id, // Use the unique ID from the store
           source: connection.source,
           target: connection.target,
           data: { ...connection },

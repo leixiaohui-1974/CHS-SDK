@@ -12,6 +12,7 @@ vi.mock('reactflow', () => ({
   Controls: () => <div>Controls</div>,
   MiniMap: () => <div>MiniMap</div>,
   Background: () => <div>Background</div>,
+  ReactFlowProvider: ({ children }) => <div>{children}</div>,
 }));
 
 describe('ModelingPage', () => {
@@ -68,8 +69,10 @@ describe('ModelingPage', () => {
     render(<ModelingPage />);
 
     expect(screen.getByText('Component Library')).toBeInTheDocument();
-    expect(screen.getByText('reservoir')).toBeInTheDocument();
-    expect(screen.getByText('gate')).toBeInTheDocument();
+    // Check for the new static component labels
+    expect(screen.getByText('Reservoir')).toBeInTheDocument();
+    expect(screen.getByText('Gate')).toBeInTheDocument();
+    expect(screen.getByText('Valve')).toBeInTheDocument();
 
     expect(screen.getByTestId('react-flow')).toBeInTheDocument();
 
