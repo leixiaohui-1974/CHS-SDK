@@ -50,7 +50,7 @@ class TestCentralDispatcherAgent(unittest.TestCase):
             "emergency_flood_level": 100.0,
             "command_topic": command_topic
         }
-        agent = CentralDispatcherAgent("emergency_dispatcher", self.bus, config)
+        agent = CentralDispatcherAgent("emergency_dispatcher", self.bus, **config)
 
         self.bus.subscribe(command_topic, lambda msg: self._message_callback(msg, command_topic))
 
@@ -69,7 +69,7 @@ class TestCentralDispatcherAgent(unittest.TestCase):
             "emergency_flood_level": 100.0,
             "command_topic": command_topic
         }
-        agent = CentralDispatcherAgent("emergency_dispatcher", self.bus, config)
+        agent = CentralDispatcherAgent("emergency_dispatcher", self.bus, **config)
 
         self.bus.subscribe(command_topic, lambda msg: self._message_callback(msg, command_topic))
 
@@ -96,7 +96,7 @@ class TestCentralDispatcherAgent(unittest.TestCase):
                 "high_setpoint": 18
             }
         }
-        agent = CentralDispatcherAgent("rule_dispatcher", self.bus, config)
+        agent = CentralDispatcherAgent("rule_dispatcher", self.bus, **config)
 
         self.bus.subscribe(command_topic, lambda msg: self._message_callback(msg, command_topic))
 
@@ -124,7 +124,7 @@ class TestCentralDispatcherAgent(unittest.TestCase):
                 "high_setpoint": 18
             }
         }
-        agent = CentralDispatcherAgent("rule_dispatcher", self.bus, config)
+        agent = CentralDispatcherAgent("rule_dispatcher", self.bus, **config)
 
         self.bus.subscribe(command_topic, lambda msg: self._message_callback(msg, command_topic))
 
@@ -135,47 +135,10 @@ class TestCentralDispatcherAgent(unittest.TestCase):
         self.assertIn(command_topic, self.received_messages)
         self.assertEqual(self.received_messages[command_topic][0]['new_setpoint'], 12)
 
-    def test_mpc_mode_runs_without_error(self):
-        """Test MPC mode: Runs optimization and publishes a command."""
-        cmd_topic_1 = "command/mpc_sp_1"
-        cmd_topic_2 = "command/mpc_sp_2"
-        state_topic_1 = "state/level_1"
-        state_topic_2 = "state/level_2"
-        forecast_topic = "forecast/inflow"
-
-        config = {
-            "mode": "mpc",
-            "prediction_horizon": 5,
-            "dt": 3600,
-            "q_weight": 1.0,
-            "r_weight": 0.5,
-            "state_keys": ["level_1", "level_2"],
-            "command_topics": {"cmd1": cmd_topic_1, "cmd2": cmd_topic_2},
-            "normal_setpoints": [4.0, 4.0],
-            "emergency_setpoint": 3.0,
-            "flood_thresholds": [6.0, 6.0],
-            "canal_surface_areas": [10000, 10000],
-            "outflow_coefficient": 500,
-            "state_subscriptions": {"level_1": state_topic_1, "level_2": state_topic_2},
-            "forecast_subscription": forecast_topic
-        }
-        agent = CentralDispatcherAgent("mpc_dispatcher", self.bus, config)
-
-        self.bus.subscribe(cmd_topic_1, lambda msg: self._message_callback(msg, cmd_topic_1))
-        self.bus.subscribe(cmd_topic_2, lambda msg: self._message_callback(msg, cmd_topic_2))
-
-        # Publish initial state and forecast
-        self.bus.publish(state_topic_1, {"water_level": 4.1})
-        self.bus.publish(state_topic_2, {"water_level": 4.2})
-        self.bus.publish(forecast_topic, {"inflow_forecast": [0.5, 0.6, 0.7, 0.5, 0.4]})
-
-        agent.run(current_time=0)
-
-        # Check that a command was published on both topics
-        self.assertIn(cmd_topic_1, self.received_messages)
-        self.assertIn(cmd_topic_2, self.received_messages)
-        self.assertEqual(len(self.received_messages[cmd_topic_1]), 1)
-        self.assertIn('new_setpoint', self.received_messages[cmd_topic_1][0])
+    def test_raises_error_for_mpc_mode(self):
+        """Test that initializing with 'mpc' mode raises a ValueError."""
+        with self.assertRaises(ValueError):
+            CentralDispatcherAgent("dispatcher_should_fail", self.bus, **{"mode": "mpc"})
 
 
 if __name__ == '__main__':

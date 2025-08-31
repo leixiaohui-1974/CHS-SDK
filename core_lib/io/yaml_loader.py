@@ -206,15 +206,15 @@ class SimulationBuilder(BaseYamlLoader):
 
                 resolve_obj_ids(agent_conf)
 
-                if class_name == 'CentralDispatcherAgent':
-                    agent_conf['config'] = agent_conf.copy()
-                    instance = self.object_factory.create(agent_conf, agent_id=agent_id)
-                elif class_name == 'CsvInflowAgent':
-                    csv_file = agent_conf['config'].pop('csv_file')
-                    agent_conf['config']['csv_file_path'] = self.scenario_path / csv_file
-                    instance = self.object_factory.create(agent_conf, agent_id=agent_id)
-                else:
-                    instance = self.object_factory.create(agent_conf, agent_id=agent_id)
+                # Special handling for CsvInflowAgent to resolve relative path
+                if class_name == 'CsvInflowAgent':
+                    if 'config' in agent_conf and 'csv_file' in agent_conf['config']:
+                        csv_file = agent_conf['config'].pop('csv_file')
+                        agent_conf['config']['csv_file_path'] = self.scenario_path / csv_file
+
+                # The object factory will unpack the 'config' block from the YAML
+                # into keyword arguments for the agent's constructor.
+                instance = self.object_factory.create(agent_conf, agent_id=agent_id)
 
                 self.harness.add_agent(instance)
         logging.info("Agents and controllers loaded.")
