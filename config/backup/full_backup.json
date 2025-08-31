@@ -1,0 +1,110 @@
+{
+  "backup_name": "chs_full_backup",
+  "backup_directory": "/app/backups/full",
+  "retention_days": 90,
+  "components": {
+    "database": {
+      "enabled": true,
+      "config_file": "config/backup/database_backup.json",
+      "priority": 1
+    },
+    "files": {
+      "enabled": true,
+      "config_file": "config/backup/file_backup.json",
+      "priority": 2
+    },
+    "simulation_files": {
+      "enabled": true,
+      "config_file": "config/backup/simulation_files_backup.json",
+      "priority": 3
+    },
+    "configuration": {
+      "enabled": true,
+      "source_directories": [
+        "/app/config",
+        "/app/docker-compose.yml",
+        "/app/docker-compose.monitoring.yml",
+        "/app/.env",
+        "/app/nginx.conf",
+        "/app/scripts"
+      ],
+      "priority": 1
+    },
+    "logs": {
+      "enabled": true,
+      "source_directories": [
+        "/app/logs",
+        "/var/log/nginx",
+        "/var/log/postgresql"
+      ],
+      "retention_days": 30,
+      "priority": 4
+    }
+  },
+  "compression": {
+    "enabled": true,
+    "algorithm": "gzip",
+    "level": 9
+  },
+  "encryption": {
+    "enabled": true,
+    "algorithm": "AES-256-GCM",
+    "key_file": "/app/config/backup_key.key"
+  },
+  "s3_config": {
+    "enabled": true,
+    "bucket": "${S3_BACKUP_BUCKET}",
+    "region": "${S3_REGION}",
+    "access_key": "${S3_ACCESS_KEY}",
+    "secret_key": "${S3_SECRET_KEY}",
+    "endpoint": "${S3_ENDPOINT}",
+    "prefix": "full-backups/",
+    "storage_class": "GLACIER",
+    "multipart_threshold": 104857600,
+    "multipart_chunksize": 8388608
+  },
+  "verification": {
+    "enabled": true,
+    "checksum_algorithm": "sha256",
+    "integrity_check": true,
+    "test_restore": false
+  },
+  "notification": {
+    "webhook": "${BACKUP_NOTIFICATION_WEBHOOK}",
+    "email": {
+      "enabled": false,
+      "smtp_server": "${SMTP_SERVER}",
+      "smtp_port": 587,
+      "username": "${SMTP_USERNAME}",
+      "password": "${SMTP_PASSWORD}",
+      "from_email": "backup@chs-platform.com",
+      "to_emails": ["admin@chs-platform.com"]
+    },
+    "slack": {
+      "enabled": false,
+      "webhook_url": "${SLACK_WEBHOOK_URL}",
+      "channel": "#backups"
+    }
+  },
+  "parallel_operations": 2,
+  "timeout_seconds": 7200,
+  "retry_attempts": 3,
+  "retry_delay": 10,
+  "monitoring": {
+    "enabled": true,
+    "progress_reporting": true,
+    "metrics_collection": true
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "/app/logs/full_backup.log",
+    "max_size_mb": 100,
+    "backup_count": 10
+  },
+  "cleanup": {
+    "enabled": true,
+    "keep_local_copies": 3,
+    "keep_remote_copies": 12,
+    "cleanup_temp_files": true
+  }
+}
