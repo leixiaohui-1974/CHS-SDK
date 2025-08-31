@@ -1,0 +1,17 @@
+# Topology Definition for the Complex Fault Scenario Example
+# Structure: reservoir -> turnout_1 -> gate_1 -> canal_1 -> turnout_2 -> gate_2 -> canal_2 -> terminal_user
+connections:
+  - upstream: upstream_reservoir
+    downstream: turnout_1
+  - upstream: turnout_1
+    downstream: gate_1
+  - upstream: gate_1
+    downstream: canal_1
+  - upstream: canal_1
+    downstream: turnout_2
+  - upstream: turnout_2
+    downstream: gate_2
+  - upstream: gate_2
+    downstream: canal_2
+  - upstream: canal_2
+    downstream: terminal_user
