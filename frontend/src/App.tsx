@@ -1,53 +1,17 @@
 import React from 'react';
-import { Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
-import { Layout, Menu } from 'antd';
-import ModelingPage from './pages/ModelingPage';
-import SimulationPage from './pages/SimulationPage';
-import ProjectLoader from './components/ProjectLoader';
+import { ConfigProvider } from 'antd';
+import zhCN from 'antd/locale/zh_CN';
+import SimulationApp from './components/SimulationApp';
+import './App.css';
 
-const { Header, Content } = Layout;
-
-const App: React.FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const handleMenuClick = (e: { key: string }) => {
-    navigate(e.key);
-  };
-
-  // Determine the selected key from the current path
-  const selectedKey = location.pathname;
-
+function App() {
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <div className="logo" style={{ color: 'white', marginRight: '20px' }}>
-            CHS-SDK Dashboard
-          </div>
-          <Menu
-            theme="dark"
-            mode="horizontal"
-            selectedKeys={[selectedKey]}
-            onClick={handleMenuClick}
-            items={[
-              { key: '/modeling', label: 'Modeling' },
-              { key: '/simulation', label: 'Simulation' },
-            ]}
-            style={{ lineHeight: '64px' }}
-          />
-        </div>
-        <ProjectLoader />
-      </Header>
-      <Content style={{ padding: '24px' }}>
-        <Routes>
-          <Route path="/" element={<Navigate to="/modeling" replace />} />
-          <Route path="/modeling" element={<ModelingPage />} />
-          <Route path="/simulation"element={<SimulationPage />} />
-        </Routes>
-      </Content>
-    </Layout>
+    <ConfigProvider locale={zhCN}>
+      <div className="App">
+        <SimulationApp />
+      </div>
+    </ConfigProvider>
   );
-};
+}
 
 export default App;

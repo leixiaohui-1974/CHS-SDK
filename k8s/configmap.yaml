@@ -1,0 +1,184 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: chs-simulation-config
+  namespace: chs-simulation
+data:
+  # Application Settings
+  ENVIRONMENT: "production"
+  DEBUG: "false"
+  
+  # Database
+  DATABASE_HOST: "postgres-service"
+  DATABASE_PORT: "5432"
+  DATABASE_NAME: "chs_simulation"
+  
+  # Redis
+  REDIS_HOST: "redis-service"
+  REDIS_PORT: "6379"
+  REDIS_DB: "0"
+  
+  # CORS
+  CORS_ORIGINS: "https://chs-simulation.example.com"
+  
+  # JWT
+  JWT_ALGORITHM: "HS256"
+  ACCESS_TOKEN_EXPIRE_MINUTES: "30"
+  REFRESH_TOKEN_EXPIRE_DAYS: "7"
+  
+  # File Upload
+  MAX_FILE_SIZE: "10485760"
+  UPLOAD_DIR: "/app/uploads"
+  
+  # WebSocket
+  WEBSOCKET_HEARTBEAT_INTERVAL: "30"
+  WEBSOCKET_MAX_CONNECTIONS: "1000"
+  
+  # Simulation
+  MAX_SIMULATION_TIME: "3600"
+  MAX_CONCURRENT_SIMULATIONS: "50"
+  SIMULATION_TIMEOUT: "1800"
+  
+  # Performance
+  WORKER_PROCESSES: "4"
+  MAX_CONNECTIONS: "1000"
+  KEEPALIVE_TIMEOUT: "65"
+  
+  # Logging
+  LOG_LEVEL: "INFO"
+  LOG_FORMAT: "json"
+  
+  # Monitoring
+  ENABLE_METRICS: "true"
+  METRICS_PORT: "9090"
+  
+  # Frontend Environment
+  VITE_API_BASE_URL: "https://api.chs-simulation.example.com/api"
+  VITE_WS_BASE_URL: "wss://api.chs-simulation.example.com/ws"
+  VITE_ENVIRONMENT: "production"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: chs-simulation-config-staging
+  namespace: chs-simulation-staging
+data:
+  # Application Settings
+  ENVIRONMENT: "staging"
+  DEBUG: "true"
+  
+  # Database
+  DATABASE_HOST: "postgres-service"
+  DATABASE_PORT: "5432"
+  DATABASE_NAME: "chs_simulation_staging"
+  
+  # Redis
+  REDIS_HOST: "redis-service"
+  REDIS_PORT: "6379"
+  REDIS_DB: "1"
+  
+  # CORS
+  CORS_ORIGINS: "https://staging.chs-simulation.example.com"
+  
+  # JWT
+  JWT_ALGORITHM: "HS256"
+  ACCESS_TOKEN_EXPIRE_MINUTES: "30"
+  REFRESH_TOKEN_EXPIRE_DAYS: "7"
+  
+  # File Upload
+  MAX_FILE_SIZE: "10485760"
+  UPLOAD_DIR: "/app/uploads"
+  
+  # WebSocket
+  WEBSOCKET_HEARTBEAT_INTERVAL: "30"
+  WEBSOCKET_MAX_CONNECTIONS: "100"
+  
+  # Simulation
+  MAX_SIMULATION_TIME: "3600"
+  MAX_CONCURRENT_SIMULATIONS: "10"
+  SIMULATION_TIMEOUT: "1800"
+  
+  # Performance
+  WORKER_PROCESSES: "2"
+  MAX_CONNECTIONS: "500"
+  KEEPALIVE_TIMEOUT: "65"
+  
+  # Logging
+  LOG_LEVEL: "DEBUG"
+  LOG_FORMAT: "json"
+  
+  # Monitoring
+  ENABLE_METRICS: "true"
+  METRICS_PORT: "9090"
+  
+  # Frontend Environment
+  VITE_API_BASE_URL: "https://api.staging.chs-simulation.example.com/api"
+  VITE_WS_BASE_URL: "wss://api.staging.chs-simulation.example.com/ws"
+  VITE_ENVIRONMENT: "staging"
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: chs-simulation-secrets
+  namespace: chs-simulation
+type: Opaque
+stringData:
+  # Database
+  DATABASE_USER: "chs_user"
+  DATABASE_PASSWORD: "your-secure-database-password"
+  
+  # Application
+  SECRET_KEY: "your-super-secret-key-for-production"
+  
+  # JWT
+  JWT_SECRET_KEY: "your-jwt-secret-key-for-production"
+  
+  # Redis (if authentication is enabled)
+  REDIS_PASSWORD: "your-redis-password"
+  
+  # Email (if using email features)
+  EMAIL_HOST_USER: "your-email@example.com"
+  EMAIL_HOST_PASSWORD: "your-email-password"
+  
+  # External APIs (if any)
+  EXTERNAL_API_KEY: "your-external-api-key"
+  
+  # SSL Certificates (if needed)
+  TLS_CERT: |
+    -----BEGIN CERTIFICATE-----
+    # Your TLS certificate content here
+    -----END CERTIFICATE-----
+  TLS_KEY: |
+    -----BEGIN PRIVATE KEY-----
+    # Your TLS private key content here
+    -----END PRIVATE KEY-----
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: chs-simulation-secrets-staging
+  namespace: chs-simulation-staging
+type: Opaque
+stringData:
+  # Database
+  DATABASE_USER: "chs_user_staging"
+  DATABASE_PASSWORD: "your-staging-database-password"
+  
+  # Application
+  SECRET_KEY: "your-secret-key-for-staging"
+  
+  # JWT
+  JWT_SECRET_KEY: "your-jwt-secret-key-for-staging"
+  
+  # Redis (if authentication is enabled)
+  REDIS_PASSWORD: "your-staging-redis-password"
+  
+  # Email (if using email features)
+  EMAIL_HOST_USER: "staging@example.com"
+  EMAIL_HOST_PASSWORD: "your-staging-email-password"
+  
+  # External APIs (if any)
+  EXTERNAL_API_KEY: "your-staging-external-api-key"

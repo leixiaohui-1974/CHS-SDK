@@ -16,6 +16,7 @@ interface ProjectState {
   error: string | null;
   fetchExampleList: () => Promise<void>;
   loadProject: (examplePath: string) => Promise<void>;
+  updateProjectConfig: (config: ProjectConfig) => void;
 }
 
 export const useProjectStore = create<ProjectState>((set) => ({
@@ -48,5 +49,9 @@ export const useProjectStore = create<ProjectState>((set) => ({
       console.error(`Failed to load project '${examplePath}':`, error);
       set({ error: `Failed to load project: ${message}`, isLoading: false, selectedExamplePath: null });
     }
+  },
+
+  updateProjectConfig: (config: ProjectConfig) => {
+    set({ projectConfig: config });
   },
 }));

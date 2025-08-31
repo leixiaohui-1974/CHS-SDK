@@ -1,0 +1,315 @@
+# 测试框架
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+pytest-xdist==3.3.1
+pytest-mock==3.12.0
+pytest-html==4.1.1
+pytest-json-report==1.5.0
+pytest-benchmark==4.0.0
+pytest-timeout==2.2.0
+pytest-randomly==3.15.0
+pytest-sugar==0.9.7
+
+# HTTP测试
+httpx==0.25.2
+requests==2.31.0
+responses==0.24.1
+
+# 数据库测试
+pytest-postgresql==5.0.0
+pytest-redis==3.0.2
+factory-boy==3.3.0
+faker==20.1.0
+
+# 性能测试
+locust==2.17.0
+pytest-benchmark==4.0.0
+memory-profiler==0.61.0
+psutil==5.9.6
+
+# 安全测试
+bandit==1.7.5
+safety==2.3.5
+pytest-security==0.1.0
+
+# Web自动化测试
+selenium==4.15.2
+webdriver-manager==4.0.1
+playwright==1.40.0
+pytest-playwright==0.4.3
+
+# API测试
+tavern==2.4.1
+dredd-hooks==0.2.0
+
+# 模拟和存根
+responses==0.24.1
+requests-mock==1.11.0
+freezegun==1.2.2
+time-machine==2.13.0
+
+# 代码质量
+flake8==6.1.0
+black==23.11.0
+isort==5.12.0
+mypy==1.7.1
+pylint==3.0.3
+bandit==1.7.5
+
+# 覆盖率
+coverage==7.3.2
+coverage-badge==1.1.0
+
+# 报告生成
+allure-pytest==2.13.2
+pytest-html==4.1.1
+junit2html==30.1.2
+
+# 数据验证
+cerberus==1.3.5
+jsonschema==4.20.0
+pydantic==2.5.0
+
+# 时间和日期
+freezegun==1.2.2
+time-machine==2.13.0
+
+# 文件处理
+openpyxl==3.1.2
+Pillow==10.1.0
+
+# 网络测试
+wiremock==2.35.0
+moto==4.2.14
+
+# 监控和指标
+prometheus-client==0.19.0
+
+# 日志
+structlog==23.2.0
+
+# 配置
+python-dotenv==1.0.0
+
+# 实用工具
+tqdm==4.66.1
+click==8.1.7
+rich==13.7.0
+tabulate==0.9.0
+
+# WebSocket测试
+websockets==12.0
+pytest-websocket==0.1.0
+
+# 并发测试
+aiofiles==23.2.1
+aiohttp==3.9.1
+
+# 数据生成
+mimesis==11.1.0
+factory-boy==3.3.0
+
+# 图像处理（用于UI测试）
+Pillow==10.1.0
+opencv-python==4.8.1.78
+
+# 数据分析（用于性能分析）
+pandas==2.1.4
+numpy==1.25.2
+matplotlib==3.8.2
+seaborn==0.13.0
+
+# 加密测试
+cryptography==41.0.8
+
+# 环境管理
+python-decouple==3.8
+
+# 调试
+ipdb==0.13.13
+pudb==2023.1
+
+# 内存分析
+memory-profiler==0.61.0
+objgraph==3.6.0
+
+# 性能分析
+py-spy==0.3.14
+line-profiler==4.1.1
+
+# 负载测试
+locust==2.17.0
+artillery==1.7.9
+
+# API文档测试
+dredd==14.1.0
+
+# 契约测试
+pact-python==2.2.1
+
+# 混沌工程
+chaos-toolkit==1.17.0
+
+# 数据库迁移测试
+alembic==1.13.0
+
+# 缓存测试
+redis==5.0.1
+
+# 消息队列测试
+celery==5.3.4
+
+# 文件系统测试
+pyfakefs==5.3.2
+
+# 时区测试
+pytz==2023.3
+
+# UUID测试
+uuid==1.30
+
+# JSON测试
+jsonpath-ng==1.6.0
+
+# XML测试
+lxml==4.9.3
+
+# YAML测试
+PyYAML==6.0.1
+
+# 正则表达式测试
+regex==2023.10.3
+
+# 字符串处理测试
+unidecode==1.3.7
+
+# 数学计算测试
+scipy==1.11.4
+
+# 统计测试
+statsmodels==0.14.0
+
+# 机器学习测试（如果需要）
+scikit-learn==1.3.2
+
+# 图形测试
+networkx==3.2.1
+
+# 地理位置测试
+geopy==2.4.1
+
+# 颜色处理测试
+colorama==0.4.6
+
+# 进度条
+tqdm==4.66.1
+
+# 命令行界面测试
+click==8.1.7
+argparse==1.4.0
+
+# 配置文件测试
+configparser==6.0.0
+
+# 环境变量测试
+os-environ==1.4.0
+
+# 路径处理测试
+pathlib==1.0.1
+
+# 文件监控测试
+watchdog==3.0.0
+
+# 压缩文件测试
+zipfile36==0.1.3
+
+# 网络请求测试
+urllib3==2.1.0
+
+# 邮件测试
+email-validator==2.1.0
+
+# 电话号码测试
+phonumbers==8.13.26
+
+# 货币测试
+babel==2.13.1
+
+# 国际化测试
+gettext==4.0
+
+# 模板测试
+jinja2==3.1.2
+
+# 序列化测试
+pickle-mixin==1.0.2
+
+# 哈希测试
+hashlib==20081119
+
+# 编码测试
+chardet==5.2.0
+
+# 压缩测试
+gzip==1.0
+
+# 线程测试
+threading==1.0
+
+# 进程测试
+multiprocessing==2.6.2.1
+
+# 异步测试
+asyncio==3.4.3
+
+# 协程测试
+coroutines==1.0
+
+# 生成器测试
+generators==1.0
+
+# 装饰器测试
+decorators==2.0.7
+
+# 上下文管理器测试
+contextlib==1.0
+
+# 迭代器测试
+itertools==1.0
+
+# 函数工具测试
+functools==1.0
+
+# 操作符测试
+operator==1.0
+
+# 集合测试
+collections==1.0
+
+# 堆队列测试
+heapq==1.0
+
+# 双端队列测试
+deque==1.0
+
+# 计数器测试
+counter==1.0
+
+# 默认字典测试
+defaultdict==1.0
+
+# 有序字典测试
+ordereddict==1.1
+
+# 链式映射测试
+chainmap==1.0
+
+# 用户字典测试
+userdict==1.0
+
+# 用户列表测试
+userlist==1.0
+
+# 用户字符串测试
+userstring==1.0

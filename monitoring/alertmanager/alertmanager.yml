@@ -1,0 +1,283 @@
+# Alertmanager 配置文件
+# CHS 仿真平台告警管理配置
+
+global:
+  # SMTP 配置
+  smtp_smarthost: 'smtp.gmail.com:587'
+  smtp_from: 'chs-alerts@company.com'
+  smtp_auth_username: 'chs-alerts@company.com'
+  smtp_auth_password: 'your-app-password'
+  smtp_require_tls: true
+
+  # 钉钉机器人配置
+  # dingtalk_api_url: 'https://oapi.dingtalk.com/robot/send'
+  # dingtalk_api_secret: 'your-dingtalk-secret'
+
+  # 企业微信配置
+  # wechat_api_url: 'https://qyapi.weixin.qq.com/cgi-bin/'
+  # wechat_api_secret: 'your-wechat-secret'
+  # wechat_api_corp_id: 'your-corp-id'
+
+# 模板配置
+templates:
+  - '/etc/alertmanager/templates/*.tmpl'
+
+# 路由配置
+route:
+  group_by: ['alertname', 'cluster', 'service']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  receiver: 'default-receiver'
+  routes:
+    # 严重告警路由
+    - match:
+        severity: critical
+      receiver: 'critical-alerts'
+      group_wait: 5s
+      group_interval: 5s
+      repeat_interval: 30m
+      routes:
+        # 系统级严重告警
+        - match:
+            service: system
+          receiver: 'system-critical'
+        # 数据库严重告警
+        - match:
+            service: database
+          receiver: 'database-critical'
+        # API 服务严重告警
+        - match:
+            service: api
+          receiver: 'api-critical'
+
+    # 警告级别告警路由
+    - match:
+        severity: warning
+      receiver: 'warning-alerts'
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 2h
+      routes:
+        # 性能相关警告
+        - match_re:
+            alertname: 'High.*'
+          receiver: 'performance-warnings'
+        # 业务相关警告
+        - match:
+            service: business
+          receiver: 'business-warnings'
+
+    # 信息级别告警路由
+    - match:
+        severity: info
+      receiver: 'info-alerts'
+      group_wait: 1m
+      group_interval: 10m
+      repeat_interval: 4h
+
+    # 维护时间静默
+    - match:
+        alertname: 'MaintenanceMode'
+      receiver: 'null'
+
+# 抑制规则
+inhibit_rules:
+  # 节点宕机时抑制该节点上的其他告警
+  - source_match:
+      alertname: 'NodeDown'
+    target_match_re:
+      instance: '.*'
+    equal: ['instance']
+
+  # API 服务宕机时抑制响应时间告警
+  - source_match:
+      alertname: 'APIServiceDown'
+    target_match:
+      alertname: 'HighAPIResponseTime'
+    equal: ['instance']
+
+  # 数据库宕机时抑制数据库相关告警
+  - source_match:
+      alertname: 'PostgreSQLDown'
+    target_match_re:
+      alertname: '.*Database.*'
+    equal: ['instance']
+
+# 接收器配置
+receivers:
+  # 默认接收器
+  - name: 'default-receiver'
+    email_configs:
+      - to: 'admin@company.com'
+        subject: '[CHS Alert] {{ .GroupLabels.alertname }}'
+        body: |
+          {{ range .Alerts }}
+          告警名称: {{ .Annotations.summary }}
+          告警描述: {{ .Annotations.description }}
+          告警级别: {{ .Labels.severity }}
+          服务名称: {{ .Labels.service }}
+          实例: {{ .Labels.instance }}
+          开始时间: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          {{ end }}
+
+  # 严重告警接收器
+  - name: 'critical-alerts'
+    email_configs:
+      - to: 'admin@company.com,ops@company.com'
+        subject: '[CHS CRITICAL] {{ .GroupLabels.alertname }}'
+        body: |
+          🚨 严重告警 🚨
+          
+          {{ range .Alerts }}
+          告警名称: {{ .Annotations.summary }}
+          告警描述: {{ .Annotations.description }}
+          告警级别: {{ .Labels.severity }}
+          服务名称: {{ .Labels.service }}
+          实例: {{ .Labels.instance }}
+          开始时间: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          
+          请立即处理！
+          {{ end }}
+    # 钉钉通知
+    webhook_configs:
+      - url: 'http://dingtalk-webhook:8080/webhook/dingtalk'
+        send_resolved: true
+        http_config:
+          basic_auth:
+            username: 'webhook-user'
+            password: 'webhook-password'
+
+  # 系统严重告警
+  - name: 'system-critical'
+    email_configs:
+      - to: 'sysadmin@company.com'
+        subject: '[CHS SYSTEM CRITICAL] {{ .GroupLabels.alertname }}'
+        body: |
+          🔥 系统严重告警 🔥
+          
+          {{ range .Alerts }}
+          告警名称: {{ .Annotations.summary }}
+          告警描述: {{ .Annotations.description }}
+          节点: {{ .Labels.instance }}
+          开始时间: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          {{ end }}
+    # SMS 通知（需要配置 SMS 网关）
+    webhook_configs:
+      - url: 'http://sms-gateway:8080/send'
+        send_resolved: true
+
+  # 数据库严重告警
+  - name: 'database-critical'
+    email_configs:
+      - to: 'dba@company.com,admin@company.com'
+        subject: '[CHS DATABASE CRITICAL] {{ .GroupLabels.alertname }}'
+        body: |
+          💾 数据库严重告警 💾
+          
+          {{ range .Alerts }}
+          告警名称: {{ .Annotations.summary }}
+          告警描述: {{ .Annotations.description }}
+          数据库实例: {{ .Labels.instance }}
+          开始时间: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          {{ end }}
+
+  # API 服务严重告警
+  - name: 'api-critical'
+    email_configs:
+      - to: 'dev@company.com,ops@company.com'
+        subject: '[CHS API CRITICAL] {{ .GroupLabels.alertname }}'
+        body: |
+          🌐 API 服务严重告警 🌐
+          
+          {{ range .Alerts }}
+          告警名称: {{ .Annotations.summary }}
+          告警描述: {{ .Annotations.description }}
+          API 实例: {{ .Labels.instance }}
+          开始时间: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          {{ end }}
+
+  # 警告级别告警
+  - name: 'warning-alerts'
+    email_configs:
+      - to: 'ops@company.com'
+        subject: '[CHS Warning] {{ .GroupLabels.alertname }}'
+        body: |
+          ⚠️ 警告告警 ⚠️
+          
+          {{ range .Alerts }}
+          告警名称: {{ .Annotations.summary }}
+          告警描述: {{ .Annotations.description }}
+          告警级别: {{ .Labels.severity }}
+          服务名称: {{ .Labels.service }}
+          实例: {{ .Labels.instance }}
+          开始时间: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          {{ end }}
+
+  # 性能警告
+  - name: 'performance-warnings'
+    email_configs:
+      - to: 'performance@company.com'
+        subject: '[CHS Performance] {{ .GroupLabels.alertname }}'
+        body: |
+          📊 性能告警 📊
+          
+          {{ range .Alerts }}
+          告警名称: {{ .Annotations.summary }}
+          告警描述: {{ .Annotations.description }}
+          当前值: {{ .Annotations.value }}
+          实例: {{ .Labels.instance }}
+          开始时间: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          {{ end }}
+
+  # 业务警告
+  - name: 'business-warnings'
+    email_configs:
+      - to: 'business@company.com,dev@company.com'
+        subject: '[CHS Business] {{ .GroupLabels.alertname }}'
+        body: |
+          💼 业务告警 💼
+          
+          {{ range .Alerts }}
+          告警名称: {{ .Annotations.summary }}
+          告警描述: {{ .Annotations.description }}
+          业务指标: {{ .Annotations.value }}
+          开始时间: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          {{ end }}
+
+  # 信息级别告警
+  - name: 'info-alerts'
+    email_configs:
+      - to: 'info@company.com'
+        subject: '[CHS Info] {{ .GroupLabels.alertname }}'
+        body: |
+          ℹ️ 信息告警 ℹ️
+          
+          {{ range .Alerts }}
+          告警名称: {{ .Annotations.summary }}
+          告警描述: {{ .Annotations.description }}
+          开始时间: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          {{ end }}
+
+  # 空接收器（用于静默）
+  - name: 'null'
+
+# 时间窗口配置
+time_intervals:
+  # 工作时间
+  - name: 'business-hours'
+    time_intervals:
+      - times:
+          - start_time: '09:00'
+            end_time: '18:00'
+        weekdays: ['monday:friday']
+        location: 'Asia/Shanghai'
+
+  # 维护时间窗口
+  - name: 'maintenance-window'
+    time_intervals:
+      - times:
+          - start_time: '02:00'
+            end_time: '04:00'
+        weekdays: ['sunday']
+        location: 'Asia/Shanghai'

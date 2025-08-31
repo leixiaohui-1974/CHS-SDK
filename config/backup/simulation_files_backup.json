@@ -1,0 +1,86 @@
+{
+  "source_directories": [
+    "/app/data/simulation_results",
+    "/app/data/user_uploads",
+    "/app/data/simulation_cache",
+    "/app/data/exports"
+  ],
+  "backup_directory": "/app/backups/simulation_files",
+  "retention_days": 180,
+  "sync_interval": 3600,
+  "exclude_patterns": [
+    "*.tmp",
+    "*.temp",
+    "*.log",
+    "*/.git/*",
+    "*/node_modules/*",
+    "*/__pycache__/*",
+    "*.pyc",
+    "*/cache/*",
+    "*/temp/*"
+  ],
+  "include_patterns": [
+    "*.json",
+    "*.csv",
+    "*.xlsx",
+    "*.pdf",
+    "*.png",
+    "*.jpg",
+    "*.jpeg",
+    "*.svg",
+    "*.zip",
+    "*.tar.gz",
+    "*.h5",
+    "*.mat",
+    "*.dat",
+    "*.txt",
+    "*.md",
+    "*.xml",
+    "*.yaml",
+    "*.yml"
+  ],
+  "max_file_size_mb": 1024,
+  "compression": {
+    "enabled": true,
+    "algorithm": "gzip",
+    "level": 6
+  },
+  "encryption": {
+    "enabled": true,
+    "algorithm": "AES-256-GCM",
+    "key_file": "/app/config/backup_key.key"
+  },
+  "s3_config": {
+    "enabled": true,
+    "bucket": "${S3_BACKUP_BUCKET}",
+    "region": "${S3_REGION}",
+    "access_key": "${S3_ACCESS_KEY}",
+    "secret_key": "${S3_SECRET_KEY}",
+    "endpoint": "${S3_ENDPOINT}",
+    "prefix": "simulation-files/",
+    "storage_class": "STANDARD_IA",
+    "multipart_threshold": 104857600,
+    "multipart_chunksize": 8388608
+  },
+  "checksum_verification": {
+    "enabled": true,
+    "algorithm": "sha256",
+    "store_checksums": true
+  },
+  "notification_webhook": "${BACKUP_NOTIFICATION_WEBHOOK}",
+  "parallel_uploads": 4,
+  "retry_attempts": 3,
+  "retry_delay": 5,
+  "bandwidth_limit_mbps": 100,
+  "monitoring": {
+    "enabled": true,
+    "metrics_port": 8081,
+    "health_check_endpoint": "/health"
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "/app/logs/simulation_files_backup.log",
+    "max_size_mb": 100,
+    "backup_count": 5
+  }
+}

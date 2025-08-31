@@ -1,0 +1,229 @@
+version: '3.8'
+
+services:
+  # Test Database
+  test-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: test_chs_simulation
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_password
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5433:5432"
+    volumes:
+      - test_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test_user -d test_chs_simulation"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - test-network
+
+  # Test Redis
+  test-redis:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"
+    volumes:
+      - test_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - test-network
+
+  # Test API Service
+  test-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: backend
+    environment:
+      # Database
+      DATABASE_URL: postgresql://test_user:test_password@test-db:5432/test_chs_simulation
+      
+      # Redis
+      REDIS_URL: redis://test-redis:6379/0
+      
+      # Application
+      ENVIRONMENT: testing
+      DEBUG: "false"
+      SECRET_KEY: test-secret-key-for-e2e-tests
+      
+      # CORS
+      CORS_ORIGINS: "http://localhost:3000,http://test-frontend:3000"
+      
+      # JWT
+      JWT_SECRET_KEY: test-jwt-secret-key
+      JWT_ALGORITHM: HS256
+      ACCESS_TOKEN_EXPIRE_MINUTES: 30
+      REFRESH_TOKEN_EXPIRE_DAYS: 7
+      
+      # File Upload
+      MAX_FILE_SIZE: 10485760
+      UPLOAD_DIR: /app/uploads
+      
+      # WebSocket
+      WEBSOCKET_HEARTBEAT_INTERVAL: 30
+      WEBSOCKET_MAX_CONNECTIONS: 100
+      
+      # Simulation
+      MAX_SIMULATION_TIME: 3600
+      MAX_CONCURRENT_SIMULATIONS: 5
+      SIMULATION_TIMEOUT: 1800
+      
+      # Performance
+      WORKER_PROCESSES: 1
+      MAX_CONNECTIONS: 100
+      KEEPALIVE_TIMEOUT: 5
+      
+      # Logging
+      LOG_LEVEL: INFO
+      LOG_FORMAT: json
+    ports:
+      - "8001:8000"
+    volumes:
+      - test_uploads:/app/uploads
+      - test_logs:/app/logs
+    depends_on:
+      test-db:
+        condition: service_healthy
+      test-redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - test-network
+    command: >
+      sh -c "python -m alembic upgrade head &&
+             python -m uvicorn server:app --host 0.0.0.0 --port 8000 --workers 1"
+
+  # Test Frontend Service
+  test-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: frontend
+    environment:
+      VITE_API_BASE_URL: http://test-api:8000/api
+      VITE_WS_BASE_URL: ws://test-api:8000/ws
+      VITE_ENVIRONMENT: testing
+    ports:
+      - "3001:3000"
+    depends_on:
+      test-api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - test-network
+
+  # Test Runner Service
+  test-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: backend
+    environment:
+      DATABASE_URL: postgresql://test_user:test_password@test-db:5432/test_chs_simulation
+      REDIS_URL: redis://test-redis:6379/0
+      ENVIRONMENT: testing
+      SECRET_KEY: test-secret-key-for-e2e-tests
+      API_BASE_URL: http://test-api:8000
+      FRONTEND_BASE_URL: http://test-frontend:3000
+    volumes:
+      - ./tests:/app/tests
+      - test_reports:/app/reports
+    depends_on:
+      test-api:
+        condition: service_healthy
+      test-frontend:
+        condition: service_healthy
+    networks:
+      - test-network
+    profiles:
+      - test
+    command: >
+      sh -c "echo 'Waiting for services to be ready...' &&
+             sleep 10 &&
+             python -m pytest tests/e2e/ -v --html=reports/e2e-report.html --self-contained-html"
+
+  # Selenium Hub for E2E Testing
+  selenium-hub:
+    image: selenium/hub:4.15.0
+    container_name: selenium-hub
+    ports:
+      - "4442:4442"
+      - "4443:4443"
+      - "4444:4444"
+    environment:
+      GRID_MAX_SESSION: 16
+      GRID_BROWSER_TIMEOUT: 300
+      GRID_TIMEOUT: 300
+    networks:
+      - test-network
+    profiles:
+      - test
+
+  # Chrome Node for E2E Testing
+  chrome:
+    image: selenium/node-chrome:4.15.0
+    shm_size: 2gb
+    depends_on:
+      - selenium-hub
+    environment:
+      HUB_HOST: selenium-hub
+      HUB_PORT: 4444
+      NODE_MAX_INSTANCES: 4
+      NODE_MAX_SESSION: 4
+    networks:
+      - test-network
+    profiles:
+      - test
+
+  # Firefox Node for E2E Testing
+  firefox:
+    image: selenium/node-firefox:4.15.0
+    shm_size: 2gb
+    depends_on:
+      - selenium-hub
+    environment:
+      HUB_HOST: selenium-hub
+      HUB_PORT: 4444
+      NODE_MAX_INSTANCES: 4
+      NODE_MAX_SESSION: 4
+    networks:
+      - test-network
+    profiles:
+      - test
+
+volumes:
+  test_postgres_data:
+    driver: local
+  test_redis_data:
+    driver: local
+  test_uploads:
+    driver: local
+  test_logs:
+    driver: local
+  test_reports:
+    driver: local
+
+networks:
+  test-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

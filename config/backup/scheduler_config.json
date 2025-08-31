@@ -1,0 +1,72 @@
+{
+  "jobs": [
+    {
+      "name": "daily_database_backup",
+      "type": "database",
+      "schedule": "02:00",
+      "config_file": "config/backup/database_backup.json",
+      "enabled": true,
+      "retention_policy": "30_days",
+      "priority": 1,
+      "max_runtime": 3600,
+      "notification_on_success": false,
+      "notification_on_failure": true
+    },
+    {
+      "name": "hourly_incremental_files",
+      "type": "files",
+      "schedule": "every 1 hours",
+      "config_file": "config/backup/file_backup.json",
+      "enabled": true,
+      "retention_policy": "7_days",
+      "priority": 2,
+      "max_runtime": 1800,
+      "notification_on_success": false,
+      "notification_on_failure": true
+    },
+    {
+      "name": "weekly_full_backup",
+      "type": "full",
+      "schedule": "weekly",
+      "config_file": "config/backup/full_backup.json",
+      "enabled": true,
+      "retention_policy": "90_days",
+      "priority": 1,
+      "max_runtime": 7200,
+      "notification_on_success": true,
+      "notification_on_failure": true
+    },
+    {
+      "name": "critical_data_backup",
+      "type": "database",
+      "schedule": "every 6 hours",
+      "config_file": "config/backup/database_backup.json",
+      "enabled": true,
+      "retention_policy": "14_days",
+      "priority": 1,
+      "max_runtime": 1800,
+      "notification_on_success": false,
+      "notification_on_failure": true
+    },
+    {
+      "name": "simulation_results_backup",
+      "type": "files",
+      "schedule": "daily",
+      "config_file": "config/backup/simulation_files_backup.json",
+      "enabled": true,
+      "retention_policy": "180_days",
+      "priority": 2,
+      "max_runtime": 3600,
+      "notification_on_success": false,
+      "notification_on_failure": true
+    }
+  ],
+  "max_concurrent_jobs": 2,
+  "log_level": "INFO",
+  "log_file": "/app/logs/backup_scheduler.log",
+  "notification_webhook": "${BACKUP_NOTIFICATION_WEBHOOK}",
+  "health_check_port": 8080,
+  "metrics_enabled": true,
+  "cleanup_enabled": true,
+  "cleanup_schedule": "daily"
+}

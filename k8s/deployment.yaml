@@ -1,0 +1,382 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chs-simulation-api
+  namespace: chs-simulation
+  labels:
+    app: chs-simulation-api
+    component: backend
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: chs-simulation-api
+  template:
+    metadata:
+      labels:
+        app: chs-simulation-api
+        component: backend
+    spec:
+      containers:
+      - name: api
+        image: ghcr.io/your-org/chs-sdk:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+          name: http
+        - containerPort: 9090
+          name: metrics
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://$(DATABASE_USER):$(DATABASE_PASSWORD)@$(DATABASE_HOST):$(DATABASE_PORT)/$(DATABASE_NAME)"
+        - name: REDIS_URL
+          value: "redis://:$(REDIS_PASSWORD)@$(REDIS_HOST):$(REDIS_PORT)/$(REDIS_DB)"
+        envFrom:
+        - configMapRef:
+            name: chs-simulation-config
+        - secretRef:
+            name: chs-simulation-secrets
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        volumeMounts:
+        - name: uploads
+          mountPath: /app/uploads
+        - name: logs
+          mountPath: /app/logs
+      volumes:
+      - name: uploads
+        persistentVolumeClaim:
+          claimName: chs-simulation-uploads-pvc
+      - name: logs
+        persistentVolumeClaim:
+          claimName: chs-simulation-logs-pvc
+      imagePullSecrets:
+      - name: ghcr-secret
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chs-simulation-frontend
+  namespace: chs-simulation
+  labels:
+    app: chs-simulation-frontend
+    component: frontend
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: chs-simulation-frontend
+  template:
+    metadata:
+      labels:
+        app: chs-simulation-frontend
+        component: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: nginx:1.25-alpine
+        ports:
+        - containerPort: 80
+          name: http
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        volumeMounts:
+        - name: frontend-config
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+        - name: frontend-static
+          mountPath: /usr/share/nginx/html
+      volumes:
+      - name: frontend-config
+        configMap:
+          name: nginx-config
+      - name: frontend-static
+        persistentVolumeClaim:
+          claimName: chs-simulation-frontend-pvc
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: chs-simulation
+  labels:
+    app: postgres
+    component: database
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+        component: database
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:15
+        ports:
+        - containerPort: 5432
+          name: postgres
+        env:
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: chs-simulation-config
+              key: DATABASE_NAME
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: chs-simulation-secrets
+              key: DATABASE_USER
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: chs-simulation-secrets
+              key: DATABASE_PASSWORD
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - $(POSTGRES_USER)
+            - -d
+            - $(POSTGRES_DB)
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - $(POSTGRES_USER)
+            - -d
+            - $(POSTGRES_DB)
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        volumeMounts:
+        - name: postgres-data
+          mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: postgres-data
+        persistentVolumeClaim:
+          claimName: postgres-pvc
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: chs-simulation
+  labels:
+    app: redis
+    component: cache
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+        component: cache
+    spec:
+      containers:
+      - name: redis
+        image: redis:7-alpine
+        ports:
+        - containerPort: 6379
+          name: redis
+        env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: chs-simulation-secrets
+              key: REDIS_PASSWORD
+        command:
+        - redis-server
+        - --requirepass
+        - $(REDIS_PASSWORD)
+        - --maxmemory
+        - 256mb
+        - --maxmemory-policy
+        - allkeys-lru
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        livenessProbe:
+          exec:
+            command:
+            - redis-cli
+            - -a
+            - $(REDIS_PASSWORD)
+            - ping
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          exec:
+            command:
+            - redis-cli
+            - -a
+            - $(REDIS_PASSWORD)
+            - ping
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        volumeMounts:
+        - name: redis-data
+          mountPath: /data
+      volumes:
+      - name: redis-data
+        persistentVolumeClaim:
+          claimName: redis-pvc
+
+---
+# Staging Deployments
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chs-simulation-api-staging
+  namespace: chs-simulation-staging
+  labels:
+    app: chs-simulation-api
+    component: backend
+    environment: staging
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: chs-simulation-api
+      environment: staging
+  template:
+    metadata:
+      labels:
+        app: chs-simulation-api
+        component: backend
+        environment: staging
+    spec:
+      containers:
+      - name: api
+        image: ghcr.io/your-org/chs-sdk:develop
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+          name: http
+        - containerPort: 9090
+          name: metrics
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://$(DATABASE_USER):$(DATABASE_PASSWORD)@$(DATABASE_HOST):$(DATABASE_PORT)/$(DATABASE_NAME)"
+        - name: REDIS_URL
+          value: "redis://:$(REDIS_PASSWORD)@$(REDIS_HOST):$(REDIS_PORT)/$(REDIS_DB)"
+        envFrom:
+        - configMapRef:
+            name: chs-simulation-config-staging
+        - secretRef:
+            name: chs-simulation-secrets-staging
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "125m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        volumeMounts:
+        - name: uploads
+          mountPath: /app/uploads
+        - name: logs
+          mountPath: /app/logs
+      volumes:
+      - name: uploads
+        persistentVolumeClaim:
+          claimName: chs-simulation-uploads-pvc-staging
+      - name: logs
+        persistentVolumeClaim:
+          claimName: chs-simulation-logs-pvc-staging
+      imagePullSecrets:
+      - name: ghcr-secret

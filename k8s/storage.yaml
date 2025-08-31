@@ -1,0 +1,218 @@
+# Persistent Volume Claims
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+  namespace: chs-simulation
+  labels:
+    app: postgres
+    component: database
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: fast-ssd
+  resources:
+    requests:
+      storage: 20Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-pvc
+  namespace: chs-simulation
+  labels:
+    app: redis
+    component: cache
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: fast-ssd
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: chs-simulation-uploads-pvc
+  namespace: chs-simulation
+  labels:
+    app: chs-simulation-api
+    component: storage
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: shared-storage
+  resources:
+    requests:
+      storage: 50Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: chs-simulation-logs-pvc
+  namespace: chs-simulation
+  labels:
+    app: chs-simulation-api
+    component: logs
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: chs-simulation-frontend-pvc
+  namespace: chs-simulation
+  labels:
+    app: chs-simulation-frontend
+    component: static
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+# Staging PVCs
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc-staging
+  namespace: chs-simulation-staging
+  labels:
+    app: postgres
+    component: database
+    environment: staging
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-pvc-staging
+  namespace: chs-simulation-staging
+  labels:
+    app: redis
+    component: cache
+    environment: staging
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 2Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: chs-simulation-uploads-pvc-staging
+  namespace: chs-simulation-staging
+  labels:
+    app: chs-simulation-api
+    component: storage
+    environment: staging
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: chs-simulation-logs-pvc-staging
+  namespace: chs-simulation-staging
+  labels:
+    app: chs-simulation-api
+    component: logs
+    environment: staging
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+# Storage Classes (examples for different cloud providers)
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: fast-ssd
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp3
+  iops: "3000"
+  throughput: "125"
+  encrypted: "true"
+volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true
+reclaimPolicy: Retain
+
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: shared-storage
+provisioner: efs.csi.aws.com
+parameters:
+  provisioningMode: efs-ap
+  fileSystemId: fs-xxxxxxxxx
+  directoryPerms: "0755"
+volumeBindingMode: Immediate
+allowVolumeExpansion: true
+reclaimPolicy: Retain
+
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: standard
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp2
+  encrypted: "true"
+volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true
+reclaimPolicy: Delete
+
+---
+# Backup Storage for Database
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-backup-pvc
+  namespace: chs-simulation
+  labels:
+    app: postgres
+    component: backup
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 100Gi
