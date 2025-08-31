@@ -1,0 +1,39 @@
+FROM python:3.11-slim
+
+# 设置工作目录
+WORKDIR /app
+
+# 安装系统依赖
+RUN apt-get update && apt-get install -y \
+    postgresql-client \
+    postgresql-client-common \
+    curl \
+    gzip \
+    openssl \
+    && rm -rf /var/lib/apt/lists/*
+
+# 复制requirements文件
+COPY requirements/backup.txt /app/requirements.txt
+
+# 安装Python依赖
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 复制备份脚本
+COPY scripts/backup/database_backup.py /app/scripts/backup/
+COPY config/backup/ /app/config/backup/
+
+# 创建必要的目录
+RUN mkdir -p /app/logs /app/backups /app/data
+
+# 设置权限
+RUN chmod +x /app/scripts/backup/database_backup.py
+
+# 创建非root用户
+RUN useradd -m -u 1000 backup && \
+    chown -R backup:backup /app
+
+# 切换到非root用户
+USER backup
+
+# 默认命令
+CMD ["python", "/app/scripts/backup/database_backup.py", "--config", "/app/config/backup/database_backup.json", "--backup"]
