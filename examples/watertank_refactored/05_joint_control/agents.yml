@@ -45,15 +45,3 @@ agents:
       simulated_object_id: reservoir_1
       state_topic: water_level_topic
       log_data: True
-
-  # Agent 4: Logger for the pump command.
-  - id: pump_command_logger
-    class: core_lib.local_agents.utility.topic_logger_agent.TopicLoggerAgent
-    config:
-      topic_to_log: pump_command_topic
-
-  # Agent 5: Logger for the valve command.
-  - id: valve_command_logger
-    class: core_lib.local_agents.utility.topic_logger_agent.TopicLoggerAgent
-    config:
-      topic_to_log: valve_command_topic

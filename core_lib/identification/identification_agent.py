@@ -11,7 +11,7 @@ class ParameterIdentificationAgent(Agent):
     """
 
     def __init__(self, agent_id: str, target_model: Identifiable,
-                 message_bus: MessageBus, **kwargs):
+                 message_bus: MessageBus, config: Dict[str, Any]):
         """
         初始化 ParameterIdentificationAgent。
 
@@ -19,7 +19,7 @@ class ParameterIdentificationAgent(Agent):
             agent_id: 该智能体的唯一ID。
             target_model: 需要被辨识参数的模型实例。
             message_bus: 系统的消息总线。
-            **kwargs: 包含智能体配置的关键字参数：
+            config: 一个包含智能体配置的字典：
                 - identification_interval: 在运行一次辨识前需要收集的数据点数量。
                 - identification_data_map: 一个字典，将模型的 identify_parameters 方法所需的
                                            键（例如 'rainfall', 'observed_runoff'）映射到
@@ -30,8 +30,8 @@ class ParameterIdentificationAgent(Agent):
         self.bus = message_bus
 
         # 配置
-        self.id_interval = kwargs.get("identification_interval", 100)
-        self.data_map = kwargs["identification_data_map"]
+        self.id_interval = config.get("identification_interval", 100)
+        self.data_map = config["identification_data_map"]
 
         # 内部状态
         self.data_history: Dict[str, List[float]] = {key: [] for key in self.data_map.keys()}
@@ -39,20 +39,29 @@ class ParameterIdentificationAgent(Agent):
 
 
         # 订阅所有必需的数据主题
+        for model_key, topic in self.data_map.items():
+            # lambda 表达式捕获了每次循环的 'model_key' 以供处理函数使用
+            self.bus.subscribe(topic, lambda msg, key=model_key: self.handle_data_message(msg, key))
+            print(f"[{self.agent_id}] 已订阅主题 '{topic}' 用于数据键 '{model_key}'.")
+
+    def handle_data_message(self, message: Message, model_key: str):
+        """用于存储传入数据的回调函数。"""
+        value = message.get("value") # 假设是一个简单的 {'value': ...} 格式的消息
+        if isinstance(value, (int, float)):
+            self.data_history[model_key].append(value)
+            # 仅对一个数据流递增计数器，以确保同步
+
+        # Subscribe to all necessary data topics
         for model_key, data_config in self.data_map.items():
             topic = data_config['topic']
+            # The key to find the data within the message payload
             data_key = data_config['key']
             # The lambda captures the necessary arguments for the handler
             callback = lambda msg, m_key=model_key, d_key=data_key: self.handle_data_message(msg, m_key, d_key)
             self.bus.subscribe(topic, callback)
             print(f"[{self.agent_id}] Subscribed to topic '{topic}' for model key '{model_key}' using data key '{data_key}'.")
 
-    def handle_data_message(self, message: Message, model_key: str, data_key: str):
-        """用于存储传入数据的回调函数。"""
-        value = message.get(data_key)
-        if isinstance(value, (int, float)):
-            self.data_history[model_key].append(value)
-            # 仅对一个数据流递增计数器，以确保同步
+
             if model_key == list(self.data_map.keys())[0]:
                 self.new_data_count += 1
 

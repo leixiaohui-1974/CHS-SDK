@@ -8,6 +8,6 @@ agents:
     config:
       csv_file: inflow.csv
       time_column: time
-      data_column: inflow_rate
-      inflow_topic: inflow_topic
+      value_column: inflow_rate
+      output_topic: inflow_topic
       data_id: inflow_1

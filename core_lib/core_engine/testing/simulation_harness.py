@@ -38,8 +38,16 @@ class SimulationHarness:
         self.message_bus = MessageBus()
         print("SimulationHarness created.")
 
-    def add_component(self, component_id: str, component: Simulatable):
+    def add_component(self, component: Simulatable):
         """Adds a physical or logical component to the simulation."""
+        # Try to get ID from a `_id` attribute, otherwise fall back to `name`
+        id_attr = next((attr for attr in dir(component) if attr.endswith('_id')), None)
+        if id_attr:
+            component_id = getattr(component, id_attr)
+        elif hasattr(component, 'name'):
+            component_id = component.name
+        else:
+            raise ValueError("Component does not have a valid ID attribute (e.g., 'pipe_id') or a 'name' attribute.")
         if component_id in self.components:
             raise ValueError(f"Component with ID '{component_id}' already exists.")
         self.components[component_id] = component
@@ -222,9 +230,6 @@ class SimulationHarness:
             step_history = {'time': current_time}
             for cid in self.sorted_components:
                 step_history[cid] = self.components[cid].get_state()
-            for agent in self.agents:
-                if hasattr(agent, 'get_state'):
-                    step_history[agent.agent_id] = agent.get_state()
             self.history.append(step_history)
 
             # Print state summary (optional)
