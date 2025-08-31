@@ -15,44 +15,35 @@ class SignalAggregatorAgent(Agent):
     This is useful for combining multiple inflows/outflows into a single
     net inflow for a component that can only subscribe to one topic.
     """
-    def __init__(self, agent_id: str, message_bus: MessageBus, **kwargs):
+    def __init__(self, agent_id: str, message_bus: MessageBus, config: dict):
         super().__init__(agent_id)
         self.bus = message_bus
 
-        # Config should be a list of dicts: [{'topic': 't1', 'key': 'k1'}, {'topic': 't2', 'key': 'k2'}]
-        self.input_configs: List[Dict[str, str]] = kwargs['input_configs']
-        self.output_topic: str = kwargs['output_topic']
-        self.last_received_values: dict[str, float] = {conf['topic']: 0.0 for conf in self.input_configs}
+        self.input_topics: List[str] = config['input_topics']
+        self.output_topic: str = config['output_topic']
+        self.last_received_values: dict[str, float] = {topic: 0.0 for topic in self.input_topics}
 
-        if not self.input_configs or not self.output_topic:
-            raise ValueError("SignalAggregatorAgent requires 'input_configs' and 'output_topic'.")
+        if not self.input_topics or not self.output_topic:
+            raise ValueError("SignalAggregatorAgent requires 'input_topics' and 'output_topic' in its config.")
 
-        # Subscribe to all input topics
-        for config in self.input_configs:
-            topic = config['topic']
-            key = config['key']
-            self.bus.subscribe(topic, lambda msg, t=topic, k=key: self.handle_signal(msg, t, k))
-            print(f"[{self.agent_id}] Subscribed to input topic '{topic}' to read key '{key}'.")
+        # Subscribe the same handler to all input topics
+        for topic in self.input_topics:
+            self.bus.subscribe(topic, lambda msg, t=topic: self.handle_signal(msg, t))
+            print(f"[{self.agent_id}] Subscribed to input topic '{topic}'.")
 
-    def handle_signal(self, message: Message, topic: str, key: str):
+    def handle_signal(self, message: Message, topic: str):
         """
-        Callback to store the latest value and immediately publish the new sum.
+        Callback to store the latest value from any of the input topics.
         """
-        value = message.get(key)
+        value = message.get("value", 0.0)
         if isinstance(value, (int, float)):
             self.last_received_values[topic] = value
-            self.publish_aggregation()
 
-    def publish_aggregation(self):
-        """Sums the last known values and publishes the result."""
+    def run(self, current_time: float, dt: float):
+        """
+        In each step, sum the last known values and publish the result.
+        """
         total_value = sum(self.last_received_values.values())
-        # The Reservoir component expects the key to be "inflow_rate"
-        self.bus.publish(self.output_topic, {"inflow_rate": total_value})
 
-    def run(self, current_time: float):
-        """
-        The agent's behavior is purely reactive. On the first step, it publishes
-        the initial sum of zero.
-        """
-        if current_time == 0:
-            self.publish_aggregation()
+        # Publish the aggregated result
+        self.bus.publish(self.output_topic, Message(self.agent_id, {"value": total_value}))

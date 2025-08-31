@@ -1,57 +1,49 @@
-## 02 - 参数辨识 (Parameter Identification)
+# 示例 2: 阀门流量系数辨识 (标准库版)
 
-### 问题描述 (Problem Description)
+## 1. 场景目标
 
-在水利水务系统的数字孪生应用中，一个核心挑战是确保仿真模型（“孪生体”）的参数与物理世界（“本体”）的真实参数保持一致。由于物理损耗、测量误差或未知因素，模型的默认参数（如管道糙率、阀门流量系数）往往与实际不符。
+本示例旨在演示如何使用本仿真框架的**标准参数辨识智能体** (`ParameterIdentificationAgent`)，在线辨识一个**标准物理组件** (`Valve`) 的内部参数。
 
-本案例旨在演示如何使用CHS-SDK的参数辨识框架，在线调整数字孪生体中阀门模型的关键参数——`discharge_coefficient`（流量系数），使其行为与一个“真实”的、具有未知参数的阀门模型尽可能匹配。
+具体来说，我们想要辨识出水阀的 **`discharge_coefficient` (流量系数)**。这是一个关键的物理参数，决定了在一定的水头差和开度下，阀门的过流能力。
 
-### 实现思路 (Implementation)
+## 2. 架构设计 (核心库增强)
 
-此场景的核心是构建一个包含“真实世界”和“数字孪生”的并行仿真环境。
+根据用户的指示，本场景的实现依赖于对核心库 (`core_lib`) 的两项重要增强：
+1.  为 `core_lib/physical_objects/valve.py` 中的 `Valve` 类增加了参数辨识能力。
+2.  改进了 `core_lib/identification/identification_agent.py` 中的 `ParameterIdentificationAgent`，使其能够从复杂消息中提取数据。
 
-*   **物理拓扑 (topology.yml):**
-    ```yaml
-    connections:
-      - upstream: real_reservoir
-        downstream: real_valve
-      - upstream: twin_reservoir
-        downstream: twin_valve
-    ```
-    我们定义了两套独立的“水库-阀门”系统。`real_` 前缀的组件代表物理世界，其阀门参数（流量系数=0.8）对辨识智能体是未知的。`twin_` 前缀的组件代表数字孪生，其阀门参数初始值设置得不准确（流量系数=0.2），需要被在线更新。
+基于此，本场景的架构非常标准和清晰：
 
-*   **智能体配置 (agents.yml):**
-    该场景配置了多个智能体协同工作：
-    1.  `CsvInflowAgent`: 为两个系统提供完全相同的入流数据。
-    2.  `DigitalTwinAgent`: 多个感知智能体，负责从“真实”和“孪生”组件中读取状态（如水位、阀门开度、出流量），并发布到消息总线上。
-    3.  `ParameterIdentificationAgent`: 这是本案例的核心。它订阅所有需要的数据（孪生模型的输入、真实模型的输出），在收集到足够数据后（每50个时间步），调用 `twin_valve` 模型的 `identify_parameters` 方法，计算出新的流量系数并更新孪生模型。
+### 物理系统 (`components.yml` & `topology.yml`)
+我们搭建了两套并行的“水库->阀门”系统：
+-   **真实系统**: `real_reservoir` -> `real_valve`。其中 `real_valve` 的流量系数被设为我们想要辨识的“真实值”（如 0.8）。
+-   **孪生系统**: `twin_reservoir` -> `twin_valve`。其中 `twin_valve` 的流量系数被设为一个错误的“初始猜测值”（如 0.2）。
 
-### 关键技术 (Key Technologies)
+### 智能体 (`agents.yml`)
 
-*   **`ParameterIdentificationAgent`**: 一个高级智能体，封装了在线参数辨识的通用逻辑：数据收集、触发辨识、调用模型方法和清除历史数据。
-*   **`Identifiable` 接口**: `Valve` 类实现了此接口，提供了 `identify_parameters` 方法。这使得任何物理模型只要实现了该接口，就能被 `ParameterIdentificationAgent` 进行辨识。
-*   **数字孪生模式 (Digital Twin Pattern)**: 通过并行的两套系统（真实与孪生），清晰地展示了如何利用真实世界的数据来校准和优化仿真模型。
+1.  **数据输入智能体**:
+    -   `CsvInflowAgent`: 为两个水库提供完全相同的入流，保证了输入条件的一致性。
+    -   `ConstantValueAgent`: 提供一个恒为0的下游水位，作为阀门出流计算的基准。
 
-### 仿真结果与分析 (Simulation Results & Analysis)
+2.  **感知智能体 (`DigitalTwinAgent`)**:
+    -   我们用了三个独立的感知智能体，分别用于发布“真实阀门”的状态（观测流量）、“孪生阀门”的状态（开度）和“孪生水库”的状态（上游水位）。
 
-#### 动态过程展示 (Dynamic Process)
-![Simulation Results](simulation_results.gif)
+3.  **辨识智能体 (`ParameterIdentificationAgent`)**:
+    -   **核心**: 这是本场景的大脑。
+    -   **目标**: 它的辨识目标被配置为 `twin_valve` 组件。
+    -   **数据**: 它订阅上述所有感知智能体发布的主题，以收集辨识所需的所有数据（观测流量、开度、上下游水位）。
+    -   **动作**: 每隔50个时间步，它会调用 `twin_valve` 自身新增的 `identify_parameters` 方法，来更新其内部的 `discharge_coefficient` 参数。
 
-#### 关键指标总结 (Key Performance Indicators)
-| 指标 (Metric) | 数值 (Value) |
-|---|---|
-| 最终辨识出的阀门流量系数 | 0.3578 |
-| 辨识稳定后出流量RMSE | 2.9519 |
+## 3. 如何运行
 
-#### 结果分析与讨论 (Analysis & Discussion)
-从上方的动图可以清晰地看到参数辨识的全过程：
-1.  **参数演化 (上图)**: `twin_valve` 的流量系数初始值为0.2。在 `t=50s`、`100s`、`150s` 和 `200s` 时，`ParameterIdentificationAgent` 触发了四次辨识。每次辨识后，参数值都会更新，并逐渐逼近一个稳定值（约0.36）。
-2.  **行为匹配 (下图)**: 在仿真初期（`t < 50s`），由于孪生阀门的流量系数远小于真实阀门，其出流量（绿线）显著低于真实阀门的出流量（蓝线）。随着参数被不断校正，孪生阀门的出流量也越来越接近真实值，表明数字孪生模型正变得越来越准确。
+在项目根目录下执行以下命令：
 
-关键指标显示，最终辨识出的流量系数为0.3578。需要注意的是，这个值并不等于“真实”阀门中设置的0.8。这是因为辨识算法的准确性受到多种因素影响，包括数据质量、辨识方法的简化程度以及激励信号的充分性。尽管如此，辨识后的出流量均方根误差（RMSE）显著减小，证明了该方法的有效性。
+```bash
+python run_scenario.py examples/watertank_refactored/02_parameter_identification
+```
 
-### 建议与展望 (Suggestions & Outlook)
+## 4. 预期结果
 
-*   **优化辨识算法**: `Valve` 类中当前的辨识方法非常简单（基于均值）。可以替换为更先进的递推最小二乘法（RLS）或卡尔曼滤波等算法，以获得更平滑、更精确的参数估计。
-*   **丰富激励信号**: 当前的入流信号相对简单。使用更复杂、动态范围更广的输入信号（即“充分激励”），可以暴露模型在更多工况下的特性，从而提高参数辨識的准确度。
-*   **辨识多个参数**: 当前只辨识了一个参数。可以将框架扩展，以同时辨识多个未知参数。
+仿真结束后，`twin_valve` 组件的 `discharge_coefficient` 参数会从初始的 0.2 逐步收敛到 `real_valve` 的真实值 0.8。您可以通过以下方式验证：
+-   检查仿真过程中打印的日志，其中会包含类似 `Identification complete. New discharge_coefficient: 0.xxx` 的信息。
+-   分析 `output.yml` 文件中 `twin_valve_state_topic` 的数据，查看其 `discharge_coefficient` 随时间的变化。

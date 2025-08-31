@@ -45,8 +45,16 @@ class SimulationHarness:
 
         print("SimulationHarness created.")
 
-    def add_component(self, component_id: str, component: Simulatable):
+    def add_component(self, component: Simulatable):
         """Adds a physical or logical component to the simulation."""
+        # Try to get ID from a `_id` attribute, otherwise fall back to `name`
+        id_attr = next((attr for attr in dir(component) if attr.endswith('_id')), None)
+        if id_attr:
+            component_id = getattr(component, id_attr)
+        elif hasattr(component, 'name'):
+            component_id = component.name
+        else:
+            raise ValueError("Component does not have a valid ID attribute (e.g., 'pipe_id') or a 'name' attribute.")
         if component_id in self.components:
             raise ValueError(f"Component with ID '{component_id}' already exists.")
         self.components[component_id] = component
@@ -203,3 +211,87 @@ class SimulationHarness:
 
         for component_id, state in new_states.items():
             self.components[component_id].set_state(state)
+
+
+    def run_simulation(self):
+        """
+        Runs a simple, centralized control simulation loop using the graph topology.
+        """
+        if not self.sorted_components:
+            raise Exception("Harness has not been built. Call harness.build() before running.")
+
+        num_steps = int(self.duration / self.dt)
+        print(f"Starting simple simulation: Duration={self.duration}s, TimeStep={self.dt}s\n")
+
+        self.history = []
+        for i in range(num_steps):
+            current_time = i * self.dt
+            print(f"--- Simulation Step {i+1}, Time: {current_time:.2f}s ---")
+
+            # 1. Compute control actions
+            actions = {}
+            for cid, spec in self.controllers.items():
+                observed_component = self.components.get(spec.observed_id)
+                if not observed_component: continue
+
+                observation_state = observed_component.get_state()
+                process_variable = observation_state.get(spec.observation_key)
+
+                if process_variable is not None:
+                    control_signal = spec.controller.compute_control_action({'process_variable': process_variable}, self.dt)
+                    actions[spec.controlled_id] = control_signal
+                    print(f"  Controller '{cid}': Target for '{spec.controlled_id}' = {control_signal:.2f}")
+
+            # 2. Step the physical models in order
+            self._step_physical_models(self.dt, actions)
+
+            # 3. Store history
+            step_history = {'time': current_time}
+            for cid in self.sorted_components:
+                step_history[cid] = self.components[cid].get_state()
+            self.history.append(step_history)
+
+            # 4. Print state summary (optional)
+            # You can customize this to print states of interest
+            print("  State Update:")
+            for cid in self.sorted_components:
+                state = self.components[cid].get_state()
+                print(f"    {cid}: {state}")
+            print("")
+
+    def run_mas_simulation(self):
+        """
+        Runs a full Multi-Agent System (MAS) simulation using the graph topology.
+        """
+        if not self.sorted_components:
+            raise Exception("Harness has not been built. Call harness.build() before running.")
+
+        num_steps = int(self.duration / self.dt)
+        print(f"Starting MAS simulation: Duration={self.duration}s, TimeStep={self.dt}s\n")
+
+        self.history = []
+        for i in range(num_steps):
+            current_time = i * self.dt
+            print(f"--- MAS Simulation Step {i+1}, Time: {current_time:.2f}s ---")
+
+            print("  Phase 1: Triggering agent perception and action cascade.")
+            for agent in self.agents:
+                agent.run(current_time)
+
+            print("  Phase 2: Stepping physical models with interactions.")
+            self._step_physical_models(self.dt)
+
+            # Store history
+            step_history = {'time': current_time}
+            for cid in self.sorted_components:
+                step_history[cid] = self.components[cid].get_state()
+            self.history.append(step_history)
+
+            # Print state summary (optional)
+            print("  State Update:")
+            for cid in self.sorted_components:
+                state_str = ", ".join(f"{k}={v:.2f}" for k, v in self.components[cid].get_state().items())
+                print(f"    {cid}: {state_str}")
+            print("")
+
+        print("MAS Simulation finished.")
