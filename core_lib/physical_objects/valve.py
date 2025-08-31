@@ -137,6 +137,13 @@ class Valve(PhysicalObjectInterface, Identifiable):
 
         return self.get_state()
 
+    def get_state(self) -> Dict[str, float]:
+        """Returns the current state of the valve, including key parameters for logging."""
+        # This overrides the base implementation to include parameters in the history log.
+        state = self._state.copy()
+        state['discharge_coefficient'] = self._params.get('discharge_coefficient')
+        return state
+
 
 class ValveStation(PhysicalObjectInterface):
     """

@@ -10,8 +10,8 @@ agents:
     config:
       csv_file: inflow_disturbance.csv
       time_column: time
-      value_column: inflow_rate
-      output_topic: inflow_disturbance_topic
+      data_column: inflow_rate
+      inflow_topic: inflow_disturbance_topic
       data_id: inflow_disturbance_1
 
   # Agent 2: Perceives the state of the physical reservoir and publishes its
@@ -30,7 +30,7 @@ agents:
     class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
     config:
       observation_topic: water_level_topic
-      observation_key: value
+      observation_key: water_level
       action_topic: valve_command_topic # The valve component listens to this
       dt: 1.0
       controller:
@@ -47,3 +47,15 @@ agents:
           # The output range is the valve opening percentage
           min_output: 0.0
           max_output: 100.0
+
+  # Agent 4: Logger for the inflow disturbance.
+  - id: inflow_logger
+    class: core_lib.local_agents.utility.topic_logger_agent.TopicLoggerAgent
+    config:
+      topic_to_log: inflow_disturbance_topic
+
+  # Agent 5: Logger for the valve control command.
+  - id: valve_logger
+    class: core_lib.local_agents.utility.topic_logger_agent.TopicLoggerAgent
+    config:
+      topic_to_log: valve_command_topic
