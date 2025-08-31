@@ -148,6 +148,25 @@ class SimulationBuilderFromModels:
                 controller_config = params.pop('controller')
                 params['controller'] = self.object_factory.create(controller_config)
 
+            # --- Logic to resolve component ID strings to component instances ---
+            # This mirrors the logic from the yaml_loader to make the API path robust.
+            if 'simulated_object_id' in params:
+                sim_obj_id = params.pop('simulated_object_id')
+                if sim_obj_id in self.component_instances:
+                    params['simulated_object'] = self.component_instances[sim_obj_id]
+                else:
+                    logging.warning(f"Agent '{agent_id}' refers to a non-existent simulated_object_id '{sim_obj_id}'.")
+
+            # HACK: Special handling for CentralDispatcherAgent, which requires a 'reservoir'
+            # instance but doesn't have it specified in the example config.
+            if 'centraldispatcheragent' in class_name.lower():
+                # Find the first reservoir and inject it.
+                first_reservoir = next((comp for comp in self.component_instances.values() if 'reservoir' in type(comp).__name__.lower()), None)
+                if first_reservoir and 'reservoir' not in params:
+                    params['reservoir'] = first_reservoir
+                elif not first_reservoir:
+                    logging.warning(f"CentralDispatcherAgent '{agent_id}' was defined, but no reservoir was found to assign to it.")
+
             # The object factory expects a dict with a 'class' key and uses the rest as kwargs
             factory_config = {
                 'class': class_name,
