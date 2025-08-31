@@ -91,18 +91,26 @@ class PipeModel(BasePhysicalObjectModel):
 
 class UnifiedCanalInitialState(BaseModel):
     """Initial state for a unified canal."""
-    water_depth: List[float] = Field(..., description="Initial water depth at each segment.")
-    flow: List[float] = Field(..., description="Initial flow rate at each segment.")
+    water_depth: Optional[List[float]] = Field(None, description="Initial water depth at each segment.")
+    flow: Optional[List[float]] = Field(None, description="Initial flow rate at each segment.")
+    # Adding this field to accommodate examples that only provide a single water level
+    water_level: Optional[float] = Field(None, description="Single initial water level for the whole canal.")
+
 
 class UnifiedCanalParameters(BaseModel):
     """Parameters for configuring a unified canal."""
-    length: float
-    bottom_width: float
-    side_slope: float
-    manning_coefficient: float
-    upstream_invert: float
-    downstream_invert: float
-    num_segments: int
+    length: Optional[float] = None
+    bottom_width: Optional[float] = None
+    side_slope: Optional[float] = None
+    manning_coefficient: Optional[float] = None
+    upstream_invert: Optional[float] = None
+    downstream_invert: Optional[float] = None
+    num_segments: Optional[int] = None
+    # Adding this to accommodate other model types defined in YAMLs
+    model_type: Optional[str] = None
+    time_constant: Optional[float] = None
+    attenuation: Optional[float] = None
+    delay: Optional[float] = None
 
 class UnifiedCanalModel(BasePhysicalObjectModel):
     """Pydantic model for a UnifiedCanal component."""

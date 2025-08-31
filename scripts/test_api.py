@@ -30,6 +30,8 @@ def create_simulation(config):
         return session_id
     except requests.exceptions.RequestException as e:
         print(f"Error creating simulation: {e}")
+        if response:
+            print(f"Error details: {response.text}")
         return None
 
 def start_simulation(session_id):

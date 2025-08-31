@@ -118,7 +118,9 @@ class SimulationBuilderFromModels:
         for agent_config in self.request_data.agents.agents:
             agent_id = agent_config.id
             class_name = agent_config.class_name
-            params = agent_config.params.model_dump(exclude_none=True)
+            # With GenericAgentConfig, params is already a dict.
+            print(f"agent_config.params: {agent_config.params}")
+            params = agent_config.params
 
             # HACK: Handle potential stale model fields due to hot-reloading issues.
             # This makes the loader robust to both old and new field names.

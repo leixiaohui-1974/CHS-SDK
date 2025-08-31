@@ -20,6 +20,7 @@ from .agent_models import (
     ReservoirPerceptionAgentParams,
     CSVInflowAgentParams,
 )
+from typing import Any, Dict
 
 # --- Components Model ---
 
@@ -49,38 +50,18 @@ class TopologyModel(BaseModel):
     """Defines the connection graph of the physical components."""
     connections: List[TopologyConnectionModel] = Field([], description="List of all connections in the system.")
 
-# --- Agent Models with Discriminated Union ---
-# This allows Pydantic to automatically use the correct 'params' model
-# based on the value of the 'class' field.
+# --- Agent Models ---
 
-class BaseAgentConfig(BaseModel):
-    """A base model for agent configuration, providing a unique ID."""
+class GenericAgentConfig(BaseModel):
+    """A generic model for any agent configuration."""
     id: str = Field(..., description="Unique identifier for the agent instance.")
-
-class GateControlAgentConfig(BaseAgentConfig):
-    class_name: Literal["core_lib.local_agents.control.gate_control_agent.GateControlAgent"] = Field(..., alias="class")
-    params: GateControlAgentParams
-
-class ReservoirPerceptionAgentConfig(BaseAgentConfig):
-    class_name: Literal["core_lib.local_agents.perception.reservoir_perception_agent.ReservoirPerceptionAgent"] = Field(..., alias="class")
-    params: ReservoirPerceptionAgentParams
-
-class CSVInflowAgentConfig(BaseAgentConfig):
-    class_name: Literal["core_lib.data_access.csv_inflow_agent.CsvInflowAgent"] = Field(..., alias="class")
-    params: CSVInflowAgentParams
-
-from typing import Annotated
-
-# Pydantic will use the 'class_name' field to decide which model to use from the union.
-AnyAgentConfig = Annotated[
-    Union[GateControlAgentConfig, ReservoirPerceptionAgentConfig, CSVInflowAgentConfig],
-    Field(discriminator="class_name"),
-]
+    class_name: str = Field(..., alias="class", description="The Python class for the agent.")
+    params: Dict[str, Any] = Field({}, description="Parameters for the agent's constructor.")
 
 
 class AgentsModel(BaseModel):
     """A container for all agent configurations."""
-    agents: List[AnyAgentConfig]
+    agents: List[GenericAgentConfig]
 
 
 # --- Main API Request Body Model ---

@@ -14,16 +14,6 @@ vi.mock('uuid', () => ({
   v4: () => 'mock-uuid',
 }));
 
-// Mock getComputedStyle for antd Modal
-Object.defineProperty(window, 'getComputedStyle', {
-  value: () => ({
-    getPropertyValue: (prop) => {
-      if (prop === 'get-property-value-for-testing') return '1px'
-      return ''
-    }
-  })
-})
-
 // Mock matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,

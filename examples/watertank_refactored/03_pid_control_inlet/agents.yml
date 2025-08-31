@@ -19,8 +19,8 @@ agents:
     config:
       csv_file: disturbance.csv
       time_column: time
-      value_column: outflow_rate
-      output_topic: disturbance_signal_topic
+      data_column: outflow_rate
+      inflow_topic: disturbance_signal_topic
       data_id: disturbance_1
 
   # Agent 3: The PID controller for the inlet pump.
@@ -30,7 +30,7 @@ agents:
     class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
     config:
       observation_topic: tank_water_level_topic # Listens to the perception agent
-      observation_key: value # The key in the message from the perception agent
+      observation_key: water_level # The key in the message from the perception agent
       action_topic: control_signal_topic # Publishes its control action here
       dt: 1.0
       # The controller logic is defined as a nested object. The YAML loader
@@ -51,7 +51,21 @@ agents:
   - id: inflow_aggregator_agent
     class: core_lib.local_agents.utility.signal_aggregator_agent.SignalAggregatorAgent
     config:
-      input_topics:
-        - control_signal_topic
-        - disturbance_signal_topic
+      input_configs:
+        - topic: control_signal_topic
+          key: control_signal
+        - topic: disturbance_signal_topic
+          key: inflow_rate
       output_topic: aggregated_inflow_topic
+
+  # Agent 5: A logger to capture the output of the PID controller for analysis.
+  - id: pid_output_logger
+    class: core_lib.local_agents.utility.topic_logger_agent.TopicLoggerAgent
+    config:
+      topic_to_log: control_signal_topic
+
+  # Agent 6: A logger to capture the disturbance signal for analysis.
+  - id: disturbance_logger
+    class: core_lib.local_agents.utility.topic_logger_agent.TopicLoggerAgent
+    config:
+      topic_to_log: disturbance_signal_topic
