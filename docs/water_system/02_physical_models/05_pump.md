@@ -18,6 +18,8 @@
 2.  **流量计算**: 在 `step` 方法中，如果水泵状态为开启，模型会根据上、下游水位计算 `outflow`。其逻辑是：如果需要克服的扬程 (`downstream_level - upstream_level`) 小于水泵的最大扬程 (`max_head`)，则水泵以其最大流量 (`max_flow_rate`) 出水；否则，流量为0。
 3.  **功耗计算**: 如果水泵有出流，其功耗 (`power_draw_kw`) 会被设置为一个固定的参数值 `power_consumption_kw`。
 
+该模型没有使用复杂的性能曲线，适用于需要快速评估开关控制策略的场景。
+
 ### 关键参数 (`parameters`)
 
 *   `max_head` (float): 水泵能提供的最大扬程 (m)。

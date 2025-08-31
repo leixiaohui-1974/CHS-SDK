@@ -15,10 +15,10 @@
 `Valve` 模型的行为主要由其 `opening` (开度, 0-100%) 决定。
 
 1.  **控制**: `Valve` 可以订阅一个 `action_topic`。控制智能体通过发布包含 `control_signal` (一个0到100之间的浮点数) 的消息来设置阀门的目标开度 `target_opening`。
-2.  **流量计算**: `step` 方法中的流量计算逻辑分为两种情况：
-    *   **有上游来水 (`inflow` > 0)**: 这种情况下，模型简化地认为，只要阀门开度大于0，所有来水都能通过，即 `outflow = inflow`。如果阀门关闭，则 `outflow = 0`。
-    *   **无上游来水 (`inflow` = 0)**: 这种情况下，模型会使用一个简化的**孔口流公式** `_calculate_flow`，根据上、下游水位差 (`head_diff`) 和阀门自身的属性（直径、流量系数）来计算 `outflow`。阀门的有效流量系数 `effective_C_d` 会随开度线性变化。
-3.  **状态更新**: 在 `step` 方法中，阀门的当前开度 `opening` 会被直接设置为 `target_opening`。这是一个简化的瞬时响应模型。
+2.  **流量计算**: `step` 方法中的流量计算逻辑根据是否有上游物理连接件 (`_inflow`) 来决定：
+    *   **有物理入流 (`_inflow` > 0)**: 模型简化地认为，只要阀门开度大于0，所有来水都能通过，即 `outflow = _inflow`。
+    *   **无物理入流 (`_inflow` = 0)**: 模型会使用一个简化的**孔口流公式** `_calculate_flow`，根据上、下游水位差 (`head_diff`) 和阀门自身的属性来计算 `outflow`。
+3.  **状态更新**: 在 `step` 方法中，阀门的当前开度 `opening` 会被直接设置为 `target_opening`，模拟瞬时响应。
 
 ### 关键参数 (`parameters`)
 
@@ -29,6 +29,9 @@
 
 *   `opening` (float): 当前的阀门开度 (0-100%)。
 *   `outflow` (float): 当前的出水流量 (m³/s)。
+
+### 高级功能：参数辨识
+`Valve` 模型实现了 `Identifiable` 接口，提供了一个 `identify_parameters` 方法。该方法可以根据历史的流量、水位和开度数据，自动校准 `discharge_coefficient` 参数，以提高仿真精度。
 
 ---
 
