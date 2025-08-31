@@ -104,7 +104,6 @@ class SimulationBuilder(BaseYamlLoader):
             "CentralDispatcherAgent": "core_lib.central_coordination.dispatch.central_dispatcher.CentralDispatcherAgent",
             "CsvInflowAgent": "core_lib.data_access.csv_inflow_agent.CsvInflowAgent",
             "EmergencyAgent": "core_lib.local_agents.supervisory.emergency_agent.EmergencyAgent",
-            "TopicLoggerAgent": "core_lib.local_agents.utility.topic_logger_agent.TopicLoggerAgent",
         }
         self.object_factory = ObjectFactory(context, class_map=DEFAULT_CLASS_MAP)
 
@@ -132,7 +131,7 @@ class SimulationBuilder(BaseYamlLoader):
             resolve_obj_ids(comp_conf)
 
             instance = self.object_factory.create(comp_conf, name=comp_id)
-            self.harness.add_component(comp_id, instance)
+            self.harness.add_component(instance)
             self.component_instances[comp_id] = instance
         logging.info(f"Loaded {len(self.component_instances)} components.")
 
@@ -208,7 +207,7 @@ class SimulationBuilder(BaseYamlLoader):
                 resolve_obj_ids(agent_conf)
 
                 # Special handling for CsvInflowAgent to resolve relative path
-                if class_name and 'CsvInflowAgent' in class_name:
+                if class_name == 'CsvInflowAgent':
                     if 'config' in agent_conf and 'csv_file' in agent_conf['config']:
                         csv_file = agent_conf['config'].pop('csv_file')
                         agent_conf['config']['csv_file_path'] = self.scenario_path / csv_file

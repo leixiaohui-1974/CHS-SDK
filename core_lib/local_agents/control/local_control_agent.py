@@ -97,24 +97,23 @@ class LocalControlAgent(Agent):
         This method supports two modes of operation:
         1. Single Action Mode: If the controller returns a single value, this method
            publishes it to the `action_topic` defined in the agent's constructor.
-           The message is a dictionary: {'value': signal}.
+           The message is a dictionary: {'control_signal': value}.
 
         2. Multi-Action Mode: If the controller returns a dictionary, this method
            treats each key-value pair as `topic: signal`. It iterates through the
            dictionary and publishes each signal to its corresponding topic. This is
-           useful for controllers that manage multiple actuators. The physical components
-           (like the Reservoir) expect the key for the signal to be 'value'.
+           useful for controllers that manage multiple actuators.
         """
         if isinstance(control_signal, dict):
             # Multi-Action Mode: Controller provided a dictionary of topic -> signal
             for topic, signal_value in control_signal.items():
                 if topic is not None and signal_value is not None:
-                    action_message: Message = {'value': signal_value, 'agent_id': self.agent_id}
+                    action_message: Message = {'control_signal': signal_value, 'agent_id': self.agent_id}
                     self.bus.publish(topic, action_message)
         else:
             # Single Action Mode: Publish a single control signal to the pre-configured topic
             if self.action_topic is not None:
-                action_message: Message = {'value': control_signal, 'agent_id': self.agent_id}
+                action_message: Message = {'control_signal': control_signal, 'agent_id': self.agent_id}
                 self.bus.publish(self.action_topic, action_message)
 
     def run(self, current_time: float):

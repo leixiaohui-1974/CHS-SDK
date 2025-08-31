@@ -8,8 +8,8 @@ agents:
     config:
       csv_file: disturbance.csv
       time_column: time
-      data_column: outflow_rate
-      inflow_topic: disturbance_signal_topic
+      value_column: outflow_rate
+      output_topic: disturbance_signal_topic
       data_id: disturbance_1
 
   # Agent 2: The PID Controller.
