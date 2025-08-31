@@ -17,7 +17,7 @@
 
 ## 2. `MessageBus` 的实现
 
-`MessageBus` 类提供两个核心方法：
+`MessageBus` 类提供以下核心方法：
 
 ### `subscribe(topic: str, callback: Callable)`
 
@@ -32,6 +32,12 @@
 *   **参数**:
     *   `topic`: 要发布到的主题。
     *   `message`: 要发布的消息。在 `core_lib` 中，消息通常是一个字典 (`Dict`)。
+
+### 其它辅助方法
+
+除了核心的发布/订阅功能，`MessageBus` 还提供了一些辅助方法：
+*   `unsubscribe(topic: str, listener: Listener)`: 用于在运行时动态地取消订阅。
+*   `set_component_topology(topology: Dict)`: 用于存储系统的物理拓扑结构。这使得智能体可以查询总线以了解组件之间的连接关系，进一步增强了系统的解耦能力。
 
 ## 3. 工作流程示例
 

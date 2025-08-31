@@ -19,13 +19,15 @@
 
 ## 3. 工作流程
 
-`LocalControlAgent` 的工作是完全事件驱动的，其 `run()` 方法通常为空。核心逻辑在消息回调函数中：
+`LocalControlAgent` 的工作是完全事件驱动的，其 `run()` 方法为空。核心逻辑在消息回调函数中：
 
-1.  **接收设定点**: `handle_command_message()` 方法订阅一个命令主题。当上层的调度智能体（如`CentralMPCAgent`）发布一个新的设定点时，该方法被调用，并更新其内部持有的 `Controller` 实例的设定点（例如，调用 `pid.set_setpoint(new_value)`)。
-2.  **接收观测值**: `handle_observation()` 方法订阅一个观测主题（通常由`DigitalTwinAgent`发布）。当新的传感器/模型状态值传来时，该方法被调用。
-3.  **计算控制量**: 它将最新的观测值（过程变量）传递给其内部 `Controller` 实例的 `compute_control_action()` 方法。
-4.  **执行控制**: `Controller` 实例根据其内部算法（如PID）计算出具体的控制动作（如一个阀门开度值）。
-5.  **发布动作**: `LocalControlAgent` 将这个计算出的控制动作发布到一个动作主题 (`action_topic`) 上，供对应的物理对象模型订阅和执行。
+1.  **接收设定点 (`command_topic`)**: `handle_command_message()` 方法订阅一个命令主题。当上层的调度智能体发布一个新的设定点时，该方法被调用，并更新其内部持有的 `Controller` 实例的设定点。
+2.  **接收观测值 (`observation_topic`)**: `handle_observation()` 方法订阅一个观测主题（通常由`DigitalTwinAgent`发布）。当新的传感器/模型状态值传来时，该方法被调用。
+3.  **接收执行器反馈 (`feedback_topic`)**: (可选) 智能体可以订阅一个反馈主题，以接收来自其正在控制的执行器（如一个 `Gate`）的实际状态。这对于实现需要了解执行器状态的复杂控制逻辑（如抗积分饱和）至关重要。
+4.  **计算控制量**: 智能体将最新的观测值（过程变量）传递给其内部 `Controller` 实例的 `compute_control_action()` 方法。
+5.  **发布动作 (`action_topic`)**: `LocalControlAgent` 将计算出的控制动作发布出去。这里支持两种模式：
+    *   **单一动作**: 如果控制器返回一个单独的值，智能体将其发布到预设的 `action_topic`。
+    *   **多重动作**: 如果控制器返回一个字典，智能体会将其中的每个键值对解释为 `主题:信号`，并将每个信号发布到对应的“主题”上。这使得一个控制器可以同时驱动多个执行器。
 
 ```mermaid
 graph TD

@@ -88,8 +88,17 @@ harness = SimulationHarness(config=simulation_config)
 harness.add_component(reservoir)
 harness.add_component(gate)
 
-# 添加控制器并将其与它所控制的组件关联起来
-harness.add_controller(controlled_object_id="gate_1", controller=pid_controller)
+# 定义物理连接
+harness.add_connection("reservoir_1", "gate_1")
+
+# 添加控制器并将其与它所控制和观察的组件关联起来
+harness.add_controller(
+    controller_id="pid_controller_1",
+    controller=pid_controller,
+    controlled_id="gate_1",
+    observed_id="reservoir_1",
+    observation_key="water_level"
+)
 ```
 请注意我们是如何独立添加每个组件的。然后，我们将 `pid_controller` 与ID为 `gate_1` 的组件链接起来。现在，平台知道这个控制器负责为 `gate_1` 提供控制动作。
 

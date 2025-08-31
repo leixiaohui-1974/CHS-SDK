@@ -63,8 +63,8 @@
 | `GateControlAgent` | 控制单个闸门，与 `ValveControlAgent` 类似，是 `LocalControlAgent` 的轻量级实现。 | `core_lib/local_agents/control/gate_control_agent.py` |
 | `PumpStationControlAgent` | 泵站控制的**站级代理**，负责站级总调度（如决定总流量），并将指令下发给机组级代理（如 `PumpControlAgent`）。 | `core_lib/local_agents/control/pump_station_control_agent.py` |
 | `ValveStationControlAgent` | 阀门站控制的**站级代理**，负责实现站级流量或水位目标，并将计算出的开度指令下发给站内每个阀门。 | `core_lib/local_agents/control/valve_station_control_agent.py` |
-| `HydropowerStationAgent` | 水电站控制，负责制定站级策略，并向下游发布针对单个水轮机或水闸的控制指令。 | `core_lib/local_agents/control/hydropower_station_agent.py` |
-| `HydropowerStationControlAgent` | 水电站控制，同上。 | `core_lib/local_agents/control/hydropower_station_control_agent.py` |
+| `HydropowerStationAgent` | **规则化水电站控制**，根据内置的规则（如防洪、供水、发电优先级）直接控制站内设备。更适用于独立的、规则驱动的场景。 | `core_lib/local_agents/control/hydropower_station_agent.py` |
+| `HydropowerStationControlAgent` | **目标导向水电站控制**，接收上层调度指令（如总发电功率、总下泄流量目标），并将其分解为对具体机组和闸门的控制动作。适用于分层或集中式控制架构。 | `core_lib/local_agents/control/hydropower_station_control_agent.py` |
 | `PressureControlAgent` | 压力控制，一个 `LocalControlAgent` 的应用实例，专用于需要维持特定压力的控制场景。 | `core_lib/local_agents/control/pressure_control_agent.py` |
 
 ### 3.3 中央协调代理 (Central Agents)

@@ -27,10 +27,12 @@
 ### 3.2 `ParameterIdentificationAgent` 的工作流程
 
 1.  **初始化**: 在创建时，`ParameterIdentificationAgent` 会被赋予一个它需要负责的 `target_model` (目标模型)，以及一个 `identification_data_map` 配置。这个 map 定义了需要从消息总线的哪些 `topic` 上获取哪些数据（例如，`{'rainfall': 'topic_A', 'observed_runoff': 'topic_B'}`）。
-2.  **订阅**: 代理根据 `identification_data_map` 向 `MessageBus` 订阅所有需要的主题。
+2.  **订阅**: 代理根据 `identification_data_map` 向 `MessageBus` 订阅所有需要的主题。它期望收到的消息是包含 `{'value': ...}` 的简单字典。
 3.  **收集数据**: `handle_data_message` 回调函数会将收到的消息存入内部的 `data_history` 字典中。
 4.  **检查与触发**: `run()` 方法在每个时间步被调用，检查 `new_data_count` 是否达到阈值 (`identification_interval`)。
-5.  **调用辨识**: 一旦达到阈值，它就将 `data_history` 中的数据打包成 `numpy` 数组，并调用 `self.target_model.identify_parameters(data_for_model)`。
+5.  **调用辨识**: 一旦达到阈值，它会将 `data_history` 中的数据打包成 `numpy` 数组（为保证数据同步，所有数据序列会被截断为其中的最短长度），并调用 `self.target_model.identify_parameters(data_for_model)`。
+6.  **发布结果**: 在辨识成功后，它会将辨识出的新参数发布到一个专门的主题 `identified_parameters/{model_name}` 上。这允许 `ModelUpdaterAgent` 等其他智能体订阅这些结果，并将更新后的参数应用回相应的模型中，从而完成整个闭环校准过程。
+6.  **发布结果**: 在辨识成功后，它会将辨识出的新参数发布到一个专门的主题 `identified_parameters/{model_name}` 上。这允许 `ModelUpdaterAgent` 等其他智能体订阅这些结果，并将更新后的参数应用回相应的模型中，从而完成整个闭环校准过程。
 
 ```mermaid
 graph TD

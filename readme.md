@@ -56,7 +56,7 @@ python run_scenario.py --scenario_path mission/scenarios/yinchuojiliao
 | **输水管道** | `Pipe` | 模拟有压管道，基于达西-韦史巴赫公式计算水头损失和流量。 |
 | **渠道河道** | `UnifiedCanal` | **推荐使用**的统一渠道/河道模型，支持多种水流演算方法。 |
 | **控制设备** | `Gate`, `Valve`, `Pump`, `WaterTurbine` | 模拟水闸、阀门、水泵、水轮机等核心调控设备。 |
-| **站级单元** | `PumpStation`, `ValveStation`, `HydropowerStation` | 作为多个设备的容器，用于聚合状态和实现站级管理。 |
+| **站级单元** | `PumpStation`, `ValveStation`, `HydropowerStation` | 作为多个设备（如水泵、阀门、水轮机）的逻辑容器，用于聚合状态和实现站级管理。 |
 
 ### 智能体 (Agents)
 

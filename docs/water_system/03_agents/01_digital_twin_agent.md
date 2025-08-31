@@ -14,7 +14,11 @@
 ### 2.1 封装与发布
 
 *   **封装 (Wrapping)**: 在初始化时，`DigitalTwinAgent` 会接收一个实现了 `Simulatable` 接口的对象实例（即一个物理模型）。它将这个模型保存在内部。
-*   **发布 (Publishing)**: `SimulationHarness` 在每个时间步调用 `DigitalTwinAgent` 的 `run()` 方法。该方法会从内部物理模型中获取当前的状态，然后将状态数据作为一条消息，发布到一个预先配置好的主题 (`state_topic`) 上。
+*   **发布 (Publishing)**: `SimulationHarness` 在每个时间步调用 `DigitalTwinAgent` 的 `run(current_time)` 方法。该方法会：
+    1.  从内部物理模型中获取当前状态。
+    2.  对状态进行认知增强（见下文）。
+    3.  **发布到主状态主题**: 将完整的状态字典发布到预先配置好的 `state_topic`。
+    4.  **发布到子主题**: **同时**，它会遍历状态字典中的每一个键值对，并将每一个值分别发布到其独立的子主题上（例如 `state_topic/water_level`）。这种“精细化发布”的机制允许其他智能体只订阅它们真正需要的信息，从而降低了系统的通信开销。
 
 ```mermaid
 graph TD
@@ -26,9 +30,11 @@ graph TD
 
 ### 2.2 认知增强 (Cognitive Enhancement)
 
-`DigitalTwinAgent` 的一个重要功能是对原始状态进行“认知增强”，为系统提供更高质量的数据。代码中的一个典型例子是**状态平滑 (State Smoothing)**。
+`DigitalTwinAgent` 的一个重要功能是对原始状态进行“认知增强”，为系统提供更高质量的数据。这是通过一个独立的 `CognitiveEnhancer` 类来实现的。
 
-通过在配置中提供 `smoothing_config`，可以对指定的变量（如 `water_level`）应用**指数移动平均 (Exponential Moving Average, EMA)** 滤波。这个过程可以有效地滤除物理模型或传感器数据中可能存在的高频噪声，为下游的决策智能体（如调度、控制）提供更稳定、更可靠的状态信息。
+在初始化 `DigitalTwinAgent` 时，可以传入不同的配置来启用这些功能：
+*   **状态平滑 (`smoothing_config`)**: 这是最基础的增强。通过提供一个 `smoothing_config` 字典，可以对指定的变量（如 `water_level`）应用**指数移动平均 (Exponential Moving Average, EMA)** 滤波。这个过程可以有效地滤除物理模型或传感器数据中可能存在的高频噪声。
+*   **高级认知 (`cognitive_config`)**: 通过提供一个 `cognitive_config`，可以启用更高级的功能，例如数据清洗、异常值检测等。这些复杂的逻辑被封装在 `CognitiveEnhancer` 内部。
 
 ## 3. 在系统中的角色
 

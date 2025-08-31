@@ -9,19 +9,15 @@
 
 ## 2. 数学模型
 
-该模型采用 **达西-韦斯巴赫 (Darcy-Weisbach)** 方程来计算流量。这是一个经典的水力学公式，用于计算流体在管道中因摩擦而产生的能量损失（水头损失）。
+`Pipe` 模型支持两种业界标准的水力计算方法，可通过 `calculation_method` 参数进行选择：
 
-在 `pipe.py` 的实现中，该公式被简化并重构为一个**流量系数 (flow_coefficient)**，该系数在对象初始化时根据管道的物理参数预先计算出来：
+1.  **`darcy_weisbach` (默认)**: 采用 **达西-韦斯巴赫 (Darcy-Weisbach)** 方程。这是计算承压管道水头损失的经典公式，适用于大多数管网仿真。
+    *   **流量计算**: `Q = A * sqrt(2 * g * h_L * D / (f * L))`
+    *   **核心参数**: `friction_factor` (摩擦系数)
 
-```python
-# self.flow_coefficient = area * sqrt(2 * g * diameter / (friction_factor * length))
-```
-
-在每个 `step()` 中，流量 `Q` 的计算就简化为：
-
-`Q = flow_coefficient * sqrt(head_difference)`
-
-其中 `head_difference` 是管道上、下游节点的水头差。
+2.  **`manning`**: 采用 **曼宁 (Manning)** 公式。该公式通常用于明渠流，但也适用于满管重力流的情况。
+    *   **流量计算**: `Q = (1.0/n) * A * R_h^(2/3) * S^(1/2)`
+    *   **核心参数**: `manning_n` (曼宁糙率系数)
 
 ## 3. 关键参数 (`parameters`)
 
@@ -29,7 +25,9 @@
 
 *   `diameter` (米): 管道直径。
 *   `length` (米): 管道长度。
-*   `friction_factor` (无量纲): 达西-韦斯巴赫摩擦系数。这是一个经验值，取决于管道的材料和状况。
+*   `calculation_method` (字符串, 可选): 计算方法，可以是 `'darcy_weisbach'` (默认) 或 `'manning'`。
+*   `friction_factor` (无量纲): **如果** `calculation_method` 是 `darcy_weisbach`，则需要此参数。
+*   `manning_n` (无量纲): **如果** `calculation_method` 是 `manning`，则需要此参数。
 
 ## 4. 状态变量 (`state`)
 
@@ -42,3 +40,9 @@
 
 *   `Pipe` 模型通过 `step()` 方法接收上、下游节点的 `head` （水头）作为输入，并计算出 `outflow`。
 *   这是一个相对简化的模型，它假设了稳定的紊流状态，并且没有考虑非满管流或水锤等瞬变现象。它适用于大规模管网的稳态或准稳态仿真。
+
+## 6. 高级功能：参数辨识
+
+`Pipe` 对象还包含一个 `identify_parameters()` 方法。这是一个强大的功能，允许模型根据实测数据（如历史流量和水位数据）自动校准其水力参数（`friction_factor` 或 `manning_n`）。
+
+这对于提高模型的仿真精度、使其更贴近物理实际至关重要。关于如何使用此功能，请参考 `IdentificationAgent` 的相关文档。
