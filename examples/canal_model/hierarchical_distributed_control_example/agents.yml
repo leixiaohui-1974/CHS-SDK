@@ -1,6 +1,6 @@
 # Agent definitions for the Hierarchical Distributed Control Example
 # This configuration defines a two-level control system:
-# 1. A central MPC agent that computes optimal water level setpoints.
+# 1. A central Dispatcher agent (in MPC mode) that computes optimal water level setpoints.
 # 2. Two local PID agents that control the gates to track these setpoints.
 
 agents:
@@ -45,34 +45,44 @@ agents:
           message:
             outflow: 20.0
 
-  # Central MPC Agent for global optimization
-  - id: central_mpc_controller
+  # Central MPC Agent - computes and publishes optimal gate openings
+  - id: central_mpc_agent
     class: core_lib.central_agents.central_mpc_agent.CentralMPCAgent
     config:
+      state_subscriptions:
+        canal_1: 'sensor/canal_1/water_level'
+        canal_2: 'sensor/canal_2/water_level'
+      forecast_subscription: 'forecast/dummy'
+      command_topics:
+        canal_1: 'control/canal_1/setpoint'
+        canal_2: 'control/canal_2/setpoint'
+      state_keys: ["canal_1", "canal_2"]
       prediction_horizon: 10
-      control_interval: 300 # Run MPC every 5 minutes
-      observation_topics:
-        - 'sensor/canal_1/water_level'
-        - 'sensor/canal_2/water_level'
-      setpoint_topics:
-        - 'control/canal_1/setpoint'
-        - 'control/canal_2/setpoint'
-      model_params: {} # Placeholder for MPC model parameters
+      dt: 60
+      q_weight: 1.0
+      r_weight: 0.1
+      # NOTE: This is a temporary fix. The agent calculates gate openings,
+      # but the PID controllers expect water level setpoints.
+      # This will be corrected in the next step.
+      target_water_levels: [5.0, 5.0]  # The MPC's target levels
+      normal_setpoints: [0.5, 0.5]     # The MPC's target/initial openings
+      emergency_setpoint: 0.1
+      flood_thresholds: [5.8, 5.8]
+      canal_surface_areas: [1500.0, 1500.0]
+      outflow_coefficient: 0.1 # More realistic coefficient for the new model
 
   # Local PID Controller for Gate 1
   - id: gate1_pid_controller
     class: core_lib.local_agents.control.structured_control_agent.StructuredControlAgent
     config:
       controlled_element_id: 'gate_1'
-      control_mode: 'lu' # Controls gate based on local upstream (LU) water level
-      # This agent listens to the central MPC for its setpoint
+      control_mode: 'lu'
       setpoint_topic: 'control/canal_1/setpoint'
-      # The observation_topic is inferred automatically by 'lu' mode
+      actuator_topic: 'actuator/gate_1/opening' # Explicitly define for clarity
       controller_config:
         Kp: 0.5
         Ki: 0.05
         Kd: 0.1
-        # No fixed setpoint here! It's received dynamically.
         min_output: 0.0
         max_output: 1.0
 
@@ -81,8 +91,9 @@ agents:
     class: core_lib.local_agents.control.structured_control_agent.StructuredControlAgent
     config:
       controlled_element_id: 'gate_2'
-      control_mode: 'lu' # Controls gate based on local upstream (LU) water level
+      control_mode: 'lu'
       setpoint_topic: 'control/canal_2/setpoint'
+      actuator_topic: 'actuator/gate_2/opening' # Explicitly define for clarity
       controller_config:
         Kp: 0.6
         Ki: 0.07
