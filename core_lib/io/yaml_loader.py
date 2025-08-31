@@ -4,58 +4,16 @@ Loads a simulation scenario from a set of YAML configuration files.
 import yaml
 from pathlib import Path
 import logging
-import importlib
-
 from core_lib.core_engine.testing.simulation_harness import SimulationHarness
 from core_lib.central_coordination.collaboration.message_bus import MessageBus
+from core_lib.io.object_factory import ObjectFactory
 
-class SimulationLoader:
+class BaseYamlLoader:
     """
-    Reads a directory of YAML files to configure and instantiate a simulation.
+    Base class for loading YAML files from a directory.
     """
-
-    def __init__(self, scenario_path: str, agents_file: str = 'agents.yml'):
-        """
-        Initializes the loader with the path to the scenario directory.
-
-        Args:
-            scenario_path: The path to the directory containing config.yml, etc.
-            agents_file: The name of the agents configuration file to load.
-        """
+    def __init__(self, scenario_path: str):
         self.scenario_path = Path(scenario_path)
-        self.config = self._load_yaml('config.yml')
-        self.components_config = self._load_yaml('components.yml')
-        self.topology_config = self._load_yaml('topology.yml')
-        self.agents_config = self._load_yaml(agents_file) # Use the specified agents file
-
-        self.harness = None
-        self.message_bus = None
-        self.component_instances = {}
-        logging.info(f"SimulationLoader initialized for scenario: {self.scenario_path.name}")
-        logging.info(f"Using agents configuration: {agents_file}")
-
-    def _instantiate_object(self, config: dict) -> object:
-        """
-        Instantiates an object from a configuration dictionary that has a 'class' key.
-        """
-        class_name = config['class']
-        ObjectClass = self._get_class(class_name)
-
-        object_config = config.get('config', {})
-
-        import inspect
-        final_args = object_config.copy()
-        sig = inspect.signature(ObjectClass.__init__)
-
-        # Inject dependencies like message_bus if the constructor needs them
-        if 'message_bus' in sig.parameters:
-            final_args['message_bus'] = self.message_bus
-
-        if 'dt' in sig.parameters and 'dt' not in final_args:
-            if self.harness and self.harness.config and 'dt' in self.harness.config:
-                final_args['dt'] = self.harness.config['dt']
-
-        return ObjectClass(**final_args)
 
     def _load_yaml(self, file_name: str):
         """Loads a single YAML file from the scenario directory."""
@@ -69,6 +27,27 @@ class SimulationLoader:
         except yaml.YAMLError as e:
             logging.error(f"Error parsing YAML file {file_path}: {e}")
             return None
+
+class SimulationBuilder(BaseYamlLoader):
+    """
+    Reads a directory of YAML files to configure and instantiate a simulation.
+    """
+
+    def __init__(self, scenario_path: str, agents_file: str = 'agents.yml'):
+        """
+        Initializes the loader with the path to the scenario directory.
+        """
+        super().__init__(scenario_path)
+        self.config = self._load_yaml('config.yml')
+        self.components_config = self._load_yaml('components.yml')
+        self.topology_config = self._load_yaml('topology.yml')
+        self.agents_config = self._load_yaml(agents_file)
+
+        self.harness = None
+        self.message_bus = None
+        self.component_instances = {}
+        self.object_factory = None
+        logging.info(f"SimulationBuilder initialized for scenario: {self.scenario_path.name}")
 
     def load(self) -> SimulationHarness:
         """
@@ -84,56 +63,74 @@ class SimulationLoader:
         if self.agents_config:
             self._load_agents_and_controllers()
         else:
-            logging.warning(f"Agents file not found or is empty. Running a non-agent simulation.")
+            logging.warning("Agents file not found or is empty. Running a non-agent simulation.")
 
         logging.info("Simulation loaded successfully. Building harness...")
         self.harness.build()
         logging.info("Harness built. Loader is ready.")
         return self.harness
 
-    def _get_class(self, class_path: str):
-        """
-        Dynamically imports and returns a class object from a string path.
-        """
-        CLASS_MAP = {
-            "Reservoir": "core_lib.physical_objects.reservoir.Reservoir",
-            "Gate": "core_lib.physical_objects.gate.Gate",
-            "UnifiedCanal": "core_lib.physical_objects.unified_canal.UnifiedCanal",
-            "PIDController": "core_lib.local_agents.control.pid_controller.PIDController",
-            "LocalControlAgent": "core_lib.local_agents.control.local_control_agent.LocalControlAgent",
-            "DigitalTwinAgent": "core_lib.local_agents.perception.digital_twin_agent.DigitalTwinAgent",
-        }
-        full_class_path = CLASS_MAP.get(class_path, class_path)
-        try:
-            module_name, class_name = full_class_path.rsplit('.', 1)
-            module = importlib.import_module(module_name)
-            return getattr(module, class_name)
-        except (ImportError, AttributeError, ValueError) as e:
-            raise ImportError(f"Could not find or import class '{class_path}'") from e
-
     def _setup_infrastructure(self):
-        """Initializes the message bus and simulation harness."""
+        """Initializes the message bus, simulation harness and object factory."""
         logging.info("Setting up simulation infrastructure...")
         self.message_bus = MessageBus()
         sim_config = self.config.get('simulation', {})
         self.harness = SimulationHarness(config=sim_config)
+
+        context = {
+            'message_bus': self.message_bus,
+            'dt': self.harness.config.get('dt')
+        }
+        DEFAULT_CLASS_MAP = {
+            # Physical Objects
+            "Reservoir": "core_lib.physical_objects.reservoir.Reservoir",
+            "Gate": "core_lib.physical_objects.gate.Gate",
+            "UnifiedCanal": "core_lib.physical_objects.unified_canal.UnifiedCanal",
+            "Pipe": "core_lib.physical_objects.pipe.Pipe",
+            "Pump": "core_lib.physical_objects.pump.Pump",
+            "Valve": "core_lib.physical_objects.valve.Valve",
+            "HydropowerStation": "core_lib.physical_objects.hydropower_station.HydropowerStation",
+            "Lake": "core_lib.physical_objects.lake.Lake",
+            "RiverChannel": "core_lib.physical_objects.river_channel.RiverChannel",
+            "WaterTurbine": "core_lib.physical_objects.water_turbine.WaterTurbine",
+            "RainfallRunoff": "core_lib.physical_objects.rainfall_runoff.RainfallRunoff",
+            "IntegralDelayCanal": "core_lib.physical_objects.integral_delay_canal.IntegralDelayCanal",
+
+            # Agents & Controllers
+            "PIDController": "core_lib.local_agents.control.pid_controller.PIDController",
+            "LocalControlAgent": "core_lib.local_agents.control.local_control_agent.LocalControlAgent",
+            "DigitalTwinAgent": "core_lib.local_agents.perception.digital_twin_agent.DigitalTwinAgent",
+            "ParameterIdentificationAgent": "core_lib.identification.identification_agent.ParameterIdentificationAgent",
+            "CentralDispatcherAgent": "core_lib.central_coordination.dispatch.central_dispatcher.CentralDispatcherAgent",
+            "CsvInflowAgent": "core_lib.data_access.csv_inflow_agent.CsvInflowAgent",
+            "EmergencyAgent": "core_lib.local_agents.supervisory.emergency_agent.EmergencyAgent",
+        }
+        self.object_factory = ObjectFactory(context, class_map=DEFAULT_CLASS_MAP)
+
 
     def _load_components(self):
         """Loads and instantiates all physical components."""
         logging.info("Loading physical components...")
         for comp_conf in self.components_config.get('components', []):
             comp_id = comp_conf.pop('id')
-            CompClass = self._get_class(comp_conf.pop('class'))
-            args = { 'name': comp_id, **comp_conf }
-            import inspect
-            sig = inspect.signature(CompClass.__init__)
-            has_kwargs = any(p.kind == p.VAR_KEYWORD for p in sig.parameters.values())
-            if 'message_bus' in sig.parameters or has_kwargs:
-                args['message_bus'] = self.message_bus
-            if not has_kwargs:
-                valid_args = list(sig.parameters.keys())
-                args = {k: v for k, v in args.items() if k in valid_args or k == 'name'}
-            instance = CompClass(**args)
+
+            # Resolve obj_id references to component instances
+            def resolve_obj_ids(d):
+                for k, v in d.items():
+                    if isinstance(v, dict):
+                        if 'obj_id' in v:
+                            obj_id = v.pop('obj_id')
+                            d[k] = self.component_instances[obj_id]
+                        else:
+                            resolve_obj_ids(v)
+                    elif isinstance(v, list):
+                        for item in v:
+                            if isinstance(item, dict):
+                                resolve_obj_ids(item)
+
+            resolve_obj_ids(comp_conf)
+
+            instance = self.object_factory.create(comp_conf, name=comp_id)
             self.harness.add_component(instance)
             self.component_instances[comp_id] = instance
         logging.info(f"Loaded {len(self.component_instances)} components.")
@@ -143,16 +140,12 @@ class SimulationLoader:
         logging.info("Loading topology...")
         topology_for_bus = {}
         for conn_conf in self.topology_config.get('connections', []):
-
-            self.harness.add_connection(conn_conf['upstream'], conn_conf['downstream'])
-
             upstream_id = conn_conf['upstream']
             downstream_id = conn_conf['downstream']
 
             logging.info(f"  - Connecting '{upstream_id}' -> '{downstream_id}'")
             self.harness.add_connection(upstream_id, downstream_id)
 
-            # Build a topology map suitable for the message bus
             if upstream_id not in topology_for_bus:
                 topology_for_bus[upstream_id] = {}
             if downstream_id not in topology_for_bus:
@@ -161,98 +154,67 @@ class SimulationLoader:
             topology_for_bus[upstream_id]['downstream'] = downstream_id
             topology_for_bus[downstream_id]['upstream'] = upstream_id
 
-        # Set the topology on the message bus so agents can query it
         self.message_bus.set_component_topology(topology_for_bus)
-
-
         logging.info("Topology loaded.")
-
-    def _resolve_obj_ids(self, config_dict: dict):
-        """
-        Recursively traverses a dictionary and replaces 'obj_id' keys
-        with 'obj' keys containing the actual component instance.
-        """
-        for key, value in config_dict.items():
-            if isinstance(value, dict):
-                if 'obj_id' in value:
-                    obj_id = value.pop('obj_id')
-                    value['obj'] = self.component_instances[obj_id]
-                else:
-                    self._resolve_obj_ids(value)
-            elif isinstance(value, list):
-                for item in value:
-                    if isinstance(item, dict):
-                        self._resolve_obj_ids(item)
 
     def _load_agents_and_controllers(self):
         """Loads and instantiates all agents and controllers."""
         logging.info("Loading agents and controllers...")
-        for agent_conf in self.agents_config.get('agents', []):
-            agent_id = agent_conf.pop('id')
-            agent_class_name = agent_conf.pop('class')
-            AgentClass = self._get_class(agent_class_name)
 
-            # Unpack the 'config' block if it exists
-            if 'config' in agent_conf:
-                config_block = agent_conf.pop('config')
-                agent_conf.update(config_block)
+        # Load controllers
+        if 'controllers' in self.agents_config:
+            for controller_conf in self.agents_config.get('controllers', []):
+                controller_id = controller_conf.pop('id')
+                controlled_id = controller_conf.pop('controlled_id')
+                observed_id = controller_conf.pop('observed_id')
+                observation_key = controller_conf.pop('observation_key')
 
-            # --- Handle all special argument adaptations before calling the constructor ---
-            self._resolve_obj_ids(agent_conf) # Recursively replace all obj_ids with obj references
-
-            # Special handling for agents
-            if 'simulated_object_id' in agent_conf:
-                agent_conf['simulated_object'] = self.component_instances[agent_conf.pop('simulated_object_id')]
-
-            # Recursively instantiate nested components
-            for key, value in agent_conf.items():
-                if isinstance(value, dict) and 'class' in value:
-                    agent_conf[key] = self._instantiate_object(value)
-
-            # Special handling for ParameterIdentificationAgent constructor
-            if agent_class_name == 'ParameterIdentificationAgent':
-                target_model_id = agent_conf.pop('target_model_id')
-                target_model_instance = self.component_instances[target_model_id]
-                instance = AgentClass(
-                    agent_id=agent_id,
-                    message_bus=self.message_bus,
-                    target_model=target_model_instance,
-                    config=agent_conf
+                instance = self.object_factory.create(controller_conf, controller_id=controller_id)
+                self.harness.add_controller(
+                    controller_id=controller_id,
+                    controller=instance,
+                    controlled_id=controlled_id,
+                    observed_id=observed_id,
+                    observation_key=observation_key
                 )
-            elif agent_class_name == 'CentralDispatcherAgent':
-                instance = AgentClass(
-                    agent_id=agent_id,
-                    message_bus=self.message_bus,
-                    config=agent_conf
-                )
-            else:
-                # --- Generic constructor call with argument adaptation ---
-                final_args = {'agent_id': agent_id, 'message_bus': self.message_bus, **agent_conf}
 
-                # Inject 'dt' from global sim config if the agent constructor accepts it
-                import inspect
-                sig = inspect.signature(AgentClass.__init__)
-                if 'dt' in sig.parameters and 'dt' not in final_args:
-                    if self.harness.config and 'dt' in self.harness.config:
-                        final_args['dt'] = self.harness.config['dt']
+        # Load agents
+        if 'agents' in self.agents_config:
+            for agent_conf in self.agents_config.get('agents', []):
+                agent_id = agent_conf.pop('id')
+                class_name = agent_conf.get('class')
 
-                instance = AgentClass(**final_args)
-            self.harness.add_agent(instance)
+                # Resolve obj_id references to component instances
+                def resolve_obj_ids(d):
+                    for k, v in list(d.items()):
+                        if k == 'obj_id' or k == 'simulated_object_id' or k == 'target_model_id' or k == 'target_component_id':
+                            if k == 'simulated_object_id':
+                                d['simulated_object'] = self.component_instances[v]
+                            elif k == 'target_model_id':
+                                d['target_model'] = self.component_instances[v]
+                            elif k == 'target_component_id':
+                                d['target_component'] = self.component_instances[v]
+                            else:
+                                d['obj'] = self.component_instances[v]
+                            del d[k]
+                        elif isinstance(v, dict):
+                            resolve_obj_ids(v)
+                        elif isinstance(v, list):
+                            for item in v:
+                                if isinstance(item, dict):
+                                    resolve_obj_ids(item)
 
-            final_args = {'agent_id': agent_id, 'message_bus': self.message_bus, **agent_conf}
+                resolve_obj_ids(agent_conf)
 
-            import inspect
-            sig = inspect.signature(AgentClass.__init__)
-            if 'dt' in sig.parameters and 'dt' not in final_args:
-                if self.harness.config and 'dt' in self.harness.config:
-                    final_args['dt'] = self.harness.config['dt']
+                if class_name == 'CentralDispatcherAgent':
+                    agent_conf['config'] = agent_conf.copy()
+                    instance = self.object_factory.create(agent_conf, agent_id=agent_id)
+                elif class_name == 'CsvInflowAgent':
+                    csv_file = agent_conf['config'].pop('csv_file')
+                    agent_conf['config']['csv_file_path'] = self.scenario_path / csv_file
+                    instance = self.object_factory.create(agent_conf, agent_id=agent_id)
+                else:
+                    instance = self.object_factory.create(agent_conf, agent_id=agent_id)
 
-            # Remove args not in constructor unless it has **kwargs
-            has_kwargs = any(p.kind == p.VAR_KEYWORD for p in sig.parameters.values())
-            if not has_kwargs:
-                valid_args = list(sig.parameters.keys())
-                final_args = {k: v for k, v in final_args.items() if k in valid_args}
-
-            instance = AgentClass(**final_args)
-            self.harness.add_agent(instance)
-        logging.info("Agents loaded.")
+                self.harness.add_agent(instance)
+        logging.info("Agents and controllers loaded.")

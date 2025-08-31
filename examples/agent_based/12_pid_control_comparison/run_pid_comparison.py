@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 sys.path.insert(0, project_root)
 
-from core_lib.io.yaml_loader import SimulationLoader
+from core_lib.io.yaml_loader import SimulationBuilder
 
 def run_scenario(scenario_name, agent_ids, config_path):
     """
@@ -37,7 +37,7 @@ def run_scenario(scenario_name, agent_ids, config_path):
 
     try:
         # Load and run the simulation
-        loader = SimulationLoader(scenario_path=config_path)
+        loader = SimulationBuilder(scenario_path=config_path)
         harness = loader.load()
         harness.run_mas_simulation()
 

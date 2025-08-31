@@ -6,12 +6,12 @@ from pathlib import Path
 project_root = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(project_root))
 
-from core_lib.io.yaml_loader import SimulationLoader
+from core_lib.io.yaml_loader import SimulationBuilder
 from core_lib.core_engine.testing.simulation_harness import SimulationHarness
 
-class TestYamlLoader(unittest.TestCase):
+class TestSimulationBuilder(unittest.TestCase):
     """
-    Tests the functionality of the SimulationLoader to ensure it can
+    Tests the functionality of the SimulationBuilder to ensure it can
     correctly parse YAML files and build a simulation harness.
     """
 
@@ -23,7 +23,7 @@ class TestYamlLoader(unittest.TestCase):
         scenario_path = project_root / "mission" / "scenarios" / "yinchuojiliao"
         self.assertTrue(scenario_path.is_dir(), f"Scenario directory not found at {scenario_path}")
 
-        loader = SimulationLoader(scenario_path=str(scenario_path))
+        loader = SimulationBuilder(scenario_path=str(scenario_path))
         harness = loader.load()
 
         # 1. Check if the harness was created
