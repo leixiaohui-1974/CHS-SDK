@@ -76,7 +76,8 @@ class TestValveControlAgent(unittest.TestCase):
         # 4. Verify that the correct action was published
         self.assertEqual(len(received_actions), 1)
         action_message = received_actions[0]
-        self.assertEqual(action_message['control_signal'], 0.75)
+        # The LocalControlAgent publishes the control signal under the 'value' key.
+        self.assertEqual(action_message['value'], 0.75)
         self.assertEqual(action_message['agent_id'], self.agent.agent_id)
 
 if __name__ == '__main__':

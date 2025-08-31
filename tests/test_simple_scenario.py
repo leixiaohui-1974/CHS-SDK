@@ -71,8 +71,8 @@ class TestSimpleScenario(unittest.TestCase):
         # 2. Simulation Harness
         config = {'duration': 100, 'dt': 1.0}
         harness = SimulationHarness(config)
-        harness.add_component(reservoir)
-        harness.add_component(valve)
+        harness.add_component(reservoir.name, reservoir)
+        harness.add_component(valve.name, valve)
         harness.add_agent(perception_agent)
         harness.add_agent(control_agent)
 
@@ -87,7 +87,8 @@ class TestSimpleScenario(unittest.TestCase):
         reservoir.set_inflow(10.0) # Constant inflow of 10 m^3/s
 
         # The harness now runs the full loop
-        harness.run_mas_simulation()
+        while harness.is_running:
+            harness.step()
 
         # 4. Assertions
         # After the simulation, the water level should be closer to the setpoint of 8.0m

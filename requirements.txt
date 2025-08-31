@@ -4,3 +4,7 @@ pyyaml
 numpy
 scipy
 scikit-learn
+fastapi
+uvicorn
+pytest
+httpx
