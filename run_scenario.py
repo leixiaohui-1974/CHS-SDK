@@ -17,6 +17,7 @@ sys.path.insert(0, str(project_root))
 
 from core_lib.io.yaml_loader import SimulationBuilder
 from core_lib.io.yaml_writer import save_history_to_yaml
+from core_lib.io.exporters import export_to_csv
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -28,6 +29,8 @@ def main():
     parser = argparse.ArgumentParser(description="Run a simulation scenario from a directory of YAML files.")
     parser.add_argument("scenario_path", type=str, help="The path to the scenario directory.")
     parser.add_argument("--agents", type=str, default="agents.yml", help="The name of the agent configuration file to use (default: agents.yml).")
+    parser.add_argument("--output-format", type=str, default="yaml", choices=["yaml", "csv"], help="The desired output format (default: yaml).")
+    parser.add_argument("--output-file", type=str, default=None, help="The name of the output file. If not provided, a default will be used.")
     args = parser.parse_args()
 
     scenario_path = Path(args.scenario_path)
@@ -53,10 +56,22 @@ def main():
     history = harness.history
     logging.info(f"Simulation generated {len(history)} steps of history data.")
 
-    # Create a unique output file name based on the agents file
-    output_filename = f"output_{Path(args.agents).stem}.yml"
-    output_path = scenario_path / output_filename
-    save_history_to_yaml(history, str(output_path))
+    # Determine output path
+    if args.output_file:
+        output_path = scenario_path / args.output_file
+    else:
+        # Generate a default filename if not provided
+        default_filename = f"output_{Path(args.agents).stem}.{args.output_format}"
+        output_path = scenario_path / default_filename
+
+    # Save results based on the chosen format
+    if args.output_format == 'yaml':
+        save_history_to_yaml(history, str(output_path))
+    elif args.output_format == 'csv':
+        export_to_csv(history, str(output_path))
+    else:
+        logging.error(f"Unsupported output format: {args.output_format}")
+
 
 if __name__ == "__main__":
     main()
