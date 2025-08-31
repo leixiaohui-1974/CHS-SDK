@@ -42,6 +42,7 @@ export const useProjectStore = create<ProjectState>((set) => ({
     try {
       // Axios handles URL encoding for path segments automatically.
       const response = await axios.get<ProjectConfig>(`${API_BASE_URL}/examples/${examplePath}`);
+      console.log('Received project config:', response.data); // <-- ADDED FOR DEBUGGING
       set({ projectConfig: response.data, isLoading: false });
     } catch (error) {
       const message = error instanceof Error ? error.message : 'An unknown error occurred.';
