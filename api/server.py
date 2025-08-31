@@ -20,7 +20,6 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(level
 # Import the main Pydantic model for the request body and the simulation builder
 from core_lib.models.api_models import SimulationRequest, ComponentsModel, TopologyModel, AgentsModel
 from core_lib.io.api_loader import SimulationBuilderFromModels
-from core_lib.io.yaml_loader import SimulationBuilder as YAMLProjectLoader
 
 # Initialize the FastAPI app
 app = FastAPI(
@@ -61,88 +60,31 @@ async def list_examples():
         logging.error(f"Error scanning examples directory: {e}")
         raise HTTPException(status_code=500, detail="Failed to scan examples directory.")
 
+import json
+
 @app.get("/api/examples/{example_path:path}", tags=["Examples"], response_model=Dict[str, Any])
 async def get_example_config(example_path: str):
     """
-    Loads the configuration files for a given example scenario using the YAMLProjectLoader.
-    The example_path should be the relative path within the 'examples' directory.
+    Loads a pre-processed example configuration from a generated JSON file.
     """
-    # Basic security check to prevent path traversal
+    # Basic security check
     if ".." in example_path:
         raise HTTPException(status_code=400, detail="Invalid example path.")
 
-    full_path = EXAMPLES_DIR / example_path
+    # Construct the path to the pre-generated JSON file
+    json_filename = example_path.replace('/', '_') + '.json'
+    json_filepath = EXAMPLES_DIR / "generated_json" / json_filename
 
-    if not full_path.is_dir():
-        raise HTTPException(status_code=404, detail=f"Example directory not found at {full_path}")
+    if not json_filepath.is_file():
+        logging.error(f"Pre-processed JSON file not found: {json_filepath}")
+        raise HTTPException(status_code=404, detail=f"Example configuration '{example_path}' not found. Have you run the preprocessing script?")
 
     try:
-        logging.info(f"Loading project from path: {full_path}")
-        # Use the aliased SimulationBuilder
-        loader = YAMLProjectLoader(scenario_path=str(full_path))
-
-        # The loader provides dictionaries. We need to parse them into our Pydantic models.
-        # This requires a transformation from the YAML structure to the API model structure.
-
-        # Transform agents config to match the Pydantic models
-        agents_config_transformed = {"agents": []}
-        if loader.agents_config and 'agents' in loader.agents_config:
-            for agent_conf in loader.agents_config['agents']:
-                # Rename 'config' key to 'params'
-                if 'config' in agent_conf:
-                    agent_conf['params'] = agent_conf.pop('config')
-
-                # Special handling for CsvInflowAgent: resolve relative path
-                if 'CsvInflowAgent' in agent_conf.get('class', ''):
-                    if 'params' in agent_conf and 'csv_file' in agent_conf['params']:
-                        csv_file = agent_conf['params'].pop('csv_file')
-                        # Construct absolute path relative to the example directory
-                        agent_conf['params']['csv_file_path'] = str(full_path / csv_file)
-
-                # The Pydantic model expects 'class' not 'class_name' due to alias
-                if 'class_name' in agent_conf:
-                    agent_conf['class'] = agent_conf.pop('class_name')
-
-                agents_config_transformed['agents'].append(agent_conf)
-
-        logging.info(f"Transformed agents config: {agents_config_transformed}")
-
-        # Transform components from a list to the structured model
-        components_transformed = {"reservoirs": [], "gates": [], "pipes": [], "unified_canals": []}
-        if loader.components_config and 'components' in loader.components_config:
-            for comp_conf in loader.components_config['components']:
-                class_path = comp_conf.pop('class', '')
-                # The 'id' in the YAML corresponds to the 'name' in the Pydantic model
-                if 'id' in comp_conf:
-                    comp_conf['name'] = comp_conf.pop('id')
-
-                if 'Reservoir' in class_path:
-                    components_transformed['reservoirs'].append(comp_conf)
-                elif 'Gate' in class_path:
-                    components_transformed['gates'].append(comp_conf)
-                elif 'Pipe' in class_path:
-                    components_transformed['pipes'].append(comp_conf)
-                elif 'UnifiedCanal' in class_path:
-                    components_transformed['unified_canals'].append(comp_conf)
-
-        components_model = ComponentsModel.model_validate(components_transformed or {})
-        topology_model = TopologyModel.model_validate(loader.topology_config or {})
-        agents_model = AgentsModel.model_validate(agents_config_transformed or {})
-
-
-        # Create a SimulationRequest instance from the loaded data
-        request_data = SimulationRequest(
-            components=components_model,
-            topology=topology_model,
-            agents=agents_model
-        )
-
-        # Return the configuration as a JSON-serializable dictionary
-        return request_data.model_dump(by_alias=True)
-
+        with open(json_filepath, 'r') as f:
+            return json.load(f)
     except Exception as e:
-        logging.error(f"Failed to load project from {full_path}: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=f"Failed to load project configuration: {e}")
+        logging.error(f"Failed to load or parse JSON file {json_filepath}: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Failed to load example configuration.")
 
 import uuid
 import asyncio

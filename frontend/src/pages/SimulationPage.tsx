@@ -1,96 +1,61 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { DragEvent, useRef } from 'react';
 import { useProjectStore } from '../store/projectStore';
-import { Empty, Button, Card, Spin, message } from 'antd';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import axios from 'axios';
+import { useSimulationStore } from '../store/simulationStore';
+import { Empty, Button, Spin, message, Layout as AntLayout, Row, Col, Card, Collapse } from 'antd';
+import RGL, { WidthProvider } from 'react-grid-layout';
+import ReactFlow, { MiniMap, Controls, Background } from 'reactflow';
+import 'react-grid-layout/css/styles.css';
+import 'react-resizable/css/styles.css';
+import 'reactflow/dist/style.css';
 
-const API_BASE_URL = 'http://localhost:8000/api';
-const WS_BASE_URL = 'ws://localhost:8000/ws';
+import VariableSidebar from '../components/VariableSidebar';
+import ChartCard from '../components/ChartCard';
+import SceneDesigner, { SceneDesignerRef } from '../components/SceneDesigner';
 
-type SimulationDataPoint = {
-  timestamp: number;
-  water_level: number;
-};
+const { Panel } = Collapse;
+const ReactGridLayout = WidthProvider(RGL);
+const { Sider, Content } = AntLayout;
 
 const SimulationPage: React.FC = () => {
   const { projectConfig } = useProjectStore();
-  const [sessionId, setSessionId] = useState<string | null>(null);
-  const [isRunning, setIsRunning] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [simulationData, setSimulationData] = useState<SimulationDataPoint[]>([]);
-  const ws = useRef<WebSocket | null>(null);
+  const sceneDesignerRef = useRef<SceneDesignerRef>(null);
+  const {
+    startSimulation,
+    stopSimulation,
+    pauseSimulation,
+    resumeSimulation,
+    addChart,
+    updateLayouts,
+    isRunning,
+    isPaused,
+    isLoading,
+    charts,
+    layouts,
+    data,
+    liveNodes,
+    liveEdges,
+  } = useSimulationStore();
 
-  useEffect(() => {
-    // Cleanup WebSocket on component unmount
-    return () => {
-      if (ws.current) {
-        ws.current.close();
-      }
-    };
-  }, []);
-
-  const handleStart = async () => {
+  const handleStart = () => {
     if (!projectConfig) {
       message.error("No project is loaded!");
       return;
     }
-    setIsLoading(true);
-    setSimulationData([]);
+    const scenarioScript = sceneDesignerRef.current?.getScenarioScript();
+    startSimulation(projectConfig, scenarioScript);
+  };
 
-    try {
-      // 1. Create simulation session
-      const createResponse = await axios.post(`${API_BASE_URL}/simulations`, projectConfig);
-      const newSessionId = createResponse.data.session_id;
-      setSessionId(newSessionId);
-
-      // 2. Open WebSocket connection
-      ws.current = new WebSocket(`${WS_BASE_URL}/simulations/${newSessionId}`);
-      ws.current.onmessage = (event) => {
-        const message = JSON.parse(event.data);
-        if (message.type === 'data') {
-          setSimulationData(prevData => [...prevData, message.payload]);
-        } else if (message.type === 'status') {
-          console.log('Simulation status:', message.payload);
-          if (message.payload.includes('finished')) {
-            setIsRunning(false);
-          }
-        } else if (message.type === 'error') {
-            console.error('Simulation error:', message.payload);
-            message.error(`Simulation error: ${message.payload}`);
-            setIsRunning(false);
-        }
-      };
-      ws.current.onopen = async () => {
-        // 3. Start the simulation
-        await axios.post(`${API_BASE_URL}/simulations/${newSessionId}/start`);
-        setIsRunning(true);
-        setIsLoading(false);
-        message.success("Simulation started!");
-      };
-       ws.current.onerror = (err) => {
-        console.error("WebSocket error:", err);
-        message.error("Failed to connect to simulation server.");
-        setIsLoading(false);
-      };
-
-    } catch (error) {
-      console.error("Failed to start simulation:", error);
-      message.error("Failed to start simulation.");
-      setIsLoading(false);
+  const onDrop = (event: DragEvent) => {
+    event.preventDefault();
+    const variableName = event.dataTransfer.getData('application/chs-sdk-variable');
+    if (variableName) {
+      addChart(variableName);
     }
   };
 
-  const handleStop = async () => {
-    if (!sessionId) return;
-    try {
-      await axios.post(`${API_BASE_URL}/simulations/${sessionId}/stop`);
-      ws.current?.close();
-      setIsRunning(false);
-      message.info("Simulation stopped.");
-    } catch (error) {
-      console.error("Failed to stop simulation:", error);
-      message.error("Failed to stop simulation.");
-    }
+  const onDragOver = (event: DragEvent) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'copy';
   };
 
   if (!projectConfig) {
@@ -98,29 +63,72 @@ const SimulationPage: React.FC = () => {
   }
 
   return (
-    <Card title="Simulation Control & Visualization">
-      <div style={{ marginBottom: '20px' }}>
-        <Spin spinning={isLoading}>
-          <Button type="primary" onClick={handleStart} disabled={isRunning || isLoading} style={{ marginRight: '10px' }}>
-            Start Simulation
-          </Button>
-          <Button type="default" danger onClick={handleStop} disabled={!isRunning}>
-            Stop Simulation
-          </Button>
-        </Spin>
-      </div>
+    <AntLayout style={{ background: '#fff', height: 'calc(100vh - 112px)' }}>
+      <Sider width={200} style={{ background: '#fff', padding: '10px', borderRight: '1px solid #f0f0f0', overflowY: 'auto' }}>
+        <VariableSidebar />
+        <Collapse ghost style={{ marginTop: '20px' }}>
+          <Panel header="Scenario Designer" key="1">
+            <SceneDesigner ref={sceneDesignerRef} />
+          </Panel>
+        </Collapse>
+      </Sider>
+      <Content style={{ padding: '0 24px', minHeight: 280, display: 'flex', flexDirection: 'column' }}>
+        <Row justify="space-between" align="middle" style={{ padding: '10px 0', flexShrink: 0 }}>
+          <Col>
+            <Spin spinning={isLoading}>
+              <Button type="primary" onClick={handleStart} disabled={isRunning || isLoading} style={{ marginRight: '10px' }}>
+                Start
+              </Button>
+              {!isRunning ? null : isPaused ? (
+                <Button onClick={resumeSimulation} style={{ marginRight: '10px' }}>Resume</Button>
+              ) : (
+                <Button onClick={pauseSimulation} style={{ marginRight: '10px' }}>Pause</Button>
+              )}
+              <Button type="default" danger onClick={stopSimulation} disabled={!isRunning}>
+                Stop
+              </Button>
+            </Spin>
+          </Col>
+        </Row>
 
-      <ResponsiveContainer width="100%" height={400}>
-        <LineChart data={simulationData}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="timestamp" label={{ value: 'Time (s)', position: 'insideBottom', offset: -5 }}/>
-          <YAxis label={{ value: 'Water Level (m)', angle: -90, position: 'insideLeft' }}/>
-          <Tooltip />
-          <Legend />
-          <Line type="monotone" dataKey="water_level" stroke="#8884d8" isAnimationActive={false} />
-        </LineChart>
-      </ResponsiveContainer>
-    </Card>
+        <Row gutter={16} style={{ flex: 1, overflow: 'hidden' }}>
+          <Col span={12} style={{ height: '100%'}}>
+            <Card title="Live Topology" style={{ height: '100%' }} bodyStyle={{ height: 'calc(100% - 56px)'}}>
+              <ReactFlow
+                nodes={liveNodes}
+                edges={liveEdges}
+                nodesDraggable={false}
+                nodesConnectable={false}
+                elementsSelectable={false}
+                fitView
+              >
+                <Controls showInteractive={false} />
+                <MiniMap />
+                <Background />
+              </ReactFlow>
+            </Card>
+          </Col>
+          <Col span={12} style={{ height: '100%', overflowY: 'auto' }}>
+             <ReactGridLayout
+              className="layout"
+              layouts={layouts}
+              onLayoutChange={(_layout, allLayouts) => updateLayouts(allLayouts)}
+              isDroppable={true}
+              onDrop={onDrop}
+              onDragOver={onDragOver}
+              cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
+              rowHeight={30}
+            >
+              {charts.map(chart => (
+                <div key={chart.id}>
+                  <ChartCard chart={chart} data={data} />
+                </div>
+              ))}
+            </ReactGridLayout>
+          </Col>
+        </Row>
+      </Content>
+    </AntLayout>
   );
 };
 

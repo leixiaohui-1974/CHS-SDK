@@ -82,3 +82,8 @@ venv.bak/
 # IDE-specific
 .idea/
 .vscode/
+
+# Custom ignores
+/examples/generated_json/
+server.log
+test_pause_resume.py
