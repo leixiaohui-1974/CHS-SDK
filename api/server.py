@@ -1,61 +1,76 @@
-import os
-import json
-from flask import Flask, jsonify, abort
-from flask_cors import CORS
+"""
+Main FastAPI application for the CHS-SDK Simulation API.
 
-app = Flask(__name__)
-CORS(app)
+This server provides an endpoint to run hydraulic simulations based on
+a JSON configuration that conforms to the Pydantic models defined
+in `core_lib.models`.
+"""
+import logging
+from fastapi import FastAPI, HTTPException, Body
+from fastapi.responses import JSONResponse
 
-# The root directory where all example subdirectories are stored.
-EXAMPLES_ROOT_DIR = 'examples'
+# Configure logging for the application
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-@app.route('/api/examples', methods=['GET'])
-def get_examples():
+# Import the main Pydantic model for the request body and the simulation builder
+from core_lib.models.api_models import SimulationRequest
+from core_lib.io.api_loader import SimulationBuilderFromModels
+
+# Initialize the FastAPI app
+app = FastAPI(
+    title="CHS-SDK Simulation API",
+    description="An API for running hydraulic simulations using the CHS-SDK.",
+    version="1.0.0"
+)
+
+@app.get("/", tags=["Status"])
+async def read_root():
+    """A simple health check endpoint to confirm the API is running."""
+    return {"status": "ok", "message": "CHS-SDK Simulation API is running."}
+
+@app.post("/run_simulation", tags=["Simulation"], response_model=dict)
+async def run_simulation(request: SimulationRequest):
     """
-    Scans the EXAMPLES_ROOT_DIR for subdirectories, each representing an example.
-    It reads the metadata from the 'config.json' inside each subdirectory.
+    Runs a hydraulic simulation based on the provided configuration.
+
+    The request body must conform to the `SimulationRequest` schema, which
+    defines all the components, the topology, and the agents for the scenario.
+    FastAPI will automatically validate the request body against this schema.
     """
-    examples = []
-    if not os.path.exists(EXAMPLES_ROOT_DIR):
-        print(f"Warning: Examples root directory '{EXAMPLES_ROOT_DIR}' not found.")
-        return jsonify([])
-
-    for example_id in os.listdir(EXAMPLES_ROOT_DIR):
-        example_dir = os.path.join(EXAMPLES_ROOT_DIR, example_id)
-        if os.path.isdir(example_dir):
-            config_path = os.path.join(example_dir, 'config.json')
-            if os.path.exists(config_path):
-                try:
-                    with open(config_path, 'r') as f:
-                        data = json.load(f)
-                        metadata = data.get('metadata', {})
-                        examples.append({
-                            'id': example_id,
-                            'name': metadata.get('name', 'Unnamed Example'),
-                            'description': metadata.get('description', '')
-                        })
-                except (json.JSONDecodeError, IOError) as e:
-                    print(f"Error reading or parsing config.json in {example_id}: {e}")
-                    continue
-    return jsonify(examples)
-
-@app.route('/api/examples/<string:example_id>', methods=['GET'])
-def get_example_details(example_id):
-    """
-    Returns the full JSON configuration for a given example id.
-    The example_id corresponds to the subdirectory name.
-    """
-    config_path = os.path.join(EXAMPLES_ROOT_DIR, example_id, 'config.json')
-
-    if not os.path.exists(config_path):
-        abort(404, description=f"Config file for example '{example_id}' not found.")
-
     try:
-        with open(config_path, 'r') as f:
-            data = json.load(f)
-            return jsonify(data)
-    except (IOError, json.JSONDecodeError) as e:
-        abort(500, description=f"Could not read or parse config file for example '{example_id}'.")
+        logging.info("Received new simulation request. Data has been validated by FastAPI.")
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001, debug=True)
+        # A global simulation config can be defined here. In a future version,
+        # this could be part of the request model itself.
+        default_sim_config = {
+            "start_time": 0,
+            "end_time": 86400,  # Default to 24 hours
+            "dt": 3600         # Default to 1-hour steps
+        }
+
+        logging.info("Building simulation from request models...")
+        # Use the new builder to create the simulation harness from Pydantic models
+        builder = SimulationBuilderFromModels(request_data=request, sim_config=default_sim_config)
+        harness = builder.build()
+
+        logging.info("Starting MAS simulation run...")
+        harness.run_mas_simulation()
+        logging.info("Simulation run complete.")
+
+        history = harness.history
+        logging.info(f"Simulation generated {len(history)} steps of history data.")
+
+        # Return the results in a structured response
+        return JSONResponse(
+            content={"status": "success", "message": "Simulation completed successfully.", "history": history},
+            status_code=200
+        )
+
+    except ValueError as e:
+        # This can catch custom validation errors raised from our root_validator
+        logging.error(f"Validation error during simulation setup: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        # Catch-all for any other unexpected errors during the simulation process
+        logging.error(f"An unexpected error occurred during simulation: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"An internal server error occurred: {e}")
