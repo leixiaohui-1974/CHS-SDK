@@ -9,7 +9,7 @@ const ProjectLoader: React.FC = () => {
     error,
     fetchExampleList,
     loadProject,
-    projectConfig,
+    selectedExamplePath,
   } = useProjectStore();
 
   useEffect(() => {

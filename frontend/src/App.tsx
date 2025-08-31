@@ -3,7 +3,6 @@ import { Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-
 import { Layout, Menu } from 'antd';
 import ModelingPage from './pages/ModelingPage';
 import SimulationPage from './pages/SimulationPage';
-import ProjectLoader from './components/ProjectLoader';
 
 const { Header, Content } = Layout;
 

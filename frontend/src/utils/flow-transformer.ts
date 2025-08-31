@@ -1,4 +1,4 @@
-import { Node, Edge } from 'reactflow';
+import type { Node, Edge } from 'reactflow';
 
 // Define more specific types based on observed projectConfig structure
 type ProjectComponent = {

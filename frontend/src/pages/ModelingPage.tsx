@@ -26,7 +26,7 @@ const ModelingPage: React.FC = () => {
   if (isLoading) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
-        <Spin size="large" data-testid="loader" />
+        <Spin size="large" tip="Loading project..." />
       </div>
     );
   }
