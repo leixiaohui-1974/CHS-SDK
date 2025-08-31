@@ -167,6 +167,23 @@ class SimulationLoader:
 
         logging.info("Topology loaded.")
 
+    def _resolve_obj_ids(self, config_dict: dict):
+        """
+        Recursively traverses a dictionary and replaces 'obj_id' keys
+        with 'obj' keys containing the actual component instance.
+        """
+        for key, value in config_dict.items():
+            if isinstance(value, dict):
+                if 'obj_id' in value:
+                    obj_id = value.pop('obj_id')
+                    value['obj'] = self.component_instances[obj_id]
+                else:
+                    self._resolve_obj_ids(value)
+            elif isinstance(value, list):
+                for item in value:
+                    if isinstance(item, dict):
+                        self._resolve_obj_ids(item)
+
     def _load_agents_and_controllers(self):
         """Loads and instantiates all agents and controllers."""
         logging.info("Loading agents and controllers...")
@@ -180,6 +197,9 @@ class SimulationLoader:
                 config_block = agent_conf.pop('config')
                 agent_conf.update(config_block)
 
+            # --- Handle all special argument adaptations before calling the constructor ---
+            self._resolve_obj_ids(agent_conf) # Recursively replace all obj_ids with obj references
+
             # Special handling for agents
             if 'simulated_object_id' in agent_conf:
                 agent_conf['simulated_object'] = self.component_instances[agent_conf.pop('simulated_object_id')]
@@ -188,6 +208,36 @@ class SimulationLoader:
             for key, value in agent_conf.items():
                 if isinstance(value, dict) and 'class' in value:
                     agent_conf[key] = self._instantiate_object(value)
+
+            # Special handling for ParameterIdentificationAgent constructor
+            if agent_class_name == 'ParameterIdentificationAgent':
+                target_model_id = agent_conf.pop('target_model_id')
+                target_model_instance = self.component_instances[target_model_id]
+                instance = AgentClass(
+                    agent_id=agent_id,
+                    message_bus=self.message_bus,
+                    target_model=target_model_instance,
+                    config=agent_conf
+                )
+            elif agent_class_name == 'CentralDispatcherAgent':
+                instance = AgentClass(
+                    agent_id=agent_id,
+                    message_bus=self.message_bus,
+                    config=agent_conf
+                )
+            else:
+                # --- Generic constructor call with argument adaptation ---
+                final_args = {'agent_id': agent_id, 'message_bus': self.message_bus, **agent_conf}
+
+                # Inject 'dt' from global sim config if the agent constructor accepts it
+                import inspect
+                sig = inspect.signature(AgentClass.__init__)
+                if 'dt' in sig.parameters and 'dt' not in final_args:
+                    if self.harness.config and 'dt' in self.harness.config:
+                        final_args['dt'] = self.harness.config['dt']
+
+                instance = AgentClass(**final_args)
+            self.harness.add_agent(instance)
 
             final_args = {'agent_id': agent_id, 'message_bus': self.message_bus, **agent_conf}
 

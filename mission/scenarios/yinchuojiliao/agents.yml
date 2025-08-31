@@ -151,6 +151,7 @@ agents:
   - id: central_dispatcher
     class: CentralDispatcherAgent
     config:
+      mode: rule
       subscribed_topic: state/terminal_pool
       observation_key: water_level
       command_topic: command/intake_gate_ctrl

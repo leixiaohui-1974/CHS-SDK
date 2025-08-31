@@ -12,15 +12,15 @@ class MPCController(Controller):
     A MIMO (Multiple-Input Multiple-Output) Model Predictive Controller.
     """
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, dt: float, horizon: int, model_config: dict, objective_config: dict, control_config: dict, **kwargs):
         """
         Initializes the MIMO MPC controller.
         """
-        self.dt = config.pop('dt', 10.0)
-        self.horizon = config.pop('horizon')
-        self.model_config = config.pop('model_config')
-        self.objective_config = config.pop('objective_config')
-        self.control_config = config.pop('control_config')
+        self.dt = dt
+        self.horizon = horizon
+        self.model_config = model_config
+        self.objective_config = objective_config
+        self.control_config = control_config
 
         self.num_actuators = self.control_config['num_actuators']
         if len(self.control_config['bounds']) != self.num_actuators:
