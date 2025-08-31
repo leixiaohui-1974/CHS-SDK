@@ -84,9 +84,9 @@ class SimulationBuilderFromModels:
                 creation_dict = component_model.model_dump(exclude_none=True)
                 creation_dict['class'] = MODEL_TO_CLASS_PATH[type(component_model)]
 
-                instance = self.object_factory.create(creation_dict)
+                instance = self.object_factory.create(creation_dict, name=instance_name)
 
-                self.harness.add_component(instance)
+                self.harness.add_component(instance_name, instance)
                 self.component_instances[instance_name] = instance
         logging.info(f"Loaded {len(self.component_instances)} components.")
 

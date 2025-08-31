@@ -18,9 +18,9 @@ from fastapi.middleware.cors import CORSMiddleware
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 # Import the main Pydantic model for the request body and the simulation builder
-from core_lib.models.api_models import SimulationRequest
+from core_lib.models.api_models import SimulationRequest, ComponentsModel, TopologyModel, AgentsModel
 from core_lib.io.api_loader import SimulationBuilderFromModels
-from core_lib.io.yaml_loader import YAMLProjectLoader
+from core_lib.io.yaml_loader import SimulationBuilder as YAMLProjectLoader
 
 # Initialize the FastAPI app
 app = FastAPI(
@@ -78,22 +78,67 @@ async def get_example_config(example_path: str):
 
     try:
         logging.info(f"Loading project from path: {full_path}")
-        loader = YAMLProjectLoader(project_path=str(full_path))
+        # Use the aliased SimulationBuilder
+        loader = YAMLProjectLoader(scenario_path=str(full_path))
 
-        # Use the loader to get the Pydantic models for each part of the config
-        components = loader.get_components()
-        topology = loader.get_topology()
-        agents = loader.get_agents()
+        # The loader provides dictionaries. We need to parse them into our Pydantic models.
+        # This requires a transformation from the YAML structure to the API model structure.
+
+        # Transform agents config to match the Pydantic models
+        agents_config_transformed = {"agents": []}
+        if loader.agents_config and 'agents' in loader.agents_config:
+            for agent_conf in loader.agents_config['agents']:
+                # Rename 'config' key to 'params'
+                if 'config' in agent_conf:
+                    agent_conf['params'] = agent_conf.pop('config')
+
+                # Special handling for CsvInflowAgent: resolve relative path
+                if 'CsvInflowAgent' in agent_conf.get('class', ''):
+                    if 'params' in agent_conf and 'csv_file' in agent_conf['params']:
+                        csv_file = agent_conf['params'].pop('csv_file')
+                        # Construct absolute path relative to the example directory
+                        agent_conf['params']['csv_file_path'] = str(full_path / csv_file)
+
+                # The Pydantic model expects 'class' not 'class_name' due to alias
+                if 'class_name' in agent_conf:
+                    agent_conf['class'] = agent_conf.pop('class_name')
+
+                agents_config_transformed['agents'].append(agent_conf)
+
+        logging.info(f"Transformed agents config: {agents_config_transformed}")
+
+        # Transform components from a list to the structured model
+        components_transformed = {"reservoirs": [], "gates": [], "pipes": [], "unified_canals": []}
+        if loader.components_config and 'components' in loader.components_config:
+            for comp_conf in loader.components_config['components']:
+                class_path = comp_conf.pop('class', '')
+                # The 'id' in the YAML corresponds to the 'name' in the Pydantic model
+                if 'id' in comp_conf:
+                    comp_conf['name'] = comp_conf.pop('id')
+
+                if 'Reservoir' in class_path:
+                    components_transformed['reservoirs'].append(comp_conf)
+                elif 'Gate' in class_path:
+                    components_transformed['gates'].append(comp_conf)
+                elif 'Pipe' in class_path:
+                    components_transformed['pipes'].append(comp_conf)
+                elif 'UnifiedCanal' in class_path:
+                    components_transformed['unified_canals'].append(comp_conf)
+
+        components_model = ComponentsModel.model_validate(components_transformed or {})
+        topology_model = TopologyModel.model_validate(loader.topology_config or {})
+        agents_model = AgentsModel.model_validate(agents_config_transformed or {})
+
 
         # Create a SimulationRequest instance from the loaded data
         request_data = SimulationRequest(
-            components=components,
-            topology=topology,
-            agents=agents
+            components=components_model,
+            topology=topology_model,
+            agents=agents_model
         )
 
         # Return the configuration as a JSON-serializable dictionary
-        return request_data.dict()
+        return request_data.model_dump(by_alias=True)
 
     except Exception as e:
         logging.error(f"Failed to load project from {full_path}: {e}", exc_info=True)
@@ -127,30 +172,50 @@ simulation_sessions: Dict[str, Any] = {}
 async def run_simulation_step_by_step(session_id: str, harness: Any):
     """
     Runs the simulation step-by-step and sends data over WebSocket.
+    Handles start, pause, and resume.
     """
+    # Find the first reservoir to report on. This is a simplification for the demo.
+    from core_lib.physical_objects.reservoir import Reservoir
+    first_reservoir_id = None
+    for comp_id, comp in harness.components.items():
+        if isinstance(comp, Reservoir):
+            first_reservoir_id = comp_id
+            break
+
     try:
-        while not simulation_sessions[session_id].get("stop_flag", False):
+        while harness.is_running and not simulation_sessions.get(session_id, {}).get("stop_flag", False):
+            # If pause is activated, wait until it's cleared.
+            if harness._is_paused.is_set():
+                await manager.send_json(session_id, {"type": "status", "payload": "Simulation paused."})
+                # Use asyncio.sleep for non-blocking wait
+                while harness._is_paused.is_set():
+                    await asyncio.sleep(0.2)
+                await manager.send_json(session_id, {"type": "status", "payload": "Simulation resumed."})
+
             harness.step()
-            # As per the prompt, hardcode sending the first reservoir's water level for now
-            # This requires identifying the first reservoir and its state
-            first_reservoir_id = None
-            if harness.physical_system and harness.physical_system.reservoirs:
-                first_reservoir_id = list(harness.physical_system.reservoirs.keys())[0]
 
+            # Send data point over WebSocket
             if first_reservoir_id:
-                water_level = harness.physical_system.reservoirs[first_reservoir_id].water_level
-                data_to_send = {
-                    "timestamp": harness.t,
-                    "id": first_reservoir_id,
-                    "water_level": water_level
-                }
-                await manager.send_json(session_id, {"type": "data", "payload": data_to_send})
+                try:
+                    state = harness.components[first_reservoir_id].get_state()
+                    water_level = state.get('water_level', 0)
+                    data_to_send = {
+                        "timestamp": harness.t,
+                        "id": first_reservoir_id,
+                        "water_level": water_level
+                    }
+                    await manager.send_json(session_id, {"type": "data", "payload": data_to_send})
+                except KeyError:
+                    logging.warning(f"Component {first_reservoir_id} not found in current step.")
+                except Exception as e:
+                    logging.error(f"Error getting state for {first_reservoir_id}: {e}")
 
-            if harness.t >= harness.end_time:
-                logging.info(f"Simulation {session_id} reached end time.")
+
+            if not harness.is_running:
+                logging.info(f"Simulation {session_id} reached end time or was stopped.")
                 break
 
-            await asyncio.sleep(0.1) # Add a small delay to prevent blocking the event loop entirely
+            await asyncio.sleep(0.1)  # Control simulation speed
 
         await manager.send_json(session_id, {"type": "status", "payload": "Simulation finished."})
     except Exception as e:
@@ -175,6 +240,7 @@ async def create_simulation_session(request: SimulationRequest):
     default_sim_config = {"start_time": 0, "end_time": 86400, "dt": 3600}
 
     try:
+        logging.info("Building simulation from request...")
         builder = SimulationBuilderFromModels(request_data=request, sim_config=default_sim_config)
         harness = builder.build()
         simulation_sessions[session_id] = {"harness": harness, "stop_flag": False}
@@ -182,7 +248,7 @@ async def create_simulation_session(request: SimulationRequest):
         return {"session_id": session_id}
     except Exception as e:
         logging.error(f"Failed to create simulation session: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail="Failed to create simulation.")
+        raise HTTPException(status_code=422, detail=str(e))
 
 @app.post("/api/simulations/{session_id}/start", tags=["Simulation"], status_code=202)
 async def start_simulation(session_id: str):
@@ -204,6 +270,35 @@ async def stop_simulation(session_id: str):
     simulation_sessions[session_id]["stop_flag"] = True
     logging.info(f"Stopping simulation for session: {session_id}")
     return {"message": "Simulation stopping."}
+
+
+@app.post("/api/simulations/{session_id}/pause", tags=["Simulation"], status_code=204)
+async def pause_simulation(session_id: str):
+    """Pauses the simulation for a given session ID."""
+    if session_id not in simulation_sessions:
+        raise HTTPException(status_code=404, detail="Simulation session not found.")
+
+    harness = simulation_sessions[session_id]["harness"]
+    if harness._is_paused.is_set():
+        raise HTTPException(status_code=409, detail="Simulation is already paused.")
+
+    harness.pause()
+    return
+
+
+@app.post("/api/simulations/{session_id}/resume", tags=["Simulation"], status_code=204)
+async def resume_simulation(session_id: str):
+    """Resumes the simulation for a given session ID."""
+    if session_id not in simulation_sessions:
+        raise HTTPException(status_code=404, detail="Simulation session not found.")
+
+    harness = simulation_sessions[session_id]["harness"]
+    if not harness._is_paused.is_set():
+        raise HTTPException(status_code=409, detail="Simulation is not paused.")
+
+    harness.resume()
+    return
+
 
 @app.websocket("/ws/simulations/{session_id}")
 async def websocket_endpoint(websocket: WebSocket, session_id: str):
