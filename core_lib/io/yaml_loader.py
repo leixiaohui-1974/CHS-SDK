@@ -184,6 +184,23 @@ class SimulationLoader:
 
         logging.info("Topology loaded.")
 
+    def _resolve_obj_ids(self, config_dict: dict):
+        """
+        Recursively traverses a dictionary and replaces 'obj_id' keys
+        with 'obj' keys containing the actual component instance.
+        """
+        for key, value in config_dict.items():
+            if isinstance(value, dict):
+                if 'obj_id' in value:
+                    obj_id = value.pop('obj_id')
+                    value['obj'] = self.component_instances[obj_id]
+                else:
+                    self._resolve_obj_ids(value)
+            elif isinstance(value, list):
+                for item in value:
+                    if isinstance(item, dict):
+                        self._resolve_obj_ids(item)
+
     def _load_agents_and_controllers(self):
         """Loads and instantiates all agents and controllers."""
         logging.info("Loading agents and controllers...")
@@ -201,6 +218,8 @@ class SimulationLoader:
                 agent_conf.update(config_block)
 
             # --- Handle all special argument adaptations before calling the constructor ---
+            self._resolve_obj_ids(agent_conf) # Recursively replace all obj_ids with obj references
+
             if 'simulated_object_id' in agent_conf:
                 sim_obj_id = agent_conf.pop('simulated_object_id')
                 agent_conf['simulated_object'] = self.component_instances[sim_obj_id]
@@ -232,6 +251,12 @@ class SimulationLoader:
                     agent_id=agent_id,
                     message_bus=self.message_bus,
                     target_model=target_model_instance,
+                    config=agent_conf
+                )
+            elif agent_class_name == 'CentralDispatcherAgent':
+                instance = AgentClass(
+                    agent_id=agent_id,
+                    message_bus=self.message_bus,
                     config=agent_conf
                 )
             else:
