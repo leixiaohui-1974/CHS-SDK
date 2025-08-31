@@ -69,8 +69,13 @@ class CSVInflowAgentConfig(BaseAgentConfig):
     class_name: Literal["core_lib.data_access.csv_inflow_agent.CsvInflowAgent"] = Field(..., alias="class")
     params: CSVInflowAgentParams
 
+from typing import Annotated
+
 # Pydantic will use the 'class_name' field to decide which model to use from the union.
-AnyAgentConfig = Union[GateControlAgentConfig, ReservoirPerceptionAgentConfig, CSVInflowAgentConfig]
+AnyAgentConfig = Annotated[
+    Union[GateControlAgentConfig, ReservoirPerceptionAgentConfig, CSVInflowAgentConfig],
+    Field(discriminator="class_name"),
+]
 
 
 class AgentsModel(BaseModel):

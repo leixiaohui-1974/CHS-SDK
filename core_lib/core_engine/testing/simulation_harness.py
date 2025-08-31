@@ -1,6 +1,7 @@
 """
 A testing and simulation harness for running the Smart Water Platform.
 """
+import threading
 from collections import deque
 from core_lib.core.interfaces import Simulatable, Agent, Controller
 from core_lib.central_coordination.collaboration.message_bus import MessageBus
@@ -22,8 +23,11 @@ class SimulationHarness:
 
     def __init__(self, config: Dict[str, Any]):
         self.config = config
-        self.duration = config.get('duration', 100)
+        self.start_time = config.get('start_time', 0)
+        self.end_time = config.get('end_time', 100)
         self.dt = config.get('dt', 1.0)
+        self.t = self.start_time
+
         self.history = []
 
         self.components: Dict[str, Simulatable] = {}
@@ -36,6 +40,9 @@ class SimulationHarness:
         self.sorted_components: List[str] = []
 
         self.message_bus = MessageBus()
+        self._is_paused = threading.Event()
+        self.is_running = False
+
         print("SimulationHarness created.")
 
     def add_component(self, component_id: str, component: Simulatable):
@@ -98,7 +105,54 @@ class SimulationHarness:
     def build(self):
         """Finalizes the harness setup by sorting the component graph."""
         self._topological_sort()
+        self.is_running = True
         print("Simulation harness build complete and ready to run.")
+
+    def pause(self):
+        """Pauses the simulation."""
+        self._is_paused.set()
+        print("Simulation paused.")
+
+    def resume(self):
+        """Resumes the simulation."""
+        self._is_paused.clear()
+        print("Simulation resumed.")
+
+    def step(self):
+        """
+        Advances the simulation by a single time step.
+        This includes running agents and updating physical models.
+        """
+        if self.t >= self.end_time:
+            self.is_running = False
+            return
+
+        # This logic is adapted from the original run_mas_simulation
+        # print(f"--- MAS Simulation Step, Time: {self.t:.2f}s ---")
+
+        # Phase 1: Trigger agents
+        for agent in self.agents:
+            agent.run(self.t)
+
+        # Phase 2: Step physical models
+        self._step_physical_models(self.dt)
+
+        # Phase 3: Store history (optional, can be disabled for performance)
+        step_history = {'time': self.t}
+        for cid in self.sorted_components:
+            step_history[cid] = self.components[cid].get_state()
+        for agent in self.agents:
+            if hasattr(agent, 'get_state'):
+                # A bit of safety here in case agent doesn't have a state method
+                try:
+                    step_history[agent.agent_id] = agent.get_state()
+                except Exception as e:
+                    print(f"Could not get state from agent {agent.agent_id}: {e}")
+        self.history.append(step_history)
+
+        # Update time
+        self.t += self.dt
+
 
     def _step_physical_models(self, dt: float, controller_actions: Dict[str, Any] = None):
         if controller_actions is None:
@@ -149,89 +203,3 @@ class SimulationHarness:
 
         for component_id, state in new_states.items():
             self.components[component_id].set_state(state)
-
-    def run_simulation(self):
-        """
-        Runs a simple, centralized control simulation loop using the graph topology.
-        """
-        if not self.sorted_components:
-            raise Exception("Harness has not been built. Call harness.build() before running.")
-
-        num_steps = int(self.duration / self.dt)
-        print(f"Starting simple simulation: Duration={self.duration}s, TimeStep={self.dt}s\n")
-
-        self.history = []
-        for i in range(num_steps):
-            current_time = i * self.dt
-            print(f"--- Simulation Step {i+1}, Time: {current_time:.2f}s ---")
-
-            # 1. Compute control actions
-            actions = {}
-            for cid, spec in self.controllers.items():
-                observed_component = self.components.get(spec.observed_id)
-                if not observed_component: continue
-
-                observation_state = observed_component.get_state()
-                process_variable = observation_state.get(spec.observation_key)
-
-                if process_variable is not None:
-                    control_signal = spec.controller.compute_control_action({'process_variable': process_variable}, self.dt)
-                    actions[spec.controlled_id] = control_signal
-                    print(f"  Controller '{cid}': Target for '{spec.controlled_id}' = {control_signal:.2f}")
-
-            # 2. Step the physical models in order
-            self._step_physical_models(self.dt, actions)
-
-            # 3. Store history
-            step_history = {'time': current_time}
-            for cid in self.sorted_components:
-                step_history[cid] = self.components[cid].get_state()
-            self.history.append(step_history)
-
-            # 4. Print state summary (optional)
-            # You can customize this to print states of interest
-            print("  State Update:")
-            for cid in self.sorted_components:
-                state = self.components[cid].get_state()
-                print(f"    {cid}: {state}")
-            print("")
-
-    def run_mas_simulation(self):
-        """
-        Runs a full Multi-Agent System (MAS) simulation using the graph topology.
-        """
-        if not self.sorted_components:
-            raise Exception("Harness has not been built. Call harness.build() before running.")
-
-        num_steps = int(self.duration / self.dt)
-        print(f"Starting MAS simulation: Duration={self.duration}s, TimeStep={self.dt}s\n")
-
-        self.history = []
-        for i in range(num_steps):
-            current_time = i * self.dt
-            print(f"--- MAS Simulation Step {i+1}, Time: {current_time:.2f}s ---")
-
-            print("  Phase 1: Triggering agent perception and action cascade.")
-            for agent in self.agents:
-                agent.run(current_time)
-
-            print("  Phase 2: Stepping physical models with interactions.")
-            self._step_physical_models(self.dt)
-
-            # Store history
-            step_history = {'time': current_time}
-            for cid in self.sorted_components:
-                step_history[cid] = self.components[cid].get_state()
-            for agent in self.agents:
-                if hasattr(agent, 'get_state'):
-                    step_history[agent.agent_id] = agent.get_state()
-            self.history.append(step_history)
-
-            # Print state summary (optional)
-            print("  State Update:")
-            for cid in self.sorted_components:
-                state_str = ", ".join(f"{k}={v:.2f}" for k, v in self.components[cid].get_state().items())
-                print(f"    {cid}: {state_str}")
-            print("")
-
-        print("MAS Simulation finished.")
