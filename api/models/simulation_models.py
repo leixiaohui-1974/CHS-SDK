@@ -6,6 +6,7 @@ import uuid
 
 # 仿真状态枚举
 class SimulationStatus(str, Enum):
+    CREATED = "created"
     IDLE = "idle"
     INITIALIZING = "initializing"
     RUNNING = "running"
@@ -106,6 +107,22 @@ class SimulationResponse(BaseModel):
     class Config:
         json_encoders = {
             datetime: lambda v: v.isoformat()
+        }
+
+# 仿真控制请求模型
+class SimulationControlRequest(BaseModel):
+    action: str = Field(..., description="控制动作: start, pause, resume, stop, reset")
+    parameters: Optional[Dict[str, Any]] = Field(default=None, description="动作参数")
+    
+    class Config:
+        schema_extra = {
+            "example": {
+                "action": "start",
+                "parameters": {
+                    "real_time_factor": 1.0,
+                    "max_steps": 1000
+                }
+            }
         }
 
 # 组件配置基础模型

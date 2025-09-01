@@ -5,8 +5,9 @@ from sqlalchemy.pool import StaticPool
 from typing import Generator
 import logging
 from contextlib import contextmanager
+import time
 
-from ..config import settings
+from config import settings
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -128,11 +129,11 @@ def get_database_info() -> dict:
             version = result.scalar()
             
             return {
-                "url": settings.database_url,
+                "url": settings.get_database_url(),
                 "version": version,
                 "echo": settings.database_echo,
-                "pool_size": engine.pool.size() if hasattr(engine.pool, 'size') else None,
-                "checked_out": engine.pool.checkedout() if hasattr(engine.pool, 'checkedout') else None,
+                "pool_size": engine.pool.size() if hasattr(engine.pool, 'size') else -1,
+                "checked_out": engine.pool.checkedout() if hasattr(engine.pool, 'checkedout') else -1,
             }
     except Exception as e:
         logger.error(f"Error getting database info: {e}")
@@ -163,6 +164,3 @@ def health_check() -> dict:
             "error": str(e),
             "database_info": get_database_info()
         }
-
-# Import time for health check
-import time

@@ -4,9 +4,9 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 import logging
 
-from ..database.database import get_db
-from ..database.models import UserDB
-from ..database.crud import UserCRUD
+from database.database import get_db
+from database.models import UserDB
+from database.crud import UserCRUD
 from .authentication import TokenManager, AuthenticationError
 from .authorization import Permission, PermissionChecker, AuthorizationError
 from .models import TokenData, UserResponse
@@ -114,11 +114,14 @@ class AuthDependencies:
     
     async def get_current_active_user(
         self,
-        current_user: UserDB = Depends(lambda self=None: auth_deps.get_current_user if self is None else self.get_current_user)
+        request: Request,
+        credentials: HTTPAuthorizationCredentials = Depends(security),
+        db: Session = Depends(get_db)
     ) -> UserDB:
         """
         Get current active user
         """
+        current_user = await self.get_current_user(request, credentials, db)
         if not current_user.is_active:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -131,8 +134,11 @@ class AuthDependencies:
         Dependency factory for requiring specific permissions
         """
         async def permission_dependency(
-            current_user: UserDB = Depends(lambda: auth_deps.get_current_active_user)
+            request: Request,
+            credentials: HTTPAuthorizationCredentials = Depends(security),
+            db: Session = Depends(get_db)
         ) -> UserDB:
+            current_user = await self.get_current_active_user(request, credentials, db)
             try:
                 if require_all:
                     has_permission = PermissionChecker.has_all_permissions(current_user, permissions)
@@ -161,7 +167,7 @@ class AuthDependencies:
         Dependency factory for requiring specific role
         """
         async def role_dependency(
-            current_user: UserDB = Depends(lambda: auth_deps.get_current_active_user)
+            current_user: UserDB = Depends(auth_deps.get_current_active_user)
         ) -> UserDB:
             user_role = PermissionChecker.get_user_role(current_user)
             
@@ -190,7 +196,7 @@ class AuthDependencies:
         """
         async def simulation_access_dependency(
             simulation_id: str,
-            current_user: UserDB = Depends(lambda: auth_deps.get_current_active_user),
+            current_user: UserDB = Depends(auth_deps.get_current_active_user),
             db: Session = Depends(get_db)
         ) -> UserDB:
             can_access = PermissionChecker.can_access_simulation(
@@ -213,7 +219,7 @@ class AuthDependencies:
         """
         async def user_access_dependency(
             user_id: str,
-            current_user: UserDB = Depends(lambda: auth_deps.get_current_active_user)
+            current_user: UserDB = Depends(auth_deps.get_current_active_user)
         ) -> UserDB:
             can_modify = PermissionChecker.can_modify_user(current_user, user_id)
             
@@ -254,55 +260,55 @@ async def get_current_active_user(
     return await auth_deps.get_current_active_user(current_user)
 
 # Permission-based dependencies
-def require_admin() -> UserDB:
+def require_admin():
     """Require admin role"""
-    return Depends(auth_deps.require_role("admin"))
+    return auth_deps.require_role("admin")
 
-def require_moderator() -> UserDB:
+def require_moderator():
     """Require moderator role or higher"""
-    return Depends(auth_deps.require_role("moderator"))
+    return auth_deps.require_role("moderator")
 
-def require_user_management() -> UserDB:
+def require_user_management():
     """Require user management permissions"""
-    return Depends(auth_deps.require_permissions([
+    return auth_deps.require_permissions([
         Permission.USER_CREATE,
         Permission.USER_UPDATE,
         Permission.USER_DELETE
-    ], require_all=False))
+    ], require_all=False)
 
-def require_simulation_management() -> UserDB:
+def require_simulation_management():
     """Require simulation management permissions"""
-    return Depends(auth_deps.require_permissions([
+    return auth_deps.require_permissions([
         Permission.SIMULATION_CREATE,
         Permission.SIMULATION_UPDATE,
         Permission.SIMULATION_DELETE,
         Permission.SIMULATION_CONTROL
-    ], require_all=False))
+    ], require_all=False)
 
-def require_simulation_read() -> UserDB:
+def require_simulation_read():
     """Require simulation read permission"""
-    return Depends(auth_deps.require_permissions([Permission.SIMULATION_READ]))
+    return auth_deps.require_permissions([Permission.SIMULATION_READ])
 
-def require_simulation_write() -> UserDB:
+def require_simulation_write():
     """Require simulation write permissions"""
-    return Depends(auth_deps.require_permissions([
+    return auth_deps.require_permissions([
         Permission.SIMULATION_CREATE,
         Permission.SIMULATION_UPDATE
-    ], require_all=False))
+    ], require_all=False)
 
-def require_data_access() -> UserDB:
+def require_data_access():
     """Require data access permissions"""
-    return Depends(auth_deps.require_permissions([
+    return auth_deps.require_permissions([
         Permission.DATA_READ,
         Permission.DATA_WRITE
-    ], require_all=False))
+    ], require_all=False)
 
-def require_websocket_access() -> UserDB:
+def require_websocket_access():
     """Require WebSocket access permissions"""
-    return Depends(auth_deps.require_permissions([
+    return auth_deps.require_permissions([
         Permission.WEBSOCKET_CONNECT,
         Permission.WEBSOCKET_SUBSCRIBE
-    ]))
+    ], require_all=False)
 
 # Rate limiting and security dependencies
 class RateLimiter:
@@ -337,3 +343,6 @@ class RateLimiter:
 api_rate_limiter = RateLimiter(max_requests=1000, window_seconds=3600)  # 1000 requests per hour
 auth_rate_limiter = RateLimiter(max_requests=10, window_seconds=300)    # 10 auth requests per 5 minutes
 websocket_rate_limiter = RateLimiter(max_requests=100, window_seconds=60)  # 100 WS connections per minute
+
+# Global auth dependencies instance
+auth_deps = AuthDependencies()

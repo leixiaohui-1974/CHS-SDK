@@ -5,10 +5,10 @@ from sqlalchemy.orm import Session
 import logging
 from datetime import datetime, timedelta
 
-from ..database.database import get_db
-from ..database.models import UserDB, SessionTokenDB
-from ..database.crud import UserCRUD, SessionTokenCRUD
-from ..auth import (
+from database.database import get_db
+from database.models import UserDB, SessionTokenDB
+from database.crud import UserCRUD, SessionTokenCRUD
+from auth import (
     UserCreate,
     UserUpdate,
     UserPasswordUpdate,
@@ -30,7 +30,7 @@ from ..auth import (
     Permission,
     PermissionChecker
 )
-from ..config import settings
+from config import settings
 
 logger = logging.getLogger(__name__)
 

@@ -1,6 +1,71 @@
 # CHS Simulation Platform - Deployment Guide
 
-This guide provides comprehensive instructions for deploying the CHS Simulation Platform across different environments.
+本指南提供了 CHS 仿真平台的完整部署说明，包括开发环境和生产环境的部署方式。
+
+## 目录
+
+- [系统要求](#系统要求)
+- [快速开始](#快速开始)
+- [开发环境部署](#开发环境部署)
+- [生产环境部署](#生产环境部署)
+- [监控和日志](#监控和日志)
+- [故障排除](#故障排除)
+- [安全注意事项](#安全注意事项)
+
+## 系统要求
+
+### 最低要求
+- **CPU**: 2 核心
+- **内存**: 4GB RAM
+- **存储**: 20GB 可用空间
+- **操作系统**: Linux (Ubuntu 20.04+), macOS, Windows 10+
+
+### 推荐配置（生产环境）
+- **CPU**: 4+ 核心
+- **内存**: 8GB+ RAM
+- **存储**: 100GB+ SSD
+- **网络**: 稳定的互联网连接
+
+### 软件依赖
+- **Docker**: 20.10+
+- **Docker Compose**: 2.0+
+- **Python**: 3.11+ (用于开发)
+- **Node.js**: 18+ (用于前端开发)
+
+## 快速开始
+
+### 1. 克隆项目
+```bash
+git clone <repository-url>
+cd CHS-SDK
+```
+
+### 2. 配置环境变量
+```bash
+# 复制环境配置文件
+cp .env.example .env
+
+# 编辑配置文件（重要：修改默认密码和密钥）
+nano .env
+```
+
+### 3. 启动服务
+```bash
+# 使用 Docker Compose 启动所有服务
+docker-compose up -d
+
+# 查看服务状态
+docker-compose ps
+```
+
+### 4. 验证部署
+```bash
+# 运行部署验证脚本
+python scripts/validate_deployment.py
+
+# 检查 API 健康状态
+curl http://localhost:8000/health
+```
 
 ## Table of Contents
 

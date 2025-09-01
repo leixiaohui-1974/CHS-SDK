@@ -7,14 +7,24 @@ in `core_lib.models`.
 """
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 import logging
 import os
+import asyncio
 from datetime import datetime
+from pathlib import Path
+from typing import List, Dict, Any
 
 # 导入路由模块
 from routes.simulation import router as simulation_router
 from routes.websocket import router as websocket_router, cleanup_websocket_resources
 from routes.auth import router as auth_router
+from routes.monitoring import router as monitoring_router, set_performance_middleware
+
+# 导入性能和缓存模块
+from middleware.performance import PerformanceMonitoringMiddleware, RateLimitingMiddleware
+from core.cache_manager import cache_manager, start_cache_cleanup_task
+from config import settings
 
 # 导入模型
 from models.api_models import SimulationRequest
@@ -22,28 +32,53 @@ from models.simulation_models import SimulationResponse
 from models.websocket_models import WebSocketMessage
 
 # Configure logging for the application
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=getattr(logging, settings.log_level.upper()),
+    format=settings.log_format
+)
+logger = logging.getLogger(__name__)
 
 # Initialize the FastAPI app
 app = FastAPI(
-    title="CHS-SDK Simulation API",
-    description="An API for running hydraulic simulations using the CHS-SDK.",
-    version="1.0.0"
+    title=settings.app_name,
+    description=settings.app_description,
+    version=settings.app_version,
+    docs_url=settings.docs_url,
+    redoc_url=settings.redoc_url,
+    openapi_url=settings.openapi_url
 )
 
-# Add CORS middleware to allow cross-origin requests from the frontend dev server
+# 创建性能监控中间件实例
+performance_middleware = PerformanceMonitoringMiddleware(app)
+
+# Add middleware in order (last added = first executed)
+# 1. Performance monitoring (should be first to capture all requests)
+app.add_middleware(PerformanceMonitoringMiddleware)
+
+# 2. Rate limiting
+if not settings.is_development():
+    app.add_middleware(RateLimitingMiddleware, requests_per_minute=120)
+
+# 3. GZIP compression
+app.add_middleware(GZipMiddleware, minimum_size=1000)
+
+# 4. CORS (should be last)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, restrict this to the frontend's domain
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=settings.cors_origins,
+    allow_credentials=settings.cors_credentials,
+    allow_methods=settings.cors_methods,
+    allow_headers=settings.cors_headers,
 )
 
+# Set performance middleware for monitoring routes
+set_performance_middleware(performance_middleware)
+
 # Include routers
-app.include_router(simulation_router, prefix="/api")
-app.include_router(websocket_router, prefix="/api")
-app.include_router(auth_router, prefix="/api")
+app.include_router(simulation_router, prefix=settings.api_prefix)
+app.include_router(websocket_router, prefix=settings.api_prefix)
+app.include_router(auth_router, prefix=settings.api_prefix)
+app.include_router(monitoring_router, prefix=settings.api_prefix)
 
 EXAMPLES_DIR = Path("examples")
 
@@ -114,14 +149,49 @@ async def startup_event():
     """
     Application startup event
     """
-    logging.info("CHS-SDK API server starting up...")
-    logging.info("API documentation available at: /docs")
+    logger.info("CHS-SDK API server starting")
+    
+    try:
+        # 初始化缓存管理器
+        await cache_manager.initialize()
+        logger.info("Cache manager initialized")
+        
+        # 启动缓存清理任务
+        asyncio.create_task(start_cache_cleanup_task())
+        logger.info("Cache cleanup task started")
+        
+        logger.info("CHS-SDK API server starting up...")
+        logger.info(f"API documentation available at: {settings.docs_url}")
+        logger.info(f"Server running in {'development' if settings.is_development() else 'production'} mode")
+        
+    except Exception as e:
+        logger.error(f"Failed to initialize application: {e}")
+        raise
 
 @app.on_event("shutdown")
 async def shutdown_event():
     """
     Application shutdown event
     """
-    logging.info("CHS-SDK API server shutting down...")
-    # Clean up WebSocket resources
-    await cleanup_websocket_resources()
+    logger.info("CHS-SDK API server shutting down...")
+    
+    try:
+        # Clean up WebSocket resources
+        await cleanup_websocket_resources()
+        logger.info("WebSocket resources cleaned up")
+        
+        # Clean up simulation resources
+        from routes.simulation import cleanup_simulation_resources
+        await cleanup_simulation_resources()
+        logger.info("Simulation resources cleaned up")
+        
+        # Close Redis connection if exists
+        if cache_manager.redis_client:
+            await cache_manager.redis_client.close()
+            logger.info("Redis connection closed")
+        
+        logger.info("CHS-SDK API server shutdown complete")
+        
+    except Exception as e:
+        logger.error(f"Error during shutdown: {e}")
+        raise

@@ -4,9 +4,9 @@ from jose import JWTError, jwt
 from sqlalchemy.orm import Session
 import logging
 
-from ..config import settings
-from ..database.crud import UserCRUD, SessionTokenCRUD
-from ..database.models import UserDB
+from config import settings
+from database.crud import UserCRUD, SessionTokenCRUD
+from database.models import UserDB
 from .password import verify_password
 from .models import TokenData
 

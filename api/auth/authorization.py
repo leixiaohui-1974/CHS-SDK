@@ -3,8 +3,8 @@ from functools import wraps
 from enum import Enum
 import logging
 
-from ..database.models import UserDB
-from ..database.crud import SimulationSessionCRUD
+from database.models import UserDB
+from database.crud import SimulationSessionCRUD
 from sqlalchemy.orm import Session
 
 logger = logging.getLogger(__name__)

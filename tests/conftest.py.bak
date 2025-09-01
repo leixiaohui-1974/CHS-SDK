@@ -1,6 +1,7 @@
 import pytest
 import asyncio
 import os
+import sys
 import tempfile
 import shutil
 from typing import AsyncGenerator, Generator
@@ -17,13 +18,13 @@ from sqlalchemy.orm import sessionmaker
 # 导入应用模块
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'api'))
 
-from main import app
-from core.database import get_db, Base
+from server import app
+from database.database import get_db
+from database.models import Base
 from core.config import settings
-from core.cache import cache_manager
-from models.user import User
-from models.simulation import Simulation
-from auth.jwt_handler import create_access_token
+from core.cache_manager import cache_manager
+from database.models import UserDB
+from auth.authentication import create_access_token
 
 # 测试配置
 TEST_DATABASE_URL = "postgresql://test:test@localhost:5433/test_db"

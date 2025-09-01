@@ -6,8 +6,8 @@ from typing import Optional, Dict, Any
 import enum
 import uuid
 
-from .database import Base
-from ..models.simulation_models import SimulationStatus, ComponentType
+from database.database import Base
+from models.simulation_models import SimulationStatus, ComponentType
 
 class SimulationSessionDB(Base):
     """

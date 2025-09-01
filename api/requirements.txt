@@ -23,6 +23,9 @@ psycopg2-binary==2.9.9
 redis==5.0.1
 aioredis==2.0.1
 
+# System and process utilities
+psutil==5.9.6
+
 # Authentication and security
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4

@@ -153,6 +153,61 @@ class SimulationHarness:
         # Update time
         self.t += self.dt
 
+    def run_mas_simulation(self):
+        """运行多智能体系统仿真"""
+        print(f"Starting MAS simulation from {self.start_time} to {self.end_time} with dt={self.dt}")
+        
+        while self.t < self.end_time and self.is_running:
+            # 检查是否暂停
+            if self._is_paused.is_set():
+                self._is_paused.wait()
+                continue
+            
+            # 执行一个仿真步骤
+            self.step()
+        
+        print(f"MAS simulation completed at time {self.t:.2f}s")
+        print(f"Generated {len(self.history)} steps of history data.")
+
+    def run_simulation(self):
+        """运行简单仿真（非智能体模式）"""
+        print(f"Starting simple simulation from {self.start_time} to {self.end_time} with dt={self.dt}")
+        
+        while self.t < self.end_time and self.is_running:
+            # 检查是否暂停
+            if self._is_paused.is_set():
+                self._is_paused.wait()
+                continue
+            
+            # Phase 1: 计算控制器动作
+            controller_actions = {}
+            for controller_id, spec in self.controllers.items():
+                try:
+                    # 获取观测值
+                    observed_component = self.components[spec.observed_id]
+                    observation = observed_component.get_state().get(spec.observation_key, 0)
+                    
+                    # 计算控制动作
+                    action = spec.controller.compute_control_action(observation)
+                    controller_actions[spec.controlled_id] = action
+                    
+                except Exception as e:
+                    print(f"Error in controller {controller_id}: {e}")
+            
+            # Phase 2: 步进物理模型
+            self._step_physical_models(self.dt, controller_actions)
+            
+            # Phase 3: 记录历史
+            step_history = {'time': self.t}
+            for cid in self.sorted_components:
+                step_history[cid] = self.components[cid].get_state()
+            self.history.append(step_history)
+            
+            # 更新时间
+            self.t += self.dt
+        
+        print(f"Simple simulation completed at time {self.t:.2f}s")
+        print(f"Generated {len(self.history)} steps of history data.")
 
     def _step_physical_models(self, dt: float, controller_actions: Dict[str, Any] = None):
         if controller_actions is None:

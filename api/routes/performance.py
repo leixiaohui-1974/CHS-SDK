@@ -11,8 +11,8 @@ from fastapi import APIRouter, Depends, HTTPException, Query, BackgroundTasks
 from fastapi.responses import Response
 from pydantic import BaseModel, Field
 
-from ..core.auth import get_current_user, require_permissions
-from ..core.performance_monitor import (
+from core.auth import get_current_user, require_permissions
+from core.performance_monitor import (
     metrics_collector,
     system_monitor,
     app_monitor,
@@ -21,7 +21,7 @@ from ..core.performance_monitor import (
     get_performance_summary,
     check_system_health
 )
-from ..core.database_optimization import (
+from core.database_optimization import (
     db_optimizer,
     query_optimizer,
     db_monitor,
@@ -29,12 +29,12 @@ from ..core.database_optimization import (
     suggest_optimizations,
     optimize_database
 )
-from ..core.load_balancer import (
+from core.load_balancer import (
     load_balancer,
     get_load_balancer_stats
 )
-from ..core.cache import cache_manager
-from ..models.user import User
+from core.cache import cache_manager
+from models.user import User
 
 logger = logging.getLogger(__name__)
 

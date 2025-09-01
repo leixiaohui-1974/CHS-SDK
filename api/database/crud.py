@@ -13,7 +13,7 @@ from .models import (
     SessionTokenDB,
     SimulationSnapshotDB
 )
-from ..models.simulation_models import SimulationStatus, ComponentType
+from models.simulation_models import SimulationStatus, ComponentType
 
 logger = logging.getLogger(__name__)
 
