@@ -18,7 +18,7 @@ from core_lib.physical_objects.gate import Gate
 from core_lib.local_agents.control.pid_controller import PIDController
 from core_lib.local_agents.control.local_control_agent import LocalControlAgent
 from core_lib.local_agents.perception.digital_twin_agent import DigitalTwinAgent
-from core_lib.central_coordination.dispatch.central_dispatcher import CentralDispatcher
+from core_lib.central_coordination.dispatch.central_dispatcher import CentralDispatcherAgent
 from core_lib.core_engine.testing.simulation_harness import SimulationHarness
 from core_lib.disturbances.rainfall_agent import RainfallAgent
 
@@ -102,16 +102,23 @@ def setup_control_system(harness, inflow_topic=None):
             }
         }
     }
-    dispatcher = CentralDispatcher(
+    dispatcher = CentralDispatcherAgent(
         agent_id="dispatcher_1",
         message_bus=message_bus,
-        state_subscriptions={'reservoir_level': RESERVOIR_STATE_TOPIC},
-        command_topics={'gate1_command': GATE_COMMAND_TOPIC},
-        rules=dispatcher_rules
+        mode="rule",
+        subscribed_topic=RESERVOIR_STATE_TOPIC,
+        observation_key="water_level",
+        command_topic=GATE_COMMAND_TOPIC,
+        dispatcher_params={
+            "low_level": 10.0,
+            "high_level": 13.0,
+            "low_setpoint": 15.0,
+            "high_setpoint": 12.0
+        }
     )
 
-    harness.add_component(reservoir)
-    harness.add_component(gate)
+    harness.add_component("reservoir_1", reservoir)
+    harness.add_component("gate_1", gate)
     harness.add_agent(reservoir_twin)
     harness.add_agent(lca)
     harness.add_agent(dispatcher)

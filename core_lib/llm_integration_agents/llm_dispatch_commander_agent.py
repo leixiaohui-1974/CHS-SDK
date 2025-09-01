@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from core_lib.core.interfaces import BaseAgent
+from core_lib.core.interfaces import Agent
 
-class LLMDispatchCommanderAgent(BaseAgent):
+class LLMDispatchCommanderAgent(Agent):
     """
     Implements Role 3: Intelligent Dispatch Commander.
 
@@ -23,6 +23,11 @@ class LLMDispatchCommanderAgent(BaseAgent):
         self.dispatcher_control_topic = f"{self.central_dispatcher_id}.control.set_strategy"
         
         self._message_bus.subscribe(self.command_topic, self.handle_command)
+
+    def run(self, current_time: float):
+        # This agent is event-driven and responds to messages,
+        # so its run method might not be used in a running simulation.
+        pass
         print(f"[{self.id}] Initialized. Listening for commands on '{self.command_topic}'.")
 
     def handle_command(self, topic: str, payload: dict):

@@ -89,10 +89,10 @@ def run_multi_component_simulation():
     harness = SimulationHarness(config={'duration': 500, 'dt': 1.0})
 
     # Add all components
-    harness.add_component(reservoir)
-    harness.add_component(gate1)
-    harness.add_component(channel)
-    harness.add_component(gate2)
+    harness.add_component("reservoir_1", reservoir)
+    harness.add_component("gate_1", gate1)
+    harness.add_component("channel_1", channel)
+    harness.add_component("gate_2", gate2)
 
     # Define the physical connections to establish the topology
     harness.add_connection("reservoir_1", "gate_1")

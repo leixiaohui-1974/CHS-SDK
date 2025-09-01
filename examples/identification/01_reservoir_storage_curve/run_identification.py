@@ -127,19 +127,21 @@ def main():
         state_topic=twin_perc_agent_conf['publish_topic']
     )
 
-    id_agent_conf = agents_config['identification_agent']['parameters']
+    id_agent_conf = agents_config['identification_agent']['parameters'].copy()
+    # Remove target_model from config since we pass it explicitly
+    id_agent_conf.pop('target_model', None)
     identification_agent = ParameterIdentificationAgent(
         agent_id='identification_agent',
         target_model=twin_reservoir,
         message_bus=bus,
-        config=id_agent_conf
+        **id_agent_conf
     )
 
     all_models_dict = {comp.name: comp for comp in components}
     model_updater = ModelUpdaterAgent(
         agent_id='model_updater',
         message_bus=bus,
-        parameter_topic=f"identified_parameters/{id_agent_conf['target_model']}",
+        parameter_topic="identified_parameters/twin_reservoir",
         models=all_models_dict
     )
 
@@ -156,7 +158,7 @@ def main():
 
     # 向仿真平台添加组件和智能体
     for comp in components:
-        harness.add_component(comp)
+        harness.add_component(comp.name, comp)
     for agent in agents:
         harness.add_agent(agent)
 

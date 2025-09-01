@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import pandas as pd
-from core_lib.core.interfaces import BaseAgent
+from core_lib.core.interfaces import Agent
 
-class LLMDataAnalystAgent(BaseAgent):
+class LLMDataAnalystAgent(Agent):
     """
     Implements Role 4: Data Analyst & Diagnostic Expert.
 
@@ -14,6 +14,10 @@ class LLMDataAnalystAgent(BaseAgent):
     def __init__(self, agent_id: str, message_bus=None):
         # This agent can operate standalone, so message_bus is optional.
         super().__init__(agent_id, message_bus)
+
+    def run(self, current_time: float):
+        # This is a post-processing agent, not used in a time-step simulation.
+        pass
 
     def step(self, t: int, dt: int):
         # This is a post-processing agent, not used in a time-step simulation.

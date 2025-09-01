@@ -65,9 +65,9 @@ def run_pump_station_simulation():
     ]
     pump_station = PumpStation("ps1", {}, {}, pumps)
 
-    harness.add_component(source_reservoir)
-    harness.add_component(downstream_reservoir)
-    harness.add_component(pump_station)
+    harness.add_component("source_res", source_reservoir)
+    harness.add_component("downstream_res", downstream_reservoir)
+    harness.add_component("ps1", pump_station)
     # The PumpStation itself is a conceptual wrapper, the physical connection is from source to the pumps' manifold,
     # and from there to the downstream reservoir. This is simplified in the harness.
     harness.add_connection("source_res", "ps1")

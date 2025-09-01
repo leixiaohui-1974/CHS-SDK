@@ -20,7 +20,7 @@ from core_lib.core_engine.testing.simulation_harness import SimulationHarness
 from core_lib.local_agents.perception.digital_twin_agent import DigitalTwinAgent
 from core_lib.local_agents.control.pid_controller import PIDController
 from core_lib.local_agents.control.local_control_agent import LocalControlAgent
-from core_lib.central_coordination.dispatch.central_dispatcher import CentralDispatcher
+from core_lib.central_coordination.dispatch.central_dispatcher import CentralDispatcherAgent
 
 def run_branched_network_simulation():
     """
@@ -43,9 +43,9 @@ def run_branched_network_simulation():
     main_chan = RiverChannel(name="main_chan", initial_state={'volume': 8e5, 'water_level': 8.0}, parameters={'k': 0.0001})
     g3 = Gate(name="g3", initial_state={'opening': 0.5}, parameters={'width': 20})
 
-    physical_components = [res1, g1, trib_chan, res2, g2, main_chan, g3]
-    for comp in physical_components:
-        harness.add_component(comp)
+    physical_components = [("res1", res1), ("g1", g1), ("trib_chan", trib_chan), ("res2", res2), ("g2", g2), ("main_chan", main_chan), ("g3", g3)]
+    for comp_id, comp in physical_components:
+        harness.add_component(comp_id, comp)
 
     # 3. --- Network Topology Definition ---
     print("Defining network connections...")
@@ -80,12 +80,19 @@ def run_branched_network_simulation():
             }
         }
     }
-    dispatcher = CentralDispatcher(
+    dispatcher = CentralDispatcherAgent(
         agent_id="central_dispatcher",
         message_bus=message_bus,
-        state_subscriptions={"res1_level": "state.res1.level", "res2_level": "state.res2.level"},
-        command_topics={"res1_command": "command.res1.setpoint", "res2_command": "command.res2.setpoint"},
-        rules=dispatcher_rules
+        mode="rule",
+        subscribed_topic="state.res1.level",
+        observation_key="water_level",
+        command_topic="command.res1.setpoint",
+        dispatcher_params={
+            "low_level": 8.0,
+            "high_level": 12.0,
+            "low_setpoint": 10.0,
+            "high_setpoint": 8.0
+        }
     )
 
     all_agents = twin_agents + [lca1, lca2, dispatcher]

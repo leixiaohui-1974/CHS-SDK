@@ -79,8 +79,8 @@ def run_getting_started_simulation():
     harness = SimulationHarness(config=simulation_config)
 
     # Add components to the harness
-    harness.add_component(reservoir)
-    harness.add_component(gate)
+    harness.add_component("reservoir_1", reservoir)
+    harness.add_component("gate_1", gate)
 
     # Define the physical connection
     harness.add_connection("reservoir_1", "gate_1")

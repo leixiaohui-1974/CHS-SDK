@@ -73,8 +73,16 @@ def main():
     pipe_obs_conf = agents_config['pipe_observer']['parameters']
     agents.append(DigitalTwinAgent('pipe_observer', all_models[pipe_obs_conf['target_model']], bus, pipe_obs_conf['publish_topic']))
 
-    id_agent_conf = agents_config['identification_agent']['parameters']
-    agents.append(ParameterIdentificationAgent('identification_agent', twin_pipe, bus, id_agent_conf))
+# 辨识与更新智能体
+    id_agent_conf = agents_config['identification_agent']['parameters'].copy()
+    # Remove target_model from config since we pass it explicitly
+    id_agent_conf.pop('target_model', None)
+    agents.append(ParameterIdentificationAgent(
+        agent_id='identification_agent',
+        target_model=twin_pipe,
+        message_bus=bus,
+        **id_agent_conf
+    ))
 
     updater_conf = agents_config['model_updater']['parameters']
     agents.append(ModelUpdaterAgent('model_updater', bus, f"identified_parameters/{updater_conf['target_model_name']}", all_models))
@@ -89,7 +97,7 @@ def main():
     harness.message_bus = bus
 
     for comp in components:
-        harness.add_component(comp)
+        harness.add_component(comp.name, comp)
     for link in topology_config.get('links', []):
         harness.add_connection(link['upstream'], link['downstream'])
     for agent in agents:

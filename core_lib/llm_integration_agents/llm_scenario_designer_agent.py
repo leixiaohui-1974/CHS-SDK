@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from core_lib.core.interfaces import BaseAgent
+from core_lib.core.interfaces import Agent
 import yaml
 
-class LLMScenarioDesignerAgent(BaseAgent):
+class LLMScenarioDesignerAgent(Agent):
     """
     Implements Role 2: Scenario Designer.
 
@@ -15,8 +15,14 @@ class LLMScenarioDesignerAgent(BaseAgent):
     """
 
     def __init__(self, agent_id: str, message_bus):
-        super().__init__(agent_id, message_bus)
-        self.generated_scenario = None
+        super().__init__(agent_id)
+        self.message_bus = message_bus
+        self.scenario_scripts = {}
+
+    def run(self, current_time: float):
+        # This agent is typically used for pre-simulation setup,
+        # so its run method might not be used in a running simulation.
+        pass
 
     def step(self, t: int, dt: int):
         # This agent is typically used for pre-simulation setup.

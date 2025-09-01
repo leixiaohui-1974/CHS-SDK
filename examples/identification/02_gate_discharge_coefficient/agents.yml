@@ -29,10 +29,18 @@ identification_agent:
     identification_interval: 50 # Run identification more frequently
     identification_data_map:
       # Data needed by Gate.identify_parameters()
-      upstream_levels: "state/upstream_reservoir/water_level"
-      downstream_levels: "state/downstream_reservoir/water_level"
-      openings: "state/true_gate/opening"
-      observed_flows: "state/true_gate/outflow" # Corrected key to 'outflow'
+      upstream_levels:
+        topic: "state/upstream_reservoir/water_level"
+        key: "water_level"
+      downstream_levels:
+        topic: "state/downstream_reservoir/water_level"
+        key: "water_level"
+      openings:
+        topic: "state/true_gate/opening"
+        key: "opening"
+      observed_flows:
+        topic: "state/true_gate/outflow"
+        key: "outflow"
 
 # Agent to apply the identified parameters back to the twin gate
 model_updater:

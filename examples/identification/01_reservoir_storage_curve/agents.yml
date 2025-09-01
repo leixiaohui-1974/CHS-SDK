@@ -32,9 +32,15 @@ identification_agent:
     identification_interval: 100
     identification_data_map:
       # Data now comes from the perception agents
-      inflows: "state/twin_reservoir/inflow"
-      outflows: "state/twin_reservoir/outflow"
-      levels: "observed_state/true_reservoir/water_level"
+      inflows:
+        topic: "state/twin_reservoir/inflow"
+        key: "inflow"
+      outflows:
+        topic: "state/twin_reservoir/outflow"
+        key: "outflow"
+      levels:
+        topic: "observed_state/true_reservoir/water_level"
+        key: "water_level"
 
 # Agent to apply the identified parameters back to the digital twin model.
 model_updater:

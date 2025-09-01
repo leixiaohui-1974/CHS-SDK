@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 import pandas as pd
+
+# Add the project root to the Python path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
+
 from core_lib.central_coordination.collaboration.message_bus import MessageBus
 from core_lib.llm_integration_agents import (
     LLMSystemBuilderAgent,

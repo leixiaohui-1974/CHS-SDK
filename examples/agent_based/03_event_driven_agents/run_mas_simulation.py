@@ -86,8 +86,8 @@ def run_mas_simulation():
     )
 
     # 5. --- Harness Final Setup ---
-    harness.add_component(reservoir)
-    harness.add_component(gate)
+    harness.add_component("reservoir_1", reservoir)
+    harness.add_component("gate_1", gate)
     harness.add_agent(twin_agent)
     harness.add_agent(control_agent)
     harness.add_connection("reservoir_1", "gate_1")

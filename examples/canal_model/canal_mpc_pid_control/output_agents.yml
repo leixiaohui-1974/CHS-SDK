@@ -1,0 +1,281 @@
+simulation_history:
+- time: 0
+  upstream_reservoir:
+    water_level: 10.0
+    outflow: 0.0
+    volume: 0
+    inflow: 0.0
+  diversion_before_gate1:
+    outflow: 0.0
+    passthrough_flow: 0
+    inflow: 0.0
+  gate_1:
+    opening: 0.5
+    outflow: 0
+  canal_1:
+    water_level: 5.0
+    inflow: 0
+    outflow: 0.0
+  diversion_before_gate2:
+    outflow: 0.0
+    passthrough_flow: 0
+    inflow: 0.0
+  gate_2:
+    opening: 0.5
+    outflow: 0
+  tail_user:
+    outflow: 45.0
+    passthrough_flow: 0
+    inflow: 0
+- time: 10
+  upstream_reservoir:
+    water_level: 10.0
+    outflow: 0.0
+    volume: 0
+    inflow: 0.0
+  diversion_before_gate1:
+    outflow: 0.0
+    passthrough_flow: 0
+    inflow: 0.0
+  gate_1:
+    opening: 0.5
+    outflow: 0
+  canal_1:
+    water_level: 5.0
+    inflow: 0
+    outflow: 0.0
+  diversion_before_gate2:
+    outflow: 0.0
+    passthrough_flow: 0
+    inflow: 0.0
+  gate_2:
+    opening: 0.5
+    outflow: 0
+  tail_user:
+    outflow: 45.0
+    passthrough_flow: 0
+    inflow: 0
+- time: 20
+  upstream_reservoir:
+    water_level: 10.0
+    outflow: 0.0
+    volume: 0
+    inflow: 0.0
+  diversion_before_gate1:
+    outflow: 0.0
+    passthrough_flow: 0
+    inflow: 0.0
+  gate_1:
+    opening: 0.5
+    outflow: 0
+  canal_1:
+    water_level: 5.0
+    inflow: 0
+    outflow: 0.0
+  diversion_before_gate2:
+    outflow: 0.0
+    passthrough_flow: 0
+    inflow: 0.0
+  gate_2:
+    opening: 0.5
+    outflow: 0
+  tail_user:
+    outflow: 45.0
+    passthrough_flow: 0
+    inflow: 0
+- time: 30
+  upstream_reservoir:
+    water_level: 10.0
+    outflow: 0.0
+    volume: 0
+    inflow: 0.0
+  diversion_before_gate1:
+    outflow: 0.0
+    passthrough_flow: 0
+    inflow: 0.0
+  gate_1:
+    opening: 0.5
+    outflow: 0
+  canal_1:
+    water_level: 5.0
+    inflow: 0
+    outflow: 0.0
+  diversion_before_gate2:
+    outflow: 0.0
+    passthrough_flow: 0
+    inflow: 0.0
+  gate_2:
+    opening: 0.5
+    outflow: 0
+  tail_user:
+    outflow: 45.0
+    passthrough_flow: 0
+    inflow: 0
+- time: 40
+  upstream_reservoir:
+    water_level: 10.0
+    outflow: 0.0
+    volume: 0
+    inflow: 0.0
+  diversion_before_gate1:
+    outflow: 0.0
+    passthrough_flow: 0
+    inflow: 0.0
+  gate_1:
+    opening: 0.5
+    outflow: 0
+  canal_1:
+    water_level: 5.0
+    inflow: 0
+    outflow: 0.0
+  diversion_before_gate2:
+    outflow: 0.0
+    passthrough_flow: 0
+    inflow: 0.0
+  gate_2:
+    opening: 0.5
+    outflow: 0
+  tail_user:
+    outflow: 45.0
+    passthrough_flow: 0
+    inflow: 0
+- time: 50
+  upstream_reservoir:
+    water_level: 10.0
+    outflow: 0.0
+    volume: 0
+    inflow: 0.0
+  diversion_before_gate1:
+    outflow: 0.0
+    passthrough_flow: 0
+    inflow: 0.0
+  gate_1:
+    opening: 0.5
+    outflow: 0
+  canal_1:
+    water_level: 5.0
+    inflow: 0
+    outflow: 0.0
+  diversion_before_gate2:
+    outflow: 0.0
+    passthrough_flow: 0
+    inflow: 0.0
+  gate_2:
+    opening: 0.5
+    outflow: 0
+  tail_user:
+    outflow: 45.0
+    passthrough_flow: 0
+    inflow: 0
+- time: 60
+  upstream_reservoir:
+    water_level: 10.0
+    outflow: 0.0
+    volume: 0
+    inflow: 0.0
+  diversion_before_gate1:
+    outflow: 0.0
+    passthrough_flow: 0
+    inflow: 0.0
+  gate_1:
+    opening: 0.5
+    outflow: 0
+  canal_1:
+    water_level: 5.0
+    inflow: 0
+    outflow: 0.0
+  diversion_before_gate2:
+    outflow: 0.0
+    passthrough_flow: 0
+    inflow: 0.0
+  gate_2:
+    opening: 0.5
+    outflow: 0
+  tail_user:
+    outflow: 45.0
+    passthrough_flow: 0
+    inflow: 0
+- time: 70
+  upstream_reservoir:
+    water_level: 10.0
+    outflow: 0.0
+    volume: 0
+    inflow: 0.0
+  diversion_before_gate1:
+    outflow: 0.0
+    passthrough_flow: 0
+    inflow: 0.0
+  gate_1:
+    opening: 0.5
+    outflow: 0
+  canal_1:
+    water_level: 5.0
+    inflow: 0
+    outflow: 0.0
+  diversion_before_gate2:
+    outflow: 0.0
+    passthrough_flow: 0
+    inflow: 0.0
+  gate_2:
+    opening: 0.5
+    outflow: 0
+  tail_user:
+    outflow: 45.0
+    passthrough_flow: 0
+    inflow: 0
+- time: 80
+  upstream_reservoir:
+    water_level: 10.0
+    outflow: 0.0
+    volume: 0
+    inflow: 0.0
+  diversion_before_gate1:
+    outflow: 0.0
+    passthrough_flow: 0
+    inflow: 0.0
+  gate_1:
+    opening: 0.5
+    outflow: 0
+  canal_1:
+    water_level: 5.0
+    inflow: 0
+    outflow: 0.0
+  diversion_before_gate2:
+    outflow: 0.0
+    passthrough_flow: 0
+    inflow: 0.0
+  gate_2:
+    opening: 0.5
+    outflow: 0
+  tail_user:
+    outflow: 45.0
+    passthrough_flow: 0
+    inflow: 0
+- time: 90
+  upstream_reservoir:
+    water_level: 10.0
+    outflow: 0.0
+    volume: 0
+    inflow: 0.0
+  diversion_before_gate1:
+    outflow: 0.0
+    passthrough_flow: 0
+    inflow: 0.0
+  gate_1:
+    opening: 0.5
+    outflow: 0
+  canal_1:
+    water_level: 5.0
+    inflow: 0
+    outflow: 0.0
+  diversion_before_gate2:
+    outflow: 0.0
+    passthrough_flow: 0
+    inflow: 0.0
+  gate_2:
+    opening: 0.5
+    outflow: 0
+  tail_user:
+    outflow: 45.0
+    passthrough_flow: 0
+    inflow: 0

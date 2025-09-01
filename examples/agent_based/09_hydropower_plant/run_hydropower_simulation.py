@@ -50,13 +50,13 @@ def run_hydropower_simulation():
     turbine.target_outflow = 30.0
 
     # 3. Add components to the harness
-    harness.add_component(source_res)
-    harness.add_component(downstream_res)
-    harness.add_component(turbine)
+    harness.add_component("source_res", source_res)
+    harness.add_component("downstream_res", downstream_res)
+    harness.add_component("turbine_1", turbine)
 
     # 4. Connect the components
-    harness.add_connection(source_res.name, turbine.name)
-    harness.add_connection(turbine.name, downstream_res.name)
+    harness.add_connection("source_res", "turbine_1")
+    harness.add_connection("turbine_1", "downstream_res")
 
     # 5. Build the simulation
     harness.build()
