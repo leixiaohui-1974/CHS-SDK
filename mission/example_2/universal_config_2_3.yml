@@ -1,0 +1,656 @@
+# Mission Example 2 - Config 2.3 通用配置文件
+# 流域联合调度系统配置
+
+# ============================================================
+# 仿真配置
+# ============================================================
+simulation:
+  name: "流域联合调度系统仿真"
+  description: "Example 2.3 - 演示一个更复杂的流域联合调度场景，包含多种水利设施的协调控制"
+  version: "1.0.0"
+  
+  # 时间设置
+  time:
+    end_time: 7200.0      # 仿真持续时间 (2小时)
+    time_step: 60.0       # 时间步长 (1分钟)
+    output_interval: 300.0  # 输出间隔 (5分钟)
+    
+  # 求解器配置
+  solver:
+    method: "watershed_dispatch"  # 流域调度求解方法
+    tolerance: 1e-4              # 求解精度
+    max_iterations: 300          # 最大迭代次数
+    
+  # 并行计算
+  parallel:
+    enabled: true                # 多设施系统，启用并行
+    num_processes: 8             # 进程数量（对应智能体数量）
+
+# ============================================================
+# 调试配置
+# ============================================================
+debug:
+  enabled: true
+  log_level: "INFO"
+  log_file: "logs/watershed_dispatch_config_2_3/debug.log"
+  session_id: "watershed_dispatch_config_2_3_session"
+  
+  # 数据收集
+  data_collection:
+    enabled: true
+    interval: 300.0  # 数据收集间隔 (5分钟)
+    variables:
+      - "reservoir_level"
+      - "hydro_station_flow"
+      - "diversion_gate_opening"
+      - "main_channel_level"
+      - "upstream_inflow"
+      - "irrigation_demand"
+      - "hydro_station_setpoint"
+      - "diversion_gate_setpoint"
+      - "dispatcher_mode"
+      - "flood_risk_level"
+      - "irrigation_supply"
+      - "power_generation"
+      - "water_balance"
+      - "system_efficiency"
+      - "coordination_status"
+      
+  # Web仪表板
+  dashboard:
+    web_dashboard: true
+    port: 8102
+    auto_open: false
+    
+  # 控制台监控
+  console:
+    real_time_display: true
+    update_interval: 300.0    # 实时监控流域调度状态
+    show_detailed_logs: true
+    show_coordination_status: true
+
+# ============================================================
+# 性能监控配置
+# ============================================================
+performance:
+  enabled: true
+  
+  # 时间跟踪
+  timing:
+    enabled: true
+    detailed_profiling: true
+    watershed_timing: true
+    multi_facility_timing: true
+    
+  # 内存监控
+  memory:
+    enabled: true
+    threshold_mb: 2500  # 内存阈值（多设施系统）
+    
+  # CPU监控
+  cpu:
+    enabled: true
+    threshold_percent: 90  # CPU使用率警告阈值
+
+# ============================================================
+# 可视化配置
+# ============================================================
+visualization:
+  enabled: true
+  
+  # 图表配置
+  plots:
+    enabled: true
+    save_plots: true
+    plot_directory: "plots/watershed_dispatch_config_2_3/"
+    format: "png"
+    dpi: 300
+    
+    # 图表定义
+    charts:
+      - name: "流域水位监控"
+        type: "time_series"
+        variables: ["reservoir_level", "main_channel_level"]
+        title: "Watershed Water Level Monitoring"
+        xlabel: "Time (minutes)"
+        ylabel: "Water Level (m)"
+        
+      - name: "流量调度"
+        type: "time_series"
+        variables: ["hydro_station_flow", "upstream_inflow", "irrigation_demand"]
+        title: "Flow Dispatch"
+        xlabel: "Time (minutes)"
+        ylabel: "Flow Rate (m³/s)"
+        
+      - name: "闸门控制"
+        type: "time_series"
+        variables: ["diversion_gate_opening", "hydro_station_setpoint"]
+        title: "Gate Control"
+        xlabel: "Time (minutes)"
+        ylabel: "Control Signals"
+        
+      - name: "调度模式"
+        type: "time_series"
+        variables: ["dispatcher_mode", "flood_risk_level"]
+        title: "Dispatch Mode"
+        xlabel: "Time (minutes)"
+        ylabel: "Mode/Risk Level"
+        
+      - name: "灌溉供水"
+        type: "time_series"
+        variables: ["irrigation_supply", "irrigation_demand"]
+        title: "Irrigation Supply"
+        xlabel: "Time (minutes)"
+        ylabel: "Flow Rate (m³/s)"
+        
+      - name: "发电功率"
+        type: "time_series"
+        variables: ["power_generation"]
+        title: "Power Generation"
+        xlabel: "Time (minutes)"
+        ylabel: "Power (MW)"
+        
+      - name: "水量平衡"
+        type: "time_series"
+        variables: ["water_balance"]
+        title: "Water Balance"
+        xlabel: "Time (minutes)"
+        ylabel: "Volume (m³)"
+        
+      - name: "系统效率"
+        type: "time_series"
+        variables: ["system_efficiency"]
+        title: "System Efficiency"
+        xlabel: "Time (minutes)"
+        ylabel: "Efficiency (%)"
+        
+      - name: "协调状态"
+        type: "time_series"
+        variables: ["coordination_status"]
+        title: "Coordination Status"
+        xlabel: "Time (minutes)"
+        ylabel: "Status Level"
+        
+  # 实时仪表板
+  dashboard:
+    enabled: true
+    update_interval: 300.0    # 实时更新流域调度状态
+    port: 8103
+
+# ============================================================
+# 数据输出配置
+# ============================================================
+output:
+  enabled: true
+  output_directory: "results/watershed_dispatch_config_2_3/"
+  
+  # 历史数据保存
+  save_history: true
+  history_file: "simulation_history.json"
+  
+  # 数据格式
+  format:
+    csv: true
+    json: true
+    hdf5: true     # 启用HDF5以处理多设施数据
+    matlab: true   # 启用MATLAB格式用于水利分析
+    
+  # 压缩设置
+  compression:
+    enabled: true
+    method: "gzip"
+    
+  # 验证配置
+  validation:
+    enabled: true
+    expected_results:
+      flood_prevention_check: true
+      max_allowed_reservoir_level: 25.0  # 水库最大允许水位 (m)
+      flood_response_time: 300           # 洪水响应时间 (秒)
+      max_acceptable_level: 24.0         # 最大可接受水位 (m)
+    performance_metrics:
+      - "max_reservoir_level"
+      - "total_irrigation_supply"
+      - "flood_prevention_success"
+      - "dispatcher_mode_switches"
+    description: "系统应能在洪水期间自动切换到防洪模式，增加水电站出流并关闭灌溉取水"
+
+# ============================================================
+# 智能分析配置
+# ============================================================
+analysis:
+  enabled: true
+  
+  # 控制性能分析
+  control_performance:
+    enabled: true
+    metrics: ["ise", "iae", "itae", "settling_time", "overshoot", "flood_response"]
+    reference_tracking: true
+    disturbance_rejection: true
+    
+  # 统计分析
+  statistical:
+    enabled: true
+    generate_summary: true
+    variance_analysis: true
+    correlation_analysis: true
+    
+  # 系统识别
+  system_identification:
+    enabled: true
+    method: "subspace"
+    state_space_model: true
+    input_signals: ["hydro_station_setpoint", "diversion_gate_setpoint"]
+    output_signals: ["reservoir_level", "main_channel_level"]
+    
+  # 流域调度专用分析
+  watershed_analysis:
+    enabled: true
+    multi_facility_coordination: true
+    flood_management: true
+    irrigation_efficiency: true
+    power_generation_optimization: true
+    
+  # 洪水分析
+  flood_analysis:
+    enabled: true
+    flood_detection: true
+    emergency_response: true
+    risk_assessment: true
+    damage_prevention: true
+    
+  # 水资源分析
+  water_resource_analysis:
+    enabled: true
+    water_balance: true
+    allocation_efficiency: true
+    supply_demand_matching: true
+    conservation_analysis: true
+    
+  # 多目标优化分析
+  multi_objective_analysis:
+    enabled: true
+    flood_control_vs_irrigation: true
+    power_generation_vs_flood_control: true
+    pareto_frontier: true
+    trade_off_analysis: true
+
+# ============================================================
+# 日志配置
+# ============================================================
+logging:
+  enabled: true
+  level: "INFO"
+  
+  # 文件日志
+  file:
+    enabled: true
+    filename: "logs/watershed_dispatch_config_2_3/simulation.log"
+    max_size_mb: 60
+    backup_count: 30
+    
+  # 控制台日志
+  console:
+    enabled: true
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    
+  # 结构化日志
+  structured:
+    enabled: true
+    format: "json"
+    
+  # 流域调度专用日志
+  watershed_log:
+    enabled: true
+    filename: "logs/watershed_dispatch_config_2_3/watershed.log"
+    variables: ["dispatcher_mode", "flood_risk_level", "coordination_status"]
+    
+  # 设施协调日志
+  facility_coordination_log:
+    enabled: true
+    filename: "logs/watershed_dispatch_config_2_3/coordination.log"
+    coordination_events: true
+    mode_switches: true
+    emergency_actions: true
+    
+  # 洪水管理日志
+  flood_management_log:
+    enabled: true
+    filename: "logs/watershed_dispatch_config_2_3/flood_management.log"
+    flood_events: true
+    emergency_responses: true
+    prevention_actions: true
+
+# ============================================================
+# 错误处理配置
+# ============================================================
+error_handling:
+  enabled: true
+  
+  # 错误分类
+  categories:
+    critical: ["facility_failure", "flood_emergency", "dam_safety", "coordination_breakdown"]
+    warning: ["irrigation_shortage", "power_reduction", "sensor_degradation", "communication_delay"]
+    info: ["normal_operation", "mode_switch", "routine_maintenance", "optimization_update"]
+    
+  # 恢复策略
+  recovery:
+    auto_retry: true
+    max_retries: 5
+    retry_delay: 180.0
+    fallback_controller: "emergency_watershed_mode"
+    
+  # 通知设置
+  notifications:
+    enabled: true
+    email: ["watershed_manager@example.com", "flood_control@example.com", "irrigation_manager@example.com", "power_operator@example.com"]
+    webhook: "http://localhost:9000/watershed_alerts"
+
+# ============================================================
+# 缓存配置
+# ============================================================
+cache:
+  enabled: true
+  
+  # 内存缓存
+  memory:
+    enabled: true
+    max_size_mb: 1000
+    
+  # 磁盘缓存
+  disk:
+    enabled: true
+    directory: "cache/watershed_dispatch_config_2_3/"
+    max_size_gb: 10
+
+# ============================================================
+# 网络配置
+# ============================================================
+network:
+  enabled: true
+  
+  # 分布式仿真
+  distributed:
+    enabled: true
+    master_host: "localhost"
+    master_port: 9008
+    
+  # 通信设置
+  communication:
+    protocol: "tcp"  # 适合流域调度的可靠通信协议
+    timeout: 240
+    buffer_size: 131072
+    topics:
+      reservoir_level: "state.reservoir.level"
+      hydro_station_flow: "state.hydro_station.flow"
+      diversion_gate_opening: "state.diversion_gate.opening"
+      main_channel_level: "state.main_channel.level"
+      downstream_demand: "state.downstream.demand"
+      hydro_station_control: "command.hydro_station.setpoint"
+      diversion_gate_control: "command.diversion_gate.setpoint"
+      upstream_inflow: "disturbance.upstream.inflow"
+      irrigation_demand: "disturbance.irrigation.demand"
+
+# ============================================================
+# 安全配置
+# ============================================================
+security:
+  enabled: true
+  
+  # 访问控制
+  access_control:
+    enabled: true
+    allowed_hosts: ["localhost", "watershed-center", "flood-control", "irrigation-center", "power-station"]
+    
+  # 加密设置
+  encryption:
+    enabled: true
+    algorithm: "AES-256"
+    
+  # 监控设置
+  monitoring:
+    enabled: true
+    intrusion_detection: true
+    dam_safety_protocols: true
+    flood_emergency_protocols: true
+    irrigation_security: true
+
+# ============================================================
+# 扩展配置
+# ============================================================
+extensions:
+  enabled: true
+  
+  # 插件系统
+  plugins:
+    enabled: true
+    directory: "plugins/watershed/"
+    modules: ["advanced_dispatch", "flood_forecasting", "irrigation_optimization", "power_scheduling"]
+    
+  # 自定义功能
+  custom:
+    enabled: true
+    modules: ["multi_facility_coordination", "water_resource_management", "emergency_response", "economic_optimization"]
+
+# ============================================================
+# 环境配置
+# ============================================================
+environment:
+  name: "development"
+  
+  # 环境变量
+  variables:
+    SIMULATION_ENV: "watershed_dispatch_config_2_3"
+    LOG_LEVEL: "INFO"
+    CONTROL_MODE: "watershed_dispatch"
+    
+  # 自定义变量
+  custom_vars:
+    # 仿真参数
+    description: "演示一个更复杂的流域联合调度场景，包含多种水利设施的协调控制"
+    duration: 7200                # 仿真持续时间 (2小时)
+    time_step: 60                 # 时间步长 (1分钟)
+    
+    # 通信主题
+    reservoir_level_topic: "state.reservoir.level"
+    hydro_station_flow_topic: "state.hydro_station.flow"
+    diversion_gate_opening_topic: "state.diversion_gate.opening"
+    main_channel_level_topic: "state.main_channel.level"
+    downstream_demand_topic: "state.downstream.demand"
+    hydro_station_control_topic: "command.hydro_station.setpoint"
+    diversion_gate_control_topic: "command.diversion_gate.setpoint"
+    upstream_inflow_topic: "disturbance.upstream.inflow"
+    irrigation_demand_topic: "disturbance.irrigation.demand"
+    
+    # 物理组件参数
+    # 上游水库
+    upstream_reservoir_type: "UnifiedCanal"
+    upstream_reservoir_model: "reservoir"
+    upstream_reservoir_initial_volume: 50000000  # 5000万立方米
+    upstream_reservoir_initial_level: 20.0       # m
+    upstream_reservoir_surface_area: 2500000     # 2.5平方公里
+    upstream_reservoir_length: 1000
+    upstream_reservoir_bottom_width: 1000
+    upstream_reservoir_side_slope_z: 0
+    upstream_reservoir_inflow_topic: "disturbance.upstream.inflow"
+    
+    # 水电站（涡轮机+溢洪道）
+    hydro_station_type: "Gate"
+    hydro_station_initial_opening: 0.3    # 30%开度
+    hydro_station_width: 50
+    hydro_station_discharge_coefficient: 0.6
+    hydro_station_max_opening: 1.0
+    
+    # 主渠道（水电站与分水闸之间）
+    main_channel_type: "UnifiedCanal"
+    main_channel_model: "channel"
+    main_channel_initial_volume: 100000   # 10万立方米
+    main_channel_initial_level: 5.0       # m
+    main_channel_length: 5000             # 5公里
+    main_channel_bottom_width: 20
+    main_channel_side_slope_z: 1.5
+    main_channel_manning_n: 0.03
+    
+    # 下游分水闸（用于灌溉）
+    diversion_gate_type: "Gate"
+    diversion_gate_initial_opening: 0.5   # 50%开度
+    diversion_gate_width: 10
+    diversion_gate_discharge_coefficient: 0.6
+    diversion_gate_max_opening: 1.0
+    
+    # 扰动智能体配置
+    # 上游入流
+    upstream_inflow_agent_id: "upstream_inflow"
+    upstream_inflow_agent_type: "RainfallAgent"
+    upstream_inflow_topic: "disturbance.upstream.inflow"
+    upstream_inflow_pattern: "flood_event"
+    upstream_base_rate: 50.0              # m³/s 基础入流
+    upstream_peak_rate: 300.0             # m³/s 洪峰入流
+    upstream_start_time: 1800             # 30分钟后开始洪水
+    upstream_duration: 3600               # 1小时洪水持续时间
+    
+    # 灌溉需求
+    irrigation_demand_agent_id: "irrigation_demand"
+    irrigation_demand_agent_type: "WaterUseAgent"
+    irrigation_target_object: "main_channel"
+    irrigation_start_time: 0
+    irrigation_duration: 7200             # 整个仿真期间持续
+    irrigation_diversion_rate: 20.0       # m³/s 灌溉需求
+    irrigation_dt: 60
+    
+    # 数字孪生智能体配置
+    # 水库孪生
+    reservoir_twin_id: "reservoir_twin"
+    reservoir_twin_type: "DigitalTwinAgent"
+    reservoir_twin_object: "upstream_reservoir"
+    reservoir_twin_topic: "state.reservoir.level"
+    reservoir_twin_smoothing: true
+    reservoir_twin_alpha: 0.8
+    
+    # 水电站孪生
+    hydro_station_twin_id: "hydro_station_twin"
+    hydro_station_twin_type: "DigitalTwinAgent"
+    hydro_station_twin_object: "hydro_station"
+    hydro_station_twin_topic: "state.hydro_station.flow"
+    hydro_station_twin_smoothing: false
+    
+    # 分水闸孪生
+    diversion_gate_twin_id: "diversion_gate_twin"
+    diversion_gate_twin_type: "DigitalTwinAgent"
+    diversion_gate_twin_object: "diversion_gate"
+    diversion_gate_twin_topic: "state.diversion_gate.opening"
+    diversion_gate_twin_smoothing: false
+    
+    # 本地控制智能体配置
+    # 水电站控制器
+    hydro_station_controller_id: "hydro_station_lca"
+    hydro_station_controller_type: "LocalControlAgent"
+    hydro_station_observation_topic: "state.reservoir.level"
+    hydro_station_observation_key: "water_level"
+    hydro_station_action_topic: "action.hydro_station.opening"
+    hydro_station_command_topic: "command.hydro_station.setpoint"
+    hydro_station_dt: 60
+    hydro_station_kp: -0.02               # 负值：水位高时增加出流
+    hydro_station_ki: -0.001
+    hydro_station_kd: -0.005
+    hydro_station_setpoint: 100           # 目标出流 (m³/s)
+    hydro_station_min_output: 0.0
+    hydro_station_max_output: 1.0
+    
+    # 分水闸控制器
+    diversion_gate_controller_id: "diversion_gate_lca"
+    diversion_gate_controller_type: "LocalControlAgent"
+    diversion_gate_observation_topic: "state.main_channel.level"
+    diversion_gate_observation_key: "water_level"
+    diversion_gate_action_topic: "action.diversion_gate.opening"
+    diversion_gate_command_topic: "command.diversion_gate.setpoint"
+    diversion_gate_dt: 60
+    diversion_gate_kp: 0.1                # 正值：渠道水位高时增加分流
+    diversion_gate_ki: 0.005
+    diversion_gate_kd: 0.02
+    diversion_gate_setpoint: 1.0          # 目标闸门开度
+    diversion_gate_min_output: 0.0
+    diversion_gate_max_output: 1.0
+    
+    # 中央调度器配置
+    central_dispatcher_id: "watershed_dispatcher"
+    central_dispatcher_type: "CentralDispatcher"
+    dispatcher_reservoir_subscription: "state.reservoir.level"
+    dispatcher_hydro_station_subscription: "state.hydro_station.flow"
+    dispatcher_diversion_gate_subscription: "state.diversion_gate.opening"
+    dispatcher_hydro_station_control: "command.hydro_station.setpoint"
+    dispatcher_diversion_gate_control: "command.diversion_gate.setpoint"
+    dispatcher_rule_set: "joint_dispatch_rules"
+    dispatcher_flood_threshold: 22.0      # m
+    dispatcher_normal_hydro_setpoint: 100 # m³/s
+    dispatcher_flood_hydro_setpoint: 400  # m³/s
+    dispatcher_normal_diversion_setpoint: 1.0  # 全开
+    dispatcher_flood_diversion_setpoint: 0.0   # 关闭
+    
+    # 物理IO智能体配置
+    # 水电站IO
+    hydro_station_io_id: "hydro_station_io"
+    hydro_station_io_type: "PhysicalIOAgent"
+    hydro_station_flow_sensor_obj: "hydro_station"
+    hydro_station_flow_sensor_key: "outflow"
+    hydro_station_flow_sensor_topic: "state.hydro_station.flow"
+    hydro_station_flow_sensor_noise: 2.0  # m³/s
+    hydro_station_gate_actuator_obj: "hydro_station"
+    hydro_station_gate_actuator_attr: "opening"
+    hydro_station_gate_actuator_topic: "action.hydro_station.opening"
+    hydro_station_gate_actuator_key: "opening"
+    
+    # 分水闸IO
+    diversion_gate_io_id: "diversion_gate_io"
+    diversion_gate_io_type: "PhysicalIOAgent"
+    diversion_gate_opening_sensor_obj: "diversion_gate"
+    diversion_gate_opening_sensor_key: "opening"
+    diversion_gate_opening_sensor_topic: "state.diversion_gate.opening"
+    diversion_gate_opening_sensor_noise: 0.01
+    diversion_gate_actuator_obj: "diversion_gate"
+    diversion_gate_actuator_attr: "opening"
+    diversion_gate_actuator_topic: "action.diversion_gate.opening"
+    diversion_gate_actuator_key: "opening"
+    
+    # 主渠道IO
+    main_channel_io_id: "main_channel_io"
+    main_channel_io_type: "PhysicalIOAgent"
+    main_channel_level_sensor_obj: "main_channel"
+    main_channel_level_sensor_key: "water_level"
+    main_channel_level_sensor_topic: "state.main_channel.level"
+    main_channel_level_sensor_noise: 0.1  # m
+    
+    # 分析和验证参数
+    enable_validation: true
+    flood_prevention_check: true
+    max_allowed_reservoir_level: 25.0     # m
+    flood_response_time: 300              # 秒
+    max_acceptable_level: 24.0            # m
+    performance_metrics: ["max_reservoir_level", "total_irrigation_supply", "flood_prevention_success", "dispatcher_mode_switches"]
+    expected_behavior_description: "系统应能在洪水期间自动切换到防洪模式，增加水电站出流并关闭灌溉取水"
+    
+    # 输出设置
+    show_progress: true
+    show_final_summary: true
+    log_level: "INFO"
+    save_history: false
+    
+    # 高级流域管理参数
+    watershed_facilities: 4               # 设施数量（水库、水电站、渠道、分水闸）
+    coordination_timeout: 240.0           # 设施协调超时 (秒)
+    emergency_response_time: 180.0        # 紧急响应时间 (秒)
+    flood_warning_level: 21.0             # 洪水预警水位 (m)
+    
+    # 系统参数
+    response_time: 300.0                  # 系统响应时间 (秒)
+    communication_delay: 15.0             # 通信延迟 (秒)
+    sensor_accuracy: 0.1                  # 传感器精度 (m)
+    actuator_accuracy: 0.05               # 执行器精度 (m)
+    dispatch_accuracy: 0.9                # 调度精度
+    
+    # 依赖项
+    dependencies:
+      - "core_lib.central_coordination.dispatch.central_dispatcher"
+      - "core_lib.central_coordination.dispatch.rules"
+      - "core_lib.disturbances.rainfall_agent"
+      - "core_lib.disturbances.water_use_agent"

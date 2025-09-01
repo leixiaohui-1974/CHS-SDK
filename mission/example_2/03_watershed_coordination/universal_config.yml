@@ -1,0 +1,547 @@
+# Mission Example 2 - 03_watershed_coordination 通用配置文件
+# 流域协调控制系统配置
+
+# ============================================================
+# 仿真配置
+# ============================================================
+simulation:
+  name: "流域协调控制系统仿真"
+  description: "Example 2.3 - 流域协调控制系统演示"
+  version: "1.0.0"
+  
+  # 时间设置
+  time:
+    end_time: 3600.0      # 仿真持续时间 (1小时)
+    time_step: 5.0        # 时间步长 (5秒)
+    output_interval: 30.0 # 输出间隔 (30秒)
+    
+  # 求解器配置
+  solver:
+    method: "watershed_coordination"  # 流域协调求解方法
+    tolerance: 1e-4                  # 求解精度
+    max_iterations: 200              # 最大迭代次数
+    
+  # 并行计算
+  parallel:
+    enabled: true                    # 流域系统，启用并行
+    num_processes: 6                 # 进程数量（对应流域设施数）
+
+# ============================================================
+# 调试配置
+# ============================================================
+debug:
+  enabled: true
+  log_level: "INFO"
+  log_file: "logs/watershed_coordination_03/debug.log"
+  session_id: "watershed_coordination_03_session"
+  
+  # 数据收集
+  data_collection:
+    enabled: true
+    interval: 30.0  # 数据收集间隔 (30秒)
+    variables:
+      - "reservoir_levels"
+      - "flow_rates"
+      - "gate_openings"
+      - "coordination_signals"
+      - "watershed_status"
+      - "facility_interactions"
+      - "water_balance"
+      - "flood_risk"
+      - "irrigation_demand"
+      - "power_generation"
+      - "environmental_flow"
+      - "system_efficiency"
+      
+  # Web仪表板
+  dashboard:
+    web_dashboard: true
+    port: 8204
+    auto_open: false
+    
+  # 控制台监控
+  console:
+    real_time_display: true
+    update_interval: 30.0     # 实时监控流域协调状态
+    show_detailed_logs: true
+    show_watershed_status: true
+
+# ============================================================
+# 性能监控配置
+# ============================================================
+performance:
+  enabled: true
+  
+  # 时间跟踪
+  timing:
+    enabled: true
+    detailed_profiling: true
+    watershed_timing: true
+    coordination_timing: true
+    
+  # 内存监控
+  memory:
+    enabled: true
+    threshold_mb: 1500  # 内存阈值（流域协调系统）
+    
+  # CPU监控
+  cpu:
+    enabled: true
+    threshold_percent: 85  # CPU使用率警告阈值
+
+# ============================================================
+# 可视化配置
+# ============================================================
+visualization:
+  enabled: true
+  
+  # 图表配置
+  plots:
+    enabled: true
+    save_plots: true
+    plot_directory: "plots/watershed_coordination_03/"
+    format: "png"
+    dpi: 300
+    
+    # 图表定义
+    charts:
+      - name: "流域水位监控"
+        type: "time_series"
+        variables: ["reservoir_levels"]
+        title: "Watershed Water Level Monitoring"
+        xlabel: "Time (seconds)"
+        ylabel: "Water Level (m)"
+        
+      - name: "流量协调"
+        type: "time_series"
+        variables: ["flow_rates"]
+        title: "Flow Coordination"
+        xlabel: "Time (seconds)"
+        ylabel: "Flow Rate (m³/s)"
+        
+      - name: "闸门协调控制"
+        type: "time_series"
+        variables: ["gate_openings"]
+        title: "Gate Coordination Control"
+        xlabel: "Time (seconds)"
+        ylabel: "Gate Opening"
+        
+      - name: "协调信号"
+        type: "time_series"
+        variables: ["coordination_signals"]
+        title: "Coordination Signals"
+        xlabel: "Time (seconds)"
+        ylabel: "Signal Strength"
+        
+      - name: "流域状态"
+        type: "time_series"
+        variables: ["watershed_status"]
+        title: "Watershed Status"
+        xlabel: "Time (seconds)"
+        ylabel: "Status Level"
+        
+      - name: "设施交互"
+        type: "time_series"
+        variables: ["facility_interactions"]
+        title: "Facility Interactions"
+        xlabel: "Time (seconds)"
+        ylabel: "Interaction Level"
+        
+      - name: "水量平衡"
+        type: "time_series"
+        variables: ["water_balance"]
+        title: "Water Balance"
+        xlabel: "Time (seconds)"
+        ylabel: "Volume (m³)"
+        
+      - name: "洪水风险"
+        type: "time_series"
+        variables: ["flood_risk"]
+        title: "Flood Risk"
+        xlabel: "Time (seconds)"
+        ylabel: "Risk Level"
+        
+      - name: "灌溉需求"
+        type: "time_series"
+        variables: ["irrigation_demand"]
+        title: "Irrigation Demand"
+        xlabel: "Time (seconds)"
+        ylabel: "Demand (m³/s)"
+        
+      - name: "发电功率"
+        type: "time_series"
+        variables: ["power_generation"]
+        title: "Power Generation"
+        xlabel: "Time (seconds)"
+        ylabel: "Power (MW)"
+        
+      - name: "环境流量"
+        type: "time_series"
+        variables: ["environmental_flow"]
+        title: "Environmental Flow"
+        xlabel: "Time (seconds)"
+        ylabel: "Flow Rate (m³/s)"
+        
+      - name: "系统效率"
+        type: "time_series"
+        variables: ["system_efficiency"]
+        title: "System Efficiency"
+        xlabel: "Time (seconds)"
+        ylabel: "Efficiency (%)"
+        
+  # 实时仪表板
+  dashboard:
+    enabled: true
+    update_interval: 30.0     # 实时更新流域协调状态
+    port: 8205
+
+# ============================================================
+# 数据输出配置
+# ============================================================
+output:
+  enabled: true
+  output_directory: "results/watershed_coordination_03/"
+  
+  # 历史数据保存
+  save_history: true
+  history_file: "simulation_history.json"
+  
+  # 数据格式
+  format:
+    csv: true
+    json: true
+    hdf5: true     # 启用HDF5以处理流域数据
+    matlab: true   # 启用MATLAB格式用于水利分析
+    
+  # 压缩设置
+  compression:
+    enabled: true
+    method: "gzip"
+    
+  # 验证配置
+  validation:
+    enabled: true
+    expected_results:
+      coordination_efficiency: 0.9     # 协调效率阈值
+      water_balance_error: 0.05       # 水量平衡误差阈值
+      flood_prevention: true          # 洪水预防成功
+    performance_metrics:
+      - "coordination_efficiency"
+      - "water_balance_error"
+      - "flood_prevention_success"
+      - "irrigation_satisfaction"
+    description: "流域协调控制系统应能有效协调各水利设施"
+
+# ============================================================
+# 智能分析配置
+# ============================================================
+analysis:
+  enabled: true
+  
+  # 控制性能分析
+  control_performance:
+    enabled: true
+    metrics: ["ise", "iae", "itae", "settling_time", "overshoot", "coordination_efficiency"]
+    reference_tracking: true
+    disturbance_rejection: true
+    
+  # 统计分析
+  statistical:
+    enabled: true
+    generate_summary: true
+    variance_analysis: true
+    correlation_analysis: true
+    
+  # 系统识别
+  system_identification:
+    enabled: true
+    method: "subspace"
+    state_space_model: true
+    input_signals: ["coordination_signals", "gate_openings"]
+    output_signals: ["reservoir_levels", "flow_rates"]
+    
+  # 流域协调专用分析
+  watershed_analysis:
+    enabled: true
+    facility_coordination: true
+    water_resource_optimization: true
+    flood_management: true
+    drought_management: true
+    
+  # 多目标优化分析
+  multi_objective_analysis:
+    enabled: true
+    flood_control_vs_irrigation: true
+    power_generation_vs_environment: true
+    economic_vs_environmental: true
+    pareto_optimization: true
+    
+  # 环境影响分析
+  environmental_analysis:
+    enabled: true
+    ecological_flow: true
+    water_quality: true
+    habitat_protection: true
+    sustainability_metrics: true
+    
+  # 经济分析
+  economic_analysis:
+    enabled: true
+    cost_benefit: true
+    revenue_optimization: true
+    operational_costs: true
+    investment_analysis: true
+
+# ============================================================
+# 日志配置
+# ============================================================
+logging:
+  enabled: true
+  level: "INFO"
+  
+  # 文件日志
+  file:
+    enabled: true
+    filename: "logs/watershed_coordination_03/simulation.log"
+    max_size_mb: 40
+    backup_count: 20
+    
+  # 控制台日志
+  console:
+    enabled: true
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    
+  # 结构化日志
+  structured:
+    enabled: true
+    format: "json"
+    
+  # 流域协调专用日志
+  watershed_log:
+    enabled: true
+    filename: "logs/watershed_coordination_03/watershed.log"
+    variables: ["watershed_status", "coordination_signals", "facility_interactions"]
+    
+  # 协调日志
+  coordination_log:
+    enabled: true
+    filename: "logs/watershed_coordination_03/coordination.log"
+    coordination_events: true
+    facility_interactions: true
+    optimization_decisions: true
+    
+  # 水资源管理日志
+  water_management_log:
+    enabled: true
+    filename: "logs/watershed_coordination_03/water_management.log"
+    allocation_decisions: true
+    conservation_actions: true
+    emergency_responses: true
+
+# ============================================================
+# 错误处理配置
+# ============================================================
+error_handling:
+  enabled: true
+  
+  # 错误分类
+  categories:
+    critical: ["facility_failure", "coordination_breakdown", "flood_emergency", "drought_emergency"]
+    warning: ["efficiency_degradation", "communication_delay", "resource_shortage"]
+    info: ["normal_operation", "coordination_update", "optimization_cycle"]
+    
+  # 恢复策略
+  recovery:
+    auto_retry: true
+    max_retries: 5
+    retry_delay: 120.0
+    fallback_controller: "emergency_coordination_mode"
+    
+  # 通知设置
+  notifications:
+    enabled: true
+    email: ["watershed_manager@example.com", "flood_control@example.com", "irrigation_manager@example.com", "environmental_officer@example.com"]
+    webhook: "http://localhost:9000/watershed_coordination_alerts"
+
+# ============================================================
+# 缓存配置
+# ============================================================
+cache:
+  enabled: true
+  
+  # 内存缓存
+  memory:
+    enabled: true
+    max_size_mb: 500
+    
+  # 磁盘缓存
+  disk:
+    enabled: true
+    directory: "cache/watershed_coordination_03/"
+    max_size_gb: 5
+
+# ============================================================
+# 网络配置
+# ============================================================
+network:
+  enabled: true
+  
+  # 分布式仿真
+  distributed:
+    enabled: true
+    master_host: "localhost"
+    master_port: 9010
+    
+  # 通信设置
+  communication:
+    protocol: "tcp"  # 适合流域协调的可靠通信协议
+    timeout: 180
+    buffer_size: 65536
+    watershed_topics:
+      coordination_center: "watershed/coordination"
+      facility_status: "watershed/facilities"
+      water_balance: "watershed/balance"
+      emergency_alerts: "watershed/emergency"
+
+# ============================================================
+# 安全配置
+# ============================================================
+security:
+  enabled: true
+  
+  # 访问控制
+  access_control:
+    enabled: true
+    allowed_hosts: ["localhost", "watershed-center", "flood-control", "irrigation-center", "environmental-station"]
+    
+  # 加密设置
+  encryption:
+    enabled: true
+    algorithm: "AES-256"
+    
+  # 监控设置
+  monitoring:
+    enabled: true
+    intrusion_detection: true
+    watershed_security: true
+    environmental_monitoring: true
+
+# ============================================================
+# 扩展配置
+# ============================================================
+extensions:
+  enabled: true
+  
+  # 插件系统
+  plugins:
+    enabled: true
+    directory: "plugins/watershed_coordination/"
+    modules: ["advanced_optimization", "climate_adaptation", "ecosystem_management"]
+    
+  # 自定义功能
+  custom:
+    enabled: true
+    modules: ["multi_objective_optimization", "environmental_protection", "economic_optimization"]
+
+# ============================================================
+# 环境配置
+# ============================================================
+environment:
+  name: "development"
+  
+  # 环境变量
+  variables:
+    SIMULATION_ENV: "watershed_coordination_03"
+    LOG_LEVEL: "INFO"
+    CONTROL_MODE: "watershed_coordination"
+    
+  # 自定义变量
+  custom_vars:
+    # 仿真参数
+    description: "流域协调控制系统演示"
+    duration: 3600                # 仿真持续时间 (1小时)
+    time_step: 5.0                # 时间步长 (5秒)
+    
+    # 流域参数
+    watershed_area: 5000          # 流域面积 (km²)
+    num_facilities: 6             # 设施数量
+    coordination_radius: 50       # 协调半径 (km)
+    
+    # 协调控制参数
+    coordination_period: 30.0     # 协调周期 (秒)
+    optimization_horizon: 3600    # 优化时域 (秒)
+    coordination_algorithm: "distributed_mpc"
+    
+    # 水资源管理参数
+    water_allocation_strategy: "priority_based"
+    conservation_target: 0.15     # 节水目标 (15%)
+    environmental_flow_ratio: 0.1 # 环境流量比例
+    
+    # 洪水管理参数
+    flood_warning_level: 0.8      # 洪水预警水位比例
+    flood_emergency_level: 0.95   # 洪水紧急水位比例
+    flood_response_time: 300      # 洪水响应时间 (秒)
+    
+    # 干旱管理参数
+    drought_warning_level: 0.3    # 干旱预警水位比例
+    drought_emergency_level: 0.2  # 干旱紧急水位比例
+    drought_response_time: 1800   # 干旱响应时间 (秒)
+    
+    # 灌溉管理参数
+    irrigation_priority: 2        # 灌溉优先级
+    irrigation_efficiency: 0.8    # 灌溉效率
+    crop_water_demand: 100        # 作物需水量 (m³/s)
+    
+    # 发电管理参数
+    power_generation_priority: 3  # 发电优先级
+    turbine_efficiency: 0.9       # 涡轮效率
+    power_demand: 50              # 电力需求 (MW)
+    
+    # 环境保护参数
+    environmental_priority: 1     # 环境保护优先级
+    minimum_environmental_flow: 10 # 最小环境流量 (m³/s)
+    water_quality_threshold: 0.8  # 水质阈值
+    
+    # 经济参数
+    water_price: 0.5              # 水价 ($/m³)
+    electricity_price: 0.1        # 电价 ($/kWh)
+    flood_damage_cost: 1000000    # 洪水损失成本 ($/event)
+    
+    # 通信参数
+    communication_delay: 2.0      # 通信延迟 (秒)
+    message_loss_rate: 0.005      # 消息丢失率
+    bandwidth_limit: 2000         # 带宽限制 (kbps)
+    
+    # 性能参数
+    coordination_efficiency_target: 0.9   # 目标协调效率
+    water_balance_error_target: 0.05      # 目标水量平衡误差
+    system_response_time_target: 180      # 目标系统响应时间 (秒)
+    
+    # 优化参数
+    optimization_method: "multi_objective_genetic_algorithm"
+    population_size: 50
+    max_generations: 100
+    mutation_rate: 0.1
+    crossover_rate: 0.8
+    
+    # 学习参数
+    reinforcement_learning: true
+    learning_algorithm: "deep_q_network"
+    exploration_rate: 0.1
+    learning_rate: 0.001
+    experience_replay_size: 10000
+    
+    # 预测参数
+    weather_forecast_horizon: 72  # 天气预报时域 (小时)
+    demand_forecast_horizon: 24   # 需求预测时域 (小时)
+    forecast_accuracy: 0.85       # 预测精度
+    
+    # 故障容错参数
+    fault_detection_enabled: true
+    fault_tolerance_level: 2      # 故障容错级别
+    backup_systems: 3             # 备用系统数量
+    
+    # 监控参数
+    real_time_monitoring: true
+    data_logging_interval: 30     # 数据记录间隔 (秒)
+    alert_threshold_levels: [0.7, 0.85, 0.95]  # 警报阈值级别

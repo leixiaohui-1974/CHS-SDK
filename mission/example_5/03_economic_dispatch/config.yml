@@ -1,0 +1,30 @@
+# Mission Example 5.3 - 水轮机经济调度表计算配置
+
+optimization:
+  turbine_count: 6
+  power_range:
+    min_mw: 0
+    max_mw: 300
+    step_mw: 10
+  
+  head_range:
+    min_m: 50
+    max_m: 120
+    step_m: 5
+
+output:
+  table_filename: "turbine_economic_table.csv"
+  save_path: "../data/"
+
+# 通用配置
+general:
+  validation:
+    enabled: true
+  
+  debug:
+    enabled: true
+    log_level: "INFO"
+    verbose: false
+  
+  performance:
+    track_timing: true

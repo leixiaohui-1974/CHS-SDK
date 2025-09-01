@@ -1,0 +1,20 @@
+# 智能体配置
+
+agents:
+  supervisor:
+    agent_id: "supervisor_1"
+    initial_target_mw: 200.0
+  
+  hydropower_control:
+    agent_id: "hydro_ctrl_1"
+  
+  grid_communication:
+    agent_id: "grid_comm_1"
+    events:
+      - time: 150
+        type: "power_limit"
+        max_power_mw: 150.0
+  
+  inflow:
+    agent_id: "inflow_1"
+    inflow_rate: 500.0

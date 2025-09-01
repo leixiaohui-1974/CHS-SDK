@@ -1,0 +1,4 @@
+# Global simulation settings
+simulation:
+  duration: 1000  # seconds
+  dt: 10.0        # time step in seconds

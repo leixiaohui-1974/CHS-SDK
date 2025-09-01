@@ -1,0 +1,352 @@
+# Mission Example 1 - 02_advanced_control 通用配置文件
+# 高级控制系统配置
+
+# ============================================================
+# 仿真配置
+# ============================================================
+simulation:
+  name: "高级控制系统仿真"
+  description: "Example 1 - 高级控制系统，演示PID控制、模糊控制和自适应控制"
+  version: "1.0.0"
+  
+  # 时间设置
+  time:
+    end_time: 1800.0      # 仿真持续时间 (秒) - 30分钟
+    time_step: 5.0        # 时间步长 (秒) - 更精细的控制
+    output_interval: 25.0 # 输出间隔 (秒)
+    
+  # 求解器配置
+  solver:
+    method: "runge_kutta"  # 高精度求解方法
+    tolerance: 1e-8       # 更高的求解精度
+    max_iterations: 2000  # 更多迭代次数
+    
+  # 并行计算
+  parallel:
+    enabled: true         # 启用并行计算以提高性能
+    num_processes: 2      # 进程数量
+
+# ============================================================
+# 调试配置
+# ============================================================
+debug:
+  enabled: true
+  log_level: "DEBUG"     # 更详细的调试信息
+  log_file: "logs/advanced_control/debug.log"
+  session_id: "advanced_control_session"
+  
+  # 数据收集
+  data_collection:
+    enabled: true
+    interval: 25.0  # 数据收集间隔 (秒)
+    variables:
+      - "upstream_canal_water_level"
+      - "downstream_canal_water_level"
+      - "control_gate_opening"
+      - "inflow_rate"
+      - "outflow_rate"
+      - "pid_output"
+      - "control_error"
+      - "setpoint"
+      - "fuzzy_output"
+      - "adaptive_gain"
+      
+  # Web仪表板
+  dashboard:
+    web_dashboard: true
+    port: 8082
+    auto_open: false
+    
+  # 控制台监控
+  console:
+    real_time_display: true
+    update_interval: 5.0   # 更频繁的更新
+
+# ============================================================
+# 性能监控配置
+# ============================================================
+performance:
+  enabled: true
+  
+  # 时间跟踪
+  timing:
+    enabled: true
+    detailed_profiling: true
+    
+  # 内存监控
+  memory:
+    enabled: true
+    threshold_mb: 1500  # 更高的内存阈值
+    
+  # CPU监控
+  cpu:
+    enabled: true
+    threshold_percent: 85  # CPU使用率警告阈值
+
+# ============================================================
+# 可视化配置
+# ============================================================
+visualization:
+  enabled: true
+  
+  # 图表配置
+  plots:
+    enabled: true
+    save_plots: true
+    plot_directory: "plots/advanced_control/"
+    format: "png"
+    dpi: 300
+    
+    # 图表定义
+    charts:
+      - name: "控制系统响应"
+        type: "time_series"
+        variables: ["setpoint", "upstream_canal_water_level", "control_error"]
+        title: "Control System Response"
+        xlabel: "Time (s)"
+        ylabel: "Water Level (m)"
+        
+      - name: "控制器输出"
+        type: "time_series"
+        variables: ["pid_output", "fuzzy_output", "control_gate_opening"]
+        title: "Controller Outputs"
+        xlabel: "Time (s)"
+        ylabel: "Control Signal"
+        
+      - name: "自适应参数"
+        type: "time_series"
+        variables: ["adaptive_gain"]
+        title: "Adaptive Control Parameters"
+        xlabel: "Time (s)"
+        ylabel: "Gain Value"
+        
+      - name: "控制性能分析"
+        type: "control_performance"
+        variables: ["control_error", "setpoint", "upstream_canal_water_level"]
+        title: "Control Performance Analysis"
+        
+  # 实时仪表板
+  dashboard:
+    enabled: true
+    update_interval: 2.0   # 更频繁的仪表板更新
+    port: 8083
+
+# ============================================================
+# 数据输出配置
+# ============================================================
+output:
+  enabled: true
+  output_directory: "results/advanced_control/"
+  
+  # 历史数据保存
+  save_history: true
+  history_file: "simulation_history.json"
+  
+  # 数据格式
+  format:
+    csv: true
+    json: true
+    hdf5: true     # 启用HDF5以处理大量控制数据
+    
+  # 压缩设置
+  compression:
+    enabled: true
+    method: "gzip"
+    
+  # 验证配置
+  validation:
+    enabled: true
+    expected_results:
+      settling_time: 300.0    # 期望稳定时间 (秒)
+      overshoot: 0.1          # 期望超调量
+      steady_state_error: 0.02 # 期望稳态误差
+    tolerance: 0.05
+
+# ============================================================
+# 智能分析配置
+# ============================================================
+analysis:
+  enabled: true
+  
+  # 控制性能分析
+  control_performance:
+    enabled: true
+    metrics: ["settling_time", "overshoot", "steady_state_error", "rise_time", "peak_time"]
+    reference_signal: "setpoint"
+    output_signal: "upstream_canal_water_level"
+    
+  # 统计分析
+  statistical:
+    enabled: true
+    generate_summary: true
+    correlation_analysis: true
+    
+  # 系统识别
+  system_identification:
+    enabled: true
+    method: "arx"
+    order: [3, 3, 2]  # 更复杂的模型
+    input_signals: ["control_gate_opening"]
+    output_signals: ["upstream_canal_water_level"]
+    
+  # 频域分析
+  frequency_analysis:
+    enabled: true
+    fft_analysis: true
+    bode_plot: true
+
+# ============================================================
+# 日志配置
+# ============================================================
+logging:
+  enabled: true
+  level: "DEBUG"
+  
+  # 文件日志
+  file:
+    enabled: true
+    filename: "logs/advanced_control/simulation.log"
+    max_size_mb: 20
+    backup_count: 10
+    
+  # 控制台日志
+  console:
+    enabled: true
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    
+  # 结构化日志
+  structured:
+    enabled: true
+    format: "json"
+    
+  # 控制专用日志
+  control_log:
+    enabled: true
+    filename: "logs/advanced_control/control.log"
+    variables: ["pid_output", "control_error", "setpoint"]
+
+# ============================================================
+# 错误处理配置
+# ============================================================
+error_handling:
+  enabled: true
+  
+  # 错误分类
+  categories:
+    critical: ["control_instability", "actuator_failure", "sensor_failure"]
+    warning: ["control_saturation", "slow_response", "oscillation"]
+    info: ["setpoint_change", "parameter_update", "mode_switch"]
+    
+  # 恢复策略
+  recovery:
+    auto_retry: true
+    max_retries: 5
+    retry_delay: 2.0
+    fallback_controller: "manual"
+    
+  # 通知设置
+  notifications:
+    enabled: true
+    email: ["control_engineer@example.com"]
+    webhook: "http://localhost:9000/alerts"
+
+# ============================================================
+# 缓存配置
+# ============================================================
+cache:
+  enabled: true
+  
+  # 内存缓存
+  memory:
+    enabled: true
+    max_size_mb: 200
+    
+  # 磁盘缓存
+  disk:
+    enabled: true
+    directory: "cache/advanced_control/"
+    max_size_gb: 2
+
+# ============================================================
+# 网络配置
+# ============================================================
+network:
+  enabled: false
+  
+  # 分布式仿真
+  distributed:
+    enabled: false
+    master_host: "localhost"
+    master_port: 9001
+    
+  # 通信设置
+  communication:
+    protocol: "tcp"
+    timeout: 30
+    buffer_size: 16384
+
+# ============================================================
+# 安全配置
+# ============================================================
+security:
+  enabled: false
+  
+  # 访问控制
+  access_control:
+    enabled: false
+    allowed_hosts: ["localhost"]
+    
+  # 加密设置
+  encryption:
+    enabled: false
+    algorithm: "AES-256"
+
+# ============================================================
+# 扩展配置
+# ============================================================
+extensions:
+  enabled: true
+  
+  # 插件系统
+  plugins:
+    enabled: true
+    directory: "plugins/control/"
+    modules: ["fuzzy_controller", "adaptive_controller"]
+    
+  # 自定义功能
+  custom:
+    enabled: true
+    modules: ["advanced_pid", "model_predictive_control"]
+
+# ============================================================
+# 环境配置
+# ============================================================
+environment:
+  name: "development"
+  
+  # 环境变量
+  variables:
+    SIMULATION_ENV: "advanced_control"
+    LOG_LEVEL: "DEBUG"
+    CONTROL_MODE: "advanced"
+    
+  # 自定义变量
+  custom_vars:
+    # PID参数
+    pid_kp: 2.0           # 比例增益
+    pid_ki: 0.5           # 积分增益
+    pid_kd: 0.1           # 微分增益
+    
+    # 模糊控制参数
+    fuzzy_rules: 25       # 模糊规则数量
+    membership_functions: 5 # 隶属函数数量
+    
+    # 自适应控制参数
+    adaptation_rate: 0.01 # 自适应速率
+    forgetting_factor: 0.95 # 遗忘因子
+    
+    # 系统参数
+    canal_length: 1000.0  # 渠道长度 (m)
+    gate_max_opening: 1.0 # 闸门最大开度
+    water_density: 1000.0 # 水密度 (kg/m³)
+    control_frequency: 0.2 # 控制频率 (Hz)

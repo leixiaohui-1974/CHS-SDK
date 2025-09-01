@@ -1,0 +1,218 @@
+# Mission Example 5 - 水电站仿真与调度策略生成配置
+# 支持4个不同的例子：5.1-5.4
+
+# 选择要运行的例子 (5.1, 5.2, 5.3, 5.4)
+example_type: "5.1"  # 可选值: "5.1", "5.2", "5.3", "5.4"
+
+# === Example 5.1: 水轮机和泄洪闸仿真 ===
+example_5_1:
+  simulation:
+    dt: 10.0
+    num_steps: 100
+  
+  physical_conditions:
+    initial_depth: 15.0
+    initial_inflow: 150.0
+  
+  components:
+    forebay:
+      model_type: "st_venant"
+      parameters:
+        length: 1000
+        num_points: 11
+        bottom_width: 20
+        side_slope_z: 2
+        manning_n: 0.03
+        slope: 0.001
+    
+    tailrace:
+      model_type: "st_venant"
+      parameters:
+        length: 1000
+        num_points: 11
+        bottom_width: 20
+        side_slope_z: 2
+        manning_n: 0.03
+        slope: 0.001
+    
+    turbine:
+      name: "turbine1"
+      equivalent_area: 25.0
+      discharge_coeff: 0.9
+    
+    gate:
+      name: "gate1"
+      width: 15
+      discharge_coeff: 0.62
+      opening_change_time: 50  # 在第50步改变闸门开度
+      new_opening: 0.2
+  
+  boundary_conditions:
+    tailrace_level_rise: 2.0  # 尾水位上升幅度
+  
+  output:
+    save_plot: true
+    plot_filename: "mission_5_1_results.png"
+
+# === Example 5.2: 多机组协调和电网交互 ===
+example_5_2:
+  simulation:
+    end_time: 300
+    dt: 10.0
+  
+  messaging:
+    power_target_topic: "grid/power_target"
+    turbine_control_topic: "control/turbines"
+    grid_event_topic: "grid/events"
+    inflow_topic: "reservoir/inflow"
+  
+  physical_components:
+    reservoir:
+      name: "主水库"
+      initial_state:
+        water_level: 100.0
+        volume: 10000000.0
+      parameters:
+        area: 100000.0
+    
+    turbines:
+      count: 6
+      base_name: "turbine"
+      parameters:
+        rated_power_mw: 50.0
+        efficiency: 0.9
+        min_flow: 10.0
+        max_flow: 100.0
+  
+  agents:
+    supervisor:
+      agent_id: "supervisor_1"
+      initial_target_mw: 200.0
+    
+    hydropower_control:
+      agent_id: "hydro_ctrl_1"
+    
+    grid_communication:
+      agent_id: "grid_comm_1"
+      events:
+        - time: 150
+          type: "power_limit"
+          max_power_mw: 150.0
+    
+    inflow:
+      agent_id: "inflow_1"
+      inflow_rate: 500.0
+
+# === Example 5.3: 水轮机经济调度表计算 ===
+example_5_3:
+  optimization:
+    turbine_count: 6
+    power_range:
+      min_mw: 0
+      max_mw: 300
+      step_mw: 10
+    
+    head_range:
+      min_m: 50
+      max_m: 120
+      step_m: 5
+  
+  turbines:
+    # 6台不同效率特性的水轮机
+    - name: "turbine_1"
+      rated_power_mw: 50
+      efficiency_curve:
+        base_efficiency: 0.92
+        optimal_load_ratio: 0.8
+    - name: "turbine_2"
+      rated_power_mw: 50
+      efficiency_curve:
+        base_efficiency: 0.90
+        optimal_load_ratio: 0.75
+    - name: "turbine_3"
+      rated_power_mw: 50
+      efficiency_curve:
+        base_efficiency: 0.88
+        optimal_load_ratio: 0.85
+    - name: "turbine_4"
+      rated_power_mw: 50
+      efficiency_curve:
+        base_efficiency: 0.91
+        optimal_load_ratio: 0.78
+    - name: "turbine_5"
+      rated_power_mw: 50
+      efficiency_curve:
+        base_efficiency: 0.89
+        optimal_load_ratio: 0.82
+    - name: "turbine_6"
+      rated_power_mw: 50
+      efficiency_curve:
+        base_efficiency: 0.93
+        optimal_load_ratio: 0.77
+  
+  output:
+    table_filename: "turbine_economic_table.csv"
+    save_path: "../data/"
+
+# === Example 5.4: 闸门调度表计算 ===
+example_5_4:
+  optimization:
+    gate_count: 5
+    flow_range:
+      min_cms: 0
+      max_cms: 1000
+      step_cms: 50
+    
+    head_range:
+      min_m: 5
+      max_m: 25
+      step_m: 2
+  
+  gates:
+    # 5个泄洪闸的参数
+    - name: "gate_1"
+      width: 12
+      max_height: 8
+      discharge_coeff: 0.62
+      priority: 1  # 中间闸门，优先开启
+    - name: "gate_2"
+      width: 12
+      max_height: 8
+      discharge_coeff: 0.62
+      priority: 3
+    - name: "gate_3"
+      width: 12
+      max_height: 8
+      discharge_coeff: 0.62
+      priority: 2
+    - name: "gate_4"
+      width: 12
+      max_height: 8
+      discharge_coeff: 0.62
+      priority: 4
+    - name: "gate_5"
+      width: 12
+      max_height: 8
+      discharge_coeff: 0.62
+      priority: 5  # 最后开启
+  
+  safety_rules:
+    symmetric_opening: true  # 对称开启规则
+    max_opening_rate: 0.1    # 最大开启速率 (m/s)
+  
+  output:
+    table_filename: "gate_flow_allocation_table.csv"
+    save_path: "../data/"
+
+# 通用配置
+general:
+  validation:
+    enabled: true
+  
+  debug:
+    enabled: true
+    log_level: "INFO"
+    verbose: false
+  
+  performance:
+    track_timing: true

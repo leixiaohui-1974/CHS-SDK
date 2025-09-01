@@ -1,0 +1,60 @@
+# Defines all agents for advanced control simulation
+agents:
+  - id: upstream_controller
+    class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
+    agent_id: upstream_pid_controller
+    observation_topic: canal1/water_level
+    observation_key: water_level
+    action_topic: gate1/opening_command
+    controller:
+      class: core_lib.local_agents.control.pid_controller.PIDController
+      Kp: 0.6
+      Ki: 0.15
+      Kd: 0.08
+      setpoint: 2.2
+      min_output: 0.0
+      max_output: 1.0
+
+  - id: downstream_controller
+    class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
+    agent_id: downstream_pid_controller
+    observation_topic: canal2/water_level
+    observation_key: water_level
+    action_topic: gate2/opening_command
+    controller:
+      class: core_lib.local_agents.control.pid_controller.PIDController
+      Kp: 0.4
+      Ki: 0.1
+      Kd: 0.06
+      setpoint: 1.8
+      min_output: 0.0
+      max_output: 1.0
+
+
+  - id: sensor_canal1
+    class: core_lib.local_agents.io.physical_io_agent.PhysicalIOAgent
+    agent_id: canal1_sensor
+    sensors_config:
+      canal1_water_level:
+        obj_id: canal1
+        target_attr: water_level
+        state_key: water_level
+        topic: canal1/water_level
+        noise_params:
+          std_dev: 0.015
+          sampling_rate: 0.5
+    actuators_config: {}
+
+  - id: sensor_canal2
+    class: core_lib.local_agents.io.physical_io_agent.PhysicalIOAgent
+    agent_id: canal2_sensor
+    sensors_config:
+      canal2_water_level:
+        obj_id: canal2
+        target_attr: water_level
+        state_key: water_level
+        topic: canal2/water_level
+        noise_params:
+          std_dev: 0.012
+          sampling_rate: 0.5
+    actuators_config: {}

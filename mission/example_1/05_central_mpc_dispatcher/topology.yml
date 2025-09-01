@@ -1,0 +1,12 @@
+# Defines the topology and connections between components
+topology:
+  connections:
+    - from: canal_upstream
+      to: gate_upstream
+      type: outflow
+    - from: gate_upstream
+      to: canal_downstream
+      type: inflow
+    - from: canal_downstream
+      to: gate_downstream
+      type: outflow

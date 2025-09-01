@@ -1,0 +1,577 @@
+# Mission Example 2 - Config 2.2 通用配置文件
+# 分层分布式控制与复杂扰动应对系统配置
+
+# ============================================================
+# 仿真配置
+# ============================================================
+simulation:
+  name: "分层分布式控制系统仿真"
+  description: "Example 2.2 - 分层分布式控制系统应对预测和非预测扰动演示"
+  version: "1.0.0"
+  
+  # 时间设置
+  time:
+    end_time: 43200.0     # 仿真持续时间 (12小时)
+    time_step: 3600.0     # 时间步长 (1小时)
+    output_interval: 3600.0  # 输出间隔 (1小时)
+    
+  # 求解器配置
+  solver:
+    method: "hierarchical"  # 分层控制求解方法
+    tolerance: 1e-4         # 求解精度
+    max_iterations: 200     # 最大迭代次数
+    
+  # 并行计算
+  parallel:
+    enabled: true           # 多智能体系统，启用并行
+    num_processes: 6        # 进程数量（对应智能体数量）
+
+# ============================================================
+# 调试配置
+# ============================================================
+debug:
+  enabled: true
+  log_level: "INFO"
+  log_file: "logs/hierarchical_control_config_2_2/debug.log"
+  session_id: "hierarchical_control_config_2_2_session"
+  
+  # 数据收集
+  data_collection:
+    enabled: true
+    interval: 3600.0  # 数据收集间隔 (1小时)
+    variables:
+      - "raw_upstream_level"
+      - "smoothed_upstream_level"
+      - "raw_downstream_level"
+      - "gate_opening"
+      - "inflow_disturbance"
+      - "water_use_disturbance"
+      - "inflow_forecast"
+      - "mpc_setpoint"
+      - "pid_output"
+      - "pid_error"
+      - "flood_risk_level"
+      - "agent_interactions"
+      - "control_hierarchy_status"
+      - "disturbance_response"
+      
+  # Web仪表板
+  dashboard:
+    web_dashboard: true
+    port: 8100
+    auto_open: false
+    
+  # 控制台监控
+  console:
+    real_time_display: true
+    update_interval: 3600.0   # 实时监控分层控制状态
+    show_detailed_logs: true
+    show_agent_interactions: true
+
+# ============================================================
+# 性能监控配置
+# ============================================================
+performance:
+  enabled: true
+  
+  # 时间跟踪
+  timing:
+    enabled: true
+    detailed_profiling: true
+    hierarchical_timing: true
+    agent_coordination_timing: true
+    
+  # 内存监控
+  memory:
+    enabled: true
+    threshold_mb: 2000  # 内存阈值（多智能体系统）
+    
+  # CPU监控
+  cpu:
+    enabled: true
+    threshold_percent: 85  # CPU使用率警告阈值
+
+# ============================================================
+# 可视化配置
+# ============================================================
+visualization:
+  enabled: true
+  
+  # 图表配置
+  plots:
+    enabled: true
+    save_plots: true
+    plot_directory: "plots/hierarchical_control_config_2_2/"
+    format: "png"
+    dpi: 300
+    
+    # 图表定义
+    charts:
+      - name: "分层控制水位响应"
+        type: "time_series"
+        variables: ["raw_upstream_level", "smoothed_upstream_level", "raw_downstream_level"]
+        title: "Hierarchical Control Water Level Response"
+        xlabel: "Time (hours)"
+        ylabel: "Water Level (m)"
+        
+      - name: "扰动与预测"
+        type: "time_series"
+        variables: ["inflow_disturbance", "water_use_disturbance", "inflow_forecast"]
+        title: "Disturbances and Forecasts"
+        xlabel: "Time (hours)"
+        ylabel: "Flow Rate (m³/s)"
+        
+      - name: "分层控制指令"
+        type: "time_series"
+        variables: ["mpc_setpoint", "pid_output", "gate_opening"]
+        title: "Hierarchical Control Commands"
+        xlabel: "Time (hours)"
+        ylabel: "Control Signals"
+        
+      - name: "洪水风险监控"
+        type: "time_series"
+        variables: ["flood_risk_level", "max_allowed_level"]
+        title: "Flood Risk Monitoring"
+        xlabel: "Time (hours)"
+        ylabel: "Risk Level"
+        
+      - name: "智能体交互"
+        type: "time_series"
+        variables: ["agent_interactions"]
+        title: "Agent Interactions"
+        xlabel: "Time (hours)"
+        ylabel: "Interaction Count"
+        
+      - name: "控制层级状态"
+        type: "time_series"
+        variables: ["control_hierarchy_status"]
+        title: "Control Hierarchy Status"
+        xlabel: "Time (hours)"
+        ylabel: "Status Level"
+        
+      - name: "扰动响应分析"
+        type: "time_series"
+        variables: ["disturbance_response"]
+        title: "Disturbance Response Analysis"
+        xlabel: "Time (hours)"
+        ylabel: "Response Magnitude"
+        
+  # 实时仪表板
+  dashboard:
+    enabled: true
+    update_interval: 3600.0   # 实时更新分层控制状态
+    port: 8101
+
+# ============================================================
+# 数据输出配置
+# ============================================================
+output:
+  enabled: true
+  output_directory: "results/hierarchical_control_config_2_2/"
+  
+  # 历史数据保存
+  save_history: true
+  history_file: "simulation_history.json"
+  
+  # 数据格式
+  format:
+    csv: true
+    json: true
+    hdf5: true     # 启用HDF5以处理多智能体数据
+    matlab: true   # 启用MATLAB格式用于控制分析
+    
+  # 压缩设置
+  compression:
+    enabled: true
+    method: "gzip"
+    
+  # 验证配置
+  validation:
+    enabled: true
+    expected_results:
+      flood_prevention_check: true
+      max_allowed_level: 6.5        # 洪水阈值 (m)
+      system_responds_to_forecast: true
+      handles_unforeseen_disturbances: true
+    performance_metrics:
+      - "final_pid_setpoint"
+      - "max_level_achieved"
+      - "flood_prevention_success"
+    description: "系统应预见并应对扰动，将水位保持在安全范围内"
+
+# ============================================================
+# 智能分析配置
+# ============================================================
+analysis:
+  enabled: true
+  
+  # 控制性能分析
+  control_performance:
+    enabled: true
+    metrics: ["ise", "iae", "itae", "settling_time", "overshoot", "disturbance_rejection"]
+    reference_tracking: true
+    disturbance_rejection: true
+    
+  # 统计分析
+  statistical:
+    enabled: true
+    generate_summary: true
+    variance_analysis: true
+    correlation_analysis: true
+    
+  # 系统识别
+  system_identification:
+    enabled: true
+    method: "subspace"
+    state_space_model: true
+    input_signals: ["mpc_setpoint", "gate_opening"]
+    output_signals: ["raw_upstream_level", "raw_downstream_level"]
+    
+  # 分层控制专用分析
+  hierarchical_analysis:
+    enabled: true
+    layer_performance: true
+    coordination_efficiency: true
+    scalability_analysis: true
+    fault_tolerance: true
+    
+  # 扰动分析
+  disturbance_analysis:
+    enabled: true
+    forecast_accuracy: true
+    unforeseen_disturbance_handling: true
+    robustness_analysis: true
+    adaptive_response: true
+    
+  # 多智能体系统分析
+  multi_agent_analysis:
+    enabled: true
+    agent_coordination: true
+    communication_efficiency: true
+    distributed_decision_making: true
+    emergent_behavior: true
+
+# ============================================================
+# 日志配置
+# ============================================================
+logging:
+  enabled: true
+  level: "INFO"
+  
+  # 文件日志
+  file:
+    enabled: true
+    filename: "logs/hierarchical_control_config_2_2/simulation.log"
+    max_size_mb: 50
+    backup_count: 25
+    
+  # 控制台日志
+  console:
+    enabled: true
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    
+  # 结构化日志
+  structured:
+    enabled: true
+    format: "json"
+    
+  # 分层控制专用日志
+  hierarchical_log:
+    enabled: true
+    filename: "logs/hierarchical_control_config_2_2/hierarchical.log"
+    variables: ["mpc_setpoint", "pid_output", "control_hierarchy_status"]
+    
+  # 智能体交互日志
+  agent_interaction_log:
+    enabled: true
+    filename: "logs/hierarchical_control_config_2_2/agent_interactions.log"
+    interactions: true
+    coordination_events: true
+    communication_patterns: true
+    
+  # 扰动响应日志
+  disturbance_log:
+    enabled: true
+    filename: "logs/hierarchical_control_config_2_2/disturbances.log"
+    forecast_events: true
+    unforeseen_events: true
+    response_actions: true
+
+# ============================================================
+# 错误处理配置
+# ============================================================
+error_handling:
+  enabled: true
+  
+  # 错误分类
+  categories:
+    critical: ["agent_failure", "communication_breakdown", "flood_emergency"]
+    warning: ["forecast_deviation", "coordination_delay", "sensor_degradation"]
+    info: ["normal_operation", "disturbance_detected", "control_action"]
+    
+  # 恢复策略
+  recovery:
+    auto_retry: true
+    max_retries: 5
+    retry_delay: 300.0
+    fallback_controller: "emergency_hierarchical_mode"
+    
+  # 通知设置
+  notifications:
+    enabled: true
+    email: ["control_engineer@example.com", "flood_manager@example.com", "system_admin@example.com"]
+    webhook: "http://localhost:9000/hierarchical_alerts"
+
+# ============================================================
+# 缓存配置
+# ============================================================
+cache:
+  enabled: true
+  
+  # 内存缓存
+  memory:
+    enabled: true
+    max_size_mb: 800
+    
+  # 磁盘缓存
+  disk:
+    enabled: true
+    directory: "cache/hierarchical_control_config_2_2/"
+    max_size_gb: 8
+
+# ============================================================
+# 网络配置
+# ============================================================
+network:
+  enabled: true
+  
+  # 分布式仿真
+  distributed:
+    enabled: true
+    master_host: "localhost"
+    master_port: 9007
+    
+  # 通信设置
+  communication:
+    protocol: "tcp"  # 适合分层控制的可靠通信协议
+    timeout: 180
+    buffer_size: 65536
+    topics:
+      raw_upstream_level: "state/canal_upstream/level/raw"
+      smoothed_upstream_level: "state/canal_upstream/level/smoothed"
+      raw_downstream_level: "state/canal_downstream/level/raw"
+      inflow_disturbance: "disturbance/inflow/upstream"
+      water_use: "disturbance/outflow/downstream"
+      inflow_forecast: "forecast/inflow/upstream"
+      mpc_command: "command/pid/setpoint"
+      pid_action: "action/gate/opening"
+
+# ============================================================
+# 安全配置
+# ============================================================
+security:
+  enabled: true
+  
+  # 访问控制
+  access_control:
+    enabled: true
+    allowed_hosts: ["localhost", "control-center", "forecast-station", "emergency-center"]
+    
+  # 加密设置
+  encryption:
+    enabled: true
+    algorithm: "AES-256"
+    
+  # 监控设置
+  monitoring:
+    enabled: true
+    intrusion_detection: true
+    emergency_protocols: true
+    flood_safety_protocols: true
+
+# ============================================================
+# 扩展配置
+# ============================================================
+extensions:
+  enabled: true
+  
+  # 插件系统
+  plugins:
+    enabled: true
+    directory: "plugins/hierarchical/"
+    modules: ["advanced_mpc", "adaptive_pid", "smart_forecasting", "emergency_response"]
+    
+  # 自定义功能
+  custom:
+    enabled: true
+    modules: ["multi_agent_coordination", "disturbance_prediction", "flood_management", "system_optimization"]
+
+# ============================================================
+# 环境配置
+# ============================================================
+environment:
+  name: "development"
+  
+  # 环境变量
+  variables:
+    SIMULATION_ENV: "hierarchical_control_config_2_2"
+    LOG_LEVEL: "INFO"
+    CONTROL_MODE: "hierarchical"
+    
+  # 自定义变量
+  custom_vars:
+    # 仿真参数
+    description: "分层分布式控制系统应对预测和非预测扰动演示"
+    duration: 43200               # 仿真持续时间 (12小时)
+    time_step: 3600               # 时间步长 (1小时)
+    
+    # 通信主题
+    raw_upstream_level_topic: "state/canal_upstream/level/raw"
+    smoothed_upstream_level_topic: "state/canal_upstream/level/smoothed"
+    raw_downstream_level_topic: "state/canal_downstream/level/raw"
+    inflow_disturbance_topic: "disturbance/inflow/upstream"
+    water_use_topic: "disturbance/outflow/downstream"
+    inflow_forecast_topic: "forecast/inflow/upstream"
+    mpc_command_topic: "command/pid/setpoint"
+    pid_action_topic: "action/gate/opening"
+    
+    # 物理组件参数
+    # 上游渠道
+    upstream_canal_type: "UnifiedCanal"
+    upstream_canal_model: "integral"
+    upstream_initial_volume: 652500   # m³ (对应约4.5m水位)
+    upstream_bottom_width: 20.0
+    upstream_length: 5000.0
+    upstream_slope: 0.0001
+    upstream_side_slope_z: 2.0
+    upstream_manning_n: 0.03
+    
+    # 下游渠道
+    downstream_canal_type: "UnifiedCanal"
+    downstream_canal_model: "integral"
+    downstream_initial_volume: 400000  # m³
+    downstream_bottom_width: 20.0
+    downstream_length: 5000.0
+    downstream_slope: 0.0001
+    downstream_side_slope_z: 2.0
+    downstream_manning_n: 0.03
+    
+    # 控制闸门
+    gate_type: "Gate"
+    gate_initial_opening: 0.3     # m
+    gate_discharge_coefficient: 0.7
+    gate_width: 15.0              # m
+    gate_max_opening: 5.0         # m
+    gate_max_rate_of_change: 0.5  # m/s
+    
+    # 扰动智能体配置
+    # 基础流量
+    base_flow_agent_id: "base_flow_1"
+    base_flow_topic: "disturbance/inflow/upstream"
+    base_flow_start_time: 0
+    base_flow_duration: 43200     # 12小时
+    base_flow_rate: 20            # m³/s (基线流量)
+    
+    # 降雨事件
+    rainfall_agent_id: "rainfall_1"
+    rainfall_topic: "disturbance/inflow/upstream"
+    rainfall_start_time: 18000    # 5小时 (3600*5)
+    rainfall_duration: 25200      # 7小时 (3600*7)
+    rainfall_rate: 100            # m³/s (预测降雨事件)
+    
+    # 用水扰动
+    water_use_agent_id: "water_user_1"
+    water_use_target: "downstream_canal"
+    water_use_start_time: 21600   # 6小时 (3600*6)
+    water_use_duration: 14400     # 4小时 (3600*4)
+    water_use_rate: 40            # m³/s (未预测用水)
+    water_use_dt: 3600            # 秒
+    
+    # 预测智能体配置
+    forecaster_agent_id: "forecaster_1"
+    forecaster_topic: "forecast/inflow/upstream"
+    forecast_data: [20, 20, 20, 20, 20, 120, 120, 120, 120, 120, 120, 120]  # 基线 + 降雨
+    
+    # IO智能体配置
+    io_agent_id: "io_agent_1"
+    # 传感器配置
+    upstream_sensor_obj: "upstream_canal"
+    upstream_sensor_state_key: "water_level"
+    upstream_sensor_topic: "state/canal_upstream/level/raw"
+    upstream_sensor_noise_std: 0.05  # m
+    downstream_sensor_obj: "downstream_canal"
+    downstream_sensor_state_key: "water_level"
+    downstream_sensor_topic: "state/canal_downstream/level/raw"
+    downstream_sensor_noise_std: 0.05  # m
+    # 执行器配置
+    gate_actuator_obj: "control_gate"
+    gate_actuator_target_attr: "target_opening"
+    gate_actuator_topic: "action/gate/opening"
+    gate_actuator_control_key: "control_signal"
+    
+    # 数字孪生智能体配置
+    twin_agent_id: "twin_agent_1"
+    twin_simulated_object: "upstream_canal"
+    twin_state_topic: "state/canal_upstream/level/smoothed"
+    twin_smoothing_alpha: 0.4     # EMA滤波器Alpha值
+    
+    # PID智能体配置
+    pid_agent_id: "pid_agent_1"
+    pid_controller_type: "PIDController"
+    pid_kp: -0.6
+    pid_ki: -0.00005
+    pid_kd: -0.1
+    pid_setpoint: 4.0             # m (立即排水的初始设定点)
+    pid_min_output: 0.0           # m
+    pid_max_output: 5.0           # m (闸门最大开度)
+    pid_observation_topic: "state/canal_upstream/level/raw"
+    pid_observation_key: "water_level"
+    pid_action_topic: "action/gate/opening"
+    pid_dt: 3600                  # 秒
+    pid_command_topic: "command/pid/setpoint"
+    
+    # MPC智能体配置
+    mpc_agent_id: "mpc_dispatcher_1"
+    mpc_prediction_horizon: 12    # 时间步
+    mpc_dt: 3600                  # 秒
+    mpc_q_weight: 1.0             # 偏离目标设定点的惩罚
+    mpc_r_weight: 0.8             # 设定点变化的惩罚
+    mpc_state_keys: ["upstream", "downstream"]
+    mpc_upstream_subscription: "state/canal_upstream/level/raw"
+    mpc_downstream_subscription: "state/canal_downstream/level/raw"
+    mpc_forecast_subscription: "forecast/inflow/upstream"
+    mpc_upstream_cmd: "command/pid/setpoint"
+    mpc_downstream_cmd: "dummy_topic"  # 本场景中未使用
+    mpc_normal_setpoints: [5.0, 5.0]   # m
+    mpc_emergency_setpoint: 4.0        # m
+    mpc_flood_thresholds: [6.5, 6.0]   # m
+    mpc_canal_surface_areas: [200000, 200000]  # m² (2e5)
+    mpc_outflow_coefficient: 1500
+    
+    # 分析和验证参数
+    enable_validation: true
+    flood_prevention_check: true
+    max_allowed_level: 6.5        # m (洪水阈值)
+    performance_metrics: ["final_pid_setpoint", "max_level_achieved", "flood_prevention_success"]
+    expected_behavior_description: "系统应预见并应对扰动，将水位保持在安全范围内"
+    success_criteria_1: "max_level < flood_threshold"
+    success_criteria_2: "system_responds_to_forecast"
+    success_criteria_3: "handles_unforeseen_disturbances"
+    
+    # 输出设置
+    show_detailed_logs: true
+    show_agent_interactions: true
+    show_final_summary: true
+    history_analysis: true
+    
+    # 高级控制参数
+    control_layers: 3             # 控制层数（感知、认知、监督）
+    coordination_timeout: 300.0   # 智能体协调超时 (秒)
+    emergency_response_time: 60.0 # 紧急响应时间 (秒)
+    
+    # 系统参数
+    response_time: 3600.0         # 系统响应时间 (秒)
+    communication_delay: 30.0     # 通信延迟 (秒)
+    sensor_accuracy: 0.05         # 传感器精度 (m)
+    actuator_accuracy: 0.02       # 执行器精度 (m)
+    forecast_accuracy: 0.8        # 预测精度

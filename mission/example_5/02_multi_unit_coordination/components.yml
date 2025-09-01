@@ -1,0 +1,19 @@
+# 物理组件配置
+
+physical_components:
+  reservoir:
+    name: "主水库"
+    initial_state:
+      water_level: 100.0
+      volume: 10000000.0
+    parameters:
+      area: 100000.0
+  
+  turbines:
+    count: 6
+    base_name: "turbine"
+    parameters:
+      rated_power_mw: 50.0
+      efficiency: 0.9
+      min_flow: 10.0
+      max_flow: 100.0

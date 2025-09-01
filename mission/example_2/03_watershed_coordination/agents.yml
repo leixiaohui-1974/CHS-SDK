@@ -1,0 +1,62 @@
+# Defines agents for watershed coordination scenario
+agents:
+  - id: watershed_coordinator
+    class: core_lib.central_coordination.dispatch.central_dispatcher.CentralDispatcherAgent
+    config:
+      mode: "rule"
+      subscribed_topic: "main_reservoir/water_level"
+      observation_key: "water_level"
+      command_topic: "coordination/main_target"
+      dispatcher_params:
+        high_level: 35.0
+        low_level: 12.0
+        high_setpoint: 20.0
+        low_setpoint: 30.0
+
+  - id: main_reservoir_controller
+    class: LocalControlAgent
+    target_component: main_gate
+    control_variable: opening
+    observation_key: water_level
+    observation_topic: main_reservoir/water_level
+    action_topic: main_gate/opening_command
+    controller:
+      class: PIDController
+      Kp: 0.8
+      Ki: 0.2
+      Kd: 0.1
+      setpoint: 25.0
+      min_output: 0.0
+      max_output: 1.0
+
+  - id: tributary_1_controller
+    class: LocalControlAgent
+    target_component: tributary_gate_1
+    control_variable: opening
+    observation_key: water_level
+    observation_topic: tributary_reservoir_1/water_level
+    action_topic: tributary_gate_1/opening_command
+    controller:
+      class: PIDController
+      Kp: 0.6
+      Ki: 0.15
+      Kd: 0.08
+      setpoint: 18.0
+      min_output: 0.0
+      max_output: 1.0
+
+  - id: tributary_2_controller
+    class: LocalControlAgent
+    target_component: tributary_gate_2
+    control_variable: opening
+    observation_key: water_level
+    observation_topic: tributary_reservoir_2/water_level
+    action_topic: tributary_gate_2/opening_command
+    controller:
+      class: PIDController
+      Kp: 0.5
+      Ki: 0.12
+      Kd: 0.06
+      setpoint: 16.0
+      min_output: 0.0
+      max_output: 1.0

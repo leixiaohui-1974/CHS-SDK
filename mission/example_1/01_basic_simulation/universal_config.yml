@@ -1,0 +1,304 @@
+# Mission Example 1 - 01_basic_simulation 通用配置文件
+# 基础物理仿真配置
+
+# ============================================================
+# 仿真配置
+# ============================================================
+simulation:
+  name: "基础物理仿真"
+  description: "Example 1 - 基础物理仿真，演示水位控制和流量管理"
+  version: "1.0.0"
+  
+  # 时间设置
+  time:
+    end_time: 1000.0      # 仿真持续时间 (秒)
+    time_step: 10.0       # 时间步长 (秒)
+    output_interval: 50.0 # 输出间隔 (秒)
+    
+  # 求解器配置
+  solver:
+    method: "euler"       # 求解方法
+    tolerance: 1e-6       # 求解精度
+    max_iterations: 1000  # 最大迭代次数
+    
+  # 并行计算
+  parallel:
+    enabled: false        # 是否启用并行计算
+    num_processes: 1      # 进程数量
+
+# ============================================================
+# 调试配置
+# ============================================================
+debug:
+  enabled: true
+  log_level: "INFO"
+  log_file: "logs/basic_simulation/debug.log"
+  session_id: "basic_sim_session"
+  
+  # 数据收集
+  data_collection:
+    enabled: true
+    interval: 50.0  # 数据收集间隔 (秒)
+    variables:
+      - "upstream_canal_water_level"
+      - "downstream_canal_water_level"
+      - "control_gate_opening"
+      - "inflow_rate"
+      - "outflow_rate"
+      
+  # Web仪表板
+  dashboard:
+    web_dashboard: true
+    port: 8080
+    auto_open: false
+    
+  # 控制台监控
+  console:
+    real_time_display: true
+    update_interval: 10.0  # 更新间隔 (秒)
+
+# ============================================================
+# 性能监控配置
+# ============================================================
+performance:
+  enabled: true
+  
+  # 时间跟踪
+  timing:
+    enabled: true
+    detailed_profiling: true
+    
+  # 内存监控
+  memory:
+    enabled: true
+    threshold_mb: 1000  # 内存警告阈值 (MB)
+    
+  # CPU监控
+  cpu:
+    enabled: true
+    threshold_percent: 80  # CPU使用率警告阈值 (%)
+
+# ============================================================
+# 可视化配置
+# ============================================================
+visualization:
+  enabled: true
+  
+  # 图表配置
+  plots:
+    enabled: true
+    save_plots: true
+    plot_directory: "plots/basic_simulation/"
+    format: "png"
+    dpi: 300
+    
+    # 图表定义
+    charts:
+      - name: "水位时间序列"
+        type: "time_series"
+        variables: ["upstream_canal_water_level", "downstream_canal_water_level"]
+        title: "Canal Water Levels Over Time"
+        xlabel: "Time (s)"
+        ylabel: "Water Level (m)"
+        
+      - name: "流量控制"
+        type: "time_series"
+        variables: ["inflow_rate", "outflow_rate"]
+        title: "Flow Rates Over Time"
+        xlabel: "Time (s)"
+        ylabel: "Flow Rate (m³/s)"
+        
+      - name: "闸门开度"
+        type: "time_series"
+        variables: ["control_gate_opening"]
+        title: "Gate Opening Over Time"
+        xlabel: "Time (s)"
+        ylabel: "Opening (%)"
+        
+  # 实时仪表板
+  dashboard:
+    enabled: true
+    update_interval: 5.0
+    port: 8081
+
+# ============================================================
+# 数据输出配置
+# ============================================================
+output:
+  enabled: true
+  output_directory: "results/basic_simulation/"
+  
+  # 历史数据保存
+  save_history: true
+  history_file: "simulation_history.json"
+  
+  # 数据格式
+  format:
+    csv: true
+    json: true
+    hdf5: false
+    
+  # 压缩设置
+  compression:
+    enabled: false
+    method: "gzip"
+    
+  # 验证配置
+  validation:
+    enabled: false
+    expected_results: {}
+    tolerance: 0.01
+
+# ============================================================
+# 智能分析配置
+# ============================================================
+analysis:
+  enabled: true
+  
+  # 控制性能分析
+  control_performance:
+    enabled: true
+    metrics: ["settling_time", "overshoot", "steady_state_error"]
+    
+  # 统计分析
+  statistical:
+    enabled: true
+    generate_summary: true
+    
+  # 系统识别
+  system_identification:
+    enabled: false
+    method: "arx"
+    order: [2, 2, 1]
+
+# ============================================================
+# 日志配置
+# ============================================================
+logging:
+  enabled: true
+  level: "INFO"
+  
+  # 文件日志
+  file:
+    enabled: true
+    filename: "logs/basic_simulation/simulation.log"
+    max_size_mb: 10
+    backup_count: 5
+    
+  # 控制台日志
+  console:
+    enabled: true
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    
+  # 结构化日志
+  structured:
+    enabled: false
+    format: "json"
+
+# ============================================================
+# 错误处理配置
+# ============================================================
+error_handling:
+  enabled: true
+  
+  # 错误分类
+  categories:
+    critical: ["simulation_divergence", "memory_overflow"]
+    warning: ["slow_convergence", "high_cpu_usage"]
+    info: ["checkpoint_saved", "iteration_completed"]
+    
+  # 恢复策略
+  recovery:
+    auto_retry: true
+    max_retries: 3
+    retry_delay: 1.0
+    
+  # 通知设置
+  notifications:
+    enabled: false
+    email: []
+    webhook: ""
+
+# ============================================================
+# 缓存配置
+# ============================================================
+cache:
+  enabled: true
+  
+  # 内存缓存
+  memory:
+    enabled: true
+    max_size_mb: 100
+    
+  # 磁盘缓存
+  disk:
+    enabled: false
+    directory: "cache/basic_simulation/"
+    max_size_gb: 1
+
+# ============================================================
+# 网络配置
+# ============================================================
+network:
+  enabled: false
+  
+  # 分布式仿真
+  distributed:
+    enabled: false
+    master_host: "localhost"
+    master_port: 9000
+    
+  # 通信设置
+  communication:
+    protocol: "tcp"
+    timeout: 30
+    buffer_size: 8192
+
+# ============================================================
+# 安全配置
+# ============================================================
+security:
+  enabled: false
+  
+  # 访问控制
+  access_control:
+    enabled: false
+    allowed_hosts: ["localhost"]
+    
+  # 加密设置
+  encryption:
+    enabled: false
+    algorithm: "AES-256"
+
+# ============================================================
+# 扩展配置
+# ============================================================
+extensions:
+  enabled: false
+  
+  # 插件系统
+  plugins:
+    enabled: false
+    directory: "plugins/"
+    
+  # 自定义功能
+  custom:
+    enabled: false
+    modules: []
+
+# ============================================================
+# 环境配置
+# ============================================================
+environment:
+  name: "development"
+  
+  # 环境变量
+  variables:
+    SIMULATION_ENV: "basic_simulation"
+    LOG_LEVEL: "INFO"
+    
+  # 自定义变量
+  custom_vars:
+    canal_length: 1000.0  # 渠道长度 (m)
+    gate_max_opening: 1.0 # 闸门最大开度
+    water_density: 1000.0 # 水密度 (kg/m³)

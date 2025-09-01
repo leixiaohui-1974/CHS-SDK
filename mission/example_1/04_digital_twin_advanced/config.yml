@@ -1,0 +1,26 @@
+# Configuration for Example 1.4: Digital Twin Agent (Advanced Features)
+# Digital Twin Agent Advanced Features Configuration
+
+simulation:
+  duration: 30  # steps
+  time_step: 1.0  # seconds
+  description: "DigitalTwinAgent data smoothing demonstration"
+
+# Message Bus Topics
+communication:
+  smoothed_state_topic: "state/canal/level/smoothed"
+
+# Data Generation
+data_generation:
+  noise_injection: true
+  noise_type: "gaussian"
+  noise_parameters:
+    mean: 0.0
+    std: 0.5  # Use significant noise to make smoothing obvious
+
+# Analysis and Validation
+analysis:
+  enable_validation: true
+  variance_comparison: true
+  true_water_level: 10.0  # m
+  noise_std: 0.5  # Standard deviation of noise

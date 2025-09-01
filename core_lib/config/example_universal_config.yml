@@ -1,0 +1,495 @@
+# 示例通用配置文件
+# 基于通用配置模板的实际应用示例
+# 适用于水利系统仿真场景
+
+# ============================================================================
+# 仿真基础配置
+# ============================================================================
+simulation:
+  name: "水利系统控制仿真"
+  description: "闸门-渠道系统的水位控制仿真"
+  version: "1.0.0"
+  author: "CHS-SDK Team"
+  created_date: "2024-01-22"
+  
+  # 时间配置
+  time:
+    start_time: 0.0
+    end_time: 100.0
+    time_step: 0.1
+    units: "seconds"
+    output_interval: 1.0
+    
+  # 求解器配置
+  solver:
+    type: "runge_kutta"
+    order: 4
+    tolerance: 1e-6
+    max_iterations: 1000
+    adaptive_step: false
+    
+  # 并行计算配置
+  parallel:
+    enabled: false
+    num_processes: 2
+    chunk_size: 50
+    backend: "multiprocessing"
+
+# ============================================================================
+# 调试与开发配置
+# ============================================================================
+debug:
+  enabled: true
+  session_id: "water_control_sim"
+  log_level: "INFO"
+  log_file: "logs/water_control_debug.log"
+  debug_mode: "development"
+  
+  # 数据收集配置
+  data_collection:
+    enabled: true
+    interval: 2.0
+    variables: ["water_level", "flow_rate", "gate_opening"]
+    save_to_file: true
+    file_path: "debug_data/water_control_debug.json"
+    max_file_size: "50MB"
+    rotation: true
+  
+  # 调试仪表板配置
+  dashboard:
+    enabled: true
+    theme: "dark"
+    
+    # Web仪表板
+    web_dashboard:
+      enabled: true
+      port: 8080
+      host: "localhost"
+      auto_open_browser: false
+      refresh_rate: 1.0
+      
+    # 控制台仪表板
+    console_dashboard:
+      enabled: false
+      update_interval: 3.0
+      display_format: "table"
+
+# ============================================================================
+# 性能监控与优化配置
+# ============================================================================
+performance:
+  enabled: true
+  track_timing: true
+  track_memory: true
+  track_cpu: true
+  track_io: false
+  track_network: false
+  
+  # 性能指标收集
+  metrics:
+    enabled: true
+    collection_interval: 1.0
+    save_to_file: true
+    metrics_file: "performance/water_control_metrics.json"
+    buffer_size: 500
+    compression: false
+    
+  # 性能分析
+  analysis:
+    enabled: true
+    generate_report: true
+    report_format: "html"
+    auto_analysis: true
+    threshold_alerts: true
+    
+  # 性能优化
+  optimization:
+    auto_tune: false
+    cache_enabled: true
+    memory_limit: "1GB"
+    cpu_limit: 70
+    gc_optimization: true
+    
+  # 性能阈值
+  thresholds:
+    max_execution_time: 5.0
+    max_memory_usage: 512
+    max_cpu_usage: 80
+
+# ============================================================================
+# 可视化与图表配置
+# ============================================================================
+visualization:
+  enabled: true
+  theme: "modern"
+  color_scheme: "auto"
+  
+  # 实时可视化
+  real_time:
+    enabled: false
+    update_interval: 1.0
+    max_points: 500
+    auto_scale: true
+    smooth_animation: true
+    
+  # 结果可视化
+  plots:
+    enabled: true
+    save_plots: true
+    output_directory: "plots/water_control/"
+    format: ["png", "svg"]
+    dpi: 300
+    style: "seaborn"
+    figsize: [12, 8]
+    font_size: 12
+    grid: true
+    legend: true
+    
+    # 图表配置
+    charts:
+      - type: "time_series"
+        title: "水位和流量时间序列"
+        variables: ["water_level", "flow_rate"]
+        filename: "water_level_flow"
+        subplot_layout: [2, 1]
+        
+      - type: "control_performance"
+        title: "水位控制性能分析"
+        variables: ["setpoint", "water_level", "gate_opening"]
+        filename: "control_performance"
+        include_error: true
+        
+      - type: "dashboard"
+        title: "水利系统监控仪表板"
+        filename: "system_dashboard"
+        layout: "grid"
+        
+      - type: "histogram"
+        title: "水位分布直方图"
+        filename: "water_level_distribution"
+        bins: 30
+        
+  # 3D可视化
+  three_d:
+    enabled: false
+    interactive: false
+    engine: "plotly"
+    quality: "medium"
+    
+  # 动画配置
+  animation:
+    enabled: false
+    fps: 24
+    duration: 10.0
+    format: "mp4"
+    
+  # 交互式可视化
+  interactive:
+    enabled: false
+    backend: "plotly"
+    export_html: true
+    include_controls: true
+
+# ============================================================================
+# 数据输出与存储配置
+# ============================================================================
+output:
+  enabled: true
+  save_history: true
+  history_file: "results/water_control_history.json"
+  output_directory: "results/water_control/"
+  
+  # 输出格式
+  formats:
+    json: true
+    csv: true
+    hdf5: false
+    pickle: false
+    parquet: false
+    excel: false
+    
+  # 输出内容
+  content:
+    all_variables: true
+    selected_variables: []
+    metadata: true
+    timestamps: true
+    system_info: true
+    configuration: true
+    
+  # 历史数据保存
+  history:
+    enabled: true
+    save_format: ["json", "csv"]
+    filename_prefix: "water_control_results"
+    
+  # 结果验证
+  validation:
+    enabled: true
+    expected_results: {}
+    tolerance: 0.05
+    
+  # 数据分割
+  partitioning:
+    enabled: false
+    by_time: false
+    by_size: false
+    max_file_size: "50MB"
+    
+  # 压缩配置
+  compression:
+    enabled: false
+    algorithm: "gzip"
+    level: 6
+    
+  # 备份配置
+  backup:
+    enabled: false
+    interval: "daily"
+    retention: 7
+    location: "backups/"
+
+# ============================================================================
+# 数据分析与处理配置
+# ============================================================================
+analysis:
+  enabled: true
+  auto_analysis: true
+  analysis_interval: 10.0
+  
+  # 控制性能分析
+  control_performance:
+    enabled: true
+    calculate_metrics: true
+    stability_analysis: true
+    frequency_analysis: false
+    settling_time: true
+    overshoot: true
+    steady_state_error: true
+    
+  # 系统识别
+  system_identification:
+    enabled: false
+    method: "least_squares"
+    model_order: 2
+    validation_split: 0.3
+    
+  # 统计分析
+  statistical:
+    enabled: true
+    descriptive_stats: true
+    correlation_analysis: true
+    trend_analysis: true
+    outlier_detection: true
+    distribution_analysis: true
+    
+  # 信号处理
+  signal_processing:
+    enabled: false
+    filtering: false
+    fft_analysis: false
+    spectral_analysis: false
+    
+  # 机器学习分析
+  machine_learning:
+    enabled: false
+    anomaly_detection: false
+    pattern_recognition: false
+    predictive_modeling: false
+    
+  # 报告生成
+  reporting:
+    enabled: true
+    auto_report: true
+    report_format: "markdown"
+    report_file: "analysis/water_control_analysis.md"
+    include_plots: true
+    detailed_analysis: true
+
+# ============================================================================
+# 日志记录与监控配置
+# ============================================================================
+logging:
+  enabled: true
+  log_directory: "logs/water_control/"
+  
+  # 日志级别配置
+  levels:
+    root: "INFO"
+    simulation: "INFO"
+    agents: "INFO"
+    components: "DEBUG"
+    performance: "INFO"
+    error: "ERROR"
+    
+  # 日志输出配置
+  handlers:
+    console:
+      enabled: true
+      level: "INFO"
+      format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+      colored: true
+      
+    file:
+      enabled: true
+      level: "DEBUG"
+      filename: "logs/water_control/simulation.log"
+      max_size: "10MB"
+      backup_count: 5
+      encoding: "utf-8"
+      
+    structured:
+      enabled: false
+      level: "INFO"
+      filename: "logs/water_control/structured.json"
+      
+    error_file:
+      enabled: true
+      level: "ERROR"
+      filename: "logs/water_control/errors.log"
+      max_size: "5MB"
+      backup_count: 3
+      
+    performance_file:
+      enabled: true
+      level: "INFO"
+      filename: "logs/water_control/performance.log"
+      max_size: "20MB"
+      backup_count: 10
+      
+  # 日志过滤
+  filtering:
+    enabled: false
+    exclude_patterns: []
+    include_patterns: []
+    rate_limiting: false
+    
+  # 日志分析
+  analysis:
+    enabled: false
+    auto_analysis: false
+    analysis_types: ["pattern", "error"]
+    analysis_interval: 3600
+    
+  # 日志监控
+  monitoring:
+    enabled: false
+    real_time_alerts: false
+    error_threshold: 5
+    warning_threshold: 20
+
+# ============================================================================
+# 错误处理与恢复配置
+# ============================================================================
+error_handling:
+  enabled: true
+  error_policy: "strict"
+  
+  # 异常处理
+  exception_handling:
+    continue_on_error: false
+    log_exceptions: true
+    exception_file: "logs/water_control/exceptions.log"
+    stack_trace: true
+    exception_details: true
+    
+  # 错误恢复
+  recovery:
+    enabled: false
+    max_retries: 2
+    retry_delay: 1.0
+    exponential_backoff: true
+    recovery_strategies: []
+    
+  # 错误分类
+  classification:
+    enabled: true
+    critical_errors: ["ComponentFailure", "SolverDivergence"]
+    recoverable_errors: ["TemporaryNetworkError"]
+    ignored_errors: ["MinorWarning"]
+    
+  # 错误通知
+  notifications:
+    enabled: false
+    email: false
+    webhook: false
+    slack: false
+    threshold: "ERROR"
+    
+  # 错误报告
+  reporting:
+    enabled: true
+    generate_error_report: true
+    error_report_file: "reports/water_control_errors.md"
+    auto_report: true
+    include_context: true
+
+# ============================================================================
+# 环境与部署配置
+# ============================================================================
+environment:
+  current: "development"
+  auto_detect: true
+  
+  # 开发环境配置
+  development:
+    debug: true
+    verbose_logging: true
+    auto_reload: false
+    hot_reload: false
+    profiling: true
+    
+  # 生产环境配置
+  production:
+    debug: false
+    optimize_performance: true
+    minimal_logging: true
+    compression: true
+    monitoring: true
+    
+  # 测试环境配置
+  testing:
+    mock_external_services: true
+    deterministic_random: true
+    fast_execution: true
+    test_data_isolation: true
+    coverage_tracking: true
+    
+  # 环境变量
+  variables:
+    custom_vars:
+      SIMULATION_MODE: "water_control"
+      LOG_LEVEL: "INFO"
+    override_config: false
+    
+  # 资源限制
+  resources:
+    memory_limit: "1GB"
+    cpu_limit: "auto"
+    disk_limit: "auto"
+    
+  # 部署配置
+  deployment:
+    containerized: false
+    cloud_platform: "none"
+    scaling: "manual"
+
+# ============================================================================
+# 其他未启用的功能（保持默认配置）
+# ============================================================================
+
+# 缓存配置（未启用）
+caching:
+  enabled: false
+
+# 网络配置（未启用）
+network:
+  enabled: false
+
+# 安全配置（未启用）
+security:
+  enabled: false
+
+# 扩展配置（未启用）
+extensions:
+  enabled: false

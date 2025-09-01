@@ -1,0 +1,63 @@
+# Configuration for Example 1.4: Digital Twin Agent (Advanced Features)
+# 数字孪生智能体（高级功能）配置
+
+simulation:
+  duration: 30  # steps
+  description: "DigitalTwinAgent 数据平滑处理演示"
+  true_water_level: 10.0  # m
+  noise_std: 0.5  # Standard deviation of noise
+
+# Message Bus Topics
+communication:
+  smoothed_state_topic: "state/canal/level/smoothed"
+
+# Physical Components
+components:
+  upstream_canal:
+    type: "UnifiedCanal"
+    model_type: "integral"
+    initial_state:
+      water_level: 10.0  # m
+    parameters:
+      bottom_width: 20.0  # m
+      length: 1000.0  # m
+      slope: 0.001  # dimensionless
+      side_slope_z: 2.0  # dimensionless
+      manning_n: 0.025  # dimensionless
+      surface_area: 20000  # m²
+      outlet_coefficient: 5.0  # dimensionless
+
+# Agent Configuration
+agent:
+  type: "DigitalTwinAgent"
+  agent_id: "twin_agent_1"
+  simulated_object: "upstream_canal"
+  state_topic: "state/canal/level/smoothed"
+  smoothing_config:
+    water_level: 0.3  # Alpha for EMA filter. Lower alpha = more smoothing
+
+# Data Generation
+data_generation:
+  noise_injection: true
+  noise_type: "gaussian"
+  noise_parameters:
+    mean: 0.0
+    std: 0.5  # Use significant noise to make smoothing obvious
+
+# Analysis and Validation
+analysis:
+  enable_validation: true
+  variance_comparison: true
+  expected_result: "smoothed_variance < raw_variance"
+  metrics:
+    - "raw_data_variance"
+    - "smoothed_data_variance"
+    - "variance_reduction_ratio"
+
+# Output Settings
+output:
+  show_detailed_logs: true
+  print_format:
+    step_width: 2
+    level_precision: 3
+  show_summary: true

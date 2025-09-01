@@ -1,0 +1,100 @@
+# Configuration for Multi-Component Systems Example
+# This example demonstrates a complex system with multiple interconnected components
+# Physical topology: Reservoir -> Gate 1 -> RiverChannel -> Gate 2
+# Control objectives: 1) Control reservoir water level via Gate 1, 2) Control channel volume via Gate 2
+
+simulation:
+  duration: 500  # seconds
+  dt: 1.0       # time step in seconds
+  
+components:
+  reservoir_1:
+    type: "Reservoir"
+    initial_state:
+      water_level: 15.0  # m
+      volume: 15000000   # m^3 (15.0 * 1e6)
+    parameters:
+      surface_area: 1000000  # m^2 (1e6)
+      storage_curve: [[0, 0], [30000000, 30]]  # [[volume_m3, level_m], ...]
+      
+  gate_1:
+    type: "Gate"
+    initial_state:
+      opening: 0.25  # 25% open
+    parameters:
+      discharge_coefficient: 0.8
+      width: 12  # meters
+      
+  channel_1:
+    type: "RiverChannel"
+    initial_state:
+      volume: 500000  # m^3
+    parameters:
+      k: 0.0001  # Storage coefficient
+      
+  gate_2:
+    type: "Gate"
+    initial_state:
+      opening: 0.5  # 50% open
+    parameters:
+      discharge_coefficient: 0.7
+      width: 10  # meters
+      
+controllers:
+  res_level_ctrl:
+    type: "PIDController"
+    parameters:
+      Kp: -0.2      # Negative for direct-acting process
+      Ki: -0.01
+      Kd: -0.05
+      setpoint: 18.0  # Target reservoir level in meters
+      min_output: 0.0
+      max_output: 1.0
+    controlled_component: "gate_1"
+    observed_component: "reservoir_1"
+    observation_key: "water_level"
+    description: "Controls reservoir water level by adjusting Gate 1"
+    
+  chan_vol_ctrl:
+    type: "PIDController"
+    parameters:
+      Kp: -0.00001   # -1e-5, negative for reverse-acting process
+      Ki: -0.0000001 # -1e-7
+      Kd: -0.000001  # -1e-6
+      setpoint: 400000  # Target channel volume in m^3 (4e5)
+      min_output: 0.0
+      max_output: 1.0
+    controlled_component: "gate_2"
+    observed_component: "channel_1"
+    observation_key: "volume"
+    description: "Controls channel volume by adjusting Gate 2"
+    
+connections:
+  - from: "reservoir_1"
+    to: "gate_1"
+  - from: "gate_1"
+    to: "channel_1"
+  - from: "channel_1"
+    to: "gate_2"
+    
+analysis:
+  performance_metrics:
+    reservoir_control:
+      steady_state_error_threshold: 0.5  # m
+      stability_threshold: 0.1  # m variation in final 10 steps
+    channel_control:
+      steady_state_error_threshold: 50000  # m^3
+      stability_threshold: 10000  # m^3 variation in final 10 steps
+  
+  visualization:
+    enabled: true
+    output_file: "02_multi_component_results.png"
+    plots:
+      - type: "reservoir_level"
+        title: "Reservoir Water Level Control"
+      - type: "channel_volume"
+        title: "Channel Volume Control"
+      - type: "gate1_opening"
+        title: "Gate 1 Opening (Reservoir Control)"
+      - type: "gate2_opening"
+        title: "Gate 2 Opening (Channel Control)"

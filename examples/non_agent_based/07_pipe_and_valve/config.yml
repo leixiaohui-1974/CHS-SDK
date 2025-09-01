@@ -1,0 +1,55 @@
+# Pipe and Valve System Configuration
+# This configuration demonstrates the physical dynamics of a pressurized pipe and valve system
+
+simulation:
+  duration: 600  # seconds
+  dt: 1.0       # time step
+  upstream_head: 50.0   # Constant head from a large reservoir (m)
+  downstream_head: 20.0 # Constant head at the outlet (m)
+
+components:
+  pipe_1:
+    type: Pipe
+    initial_state: {}
+    parameters:
+      diameter: 0.5        # m
+      length: 1000         # m
+      friction_factor: 0.02
+
+  valve_1:
+    type: Valve
+    initial_state:
+      opening: 0.0         # Initial valve opening (0-100%)
+    parameters:
+      diameter: 0.5        # m
+      discharge_coefficient: 0.8
+
+# Valve opening control pattern
+control:
+  valve_opening_pattern:
+    type: sinusoidal
+    amplitude: 50        # % opening amplitude
+    period: 628.3        # seconds (2*pi*100)
+    offset: 50           # % base opening
+
+# Output and visualization settings
+output:
+  print_interval: 30     # Print results every 30 seconds
+  delay: 0.01           # Small delay between steps (seconds)
+  
+visualization:
+  enabled: true
+  save_path: "07_pipe_valve_results.png"
+  plots:
+    - title: "Valve Opening vs Time"
+      x_data: "time"
+      y_data: "valve_opening"
+      ylabel: "Valve Opening (%)"
+    - title: "Pipe Flow vs Time"
+      x_data: "time"
+      y_data: "pipe_outflow"
+      ylabel: "Pipe Outflow (m³/s)"
+    - title: "Pipe Head Loss vs Time"
+      x_data: "time"
+      y_data: "pipe_head_loss"
+      ylabel: "Pipe Head Loss (m)"

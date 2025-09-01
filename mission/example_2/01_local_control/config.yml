@@ -1,0 +1,4 @@
+# Global simulation settings for local control
+simulation:
+  duration: 1200  # seconds (20 minutes)
+  dt: 2.0         # time step in seconds

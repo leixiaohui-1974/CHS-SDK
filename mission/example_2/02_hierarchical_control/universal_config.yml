@@ -1,0 +1,471 @@
+# Mission Example 2 - 02_hierarchical_control 通用配置文件
+# 分层控制系统配置
+
+# ============================================================
+# 仿真配置
+# ============================================================
+simulation:
+  name: "分层控制系统仿真"
+  description: "Example 2.2 - 分层控制系统演示"
+  version: "1.0.0"
+  
+  # 时间设置
+  time:
+    end_time: 1800.0      # 仿真持续时间 (30分钟)
+    time_step: 3.0        # 时间步长 (3秒)
+    output_interval: 15.0 # 输出间隔 (15秒)
+    
+  # 求解器配置
+  solver:
+    method: "hierarchical"  # 分层控制求解方法
+    tolerance: 1e-4         # 求解精度
+    max_iterations: 150     # 最大迭代次数
+    
+  # 并行计算
+  parallel:
+    enabled: true           # 分层系统，启用并行
+    num_processes: 4        # 进程数量（对应控制层数）
+
+# ============================================================
+# 调试配置
+# ============================================================
+debug:
+  enabled: true
+  log_level: "INFO"
+  log_file: "logs/hierarchical_control_02/debug.log"
+  session_id: "hierarchical_control_02_session"
+  
+  # 数据收集
+  data_collection:
+    enabled: true
+    interval: 15.0  # 数据收集间隔 (15秒)
+    variables:
+      - "water_level"
+      - "gate_opening"
+      - "local_controller_output"
+      - "supervisory_setpoint"
+      - "coordination_signal"
+      - "hierarchy_status"
+      - "layer_performance"
+      - "communication_status"
+      - "system_stability"
+      - "control_effort"
+      
+  # Web仪表板
+  dashboard:
+    web_dashboard: true
+    port: 8202
+    auto_open: false
+    
+  # 控制台监控
+  console:
+    real_time_display: true
+    update_interval: 15.0     # 实时监控分层控制状态
+    show_detailed_logs: true
+    show_hierarchy_status: true
+
+# ============================================================
+# 性能监控配置
+# ============================================================
+performance:
+  enabled: true
+  
+  # 时间跟踪
+  timing:
+    enabled: true
+    detailed_profiling: true
+    hierarchical_timing: true
+    layer_coordination_timing: true
+    
+  # 内存监控
+  memory:
+    enabled: true
+    threshold_mb: 1000  # 内存阈值（分层控制系统）
+    
+  # CPU监控
+  cpu:
+    enabled: true
+    threshold_percent: 80  # CPU使用率警告阈值
+
+# ============================================================
+# 可视化配置
+# ============================================================
+visualization:
+  enabled: true
+  
+  # 图表配置
+  plots:
+    enabled: true
+    save_plots: true
+    plot_directory: "plots/hierarchical_control_02/"
+    format: "png"
+    dpi: 300
+    
+    # 图表定义
+    charts:
+      - name: "分层控制响应"
+        type: "time_series"
+        variables: ["water_level", "supervisory_setpoint"]
+        title: "Hierarchical Control Response"
+        xlabel: "Time (seconds)"
+        ylabel: "Water Level (m)"
+        
+      - name: "控制层级输出"
+        type: "time_series"
+        variables: ["local_controller_output", "gate_opening"]
+        title: "Control Layer Outputs"
+        xlabel: "Time (seconds)"
+        ylabel: "Control Signal"
+        
+      - name: "协调信号"
+        type: "time_series"
+        variables: ["coordination_signal"]
+        title: "Coordination Signal"
+        xlabel: "Time (seconds)"
+        ylabel: "Coordination Level"
+        
+      - name: "层级状态"
+        type: "time_series"
+        variables: ["hierarchy_status"]
+        title: "Hierarchy Status"
+        xlabel: "Time (seconds)"
+        ylabel: "Status Level"
+        
+      - name: "层级性能"
+        type: "time_series"
+        variables: ["layer_performance"]
+        title: "Layer Performance"
+        xlabel: "Time (seconds)"
+        ylabel: "Performance Index"
+        
+      - name: "通信状态"
+        type: "time_series"
+        variables: ["communication_status"]
+        title: "Communication Status"
+        xlabel: "Time (seconds)"
+        ylabel: "Communication Quality"
+        
+      - name: "系统稳定性"
+        type: "time_series"
+        variables: ["system_stability"]
+        title: "System Stability"
+        xlabel: "Time (seconds)"
+        ylabel: "Stability Index"
+        
+      - name: "控制努力"
+        type: "time_series"
+        variables: ["control_effort"]
+        title: "Control Effort"
+        xlabel: "Time (seconds)"
+        ylabel: "Effort Level"
+        
+  # 实时仪表板
+  dashboard:
+    enabled: true
+    update_interval: 15.0     # 实时更新分层控制状态
+    port: 8203
+
+# ============================================================
+# 数据输出配置
+# ============================================================
+output:
+  enabled: true
+  output_directory: "results/hierarchical_control_02/"
+  
+  # 历史数据保存
+  save_history: true
+  history_file: "simulation_history.json"
+  
+  # 数据格式
+  format:
+    csv: true
+    json: true
+    hdf5: true     # 启用HDF5以处理分层数据
+    matlab: true   # 启用MATLAB格式用于控制分析
+    
+  # 压缩设置
+  compression:
+    enabled: true
+    method: "gzip"
+    
+  # 验证配置
+  validation:
+    enabled: true
+    expected_results:
+      coordination_efficiency: 0.85    # 协调效率阈值
+      layer_response_time: 60         # 层级响应时间 (秒)
+      system_stability: 0.9           # 系统稳定性指标
+    performance_metrics:
+      - "coordination_efficiency"
+      - "layer_response_time"
+      - "system_stability"
+      - "communication_quality"
+    description: "分层控制系统应能有效协调各控制层级"
+
+# ============================================================
+# 智能分析配置
+# ============================================================
+analysis:
+  enabled: true
+  
+  # 控制性能分析
+  control_performance:
+    enabled: true
+    metrics: ["ise", "iae", "itae", "settling_time", "overshoot", "coordination_efficiency"]
+    reference_tracking: true
+    disturbance_rejection: true
+    
+  # 统计分析
+  statistical:
+    enabled: true
+    generate_summary: true
+    variance_analysis: true
+    correlation_analysis: true
+    
+  # 系统识别
+  system_identification:
+    enabled: true
+    method: "subspace"
+    state_space_model: true
+    input_signals: ["supervisory_setpoint", "coordination_signal"]
+    output_signals: ["water_level", "local_controller_output"]
+    
+  # 分层控制专用分析
+  hierarchical_analysis:
+    enabled: true
+    layer_performance: true
+    coordination_efficiency: true
+    scalability_analysis: true
+    fault_tolerance: true
+    
+  # 通信分析
+  communication_analysis:
+    enabled: true
+    latency_analysis: true
+    bandwidth_utilization: true
+    reliability_analysis: true
+    protocol_efficiency: true
+    
+  # 稳定性分析
+  stability_analysis:
+    enabled: true
+    lyapunov_analysis: true
+    robustness_analysis: true
+    margin_analysis: true
+    sensitivity_analysis: true
+
+# ============================================================
+# 日志配置
+# ============================================================
+logging:
+  enabled: true
+  level: "INFO"
+  
+  # 文件日志
+  file:
+    enabled: true
+    filename: "logs/hierarchical_control_02/simulation.log"
+    max_size_mb: 30
+    backup_count: 15
+    
+  # 控制台日志
+  console:
+    enabled: true
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    
+  # 结构化日志
+  structured:
+    enabled: true
+    format: "json"
+    
+  # 分层控制专用日志
+  hierarchical_log:
+    enabled: true
+    filename: "logs/hierarchical_control_02/hierarchical.log"
+    variables: ["hierarchy_status", "coordination_signal", "layer_performance"]
+    
+  # 协调日志
+  coordination_log:
+    enabled: true
+    filename: "logs/hierarchical_control_02/coordination.log"
+    coordination_events: true
+    layer_interactions: true
+    performance_metrics: true
+    
+  # 通信日志
+  communication_log:
+    enabled: true
+    filename: "logs/hierarchical_control_02/communication.log"
+    message_flow: true
+    latency_tracking: true
+    error_tracking: true
+
+# ============================================================
+# 错误处理配置
+# ============================================================
+error_handling:
+  enabled: true
+  
+  # 错误分类
+  categories:
+    critical: ["layer_failure", "coordination_breakdown", "communication_failure"]
+    warning: ["performance_degradation", "latency_increase", "synchronization_issue"]
+    info: ["normal_operation", "layer_switch", "coordination_update"]
+    
+  # 恢复策略
+  recovery:
+    auto_retry: true
+    max_retries: 5
+    retry_delay: 90.0
+    fallback_controller: "centralized_mode"
+    
+  # 通知设置
+  notifications:
+    enabled: true
+    email: ["control_engineer@example.com", "system_admin@example.com", "operations@example.com"]
+    webhook: "http://localhost:9000/hierarchical_alerts"
+
+# ============================================================
+# 缓存配置
+# ============================================================
+cache:
+  enabled: true
+  
+  # 内存缓存
+  memory:
+    enabled: true
+    max_size_mb: 300
+    
+  # 磁盘缓存
+  disk:
+    enabled: true
+    directory: "cache/hierarchical_control_02/"
+    max_size_gb: 3
+
+# ============================================================
+# 网络配置
+# ============================================================
+network:
+  enabled: true
+  
+  # 分布式仿真
+  distributed:
+    enabled: true
+    master_host: "localhost"
+    master_port: 9009
+    
+  # 通信设置
+  communication:
+    protocol: "tcp"  # 适合分层控制的可靠通信协议
+    timeout: 120
+    buffer_size: 32768
+    hierarchical_topics:
+      supervisory_level: "hierarchy/supervisory"
+      coordination_level: "hierarchy/coordination"
+      local_level: "hierarchy/local"
+      status_reporting: "hierarchy/status"
+
+# ============================================================
+# 安全配置
+# ============================================================
+security:
+  enabled: true
+  
+  # 访问控制
+  access_control:
+    enabled: true
+    allowed_hosts: ["localhost", "control-center", "supervisory-station"]
+    
+  # 加密设置
+  encryption:
+    enabled: true
+    algorithm: "AES-256"
+    
+  # 监控设置
+  monitoring:
+    enabled: true
+    intrusion_detection: true
+    hierarchy_security: true
+    communication_security: true
+
+# ============================================================
+# 扩展配置
+# ============================================================
+extensions:
+  enabled: true
+  
+  # 插件系统
+  plugins:
+    enabled: true
+    directory: "plugins/hierarchical/"
+    modules: ["advanced_coordination", "adaptive_hierarchy", "fault_tolerant_control"]
+    
+  # 自定义功能
+  custom:
+    enabled: true
+    modules: ["layer_optimization", "coordination_enhancement", "performance_tuning"]
+
+# ============================================================
+# 环境配置
+# ============================================================
+environment:
+  name: "development"
+  
+  # 环境变量
+  variables:
+    SIMULATION_ENV: "hierarchical_control_02"
+    LOG_LEVEL: "INFO"
+    CONTROL_MODE: "hierarchical"
+    
+  # 自定义变量
+  custom_vars:
+    # 仿真参数
+    description: "分层控制系统演示"
+    duration: 1800                # 仿真持续时间 (30分钟)
+    time_step: 3.0                # 时间步长 (3秒)
+    
+    # 分层控制参数
+    control_layers: 3             # 控制层数（监督、协调、本地）
+    coordination_period: 15.0     # 协调周期 (秒)
+    supervisory_period: 60.0      # 监督周期 (秒)
+    
+    # 层级配置
+    supervisory_layer:
+      enabled: true
+      update_rate: 0.0167         # 1/60 Hz
+      optimization_horizon: 300   # 5分钟
+      
+    coordination_layer:
+      enabled: true
+      update_rate: 0.0667         # 1/15 Hz
+      coordination_scope: "local_group"
+      
+    local_layer:
+      enabled: true
+      update_rate: 0.333          # 1/3 Hz
+      control_type: "pid"
+    
+    # 通信参数
+    communication_delay: 1.0      # 通信延迟 (秒)
+    message_loss_rate: 0.01       # 消息丢失率
+    bandwidth_limit: 1000         # 带宽限制 (kbps)
+    
+    # 性能参数
+    coordination_efficiency_target: 0.85  # 目标协调效率
+    layer_response_time_target: 60        # 目标层级响应时间 (秒)
+    system_stability_target: 0.9          # 目标系统稳定性
+    
+    # 故障容错参数
+    fault_detection_enabled: true
+    fault_recovery_enabled: true
+    redundancy_level: 2           # 冗余级别
+    
+    # 优化参数
+    optimization_enabled: true
+    optimization_method: "genetic_algorithm"
+    optimization_objectives: ["performance", "stability", "efficiency"]
+    
+    # 学习参数
+    adaptive_learning: true
+    learning_rate: 0.01
+    experience_buffer_size: 1000

@@ -1,0 +1,4 @@
+# Global simulation settings for watershed coordination
+simulation:
+  duration: 3600  # seconds (1 hour)
+  dt: 5.0         # time step in seconds

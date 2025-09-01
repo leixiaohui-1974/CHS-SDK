@@ -1,0 +1,43 @@
+# Defines all physical components for advanced control simulation
+components:
+  - id: canal1
+    class: UnifiedCanal
+    initial_state:
+      water_level: 2.0
+      flow_rate: 10.0
+    parameters:
+      bottom_width: 20.0
+      length: 1000.0
+      slope: 0.001
+      side_slope_z: 2.0
+      manning_n: 0.025
+
+  - id: canal2
+    class: UnifiedCanal
+    initial_state:
+      water_level: 1.8
+      flow_rate: 8.0
+    parameters:
+      bottom_width: 15.0
+      length: 800.0
+      slope: 0.0015
+      side_slope_z: 1.5
+      manning_n: 0.03
+
+  - id: gate1
+    class: Gate
+    initial_state:
+      opening: 0.3
+    parameters:
+      discharge_coefficient: 0.8
+      width: 10.0
+      max_opening: 3.0
+
+  - id: gate2
+    class: Gate
+    initial_state:
+      opening: 0.25
+    parameters:
+      discharge_coefficient: 0.75
+      width: 8.0
+      max_opening: 2.5

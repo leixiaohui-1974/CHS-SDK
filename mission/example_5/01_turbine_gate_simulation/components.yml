@@ -1,0 +1,34 @@
+# 物理组件配置
+
+components:
+  forebay:
+    model_type: "st_venant"
+    parameters:
+      length: 1000
+      num_points: 11
+      bottom_width: 20
+      side_slope_z: 2
+      manning_n: 0.03
+      slope: 0.001
+  
+  tailrace:
+    model_type: "st_venant"
+    parameters:
+      length: 1000
+      num_points: 11
+      bottom_width: 20
+      side_slope_z: 2
+      manning_n: 0.03
+      slope: 0.001
+  
+  turbine:
+    name: "turbine1"
+    equivalent_area: 25.0
+    discharge_coeff: 0.9
+  
+  gate:
+    name: "gate1"
+    width: 15
+    discharge_coeff: 0.62
+    opening_change_time: 50  # 在第50步改变闸门开度
+    new_opening: 0.2

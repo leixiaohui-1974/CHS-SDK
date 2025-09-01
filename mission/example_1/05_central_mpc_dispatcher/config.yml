@@ -1,0 +1,35 @@
+# Configuration for Example 1.5: Central MPC Dispatcher Agent
+# Central MPC Dispatcher Agent Configuration
+
+simulation:
+  duration: 10  # steps
+  time_step: 3600  # seconds (1 hour)
+  description: "CentralMPCAgent high-level dispatch command demonstration"
+
+# Message Bus Topics
+communication:
+  state_topics:
+    upstream: "state/canal_upstream/level"
+    downstream: "state/canal_downstream/level"
+  forecast_topic: "forecast/inflow"
+  command_topics:
+    upstream: "command/gate_upstream/setpoint"
+    downstream: "command/gate_downstream/setpoint"
+
+# Test Scenarios
+test_scenarios:
+  initial_state:
+    upstream_level: 10.1  # m
+    downstream_level: 8.0  # m
+  
+  forecast:
+    type: "flood_warning"
+    description: "Continuous high inflow forecast"
+    inflow_values: 50.0  # m³/s for all horizon steps
+    duration: 10  # horizon steps
+
+# Analysis and Validation
+analysis:
+  enable_validation: true
+  expected_behavior:
+    setpoint_reduction: true  # New setpoint should be lower than normal

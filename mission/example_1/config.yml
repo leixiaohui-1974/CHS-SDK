@@ -1,0 +1,79 @@
+# Mission Example 1 - 物理模型仿真配置
+# 演示纯物理组件（渠道和闸门）动态行为
+
+# 仿真配置
+simulation:
+  duration: 100.0          # 仿真持续时间（秒）
+  time_step: 1.0           # 时间步长（秒）
+  output_interval: 5.0     # 输出间隔（秒）
+  description: "演示纯物理组件（渠道和闸门）动态行为的示例"
+
+# 调试配置
+debug:
+  log_level: INFO
+  log_file: logs/mission_example_1.log
+  enable_performance_monitoring: true
+  enable_data_collection: true
+  data_collection_interval: 5.0
+  session_id: "mission_example_1"
+
+# 渠道组件配置
+canal:
+  name: "canal_1"
+  initial_state:
+    water_level: 2.0       # 初始水位（米）
+    flow_rate: 10.0        # 初始流量（立方米/秒）
+    volume: 20000.0        # 初始蓄水量（立方米）
+    inflow: 10.0           # 初始入流（立方米/秒）
+    outflow: 10.0          # 初始出流（立方米/秒）
+  parameters:
+    model_type: integral_delay  # 模型类型
+    length: 1000.0         # 渠道长度（米）
+    bottom_width: 20.0     # 渠道底宽（米）
+    side_slope_z: 1.0      # 边坡系数
+    manning_coefficient: 0.025  # 曼宁系数
+    gain: 0.001            # 积分增益
+    delay: 300             # 时滞（秒）
+
+# 闸门组件配置
+gate:
+  name: "gate_1"
+  initial_state:
+    opening: 0.5           # 初始开度（0-1）
+    flow_rate: 0.0         # 初始流量（立方米/秒）
+  parameters:
+    max_opening: 1.0       # 最大开度
+    discharge_coefficient: 0.6  # 流量系数
+    width: 10.0            # 闸门宽度（米）
+    max_rate_of_change: 0.1     # 最大变化率（每秒）
+
+# 仿真场景配置
+scenario:
+  # 入流变化配置
+  inflow_changes:
+    - time: 50.0           # 在第50秒时
+      new_inflow: 15.0     # 将入流改为15立方米/秒
+  
+  # 闸门操作配置
+  gate_operations:
+    - time: 30.0           # 在第30秒时
+      new_opening: 0.8     # 将闸门开度改为0.8
+    - time: 70.0           # 在第70秒时
+      new_opening: 0.3     # 将闸门开度改为0.3
+
+# 输出配置
+output:
+  save_results: true
+  output_directory: results/
+  plot_results: true
+  save_plots: true
+  variables_to_plot:
+    - canal_water_level
+    - gate_outflow
+    - inflow_rate
+  
+  # 结果验证配置
+  validation:
+    enable: true
+    check_water_level_response: true
+    check_outflow_response: true

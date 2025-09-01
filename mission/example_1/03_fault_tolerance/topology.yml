@@ -1,0 +1,15 @@
+# Defines connections for fault tolerance system
+topology:
+  connections:
+    - from: main_canal
+      to: main_gate
+      type: flow
+    - from: main_canal
+      to: backup_gate
+      type: flow
+    - from: backup_gate
+      to: backup_canal
+      type: flow
+    - from: pump_station
+      to: main_canal
+      type: flow

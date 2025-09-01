@@ -1,0 +1,36 @@
+# Mission Example 3 - 增强感知智能体演示配置
+# 展示增强后的感知智能体的认知能力
+
+simulation:
+  duration: 20  # 仿真步数
+  dt: 1.0       # 时间步长
+
+# 消息主题配置
+messaging:
+  state_topic: "perception/reservoir/state"
+
+# 仿真场景配置
+scenario:
+  fault_injection:
+    sensor_fault_time: 5      # 在第5步注入传感器故障
+    rapid_drop_time: 10       # 在第10步模拟水位快速下降
+    critical_drop_time: 11    # 在第11步触发预警
+  normal_operation:
+    water_level_decrease: 0.5  # 每步正常水位下降量
+
+# 验证配置
+validation:
+  enabled: true
+  checks:
+    - name: "anomaly_detection"
+      description: "验证异常检测功能"
+    - name: "predictive_warning"
+      description: "验证预警功能"
+    - name: "sensor_fault_handling"
+      description: "验证传感器故障处理"
+
+# 调试配置
+debug:
+  enabled: true
+  log_level: "INFO"
+  print_messages: true

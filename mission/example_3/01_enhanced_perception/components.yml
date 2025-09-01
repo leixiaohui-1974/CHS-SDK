@@ -1,0 +1,10 @@
+# 物理组件配置
+
+physical_components:
+  reservoir:
+    name: "演示水库"
+    initial_state:
+      water_level: 10.0
+      volume: 1000.0
+    parameters:
+      area: 100.0

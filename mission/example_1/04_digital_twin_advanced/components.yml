@@ -1,0 +1,15 @@
+# Defines all physical components in the simulation
+components:
+  - id: upstream_canal
+    class: UnifiedCanal
+    model_type: integral
+    initial_state:
+      water_level: 10.0  # m
+    parameters:
+      bottom_width: 20.0  # m
+      length: 1000.0  # m
+      slope: 0.001  # dimensionless
+      side_slope_z: 2.0  # dimensionless
+      manning_n: 0.025  # dimensionless
+      surface_area: 20000  # m²
+      outlet_coefficient: 5.0  # dimensionless

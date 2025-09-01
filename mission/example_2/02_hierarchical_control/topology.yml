@@ -1,0 +1,18 @@
+# Defines connections for hierarchical control scenario
+topology:
+  connections:
+    - from: upper_reservoir
+      to: upper_gate
+      type: flow
+    - from: upper_gate
+      to: connecting_canal
+      type: flow
+    - from: connecting_canal
+      to: lower_reservoir
+      type: flow
+    - from: lower_reservoir
+      to: lower_gate
+      type: flow
+    - from: lower_gate
+      to: outlet_canal
+      type: flow

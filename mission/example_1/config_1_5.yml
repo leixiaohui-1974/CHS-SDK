@@ -1,0 +1,68 @@
+# Configuration for Example 1.5: Central MPC Dispatcher Agent
+# 中心MPC调度智能体配置
+
+simulation:
+  description: "CentralMPCAgent 根据预测信息输出高层调度指令演示"
+  time_step: 3600  # seconds (1 hour)
+
+# Message Bus Topics
+communication:
+  state_topics:
+    upstream: "state/canal_upstream/level"
+    downstream: "state/canal_downstream/level"
+  forecast_topic: "forecast/inflow"
+  command_topics:
+    upstream: "command/gate_upstream/setpoint"
+    downstream: "command/gate_downstream/setpoint"
+
+# MPC Agent Configuration
+agent:
+  type: "CentralMPCAgent"
+  agent_id: "central_dispatcher_1"
+  config:
+    prediction_horizon: 10  # time steps
+    dt: 3600  # Time step in seconds (1 hour)
+    q_weight: 1.0  # Penalty on deviation from target setpoint
+    r_weight: 0.5  # Penalty on setpoint changes
+    state_keys: ["upstream", "downstream"]
+    normal_setpoints: [10.0, 8.0]  # Normal target level for upstream and downstream (m)
+    emergency_setpoint: 8.5  # Emergency target level (lower to create buffer) (m)
+    flood_thresholds: [12.0, 10.0]  # Flood threshold levels (m)
+    canal_surface_areas: [1500000, 1500000]  # m² (1.5e6)
+    outflow_coefficient: 1000  # Simplified model parameter
+
+# Test Scenarios
+test_scenarios:
+  initial_state:
+    upstream_level: 10.1  # m
+    downstream_level: 8.0  # m
+  
+  forecast:
+    type: "flood_warning"
+    description: "未来持续大流量入流"
+    inflow_values: 50.0  # m³/s for all horizon steps
+    duration: 10  # horizon steps
+
+# Analysis and Validation
+analysis:
+  enable_validation: true
+  expected_behavior:
+    setpoint_reduction: true  # New setpoint should be lower than normal
+    reasonable_range:
+      min: 5.0  # m
+      max: 12.0  # m
+  validation_criteria:
+    - "new_setpoint < normal_setpoint"  # Face flood warning, new setpoint should be lower
+    - "new_setpoint > min_reasonable_value"  # Sanity check
+
+# Dependencies
+dependencies:
+  required_packages:
+    - "scipy"  # Required for MPC controller
+  error_message: "本示例需要 'scipy' 库。请运行: pip install scipy"
+
+# Output Settings
+output:
+  show_detailed_logs: true
+  show_mpc_calculations: true
+  wait_time: 0.1  # seconds for message processing

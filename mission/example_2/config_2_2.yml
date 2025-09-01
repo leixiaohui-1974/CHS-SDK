@@ -1,0 +1,201 @@
+# Configuration for Example 2.2: Hierarchical Distributed Control with Complex Disturbances
+# 分层分布式控制与复杂扰动应对配置
+
+simulation:
+  duration: 43200  # 12 hours in seconds (3600 * 12)
+  time_step: 3600  # 1 hour in seconds
+  description: "分层分布式控制系统应对预测和非预测扰动演示"
+
+# Message Bus Topics
+communication:
+  # Sensor/State Topics
+  raw_upstream_level_topic: "state/canal_upstream/level/raw"
+  smoothed_upstream_level_topic: "state/canal_upstream/level/smoothed"
+  raw_downstream_level_topic: "state/canal_downstream/level/raw"
+  
+  # Disturbance Topics
+  inflow_disturbance_topic: "disturbance/inflow/upstream"
+  water_use_topic: "disturbance/outflow/downstream"
+  
+  # Forecast Topic
+  inflow_forecast_topic: "forecast/inflow/upstream"
+  
+  # Command & Action Topics
+  mpc_command_topic: "command/pid/setpoint"
+  pid_action_topic: "action/gate/opening"
+
+# Physical Components
+components:
+  upstream_canal:
+    type: "UnifiedCanal"
+    model_type: "integral"
+    initial_state:
+      volume: 652500  # m³ (corresponds to ~4.5m water level)
+    parameters:
+      bottom_width: 20.0  # m
+      length: 5000.0  # m
+      slope: 0.0001  # dimensionless
+      side_slope_z: 2.0  # dimensionless
+      manning_n: 0.03  # dimensionless
+    inflow_topic: "disturbance/inflow/upstream"
+  
+  downstream_canal:
+    type: "UnifiedCanal"
+    model_type: "integral"
+    initial_state:
+      volume: 400000  # m³
+    parameters:
+      bottom_width: 20.0  # m
+      length: 5000.0  # m
+      slope: 0.0001  # dimensionless
+      side_slope_z: 2.0  # dimensionless
+      manning_n: 0.03  # dimensionless
+  
+  control_gate:
+    type: "Gate"
+    initial_state:
+      opening: 0.3  # m
+    parameters:
+      discharge_coefficient: 0.7
+      width: 15.0  # m
+      max_opening: 5.0  # m
+      max_rate_of_change: 0.5  # m/s
+
+# Component Connections
+connections:
+  - from: "upstream_canal"
+    to: "control_gate"
+  - from: "control_gate"
+    to: "downstream_canal"
+
+# Agents Configuration
+agents:
+  # Disturbance Agents
+  base_flow_agent:
+    type: "RainfallAgent"
+    agent_id: "base_flow_1"
+    config:
+      topic: "disturbance/inflow/upstream"
+      start_time: 0  # seconds
+      duration: 43200  # 12 hours
+      inflow_rate: 20  # m³/s (baseline flow)
+  
+  rainfall_agent:
+    type: "RainfallAgent"
+    agent_id: "rainfall_1"
+    config:
+      topic: "disturbance/inflow/upstream"
+      start_time: 18000  # 5 hours (3600*5)
+      duration: 25200  # 7 hours (3600*7)
+      inflow_rate: 100  # m³/s (forecasted rainfall event)
+  
+  water_use_agent:
+    type: "WaterUseAgent"
+    agent_id: "water_user_1"
+    target_object: "downstream_canal"
+    start_time: 21600  # 6 hours (3600*6)
+    duration: 14400  # 4 hours (3600*4)
+    diversion_rate: 40  # m³/s (un-forecasted water use)
+    dt: 3600  # seconds
+  
+  # Forecast Agent
+  forecaster:
+    type: "InflowForecasterAgent"
+    agent_id: "forecaster_1"
+    topic: "forecast/inflow/upstream"
+    forecast_data: [20, 20, 20, 20, 20, 120, 120, 120, 120, 120, 120, 120]  # baseline + rainfall
+  
+  # IO Agent (Sensing & Acting Layer)
+  io_agent:
+    type: "PhysicalIOAgent"
+    agent_id: "io_agent_1"
+    sensors_config:
+      upstream_sensor:
+        obj_name: "upstream_canal"
+        state_key: "water_level"
+        topic: "state/canal_upstream/level/raw"
+        noise_std: 0.05  # m
+      downstream_sensor:
+        obj_name: "downstream_canal"
+        state_key: "water_level"
+        topic: "state/canal_downstream/level/raw"
+        noise_std: 0.05  # m
+    actuators_config:
+      gate_actuator:
+        obj_name: "control_gate"
+        target_attr: "target_opening"
+        topic: "action/gate/opening"
+        control_key: "control_signal"
+  
+  # Digital Twin Agent (Cognitive Layer)
+  twin_agent:
+    type: "DigitalTwinAgent"
+    agent_id: "twin_agent_1"
+    simulated_object: "upstream_canal"
+    state_topic: "state/canal_upstream/level/smoothed"
+    smoothing_config:
+      water_level: 0.4  # Alpha for EMA filter
+  
+  # Local PID Control Agent (Local Control Layer)
+  pid_agent:
+    type: "LocalControlAgent"
+    agent_id: "pid_agent_1"
+    controller:
+      type: "PIDController"
+      Kp: -0.6
+      Ki: -0.00005
+      Kd: -0.1
+      setpoint: 4.0  # m (initial setpoint for immediate draining)
+      min_output: 0.0  # m
+      max_output: 5.0  # m (gate max_opening)
+    observation_topic: "state/canal_upstream/level/raw"
+    observation_key: "water_level"
+    action_topic: "action/gate/opening"
+    dt: 3600  # seconds
+    command_topic: "command/pid/setpoint"
+  
+  # Central MPC Agent (Supervisory Control Layer)
+  mpc_agent:
+    type: "CentralMPCAgent"
+    agent_id: "mpc_dispatcher_1"
+    config:
+      prediction_horizon: 12  # time steps
+      dt: 3600  # seconds
+      q_weight: 1.0  # Penalty on deviation from target setpoint
+      r_weight: 0.8  # Penalty on setpoint changes
+      state_keys: ["upstream", "downstream"]
+      state_subscriptions:
+        upstream: "state/canal_upstream/level/raw"
+        downstream: "state/canal_downstream/level/raw"
+      forecast_subscription: "forecast/inflow/upstream"
+      command_topics:
+        upstream_cmd: "command/pid/setpoint"
+        downstream_cmd: "dummy_topic"  # Not used in this scenario
+      normal_setpoints: [5.0, 5.0]  # m
+      emergency_setpoint: 4.0  # m
+      flood_thresholds: [6.5, 6.0]  # m
+      canal_surface_areas: [200000, 200000]  # m² (2e5)
+      outflow_coefficient: 1500
+
+# Analysis and Validation
+analysis:
+  enable_validation: true
+  flood_prevention_check: true
+  max_allowed_level: 6.5  # m (flood threshold)
+  performance_metrics:
+    - "final_pid_setpoint"
+    - "max_level_achieved"
+    - "flood_prevention_success"
+  expected_behavior:
+    description: "系统应预见并应对扰动，将水位保持在安全范围内"
+    success_criteria:
+      - "max_level < flood_threshold"
+      - "system_responds_to_forecast"
+      - "handles_unforeseen_disturbances"
+
+# Output Settings
+output:
+  show_detailed_logs: true
+  show_agent_interactions: true
+  show_final_summary: true
+  history_analysis: true

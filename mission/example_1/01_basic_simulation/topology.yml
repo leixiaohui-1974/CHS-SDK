@@ -1,0 +1,6 @@
+# Defines connections between components
+topology:
+  connections:
+    - from: canal1
+      to: gate1
+      type: flow

@@ -1,0 +1,34 @@
+# 水轮机组件配置
+
+turbines:
+  # 6台不同效率特性的水轮机
+  - name: "turbine_1"
+    rated_power_mw: 50
+    efficiency_curve:
+      base_efficiency: 0.92
+      optimal_load_ratio: 0.8
+  - name: "turbine_2"
+    rated_power_mw: 50
+    efficiency_curve:
+      base_efficiency: 0.90
+      optimal_load_ratio: 0.75
+  - name: "turbine_3"
+    rated_power_mw: 50
+    efficiency_curve:
+      base_efficiency: 0.88
+      optimal_load_ratio: 0.85
+  - name: "turbine_4"
+    rated_power_mw: 50
+    efficiency_curve:
+      base_efficiency: 0.91
+      optimal_load_ratio: 0.78
+  - name: "turbine_5"
+    rated_power_mw: 50
+    efficiency_curve:
+      base_efficiency: 0.89
+      optimal_load_ratio: 0.82
+  - name: "turbine_6"
+    rated_power_mw: 50
+    efficiency_curve:
+      base_efficiency: 0.93
+      optimal_load_ratio: 0.77

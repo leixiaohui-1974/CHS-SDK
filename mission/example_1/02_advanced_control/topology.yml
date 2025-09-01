@@ -1,0 +1,12 @@
+# Defines connections between components for advanced control
+topology:
+  connections:
+    - from: canal1
+      to: gate1
+      type: flow
+    - from: gate1
+      to: canal2
+      type: flow
+    - from: canal2
+      to: gate2
+      type: flow

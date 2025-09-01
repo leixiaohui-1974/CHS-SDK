@@ -1,0 +1,24 @@
+# Mission Example 5.2 - 多机组协调和电网交互配置
+
+simulation:
+  end_time: 300
+  dt: 10.0
+
+messaging:
+  power_target_topic: "grid/power_target"
+  turbine_control_topic: "control/turbines"
+  grid_event_topic: "grid/events"
+  inflow_topic: "reservoir/inflow"
+
+# 通用配置
+general:
+  validation:
+    enabled: true
+  
+  debug:
+    enabled: true
+    log_level: "INFO"
+    verbose: false
+  
+  performance:
+    track_timing: true

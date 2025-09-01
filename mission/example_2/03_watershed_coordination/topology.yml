@@ -1,0 +1,30 @@
+# Defines connections for watershed coordination scenario
+topology:
+  connections:
+    - from: main_reservoir
+      to: main_gate
+      type: flow
+    - from: main_gate
+      to: main_canal
+      type: flow
+    - from: tributary_reservoir_1
+      to: tributary_gate_1
+      type: flow
+    - from: tributary_gate_1
+      to: tributary_canal_1
+      type: flow
+    - from: tributary_reservoir_2
+      to: tributary_gate_2
+      type: flow
+    - from: tributary_gate_2
+      to: tributary_canal_2
+      type: flow
+    - from: main_canal
+      to: confluence_junction
+      type: flow
+    - from: tributary_canal_1
+      to: confluence_junction
+      type: flow
+    - from: tributary_canal_2
+      to: confluence_junction
+      type: flow

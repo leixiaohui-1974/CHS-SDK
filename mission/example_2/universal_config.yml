@@ -1,0 +1,551 @@
+# Mission Example 2 - 通用配置文件
+# 现地闭环控制系统演示
+# 验证一个由现地PID智能体独立工作的完整闭环控制系统
+
+# 仿真基础配置
+simulation:
+  name: "Mission Example 2 - 现地闭环控制"
+  description: "验证一个由现地PID智能体独立工作的完整闭环控制系统"
+  version: "2.1.0"
+  author: "CHS-SDK Team"
+  created_date: "2024-01-22"
+  
+  # 时间配置
+  time:
+    start_time: 0.0
+    end_time: 2000.0       # 对应原配置的 duration
+    time_step: 10.0        # 对应原配置的 dt
+    units: "seconds"
+    output_interval: 100.0  # 对应原配置的 data_collection_interval
+    
+  # 求解器配置
+  solver:
+    type: "runge_kutta"
+    order: 4
+    tolerance: 1e-6
+    max_iterations: 1000
+    adaptive_step: false
+    
+  # 并行计算配置
+  parallel:
+    enabled: false
+    num_processes: 1
+    chunk_size: 50
+    backend: "sequential"
+
+# 调试配置（对应原配置的 debug 节）
+debug:
+  enabled: true
+  session_id: "example_2_1_session"    # 对应原配置
+  log_level: "INFO"                     # 对应原配置
+  log_file: "logs/example_2_1.log"      # 对应原配置
+  debug_mode: "development"
+  
+  # 数据收集配置
+  data_collection:
+    enabled: true                        # 对应原配置的 enable_data_collection
+    interval: 100.0                      # 对应原配置的 data_collection_interval
+    variables: [
+      "upstream_canal_water_level",
+      "control_gate_opening", 
+      "inflow_rate",
+      "pid_output",
+      "control_error"
+    ]
+    save_to_file: true
+    file_path: "debug_data_example_2.json"
+    max_file_size: "100MB"
+    rotation: true
+  
+  # 调试仪表板配置
+  dashboard:
+    enabled: true
+    theme: "dark"
+    
+    web_dashboard:
+      enabled: true
+      port: 8081
+      host: "localhost"
+      auto_open_browser: false
+      refresh_rate: 2.0
+      
+    console_dashboard:
+      enabled: false
+      update_interval: 10.0
+      display_format: "table"
+
+# 性能监控配置（对应原配置的 enable_performance_monitoring）
+performance:
+  enabled: true
+  track_timing: true
+  track_memory: true
+  track_cpu: true
+  track_io: false
+  track_network: false
+  
+  # 性能指标收集
+  metrics:
+    enabled: true
+    collection_interval: 100.0
+    save_to_file: true
+    metrics_file: "performance_metrics_example_2.json"
+    buffer_size: 200
+    compression: false
+    
+  # 性能分析
+  analysis:
+    enabled: true
+    generate_report: true
+    report_format: "html"
+    auto_analysis: true
+    threshold_alerts: true
+    
+  # 性能优化
+  optimization:
+    auto_tune: false
+    cache_enabled: true
+    memory_limit: "1GB"
+    cpu_limit: 70
+    gc_optimization: true
+    
+  # 性能阈值
+  thresholds:
+    max_execution_time: 30.0
+    max_memory_usage: 512
+    max_cpu_usage: 80
+
+# 可视化配置
+visualization:
+  enabled: true
+  theme: "modern"
+  color_scheme: "auto"
+  
+  # 实时可视化
+  real_time:
+    enabled: true
+    update_interval: 10.0
+    max_points: 1000
+    auto_scale: true
+    smooth_animation: true
+    
+  # 结果可视化
+  plots:
+    enabled: true
+    save_plots: true
+    output_directory: "plots/example_2/"
+    format: ["png", "svg"]
+    dpi: 300
+    style: "seaborn"
+    figsize: [14, 10]
+    font_size: 12
+    grid: true
+    legend: true
+    
+    # 图表配置
+    charts:
+      - type: "time_series"
+        title: "水位控制时间序列"
+        variables: ["upstream_canal_water_level", "setpoint"]
+        filename: "water_level_control"
+        subplot_layout: [1, 1]
+        
+      - type: "control_performance"
+        title: "PID控制性能"
+        variables: ["setpoint", "upstream_canal_water_level", "control_error"]
+        filename: "pid_performance"
+        include_error: true
+        
+      - type: "time_series"
+        title: "闸门开度和入流"
+        variables: ["control_gate_opening", "inflow_rate"]
+        filename: "gate_inflow"
+        subplot_layout: [2, 1]
+        
+      - type: "dashboard"
+        title: "控制系统仪表板"
+        filename: "control_dashboard"
+        layout: "grid"
+        
+      - type: "histogram"
+        title: "控制误差分布"
+        variables: ["control_error"]
+        filename: "error_distribution"
+        bins: 50
+
+# 数据输出配置
+output:
+  enabled: true
+  save_history: true
+  history_file: "simulation_history_example_2.json"
+  output_directory: "results/example_2/"
+  
+  # 输出格式
+  formats:
+    json: true
+    csv: true
+    hdf5: false
+    pickle: false
+    parquet: false
+    excel: true  # 便于分析控制性能
+    
+  # 输出内容
+  content:
+    all_variables: false
+    selected_variables: [
+      "upstream_canal_water_level",
+      "control_gate_opening", 
+      "inflow_rate",
+      "pid_output",
+      "control_error",
+      "setpoint"
+    ]
+    metadata: true
+    timestamps: true
+    system_info: true
+    configuration: true
+    
+  # 历史数据保存
+  history:
+    enabled: true
+    save_format: ["json", "csv", "excel"]
+    filename_prefix: "example_2_results"
+    
+  # 结果验证（对应原配置的 validation 节）
+  validation:
+    enabled: true
+    expected_results: {
+      "target_level": 4.0,      # 对应原配置的 target_level
+      "tolerance": 0.1,         # 对应原配置的 tolerance
+      "steady_state_error": 0.05,
+      "settling_time": 500.0
+    }
+    tolerance: 0.1
+
+# 分析配置
+analysis:
+  enabled: true
+  auto_analysis: true
+  analysis_interval: 200.0
+  
+  # 控制性能分析
+  control_performance:
+    enabled: true
+    calculate_metrics: true
+    stability_analysis: true
+    frequency_analysis: true
+    settling_time: true
+    overshoot: true
+    steady_state_error: true
+    
+  # 系统识别
+  system_identification:
+    enabled: true
+    method: "least_squares"
+    model_order: 2
+    validation_split: 0.3
+    
+  # 统计分析
+  statistical:
+    enabled: true
+    descriptive_stats: true
+    correlation_analysis: true
+    trend_analysis: true
+    outlier_detection: true
+    distribution_analysis: true
+    
+  # 信号处理
+  signal_processing:
+    enabled: true
+    filtering: true
+    fft_analysis: true
+    spectral_analysis: false
+    
+  # 报告生成
+  reporting:
+    enabled: true
+    auto_report: true
+    report_format: "markdown"
+    report_file: "example_2_control_analysis.md"
+    include_plots: true
+    detailed_analysis: true
+
+# 日志配置
+logging:
+  enabled: true
+  log_directory: "logs/example_2/"
+  
+  # 日志级别配置
+  levels:
+    root: "INFO"
+    simulation: "INFO"
+    agents: "DEBUG"      # 智能体日志更详细
+    components: "DEBUG"
+    performance: "INFO"
+    error: "ERROR"
+    control: "DEBUG"     # 控制系统专用日志
+    
+  # 日志输出配置
+  handlers:
+    console:
+      enabled: true
+      level: "INFO"
+      format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+      colored: true
+      
+    file:
+      enabled: true
+      level: "DEBUG"
+      filename: "example_2_simulation.log"
+      max_size: "20MB"
+      backup_count: 5
+      encoding: "utf-8"
+      
+    control_file:
+      enabled: true
+      level: "DEBUG"
+      filename: "example_2_control.log"
+      max_size: "10MB"
+      backup_count: 3
+      
+    error_file:
+      enabled: true
+      level: "ERROR"
+      filename: "example_2_errors.log"
+      max_size: "5MB"
+      backup_count: 3
+
+# 错误处理配置
+error_handling:
+  enabled: true
+  error_policy: "continue"  # 控制系统应该有一定容错能力
+  
+  # 异常处理
+  exception_handling:
+    continue_on_error: true   # 控制系统中的小错误不应停止仿真
+    log_exceptions: true
+    exception_file: "example_2_exceptions.log"
+    stack_trace: true
+    exception_details: true
+    
+  # 错误恢复
+  recovery:
+    enabled: true
+    max_retries: 3
+    retry_delay: 1.0
+    exponential_backoff: true
+    recovery_strategies: ["reset_controller", "safe_mode"]
+    
+  # 错误分类
+  classification:
+    enabled: true
+    critical_errors: ["ControllerFailure", "SensorFailure", "ActuatorFailure"]
+    recoverable_errors: ["TemporaryNetworkError", "MinorSensorNoise"]
+    ignored_errors: ["MinorWarning", "CalibrationDrift"]
+    
+  # 错误通知
+  notifications:
+    enabled: true
+    email: false
+    webhook: false
+    slack: false
+    threshold: "ERROR"
+
+# 缓存配置
+caching:
+  enabled: true
+  cache_directory: "cache/example_2/"
+  
+  # 缓存策略
+  strategy:
+    eviction_policy: "lru"
+    persistent: true
+    cache_threshold: 0.8
+    memory_limit: "256MB"
+    
+  # 数据缓存
+  data:
+    cache_input_data: true
+    cache_intermediate: true
+    compression: true
+    
+  # 缓存策略
+  policies:
+    adaptive: true
+    preload: false
+    background_refresh: true
+
+# 网络配置（用于分布式控制）
+network:
+  enabled: false  # 本示例为单机控制
+  timeout: 30.0
+  protocol: "tcp"
+  
+  # 消息队列（对应原配置的 topics）
+  messaging:
+    enabled: true
+    type: "internal"  # 内部消息系统
+    topics:
+      upstream_level: "state/canal_upstream/level"    # 对应原配置
+      gate_action: "action/gate/opening"              # 对应原配置
+      inflow: "disturbance/inflow"                    # 对应原配置
+
+# 环境配置
+environment:
+  current: "development"
+  auto_detect: true
+  
+  # 开发环境配置
+  development:
+    debug: true
+    verbose_logging: true
+    auto_reload: false
+    hot_reload: false
+    profiling: true
+    
+  # 环境变量
+  variables:
+    custom_vars:
+      SIMULATION_MODE: "closed_loop_control"
+      LOG_LEVEL: "DEBUG"
+      CONTROL_MODE: "PID"
+    override_config: false
+    
+  # 资源限制
+  resources:
+    memory_limit: "1GB"
+    cpu_limit: "auto"
+    disk_limit: "auto"
+
+# 控制系统特定配置（保留原配置的控制相关设置）
+control_system:
+  # PID控制器配置（对应原配置的 agents.pid_controller）
+  pid_controller:
+    Kp: -0.8
+    Ki: -0.002
+    Kd: 0.0
+    setpoint: 4.0      # 目标水位（米）
+    min_output: 0.0
+    max_output: 3.0    # 与闸门最大开度一致
+    
+  # 控制智能体配置（对应原配置的 agents.control_agent）
+  control_agent:
+    agent_id: "pid_agent_1"
+    observation_topic: "state/canal_upstream/level"
+    observation_key: "water_level"
+    action_topic: "action/gate/opening"
+    dt: 10.0
+    
+  # 传感器配置（对应原配置的 agents.io_agent.sensors_config）
+  sensors:
+    canal_level_sensor:
+      obj: "upstream_canal"
+      state_key: "water_level"
+      topic: "state/canal_upstream/level"
+      noise_std: 0.01
+      
+  # 执行器配置（对应原配置的 agents.io_agent.actuators_config）
+  actuators:
+    gate_actuator:
+      obj: "control_gate"
+      target_attr: "target_opening"
+      topic: "action/gate/opening"
+      control_key: "control_signal"
+
+# 物理组件配置（保留原配置的 components 节）
+components:
+  upstream_canal:
+    type: "UnifiedCanal"
+    model_type: "integral"
+    name: "upstream_canal"
+    initial_state:
+      volume: 112100.0  # 对应约4.0m水位的体积
+    parameters:
+      bottom_width: 20.0
+      length: 1000.0
+      slope: 0.001
+      side_slope_z: 2.0
+      manning_n: 0.025
+    inflow_topic: "disturbance/inflow"
+
+  downstream_canal:
+    type: "UnifiedCanal"
+    model_type: "integral"
+    name: "downstream_canal"
+    initial_state:
+      volume: 50000
+    parameters:
+      bottom_width: 20.0
+      length: 1000.0
+      slope: 0.001
+      side_slope_z: 2.0
+      manning_n: 0.025
+
+  control_gate:
+    type: "Gate"
+    name: "control_gate"
+    initial_state:
+      opening: 0.38  # 在设定点附近平衡入流的开度
+    parameters:
+      discharge_coefficient: 0.8
+      width: 10.0
+      max_opening: 3.0
+      max_rate_of_change: 0.05
+
+# 连接配置（保留原配置的 connections 节）
+connections:
+  - from: "upstream_canal"
+    to: "control_gate"
+  - from: "control_gate"
+    to: "downstream_canal"
+
+# 智能体配置（保留原配置的 agents 节）
+agents:
+  pid_controller:
+    type: "PIDController"
+    parameters:
+      Kp: -0.8
+      Ki: -0.002
+      Kd: 0.0
+      setpoint: 4.0
+      min_output: 0.0
+      max_output: 3.0
+
+  control_agent:
+    type: "LocalControlAgent"
+    agent_id: "pid_agent_1"
+    controller: "pid_controller"
+    observation_topic: "state/canal_upstream/level"
+    observation_key: "water_level"
+    action_topic: "action/gate/opening"
+    dt: 10.0
+
+  io_agent:
+    type: "PhysicalIOAgent"
+    agent_id: "io_agent_1"
+    sensors_config:
+      canal_level_sensor:
+        obj: "upstream_canal"
+        state_key: "water_level"
+        topic: "state/canal_upstream/level"
+        noise_std: 0.01
+    actuators_config:
+      gate_actuator:
+        obj: "control_gate"
+        target_attr: "target_opening"
+        topic: "action/gate/opening"
+        control_key: "control_signal"
+
+  inflow_disturbance:
+    type: "RainfallAgent"
+    agent_id: "inflow_disturbance_1"
+    config:
+      topic: "disturbance/inflow"
+      start_time: 0
+      duration: 2000
+      inflow_rate: 15.0
+
+# 验证配置（保留原配置的 validation 节）
+validation:
+  target_level: 4.0
+  tolerance: 0.1
+  description: "系统应将上游水位稳定在PID设定点附近"

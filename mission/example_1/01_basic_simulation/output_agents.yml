@@ -1,0 +1,91 @@
+simulation_history:
+- time: 0
+  canal1:
+    water_level: 2.0
+    flow_rate: 10.0
+    inflow: 0
+    outflow: 0.0
+  gate1:
+    opening: 0.2
+    outflow: 0
+- time: 10.0
+  canal1:
+    water_level: 2.0
+    flow_rate: 10.0
+    inflow: 0
+    outflow: 0.0
+  gate1:
+    opening: 0.2
+    outflow: 0
+- time: 20.0
+  canal1:
+    water_level: 2.0
+    flow_rate: 10.0
+    inflow: 0
+    outflow: 0.0
+  gate1:
+    opening: 0.2
+    outflow: 0
+- time: 30.0
+  canal1:
+    water_level: 2.0
+    flow_rate: 10.0
+    inflow: 0
+    outflow: 0.0
+  gate1:
+    opening: 0.2
+    outflow: 0
+- time: 40.0
+  canal1:
+    water_level: 2.0
+    flow_rate: 10.0
+    inflow: 0
+    outflow: 0.0
+  gate1:
+    opening: 0.2
+    outflow: 0
+- time: 50.0
+  canal1:
+    water_level: 2.0
+    flow_rate: 10.0
+    inflow: 0
+    outflow: 0.0
+  gate1:
+    opening: 0.2
+    outflow: 0
+- time: 60.0
+  canal1:
+    water_level: 2.0
+    flow_rate: 10.0
+    inflow: 0
+    outflow: 0.0
+  gate1:
+    opening: 0.2
+    outflow: 0
+- time: 70.0
+  canal1:
+    water_level: 2.0
+    flow_rate: 10.0
+    inflow: 0
+    outflow: 0.0
+  gate1:
+    opening: 0.2
+    outflow: 0
+- time: 80.0
+  canal1:
+    water_level: 2.0
+    flow_rate: 10.0
+    inflow: 0
+    outflow: 0.0
+  gate1:
+    opening: 0.2
+    outflow: 0
+- time: 90.0
+  canal1:
+    water_level: 2.0
+    flow_rate: 10.0
+    inflow: 0
+    outflow: 0.0
+  gate1:
+    opening: 0.2
+    outflow: 0

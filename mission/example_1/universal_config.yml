@@ -1,0 +1,363 @@
+# Mission Example 1 - 通用配置文件
+# 演示如何使用通用配置系统替代传统配置
+# 基于 universal_config_template.yml 模板
+
+# 仿真基础配置
+simulation:
+  name: "Mission Example 1"
+  description: "演示纯物理组件（渠道和闸门）动态行为的示例"
+  version: "1.0.0"
+  author: "CHS-SDK Team"
+  created_date: "2024-01-22"
+  
+  # 时间配置
+  time:
+    start_time: 0.0
+    end_time: 100.0        # 对应原配置的 duration
+    time_step: 1.0         # 对应原配置的 time_step
+    units: "seconds"
+    output_interval: 5.0   # 对应原配置的 output_interval
+    
+  # 求解器配置
+  solver:
+    type: "runge_kutta"
+    order: 4
+    tolerance: 1e-6
+    max_iterations: 1000
+    adaptive_step: false
+    
+  # 并行计算配置
+  parallel:
+    enabled: false
+    num_processes: 1
+    chunk_size: 50
+    backend: "sequential"
+
+# 调试配置（对应原配置的 debug 节）
+debug:
+  enabled: true
+  session_id: "mission_example_1"  # 对应原配置
+  log_level: "INFO"                 # 对应原配置
+  log_file: "logs/mission_example_1.log"  # 对应原配置
+  debug_mode: "development"
+  
+  # 数据收集配置
+  data_collection:
+    enabled: true                    # 对应原配置的 enable_data_collection
+    interval: 5.0                    # 对应原配置的 data_collection_interval
+    variables: ["canal_water_level", "gate_outflow", "inflow_rate"]
+    save_to_file: true
+    file_path: "debug_data.json"
+    max_file_size: "50MB"
+    rotation: true
+  
+  # 调试仪表板配置
+  dashboard:
+    enabled: false
+    theme: "dark"
+    
+    web_dashboard:
+      enabled: false
+      port: 8080
+      host: "localhost"
+      auto_open_browser: false
+      refresh_rate: 1.0
+      
+    console_dashboard:
+      enabled: false
+      update_interval: 3.0
+      display_format: "table"
+
+# 性能监控配置（对应原配置的 enable_performance_monitoring）
+performance:
+  enabled: true
+  track_timing: true
+  track_memory: true
+  track_cpu: false
+  track_io: false
+  track_network: false
+  
+  # 性能指标收集
+  metrics:
+    enabled: true
+    collection_interval: 5.0
+    save_to_file: true
+    metrics_file: "performance_metrics.json"
+    buffer_size: 100
+    compression: false
+    
+  # 性能分析
+  analysis:
+    enabled: true
+    generate_report: true
+    report_format: "html"
+    auto_analysis: true
+    threshold_alerts: false
+    
+  # 性能优化
+  optimization:
+    auto_tune: false
+    cache_enabled: true
+    memory_limit: "512MB"
+    cpu_limit: 70
+    gc_optimization: true
+    
+  # 性能阈值
+  thresholds:
+    max_execution_time: 10.0
+    max_memory_usage: 256
+    max_cpu_usage: 80
+
+# 可视化配置（对应原配置的输出图表）
+visualization:
+  enabled: true
+  theme: "modern"
+  color_scheme: "auto"
+  
+  # 实时可视化
+  real_time:
+    enabled: false
+    update_interval: 1.0
+    max_points: 500
+    auto_scale: true
+    smooth_animation: true
+    
+  # 结果可视化
+  plots:
+    enabled: true              # 对应原配置的 plot_results
+    save_plots: true           # 对应原配置的 save_plots
+    output_directory: "plots/" 
+    format: ["png", "svg"]
+    dpi: 300
+    style: "seaborn"
+    figsize: [12, 8]
+    font_size: 12
+    grid: true
+    legend: true
+    
+    # 图表配置（对应原配置的 variables_to_plot）
+    charts:
+      - type: "time_series"
+        title: "水位和流量时间序列"
+        variables: ["canal_water_level", "gate_outflow", "inflow_rate"]
+        filename: "time_series"
+        subplot_layout: [3, 1]
+        
+      - type: "control_performance"
+        title: "闸门控制性能"
+        variables: ["gate_opening", "gate_outflow"]
+        filename: "gate_control"
+        include_error: false
+        
+      - type: "dashboard"
+        title: "系统仪表板"
+        filename: "dashboard"
+        layout: "grid"
+
+# 数据输出配置（对应原配置的 output 节）
+output:
+  enabled: true
+  save_history: true           # 对应原配置的 save_results
+  history_file: "simulation_history.json"
+  output_directory: "results/" # 对应原配置的 output_directory
+  
+  # 输出格式
+  formats:
+    json: true
+    csv: true
+    hdf5: false
+    pickle: false
+    parquet: false
+    excel: false
+    
+  # 输出内容
+  content:
+    all_variables: false
+    selected_variables: ["canal_water_level", "gate_outflow", "inflow_rate"]  # 对应原配置
+    metadata: true
+    timestamps: true
+    system_info: true
+    configuration: true
+    
+  # 历史数据保存
+  history:
+    enabled: true
+    save_format: ["json", "csv"]
+    filename_prefix: "mission_1_results"
+    
+  # 结果验证（对应原配置的 validation 节）
+  validation:
+    enabled: true              # 对应原配置的 validation.enable
+    expected_results: {
+      "water_level_response": true,  # 对应原配置的 check_water_level_response
+      "outflow_response": true       # 对应原配置的 check_outflow_response
+    }
+    tolerance: 0.05
+
+# 分析配置
+analysis:
+  enabled: true
+  auto_analysis: true
+  analysis_interval: 10.0
+  
+  # 控制性能分析
+  control_performance:
+    enabled: true
+    calculate_metrics: true
+    stability_analysis: true
+    frequency_analysis: false
+    settling_time: true
+    overshoot: true
+    steady_state_error: true
+    
+  # 统计分析
+  statistical:
+    enabled: true
+    descriptive_stats: true
+    correlation_analysis: true
+    trend_analysis: true
+    outlier_detection: false
+    distribution_analysis: false
+    
+  # 报告生成
+  reporting:
+    enabled: true
+    auto_report: true
+    report_format: "markdown"
+    report_file: "mission_1_analysis.md"
+    include_plots: true
+    detailed_analysis: true
+
+# 日志配置（扩展原配置的日志功能）
+logging:
+  enabled: true
+  log_directory: "logs/"
+  
+  # 日志级别配置
+  levels:
+    root: "INFO"
+    simulation: "INFO"
+    agents: "INFO"
+    components: "DEBUG"
+    performance: "INFO"
+    error: "ERROR"
+    
+  # 日志输出配置
+  handlers:
+    console:
+      enabled: true
+      level: "INFO"
+      format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+      colored: true
+      
+    file:
+      enabled: true
+      level: "DEBUG"
+      filename: "mission_1_simulation.log"
+      max_size: "10MB"
+      backup_count: 5
+      encoding: "utf-8"
+      
+    error_file:
+      enabled: true
+      level: "ERROR"
+      filename: "mission_1_errors.log"
+      max_size: "5MB"
+      backup_count: 3
+
+# 错误处理配置
+error_handling:
+  enabled: true
+  error_policy: "strict"
+  
+  # 异常处理
+  exception_handling:
+    continue_on_error: false
+    log_exceptions: true
+    exception_file: "mission_1_exceptions.log"
+    stack_trace: true
+    exception_details: true
+    
+  # 错误恢复
+  recovery:
+    enabled: false
+    max_retries: 2
+    retry_delay: 1.0
+    exponential_backoff: true
+    recovery_strategies: []
+    
+  # 错误分类
+  classification:
+    enabled: true
+    critical_errors: ["ComponentFailure", "SolverDivergence"]
+    recoverable_errors: ["TemporaryNetworkError"]
+    ignored_errors: ["MinorWarning"]
+
+# 环境配置
+environment:
+  current: "development"
+  auto_detect: true
+  
+  # 开发环境配置
+  development:
+    debug: true
+    verbose_logging: true
+    auto_reload: false
+    hot_reload: false
+    profiling: true
+    
+  # 环境变量
+  variables:
+    custom_vars:
+      SIMULATION_MODE: "canal_gate_simulation"
+      LOG_LEVEL: "INFO"
+    override_config: false
+    
+  # 资源限制
+  resources:
+    memory_limit: "512MB"
+    cpu_limit: "auto"
+    disk_limit: "auto"
+
+# 场景特定配置（保留原配置的场景设置）
+scenario:
+  # 入流变化配置
+  inflow_changes:
+    - time: 50.0
+      new_inflow: 15.0
+  
+  # 闸门操作配置
+  gate_operations:
+    - time: 30.0
+      new_opening: 0.8
+    - time: 70.0
+      new_opening: 0.3
+
+# 组件特定配置（保留原配置的组件设置）
+canal:
+  name: "canal_1"
+  initial_state:
+    water_level: 2.0
+    flow_rate: 10.0
+    volume: 20000.0
+    inflow: 10.0
+    outflow: 10.0
+  parameters:
+    model_type: integral_delay
+    length: 1000.0
+    bottom_width: 20.0
+    side_slope_z: 1.0
+    manning_coefficient: 0.025
+    gain: 0.001
+    delay: 300
+
+gate:
+  name: "gate_1"
+  initial_state:
+    opening: 0.5
+    flow_rate: 0.0
+  parameters:
+    max_opening: 1.0
+    discharge_coefficient: 0.6
+    width: 10.0
+    max_rate_of_change: 0.1

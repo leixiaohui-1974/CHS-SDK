@@ -1,0 +1,59 @@
+# Configuration for Getting Started Example - Reservoir-Gate PID Control System
+# This example demonstrates basic non-agent-based simulation with PID control
+
+simulation:
+  duration: 300  # seconds
+  dt: 1.0       # time step in seconds
+  
+components:
+  reservoir_1:
+    type: "Reservoir"
+    initial_state:
+      volume: 21000000  # m^3, equivalent to 14m * 1.5e6 m^2
+      water_level: 14.0  # m, initial level above setpoint
+    parameters:
+      surface_area: 1500000  # m^2
+      storage_curve: [[0, 0], [30000000, 20]]  # [[volume_m3, level_m], ...]
+      
+  gate_1:
+    type: "Gate"
+    initial_state:
+      opening: 0.5  # 50% open
+    parameters:
+      max_rate_of_change: 0.1
+      discharge_coefficient: 0.6
+      width: 10
+      
+controllers:
+  pid_controller_1:
+    type: "PIDController"
+    parameters:
+      Kp: -0.5      # Negative for reverse-acting process
+      Ki: -0.01
+      Kd: -0.1
+      setpoint: 12.0  # Target water level in meters
+      min_output: 0.0
+      max_output: 1.0  # Gate opening percentage
+    controlled_component: "gate_1"
+    observed_component: "reservoir_1"
+    observation_key: "water_level"
+    
+connections:
+  - from: "reservoir_1"
+    to: "gate_1"
+    
+analysis:
+  performance_metrics:
+    steady_state_error_threshold: 0.1  # m
+    overshoot_threshold: 20  # percent
+    settling_time_threshold: 50  # seconds
+    settling_tolerance: 0.02  # 2% of setpoint
+  
+  visualization:
+    enabled: true
+    output_file: "01_getting_started_results.png"
+    plots:
+      - type: "water_level"
+        title: "PID Control of Reservoir Water Level"
+      - type: "gate_opening"
+        title: "PID Controller Output (Gate Opening)"

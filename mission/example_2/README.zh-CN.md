@@ -29,10 +29,70 @@
 
 ## 如何运行
 
-你可以按顺序依次执行这些Python脚本，来理解不同层次的控制策略：
+本目录中的所有示例都已重构为配置文件驱动的方式，你可以按顺序依次执行这些脚本，来理解不同层次的控制策略：
+
+### 配置文件驱动方式（推荐）
+
+使用 `run_unified_scenario` 统一仿真运行器，代码简洁、易于维护：
 
 ```bash
-python mission/example_2/example_2_1_local_closed_loop.py
-python mission/example_2/example_2_2_hierarchical_control.py
-python mission/example_2/example_2_3_joint_dispatch.py
+# 示例 2.1: 本地闭环控制
+python mission/example_2/run_config_2_1.py
+
+# 示例 2.2: 分层控制
+python mission/example_2/run_config_2_2.py
+
+# 示例 2.3: 流域联合调度
+python mission/example_2/run_config_2_3.py
 ```
+
+### 配置文件说明
+- `config_2_1.yml`: 本地闭环控制系统配置
+- `config_2_2.yml`: 分层分布式控制系统配置
+- `config_2_3.yml`: 流域联合调度系统配置
+
+每个配置文件都包含了完整的仿真参数、组件配置、智能体设置和验证标准，可以根据需要进行修改和扩展。
+
+## 输出结果
+
+### 控制台输出
+- 🚀 仿真启动信息和配置摘要
+- 📊 实时仿真进度条和状态显示
+- 🎯 智能体协作和控制策略
+- ✅ 自动验证结果和性能指标
+- 📈 仿真总结和统计数据
+
+### 数据文件
+- **历史数据**: `simulation_history.yml` - 完整的仿真历史记录
+- **日志文件**: 详细的运行日志和调试信息
+- **验证报告**: 自动生成的结果验证报告
+
+## 验证标准
+
+每个示例都有特定的验证标准：
+
+1. **本地闭环控制**: PID控制器的稳定性和响应性能
+2. **分层控制**: MPC优化效果和分层协调能力
+3. **流域联合调度**: 多目标协调和规则执行效果
+
+## 文件结构
+
+```
+mission/example_2/
+├── README.zh-CN.md              # 本文档
+├── config_2_1.yml              # 本地闭环控制配置
+├── config_2_2.yml              # 分层控制配置
+├── config_2_3.yml              # 流域联合调度配置
+├── run_config_2_1.py           # 本地闭环控制运行脚本
+├── run_config_2_2.py           # 分层控制运行脚本
+└── run_config_2_3.py           # 流域联合调度运行脚本
+```
+
+## 技术特性
+
+- **统一架构**: 使用 `run_unified_scenario` 统一仿真运行器
+- **配置驱动**: 所有参数通过 YAML 配置文件管理
+- **自动验证**: 内置结果验证和分析功能
+- **进度显示**: 实时仿真进度和状态监控
+- **多智能体**: 支持复杂的智能体协作和分层控制
+- **易于扩展**: 模块化设计，便于添加新的控制策略

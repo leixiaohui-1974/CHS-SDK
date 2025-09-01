@@ -1,0 +1,396 @@
+# Mission Example 2 - 01_local_control 通用配置文件
+# 现地控制系统配置
+
+# ============================================================
+# 仿真配置
+# ============================================================
+simulation:
+  name: "现地控制系统仿真"
+  description: "Example 2.1 - 现地控制系统基础演示"
+  version: "1.0.0"
+  
+  # 时间设置
+  time:
+    end_time: 1200.0      # 仿真持续时间 (20分钟)
+    time_step: 2.0        # 时间步长 (2秒)
+    output_interval: 10.0 # 输出间隔 (10秒)
+    
+  # 求解器配置
+  solver:
+    method: "local_control"  # 现地控制求解方法
+    tolerance: 1e-5          # 求解精度
+    max_iterations: 100      # 最大迭代次数
+    
+  # 并行计算
+  parallel:
+    enabled: false          # 单一控制回路，无需并行
+    num_processes: 1
+
+# ============================================================
+# 调试配置
+# ============================================================
+debug:
+  enabled: true
+  log_level: "INFO"
+  log_file: "logs/local_control_01/debug.log"
+  session_id: "local_control_01_session"
+  
+  # 数据收集
+  data_collection:
+    enabled: true
+    interval: 10.0  # 数据收集间隔 (10秒)
+    variables:
+      - "water_level"
+      - "gate_opening"
+      - "pid_error"
+      - "pid_output"
+      - "setpoint"
+      - "control_signal"
+      - "system_response"
+      - "disturbance_input"
+      
+  # Web仪表板
+  dashboard:
+    web_dashboard: true
+    port: 8200
+    auto_open: false
+    
+  # 控制台监控
+  console:
+    real_time_display: true
+    update_interval: 10.0     # 实时监控控制状态
+    show_detailed_logs: true
+    show_control_performance: true
+
+# ============================================================
+# 性能监控配置
+# ============================================================
+performance:
+  enabled: true
+  
+  # 时间跟踪
+  timing:
+    enabled: true
+    detailed_profiling: true
+    control_loop_timing: true
+    
+  # 内存监控
+  memory:
+    enabled: true
+    threshold_mb: 500  # 内存阈值（单一控制系统）
+    
+  # CPU监控
+  cpu:
+    enabled: true
+    threshold_percent: 70  # CPU使用率警告阈值
+
+# ============================================================
+# 可视化配置
+# ============================================================
+visualization:
+  enabled: true
+  
+  # 图表配置
+  plots:
+    enabled: true
+    save_plots: true
+    plot_directory: "plots/local_control_01/"
+    format: "png"
+    dpi: 300
+    
+    # 图表定义
+    charts:
+      - name: "控制系统响应"
+        type: "time_series"
+        variables: ["water_level", "setpoint"]
+        title: "Control System Response"
+        xlabel: "Time (seconds)"
+        ylabel: "Water Level (m)"
+        
+      - name: "PID控制器输出"
+        type: "time_series"
+        variables: ["pid_output", "gate_opening"]
+        title: "PID Controller Output"
+        xlabel: "Time (seconds)"
+        ylabel: "Control Signal"
+        
+      - name: "控制误差"
+        type: "time_series"
+        variables: ["pid_error"]
+        title: "Control Error"
+        xlabel: "Time (seconds)"
+        ylabel: "Error (m)"
+        
+      - name: "系统响应分析"
+        type: "time_series"
+        variables: ["system_response"]
+        title: "System Response Analysis"
+        xlabel: "Time (seconds)"
+        ylabel: "Response Magnitude"
+        
+      - name: "扰动输入"
+        type: "time_series"
+        variables: ["disturbance_input"]
+        title: "Disturbance Input"
+        xlabel: "Time (seconds)"
+        ylabel: "Disturbance Level"
+        
+  # 实时仪表板
+  dashboard:
+    enabled: true
+    update_interval: 10.0     # 实时更新控制状态
+    port: 8201
+
+# ============================================================
+# 数据输出配置
+# ============================================================
+output:
+  enabled: true
+  output_directory: "results/local_control_01/"
+  
+  # 历史数据保存
+  save_history: true
+  history_file: "simulation_history.json"
+  
+  # 数据格式
+  format:
+    csv: true
+    json: true
+    hdf5: false    # 单一控制系统，无需HDF5
+    matlab: true   # 启用MATLAB格式用于控制分析
+    
+  # 压缩设置
+  compression:
+    enabled: false  # 数据量较小，无需压缩
+    
+  # 验证配置
+  validation:
+    enabled: true
+    expected_results:
+      steady_state_error: 0.1    # 稳态误差阈值 (m)
+      settling_time: 300         # 调节时间 (秒)
+      overshoot: 0.2            # 超调量阈值 (m)
+    performance_metrics:
+      - "final_error"
+      - "settling_time"
+      - "overshoot"
+      - "control_effort"
+    description: "现地控制系统应能稳定控制水位到设定值"
+
+# ============================================================
+# 智能分析配置
+# ============================================================
+analysis:
+  enabled: true
+  
+  # 控制性能分析
+  control_performance:
+    enabled: true
+    metrics: ["ise", "iae", "itae", "settling_time", "overshoot", "steady_state_error"]
+    reference_tracking: true
+    disturbance_rejection: true
+    
+  # 统计分析
+  statistical:
+    enabled: true
+    generate_summary: true
+    variance_analysis: true
+    correlation_analysis: true
+    
+  # 系统识别
+  system_identification:
+    enabled: true
+    method: "subspace"
+    state_space_model: true
+    input_signals: ["gate_opening"]
+    output_signals: ["water_level"]
+    
+  # PID专用分析
+  pid_analysis:
+    enabled: true
+    tuning_analysis: true
+    stability_analysis: true
+    robustness_analysis: true
+    parameter_sensitivity: true
+    
+  # 闭环系统分析
+  closed_loop_analysis:
+    enabled: true
+    stability_margins: true
+    frequency_response: true
+    step_response: true
+    impulse_response: true
+
+# ============================================================
+# 日志配置
+# ============================================================
+logging:
+  enabled: true
+  level: "INFO"
+  
+  # 文件日志
+  file:
+    enabled: true
+    filename: "logs/local_control_01/simulation.log"
+    max_size_mb: 20
+    backup_count: 10
+    
+  # 控制台日志
+  console:
+    enabled: true
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    
+  # 结构化日志
+  structured:
+    enabled: true
+    format: "json"
+    
+  # PID专用日志
+  pid_log:
+    enabled: true
+    filename: "logs/local_control_01/pid.log"
+    variables: ["pid_error", "pid_output", "setpoint"]
+    
+  # 控制循环日志
+  control_loop_log:
+    enabled: true
+    filename: "logs/local_control_01/control_loop.log"
+    loop_timing: true
+    performance_metrics: true
+    stability_indicators: true
+
+# ============================================================
+# 错误处理配置
+# ============================================================
+error_handling:
+  enabled: true
+  
+  # 错误分类
+  categories:
+    critical: ["controller_failure", "actuator_failure", "sensor_failure"]
+    warning: ["setpoint_deviation", "performance_degradation", "oscillation"]
+    info: ["normal_operation", "setpoint_change", "tuning_update"]
+    
+  # 恢复策略
+  recovery:
+    auto_retry: true
+    max_retries: 3
+    retry_delay: 60.0
+    fallback_controller: "manual_mode"
+    
+  # 通知设置
+  notifications:
+    enabled: true
+    email: ["control_engineer@example.com", "operator@example.com"]
+    webhook: "http://localhost:9000/control_alerts"
+
+# ============================================================
+# 缓存配置
+# ============================================================
+cache:
+  enabled: true
+  
+  # 内存缓存
+  memory:
+    enabled: true
+    max_size_mb: 100
+    
+  # 磁盘缓存
+  disk:
+    enabled: false  # 单一控制系统，无需磁盘缓存
+
+# ============================================================
+# 网络配置
+# ============================================================
+network:
+  enabled: false  # 单一控制系统，无需网络通信
+
+# ============================================================
+# 安全配置
+# ============================================================
+security:
+  enabled: true
+  
+  # 访问控制
+  access_control:
+    enabled: true
+    allowed_hosts: ["localhost", "control-station"]
+    
+  # 加密设置
+  encryption:
+    enabled: false  # 本地系统，无需加密
+    
+  # 监控设置
+  monitoring:
+    enabled: true
+    intrusion_detection: false
+    safety_protocols: true
+
+# ============================================================
+# 扩展配置
+# ============================================================
+extensions:
+  enabled: true
+  
+  # 插件系统
+  plugins:
+    enabled: true
+    directory: "plugins/local_control/"
+    modules: ["advanced_pid", "adaptive_control", "fault_detection"]
+    
+  # 自定义功能
+  custom:
+    enabled: true
+    modules: ["control_optimization", "performance_monitoring", "auto_tuning"]
+
+# ============================================================
+# 环境配置
+# ============================================================
+environment:
+  name: "development"
+  
+  # 环境变量
+  variables:
+    SIMULATION_ENV: "local_control_01"
+    LOG_LEVEL: "INFO"
+    CONTROL_MODE: "local"
+    
+  # 自定义变量
+  custom_vars:
+    # 仿真参数
+    description: "现地控制系统基础演示"
+    duration: 1200                # 仿真持续时间 (20分钟)
+    time_step: 2.0                # 时间步长 (2秒)
+    
+    # 控制参数
+    control_type: "pid"           # 控制器类型
+    setpoint: 5.0                 # 设定值 (m)
+    control_period: 2.0           # 控制周期 (秒)
+    
+    # PID参数
+    pid_kp: 1.0                   # 比例增益
+    pid_ki: 0.1                   # 积分增益
+    pid_kd: 0.05                  # 微分增益
+    pid_min_output: 0.0           # 最小输出
+    pid_max_output: 10.0          # 最大输出
+    
+    # 系统参数
+    response_time: 60.0           # 系统响应时间 (秒)
+    settling_time_target: 300.0   # 目标调节时间 (秒)
+    steady_state_error_limit: 0.1 # 稳态误差限制 (m)
+    overshoot_limit: 0.2          # 超调量限制 (m)
+    
+    # 传感器参数
+    sensor_accuracy: 0.01         # 传感器精度 (m)
+    sensor_noise_std: 0.005       # 传感器噪声标准差 (m)
+    
+    # 执行器参数
+    actuator_accuracy: 0.02       # 执行器精度
+    actuator_delay: 1.0           # 执行器延迟 (秒)
+    
+    # 性能指标
+    performance_targets:
+      settling_time: 300          # 目标调节时间 (秒)
+      overshoot: 0.1             # 目标超调量 (m)
+      steady_state_error: 0.05   # 目标稳态误差 (m)
+      control_effort: 5.0        # 目标控制努力

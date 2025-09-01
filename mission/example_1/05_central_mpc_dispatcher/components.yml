@@ -1,0 +1,45 @@
+# Defines all physical components in the simulation
+components:
+  - id: canal_upstream
+    class: UnifiedCanal
+    model_type: integral
+    initial_state:
+      water_level: 10.1  # m
+    parameters:
+      bottom_width: 20.0  # m
+      length: 1000.0  # m
+      slope: 0.001  # dimensionless
+      side_slope_z: 2.0  # dimensionless
+      manning_n: 0.025  # dimensionless
+      surface_area: 1500000  # m² (1.5e6)
+
+  - id: canal_downstream
+    class: UnifiedCanal
+    model_type: integral
+    initial_state:
+      water_level: 8.0  # m
+    parameters:
+      bottom_width: 20.0  # m
+      length: 1000.0  # m
+      slope: 0.001  # dimensionless
+      side_slope_z: 2.0  # dimensionless
+      manning_n: 0.025  # dimensionless
+      surface_area: 1500000  # m² (1.5e6)
+
+  - id: gate_upstream
+    class: Gate
+    initial_state:
+      opening: 0.5  # m
+    parameters:
+      discharge_coefficient: 0.8
+      width: 10.0  # m
+      max_opening: 3.0  # m
+
+  - id: gate_downstream
+    class: Gate
+    initial_state:
+      opening: 0.4  # m
+    parameters:
+      discharge_coefficient: 0.8
+      width: 10.0  # m
+      max_opening: 3.0  # m

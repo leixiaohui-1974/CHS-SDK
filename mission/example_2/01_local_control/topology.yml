@@ -1,0 +1,9 @@
+# Defines connections for local control scenario
+topology:
+  connections:
+    - from: reservoir1
+      to: gate1
+      type: flow
+    - from: gate1
+      to: downstream_canal
+      type: flow

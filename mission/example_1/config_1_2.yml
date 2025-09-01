@@ -1,0 +1,77 @@
+# Configuration for Example 1.2: Physical IO Agent Simulation
+# 传感器与执行器仿真智能体配置
+
+simulation:
+  duration: 50  # seconds
+  time_step: 1.0  # seconds
+  description: "PhysicalIOAgent 传感器感知和执行器物理动作演示"
+
+# Message Bus Topics
+communication:
+  state_topic: "state/canal/level"
+  action_topic: "action/gate/opening"
+
+# Physical Components
+components:
+  upstream_canal:
+    type: "UnifiedCanal"
+    model_type: "integral"
+    initial_state:
+      volume: 100000  # m³
+      outflow: 0  # m³/s
+    parameters:
+      bottom_width: 20.0  # m
+      length: 1000.0  # m
+      slope: 0.001  # dimensionless
+      side_slope_z: 2.0  # dimensionless
+      manning_n: 0.025  # dimensionless
+  
+  control_gate:
+    type: "Gate"
+    initial_state:
+      opening: 0.2  # m
+    parameters:
+      discharge_coefficient: 0.8
+      width: 10.0  # m
+      max_opening: 3.0  # m
+      max_rate_of_change: 0.05  # m/s
+
+# Agents Configuration
+agents:
+  physical_io_agent:
+    type: "PhysicalIOAgent"
+    agent_id: "io_agent_1"
+    sensors_config:
+      canal_level_sensor:
+        obj_name: "upstream_canal"
+        state_key: "water_level"
+        topic: "state/canal/level"
+        noise_std: 0.02  # Standard deviation of sensor noise in meters
+    actuators_config:
+      gate_actuator:
+        obj_name: "control_gate"
+        target_attr: "target_opening"
+        topic: "action/gate/opening"
+        control_key: "target_opening"
+
+# Control Commands
+control_sequence:
+  - time: 5.0  # seconds
+    action:
+      type: "send_command"
+      topic: "action/gate/opening"
+      data:
+        target_opening: 0.5  # m
+
+# Analysis and Validation
+analysis:
+  enable_validation: true
+  expected_final_opening: 0.5  # m
+  tolerance: 1e-9
+  check_sensor_noise: true
+
+# Output Settings
+output:
+  print_interval: 1  # Print every step
+  sleep_duration: 0.05  # seconds between steps for real-time simulation
+  show_detailed_logs: true

@@ -1,0 +1,431 @@
+# Mission Example 1 - Config 1.4 通用配置文件
+# 数字孪生智能体（高级功能）系统配置
+
+# ============================================================
+# 仿真配置
+# ============================================================
+simulation:
+  name: "数字孪生高级功能仿真"
+  description: "Example 1.4 - DigitalTwinAgent 数据平滑处理演示"
+  version: "1.0.0"
+  
+  # 时间设置
+  time:
+    end_time: 30.0        # 仿真持续时间 (步数)
+    time_step: 1.0        # 时间步长 (秒)
+    output_interval: 1.0  # 输出间隔 (秒)
+    
+  # 求解器配置
+  solver:
+    method: "euler"       # 适用于数字孪生的求解方法
+    tolerance: 1e-6       # 求解精度
+    max_iterations: 1000  # 最大迭代次数
+    
+  # 并行计算
+  parallel:
+    enabled: true         # 启用并行计算以处理复杂数字孪生
+    num_processes: 2      # 进程数量
+
+# ============================================================
+# 调试配置
+# ============================================================
+debug:
+  enabled: true
+  log_level: "INFO"
+  log_file: "logs/digital_twin_config_1_4/debug.log"
+  session_id: "digital_twin_config_1_4_session"
+  
+  # 数据收集
+  data_collection:
+    enabled: true
+    interval: 1.0  # 数据收集间隔 (秒)
+    variables:
+      - "true_water_level"
+      - "noisy_water_level"
+      - "smoothed_water_level"
+      - "raw_data_variance"
+      - "smoothed_data_variance"
+      - "variance_reduction_ratio"
+      - "smoothing_alpha"
+      - "noise_injection"
+      - "data_quality_score"
+      - "twin_accuracy"
+      
+  # Web仪表板
+  dashboard:
+    web_dashboard: true
+    port: 8094
+    auto_open: false
+    
+  # 控制台监控
+  console:
+    real_time_display: true
+    update_interval: 1.0   # 实时监控数字孪生状态
+    show_detailed_logs: true
+
+# ============================================================
+# 性能监控配置
+# ============================================================
+performance:
+  enabled: true
+  
+  # 时间跟踪
+  timing:
+    enabled: true
+    detailed_profiling: true
+    digital_twin_timing: true
+    
+  # 内存监控
+  memory:
+    enabled: true
+    threshold_mb: 1000  # 内存阈值
+    
+  # CPU监控
+  cpu:
+    enabled: true
+    threshold_percent: 70  # CPU使用率警告阈值
+
+# ============================================================
+# 可视化配置
+# ============================================================
+visualization:
+  enabled: true
+  
+  # 图表配置
+  plots:
+    enabled: true
+    save_plots: true
+    plot_directory: "plots/digital_twin_config_1_4/"
+    format: "png"
+    dpi: 300
+    
+    # 图表定义
+    charts:
+      - name: "数据平滑效果对比"
+        type: "time_series"
+        variables: ["true_water_level", "noisy_water_level", "smoothed_water_level"]
+        title: "Data Smoothing Effect Comparison"
+        xlabel: "Time Steps"
+        ylabel: "Water Level (m)"
+        
+      - name: "方差分析"
+        type: "time_series"
+        variables: ["raw_data_variance", "smoothed_data_variance"]
+        title: "Variance Analysis"
+        xlabel: "Time Steps"
+        ylabel: "Variance"
+        
+      - name: "方差降低比率"
+        type: "time_series"
+        variables: ["variance_reduction_ratio"]
+        title: "Variance Reduction Ratio"
+        xlabel: "Time Steps"
+        ylabel: "Reduction Ratio"
+        
+      - name: "平滑参数分析"
+        type: "time_series"
+        variables: ["smoothing_alpha"]
+        title: "Smoothing Parameter Analysis"
+        xlabel: "Time Steps"
+        ylabel: "Alpha Value"
+        
+      - name: "数据质量评估"
+        type: "time_series"
+        variables: ["data_quality_score", "twin_accuracy"]
+        title: "Data Quality Assessment"
+        xlabel: "Time Steps"
+        ylabel: "Quality Score"
+        
+      - name: "噪声注入效果"
+        type: "histogram"
+        variables: ["noise_injection"]
+        title: "Noise Injection Effect"
+        
+  # 实时仪表板
+  dashboard:
+    enabled: true
+    update_interval: 1.0   # 实时更新数字孪生状态
+    port: 8095
+
+# ============================================================
+# 数据输出配置
+# ============================================================
+output:
+  enabled: true
+  output_directory: "results/digital_twin_config_1_4/"
+  
+  # 历史数据保存
+  save_history: true
+  history_file: "simulation_history.json"
+  
+  # 数据格式
+  format:
+    csv: true
+    json: true
+    hdf5: true     # 启用HDF5以处理大量数字孪生数据
+    
+  # 压缩设置
+  compression:
+    enabled: true
+    method: "gzip"
+    
+  # 验证配置
+  validation:
+    enabled: true
+    expected_results:
+      variance_reduction: true      # 期望方差降低
+      smoothing_effectiveness: 0.7  # 期望平滑效果
+      data_quality: 0.8            # 期望数据质量
+    tolerance: 0.1
+
+# ============================================================
+# 智能分析配置
+# ============================================================
+analysis:
+  enabled: true
+  
+  # 控制性能分析
+  control_performance:
+    enabled: false  # 数字孪生主要关注数据处理
+    
+  # 统计分析
+  statistical:
+    enabled: true
+    generate_summary: true
+    variance_analysis: true
+    correlation_analysis: true
+    
+  # 系统识别
+  system_identification:
+    enabled: true
+    method: "kalman"
+    state_space_model: true
+    input_signals: ["noisy_water_level"]
+    output_signals: ["smoothed_water_level"]
+    
+  # 数字孪生专用分析
+  digital_twin_analysis:
+    enabled: true
+    data_quality_assessment: true
+    model_validation: true
+    smoothing_performance: true
+    noise_characterization: true
+    
+  # 信号处理分析
+  signal_processing:
+    enabled: true
+    filtering_analysis: true
+    frequency_analysis: true
+    noise_analysis: true
+
+# ============================================================
+# 日志配置
+# ============================================================
+logging:
+  enabled: true
+  level: "INFO"
+  
+  # 文件日志
+  file:
+    enabled: true
+    filename: "logs/digital_twin_config_1_4/simulation.log"
+    max_size_mb: 30
+    backup_count: 15
+    
+  # 控制台日志
+  console:
+    enabled: true
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    
+  # 结构化日志
+  structured:
+    enabled: true
+    format: "json"
+    
+  # 数字孪生专用日志
+  digital_twin_log:
+    enabled: true
+    filename: "logs/digital_twin_config_1_4/digital_twin.log"
+    variables: ["smoothed_water_level", "data_quality_score", "variance_reduction_ratio"]
+    
+  # 数据处理日志
+  data_processing_log:
+    enabled: true
+    filename: "logs/digital_twin_config_1_4/data_processing.log"
+    smoothing_events: true
+    quality_events: true
+
+# ============================================================
+# 错误处理配置
+# ============================================================
+error_handling:
+  enabled: true
+  
+  # 错误分类
+  categories:
+    critical: ["data_corruption", "model_failure", "smoothing_failure"]
+    warning: ["high_noise_level", "poor_data_quality", "model_drift"]
+    info: ["data_processed", "smoothing_applied", "quality_updated"]
+    
+  # 恢复策略
+  recovery:
+    auto_retry: true
+    max_retries: 5
+    retry_delay: 1.0
+    fallback_smoother: "moving_average"
+    
+  # 通知设置
+  notifications:
+    enabled: true
+    email: ["data_scientist@example.com"]
+    webhook: "http://localhost:9000/dt_alerts"
+
+# ============================================================
+# 缓存配置
+# ============================================================
+cache:
+  enabled: true
+  
+  # 内存缓存
+  memory:
+    enabled: true
+    max_size_mb: 250
+    
+  # 磁盘缓存
+  disk:
+    enabled: true
+    directory: "cache/digital_twin_config_1_4/"
+    max_size_gb: 2
+
+# ============================================================
+# 网络配置
+# ============================================================
+network:
+  enabled: true
+  
+  # 分布式仿真
+  distributed:
+    enabled: false
+    
+  # 通信设置
+  communication:
+    protocol: "mqtt"  # 适合数字孪生的通信协议
+    timeout: 20
+    buffer_size: 12288
+    topics:
+      smoothed_state: "state/canal/level/smoothed"
+      raw_data: "data/canal/level/raw"
+      quality_metrics: "metrics/data/quality"
+
+# ============================================================
+# 安全配置
+# ============================================================
+security:
+  enabled: false  # 开发环境暂不启用
+  
+  # 访问控制
+  access_control:
+    enabled: false
+    
+  # 加密设置
+  encryption:
+    enabled: false
+
+# ============================================================
+# 扩展配置
+# ============================================================
+extensions:
+  enabled: true
+  
+  # 插件系统
+  plugins:
+    enabled: true
+    directory: "plugins/digital_twin/"
+    modules: ["advanced_smoothing", "adaptive_filtering", "quality_assessment"]
+    
+  # 自定义功能
+  custom:
+    enabled: true
+    modules: ["ml_smoothing", "predictive_filtering", "anomaly_detection"]
+
+# ============================================================
+# 环境配置
+# ============================================================
+environment:
+  name: "development"
+  
+  # 环境变量
+  variables:
+    SIMULATION_ENV: "digital_twin_config_1_4"
+    LOG_LEVEL: "INFO"
+    DATA_QUALITY_CHECK: "enabled"
+    
+  # 自定义变量
+  custom_vars:
+    # 仿真参数
+    duration: 30                  # 仿真步数
+    description: "DigitalTwinAgent 数据平滑处理演示"
+    true_water_level: 10.0        # 真实水位 (m)
+    noise_std: 0.5                # 噪声标准差
+    
+    # 通信主题
+    smoothed_state_topic: "state/canal/level/smoothed"
+    
+    # 物理组件参数
+    # 上游渠道参数
+    canal_type: "UnifiedCanal"
+    canal_model_type: "integral"
+    canal_initial_water_level: 10.0  # 初始水位 (m)
+    canal_bottom_width: 20.0         # 底宽 (m)
+    canal_length: 1000.0             # 长度 (m)
+    canal_slope: 0.001               # 坡度
+    canal_side_slope_z: 2.0          # 边坡系数
+    canal_manning_n: 0.025           # 曼宁系数
+    canal_surface_area: 20000        # 表面积 (m²)
+    canal_outlet_coefficient: 5.0    # 出口系数
+    
+    # 智能体配置
+    agent_type: "DigitalTwinAgent"
+    agent_id: "twin_agent_1"
+    simulated_object: "upstream_canal"
+    state_topic: "state/canal/level/smoothed"
+    
+    # 平滑配置
+    smoothing_water_level_alpha: 0.3  # EMA滤波器的Alpha值，较低的alpha = 更多平滑
+    
+    # 数据生成参数
+    noise_injection: true
+    noise_type: "gaussian"
+    noise_mean: 0.0
+    noise_std_param: 0.5              # 使用显著噪声使平滑效果明显
+    
+    # 分析和验证参数
+    enable_validation: true
+    variance_comparison: true
+    expected_result: "smoothed_variance < raw_variance"
+    
+    # 指标参数
+    metrics_raw_data_variance: true
+    metrics_smoothed_data_variance: true
+    metrics_variance_reduction_ratio: true
+    
+    # 输出设置
+    show_detailed_logs: true
+    step_width: 2                     # 步骤宽度
+    level_precision: 3                # 水位精度
+    show_summary: true                # 显示摘要
+    
+    # 数字孪生参数
+    twin_update_frequency: 1.0        # 孪生更新频率 (Hz)
+    model_fidelity: "high"            # 模型保真度
+    synchronization_mode: "real_time" # 同步模式
+    
+    # 滤波参数
+    filter_type: "ema"                # 滤波器类型（指数移动平均）
+    filter_window_size: 5             # 滤波窗口大小
+    adaptive_filtering: true          # 自适应滤波
+    
+    # 质量评估参数
+    quality_threshold: 0.8            # 质量阈值
+    accuracy_threshold: 0.9           # 精度阈值
+    reliability_threshold: 0.95       # 可靠性阈值

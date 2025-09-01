@@ -28,9 +28,10 @@ class NetworkSolver:
     def add_component(self, component):
         """Adds a reach or a node to the network."""
         self.components.append(component)
-        if isinstance(component, UnifiedCanal) and component.model_type == 'st_venant':
+        # Check if component is a UnifiedCanal with st_venant model
+        if hasattr(component, 'model_type') and component.model_type == 'st_venant' and 'UnifiedCanal' in str(type(component)):
             self.reaches.append(component)
-        elif isinstance(component, HydroNode):
+        elif hasattr(component, '__class__') and 'HydroNode' in str(type(component).__bases__):
             self.nodes.append(component)
         else:
             # We can either raise an error or just ignore other types

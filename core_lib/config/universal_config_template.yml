@@ -1,0 +1,694 @@
+# 通用配置文件模板
+# 适用于所有仿真场景的标准化配置
+# 与component、topology、agents等配置保持一致的结构和调用方式
+
+# ============================================================================
+# 仿真基础配置
+# ============================================================================
+simulation:
+  # 仿真基本参数
+  name: "标准仿真场景"  # 仿真名称
+  description: "使用通用配置的标准仿真"  # 仿真描述
+  version: "1.0.0"  # 配置版本
+  author: "CHS-SDK"  # 作者
+  created_date: "2024-01-01"  # 创建日期
+  
+  # 时间配置
+  time:
+    start_time: 0.0  # 开始时间
+    end_time: 100.0  # 结束时间
+    time_step: 0.1   # 时间步长
+    units: "seconds"  # 时间单位
+    output_interval: 5.0     # 输出间隔（秒）
+    
+  # 求解器配置
+  solver:
+    type: "runge_kutta"  # 求解器类型: runge_kutta, euler, adams_bashforth
+    order: 4  # 求解器阶数
+    tolerance: 1e-6  # 容差
+    max_iterations: 1000  # 最大迭代次数
+    adaptive_step: false  # 自适应步长
+  
+# ============================================================================
+# 调试与开发配置
+# ============================================================================
+debug:
+  enabled: true               # 启用调试功能
+  session_id: "sim_session"   # 调试会话ID
+  log_level: "DEBUG"          # 日志级别: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  log_file: "logs/debug.log"  # 调试日志文件
+  debug_mode: "development"   # 调试模式: development, testing, production
+  
+  # 数据收集配置
+  data_collection:
+    enabled: true             # 启用数据收集
+    interval: 5.0             # 收集间隔（秒）
+    variables: []             # 要收集的变量列表（空表示收集所有）
+    save_to_file: true        # 保存到文件
+    file_path: "debug_data.json"
+    max_file_size: "100MB"    # 最大文件大小
+    rotation: true            # 文件轮转
+  
+  # 调试仪表板配置
+  dashboard:
+    enabled: true             # 启用仪表板
+    theme: "dark"             # 主题: dark, light
+    
+    # Web仪表板
+    web_dashboard:
+      enabled: true           # 启用Web仪表板
+      port: 8080              # 端口号
+      host: "localhost"       # 主机地址
+      auto_open_browser: false # 自动打开浏览器
+      refresh_rate: 2.0       # 刷新频率（秒）
+      
+    # 控制台仪表板
+    console_dashboard:
+      enabled: false          # 启用控制台仪表板
+      update_interval: 5.0    # 更新间隔（秒）
+      display_format: "table" # 显示格式: table, json, compact
+      
+# ============================================================================
+# 性能监控与优化配置
+# ============================================================================
+performance:
+  enabled: true               # 启用性能监控
+  track_timing: true          # 跟踪时间性能
+  track_memory: true          # 跟踪内存使用
+  track_cpu: true             # 跟踪CPU使用
+  track_io: false             # 跟踪IO性能
+  track_network: false        # 跟踪网络性能
+  
+  # 性能指标收集
+  metrics:
+    enabled: true             # 启用指标收集
+    collection_interval: 1.0  # 收集间隔（秒）
+    save_to_file: true        # 保存到文件
+    metrics_file: "performance_metrics.json"
+    buffer_size: 1000         # 缓冲区大小
+    compression: true         # 数据压缩
+    
+  # 性能分析
+  analysis:
+    enabled: true             # 启用性能分析
+    real_time_analysis: false # 实时分析
+    batch_analysis: true      # 批量分析
+    generate_report: true     # 生成分析报告
+    report_format: "html"     # 报告格式: html, pdf, json, markdown
+    report_file: "performance_report.md"
+    auto_analysis: true       # 自动分析
+    threshold_alerts: true    # 阈值告警
+    
+  # 性能优化
+  optimization:
+    auto_tune: false          # 自动调优
+    cache_enabled: true       # 启用缓存
+    memory_limit: "2GB"       # 内存限制
+    cpu_limit: 80             # CPU使用限制（百分比）
+    gc_optimization: true     # 垃圾回收优化
+    
+  # 性能阈值
+  thresholds:
+    max_execution_time: 10.0  # 最大执行时间（秒）
+    max_memory_usage: 1024    # 最大内存使用（MB）
+    max_cpu_usage: 90         # 最大CPU使用（百分比）
+    
+  # 性能告警
+  alerts:
+    enabled: false
+    cpu_threshold: 80.0      # CPU使用率告警阈值（%）
+    memory_threshold: 80.0   # 内存使用率告警阈值（%）
+    execution_time_threshold: 10.0 # 执行时间告警阈值（秒）
+    
+# ============================================================================
+# 可视化与图表配置
+# ============================================================================
+visualization:
+  enabled: true               # 启用可视化功能
+  theme: "modern"             # 可视化主题: modern, classic, dark, light
+  color_scheme: "auto"        # 颜色方案: auto, colorblind, vibrant, pastel
+  
+  # 实时可视化
+  real_time:
+    enabled: false            # 启用实时可视化
+    update_interval: 1.0      # 更新间隔（秒）
+    max_points: 1000          # 最大显示点数
+    auto_scale: true          # 自动缩放
+    smooth_animation: true    # 平滑动画
+    
+  # 结果可视化
+  plots:
+    enabled: true             # 启用图表生成
+    save_plots: true          # 保存图表
+    output_directory: "plots/" # 输出目录
+    format: ["png", "svg"]    # 输出格式: png, svg, pdf, html
+    dpi: 300                  # 图像分辨率
+    style: "seaborn"          # matplotlib样式
+    figsize: [12, 8]          # 图表尺寸
+    font_size: 12             # 字体大小
+    grid: true                # 显示网格
+    legend: true              # 显示图例
+    
+    # 图表配置
+    charts:
+      - type: "time_series"
+        title: "系统状态时间序列"
+        variables: ["water_level", "flow_rate"]
+        filename: "time_series"
+        subplot_layout: [2, 1]  # 子图布局
+        
+      - type: "control_performance"
+        title: "控制性能分析"
+        variables: ["setpoint", "actual_value", "control_signal"]
+        filename: "control_performance"
+        include_error: true     # 包含误差分析
+        
+      - type: "dashboard"
+        title: "系统仪表板"
+        filename: "dashboard"
+        layout: "grid"          # 布局方式: grid, flow
+        
+      - type: "heatmap"
+        title: "相关性热力图"
+        filename: "correlation_heatmap"
+        variables: "all"        # 使用所有变量
+        
+      - type: "histogram"
+        title: "数据分布直方图"
+        filename: "distribution"
+        bins: 50                # 直方图箱数
+        
+  # 3D可视化
+  three_d:
+    enabled: false            # 启用3D可视化
+    interactive: false        # 交互式3D
+    engine: "plotly"          # 3D引擎: plotly, mayavi
+    quality: "medium"         # 渲染质量: low, medium, high
+    
+  # 动画配置
+  animation:
+    enabled: false            # 启用动画
+    fps: 30                   # 帧率
+    duration: 10.0            # 动画时长（秒）
+    format: "mp4"             # 动画格式: mp4, gif
+    
+  # 交互式可视化
+  interactive:
+    enabled: false            # 启用交互式可视化
+    backend: "plotly"         # 后端: plotly, bokeh, altair
+    export_html: true         # 导出HTML
+    include_controls: true    # 包含控制组件
+    
+# ============================================================================
+# 数据输出与存储配置
+# ============================================================================
+output:
+  enabled: true               # 启用数据输出
+  save_history: true          # 保存历史数据
+  history_file: "simulation_history.json"
+  output_directory: "results/" # 输出目录
+  
+  # 输出格式
+  formats:
+    json: true                # JSON格式
+    csv: true                 # CSV格式
+    hdf5: false               # HDF5格式
+    pickle: false             # Pickle格式
+    parquet: false            # Parquet格式
+    excel: false              # Excel格式
+    
+  # 输出内容
+  content:
+    all_variables: true       # 输出所有变量
+    selected_variables: []    # 选择性输出变量
+    metadata: true            # 包含元数据
+    timestamps: true          # 包含时间戳
+    system_info: true         # 包含系统信息
+    configuration: true       # 包含配置信息
+    
+  # 历史数据保存
+  history:
+    enabled: true
+    save_format: ["yaml", "csv", "json"] # 支持多种格式
+    filename_prefix: "simulation_results"
+    
+  # 实时数据流
+  streaming:
+    enabled: false
+    topics: []
+    
+  # 数据导出
+  export:
+    enabled: true
+    formats: ["csv", "excel", "json"]
+    include_metadata: true
+    
+  # 数据分割
+  partitioning:
+    enabled: false            # 启用数据分割
+    by_time: false            # 按时间分割
+    by_size: false            # 按大小分割
+    max_file_size: "100MB"    # 最大文件大小
+    
+  # 压缩配置
+  compression:
+    enabled: false            # 启用压缩
+    algorithm: "gzip"         # 压缩算法: gzip, bz2, lzma
+    level: 6                  # 压缩级别
+    
+  # 备份配置
+  backup:
+    enabled: false            # 启用备份
+    interval: "daily"         # 备份间隔: hourly, daily, weekly
+    retention: 30             # 保留天数
+    location: "backups/"      # 备份位置
+    
+  # 结果验证
+  validation:
+    enabled: true
+    check_convergence: true
+    check_stability: true
+    tolerance: 0.01
+    
+# ============================================================================
+# 数据分析与处理配置
+# ============================================================================
+analysis:
+  enabled: true               # 启用分析功能
+  auto_analysis: true         # 自动分析
+  analysis_interval: 10.0     # 分析间隔（秒）
+  
+  # 控制性能分析
+  control_performance:
+    enabled: true
+    calculate_metrics: true   # 计算RMSE、稳态误差等
+    stability_analysis: true  # 稳定性分析
+    frequency_analysis: false # 频域分析
+    settling_time: true       # 计算调节时间
+    overshoot: true           # 计算超调量
+    steady_state_error: true  # 稳态误差分析
+    
+  # 系统识别
+  system_identification:
+    enabled: false
+    method: "least_squares"  # least_squares, recursive_least_squares
+    model_order: 2            # 模型阶数
+    validation_split: 0.3     # 验证集比例
+    
+  # 统计分析
+  statistical:
+    enabled: true
+    descriptive_stats: true   # 描述性统计
+    correlation_analysis: true # 相关性分析
+    trend_analysis: true      # 趋势分析
+    outlier_detection: true   # 异常值检测
+    distribution_analysis: true # 分布分析
+    
+  # 信号处理
+  signal_processing:
+    enabled: false            # 启用信号处理
+    filtering: false          # 信号滤波
+    fft_analysis: false       # FFT分析
+    spectral_analysis: false  # 频谱分析
+    
+  # 机器学习分析
+  machine_learning:
+    enabled: false            # 启用机器学习分析
+    anomaly_detection: false  # 异常检测
+    pattern_recognition: false # 模式识别
+    predictive_modeling: false # 预测建模
+    
+  # 报告生成
+  reporting:
+    enabled: true             # 启用报告生成
+    auto_report: true         # 自动生成报告
+    report_format: "markdown" # 报告格式: markdown, html, pdf
+    report_file: "analysis_report.md"
+    include_plots: true       # 包含图表
+    detailed_analysis: true   # 详细分析
+    
+# ============================================================================
+# 日志记录与监控配置
+# ============================================================================
+logging:
+  enabled: true               # 启用日志功能
+  log_directory: "logs/"      # 日志目录
+  
+  # 日志级别配置
+  levels:
+    root: "INFO"              # 根日志级别
+    simulation: "INFO"        # 仿真日志级别
+    agents: "INFO"            # 智能体日志级别
+    components: "DEBUG"       # 组件日志级别
+    performance: "INFO"       # 性能日志级别
+    error: "ERROR"            # 错误日志级别
+    
+  # 日志输出配置
+  handlers:
+    console:
+      enabled: true
+      level: "INFO"
+      format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+      colored: true           # 彩色输出
+      
+    file:
+      enabled: true
+      level: "DEBUG"
+      filename: "logs/detailed.log"
+      max_size: "10MB"
+      backup_count: 5
+      encoding: "utf-8"
+      
+    structured:
+      enabled: false
+      format: "json"
+      filename: "logs/structured.json"
+      
+    error_file:
+      enabled: true           # 单独的错误日志文件
+      level: "ERROR"
+      filename: "logs/errors.log"
+      max_size: "5MB"
+      backup_count: 3
+      
+    performance_file:
+      enabled: true           # 性能日志文件
+      level: "INFO"
+      filename: "logs/performance.log"
+      max_size: "20MB"
+      backup_count: 10
+      
+  # 日志过滤
+  filtering:
+    enabled: false            # 启用日志过滤
+    exclude_patterns: []      # 排除模式
+    include_patterns: []      # 包含模式
+    rate_limiting: false      # 速率限制
+    
+  # 日志分析
+  analysis:
+    enabled: false
+    auto_analysis: false
+    analysis_types: ["pattern", "anomaly", "performance", "error"]
+    analysis_interval: 3600   # 分析间隔（秒）
+    
+  # 日志监控
+  monitoring:
+    enabled: false            # 启用日志监控
+    real_time_alerts: false   # 实时告警
+    error_threshold: 10       # 错误阈值
+    warning_threshold: 50     # 警告阈值
+    
+# ============================================================================
+# 错误处理与恢复配置
+# ============================================================================
+error_handling:
+  enabled: true               # 启用错误处理
+  error_policy: "strict"      # 错误策略: strict, lenient, custom
+  
+  # 异常处理
+  exception_handling:
+    enabled: true
+    continue_on_error: false  # 遇到错误时继续执行
+    log_exceptions: true      # 记录异常
+    exception_file: "logs/exceptions.log"
+    stack_trace: true         # 记录堆栈跟踪
+    exception_details: true   # 详细异常信息
+    
+  # 错误恢复
+  recovery:
+    enabled: false            # 启用错误恢复
+    auto_recovery: false
+    max_retries: 3            # 最大重试次数
+    retry_delay: 1.0          # 重试延迟（秒）
+    exponential_backoff: true # 指数退避
+    recovery_strategies: []   # 恢复策略列表
+    
+  # 错误分类
+  classification:
+    enabled: true             # 启用错误分类
+    critical_errors: []       # 关键错误列表
+    recoverable_errors: []    # 可恢复错误列表
+    ignored_errors: []        # 忽略错误列表
+    
+  # 错误通知
+  notifications:
+    enabled: false            # 启用错误通知
+    email: false              # 邮件通知
+    webhook: false            # Webhook通知
+    slack: false              # Slack通知
+    threshold: "ERROR"        # 通知阈值
+    
+  # 错误报告
+  reporting:
+    enabled: true
+    generate_error_report: true
+    error_report_file: "error_report.md"
+    auto_report: true         # 自动生成报告
+    include_context: true     # 包含上下文信息
+    
+# ============================================================================
+# 缓存与优化配置
+# ============================================================================
+caching:
+  enabled: false              # 启用缓存功能
+  cache_directory: "cache/"   # 缓存目录
+  
+  # 结果缓存
+  results:
+    enabled: false
+    cache_size: 1000          # 缓存大小
+    ttl: 3600                 # 缓存生存时间（秒）
+    eviction_policy: "lru"    # 淘汰策略: lru, fifo, random
+    persistent: false         # 持久化缓存
+    
+  # 计算缓存
+  computation:
+    enabled: false
+    cache_expensive_operations: true
+    cache_threshold: 1.0      # 缓存阈值（秒）
+    memory_limit: "500MB"     # 内存限制
+    
+  # 数据缓存
+  data:
+    enabled: false            # 启用数据缓存
+    cache_input_data: false   # 缓存输入数据
+    cache_intermediate: false # 缓存中间结果
+    compression: true         # 压缩缓存数据
+    
+  # 缓存策略
+  strategy:
+    adaptive: false           # 自适应缓存
+    preload: false            # 预加载
+    background_refresh: false # 后台刷新
+    
+# ============================================================================
+# 并行计算与性能配置
+# ============================================================================
+parallel:
+  enabled: false              # 启用并行计算
+  auto_detect_cores: true     # 自动检测CPU核心数
+  
+  # 多进程配置
+  multiprocessing:
+    enabled: false
+    num_processes: 4          # 进程数量
+    process_pool: true        # 使用进程池
+    shared_memory: false      # 共享内存
+    communication: "queue"    # 通信方式: queue, pipe, shared_memory
+    
+  # 多线程配置
+  multithreading:
+    enabled: false
+    num_threads: 4            # 线程数量
+    thread_pool: true         # 使用线程池
+    thread_safety: true       # 线程安全
+    
+  # 分布式计算
+  distributed:
+    enabled: false            # 启用分布式计算
+    cluster_type: "local"     # 集群类型: local, slurm, kubernetes
+    nodes: []                 # 节点列表
+    
+  # 负载均衡
+  load_balancing:
+    enabled: false            # 启用负载均衡
+    strategy: "round_robin"   # 策略: round_robin, least_loaded, random
+    dynamic_adjustment: false # 动态调整
+    
+# ============================================================================
+# 网络与通信配置
+# ============================================================================
+network:
+  enabled: false              # 启用网络功能
+  timeout: 30.0               # 网络超时（秒）
+  
+  # API服务
+  api:
+    enabled: false
+    host: "localhost"          # 主机地址
+    port: 8000                 # 端口号
+    protocol: "http"           # 协议: http, https
+    cors_enabled: true         # 启用CORS
+    rate_limiting: false       # 速率限制
+    authentication: false     # 身份验证
+    
+  # WebSocket配置
+  websocket:
+    enabled: false
+    host: "localhost"
+    port: 8001
+    max_connections: 100       # 最大连接数
+    heartbeat_interval: 30     # 心跳间隔（秒）
+    
+  # 消息队列
+  message_queue:
+    enabled: false            # 启用消息队列
+    type: "redis"             # 类型: redis, rabbitmq, kafka
+    host: "localhost"
+    port: 6379
+    
+  # 远程调用
+  rpc:
+    enabled: false            # 启用RPC
+    protocol: "grpc"          # 协议: grpc, xmlrpc, jsonrpc
+    compression: true         # 启用压缩
+    
+  # 网络监控
+  monitoring:
+    enabled: false            # 启用网络监控
+    track_latency: true       # 跟踪延迟
+    track_bandwidth: true     # 跟踪带宽
+    alert_on_failure: true    # 故障告警
+    
+# ============================================================================
+# 安全与权限配置
+# ============================================================================
+security:
+  enabled: false              # 启用安全功能
+  security_level: "medium"    # 安全级别: low, medium, high
+  
+  # 访问控制
+  access_control:
+    enabled: false
+    require_authentication: false # 需要身份验证
+    authentication_method: "token" # 认证方式: token, oauth, ldap
+    session_timeout: 3600      # 会话超时（秒）
+    max_login_attempts: 3      # 最大登录尝试次数
+    
+  # 数据加密
+  encryption:
+    enabled: false
+    encrypt_sensitive_data: false # 加密敏感数据
+    encryption_algorithm: "AES256" # 加密算法
+    key_rotation: false        # 密钥轮换
+    
+  # 审计日志
+  audit:
+    enabled: false            # 启用审计日志
+    log_access: true          # 记录访问日志
+    log_changes: true         # 记录变更日志
+    audit_file: "logs/audit.log"
+    
+  # 输入验证
+  input_validation:
+    enabled: false            # 启用输入验证
+    sanitize_input: true      # 清理输入
+    validate_types: true      # 类型验证
+    
+  # 网络安全
+  network_security:
+    enabled: false            # 启用网络安全
+    ssl_enabled: false        # 启用SSL
+    firewall_rules: []        # 防火墙规则
+    ip_whitelist: []          # IP白名单
+    
+# ============================================================================
+# 扩展与插件配置
+# ============================================================================
+extensions:
+  enabled: false              # 启用扩展功能
+  auto_discovery: true        # 自动发现扩展
+  
+  # 插件系统
+  plugins:
+    enabled: false
+    plugin_directory: "plugins/" # 插件目录
+    auto_load: true           # 自动加载插件
+    plugin_config: "plugins.yaml" # 插件配置文件
+    sandbox_mode: true        # 沙箱模式
+    
+  # 自定义模块
+  custom_modules:
+    enabled: false
+    module_directory: "custom/" # 自定义模块目录
+    import_path: []           # 导入路径
+    reload_on_change: false   # 变更时重新加载
+    
+  # 钩子系统
+  hooks:
+    enabled: false            # 启用钩子系统
+    pre_simulation: []        # 仿真前钩子
+    post_simulation: []       # 仿真后钩子
+    on_error: []              # 错误钩子
+    
+  # 扩展API
+  api:
+    enabled: false            # 启用扩展API
+    version: "v1"             # API版本
+    documentation: true       # 自动生成文档
+    
+  # 第三方集成
+  integrations:
+    enabled: false            # 启用第三方集成
+    matlab: false             # MATLAB集成
+    simulink: false           # Simulink集成
+    labview: false            # LabVIEW集成
+    
+# ============================================================================
+# 环境与部署配置
+# ============================================================================
+environment:
+  current: "development"      # 当前环境: development, testing, production
+  auto_detect: true           # 自动检测环境
+  
+  # 开发环境配置
+  development:
+    debug: true               # 启用调试
+    verbose_logging: true     # 详细日志
+    auto_reload: false        # 自动重载
+    hot_reload: false         # 热重载
+    profiling: true           # 性能分析
+    
+  # 生产环境配置
+  production:
+    debug: false              # 禁用调试
+    optimize_performance: true # 性能优化
+    minimal_logging: true     # 最小日志
+    compression: true         # 启用压缩
+    monitoring: true          # 启用监控
+    
+  # 测试环境配置
+  testing:
+    mock_external_services: true # 模拟外部服务
+    deterministic_random: true   # 确定性随机
+    fast_execution: true      # 快速执行
+    test_data_isolation: true # 测试数据隔离
+    coverage_tracking: true   # 覆盖率跟踪
+    
+  # 环境变量
+  variables:
+    custom_vars: {}           # 自定义环境变量
+    override_config: false    # 允许环境变量覆盖配置
+    
+  # 资源限制
+  resources:
+    memory_limit: "auto"      # 内存限制
+    cpu_limit: "auto"         # CPU限制
+    disk_limit: "auto"        # 磁盘限制
+    
+  # 部署配置
+  deployment:
+    containerized: false      # 容器化部署
+    cloud_platform: "none"   # 云平台: aws, azure, gcp, none
+    scaling: "manual"         # 扩缩容: manual, auto

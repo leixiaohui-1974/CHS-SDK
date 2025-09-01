@@ -1,0 +1,121 @@
+# Mission Example 2.1 - 现地闭环控制配置文件
+# 验证一个由现地PID智能体独立工作的完整闭环控制系统
+
+simulation:
+  duration: 2000
+  dt: 10.0
+  description: "现地闭环控制系统演示"
+
+# 消息主题配置
+topics:
+  upstream_level: "state/canal_upstream/level"
+  gate_action: "action/gate/opening"
+  inflow: "disturbance/inflow"
+
+# 物理组件配置
+components:
+  upstream_canal:
+    type: "UnifiedCanal"
+    model_type: "integral"
+    name: "upstream_canal"
+    initial_state:
+      volume: 112100.0  # 对应约4.0m水位的体积
+    parameters:
+      bottom_width: 20.0
+      length: 1000.0
+      slope: 0.001
+      side_slope_z: 2.0
+      manning_n: 0.025
+    inflow_topic: "disturbance/inflow"
+
+  downstream_canal:
+    type: "UnifiedCanal"
+    model_type: "integral"
+    name: "downstream_canal"
+    initial_state:
+      volume: 50000
+    parameters:
+      bottom_width: 20.0
+      length: 1000.0
+      slope: 0.001
+      side_slope_z: 2.0
+      manning_n: 0.025
+
+  control_gate:
+    type: "Gate"
+    name: "control_gate"
+    initial_state:
+      opening: 0.38  # 在设定点附近平衡入流的开度
+    parameters:
+      discharge_coefficient: 0.8
+      width: 10.0
+      max_opening: 3.0
+      max_rate_of_change: 0.05
+
+# 连接配置
+connections:
+  - from: "upstream_canal"
+    to: "control_gate"
+  - from: "control_gate"
+    to: "downstream_canal"
+
+# 智能体配置
+agents:
+  pid_controller:
+    type: "PIDController"
+    parameters:
+      Kp: -0.8
+      Ki: -0.002
+      Kd: 0.0
+      setpoint: 4.0  # 目标水位（米）
+      min_output: 0.0
+      max_output: 3.0  # 与闸门最大开度一致
+
+  control_agent:
+    type: "LocalControlAgent"
+    agent_id: "pid_agent_1"
+    controller: "pid_controller"
+    observation_topic: "state/canal_upstream/level"
+    observation_key: "water_level"
+    action_topic: "action/gate/opening"
+    dt: 10.0
+
+  io_agent:
+    type: "PhysicalIOAgent"
+    agent_id: "io_agent_1"
+    sensors_config:
+      canal_level_sensor:
+        obj: "upstream_canal"
+        state_key: "water_level"
+        topic: "state/canal_upstream/level"
+        noise_std: 0.01
+    actuators_config:
+      gate_actuator:
+        obj: "control_gate"
+        target_attr: "target_opening"
+        topic: "action/gate/opening"
+        control_key: "control_signal"
+
+  inflow_disturbance:
+    type: "RainfallAgent"
+    agent_id: "inflow_disturbance_1"
+    config:
+      topic: "disturbance/inflow"
+      start_time: 0
+      duration: 2000  # 整个仿真期间
+      inflow_rate: 15.0
+
+# 验证配置
+validation:
+  target_level: 4.0
+  tolerance: 0.1
+  description: "系统应将上游水位稳定在PID设定点附近"
+
+# 调试配置
+debug:
+  log_level: "INFO"
+  log_file: "example_2_1.log"
+  enable_performance_monitoring: true
+  enable_data_collection: true
+  data_collection_interval: 100
+  session_id: "example_2_1_session"

@@ -1,0 +1,33 @@
+# Defines physical components for local control scenario
+components:
+  - id: reservoir1
+    class: Reservoir
+    initial_state:
+      water_level: 15.0
+      volume: 150000.0
+    parameters:
+      surface_area: 10000.0
+      max_capacity: 200000.0
+      min_level: 5.0
+      max_level: 25.0
+
+  - id: gate1
+    class: Gate
+    initial_state:
+      opening: 0.3
+    parameters:
+      discharge_coefficient: 0.8
+      width: 8.0
+      max_opening: 2.5
+
+  - id: downstream_canal
+    class: UnifiedCanal
+    initial_state:
+      water_level: 1.5
+      flow_rate: 5.0
+    parameters:
+      bottom_width: 15.0
+      length: 500.0
+      slope: 0.002
+      side_slope_z: 1.5
+      manning_n: 0.03

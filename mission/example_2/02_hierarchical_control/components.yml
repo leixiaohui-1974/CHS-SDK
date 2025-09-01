@@ -1,0 +1,65 @@
+# Defines physical components for hierarchical control scenario
+components:
+  - id: upper_reservoir
+    class: Reservoir
+    initial_state:
+      water_level: 20.0
+      volume: 200000.0
+    parameters:
+      surface_area: 10000.0
+      max_capacity: 250000.0
+      min_level: 8.0
+      max_level: 30.0
+
+  - id: lower_reservoir
+    class: Reservoir
+    initial_state:
+      water_level: 12.0
+      volume: 120000.0
+    parameters:
+      surface_area: 10000.0
+      max_capacity: 200000.0
+      min_level: 5.0
+      max_level: 25.0
+
+  - id: upper_gate
+    class: Gate
+    initial_state:
+      opening: 0.4
+    parameters:
+      discharge_coefficient: 0.85
+      width: 10.0
+      max_opening: 3.0
+
+  - id: lower_gate
+    class: Gate
+    initial_state:
+      opening: 0.35
+    parameters:
+      discharge_coefficient: 0.8
+      width: 8.0
+      max_opening: 2.5
+
+  - id: connecting_canal
+    class: UnifiedCanal
+    initial_state:
+      water_level: 2.0
+      flow_rate: 8.0
+    parameters:
+      bottom_width: 12.0
+      length: 800.0
+      slope: 0.0015
+      side_slope_z: 2.0
+      manning_n: 0.025
+
+  - id: outlet_canal
+    class: UnifiedCanal
+    initial_state:
+      water_level: 1.8
+      flow_rate: 6.0
+    parameters:
+      bottom_width: 10.0
+      length: 600.0
+      slope: 0.002
+      side_slope_z: 1.5
+      manning_n: 0.03

@@ -1,0 +1,26 @@
+# Defines all agents in the simulation
+agents:
+  - id: gate_controller
+    class: LocalControlAgent
+    controller:
+      class: PIDController
+      Kp: 0.5
+      Ki: 0.1
+      Kd: 0.05
+      setpoint: 2.5
+      min_output: 0.0
+      max_output: 1.0
+    observation_topic: water_level_topic
+    observation_key: water_level
+    action_topic: gate1/opening_command
+    dt: 10.0
+
+  - id: water_level_sensor
+    class: core_lib.local_agents.io.physical_io_agent.PhysicalIOAgent
+    sensors_config:
+      canal_sensor:
+        obj_id: canal1
+        state_key: water_level
+        topic: water_level_topic
+        noise_std: 0.02
+    actuators_config: {}

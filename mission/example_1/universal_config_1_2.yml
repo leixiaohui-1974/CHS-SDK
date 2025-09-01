@@ -1,0 +1,417 @@
+# Mission Example 1 - Config 1.2 通用配置文件
+# 物理IO智能体仿真系统配置
+
+# ============================================================
+# 仿真配置
+# ============================================================
+simulation:
+  name: "物理IO智能体仿真"
+  description: "Example 1.2 - PhysicalIOAgent 传感器感知和执行器物理动作演示"
+  version: "1.0.0"
+  
+  # 时间设置
+  time:
+    end_time: 50.0        # 仿真持续时间 (秒)
+    time_step: 1.0        # 时间步长 (秒)
+    output_interval: 1.0  # 输出间隔 (秒)
+    
+  # 求解器配置
+  solver:
+    method: "euler"       # 适用于物理IO仿真的求解方法
+    tolerance: 1e-6       # 求解精度
+    max_iterations: 1000  # 最大迭代次数
+    
+  # 并行计算
+  parallel:
+    enabled: false       # 物理IO仿真通常不需要并行
+    num_processes: 1      # 进程数量
+
+# ============================================================
+# 调试配置
+# ============================================================
+debug:
+  enabled: true
+  log_level: "INFO"
+  log_file: "logs/physical_io/debug.log"
+  session_id: "physical_io_session"
+  
+  # 数据收集
+  data_collection:
+    enabled: true
+    interval: 1.0  # 数据收集间隔 (秒)
+    variables:
+      - "canal_water_level"
+      - "gate_opening"
+      - "target_opening"
+      - "sensor_noise"
+      - "actuator_response"
+      - "control_command"
+      - "system_state"
+      - "io_latency"
+      - "sensor_accuracy"
+      - "actuator_precision"
+      
+  # Web仪表板
+  dashboard:
+    web_dashboard: true
+    port: 8090
+    auto_open: false
+    
+  # 控制台监控
+  console:
+    real_time_display: true
+    update_interval: 1.0   # 实时监控物理IO状态
+    show_detailed_logs: true
+
+# ============================================================
+# 性能监控配置
+# ============================================================
+performance:
+  enabled: true
+  
+  # 时间跟踪
+  timing:
+    enabled: true
+    detailed_profiling: true
+    io_timing: true
+    
+  # 内存监控
+  memory:
+    enabled: true
+    threshold_mb: 800   # 内存阈值
+    
+  # CPU监控
+  cpu:
+    enabled: true
+    threshold_percent: 70  # CPU使用率警告阈值
+
+# ============================================================
+# 可视化配置
+# ============================================================
+visualization:
+  enabled: true
+  
+  # 图表配置
+  plots:
+    enabled: true
+    save_plots: true
+    plot_directory: "plots/physical_io/"
+    format: "png"
+    dpi: 300
+    
+    # 图表定义
+    charts:
+      - name: "传感器数据"
+        type: "time_series"
+        variables: ["canal_water_level", "sensor_noise"]
+        title: "Sensor Data and Noise"
+        xlabel: "Time (s)"
+        ylabel: "Water Level (m)"
+        
+      - name: "执行器响应"
+        type: "time_series"
+        variables: ["gate_opening", "target_opening"]
+        title: "Actuator Response"
+        xlabel: "Time (s)"
+        ylabel: "Gate Opening (m)"
+        
+      - name: "控制命令"
+        type: "time_series"
+        variables: ["control_command"]
+        title: "Control Commands"
+        xlabel: "Time (s)"
+        ylabel: "Command Value"
+        
+      - name: "IO性能"
+        type: "time_series"
+        variables: ["io_latency", "sensor_accuracy", "actuator_precision"]
+        title: "IO Performance Metrics"
+        xlabel: "Time (s)"
+        ylabel: "Performance"
+        
+      - name: "系统状态"
+        type: "time_series"
+        variables: ["system_state"]
+        title: "System State Overview"
+        xlabel: "Time (s)"
+        ylabel: "State"
+        
+  # 实时仪表板
+  dashboard:
+    enabled: true
+    update_interval: 1.0   # 实时更新物理IO状态
+    port: 8091
+
+# ============================================================
+# 数据输出配置
+# ============================================================
+output:
+  enabled: true
+  output_directory: "results/physical_io/"
+  
+  # 历史数据保存
+  save_history: true
+  history_file: "simulation_history.json"
+  
+  # 数据格式
+  format:
+    csv: true
+    json: true
+    hdf5: false    # 物理IO数据量相对较小
+    
+  # 压缩设置
+  compression:
+    enabled: false  # 数据量小，不需要压缩
+    
+  # 验证配置
+  validation:
+    enabled: true
+    expected_results:
+      final_opening: 0.5        # 期望最终开度 (m)
+      sensor_noise_check: true  # 检查传感器噪声
+      actuator_response: true   # 检查执行器响应
+    tolerance: 1e-9
+
+# ============================================================
+# 智能分析配置
+# ============================================================
+analysis:
+  enabled: true
+  
+  # 控制性能分析
+  control_performance:
+    enabled: true
+    metrics: ["response_time", "steady_state_error", "overshoot"]
+    reference_tracking: true
+    
+  # 统计分析
+  statistical:
+    enabled: true
+    generate_summary: true
+    noise_analysis: true
+    
+  # 系统识别
+  system_identification:
+    enabled: true
+    method: "least_squares"
+    input_signals: ["target_opening"]
+    output_signals: ["gate_opening"]
+    
+  # 物理IO专用分析
+  io_analysis:
+    enabled: true
+    sensor_performance: true
+    actuator_performance: true
+    latency_analysis: true
+    noise_characterization: true
+    
+  # 硬件在环分析
+  hil_analysis:
+    enabled: true
+    real_time_performance: true
+    timing_analysis: true
+
+# ============================================================
+# 日志配置
+# ============================================================
+logging:
+  enabled: true
+  level: "INFO"
+  
+  # 文件日志
+  file:
+    enabled: true
+    filename: "logs/physical_io/simulation.log"
+    max_size_mb: 20
+    backup_count: 10
+    
+  # 控制台日志
+  console:
+    enabled: true
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    
+  # 结构化日志
+  structured:
+    enabled: true
+    format: "json"
+    
+  # 物理IO专用日志
+  io_log:
+    enabled: true
+    filename: "logs/physical_io/io.log"
+    variables: ["sensor_data", "actuator_commands", "io_latency"]
+    
+  # 硬件日志
+  hardware_log:
+    enabled: true
+    filename: "logs/physical_io/hardware.log"
+    sensor_events: true
+    actuator_events: true
+
+# ============================================================
+# 错误处理配置
+# ============================================================
+error_handling:
+  enabled: true
+  
+  # 错误分类
+  categories:
+    critical: ["sensor_failure", "actuator_failure", "communication_loss"]
+    warning: ["sensor_noise_high", "actuator_lag", "command_delay"]
+    info: ["sensor_reading", "actuator_command", "io_operation"]
+    
+  # 恢复策略
+  recovery:
+    auto_retry: true
+    max_retries: 3
+    retry_delay: 0.1
+    fallback_mode: "safe_state"
+    
+  # 通知设置
+  notifications:
+    enabled: true
+    email: ["io_engineer@example.com"]
+    webhook: "http://localhost:9000/io_alerts"
+
+# ============================================================
+# 缓存配置
+# ============================================================
+cache:
+  enabled: true
+  
+  # 内存缓存
+  memory:
+    enabled: true
+    max_size_mb: 100
+    
+  # 磁盘缓存
+  disk:
+    enabled: false  # 物理IO数据实时性要求高，不使用磁盘缓存
+
+# ============================================================
+# 网络配置
+# ============================================================
+network:
+  enabled: true
+  
+  # 分布式仿真
+  distributed:
+    enabled: false
+    
+  # 通信设置
+  communication:
+    protocol: "mqtt"  # 适合物理IO的轻量级协议
+    timeout: 5
+    buffer_size: 4096
+    topics:
+      state: "state/canal/level"
+      action: "action/gate/opening"
+      sensor_data: "sensor/canal/level"
+      actuator_command: "actuator/gate/opening"
+
+# ============================================================
+# 安全配置
+# ============================================================
+security:
+  enabled: false  # 开发环境暂不启用
+  
+  # 访问控制
+  access_control:
+    enabled: false
+    
+  # 加密设置
+  encryption:
+    enabled: false
+
+# ============================================================
+# 扩展配置
+# ============================================================
+extensions:
+  enabled: true
+  
+  # 插件系统
+  plugins:
+    enabled: true
+    directory: "plugins/io/"
+    modules: ["sensor_calibration", "actuator_tuning", "noise_filter"]
+    
+  # 自定义功能
+  custom:
+    enabled: true
+    modules: ["hardware_interface", "real_time_io", "safety_monitor"]
+
+# ============================================================
+# 环境配置
+# ============================================================
+environment:
+  name: "development"
+  
+  # 环境变量
+  variables:
+    SIMULATION_ENV: "physical_io"
+    LOG_LEVEL: "INFO"
+    REAL_TIME_MODE: "enabled"
+    
+  # 自定义变量
+  custom_vars:
+    # 仿真参数
+    duration: 50              # 仿真持续时间 (秒)
+    time_step: 1.0            # 时间步长 (秒)
+    description: "PhysicalIOAgent 传感器感知和执行器物理动作演示"
+    
+    # 通信主题
+    state_topic: "state/canal/level"
+    action_topic: "action/gate/opening"
+    
+    # 物理组件参数
+    # 上游渠道参数
+    canal_initial_volume: 100000    # 初始体积 (m³)
+    canal_initial_outflow: 0        # 初始出流 (m³/s)
+    canal_bottom_width: 20.0        # 底宽 (m)
+    canal_length: 1000.0            # 长度 (m)
+    canal_slope: 0.001              # 坡度
+    canal_side_slope_z: 2.0         # 边坡系数
+    canal_manning_n: 0.025          # 曼宁系数
+    
+    # 控制闸门参数
+    gate_initial_opening: 0.2       # 初始开度 (m)
+    gate_discharge_coefficient: 0.8 # 流量系数
+    gate_width: 10.0                # 宽度 (m)
+    gate_max_opening: 3.0           # 最大开度 (m)
+    gate_max_rate_of_change: 0.05   # 最大变化率 (m/s)
+    
+    # 传感器配置
+    sensor_obj_name: "upstream_canal"
+    sensor_state_key: "water_level"
+    sensor_topic: "state/canal/level"
+    sensor_noise_std: 0.02          # 传感器噪声标准差 (m)
+    
+    # 执行器配置
+    actuator_obj_name: "control_gate"
+    actuator_target_attr: "target_opening"
+    actuator_topic: "action/gate/opening"
+    actuator_control_key: "target_opening"
+    
+    # 控制序列
+    control_time: 5.0               # 控制命令时间 (秒)
+    control_target_opening: 0.5     # 目标开度 (m)
+    
+    # 验证参数
+    enable_validation: true
+    expected_final_opening: 0.5     # 期望最终开度 (m)
+    validation_tolerance: 1e-9      # 验证容差
+    check_sensor_noise: true        # 检查传感器噪声
+    
+    # 输出设置
+    print_interval: 1               # 打印间隔
+    sleep_duration: 0.05            # 步间睡眠时间 (秒)
+    show_detailed_logs: true        # 显示详细日志
+    
+    # 智能体配置
+    agent_type: "PhysicalIOAgent"
+    agent_id: "io_agent_1"
+    
+    # 系统参数
+    real_time_factor: 1.0           # 实时因子
+    simulation_speed: "normal"      # 仿真速度
+    hardware_interface: "simulated" # 硬件接口类型

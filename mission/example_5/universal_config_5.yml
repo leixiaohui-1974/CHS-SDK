@@ -1,0 +1,426 @@
+# Mission Example 5 - 水电站仿真与调度策略通用配置文件
+# 支持4个不同的水电站运行场景：涡轮机闸门仿真、多机组协调、经济调度、闸门调度
+
+# ============================================================
+# 仿真配置
+# ============================================================
+simulation:
+  name: "Mission Example 5 - Hydropower Station Simulation"
+  description: "水电站仿真与调度策略生成，包含涡轮机、闸门、多机组协调和经济调度"
+  version: "5.0.0"
+  
+  # 时间设置
+  time:
+    duration: 100            # 仿真步数
+    time_step: 10.0         # 时间步长 (秒)
+    start_time: 0.0         # 开始时间
+    
+  # 求解器设置
+  solver:
+    type: "runge_kutta"     # 求解器类型
+    tolerance: 1e-6         # 收敛容差
+    max_iterations: 2000    # 最大迭代次数
+    adaptive_step: true     # 自适应步长
+    
+  # 并行计算
+  parallel:
+    enabled: true           # 并行计算
+    num_processes: 4        # 进程数
+    load_balancing: true    # 负载均衡
+
+# ============================================================
+# 调试配置
+# ============================================================
+debug:
+  enabled: true
+  log_level: "INFO"
+  log_file: "logs/example_5/debug.log"
+  session_id: "hydropower_simulation"
+  
+  # 数据收集
+  data_collection:
+    enabled: true
+    variables: ["water_level", "flow_rate", "power_output", "turbine_efficiency", "gate_opening"]
+    sampling_rate: 1        # 每步采样
+    
+  # Web仪表板
+  web_dashboard:
+    enabled: true
+    port: 8087
+    auto_open: false
+    
+  # 控制台监控
+  console_monitoring:
+    enabled: true
+    update_interval: 10.0
+    show_progress: true
+
+# ============================================================
+# 性能监控配置
+# ============================================================
+performance:
+  enabled: true
+  
+  # 时间监控
+  timing:
+    enabled: true
+    detailed_profiling: true
+    component_timing: true
+    
+  # 内存监控
+  memory:
+    enabled: true
+    track_peak_usage: true
+    garbage_collection: true
+    
+  # CPU监控
+  cpu:
+    enabled: true
+    track_utilization: true
+    core_usage: true
+
+# ============================================================
+# 可视化配置
+# ============================================================
+visualization:
+  enabled: true
+  
+  # 图表配置
+  plots:
+    enabled: true
+    output_directory: "plots/example_5/"
+    formats: ["png", "pdf", "svg"]
+    dpi: 300
+    style: "seaborn"
+    
+  # 实时仪表板
+  dashboard:
+    enabled: true
+    update_interval: 5.0
+    port: 8088
+    
+  # 3D可视化
+  three_d:
+    enabled: true
+    water_surface: true
+    turbine_animation: true
+
+# ============================================================
+# 数据输出配置
+# ============================================================
+output:
+  enabled: true
+  output_directory: "results/example_5/"
+  
+  # 历史数据
+  history:
+    enabled: true
+    filename: "hydropower_simulation_history.json"
+    
+  # 多种格式输出
+  formats:
+    json: true
+    csv: true
+    hdf5: true
+    matlab: true
+    
+  # 数据压缩
+  compression:
+    enabled: true
+    algorithm: "lzma"
+    
+  # 数据验证
+  validation:
+    enabled: true
+    schema_file: "schemas/hydropower_data.json"
+
+# ============================================================
+# 智能分析配置
+# ============================================================
+analysis:
+  enabled: true
+  
+  # 控制性能分析
+  control_performance:
+    enabled: true
+    metrics: ["power_efficiency", "water_usage_efficiency", "response_time", "stability"]
+    
+  # 统计分析
+  statistical:
+    enabled: true
+    generate_summary: true
+    correlation_analysis: true
+    trend_analysis: true
+    
+  # 系统识别
+  system_identification:
+    enabled: true
+    method: "subspace"
+    order: [4, 4, 2]
+    
+  # 水电站专用分析
+  hydropower_analysis:
+    enabled: true
+    turbine_performance: true
+    hydraulic_efficiency: true
+    power_curve_analysis: true
+    cavitation_analysis: true
+    
+  # 经济分析
+  economic_analysis:
+    enabled: true
+    cost_optimization: true
+    revenue_analysis: true
+    market_analysis: true
+    
+  # 调度分析
+  scheduling_analysis:
+    enabled: true
+    dispatch_efficiency: true
+    load_following: true
+    peak_shaving: true
+    
+  # 多机组协调分析
+  coordination_analysis:
+    enabled: true
+    unit_coordination: true
+    load_sharing: true
+    synchronization: true
+
+# ============================================================
+# 日志配置
+# ============================================================
+logging:
+  enabled: true
+  level: "INFO"
+  
+  # 文件日志
+  file:
+    enabled: true
+    filename: "logs/example_5/simulation.log"
+    max_size_mb: 50
+    backup_count: 15
+    
+  # 控制台日志
+  console:
+    enabled: true
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    
+  # 结构化日志
+  structured:
+    enabled: true
+    format: "json"
+    
+  # 水电站专用日志
+  hydropower_log:
+    enabled: true
+    filename: "logs/example_5/hydropower.log"
+    variables: ["power_output", "turbine_efficiency", "water_flow", "head_loss"]
+    
+  # 调度日志
+  dispatch_log:
+    enabled: true
+    filename: "logs/example_5/dispatch.log"
+    decisions: true
+    economics: true
+    constraints: true
+    
+  # 协调日志
+  coordination_log:
+    enabled: true
+    filename: "logs/example_5/coordination.log"
+    unit_status: true
+    load_distribution: true
+    synchronization: true
+
+# ============================================================
+# 错误处理配置
+# ============================================================
+error_handling:
+  enabled: true
+  
+  # 错误分类
+  categories:
+    critical: ["turbine_failure", "dam_breach", "power_grid_failure"]
+    warning: ["efficiency_drop", "cavitation_detected", "load_imbalance"]
+    info: ["unit_started", "dispatch_updated", "maintenance_scheduled"]
+    
+  # 恢复策略
+  recovery:
+    auto_retry: true
+    max_retries: 5
+    retry_delay: 5.0
+    fallback_mode: "emergency_shutdown"
+    
+  # 通知设置
+  notifications:
+    enabled: true
+    email: ["hydropower_operator@example.com", "dispatch_center@example.com"]
+    webhook: "http://localhost:9000/alerts"
+    sms: ["+1234567890"]
+
+# ============================================================
+# 缓存配置
+# ============================================================
+cache:
+  enabled: true
+  
+  # 内存缓存
+  memory:
+    enabled: true
+    max_size_mb: 500
+    
+  # 磁盘缓存
+  disk:
+    enabled: true
+    directory: "cache/example_5/"
+    max_size_gb: 5
+    
+  # 分布式缓存
+  distributed:
+    enabled: false
+    redis_host: "localhost"
+    redis_port: 6379
+
+# ============================================================
+# 网络配置
+# ============================================================
+network:
+  enabled: true
+  
+  # 分布式仿真
+  distributed:
+    enabled: true
+    master_host: "localhost"
+    master_port: 9005
+    worker_ports: [9006, 9007, 9008, 9009]
+    
+  # 通信设置
+  communication:
+    protocol: "tcp"
+    timeout: 60
+    buffer_size: 32768
+    compression: true
+
+# ============================================================
+# 安全配置
+# ============================================================
+security:
+  enabled: true
+  
+  # 访问控制
+  access_control:
+    enabled: true
+    allowed_hosts: ["localhost", "control-room", "dispatch-center"]
+    authentication: true
+    
+  # 加密设置
+  encryption:
+    enabled: true
+    algorithm: "AES-256"
+    key_rotation: true
+    
+  # 监控设置
+  monitoring:
+    enabled: true
+    intrusion_detection: true
+    audit_logging: true
+
+# ============================================================
+# 扩展配置
+# ============================================================
+extensions:
+  enabled: true
+  
+  # 插件系统
+  plugins:
+    enabled: true
+    directory: "plugins/hydropower/"
+    modules: ["advanced_turbine_model", "economic_dispatch", "predictive_maintenance"]
+    
+  # 自定义功能
+  custom:
+    enabled: true
+    modules: ["machine_learning_dispatch", "digital_twin", "predictive_analytics"]
+
+# ============================================================
+# 环境配置
+# ============================================================
+environment:
+  name: "production"
+  
+  # 环境变量
+  variables:
+    SIMULATION_ENV: "hydropower_station"
+    LOG_LEVEL: "INFO"
+    POWER_GRID_MODE: "connected"
+    
+  # 自定义变量
+  custom_vars:
+    # 仿真参数
+    duration: 100            # 仿真步数
+    time_step: 10.0         # 时间步长 (秒)
+    
+    # 示例选择
+    example_type: "5.1"     # 运行的示例类型
+    
+    # 物理条件
+    initial_depth: 15.0     # 初始水深 (m)
+    initial_inflow: 150.0   # 初始入流 (m³/s)
+    
+    # 涡轮机参数
+    turbine_rated_power: 100.0  # 额定功率 (MW)
+    turbine_efficiency: 0.9     # 涡轮机效率
+    min_head: 5.0              # 最小水头 (m)
+    max_head: 50.0             # 最大水头 (m)
+    
+    # 闸门参数
+    gate_max_opening: 10.0     # 最大开度 (m)
+    gate_response_time: 30.0   # 响应时间 (s)
+    
+    # 前池参数
+    forebay_length: 1000       # 前池长度 (m)
+    forebay_width: 20          # 前池宽度 (m)
+    forebay_slope: 2           # 边坡系数
+    manning_n: 0.03            # 曼宁系数
+    
+    # 经济参数
+    electricity_price: 0.08    # 电价 ($/kWh)
+    water_value: 0.001         # 水价值 ($/m³)
+    operation_cost: 0.01       # 运行成本 ($/kWh)
+    
+    # 调度参数
+    dispatch_interval: 300     # 调度间隔 (s)
+    forecast_horizon: 24       # 预测时域 (h)
+    optimization_method: "genetic_algorithm"
+    
+    # 多机组参数
+    num_units: 4              # 机组数量
+    unit_capacity: [25, 25, 25, 25]  # 各机组容量 (MW)
+    
+    # 通信参数
+    power_topic: "hydropower/power/output"
+    flow_topic: "hydropower/flow/measurement"
+    dispatch_topic: "hydropower/dispatch/command"
+    
+    # 性能参数
+    max_memory_gb: 2          # 最大内存使用
+    cpu_cores: 4              # CPU核心数
+    gpu_acceleration: false   # GPU加速
+    
+    # 安全参数
+    emergency_shutdown_level: 2.0  # 紧急停机水位
+    max_flow_rate: 500.0          # 最大流量
+    
+    # 维护参数
+    maintenance_interval: 8760    # 维护间隔 (h)
+    predictive_maintenance: true  # 预测性维护
+    
+    # 环境参数
+    environmental_flow: 10.0      # 生态流量 (m³/s)
+    fish_passage: true           # 鱼道
+    
+    # 监控参数
+    vibration_monitoring: true   # 振动监测
+    temperature_monitoring: true # 温度监测
+    cavitation_monitoring: true  # 空化监测

@@ -1,0 +1,376 @@
+# Mission Example 5.1 - 水轮机和泄洪闸仿真通用配置文件
+# 专注于水轮机和泄洪闸的联合仿真
+
+# ============================================================
+# 仿真配置
+# ============================================================
+simulation:
+  name: "Mission Example 5.1 - Turbine Gate Simulation"
+  description: "水轮机和泄洪闸联合仿真，研究水力机械与水工建筑物的协调运行"
+  version: "5.1.0"
+  
+  # 时间设置
+  time:
+    duration: 100            # 仿真步数
+    time_step: 10.0         # 时间步长 (秒)
+    start_time: 0.0         # 开始时间
+    
+  # 求解器设置
+  solver:
+    type: "runge_kutta"     # 求解器类型
+    tolerance: 1e-6         # 收敛容差
+    max_iterations: 1000    # 最大迭代次数
+    adaptive_step: true     # 自适应步长
+
+# ============================================================
+# 调试配置
+# ============================================================
+debug:
+  enabled: true
+  log_level: "INFO"
+  log_file: "logs/example_5_1/debug.log"
+  session_id: "turbine_gate_simulation"
+  verbose: false
+  
+  # 数据收集
+  data_collection:
+    enabled: true
+    variables: ["water_level", "flow_rate", "turbine_power", "gate_opening", "pressure"]
+    sampling_rate: 1        # 每步采样
+    
+  # Web仪表板
+  web_dashboard:
+    enabled: true
+    port: 8091
+    auto_open: false
+    
+  # 控制台监控
+  console_monitoring:
+    enabled: true
+    update_interval: 10.0
+    show_progress: true
+
+# ============================================================
+# 性能监控配置
+# ============================================================
+performance:
+  enabled: true
+  track_timing: true
+  
+  # 时间监控
+  timing:
+    enabled: true
+    detailed_profiling: true
+    component_timing: true
+    
+  # 内存监控
+  memory:
+    enabled: true
+    track_peak_usage: true
+    garbage_collection: true
+    
+  # CPU监控
+  cpu:
+    enabled: true
+    track_utilization: true
+    core_usage: true
+
+# ============================================================
+# 可视化配置
+# ============================================================
+visualization:
+  enabled: true
+  
+  # 图表配置
+  plots:
+    enabled: true
+    output_directory: "plots/example_5_1/"
+    formats: ["png", "pdf"]
+    dpi: 300
+    style: "seaborn"
+    save_plot: true
+    plot_filename: "mission_5_1_results.png"
+    
+  # 实时仪表板
+  dashboard:
+    enabled: true
+    update_interval: 5.0
+    port: 8092
+    
+  # 3D可视化
+  three_d:
+    enabled: true
+    water_surface: true
+    turbine_animation: true
+    gate_animation: true
+
+# ============================================================
+# 数据输出配置
+# ============================================================
+output:
+  enabled: true
+  output_directory: "results/example_5_1/"
+  save_plot: true
+  plot_filename: "mission_5_1_results.png"
+  
+  # 历史数据
+  history:
+    enabled: true
+    filename: "turbine_gate_simulation_history.json"
+    
+  # 多种格式输出
+  formats:
+    json: true
+    csv: true
+    hdf5: true
+    matlab: true
+    
+  # 数据压缩
+  compression:
+    enabled: true
+    algorithm: "lzma"
+    
+  # 数据验证
+  validation:
+    enabled: true
+    schema_file: "schemas/turbine_gate_data.json"
+
+# ============================================================
+# 智能分析配置
+# ============================================================
+analysis:
+  enabled: true
+  
+  # 水轮机分析
+  turbine_analysis:
+    enabled: true
+    efficiency_analysis: true
+    cavitation_analysis: true
+    power_curve_analysis: true
+    vibration_analysis: true
+    
+  # 闸门分析
+  gate_analysis:
+    enabled: true
+    flow_coefficient: true
+    discharge_analysis: true
+    hydraulic_forces: true
+    operation_analysis: true
+    
+  # 水力分析
+  hydraulic_analysis:
+    enabled: true
+    flow_patterns: true
+    pressure_distribution: true
+    energy_losses: true
+    transient_analysis: true
+    
+  # 协调分析
+  coordination_analysis:
+    enabled: true
+    turbine_gate_interaction: true
+    optimal_operation: true
+    response_analysis: true
+    
+  # 统计分析
+  statistical:
+    enabled: true
+    generate_summary: true
+    correlation_analysis: true
+    trend_analysis: true
+
+# ============================================================
+# 日志配置
+# ============================================================
+logging:
+  enabled: true
+  level: "INFO"
+  
+  # 文件日志
+  file:
+    enabled: true
+    filename: "logs/example_5_1/simulation.log"
+    max_size_mb: 50
+    backup_count: 10
+    
+  # 控制台日志
+  console:
+    enabled: true
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    
+  # 结构化日志
+  structured:
+    enabled: true
+    format: "json"
+    
+  # 水轮机日志
+  turbine_log:
+    enabled: true
+    filename: "logs/example_5_1/turbine.log"
+    variables: ["power_output", "efficiency", "rotational_speed", "torque"]
+    
+  # 闸门日志
+  gate_log:
+    enabled: true
+    filename: "logs/example_5_1/gate.log"
+    variables: ["opening", "flow_rate", "upstream_level", "downstream_level"]
+
+# ============================================================
+# 错误处理配置
+# ============================================================
+error_handling:
+  enabled: true
+  
+  # 错误分类
+  categories:
+    critical: ["turbine_failure", "gate_stuck", "overspeed"]
+    warning: ["efficiency_drop", "cavitation_detected", "vibration_high"]
+    info: ["turbine_started", "gate_opened", "normal_operation"]
+    
+  # 恢复策略
+  recovery:
+    auto_retry: true
+    max_retries: 3
+    retry_delay: 5.0
+    fallback_mode: "safe_shutdown"
+    
+  # 通知设置
+  notifications:
+    enabled: true
+    email: ["turbine_operator@example.com"]
+    webhook: "http://localhost:9001/alerts"
+
+# ============================================================
+# 缓存配置
+# ============================================================
+cache:
+  enabled: true
+  
+  # 内存缓存
+  memory:
+    enabled: true
+    max_size_mb: 200
+    
+  # 磁盘缓存
+  disk:
+    enabled: true
+    directory: "cache/example_5_1/"
+    max_size_gb: 2
+
+# ============================================================
+# 网络配置
+# ============================================================
+network:
+  enabled: false
+  
+  # 分布式仿真
+  distributed:
+    enabled: false
+
+# ============================================================
+# 安全配置
+# ============================================================
+security:
+  enabled: true
+  
+  # 访问控制
+  access_control:
+    enabled: true
+    allowed_hosts: ["localhost"]
+    authentication: false
+    
+  # 加密设置
+  encryption:
+    enabled: false
+
+# ============================================================
+# 扩展配置
+# ============================================================
+extensions:
+  enabled: true
+  
+  # 插件系统
+  plugins:
+    enabled: true
+    directory: "plugins/turbine_gate/"
+    modules: ["advanced_turbine_model", "gate_control_system"]
+    
+  # 自定义功能
+  custom:
+    enabled: true
+    modules: ["turbine_optimization", "gate_scheduling"]
+
+# ============================================================
+# 环境配置
+# ============================================================
+environment:
+  name: "development"
+  
+  # 环境变量
+  variables:
+    SIMULATION_ENV: "turbine_gate"
+    LOG_LEVEL: "INFO"
+    
+  # 自定义变量
+  custom_vars:
+    # 仿真参数
+    duration: 100            # 仿真步数
+    time_step: 10.0         # 时间步长 (秒)
+    
+    # 物理条件
+    initial_depth: 15.0     # 初始水深 (m)
+    initial_inflow: 150.0   # 初始入流 (m³/s)
+    
+    # 边界条件
+    tailrace_level_rise: 2.0  # 尾水位上升幅度 (m)
+    
+    # 水轮机参数
+    turbine_rated_power: 50.0   # 额定功率 (MW)
+    turbine_efficiency: 0.9     # 涡轮机效率
+    rated_head: 20.0           # 额定水头 (m)
+    rated_flow: 25.0           # 额定流量 (m³/s)
+    min_operating_head: 5.0    # 最小运行水头 (m)
+    max_operating_head: 40.0   # 最大运行水头 (m)
+    
+    # 闸门参数
+    gate_width: 8.0            # 闸门宽度 (m)
+    gate_height: 10.0          # 闸门高度 (m)
+    max_opening: 8.0           # 最大开度 (m)
+    opening_speed: 0.1         # 开启速度 (m/s)
+    discharge_coefficient: 0.6  # 流量系数
+    
+    # 水力参数
+    manning_coefficient: 0.025  # 曼宁系数
+    energy_loss_coefficient: 0.1 # 能量损失系数
+    
+    # 控制参数
+    control_frequency: 0.1     # 控制频率 (Hz)
+    response_time: 30.0        # 响应时间 (s)
+    
+    # 监测参数
+    pressure_sensors: 5        # 压力传感器数量
+    flow_sensors: 3           # 流量传感器数量
+    level_sensors: 2          # 水位传感器数量
+    
+    # 安全参数
+    max_water_level: 25.0     # 最大水位 (m)
+    min_water_level: 5.0      # 最小水位 (m)
+    emergency_gate_time: 60.0  # 紧急关闸时间 (s)
+    
+    # 性能参数
+    max_memory_mb: 500        # 最大内存使用
+    cpu_cores: 2              # CPU核心数
+    
+    # 输出参数
+    save_interval: 10         # 保存间隔 (步)
+    plot_variables: ["water_level", "flow_rate", "turbine_power", "gate_opening"]
+    
+    # 验证参数
+    validation_enabled: true   # 启用验证
+    tolerance: 1e-6           # 验证容差
+    
+    # 通信参数
+    turbine_topic: "turbine/status"
+    gate_topic: "gate/position"
+    flow_topic: "hydraulic/flow"
+    level_topic: "hydraulic/level"

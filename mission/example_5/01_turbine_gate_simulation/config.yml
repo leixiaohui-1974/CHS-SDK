@@ -1,0 +1,29 @@
+# Mission Example 5.1 - 水轮机和泄洪闸仿真配置
+
+simulation:
+  dt: 10.0
+  num_steps: 100
+
+physical_conditions:
+  initial_depth: 15.0
+  initial_inflow: 150.0
+
+boundary_conditions:
+  tailrace_level_rise: 2.0  # 尾水位上升幅度
+
+output:
+  save_plot: true
+  plot_filename: "mission_5_1_results.png"
+
+# 通用配置
+general:
+  validation:
+    enabled: true
+  
+  debug:
+    enabled: true
+    log_level: "INFO"
+    verbose: false
+  
+  performance:
+    track_timing: true

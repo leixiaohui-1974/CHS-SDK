@@ -1,0 +1,360 @@
+# Mission Example 3 - 01_enhanced_perception 通用配置文件
+# 增强感知智能体演示 - 认知能力和故障处理
+
+# ============================================================
+# 仿真配置
+# ============================================================
+simulation:
+  name: "Enhanced Perception Agent Demo"
+  description: "演示增强感知智能体的认知能力、故障检测和自适应处理"
+  version: "3.1.0"
+  
+  # 时间设置
+  time:
+    duration: 20              # 仿真步数
+    time_step: 1.0           # 时间步长 (秒)
+    start_time: 0.0          # 开始时间
+    
+  # 求解器设置
+  solver:
+    type: "euler"            # 求解器类型
+    tolerance: 1e-6          # 收敛容差
+    max_iterations: 1000     # 最大迭代次数
+    
+  # 并行计算
+  parallel:
+    enabled: false          # 并行计算
+    num_processes: 1         # 进程数
+
+# ============================================================
+# 调试配置
+# ============================================================
+debug:
+  enabled: true
+  log_level: "DEBUG"
+  log_file: "logs/example_3/01_enhanced_perception/debug.log"
+  session_id: "enhanced_perception_demo"
+  
+  # 数据收集
+  data_collection:
+    enabled: true
+    variables: ["water_level", "volume", "sensor_fault", "perception_confidence", "fault_detection"]
+    sampling_rate: 1         # 每步采样
+    
+  # Web仪表板
+  web_dashboard:
+    enabled: true
+    port: 8085
+    auto_open: false
+    
+  # 控制台监控
+  console_monitoring:
+    enabled: true
+    update_interval: 2.0
+    show_progress: true
+
+# ============================================================
+# 性能监控配置
+# ============================================================
+performance:
+  enabled: true
+  
+  # 时间监控
+  timing:
+    enabled: true
+    detailed_profiling: true
+    
+  # 内存监控
+  memory:
+    enabled: true
+    track_peak_usage: true
+    
+  # CPU监控
+  cpu:
+    enabled: true
+    track_utilization: true
+
+# ============================================================
+# 可视化配置
+# ============================================================
+visualization:
+  enabled: true
+  
+  # 图表配置
+  plots:
+    enabled: true
+    output_directory: "plots/example_3/01_enhanced_perception/"
+    formats: ["png", "pdf"]
+    dpi: 300
+    style: "seaborn"
+    
+  # 实时仪表板
+  dashboard:
+    enabled: true
+    update_interval: 1.0
+    port: 8086
+
+# ============================================================
+# 数据输出配置
+# ============================================================
+output:
+  enabled: true
+  output_directory: "results/example_3/01_enhanced_perception/"
+  
+  # 历史数据
+  history:
+    enabled: true
+    filename: "enhanced_perception_demo_history.json"
+    
+  # 多种格式输出
+  formats:
+    json: true
+    csv: true
+    hdf5: false
+    
+  # 数据压缩
+  compression:
+    enabled: true
+    algorithm: "gzip"
+    
+  # 数据验证
+  validation:
+    enabled: true
+    schema_file: "schemas/enhanced_perception_data.json"
+
+# ============================================================
+# 智能分析配置
+# ============================================================
+analysis:
+  enabled: true
+  
+  # 控制性能分析
+  control_performance:
+    enabled: true
+    metrics: ["fault_detection_rate", "false_positive_rate", "recovery_time"]
+    
+  # 统计分析
+  statistical:
+    enabled: true
+    generate_summary: true
+    correlation_analysis: true
+    
+  # 系统识别
+  system_identification:
+    enabled: true
+    method: "arx"
+    order: [2, 2, 1]
+    
+  # 感知专用分析
+  perception_analysis:
+    enabled: true
+    pattern_recognition: true
+    anomaly_detection: true
+    confidence_tracking: true
+    learning_curve_analysis: true
+    fault_diagnosis: true
+    
+  # 故障分析
+  fault_analysis:
+    enabled: true
+    fault_detection_performance: true
+    isolation_accuracy: true
+    recovery_effectiveness: true
+    
+  # 认知分析
+  cognitive_analysis:
+    enabled: true
+    decision_quality: true
+    reasoning_trace: true
+    adaptation_performance: true
+
+# ============================================================
+# 日志配置
+# ============================================================
+logging:
+  enabled: true
+  level: "DEBUG"
+  
+  # 文件日志
+  file:
+    enabled: true
+    filename: "logs/example_3/01_enhanced_perception/simulation.log"
+    max_size_mb: 15
+    backup_count: 8
+    
+  # 控制台日志
+  console:
+    enabled: true
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    
+  # 结构化日志
+  structured:
+    enabled: true
+    format: "json"
+    
+  # 感知专用日志
+  perception_log:
+    enabled: true
+    filename: "logs/example_3/01_enhanced_perception/perception.log"
+    variables: ["perception_confidence", "fault_detected", "adaptation_action"]
+    
+  # 故障日志
+  fault_log:
+    enabled: true
+    filename: "logs/example_3/01_enhanced_perception/fault.log"
+    fault_events: true
+    detection_results: true
+    recovery_actions: true
+
+# ============================================================
+# 错误处理配置
+# ============================================================
+error_handling:
+  enabled: true
+  
+  # 错误分类
+  categories:
+    critical: ["perception_system_failure", "cognitive_breakdown"]
+    warning: ["sensor_fault_detected", "low_confidence_reading"]
+    info: ["fault_recovered", "adaptation_successful"]
+    
+  # 恢复策略
+  recovery:
+    auto_retry: true
+    max_retries: 5
+    retry_delay: 1.0
+    fallback_mode: "safe_mode"
+    
+  # 通知设置
+  notifications:
+    enabled: true
+    email: ["perception_engineer@example.com"]
+    webhook: "http://localhost:9000/alerts"
+
+# ============================================================
+# 缓存配置
+# ============================================================
+cache:
+  enabled: true
+  
+  # 内存缓存
+  memory:
+    enabled: true
+    max_size_mb: 150
+    
+  # 磁盘缓存
+  disk:
+    enabled: true
+    directory: "cache/example_3/01_enhanced_perception/"
+    max_size_gb: 1
+
+# ============================================================
+# 网络配置
+# ============================================================
+network:
+  enabled: false
+  
+  # 分布式仿真
+  distributed:
+    enabled: false
+    master_host: "localhost"
+    master_port: 9005
+    
+  # 通信设置
+  communication:
+    protocol: "tcp"
+    timeout: 30
+    buffer_size: 8192
+
+# ============================================================
+# 安全配置
+# ============================================================
+security:
+  enabled: true
+  
+  # 访问控制
+  access_control:
+    enabled: true
+    allowed_hosts: ["localhost", "perception-server"]
+    
+  # 加密设置
+  encryption:
+    enabled: true
+    algorithm: "AES-256"
+    
+  # 监控设置
+  monitoring:
+    enabled: true
+    intrusion_detection: true
+
+# ============================================================
+# 扩展配置
+# ============================================================
+extensions:
+  enabled: true
+  
+  # 插件系统
+  plugins:
+    enabled: true
+    directory: "plugins/enhanced_perception/"
+    modules: ["fault_injection", "adaptive_perception", "cognitive_reasoning"]
+    
+  # 自定义功能
+  custom:
+    enabled: true
+    modules: ["sensor_fusion", "fault_tolerance", "self_healing"]
+
+# ============================================================
+# 环境配置
+# ============================================================
+environment:
+  name: "development"
+  
+  # 环境变量
+  variables:
+    SIMULATION_ENV: "enhanced_perception_demo"
+    LOG_LEVEL: "DEBUG"
+    FAULT_INJECTION: "enabled"
+    
+  # 自定义变量
+  custom_vars:
+    # 仿真参数
+    duration: 20              # 仿真步数
+    time_step: 1.0           # 时间步长 (秒)
+    
+    # 故障注入参数
+    sensor_fault_time: 5     # 传感器故障注入时间
+    fault_duration: 3        # 故障持续时间
+    fault_severity: 0.5      # 故障严重程度
+    
+    # 感知参数
+    perception_threshold: 0.8 # 感知置信度阈值
+    fault_detection_threshold: 0.7 # 故障检测阈值
+    adaptation_rate: 0.1     # 自适应速率
+    
+    # 认知参数
+    reasoning_enabled: true  # 启用推理
+    learning_enabled: true   # 启用学习
+    memory_size: 100        # 记忆大小
+    
+    # 物理组件参数
+    reservoir_area: 100.0    # 水库面积
+    initial_water_level: 10.0 # 初始水位
+    initial_volume: 1000.0   # 初始体积
+    
+    # 通信参数
+    state_topic: "perception/reservoir/state"
+    fault_topic: "perception/fault/status"
+    
+    # 性能参数
+    max_processing_time: 0.1 # 最大处理时间
+    memory_limit_mb: 200     # 内存限制
+    
+    # 可视化参数
+    real_time_plot: true     # 实时绘图
+    plot_interval: 1         # 绘图间隔
+    
+    # 故障容错参数
+    fault_tolerance_enabled: true # 故障容错
+    auto_recovery: true      # 自动恢复
+    backup_sensors: true     # 备用传感器

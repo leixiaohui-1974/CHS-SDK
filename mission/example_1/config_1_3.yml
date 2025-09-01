@@ -1,0 +1,61 @@
+# Configuration for Example 1.3: Gate Control Agent (Local PID)
+# 闸站控制智能体（现地PID）配置
+
+simulation:
+  description: "LocalControlAgent 现地PID智能体本地反馈控制闭环演示"
+  control_cycle: 1.0  # seconds
+
+# Message Bus Topics
+communication:
+  observation_topic: "state/canal/level"
+  action_topic: "action/gate/opening"
+
+# PID Controller Configuration
+controller:
+  type: "PIDController"
+  parameters:
+    Kp: -0.5  # 负值：水位高于设定点时，需要关小闸门（减小开度）
+    Ki: -0.1
+    Kd: 0.0
+    setpoint: 10.0  # 目标水位 10.0m
+    min_output: 0.0  # 闸门最小开度
+    max_output: 2.0  # 闸门最大开度
+
+# Agent Configuration
+agent:
+  type: "LocalControlAgent"
+  agent_id: "gate_control_agent_1"
+  observation_key: "water_level"  # 期望从消息中获取的键
+  dt: 1.0  # 控制周期
+
+# Test Scenarios
+test_scenarios:
+  - name: "场景1: 水位高于设定点"
+    description: "需要开大闸门增加泄流"
+    water_level: 10.5  # 高于设定点 0.5m
+    expected_action: "positive"  # 正向动作（开大闸门）
+    expected_calculation:
+      error: -0.5  # setpoint - pv = 10.0 - 10.5
+      action: 0.25  # Kp * error = (-0.5) * (-0.5)
+  
+  - name: "场景2: 水位低于设定点"
+    description: "需要关小闸门减少泄流"
+    water_level: 9.8  # 低于设定点 0.2m
+    expected_action: "clamped_to_min"  # 被钳位到最小值
+    expected_calculation:
+      error: 0.2  # setpoint - pv = 10.0 - 9.8
+      action: -0.1  # Kp * error = (-0.5) * 0.2，被钳位到0.0
+  
+  - name: "场景3: 水位等于设定点"
+    description: "误差为0，积分项生效"
+    water_level: 10.0  # 等于设定点
+    expected_action: "integral_effect"  # 积分项起作用
+    expected_calculation:
+      error: 0.0  # setpoint - pv = 10.0 - 10.0
+      note: "P项和D项为0，只有I项起作用"
+
+# Output Settings
+output:
+  show_detailed_logs: true
+  wait_time: 0.1  # seconds between message processing
+  enable_validation: true

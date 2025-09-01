@@ -1,0 +1,426 @@
+# Mission Example 1 - 05_central_mpc_dispatcher 通用配置文件
+# 中央MPC调度系统配置
+
+# ============================================================
+# 仿真配置
+# ============================================================
+simulation:
+  name: "中央MPC调度仿真"
+  description: "Example 1 - 中央MPC调度系统，演示高级调度命令和预测控制"
+  version: "1.0.0"
+  
+  # 时间设置
+  time:
+    end_time: 36000.0     # 仿真持续时间 (10步 * 3600秒/步)
+    time_step: 3600.0     # 时间步长 (1小时)
+    output_interval: 3600.0  # 输出间隔 (1小时)
+    
+  # 求解器配置
+  solver:
+    method: "mpc"         # 模型预测控制求解方法
+    tolerance: 1e-4       # 求解精度
+    max_iterations: 500   # 最大迭代次数
+    horizon_steps: 10     # 预测时域
+    
+  # 并行计算
+  parallel:
+    enabled: true         # 启用并行计算以处理复杂MPC
+    num_processes: 4      # 进程数量
+
+# ============================================================
+# 调试配置
+# ============================================================
+debug:
+  enabled: true
+  log_level: "INFO"
+  log_file: "logs/central_mpc_dispatcher/debug.log"
+  session_id: "central_mpc_dispatcher_session"
+  
+  # 数据收集
+  data_collection:
+    enabled: true
+    interval: 3600.0  # 数据收集间隔 (1小时)
+    variables:
+      - "upstream_level"
+      - "downstream_level"
+      - "upstream_setpoint"
+      - "downstream_setpoint"
+      - "inflow_forecast"
+      - "mpc_cost"
+      - "constraint_violations"
+      - "optimization_time"
+      - "prediction_horizon"
+      - "control_horizon"
+      
+  # Web仪表板
+  dashboard:
+    web_dashboard: true
+    port: 8088
+    auto_open: false
+    
+  # 控制台监控
+  console:
+    real_time_display: true
+    update_interval: 3600.0   # 实时监控MPC调度状态
+
+# ============================================================
+# 性能监控配置
+# ============================================================
+performance:
+  enabled: true
+  
+  # 时间跟踪
+  timing:
+    enabled: true
+    detailed_profiling: true
+    mpc_timing: true
+    optimization_timing: true
+    
+  # 内存监控
+  memory:
+    enabled: true
+    threshold_mb: 2000  # 内存阈值
+    
+  # CPU监控
+  cpu:
+    enabled: true
+    threshold_percent: 80  # CPU使用率警告阈值
+
+# ============================================================
+# 可视化配置
+# ============================================================
+visualization:
+  enabled: true
+  
+  # 图表配置
+  plots:
+    enabled: true
+    save_plots: true
+    plot_directory: "plots/central_mpc_dispatcher/"
+    format: "png"
+    dpi: 300
+    
+    # 图表定义
+    charts:
+      - name: "水位控制轨迹"
+        type: "time_series"
+        variables: ["upstream_level", "downstream_level"]
+        title: "Water Level Control Trajectory"
+        xlabel: "Time (hours)"
+        ylabel: "Water Level (m)"
+        
+      - name: "MPC设定值"
+        type: "time_series"
+        variables: ["upstream_setpoint", "downstream_setpoint"]
+        title: "MPC Setpoint Commands"
+        xlabel: "Time (hours)"
+        ylabel: "Setpoint (m)"
+        
+      - name: "流量预测"
+        type: "time_series"
+        variables: ["inflow_forecast"]
+        title: "Inflow Forecast"
+        xlabel: "Time (hours)"
+        ylabel: "Inflow (m³/s)"
+        
+      - name: "MPC性能指标"
+        type: "time_series"
+        variables: ["mpc_cost", "optimization_time"]
+        title: "MPC Performance Metrics"
+        xlabel: "Time (hours)"
+        ylabel: "Cost/Time"
+        
+      - name: "约束违反分析"
+        type: "time_series"
+        variables: ["constraint_violations"]
+        title: "Constraint Violation Analysis"
+        xlabel: "Time (hours)"
+        ylabel: "Violations"
+        
+      - name: "预测时域分析"
+        type: "heatmap"
+        variables: ["prediction_horizon", "control_horizon"]
+        title: "Prediction Horizon Analysis"
+        
+  # 实时仪表板
+  dashboard:
+    enabled: true
+    update_interval: 3600.0   # 实时更新MPC状态
+    port: 8089
+
+# ============================================================
+# 数据输出配置
+# ============================================================
+output:
+  enabled: true
+  output_directory: "results/central_mpc_dispatcher/"
+  
+  # 历史数据保存
+  save_history: true
+  history_file: "simulation_history.json"
+  
+  # 数据格式
+  format:
+    csv: true
+    json: true
+    hdf5: true     # 启用HDF5以处理大量MPC数据
+    matlab: true   # 启用MATLAB格式用于控制分析
+    
+  # 压缩设置
+  compression:
+    enabled: true
+    method: "gzip"
+    
+  # 验证配置
+  validation:
+    enabled: true
+    expected_results:
+      setpoint_reduction: true      # 期望设定值降低
+      constraint_satisfaction: 0.95 # 期望约束满足率
+      optimization_success: 0.98   # 期望优化成功率
+    tolerance: 0.05
+
+# ============================================================
+# 智能分析配置
+# ============================================================
+analysis:
+  enabled: true
+  
+  # 控制性能分析
+  control_performance:
+    enabled: true
+    metrics: ["ise", "iae", "itae", "settling_time", "overshoot"]
+    reference_tracking: true
+    disturbance_rejection: true
+    
+  # 统计分析
+  statistical:
+    enabled: true
+    generate_summary: true
+    variance_analysis: true
+    correlation_analysis: true
+    
+  # 系统识别
+  system_identification:
+    enabled: true
+    method: "subspace"
+    state_space_model: true
+    input_signals: ["upstream_setpoint", "downstream_setpoint"]
+    output_signals: ["upstream_level", "downstream_level"]
+    
+  # MPC专用分析
+  mpc_analysis:
+    enabled: true
+    optimization_performance: true
+    constraint_analysis: true
+    robustness_analysis: true
+    sensitivity_analysis: true
+    
+  # 预测分析
+  forecasting:
+    enabled: true
+    horizon_analysis: true
+    prediction_accuracy: true
+    uncertainty_quantification: true
+
+# ============================================================
+# 日志配置
+# ============================================================
+logging:
+  enabled: true
+  level: "INFO"
+  
+  # 文件日志
+  file:
+    enabled: true
+    filename: "logs/central_mpc_dispatcher/simulation.log"
+    max_size_mb: 50
+    backup_count: 20
+    
+  # 控制台日志
+  console:
+    enabled: true
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    
+  # 结构化日志
+  structured:
+    enabled: true
+    format: "json"
+    
+  # MPC专用日志
+  mpc_log:
+    enabled: true
+    filename: "logs/central_mpc_dispatcher/mpc.log"
+    variables: ["mpc_cost", "optimization_time", "constraint_violations"]
+    
+  # 调度日志
+  dispatch_log:
+    enabled: true
+    filename: "logs/central_mpc_dispatcher/dispatch.log"
+    commands: true
+    decisions: true
+
+# ============================================================
+# 错误处理配置
+# ============================================================
+error_handling:
+  enabled: true
+  
+  # 错误分类
+  categories:
+    critical: ["optimization_failure", "infeasible_problem", "system_instability"]
+    warning: ["constraint_violation", "suboptimal_solution", "forecast_uncertainty"]
+    info: ["setpoint_updated", "optimization_completed", "forecast_received"]
+    
+  # 恢复策略
+  recovery:
+    auto_retry: true
+    max_retries: 3
+    retry_delay: 60.0
+    fallback_controller: "pid"
+    
+  # 通知设置
+  notifications:
+    enabled: true
+    email: ["control_engineer@example.com"]
+    webhook: "http://localhost:9000/mpc_alerts"
+
+# ============================================================
+# 缓存配置
+# ============================================================
+cache:
+  enabled: true
+  
+  # 内存缓存
+  memory:
+    enabled: true
+    max_size_mb: 500
+    
+  # 磁盘缓存
+  disk:
+    enabled: true
+    directory: "cache/central_mpc_dispatcher/"
+    max_size_gb: 5
+
+# ============================================================
+# 网络配置
+# ============================================================
+network:
+  enabled: true
+  
+  # 分布式仿真
+  distributed:
+    enabled: true
+    master_host: "localhost"
+    master_port: 9004
+    
+  # 通信设置
+  communication:
+    protocol: "tcp"  # 适合MPC的可靠通信协议
+    timeout: 60
+    buffer_size: 32768
+    topics:
+      state_upstream: "state/canal_upstream/level"
+      state_downstream: "state/canal_downstream/level"
+      forecast: "forecast/inflow"
+      command_upstream: "command/gate_upstream/setpoint"
+      command_downstream: "command/gate_downstream/setpoint"
+
+# ============================================================
+# 安全配置
+# ============================================================
+security:
+  enabled: true
+  
+  # 访问控制
+  access_control:
+    enabled: true
+    allowed_hosts: ["localhost", "control-server"]
+    
+  # 加密设置
+  encryption:
+    enabled: true
+    algorithm: "AES-256"
+    
+  # 监控设置
+  monitoring:
+    enabled: true
+    intrusion_detection: true
+
+# ============================================================
+# 扩展配置
+# ============================================================
+extensions:
+  enabled: true
+  
+  # 插件系统
+  plugins:
+    enabled: true
+    directory: "plugins/mpc/"
+    modules: ["advanced_mpc", "robust_mpc", "stochastic_mpc"]
+    
+  # 自定义功能
+  custom:
+    enabled: true
+    modules: ["economic_mpc", "distributed_mpc", "adaptive_mpc"]
+
+# ============================================================
+# 环境配置
+# ============================================================
+environment:
+  name: "development"
+  
+  # 环境变量
+  variables:
+    SIMULATION_ENV: "central_mpc_dispatcher"
+    LOG_LEVEL: "INFO"
+    MPC_SOLVER: "ipopt"
+    
+  # 自定义变量
+  custom_vars:
+    # 仿真参数
+    duration: 10              # 仿真步数
+    time_step: 3600           # 时间步长 (秒)
+    description: "CentralMPCAgent high-level dispatch command demonstration"
+    
+    # 通信主题
+    state_topic_upstream: "state/canal_upstream/level"
+    state_topic_downstream: "state/canal_downstream/level"
+    forecast_topic: "forecast/inflow"
+    command_topic_upstream: "command/gate_upstream/setpoint"
+    command_topic_downstream: "command/gate_downstream/setpoint"
+    
+    # 测试场景参数
+    initial_upstream_level: 10.1    # 初始上游水位 (m)
+    initial_downstream_level: 8.0   # 初始下游水位 (m)
+    
+    # 预测参数
+    forecast_type: "flood_warning"
+    forecast_description: "Continuous high inflow forecast"
+    inflow_values: 50.0             # 流量预测值 (m³/s)
+    forecast_duration: 10           # 预测时域步数
+    
+    # MPC参数
+    prediction_horizon: 10          # 预测时域
+    control_horizon: 3              # 控制时域
+    sampling_time: 3600             # 采样时间 (秒)
+    
+    # 约束参数
+    min_water_level: 5.0            # 最小水位 (m)
+    max_water_level: 15.0           # 最大水位 (m)
+    min_setpoint: 0.0               # 最小设定值
+    max_setpoint: 20.0              # 最大设定值
+    
+    # 权重参数
+    level_weight: 1.0               # 水位权重
+    setpoint_weight: 0.1            # 设定值权重
+    change_weight: 0.01             # 变化率权重
+    
+    # 验证参数
+    enable_validation: true
+    expected_setpoint_reduction: true
+    
+    # 系统参数
+    canal_capacity: 100.0           # 渠道容量 (m³/s)
+    gate_response_time: 300.0       # 闸门响应时间 (秒)
+    sensor_delay: 60.0              # 传感器延迟 (秒)

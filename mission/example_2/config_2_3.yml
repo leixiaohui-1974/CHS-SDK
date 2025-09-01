@@ -1,0 +1,257 @@
+# Configuration for Example 2.3: Joint Watershed Dispatch
+# 流域联合调度配置文件
+
+simulation:
+  description: "演示一个更复杂的流域联合调度场景，包含多种水利设施的协调控制"
+  duration: 7200  # 2 hours in seconds
+  time_step: 60   # 1 minute time step
+
+# Communication topics
+communication:
+  state_topics:
+    reservoir_level: "state.reservoir.level"
+    hydro_station_flow: "state.hydro_station.flow"
+    diversion_gate_opening: "state.diversion_gate.opening"
+    downstream_demand: "state.downstream.demand"
+  
+  command_topics:
+    hydro_station_control: "command.hydro_station.setpoint"
+    diversion_gate_control: "command.diversion_gate.setpoint"
+  
+  disturbance_topics:
+    upstream_inflow: "disturbance.upstream.inflow"
+    irrigation_demand: "disturbance.irrigation.demand"
+
+# Physical components
+components:
+  # Upstream reservoir
+  upstream_reservoir:
+    type: "UnifiedCanal"
+    model_type: "reservoir"
+    initial_state:
+      volume: 50000000  # 50 million cubic meters
+      water_level: 20.0  # meters
+    parameters:
+      surface_area: 2500000  # 2.5 km²
+      length: 1000
+      bottom_width: 1000
+      side_slope_z: 0
+    inflow_topic: "disturbance.upstream.inflow"
+  
+  # Hydro station (turbine + spillway)
+  hydro_station:
+    type: "Gate"
+    initial_state:
+      opening: 0.3  # 30% opening
+    parameters:
+      width: 50
+      discharge_coefficient: 0.6
+      max_opening: 1.0
+  
+  # Main channel (between hydro station and diversion)
+  main_channel:
+    type: "UnifiedCanal"
+    model_type: "channel"
+    initial_state:
+      volume: 100000  # 100,000 cubic meters
+      water_level: 5.0  # meters
+    parameters:
+      length: 5000  # 5 km
+      bottom_width: 20
+      side_slope_z: 1.5
+      manning_n: 0.03
+  
+  # Downstream diversion gate (for irrigation)
+  diversion_gate:
+    type: "Gate"
+    initial_state:
+      opening: 0.5  # 50% opening
+    parameters:
+      width: 10
+      discharge_coefficient: 0.6
+      max_opening: 1.0
+
+# Network connections
+connections:
+  - from: "upstream_reservoir"
+    to: "hydro_station"
+  - from: "hydro_station"
+    to: "main_channel"
+  - from: "main_channel"
+    to: "diversion_gate"
+
+# Agents configuration
+agents:
+  # Disturbance agents
+  upstream_inflow_agent:
+    type: "RainfallAgent"
+    agent_id: "upstream_inflow"
+    config:
+      topic: "disturbance.upstream.inflow"
+      pattern: "flood_event"
+      base_rate: 50.0  # m³/s base inflow
+      peak_rate: 300.0  # m³/s peak inflow during flood
+      start_time: 1800  # Start flood after 30 minutes
+      duration: 3600    # 1 hour flood duration
+  
+  irrigation_demand_agent:
+    type: "WaterUseAgent"
+    agent_id: "irrigation_demand"
+    target_object: "main_channel"
+    start_time: 0
+    duration: 7200  # Continuous throughout simulation
+    diversion_rate: 20.0  # m³/s irrigation demand
+    dt: 60
+  
+  # Perception agents (Digital Twins)
+  reservoir_twin:
+    type: "DigitalTwinAgent"
+    agent_id: "reservoir_twin"
+    simulated_object: "upstream_reservoir"
+    state_topic: "state.reservoir.level"
+    smoothing_config:
+      enable_smoothing: true
+      alpha: 0.8
+  
+  hydro_station_twin:
+    type: "DigitalTwinAgent"
+    agent_id: "hydro_station_twin"
+    simulated_object: "hydro_station"
+    state_topic: "state.hydro_station.flow"
+    smoothing_config:
+      enable_smoothing: false
+  
+  diversion_gate_twin:
+    type: "DigitalTwinAgent"
+    agent_id: "diversion_gate_twin"
+    simulated_object: "diversion_gate"
+    state_topic: "state.diversion_gate.opening"
+    smoothing_config:
+      enable_smoothing: false
+  
+  # Local control agents
+  hydro_station_controller:
+    type: "LocalControlAgent"
+    agent_id: "hydro_station_lca"
+    observation_topic: "state.reservoir.level"
+    observation_key: "water_level"
+    action_topic: "action.hydro_station.opening"
+    command_topic: "command.hydro_station.setpoint"
+    dt: 60
+    controller:
+      Kp: -0.02  # Negative because higher water level should increase outflow
+      Ki: -0.001
+      Kd: -0.005
+      setpoint: 100  # Target outflow (m³/s), will be updated by dispatcher
+      min_output: 0.0
+      max_output: 1.0
+  
+  diversion_gate_controller:
+    type: "LocalControlAgent"
+    agent_id: "diversion_gate_lca"
+    observation_topic: "state.main_channel.level"
+    observation_key: "water_level"
+    action_topic: "action.diversion_gate.opening"
+    command_topic: "command.diversion_gate.setpoint"
+    dt: 60
+    controller:
+      Kp: 0.1   # Positive because higher channel level should increase diversion
+      Ki: 0.005
+      Kd: 0.02
+      setpoint: 1.0  # Target gate opening, will be updated by dispatcher
+      min_output: 0.0
+      max_output: 1.0
+  
+  # Central dispatcher (rule-based)
+  central_dispatcher:
+    type: "CentralDispatcher"
+    agent_id: "watershed_dispatcher"
+    state_subscriptions:
+      reservoir: "state.reservoir.level"
+      hydro_station: "state.hydro_station.flow"
+      diversion_gate: "state.diversion_gate.opening"
+    command_topics:
+      hydro_station_control: "command.hydro_station.setpoint"
+      diversion_gate_control: "command.diversion_gate.setpoint"
+    rules:
+      rule_set: "joint_dispatch_rules"  # Reference to predefined rules
+      flood_threshold: 22.0  # meters
+      normal_hydro_setpoint: 100  # m³/s
+      flood_hydro_setpoint: 400   # m³/s
+      normal_diversion_setpoint: 1.0  # full opening
+      flood_diversion_setpoint: 0.0   # closed
+  
+  # Physical I/O agents
+  hydro_station_io:
+    type: "PhysicalIOAgent"
+    agent_id: "hydro_station_io"
+    sensors_config:
+      flow_sensor:
+        obj_name: "hydro_station"
+        state_key: "outflow"
+        topic: "state.hydro_station.flow"
+        noise_std: 2.0  # m³/s
+    actuators_config:
+      gate_actuator:
+        obj_name: "hydro_station"
+        target_attr: "opening"
+        topic: "action.hydro_station.opening"
+        control_key: "opening"
+  
+  diversion_gate_io:
+    type: "PhysicalIOAgent"
+    agent_id: "diversion_gate_io"
+    sensors_config:
+      opening_sensor:
+        obj_name: "diversion_gate"
+        state_key: "opening"
+        topic: "state.diversion_gate.opening"
+        noise_std: 0.01
+    actuators_config:
+      gate_actuator:
+        obj_name: "diversion_gate"
+        target_attr: "opening"
+        topic: "action.diversion_gate.opening"
+        control_key: "opening"
+  
+  main_channel_io:
+    type: "PhysicalIOAgent"
+    agent_id: "main_channel_io"
+    sensors_config:
+      level_sensor:
+        obj_name: "main_channel"
+        state_key: "water_level"
+        topic: "state.main_channel.level"
+        noise_std: 0.1  # meters
+    actuators_config: {}
+
+# Analysis and validation
+analysis:
+  enable_validation: true
+  flood_prevention_check: true
+  max_allowed_reservoir_level: 25.0  # meters
+  
+  performance_metrics:
+    - "max_reservoir_level"
+    - "total_irrigation_supply"
+    - "flood_prevention_success"
+    - "dispatcher_mode_switches"
+  
+  expected_behavior:
+    description: "系统应能在洪水期间自动切换到防洪模式，增加水电站出流并关闭灌溉取水"
+    flood_response_time: 300  # seconds
+    max_acceptable_level: 24.0  # meters
+
+# Dependencies
+dependencies:
+  - "core_lib.central_coordination.dispatch.central_dispatcher"
+  - "core_lib.central_coordination.dispatch.rules"
+  - "core_lib.disturbances.rainfall_agent"
+  - "core_lib.disturbances.water_use_agent"
+
+# Output settings
+output:
+  show_progress: true
+  show_final_summary: true
+  log_level: "INFO"
+  save_history: false

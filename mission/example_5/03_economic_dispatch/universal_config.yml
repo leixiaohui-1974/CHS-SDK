@@ -1,0 +1,407 @@
+# Mission Example 5.3 - 水轮机经济调度表计算通用配置文件
+# 专注于水轮机经济调度表的生成和优化计算
+
+# ============================================================
+# 仿真配置
+# ============================================================
+simulation:
+  name: "Mission Example 5.3 - Economic Dispatch"
+  description: "水轮机经济调度表计算，生成不同水头和功率条件下的最优运行策略"
+  version: "5.3.0"
+  
+  # 时间设置
+  time:
+    duration: 1              # 单次计算
+    time_step: 1.0          # 时间步长 (秒)
+    start_time: 0.0         # 开始时间
+    
+  # 求解器设置
+  solver:
+    type: "optimization"    # 优化求解器
+    tolerance: 1e-8         # 收敛容差
+    max_iterations: 5000    # 最大迭代次数
+    algorithm: "genetic_algorithm"  # 优化算法
+
+# ============================================================
+# 调试配置
+# ============================================================
+debug:
+  enabled: true
+  log_level: "INFO"
+  log_file: "logs/example_5_3/debug.log"
+  session_id: "economic_dispatch"
+  verbose: false
+  
+  # 数据收集
+  data_collection:
+    enabled: true
+    variables: ["power_output", "efficiency", "cost", "head", "flow_rate"]
+    sampling_rate: 1        # 每步采样
+    
+  # Web仪表板
+  web_dashboard:
+    enabled: true
+    port: 8095
+    auto_open: false
+    
+  # 控制台监控
+  console_monitoring:
+    enabled: true
+    update_interval: 1.0
+    show_progress: true
+
+# ============================================================
+# 性能监控配置
+# ============================================================
+performance:
+  enabled: true
+  track_timing: true
+  
+  # 时间监控
+  timing:
+    enabled: true
+    detailed_profiling: true
+    component_timing: true
+    
+  # 内存监控
+  memory:
+    enabled: true
+    track_peak_usage: true
+    garbage_collection: true
+    
+  # CPU监控
+  cpu:
+    enabled: true
+    track_utilization: true
+    core_usage: true
+
+# ============================================================
+# 可视化配置
+# ============================================================
+visualization:
+  enabled: true
+  
+  # 图表配置
+  plots:
+    enabled: true
+    output_directory: "plots/example_5_3/"
+    formats: ["png", "pdf"]
+    dpi: 300
+    style: "seaborn"
+    
+  # 经济调度可视化
+  economic_plots:
+    enabled: true
+    efficiency_curves: true
+    cost_surfaces: true
+    dispatch_tables: true
+    optimization_convergence: true
+    
+  # 3D可视化
+  three_d:
+    enabled: true
+    cost_surface: true
+    efficiency_surface: true
+
+# ============================================================
+# 数据输出配置
+# ============================================================
+output:
+  enabled: true
+  output_directory: "results/example_5_3/"
+  table_filename: "turbine_economic_table.csv"
+  save_path: "../data/"
+  
+  # 历史数据
+  history:
+    enabled: true
+    filename: "economic_dispatch_history.json"
+    
+  # 多种格式输出
+  formats:
+    json: true
+    csv: true
+    excel: true
+    hdf5: true
+    matlab: true
+    
+  # 数据压缩
+  compression:
+    enabled: true
+    algorithm: "lzma"
+    
+  # 数据验证
+  validation:
+    enabled: true
+    schema_file: "schemas/economic_dispatch_data.json"
+
+# ============================================================
+# 智能分析配置
+# ============================================================
+analysis:
+  enabled: true
+  
+  # 经济分析
+  economic_analysis:
+    enabled: true
+    cost_optimization: true
+    efficiency_analysis: true
+    revenue_analysis: true
+    profit_maximization: true
+    
+  # 优化分析
+  optimization_analysis:
+    enabled: true
+    convergence_analysis: true
+    sensitivity_analysis: true
+    pareto_analysis: true
+    robustness_analysis: true
+    
+  # 调度分析
+  dispatch_analysis:
+    enabled: true
+    load_distribution: true
+    unit_commitment: true
+    reserve_allocation: true
+    
+  # 水力分析
+  hydraulic_analysis:
+    enabled: true
+    head_loss_analysis: true
+    flow_optimization: true
+    efficiency_mapping: true
+    
+  # 统计分析
+  statistical:
+    enabled: true
+    generate_summary: true
+    correlation_analysis: true
+    trend_analysis: true
+
+# ============================================================
+# 日志配置
+# ============================================================
+logging:
+  enabled: true
+  level: "INFO"
+  
+  # 文件日志
+  file:
+    enabled: true
+    filename: "logs/example_5_3/simulation.log"
+    max_size_mb: 50
+    backup_count: 10
+    
+  # 控制台日志
+  console:
+    enabled: true
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    
+  # 结构化日志
+  structured:
+    enabled: true
+    format: "json"
+    
+  # 优化日志
+  optimization_log:
+    enabled: true
+    filename: "logs/example_5_3/optimization.log"
+    variables: ["iteration", "objective_value", "constraints", "convergence"]
+    
+  # 经济日志
+  economic_log:
+    enabled: true
+    filename: "logs/example_5_3/economic.log"
+    variables: ["cost", "revenue", "profit", "efficiency"]
+
+# ============================================================
+# 错误处理配置
+# ============================================================
+error_handling:
+  enabled: true
+  
+  # 错误分类
+  categories:
+    critical: ["optimization_failure", "infeasible_solution", "numerical_instability"]
+    warning: ["slow_convergence", "suboptimal_solution", "constraint_violation"]
+    info: ["optimization_started", "iteration_completed", "solution_found"]
+    
+  # 恢复策略
+  recovery:
+    auto_retry: true
+    max_retries: 3
+    retry_delay: 2.0
+    fallback_mode: "simplified_model"
+    
+  # 通知设置
+  notifications:
+    enabled: true
+    email: ["dispatch_engineer@example.com"]
+    webhook: "http://localhost:9003/alerts"
+
+# ============================================================
+# 缓存配置
+# ============================================================
+cache:
+  enabled: true
+  
+  # 内存缓存
+  memory:
+    enabled: true
+    max_size_mb: 400
+    
+  # 磁盘缓存
+  disk:
+    enabled: true
+    directory: "cache/example_5_3/"
+    max_size_gb: 2
+
+# ============================================================
+# 网络配置
+# ============================================================
+network:
+  enabled: false
+  
+  # 分布式计算
+  distributed:
+    enabled: false
+
+# ============================================================
+# 安全配置
+# ============================================================
+security:
+  enabled: true
+  
+  # 访问控制
+  access_control:
+    enabled: true
+    allowed_hosts: ["localhost"]
+    authentication: false
+    
+  # 加密设置
+  encryption:
+    enabled: false
+
+# ============================================================
+# 扩展配置
+# ============================================================
+extensions:
+  enabled: true
+  
+  # 插件系统
+  plugins:
+    enabled: true
+    directory: "plugins/economic_dispatch/"
+    modules: ["advanced_optimization", "market_analysis", "forecasting"]
+    
+  # 自定义功能
+  custom:
+    enabled: true
+    modules: ["machine_learning_optimization", "real_time_pricing"]
+
+# ============================================================
+# 环境配置
+# ============================================================
+environment:
+  name: "development"
+  
+  # 环境变量
+  variables:
+    SIMULATION_ENV: "economic_dispatch"
+    LOG_LEVEL: "INFO"
+    OPTIMIZATION_MODE: "batch"
+    
+  # 自定义变量
+  custom_vars:
+    # 优化参数
+    turbine_count: 6        # 水轮机数量
+    
+    # 功率范围
+    power_range:
+      min_mw: 0            # 最小功率 (MW)
+      max_mw: 300          # 最大功率 (MW)
+      step_mw: 10          # 功率步长 (MW)
+    
+    # 水头范围
+    head_range:
+      min_m: 50            # 最小水头 (m)
+      max_m: 120           # 最大水头 (m)
+      step_m: 5            # 水头步长 (m)
+    
+    # 水轮机参数
+    turbine_parameters:
+      rated_power: [50, 50, 50, 50, 50, 50]  # 额定功率 (MW)
+      rated_head: [80, 80, 80, 80, 80, 80]   # 额定水头 (m)
+      rated_flow: [62.5, 62.5, 62.5, 62.5, 62.5, 62.5]  # 额定流量 (m³/s)
+      efficiency_curve: "hill_chart"          # 效率曲线类型
+      
+    # 经济参数
+    economic_parameters:
+      fuel_cost: [0.02, 0.025, 0.018, 0.022, 0.019, 0.024]  # 燃料成本 ($/kWh)
+      startup_cost: [1000, 1200, 800, 1100, 900, 1300]      # 启动成本 ($)
+      maintenance_cost: [0.005, 0.006, 0.004, 0.005, 0.0045, 0.0055]  # 维护成本 ($/kWh)
+      water_value: 0.001     # 水价值 ($/m³)
+      electricity_price: 0.08 # 电价 ($/kWh)
+      
+    # 约束条件
+    constraints:
+      min_load_factor: 0.2   # 最小负荷率
+      max_load_factor: 1.0   # 最大负荷率
+      ramp_rate: 10.0       # 爬坡速率 (MW/min)
+      min_up_time: 60       # 最小运行时间 (min)
+      min_down_time: 30     # 最小停机时间 (min)
+      
+    # 优化设置
+    optimization_settings:
+      algorithm: "genetic_algorithm"  # 优化算法
+      population_size: 100   # 种群大小
+      generations: 500      # 迭代代数
+      crossover_rate: 0.8   # 交叉概率
+      mutation_rate: 0.1    # 变异概率
+      elite_ratio: 0.1      # 精英比例
+      
+    # 目标函数
+    objective_function:
+      type: "multi_objective"  # 目标函数类型
+      weights:
+        cost: 0.6          # 成本权重
+        efficiency: 0.3    # 效率权重
+        environmental: 0.1  # 环境权重
+        
+    # 输出设置
+    output_settings:
+      table_filename: "turbine_economic_table.csv"
+      save_path: "../data/"
+      include_metadata: true
+      precision: 6          # 数值精度
+      
+    # 验证参数
+    validation_enabled: true  # 启用验证
+    tolerance: 1e-8        # 验证容差
+    
+    # 性能参数
+    max_memory_mb: 1000    # 最大内存使用
+    cpu_cores: 4           # CPU核心数
+    parallel_optimization: true  # 并行优化
+    
+    # 市场参数
+    market_parameters:
+      peak_hours: [8, 9, 10, 11, 18, 19, 20, 21]  # 峰时
+      off_peak_multiplier: 0.6  # 谷时电价倍数
+      peak_multiplier: 1.5      # 峰时电价倍数
+      
+    # 环境参数
+    environmental_parameters:
+      co2_emission_factor: 0.5  # CO2排放因子 (kg/kWh)
+      environmental_cost: 0.02  # 环境成本 ($/kg CO2)
+      
+    # 可靠性参数
+    reliability_parameters:
+      forced_outage_rate: [0.02, 0.025, 0.015, 0.02, 0.018, 0.022]  # 强迫停运率
+      planned_outage_rate: [0.05, 0.06, 0.04, 0.05, 0.045, 0.055]   # 计划停运率
+      
+    # 预测参数
+    forecasting_parameters:
+      load_forecast_accuracy: 0.95  # 负荷预测精度
+      inflow_forecast_accuracy: 0.85  # 入流预测精度
+      price_forecast_accuracy: 0.8    # 电价预测精度

@@ -1,0 +1,30 @@
+# Defines all agents in the simulation
+agents:
+  - id: central_mpc_agent
+    class: core_lib.central_agents.central_mpc_agent.CentralMPCAgent
+    agent_id: central_dispatcher_1
+    prediction_horizon: 10  # time steps
+    dt: 3600  # Time step in seconds (1 hour)
+    q_weight: 1.0  # Penalty on deviation from target setpoint
+    r_weight: 0.5  # Penalty on setpoint changes
+    state_keys: ["upstream", "downstream"]
+    normal_setpoints: [10.0, 8.0]  # Normal target level for upstream and downstream (m)
+    target_water_levels: [10.0, 8.0]  # Target water levels for MPC optimization (m)
+    mpc_pid_model_kp: 0.5  # MPC PID model proportional gain
+    initial_setpoint_guess: [10.0, 8.0]  # Initial setpoint guess for optimization
+    level_setpoint_bounds: [[8.0, 12.0], [6.0, 10.0]]  # Bounds for setpoint optimization
+    emergency_setpoint: 8.5  # Emergency target level (lower to create buffer) (m)
+    flood_thresholds: [12.0, 10.0]  # Flood threshold levels (m)
+    canal_surface_areas: [1500000, 1500000]  # m² (1.5e6)
+    outflow_coefficient: 1000  # Simplified model parameter
+    state_subscriptions:
+      upstream: "state/canal_upstream/level"
+      downstream: "state/canal_downstream/level"
+    forecast_subscription: "forecast/inflow"
+    state_topics:
+      upstream: "state/canal_upstream/level"
+      downstream: "state/canal_downstream/level"
+    forecast_topic: "forecast/inflow"
+    command_topics:
+      upstream: "command/gate_upstream/setpoint"
+      downstream: "command/gate_downstream/setpoint"

@@ -1,0 +1,387 @@
+# Mission Example 1 - 03_fault_tolerance 通用配置文件
+# 容错系统配置
+
+# ============================================================
+# 仿真配置
+# ============================================================
+simulation:
+  name: "容错系统仿真"
+  description: "Example 1 - 容错系统，演示故障检测、诊断和容错控制"
+  version: "1.0.0"
+  
+  # 时间设置
+  time:
+    end_time: 2400.0      # 仿真持续时间 (秒) - 40分钟
+    time_step: 2.0        # 时间步长 (秒) - 高频率监控
+    output_interval: 20.0 # 输出间隔 (秒)
+    
+  # 求解器配置
+  solver:
+    method: "runge_kutta"  # 高精度求解方法
+    tolerance: 1e-9       # 极高的求解精度
+    max_iterations: 3000  # 更多迭代次数
+    
+  # 并行计算
+  parallel:
+    enabled: true         # 启用并行计算
+    num_processes: 4      # 更多进程以处理容错逻辑
+
+# ============================================================
+# 调试配置
+# ============================================================
+debug:
+  enabled: true
+  log_level: "DEBUG"     # 详细的调试信息
+  log_file: "logs/fault_tolerance/debug.log"
+  session_id: "fault_tolerance_session"
+  
+  # 数据收集
+  data_collection:
+    enabled: true
+    interval: 20.0  # 数据收集间隔 (秒)
+    variables:
+      - "upstream_canal_water_level"
+      - "downstream_canal_water_level"
+      - "control_gate_opening"
+      - "inflow_rate"
+      - "outflow_rate"
+      - "pid_output"
+      - "control_error"
+      - "setpoint"
+      - "fault_status"
+      - "fault_type"
+      - "fault_severity"
+      - "recovery_action"
+      - "system_health"
+      - "sensor_status"
+      - "actuator_status"
+      
+  # Web仪表板
+  dashboard:
+    web_dashboard: true
+    port: 8084
+    auto_open: false
+    
+  # 控制台监控
+  console:
+    real_time_display: true
+    update_interval: 2.0   # 高频率更新以监控故障
+
+# ============================================================
+# 性能监控配置
+# ============================================================
+performance:
+  enabled: true
+  
+  # 时间跟踪
+  timing:
+    enabled: true
+    detailed_profiling: true
+    fault_detection_timing: true
+    
+  # 内存监控
+  memory:
+    enabled: true
+    threshold_mb: 2000  # 更高的内存阈值
+    
+  # CPU监控
+  cpu:
+    enabled: true
+    threshold_percent: 90  # 更高的CPU阈值
+
+# ============================================================
+# 可视化配置
+# ============================================================
+visualization:
+  enabled: true
+  
+  # 图表配置
+  plots:
+    enabled: true
+    save_plots: true
+    plot_directory: "plots/fault_tolerance/"
+    format: "png"
+    dpi: 300
+    
+    # 图表定义
+    charts:
+      - name: "系统健康状态"
+        type: "time_series"
+        variables: ["system_health", "fault_status"]
+        title: "System Health and Fault Status"
+        xlabel: "Time (s)"
+        ylabel: "Status"
+        
+      - name: "故障检测与恢复"
+        type: "time_series"
+        variables: ["fault_severity", "recovery_action"]
+        title: "Fault Detection and Recovery"
+        xlabel: "Time (s)"
+        ylabel: "Severity/Action"
+        
+      - name: "传感器状态"
+        type: "time_series"
+        variables: ["sensor_status"]
+        title: "Sensor Status Monitoring"
+        xlabel: "Time (s)"
+        ylabel: "Status"
+        
+      - name: "执行器状态"
+        type: "time_series"
+        variables: ["actuator_status"]
+        title: "Actuator Status Monitoring"
+        xlabel: "Time (s)"
+        ylabel: "Status"
+        
+      - name: "容错控制性能"
+        type: "control_performance"
+        variables: ["control_error", "setpoint", "upstream_canal_water_level"]
+        title: "Fault-Tolerant Control Performance"
+        
+  # 实时仪表板
+  dashboard:
+    enabled: true
+    update_interval: 1.0   # 实时监控故障状态
+    port: 8085
+
+# ============================================================
+# 数据输出配置
+# ============================================================
+output:
+  enabled: true
+  output_directory: "results/fault_tolerance/"
+  
+  # 历史数据保存
+  save_history: true
+  history_file: "simulation_history.json"
+  
+  # 数据格式
+  format:
+    csv: true
+    json: true
+    hdf5: true     # 启用HDF5以处理大量故障数据
+    
+  # 压缩设置
+  compression:
+    enabled: true
+    method: "gzip"
+    
+  # 验证配置
+  validation:
+    enabled: true
+    expected_results:
+      fault_detection_time: 10.0    # 期望故障检测时间 (秒)
+      recovery_time: 30.0           # 期望恢复时间 (秒)
+      system_availability: 0.95     # 期望系统可用性
+    tolerance: 0.1
+
+# ============================================================
+# 智能分析配置
+# ============================================================
+analysis:
+  enabled: true
+  
+  # 控制性能分析
+  control_performance:
+    enabled: true
+    metrics: ["settling_time", "overshoot", "steady_state_error", "fault_tolerance"]
+    reference_signal: "setpoint"
+    output_signal: "upstream_canal_water_level"
+    
+  # 统计分析
+  statistical:
+    enabled: true
+    generate_summary: true
+    fault_statistics: true
+    
+  # 系统识别
+  system_identification:
+    enabled: true
+    method: "arx"
+    order: [4, 4, 3]  # 更复杂的模型以处理故障
+    input_signals: ["control_gate_opening"]
+    output_signals: ["upstream_canal_water_level"]
+    
+  # 故障分析
+  fault_analysis:
+    enabled: true
+    fault_detection: true
+    fault_diagnosis: true
+    fault_prognosis: true
+    mtbf_analysis: true  # 平均故障间隔时间分析
+    mttr_analysis: true  # 平均修复时间分析
+
+# ============================================================
+# 日志配置
+# ============================================================
+logging:
+  enabled: true
+  level: "DEBUG"
+  
+  # 文件日志
+  file:
+    enabled: true
+    filename: "logs/fault_tolerance/simulation.log"
+    max_size_mb: 50
+    backup_count: 20
+    
+  # 控制台日志
+  console:
+    enabled: true
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    
+  # 结构化日志
+  structured:
+    enabled: true
+    format: "json"
+    
+  # 故障专用日志
+  fault_log:
+    enabled: true
+    filename: "logs/fault_tolerance/fault.log"
+    variables: ["fault_status", "fault_type", "fault_severity", "recovery_action"]
+    
+  # 安全日志
+  safety_log:
+    enabled: true
+    filename: "logs/fault_tolerance/safety.log"
+    critical_events: true
+
+# ============================================================
+# 错误处理配置
+# ============================================================
+error_handling:
+  enabled: true
+  
+  # 错误分类
+  categories:
+    critical: ["sensor_failure", "actuator_failure", "communication_loss", "safety_violation"]
+    warning: ["sensor_drift", "actuator_saturation", "performance_degradation"]
+    info: ["fault_detected", "recovery_initiated", "system_restored"]
+    
+  # 恢复策略
+  recovery:
+    auto_retry: true
+    max_retries: 10
+    retry_delay: 5.0
+    fallback_controller: "safe_mode"
+    emergency_shutdown: true
+    
+  # 通知设置
+  notifications:
+    enabled: true
+    email: ["safety_engineer@example.com", "control_engineer@example.com"]
+    webhook: "http://localhost:9000/fault_alerts"
+    sms: ["+1234567890"]
+
+# ============================================================
+# 缓存配置
+# ============================================================
+cache:
+  enabled: true
+  
+  # 内存缓存
+  memory:
+    enabled: true
+    max_size_mb: 500
+    
+  # 磁盘缓存
+  disk:
+    enabled: true
+    directory: "cache/fault_tolerance/"
+    max_size_gb: 5
+
+# ============================================================
+# 网络配置
+# ============================================================
+network:
+  enabled: true
+  
+  # 分布式仿真
+  distributed:
+    enabled: true
+    master_host: "localhost"
+    master_port: 9002
+    redundancy: true  # 启用冗余通信
+    
+  # 通信设置
+  communication:
+    protocol: "tcp"
+    timeout: 60
+    buffer_size: 32768
+    heartbeat_interval: 5.0
+
+# ============================================================
+# 安全配置
+# ============================================================
+security:
+  enabled: true
+  
+  # 访问控制
+  access_control:
+    enabled: true
+    allowed_hosts: ["localhost", "192.168.1.0/24"]
+    authentication: true
+    
+  # 加密设置
+  encryption:
+    enabled: true
+    algorithm: "AES-256"
+    
+  # 安全监控
+  monitoring:
+    enabled: true
+    intrusion_detection: true
+    anomaly_detection: true
+
+# ============================================================
+# 扩展配置
+# ============================================================
+extensions:
+  enabled: true
+  
+  # 插件系统
+  plugins:
+    enabled: true
+    directory: "plugins/fault_tolerance/"
+    modules: ["fault_detector", "fault_diagnoser", "recovery_manager"]
+    
+  # 自定义功能
+  custom:
+    enabled: true
+    modules: ["predictive_maintenance", "health_monitoring", "safety_system"]
+
+# ============================================================
+# 环境配置
+# ============================================================
+environment:
+  name: "production"  # 生产环境级别的容错
+  
+  # 环境变量
+  variables:
+    SIMULATION_ENV: "fault_tolerance"
+    LOG_LEVEL: "DEBUG"
+    SAFETY_MODE: "enabled"
+    REDUNDANCY_LEVEL: "high"
+    
+  # 自定义变量
+  custom_vars:
+    # 故障检测参数
+    fault_threshold: 0.1      # 故障检测阈值
+    detection_window: 10.0    # 检测窗口 (秒)
+    false_alarm_rate: 0.01    # 误报率
+    
+    # 容错控制参数
+    backup_controller: "pid"  # 备用控制器
+    degraded_performance: 0.8 # 降级性能水平
+    safe_mode_setpoint: 2.0   # 安全模式设定值
+    
+    # 系统参数
+    canal_length: 1000.0      # 渠道长度 (m)
+    gate_max_opening: 1.0     # 闸门最大开度
+    water_density: 1000.0     # 水密度 (kg/m³)
+    
+    # 可靠性参数
+    mtbf: 8760.0             # 平均故障间隔时间 (小时)
+    mttr: 2.0                # 平均修复时间 (小时)
+    availability_target: 0.99 # 目标可用性

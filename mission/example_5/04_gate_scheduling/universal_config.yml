@@ -1,0 +1,450 @@
+# Mission Example 5.4 - 闸门调度表计算通用配置文件
+# 专注于闸门流量分配调度表的生成和优化计算
+
+# ============================================================
+# 仿真配置
+# ============================================================
+simulation:
+  name: "Mission Example 5.4 - Gate Scheduling"
+  description: "闸门调度表计算，生成不同水头和流量条件下的最优闸门开度分配策略"
+  version: "5.4.0"
+  
+  # 时间设置
+  time:
+    duration: 1              # 单次计算
+    time_step: 1.0          # 时间步长 (秒)
+    start_time: 0.0         # 开始时间
+    
+  # 求解器设置
+  solver:
+    type: "optimization"    # 优化求解器
+    tolerance: 1e-8         # 收敛容差
+    max_iterations: 3000    # 最大迭代次数
+    algorithm: "particle_swarm"  # 优化算法
+
+# ============================================================
+# 调试配置
+# ============================================================
+debug:
+  enabled: true
+  log_level: "INFO"
+  log_file: "logs/example_5_4/debug.log"
+  session_id: "gate_scheduling"
+  verbose: false
+  
+  # 数据收集
+  data_collection:
+    enabled: true
+    variables: ["gate_opening", "flow_rate", "head_loss", "discharge_coefficient", "velocity"]
+    sampling_rate: 1        # 每步采样
+    
+  # Web仪表板
+  web_dashboard:
+    enabled: true
+    port: 8096
+    auto_open: false
+    
+  # 控制台监控
+  console_monitoring:
+    enabled: true
+    update_interval: 1.0
+    show_progress: true
+
+# ============================================================
+# 性能监控配置
+# ============================================================
+performance:
+  enabled: true
+  track_timing: true
+  
+  # 时间监控
+  timing:
+    enabled: true
+    detailed_profiling: true
+    component_timing: true
+    
+  # 内存监控
+  memory:
+    enabled: true
+    track_peak_usage: true
+    garbage_collection: true
+    
+  # CPU监控
+  cpu:
+    enabled: true
+    track_utilization: true
+    core_usage: true
+
+# ============================================================
+# 可视化配置
+# ============================================================
+visualization:
+  enabled: true
+  
+  # 图表配置
+  plots:
+    enabled: true
+    output_directory: "plots/example_5_4/"
+    formats: ["png", "pdf"]
+    dpi: 300
+    style: "seaborn"
+    
+  # 闸门调度可视化
+  gate_plots:
+    enabled: true
+    opening_distribution: true
+    flow_allocation: true
+    head_loss_curves: true
+    optimization_convergence: true
+    
+  # 3D可视化
+  three_d:
+    enabled: true
+    flow_surface: true
+    opening_surface: true
+
+# ============================================================
+# 数据输出配置
+# ============================================================
+output:
+  enabled: true
+  output_directory: "results/example_5_4/"
+  table_filename: "gate_flow_allocation_table.csv"
+  save_path: "../data/"
+  
+  # 历史数据
+  history:
+    enabled: true
+    filename: "gate_scheduling_history.json"
+    
+  # 多种格式输出
+  formats:
+    json: true
+    csv: true
+    excel: true
+    hdf5: true
+    matlab: true
+    
+  # 数据压缩
+  compression:
+    enabled: true
+    algorithm: "lzma"
+    
+  # 数据验证
+  validation:
+    enabled: true
+    schema_file: "schemas/gate_scheduling_data.json"
+
+# ============================================================
+# 智能分析配置
+# ============================================================
+analysis:
+  enabled: true
+  
+  # 闸门分析
+  gate_analysis:
+    enabled: true
+    flow_distribution: true
+    opening_optimization: true
+    discharge_analysis: true
+    hydraulic_efficiency: true
+    
+  # 水力分析
+  hydraulic_analysis:
+    enabled: true
+    head_loss_analysis: true
+    velocity_distribution: true
+    cavitation_analysis: true
+    energy_dissipation: true
+    
+  # 优化分析
+  optimization_analysis:
+    enabled: true
+    convergence_analysis: true
+    sensitivity_analysis: true
+    pareto_analysis: true
+    robustness_analysis: true
+    
+  # 安全分析
+  safety_analysis:
+    enabled: true
+    symmetric_operation: true
+    opening_rate_analysis: true
+    structural_loads: true
+    
+  # 统计分析
+  statistical:
+    enabled: true
+    generate_summary: true
+    correlation_analysis: true
+    trend_analysis: true
+
+# ============================================================
+# 日志配置
+# ============================================================
+logging:
+  enabled: true
+  level: "INFO"
+  
+  # 文件日志
+  file:
+    enabled: true
+    filename: "logs/example_5_4/simulation.log"
+    max_size_mb: 50
+    backup_count: 10
+    
+  # 控制台日志
+  console:
+    enabled: true
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    
+  # 结构化日志
+  structured:
+    enabled: true
+    format: "json"
+    
+  # 优化日志
+  optimization_log:
+    enabled: true
+    filename: "logs/example_5_4/optimization.log"
+    variables: ["iteration", "objective_value", "constraints", "convergence"]
+    
+  # 闸门日志
+  gate_log:
+    enabled: true
+    filename: "logs/example_5_4/gate.log"
+    variables: ["gate_opening", "flow_rate", "head_loss", "forces"]
+
+# ============================================================
+# 错误处理配置
+# ============================================================
+error_handling:
+  enabled: true
+  
+  # 错误分类
+  categories:
+    critical: ["optimization_failure", "constraint_violation", "gate_malfunction"]
+    warning: ["slow_convergence", "suboptimal_solution", "high_head_loss"]
+    info: ["optimization_started", "iteration_completed", "solution_found"]
+    
+  # 恢复策略
+  recovery:
+    auto_retry: true
+    max_retries: 3
+    retry_delay: 2.0
+    fallback_mode: "equal_distribution"
+    
+  # 通知设置
+  notifications:
+    enabled: true
+    email: ["gate_operator@example.com"]
+    webhook: "http://localhost:9004/alerts"
+
+# ============================================================
+# 缓存配置
+# ============================================================
+cache:
+  enabled: true
+  
+  # 内存缓存
+  memory:
+    enabled: true
+    max_size_mb: 300
+    
+  # 磁盘缓存
+  disk:
+    enabled: true
+    directory: "cache/example_5_4/"
+    max_size_gb: 2
+
+# ============================================================
+# 网络配置
+# ============================================================
+network:
+  enabled: false
+  
+  # 分布式计算
+  distributed:
+    enabled: false
+
+# ============================================================
+# 安全配置
+# ============================================================
+security:
+  enabled: true
+  
+  # 访问控制
+  access_control:
+    enabled: true
+    allowed_hosts: ["localhost"]
+    authentication: false
+    
+  # 加密设置
+  encryption:
+    enabled: false
+
+# ============================================================
+# 扩展配置
+# ============================================================
+extensions:
+  enabled: true
+  
+  # 插件系统
+  plugins:
+    enabled: true
+    directory: "plugins/gate_scheduling/"
+    modules: ["advanced_hydraulics", "structural_analysis", "predictive_maintenance"]
+    
+  # 自定义功能
+  custom:
+    enabled: true
+    modules: ["machine_learning_optimization", "real_time_control"]
+
+# ============================================================
+# 环境配置
+# ============================================================
+environment:
+  name: "development"
+  
+  # 环境变量
+  variables:
+    SIMULATION_ENV: "gate_scheduling"
+    LOG_LEVEL: "INFO"
+    OPTIMIZATION_MODE: "batch"
+    
+  # 自定义变量
+  custom_vars:
+    # 优化参数
+    gate_count: 5           # 闸门数量
+    
+    # 流量范围
+    flow_range:
+      min_cms: 0            # 最小流量 (m³/s)
+      max_cms: 1000         # 最大流量 (m³/s)
+      step_cms: 50          # 流量步长 (m³/s)
+    
+    # 水头范围
+    head_range:
+      min_m: 5             # 最小水头 (m)
+      max_m: 25            # 最大水头 (m)
+      step_m: 2            # 水头步长 (m)
+    
+    # 闸门参数
+    gate_parameters:
+      width: [8.0, 8.0, 8.0, 8.0, 8.0]      # 闸门宽度 (m)
+      height: [10.0, 10.0, 10.0, 10.0, 10.0] # 闸门高度 (m)
+      max_opening: [8.0, 8.0, 8.0, 8.0, 8.0] # 最大开度 (m)
+      discharge_coefficient: [0.6, 0.6, 0.6, 0.6, 0.6]  # 流量系数
+      
+    # 安全规则
+    safety_rules:
+      symmetric_opening: true    # 对称开启规则
+      max_opening_rate: 0.1     # 最大开启速率 (m/s)
+      min_opening: 0.5          # 最小开度 (m)
+      max_velocity: 15.0        # 最大流速 (m/s)
+      max_head_loss: 2.0        # 最大水头损失 (m)
+      
+    # 水力参数
+    hydraulic_parameters:
+      manning_coefficient: 0.025  # 曼宁系数
+      energy_loss_coefficient: 0.1 # 能量损失系数
+      contraction_coefficient: 0.8  # 收缩系数
+      velocity_coefficient: 0.95    # 流速系数
+      
+    # 约束条件
+    constraints:
+      flow_balance: true        # 流量平衡约束
+      opening_limits: true      # 开度限制约束
+      velocity_limits: true     # 流速限制约束
+      head_loss_limits: true    # 水头损失限制约束
+      symmetry_constraint: true # 对称性约束
+      
+    # 优化设置
+    optimization_settings:
+      algorithm: "particle_swarm"  # 优化算法
+      swarm_size: 50           # 粒子群大小
+      iterations: 1000         # 迭代次数
+      inertia_weight: 0.9      # 惯性权重
+      cognitive_weight: 2.0    # 认知权重
+      social_weight: 2.0       # 社会权重
+      
+    # 目标函数
+    objective_function:
+      type: "multi_objective"  # 目标函数类型
+      weights:
+        flow_uniformity: 0.4   # 流量均匀性权重
+        head_loss_min: 0.3     # 水头损失最小化权重
+        opening_efficiency: 0.2 # 开度效率权重
+        safety_margin: 0.1     # 安全裕度权重
+        
+    # 输出设置
+    output_settings:
+      table_filename: "gate_flow_allocation_table.csv"
+      save_path: "../data/"
+      include_metadata: true
+      precision: 4             # 数值精度
+      
+    # 验证参数
+    validation_enabled: true   # 启用验证
+    tolerance: 1e-8           # 验证容差
+    
+    # 性能参数
+    max_memory_mb: 800        # 最大内存使用
+    cpu_cores: 4              # CPU核心数
+    parallel_optimization: true  # 并行优化
+    
+    # 结构参数
+    structural_parameters:
+      gate_material: "steel"    # 闸门材料
+      yield_strength: 250e6     # 屈服强度 (Pa)
+      safety_factor: 2.5        # 安全系数
+      fatigue_limit: 100e6      # 疲劳极限 (Pa)
+      
+    # 环境参数
+    environmental_parameters:
+      water_temperature: 15.0   # 水温 (°C)
+      water_density: 1000.0     # 水密度 (kg/m³)
+      kinematic_viscosity: 1.14e-6  # 运动粘度 (m²/s)
+      atmospheric_pressure: 101325   # 大气压力 (Pa)
+      
+    # 控制参数
+    control_parameters:
+      response_time: 60.0       # 响应时间 (s)
+      control_accuracy: 0.1     # 控制精度 (m)
+      feedback_gain: 1.0        # 反馈增益
+      feedforward_gain: 0.5     # 前馈增益
+      
+    # 监测参数
+    monitoring_parameters:
+      position_sensors: 5       # 位置传感器数量
+      force_sensors: 5          # 力传感器数量
+      vibration_sensors: 5      # 振动传感器数量
+      temperature_sensors: 5    # 温度传感器数量
+      
+    # 维护参数
+    maintenance_parameters:
+      inspection_interval: 720  # 检查间隔 (h)
+      lubrication_interval: 168 # 润滑间隔 (h)
+      calibration_interval: 2160 # 校准间隔 (h)
+      overhaul_interval: 8760   # 大修间隔 (h)
+      
+    # 经济参数
+    economic_parameters:
+      operation_cost: 0.01      # 运行成本 ($/h)
+      maintenance_cost: 0.05    # 维护成本 ($/h)
+      energy_cost: 0.08         # 能源成本 ($/kWh)
+      water_value: 0.001        # 水价值 ($/m³)
+      
+    # 可靠性参数
+    reliability_parameters:
+      mtbf: 8760               # 平均故障间隔时间 (h)
+      mttr: 4                  # 平均修复时间 (h)
+      availability: 0.999      # 可用性
+      
+    # 通信参数
+    communication_parameters:
+      gate_control_topic: "gate/control"
+      gate_status_topic: "gate/status"
+      flow_measurement_topic: "flow/measurement"
+      level_measurement_topic: "level/measurement"
+      alarm_topic: "gate/alarm"

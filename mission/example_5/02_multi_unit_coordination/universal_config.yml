@@ -1,0 +1,408 @@
+# Mission Example 5.2 - 多机组协调和电网交互通用配置文件
+# 专注于多个水轮发电机组的协调运行和电网交互
+
+# ============================================================
+# 仿真配置
+# ============================================================
+simulation:
+  name: "Mission Example 5.2 - Multi-Unit Coordination"
+  description: "多机组协调运行和电网交互仿真，研究水电站多机组的协调控制策略"
+  version: "5.2.0"
+  
+  # 时间设置
+  time:
+    duration: 30             # 仿真步数 (300s / 10s = 30步)
+    time_step: 10.0         # 时间步长 (秒)
+    start_time: 0.0         # 开始时间
+    end_time: 300           # 结束时间 (秒)
+    
+  # 求解器设置
+  solver:
+    type: "runge_kutta"     # 求解器类型
+    tolerance: 1e-6         # 收敛容差
+    max_iterations: 1000    # 最大迭代次数
+    adaptive_step: true     # 自适应步长
+
+# ============================================================
+# 调试配置
+# ============================================================
+debug:
+  enabled: true
+  log_level: "INFO"
+  log_file: "logs/example_5_2/debug.log"
+  session_id: "multi_unit_coordination"
+  verbose: false
+  
+  # 数据收集
+  data_collection:
+    enabled: true
+    variables: ["total_power", "unit_power", "grid_frequency", "load_sharing", "coordination_efficiency"]
+    sampling_rate: 1        # 每步采样
+    
+  # Web仪表板
+  web_dashboard:
+    enabled: true
+    port: 8093
+    auto_open: false
+    
+  # 控制台监控
+  console_monitoring:
+    enabled: true
+    update_interval: 10.0
+    show_progress: true
+
+# ============================================================
+# 性能监控配置
+# ============================================================
+performance:
+  enabled: true
+  track_timing: true
+  
+  # 时间监控
+  timing:
+    enabled: true
+    detailed_profiling: true
+    component_timing: true
+    
+  # 内存监控
+  memory:
+    enabled: true
+    track_peak_usage: true
+    garbage_collection: true
+    
+  # CPU监控
+  cpu:
+    enabled: true
+    track_utilization: true
+    core_usage: true
+
+# ============================================================
+# 可视化配置
+# ============================================================
+visualization:
+  enabled: true
+  
+  # 图表配置
+  plots:
+    enabled: true
+    output_directory: "plots/example_5_2/"
+    formats: ["png", "pdf"]
+    dpi: 300
+    style: "seaborn"
+    
+  # 实时仪表板
+  dashboard:
+    enabled: true
+    update_interval: 5.0
+    port: 8094
+    
+  # 多机组可视化
+  multi_unit:
+    enabled: true
+    unit_status: true
+    load_distribution: true
+    coordination_diagram: true
+
+# ============================================================
+# 数据输出配置
+# ============================================================
+output:
+  enabled: true
+  output_directory: "results/example_5_2/"
+  
+  # 历史数据
+  history:
+    enabled: true
+    filename: "multi_unit_coordination_history.json"
+    
+  # 多种格式输出
+  formats:
+    json: true
+    csv: true
+    hdf5: true
+    matlab: true
+    
+  # 数据压缩
+  compression:
+    enabled: true
+    algorithm: "lzma"
+    
+  # 数据验证
+  validation:
+    enabled: true
+    schema_file: "schemas/multi_unit_data.json"
+
+# ============================================================
+# 智能分析配置
+# ============================================================
+analysis:
+  enabled: true
+  
+  # 多机组协调分析
+  coordination_analysis:
+    enabled: true
+    load_sharing_efficiency: true
+    synchronization_analysis: true
+    response_coordination: true
+    stability_analysis: true
+    
+  # 电网交互分析
+  grid_interaction:
+    enabled: true
+    frequency_response: true
+    power_quality: true
+    grid_stability: true
+    reactive_power: true
+    
+  # 机组性能分析
+  unit_performance:
+    enabled: true
+    individual_efficiency: true
+    comparative_analysis: true
+    degradation_analysis: true
+    
+  # 控制系统分析
+  control_analysis:
+    enabled: true
+    controller_performance: true
+    setpoint_tracking: true
+    disturbance_rejection: true
+    
+  # 统计分析
+  statistical:
+    enabled: true
+    generate_summary: true
+    correlation_analysis: true
+    trend_analysis: true
+
+# ============================================================
+# 日志配置
+# ============================================================
+logging:
+  enabled: true
+  level: "INFO"
+  
+  # 文件日志
+  file:
+    enabled: true
+    filename: "logs/example_5_2/simulation.log"
+    max_size_mb: 50
+    backup_count: 10
+    
+  # 控制台日志
+  console:
+    enabled: true
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    
+  # 结构化日志
+  structured:
+    enabled: true
+    format: "json"
+    
+  # 协调日志
+  coordination_log:
+    enabled: true
+    filename: "logs/example_5_2/coordination.log"
+    variables: ["unit_status", "load_distribution", "coordination_commands"]
+    
+  # 电网日志
+  grid_log:
+    enabled: true
+    filename: "logs/example_5_2/grid.log"
+    variables: ["grid_frequency", "power_target", "grid_events"]
+    
+  # 机组日志
+  unit_log:
+    enabled: true
+    filename: "logs/example_5_2/units.log"
+    variables: ["unit_power", "unit_efficiency", "unit_status"]
+
+# ============================================================
+# 错误处理配置
+# ============================================================
+error_handling:
+  enabled: true
+  
+  # 错误分类
+  categories:
+    critical: ["unit_failure", "grid_disconnection", "coordination_failure"]
+    warning: ["load_imbalance", "frequency_deviation", "efficiency_drop"]
+    info: ["unit_started", "load_redistributed", "coordination_updated"]
+    
+  # 恢复策略
+  recovery:
+    auto_retry: true
+    max_retries: 3
+    retry_delay: 5.0
+    fallback_mode: "single_unit_operation"
+    
+  # 通知设置
+  notifications:
+    enabled: true
+    email: ["grid_operator@example.com", "unit_supervisor@example.com"]
+    webhook: "http://localhost:9002/alerts"
+
+# ============================================================
+# 缓存配置
+# ============================================================
+cache:
+  enabled: true
+  
+  # 内存缓存
+  memory:
+    enabled: true
+    max_size_mb: 300
+    
+  # 磁盘缓存
+  disk:
+    enabled: true
+    directory: "cache/example_5_2/"
+    max_size_gb: 3
+
+# ============================================================
+# 网络配置
+# ============================================================
+network:
+  enabled: true
+  
+  # 分布式仿真
+  distributed:
+    enabled: true
+    master_host: "localhost"
+    master_port: 9010
+    worker_ports: [9011, 9012, 9013, 9014]
+    
+  # 通信设置
+  communication:
+    protocol: "tcp"
+    timeout: 30
+    buffer_size: 16384
+    compression: true
+
+# ============================================================
+# 安全配置
+# ============================================================
+security:
+  enabled: true
+  
+  # 访问控制
+  access_control:
+    enabled: true
+    allowed_hosts: ["localhost", "grid-control"]
+    authentication: true
+    
+  # 加密设置
+  encryption:
+    enabled: true
+    algorithm: "AES-256"
+
+# ============================================================
+# 扩展配置
+# ============================================================
+extensions:
+  enabled: true
+  
+  # 插件系统
+  plugins:
+    enabled: true
+    directory: "plugins/multi_unit/"
+    modules: ["advanced_coordination", "grid_interface", "load_forecasting"]
+    
+  # 自定义功能
+  custom:
+    enabled: true
+    modules: ["machine_learning_coordination", "predictive_control"]
+
+# ============================================================
+# 环境配置
+# ============================================================
+environment:
+  name: "development"
+  
+  # 环境变量
+  variables:
+    SIMULATION_ENV: "multi_unit_coordination"
+    LOG_LEVEL: "INFO"
+    GRID_MODE: "connected"
+    
+  # 自定义变量
+  custom_vars:
+    # 仿真参数
+    duration: 30             # 仿真步数
+    time_step: 10.0         # 时间步长 (秒)
+    end_time: 300           # 结束时间 (秒)
+    
+    # 机组参数
+    num_units: 4            # 机组数量
+    unit_capacity: [25, 25, 25, 25]  # 各机组容量 (MW)
+    unit_efficiency: [0.9, 0.88, 0.91, 0.89]  # 各机组效率
+    min_load: [5, 5, 5, 5]  # 最小负荷 (MW)
+    max_load: [30, 30, 30, 30]  # 最大负荷 (MW)
+    
+    # 电网参数
+    grid_frequency: 50.0    # 电网频率 (Hz)
+    frequency_tolerance: 0.5 # 频率容差 (Hz)
+    voltage_level: 13.8     # 电压等级 (kV)
+    power_factor: 0.95      # 功率因数
+    
+    # 协调参数
+    coordination_mode: "economic"  # 协调模式: economic, equal_sharing, priority
+    response_time: 10.0     # 响应时间 (s)
+    coordination_frequency: 1.0  # 协调频率 (Hz)
+    load_sharing_algorithm: "proportional"  # 负荷分配算法
+    
+    # 控制参数
+    pid_kp: 1.0            # 比例增益
+    pid_ki: 0.1            # 积分增益
+    pid_kd: 0.05           # 微分增益
+    control_deadband: 0.5   # 控制死区 (MW)
+    
+    # 通信参数
+    power_target_topic: "grid/power_target"
+    turbine_control_topic: "control/turbines"
+    grid_event_topic: "grid/events"
+    inflow_topic: "reservoir/inflow"
+    coordination_topic: "coordination/commands"
+    status_topic: "units/status"
+    
+    # 监测参数
+    monitoring_interval: 1.0  # 监测间隔 (s)
+    data_logging: true      # 数据记录
+    alarm_thresholds:
+      frequency_low: 49.5   # 低频报警 (Hz)
+      frequency_high: 50.5  # 高频报警 (Hz)
+      power_deviation: 5.0  # 功率偏差报警 (MW)
+    
+    # 经济参数
+    fuel_cost: [0.02, 0.025, 0.018, 0.022]  # 各机组燃料成本 ($/kWh)
+    startup_cost: [1000, 1200, 800, 1100]   # 启动成本 ($)
+    maintenance_cost: [0.005, 0.006, 0.004, 0.005]  # 维护成本 ($/kWh)
+    
+    # 水力参数
+    reservoir_level: 25.0   # 水库水位 (m)
+    inflow_rate: 200.0     # 入流量 (m³/s)
+    tailwater_level: 5.0   # 尾水位 (m)
+    
+    # 性能参数
+    max_memory_mb: 800     # 最大内存使用
+    cpu_cores: 4           # CPU核心数
+    
+    # 安全参数
+    emergency_shutdown: true  # 紧急停机
+    safety_margins:
+      frequency: 0.2       # 频率安全裕度 (Hz)
+      power: 2.0          # 功率安全裕度 (MW)
+      voltage: 0.5        # 电压安全裕度 (kV)
+    
+    # 验证参数
+    validation_enabled: true  # 启用验证
+    tolerance: 1e-6        # 验证容差
+    
+    # 预测参数
+    load_forecast_horizon: 60  # 负荷预测时域 (min)
+    inflow_forecast_horizon: 120  # 入流预测时域 (min)
+    
+    # 优化参数
+    optimization_method: "genetic_algorithm"
+    optimization_interval: 300  # 优化间隔 (s)
+    convergence_tolerance: 1e-4

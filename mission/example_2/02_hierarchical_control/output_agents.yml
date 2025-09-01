@@ -1,0 +1,919 @@
+simulation_history:
+- time: 0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 3.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 6.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 9.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 12.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 15.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 18.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 21.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 24.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 27.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 30.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 33.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 36.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 39.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 42.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 45.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 48.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 51.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 54.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 57.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 60.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 63.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 66.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 69.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 72.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 75.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 78.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 81.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 84.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 87.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 90.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 93.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 96.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0
+- time: 99.0
+  upper_reservoir:
+    water_level: 20.0
+    volume: 200000.0
+    outflow: 0
+    inflow: 0.0
+  lower_reservoir:
+    water_level: 12.0
+    volume: 120000.0
+    outflow: 0
+    inflow: 0.0
+  upper_gate:
+    opening: 0.4
+    outflow: 0
+  lower_gate:
+    opening: 0.35
+    outflow: 0
+  connecting_canal:
+    water_level: 2.0
+    flow_rate: 8.0
+    inflow: 0
+    outflow: 0.0
+  outlet_canal:
+    water_level: 1.8
+    flow_rate: 6.0
+    inflow: 0
+    outflow: 0.0

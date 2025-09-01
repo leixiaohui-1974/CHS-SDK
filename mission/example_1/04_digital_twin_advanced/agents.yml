@@ -1,0 +1,10 @@
+# Defines all agents in the simulation
+agents:
+  - id: digital_twin_agent
+    class: core_lib.local_agents.perception.digital_twin_agent.DigitalTwinAgent
+    agent_id: twin_agent_1
+    simulated_object_id: upstream_canal
+    state_topic: state/canal/level/smoothed
+    log_data: true
+    smoothing_config:
+      water_level: 0.3  # Alpha for EMA filter. Lower alpha = more smoothing

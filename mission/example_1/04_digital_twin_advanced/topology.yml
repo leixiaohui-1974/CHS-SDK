@@ -1,0 +1,5 @@
+# Defines the topology and connections between components
+topology:
+  connections: []
+  # This example focuses on digital twin agent functionality
+  # No physical connections needed for demonstration

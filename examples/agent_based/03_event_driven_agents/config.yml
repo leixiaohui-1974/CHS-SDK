@@ -1,0 +1,92 @@
+# Multi-Agent System (MAS) Event-Driven Simulation Configuration
+# This configuration demonstrates the multi-agent system architecture where components
+# are fully decoupled and communicate only via a MessageBus
+
+simulation:
+  duration: 300  # seconds
+  dt: 1.0       # time step
+
+# Communication topics for message bus
+communication:
+  topics:
+    reservoir_state: "state.reservoir.level"
+    gate_action: "action.gate.opening"
+
+components:
+  reservoir_1:
+    type: Reservoir
+    initial_state:
+      volume: 21000000      # m³ (21e6)
+      water_level: 14.0     # m
+    parameters:
+      surface_area: 1500000 # m² (1.5e6)
+      storage_curve:
+        - [0, 0]
+        - [30000000, 20]      # [30e6, 20]
+
+  gate_1:
+    type: Gate
+    initial_state:
+      opening: 0.1          # Initial opening (0-1)
+    parameters:
+      max_rate_of_change: 0.1
+      discharge_coefficient: 0.6
+      width: 10             # m
+      max_opening: 1.0
+    message_bus:
+      enabled: true
+      action_topic: "action.gate.opening"
+
+# Agent configuration
+agents:
+  twin_agent_reservoir_1:
+    type: DigitalTwinAgent
+    agent_id: "twin_agent_reservoir_1"
+    simulated_object: "reservoir_1"
+    message_bus:
+      state_topic: "state.reservoir.level"
+
+  control_agent_gate_1:
+    type: LocalControlAgent
+    agent_id: "control_agent_gate_1"
+    controller:
+      type: PIDController
+      parameters:
+        Kp: -0.5
+        Ki: -0.01
+        Kd: -0.1
+        setpoint: 12.0        # Target water level (m)
+        min_output: 0.0
+        max_output: 1.0       # Same as gate max_opening
+    message_bus:
+      observation_topic: "state.reservoir.level"
+      observation_key: "water_level"
+      action_topic: "action.gate.opening"
+
+# Physical connections between components
+connections:
+  - from: "reservoir_1"
+    to: "gate_1"
+
+# Analysis and output settings
+analysis:
+  final_state_report: true
+  target_water_level: 12.0
+  
+visualization:
+  enabled: true
+  save_path: "03_mas_results.png"
+  plots:
+    - title: "Reservoir Water Level vs Time"
+      x_data: "time"
+      y_data: "reservoir_water_level"
+      ylabel: "Water Level (m)"
+      target_line: 12.0
+    - title: "Gate Opening vs Time"
+      x_data: "time"
+      y_data: "gate_opening"
+      ylabel: "Gate Opening (0-1)"
+    - title: "Reservoir Volume vs Time"
+      x_data: "time"
+      y_data: "reservoir_volume"
+      ylabel: "Volume (m³)"

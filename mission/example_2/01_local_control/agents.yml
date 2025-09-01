@@ -1,0 +1,43 @@
+# Defines agents for local control scenario
+agents:
+  - id: local_controller
+    class: LocalControlAgent
+    target_component: gate1
+    control_variable: opening
+    observation_key: water_level
+    observation_topic: reservoir1/water_level
+    action_topic: gate1/opening_command
+    controller:
+      class: PIDController
+      Kp: 0.8
+      Ki: 0.2
+      Kd: 0.1
+      setpoint: 15.0
+      min_output: 0.0
+      max_output: 1.0
+
+  - id: level_sensor
+    class: core_lib.local_agents.io.physical_io_agent.PhysicalIOAgent
+    sensors_config:
+      reservoir1_water_level:
+        obj_id: reservoir1
+        target_attr: water_level
+        state_key: water_level
+        topic: reservoir1/water_level
+        noise_params:
+          std_dev: 0.05
+          sampling_rate: 0.5
+    actuators_config: {}
+
+  - id: flow_sensor
+    class: core_lib.local_agents.io.physical_io_agent.PhysicalIOAgent
+    sensors_config:
+      downstream_canal_flow_rate:
+        obj_id: downstream_canal
+        target_attr: flow_rate
+        state_key: flow_rate
+        topic: downstream_canal/flow_rate
+        noise_params:
+          std_dev: 0.02
+          sampling_rate: 1.0
+    actuators_config: {}

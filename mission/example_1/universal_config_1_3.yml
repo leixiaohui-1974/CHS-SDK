@@ -1,0 +1,427 @@
+# Mission Example 1 - Config 1.3 通用配置文件
+# 闸站控制智能体（现地PID）系统配置
+
+# ============================================================
+# 仿真配置
+# ============================================================
+simulation:
+  name: "现地PID控制仿真"
+  description: "Example 1.3 - LocalControlAgent 现地PID智能体本地反馈控制闭环演示"
+  version: "1.0.0"
+  
+  # 时间设置
+  time:
+    end_time: 100.0       # 仿真持续时间 (秒)
+    time_step: 1.0        # 时间步长 (秒)
+    output_interval: 1.0  # 输出间隔 (秒)
+    control_cycle: 1.0    # 控制周期 (秒)
+    
+  # 求解器配置
+  solver:
+    method: "euler"       # 适用于PID控制的求解方法
+    tolerance: 1e-6       # 求解精度
+    max_iterations: 1000  # 最大迭代次数
+    
+  # 并行计算
+  parallel:
+    enabled: false       # PID控制通常不需要并行
+    num_processes: 1      # 进程数量
+
+# ============================================================
+# 调试配置
+# ============================================================
+debug:
+  enabled: true
+  log_level: "INFO"
+  log_file: "logs/local_pid_control/debug.log"
+  session_id: "local_pid_control_session"
+  
+  # 数据收集
+  data_collection:
+    enabled: true
+    interval: 1.0  # 数据收集间隔 (秒)
+    variables:
+      - "water_level"
+      - "setpoint"
+      - "control_error"
+      - "pid_output"
+      - "gate_opening"
+      - "proportional_term"
+      - "integral_term"
+      - "derivative_term"
+      - "control_action"
+      - "system_response"
+      
+  # Web仪表板
+  dashboard:
+    web_dashboard: true
+    port: 8092
+    auto_open: false
+    
+  # 控制台监控
+  console:
+    real_time_display: true
+    update_interval: 1.0   # 实时监控PID控制状态
+    show_detailed_logs: true
+
+# ============================================================
+# 性能监控配置
+# ============================================================
+performance:
+  enabled: true
+  
+  # 时间跟踪
+  timing:
+    enabled: true
+    detailed_profiling: true
+    control_timing: true
+    
+  # 内存监控
+  memory:
+    enabled: true
+    threshold_mb: 600   # 内存阈值
+    
+  # CPU监控
+  cpu:
+    enabled: true
+    threshold_percent: 60  # CPU使用率警告阈值
+
+# ============================================================
+# 可视化配置
+# ============================================================
+visualization:
+  enabled: true
+  
+  # 图表配置
+  plots:
+    enabled: true
+    save_plots: true
+    plot_directory: "plots/local_pid_control/"
+    format: "png"
+    dpi: 300
+    
+    # 图表定义
+    charts:
+      - name: "PID控制响应"
+        type: "time_series"
+        variables: ["water_level", "setpoint"]
+        title: "PID Control Response"
+        xlabel: "Time (s)"
+        ylabel: "Water Level (m)"
+        
+      - name: "控制误差"
+        type: "time_series"
+        variables: ["control_error"]
+        title: "Control Error"
+        xlabel: "Time (s)"
+        ylabel: "Error (m)"
+        
+      - name: "PID分量"
+        type: "time_series"
+        variables: ["proportional_term", "integral_term", "derivative_term"]
+        title: "PID Components"
+        xlabel: "Time (s)"
+        ylabel: "Control Component"
+        
+      - name: "控制输出"
+        type: "time_series"
+        variables: ["pid_output", "gate_opening"]
+        title: "Control Output"
+        xlabel: "Time (s)"
+        ylabel: "Gate Opening (m)"
+        
+      - name: "系统响应分析"
+        type: "time_series"
+        variables: ["system_response"]
+        title: "System Response Analysis"
+        xlabel: "Time (s)"
+        ylabel: "Response"
+        
+      - name: "控制性能指标"
+        type: "statistical"
+        variables: ["control_error", "pid_output"]
+        title: "Control Performance Metrics"
+        
+  # 实时仪表板
+  dashboard:
+    enabled: true
+    update_interval: 1.0   # 实时更新PID控制状态
+    port: 8093
+
+# ============================================================
+# 数据输出配置
+# ============================================================
+output:
+  enabled: true
+  output_directory: "results/local_pid_control/"
+  
+  # 历史数据保存
+  save_history: true
+  history_file: "simulation_history.json"
+  
+  # 数据格式
+  format:
+    csv: true
+    json: true
+    matlab: true   # 启用MATLAB格式用于控制分析
+    
+  # 压缩设置
+  compression:
+    enabled: false  # 控制数据量相对较小
+    
+  # 验证配置
+  validation:
+    enabled: true
+    expected_results:
+      steady_state_error: 0.1   # 期望稳态误差
+      settling_time: 20.0       # 期望调节时间
+      overshoot: 0.2           # 期望超调量
+    tolerance: 0.05
+
+# ============================================================
+# 智能分析配置
+# ============================================================
+analysis:
+  enabled: true
+  
+  # 控制性能分析
+  control_performance:
+    enabled: true
+    metrics: ["ise", "iae", "itae", "settling_time", "overshoot", "rise_time"]
+    reference_tracking: true
+    disturbance_rejection: true
+    
+  # 统计分析
+  statistical:
+    enabled: true
+    generate_summary: true
+    variance_analysis: true
+    
+  # 系统识别
+  system_identification:
+    enabled: true
+    method: "least_squares"
+    input_signals: ["gate_opening"]
+    output_signals: ["water_level"]
+    
+  # PID专用分析
+  pid_analysis:
+    enabled: true
+    tuning_analysis: true
+    stability_analysis: true
+    robustness_analysis: true
+    parameter_sensitivity: true
+    
+  # 频域分析
+  frequency_domain:
+    enabled: true
+    bode_plot: true
+    nyquist_plot: true
+    root_locus: true
+
+# ============================================================
+# 日志配置
+# ============================================================
+logging:
+  enabled: true
+  level: "INFO"
+  
+  # 文件日志
+  file:
+    enabled: true
+    filename: "logs/local_pid_control/simulation.log"
+    max_size_mb: 25
+    backup_count: 12
+    
+  # 控制台日志
+  console:
+    enabled: true
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    
+  # 结构化日志
+  structured:
+    enabled: true
+    format: "json"
+    
+  # PID专用日志
+  pid_log:
+    enabled: true
+    filename: "logs/local_pid_control/pid.log"
+    variables: ["control_error", "pid_output", "tuning_parameters"]
+    
+  # 控制日志
+  control_log:
+    enabled: true
+    filename: "logs/local_pid_control/control.log"
+    setpoint_changes: true
+    parameter_changes: true
+
+# ============================================================
+# 错误处理配置
+# ============================================================
+error_handling:
+  enabled: true
+  
+  # 错误分类
+  categories:
+    critical: ["controller_failure", "actuator_saturation", "system_instability"]
+    warning: ["large_error", "oscillation", "slow_response"]
+    info: ["setpoint_change", "parameter_update", "control_action"]
+    
+  # 恢复策略
+  recovery:
+    auto_retry: true
+    max_retries: 3
+    retry_delay: 1.0
+    fallback_controller: "manual"
+    
+  # 通知设置
+  notifications:
+    enabled: true
+    email: ["control_engineer@example.com"]
+    webhook: "http://localhost:9000/pid_alerts"
+
+# ============================================================
+# 缓存配置
+# ============================================================
+cache:
+  enabled: true
+  
+  # 内存缓存
+  memory:
+    enabled: true
+    max_size_mb: 150
+    
+  # 磁盘缓存
+  disk:
+    enabled: false  # PID控制数据实时性要求高
+
+# ============================================================
+# 网络配置
+# ============================================================
+network:
+  enabled: true
+  
+  # 分布式仿真
+  distributed:
+    enabled: false
+    
+  # 通信设置
+  communication:
+    protocol: "mqtt"  # 适合控制系统的轻量级协议
+    timeout: 10
+    buffer_size: 8192
+    topics:
+      observation: "state/canal/level"
+      action: "action/gate/opening"
+      setpoint: "setpoint/water/level"
+      control_status: "status/control/pid"
+
+# ============================================================
+# 安全配置
+# ============================================================
+security:
+  enabled: false  # 开发环境暂不启用
+  
+  # 访问控制
+  access_control:
+    enabled: false
+    
+  # 加密设置
+  encryption:
+    enabled: false
+
+# ============================================================
+# 扩展配置
+# ============================================================
+extensions:
+  enabled: true
+  
+  # 插件系统
+  plugins:
+    enabled: true
+    directory: "plugins/control/"
+    modules: ["pid_tuner", "adaptive_control", "fuzzy_control"]
+    
+  # 自定义功能
+  custom:
+    enabled: true
+    modules: ["advanced_pid", "cascade_control", "feedforward_control"]
+
+# ============================================================
+# 环境配置
+# ============================================================
+environment:
+  name: "development"
+  
+  # 环境变量
+  variables:
+    SIMULATION_ENV: "local_pid_control"
+    LOG_LEVEL: "INFO"
+    CONTROL_MODE: "automatic"
+    
+  # 自定义变量
+  custom_vars:
+    # 仿真参数
+    description: "LocalControlAgent 现地PID智能体本地反馈控制闭环演示"
+    control_cycle: 1.0            # 控制周期 (秒)
+    
+    # 通信主题
+    observation_topic: "state/canal/level"
+    action_topic: "action/gate/opening"
+    
+    # PID控制器参数
+    controller_type: "PIDController"
+    kp: -0.5                      # 比例增益（负值：水位高于设定点时，需要关小闸门）
+    ki: -0.1                      # 积分增益
+    kd: 0.0                       # 微分增益
+    setpoint: 10.0                # 目标水位 (m)
+    min_output: 0.0               # 闸门最小开度 (m)
+    max_output: 2.0               # 闸门最大开度 (m)
+    
+    # 智能体配置
+    agent_type: "LocalControlAgent"
+    agent_id: "gate_control_agent_1"
+    observation_key: "water_level"  # 期望从消息中获取的键
+    dt: 1.0                       # 控制周期 (秒)
+    
+    # 测试场景参数
+    # 场景1: 水位高于设定点
+    scenario_1_name: "场景1: 水位高于设定点"
+    scenario_1_description: "需要开大闸门增加泄流"
+    scenario_1_water_level: 10.5  # 高于设定点 0.5m
+    scenario_1_expected_action: "positive"  # 正向动作（开大闸门）
+    scenario_1_error: -0.5        # setpoint - pv = 10.0 - 10.5
+    scenario_1_action: 0.25       # Kp * error = (-0.5) * (-0.5)
+    
+    # 场景2: 水位低于设定点
+    scenario_2_name: "场景2: 水位低于设定点"
+    scenario_2_description: "需要关小闸门减少泄流"
+    scenario_2_water_level: 9.8   # 低于设定点 0.2m
+    scenario_2_expected_action: "clamped_to_min"  # 被钳位到最小值
+    scenario_2_error: 0.2         # setpoint - pv = 10.0 - 9.8
+    scenario_2_action: -0.1       # Kp * error = (-0.5) * 0.2，被钳位到0.0
+    
+    # 场景3: 水位等于设定点
+    scenario_3_name: "场景3: 水位等于设定点"
+    scenario_3_description: "误差为0，积分项生效"
+    scenario_3_water_level: 10.0  # 等于设定点
+    scenario_3_expected_action: "integral_effect"  # 积分项起作用
+    scenario_3_error: 0.0         # setpoint - pv = 10.0 - 10.0
+    scenario_3_note: "P项和D项为0，只有I项起作用"
+    
+    # 输出设置
+    show_detailed_logs: true      # 显示详细日志
+    wait_time: 0.1                # 消息处理间隔时间 (秒)
+    enable_validation: true       # 启用验证
+    
+    # 控制参数
+    anti_windup: true             # 抗积分饱和
+    derivative_filter: true       # 微分滤波
+    setpoint_filter: true         # 设定值滤波
+    
+    # 系统参数
+    plant_delay: 2.0              # 被控对象延迟 (秒)
+    plant_time_constant: 10.0     # 被控对象时间常数 (秒)
+    disturbance_amplitude: 0.1    # 干扰幅度
+    noise_level: 0.01             # 噪声水平
