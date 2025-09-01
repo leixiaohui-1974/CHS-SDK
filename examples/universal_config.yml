@@ -1,0 +1,543 @@
+# CHS-SDK Examples 通用配置文件
+# 为examples目录下的所有仿真示例提供统一的配置管理和高级功能支持
+
+# 元数据信息
+metadata:
+  name: "CHS-SDK Examples Universal Configuration"
+  version: "1.0.0"
+  description: "Examples目录统一配置文件，支持多种仿真示例类型"
+  author: "CHS-SDK Team"
+  created: "2024-01-01"
+  updated: "2024-01-01"
+  tags: ["examples", "universal", "multi-scenario"]
+
+# 仿真引擎配置
+simulation_engine:
+  name: "CHS-SDK Simulation Engine"
+  version: "2.0"
+  time_step: 1.0  # 默认时间步长（秒）
+  total_time: 3600.0  # 默认总仿真时间（秒）
+  solver:
+    type: "runge_kutta_4"  # 求解器类型
+    tolerance: 1e-6
+    max_iterations: 1000
+  
+  # 并行计算配置
+  parallel:
+    enabled: false
+    num_threads: 4
+    chunk_size: 100
+
+# 场景配置
+scenarios:
+  # 非智能体示例
+  non_agent_based:
+    getting_started:
+      name: "入门示例"
+      description: "基础水库-闸门系统仿真"
+      time_step: 1.0
+      total_time: 3600.0
+      parameters:
+        reservoir_capacity: 1000.0
+        initial_level: 10.0
+        inflow_rate: 20.0
+      monitoring:
+        - "reservoir.level"
+        - "gate.opening"
+        - "gate.flow_rate"
+    
+    multi_component:
+      name: "多组件系统"
+      description: "复杂多组件水利系统仿真"
+      time_step: 1.0
+      total_time: 7200.0
+      parameters:
+        upstream_capacity: 2000.0
+        downstream_capacity: 800.0
+        pipe_length: 1000.0
+      monitoring:
+        - "upstream_reservoir.level"
+        - "downstream_reservoir.level"
+        - "connecting_pipe.flow_rate"
+        - "control_gate.opening"
+  
+  # 智能体示例
+  agent_based:
+    event_driven_agents:
+      name: "事件驱动智能体"
+      description: "基于事件的智能体控制系统"
+      time_step: 1.0
+      total_time: 3600.0
+      parameters:
+        canal_length: 1000.0
+        target_level: 2.5
+        control_gains:
+          kp: 1.0
+          ki: 0.1
+          kd: 0.05
+      monitoring:
+        - "canal.level"
+        - "gate.opening"
+        - "agent.control_signal"
+    
+    hierarchical_control:
+      name: "分层控制"
+      description: "分层分布式控制系统"
+      time_step: 1.0
+      total_time: 3600.0
+      parameters:
+        local_control:
+          kp: 0.8
+          ki: 0.05
+          kd: 0.02
+        central_control:
+          horizon: 10
+          prediction_steps: 20
+      monitoring:
+        - "canal.level"
+        - "local_controller.output"
+        - "central_dispatcher.setpoint"
+    
+    complex_networks:
+      name: "复杂网络"
+      description: "分支网络系统仿真"
+      time_step: 1.0
+      total_time: 5400.0
+      parameters:
+        network_topology: "branched"
+        num_branches: 3
+        coordination_strategy: "distributed"
+      monitoring:
+        - "network.total_flow"
+        - "branch.*.flow_rate"
+        - "coordination.efficiency"
+  
+  # 渠道模型示例
+  canal_model:
+    canal_pid_control:
+      name: "渠道PID控制"
+      description: "渠道系统PID控制对比"
+      time_step: 1.0
+      total_time: 7200.0
+      parameters:
+        canal_geometry:
+          length: 2000.0
+          width: 15.0
+          slope: 0.001
+        control_strategies:
+          - "local_upstream"
+          - "distant_downstream"
+          - "mixed_control"
+      monitoring:
+        - "canal.level_profile"
+        - "gate.*.opening"
+        - "control.performance_index"
+    
+    canal_mpc_control:
+      name: "渠道MPC控制"
+      description: "渠道系统MPC与PID控制"
+      time_step: 1.0
+      total_time: 10800.0
+      parameters:
+        mpc_settings:
+          prediction_horizon: 20
+          control_horizon: 10
+          weights:
+            tracking: 1.0
+            control_effort: 0.1
+        comparison_modes:
+          - "pid_only"
+          - "mpc_only"
+          - "hybrid"
+      monitoring:
+        - "canal.level_tracking_error"
+        - "mpc.optimization_time"
+        - "control.energy_consumption"
+  
+  # 参数辨识示例
+  identification:
+    reservoir_identification:
+      name: "水库参数辨识"
+      description: "水库库容曲线参数辨识"
+      time_step: 1.0
+      total_time: 86400.0  # 24小时
+      parameters:
+        identification_method: "least_squares"
+        data_source: "synthetic"
+        noise_level: 0.05
+      monitoring:
+        - "reservoir.level"
+        - "identification.parameters"
+        - "identification.error"
+  
+  # 演示示例
+  demo:
+    simplified_demo:
+      name: "简化演示"
+      description: "简化水库控制演示"
+      time_step: 2.0
+      total_time: 1800.0
+      parameters:
+        demo_mode: "interactive"
+        visualization: true
+      monitoring:
+        - "reservoir.level"
+        - "control.action"
+  
+  # Mission示例 - 从mission目录迁移
+  mission_example_1:
+    basic_simulation:
+      name: "基础物理仿真"
+      description: "Mission示例1 - 基础仿真入门"
+      time_step: 1.0
+      total_time: 3600.0
+      parameters:
+        reservoir_capacity: 1000.0
+        initial_level: 10.0
+        control_strategy: "basic_pid"
+      monitoring:
+        - "reservoir.level"
+        - "gate.opening"
+        - "controller.output"
+    
+    advanced_control:
+      name: "高级控制策略"
+      description: "Mission示例1 - 高级控制算法"
+      time_step: 1.0
+      total_time: 7200.0
+      parameters:
+        control_type: "mpc"
+        prediction_horizon: 20
+        control_horizon: 10
+      monitoring:
+        - "mpc.optimization_time"
+        - "control.performance_index"
+        - "system.stability_margin"
+    
+    fault_tolerance:
+      name: "容错机制"
+      description: "Mission示例1 - 系统容错设计"
+      time_step: 1.0
+      total_time: 5400.0
+      parameters:
+        fault_detection: true
+        recovery_strategy: "graceful_degradation"
+        backup_systems: true
+      monitoring:
+        - "fault_detector.status"
+        - "system.health_index"
+        - "recovery.actions"
+  
+  mission_example_2:
+    local_control:
+      name: "本地控制"
+      description: "Mission示例2 - 本地闭环控制"
+      time_step: 1.0
+      total_time: 3600.0
+      parameters:
+        control_mode: "local"
+        pid_tuning: "auto"
+      monitoring:
+        - "local_controller.output"
+        - "system.response_time"
+    
+    hierarchical_control:
+      name: "分层控制"
+      description: "Mission示例2 - 分层分布式控制"
+      time_step: 1.0
+      total_time: 7200.0
+      parameters:
+        hierarchy_levels: 3
+        coordination_strategy: "consensus"
+      monitoring:
+        - "hierarchy.coordination_index"
+        - "distributed.consensus_error"
+  
+  mission_example_3:
+    enhanced_perception:
+      name: "增强感知"
+      description: "Mission示例3 - 智能感知系统"
+      time_step: 1.0
+      total_time: 3600.0
+      parameters:
+        sensor_fusion: true
+        ai_processing: true
+        real_time_analysis: true
+      monitoring:
+        - "sensor.fusion_quality"
+        - "ai.processing_time"
+        - "perception.accuracy"
+  
+  mission_example_5:
+    turbine_gate_simulation:
+      name: "水轮机闸门仿真"
+      description: "Mission示例5 - 水轮机闸门基础仿真"
+      time_step: 1.0
+      total_time: 3600.0
+      parameters:
+        turbine_count: 4
+        gate_count: 8
+        power_generation: true
+      monitoring:
+        - "turbine.*.power_output"
+        - "gate.*.flow_rate"
+        - "system.total_power"
+    
+    economic_dispatch:
+      name: "经济调度"
+      description: "Mission示例5 - 经济优化调度"
+      time_step: 1.0
+      total_time: 86400.0  # 24小时
+      parameters:
+        optimization_objective: "cost_minimization"
+        market_prices: true
+        environmental_constraints: true
+      monitoring:
+        - "economic.total_cost"
+        - "optimization.convergence"
+        - "environmental.compliance"
+  
+  mission_scenarios:
+    yinchuojiliao:
+      name: "引绰济辽工程仿真"
+      description: "大型跨流域调水工程仿真"
+      time_step: 1.0
+      total_time: 8760.0  # 一年的小时数
+      parameters:
+        transfer_capacity: 43.0  # 亿立方米/年
+        channel_length: 263.0   # 公里
+        pump_stations: 9
+      monitoring:
+        - "water_transfer_rate"
+        - "channel_flow"
+        - "pump_efficiency"
+        - "water_quality"
+
+# 组件模板
+component_templates:
+  reservoir:
+    type: "Reservoir"
+    default_parameters:
+      max_capacity: 1000.0
+      initial_level: 10.0
+      surface_area: 100.0
+      min_level: 0.0
+      max_level: 20.0
+  
+  gate:
+    type: "Gate"
+    default_parameters:
+      max_flow_rate: 50.0
+      initial_opening: 0.5
+      min_opening: 0.0
+      max_opening: 1.0
+      response_time: 10.0
+  
+  canal:
+    type: "Canal"
+    default_parameters:
+      length: 1000.0
+      width: 10.0
+      initial_level: 2.0
+      manning_coefficient: 0.025
+      slope: 0.001
+  
+  pipe:
+    type: "Pipe"
+    default_parameters:
+      length: 500.0
+      diameter: 1.5
+      roughness: 0.01
+      material: "concrete"
+
+# 智能体配置
+agents:
+  # 物理IO智能体
+  physical_io:
+    type: "PhysicalIOAgent"
+    parameters:
+      sensor_noise: 0.01
+      actuator_delay: 1.0
+      sampling_rate: 1.0
+  
+  # PID控制智能体
+  pid_controller:
+    type: "PIDControlAgent"
+    parameters:
+      kp: 1.0
+      ki: 0.1
+      kd: 0.05
+      setpoint: 10.0
+      output_limits: [-1.0, 1.0]
+  
+  # 中央调度智能体
+  central_dispatcher:
+    type: "CentralDispatcherAgent"
+    parameters:
+      control_horizon: 10
+      prediction_horizon: 20
+      optimization_method: "quadratic_programming"
+  
+  # 数字孪生智能体
+  digital_twin:
+    type: "DigitalTwinAgent"
+    parameters:
+      model_type: "physics_based"
+      update_frequency: 10.0
+      calibration_enabled: true
+
+# 控制器配置
+controllers:
+  pid:
+    type: "PIDController"
+    tuning_method: "ziegler_nichols"
+    anti_windup: true
+    derivative_filter: true
+  
+  mpc:
+    type: "MPCController"
+    solver: "cvxpy"
+    constraints:
+      input_bounds: [-1.0, 1.0]
+      output_bounds: [0.0, 20.0]
+    objective:
+      tracking_weight: 1.0
+      control_weight: 0.1
+
+# 数据管理
+data_management:
+  input:
+    formats: ["csv", "json", "yaml"]
+    validation: true
+    preprocessing:
+      - "outlier_removal"
+      - "interpolation"
+      - "smoothing"
+  
+  output:
+    formats: ["csv", "json", "hdf5"]
+    compression: true
+    metadata_inclusion: true
+    real_time_export: false
+  
+  storage:
+    backend: "file_system"
+    retention_policy: "30_days"
+    backup_enabled: true
+
+# 调试和诊断
+debugging:
+  log_level: "INFO"
+  log_format: "detailed"
+  trace_execution: false
+  
+  profiling:
+    enabled: false
+    output_format: "text"
+    include_memory: true
+  
+  assertions:
+    enabled: true
+    custom_checks:
+      - "mass_conservation"
+      - "energy_conservation"
+      - "stability_check"
+
+# 性能监控
+performance:
+  monitoring:
+    enabled: true
+    metrics:
+      - "execution_time"
+      - "memory_usage"
+      - "cpu_utilization"
+      - "convergence_rate"
+    
+    sampling_interval: 10.0
+    alert_thresholds:
+      execution_time: 60.0
+      memory_usage: 1000.0  # MB
+  
+  optimization:
+    auto_tuning: false
+    adaptive_time_step: false
+    parallel_execution: false
+
+# 可视化配置
+visualization:
+  enabled: true
+  real_time: false
+  
+  plots:
+    time_series:
+      enabled: true
+      variables: ["level", "flow_rate", "opening"]
+      style: "line"
+    
+    spatial:
+      enabled: false
+      type: "2d_map"
+      animation: false
+    
+    control:
+      enabled: true
+      show_setpoints: true
+      show_disturbances: true
+  
+  export:
+    formats: ["png", "pdf", "svg"]
+    resolution: "high"
+    interactive: false
+
+# 验证和测试
+validation:
+  enabled: true
+  
+  unit_tests:
+    component_tests: true
+    agent_tests: true
+    integration_tests: false
+  
+  benchmarks:
+    performance_tests: true
+    accuracy_tests: true
+    stability_tests: true
+  
+  comparison:
+    reference_solutions: true
+    analytical_solutions: false
+    experimental_data: false
+
+# 扩展功能
+extensions:
+  plugins:
+    enabled: false
+    search_paths: ["./plugins", "../plugins"]
+  
+  custom_components:
+    enabled: true
+    auto_discovery: true
+  
+  external_interfaces:
+    rest_api: false
+    mqtt: false
+    database: false
+
+# 安全配置
+security:
+  authentication:
+    enabled: false
+    method: "token"
+  
+  authorization:
+    enabled: false
+    role_based: false
+  
+  encryption:
+    data_at_rest: false
+    data_in_transit: false
+  
+  audit:
+    enabled: false
+    log_access: false
+    log_modifications: false

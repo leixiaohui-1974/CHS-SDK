@@ -19,7 +19,83 @@
 
 ## 运行方式
 
-### 方式一：配置文件驱动（推荐）
+### 方式一：硬编码方式
+
+```bash
+# 使用硬编码参数运行
+python run_hardcoded.py
+```
+
+**特点**:
+- 参数直接在代码中定义
+- 代码逻辑清晰，适合学习和理解
+- 快速测试和演示
+- 完整集成调试工具
+
+**适用场景**: 学习代码逻辑、快速原型验证
+
+### 方式二：场景运行方式
+
+```bash
+# 交互式选择场景
+python run_scenario.py
+
+# 直接指定场景编号
+python run_scenario.py 1  # 基础物理模型仿真
+python run_scenario.py 2  # 物理IO智能体演示
+python run_scenario.py 3  # 闸门控制智能体演示
+python run_scenario.py 4  # 数字孪生智能体演示
+python run_scenario.py 5  # 中央调度智能体演示
+```
+
+**特点**:
+- 使用传统的多配置文件方式（agents.yml、components.yml、config.yml等）
+- 支持交互式场景选择
+- 每个场景独立配置
+- 灵活的参数调整
+
+**适用场景**: 传统配置管理、多场景对比测试
+
+### 方式三：统一场景运行方式
+
+```bash
+# 交互式选择场景
+python run_unified_scenario.py
+
+# 直接指定场景编号
+python run_unified_scenario.py 1  # 基础物理模型仿真
+python run_unified_scenario.py 2  # 物理IO智能体演示
+python run_unified_scenario.py 3  # 闸门控制智能体演示
+python run_unified_scenario.py 4  # 数字孪生智能体演示
+python run_unified_scenario.py 5  # 中央调度智能体演示
+```
+
+**特点**:
+- 使用统一配置文件（universal_config_1_x.yml）
+- 简化的配置管理
+- 支持交互式场景选择
+- 自动配置文件查找和回退
+
+**适用场景**: 简化配置管理、标准化仿真流程
+
+### 方式四：通用配置运行方式（推荐）
+
+```bash
+# 使用通用配置文件运行
+python run_universal_config.py
+```
+
+**特点**:
+- 使用最完整的通用配置文件（universal_config.yml）
+- 支持所有高级功能（调试、性能监控、可视化等）
+- 参数通过 YAML 配置文件定义
+- 代码简洁，易于维护
+- 自动验证和分析功能
+- 支持进度显示和结果总结
+
+**适用场景**: 生产环境、完整功能测试、性能分析
+
+### 传统配置文件驱动方式（兼容性）
 
 ```bash
 # 基础物理模型仿真
@@ -39,24 +115,9 @@ python run_config_1_5.py
 ```
 
 **特点**:
-- 使用统一的仿真运行器 `run_unified_scenario`
-- 参数通过 YAML 配置文件定义
-- 代码简洁，易于维护
-- 自动验证和分析功能
-- 支持进度显示和结果总结
-
-### 方式二：硬编码方式
-
-```bash
-# 使用硬编码参数运行
-python run_hardcoded.py
-```
-
-**特点**:
-- 参数直接在代码中定义
-- 代码逻辑清晰，适合学习和理解
-- 快速测试和演示
-- 完整集成调试工具
+- 保持向后兼容性
+- 每个场景独立的运行脚本
+- 传统的配置文件结构
 
 ## 配置文件
 
@@ -123,12 +184,25 @@ mission/example_1/
 ├── config_1_3.yml              # 闸门控制智能体配置
 ├── config_1_4.yml              # 数字孪生智能体配置
 ├── config_1_5.yml              # 中央调度智能体配置
-├── run_config.py               # 基础物理模型运行脚本
-├── run_config_1_2.py           # 物理IO智能体运行脚本
-├── run_config_1_3.py           # 闸门控制智能体运行脚本
-├── run_config_1_4.py           # 数字孪生智能体运行脚本
-├── run_config_1_5.py           # 中央调度智能体运行脚本
-└── run_hardcoded.py            # 硬编码方式运行脚本
+├── universal_config.yml         # 通用配置文件
+├── universal_config_1_2.yml     # 物理IO智能体通用配置
+├── universal_config_1_3.yml     # 闸门控制智能体通用配置
+├── universal_config_1_4.yml     # 数字孪生智能体通用配置
+├── universal_config_1_5.yml     # 中央调度智能体通用配置
+├── run_hardcoded.py            # 硬编码方式运行脚本
+├── run_scenario.py             # 场景运行方式脚本
+├── run_unified_scenario.py     # 统一场景运行方式脚本
+├── run_universal_config.py     # 通用配置运行方式脚本
+├── run_config.py               # 基础物理模型运行脚本（兼容性）
+├── run_config_1_2.py           # 物理IO智能体运行脚本（兼容性）
+├── run_config_1_3.py           # 闸门控制智能体运行脚本（兼容性）
+├── run_config_1_4.py           # 数字孪生智能体运行脚本（兼容性）
+├── run_config_1_5.py           # 中央调度智能体运行脚本（兼容性）
+├── 01_basic_simulation/         # 基础物理模型仿真场景
+├── 02_advanced_control/         # 物理IO智能体演示场景
+├── 03_fault_tolerance/          # 闸门控制智能体演示场景
+├── 04_digital_twin_advanced/    # 数字孪生智能体演示场景
+└── 05_central_mpc_dispatcher/   # 中央调度智能体演示场景
 ```
 
 ## 技术特性

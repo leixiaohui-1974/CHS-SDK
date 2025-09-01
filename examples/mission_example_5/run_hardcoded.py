@@ -23,12 +23,12 @@ sys.path.insert(0, str(project_root))
 
 # 导入必要的模块
 try:
-    from chs_sdk.core.simulation import Simulation
-    from chs_sdk.core.message_bus import MessageBus
-    from chs_sdk.components.physical import PhysicalComponent
-    from chs_sdk.agents.base import BaseAgent
-    from chs_sdk.utils.logging import setup_logging
-    from chs_sdk.utils.visualization import create_plots
+    from core_lib.core_engine.simulation import Simulation
+    from core_lib.central_coordination.collaboration.message_bus import MessageBus
+    from core_lib.physical_objects.physical import PhysicalComponent
+    from core_lib.central_agents.base import BaseAgent
+    from core_lib.utils.logging import setup_logging
+    from core_lib.utils.visualization import create_plots
 except ImportError as e:
     print(f"导入错误: {e}")
     print("请确保CHS-SDK已正确安装")

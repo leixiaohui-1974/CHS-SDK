@@ -106,3 +106,122 @@
 4.  运行仿真，并观察在不同扰动情景下，MPC如何调整PID的设定点，以及整个系统如何协同工作以维持稳定。
 
 **核心功能点**：这是最终的、最完整的示例，它将验证所有智能体、预测和控制层面的协同工作能力。
+
+## 运行方式 (Running Methods)
+
+CHS-SDK Examples目录支持四种不同的运行方式，以满足不同的使用需求：
+
+### 1. 硬编码运行方式 (Hardcoded Approach)
+**特点**: 直接在Python代码中构建仿真，无需外部配置文件
+**适用场景**: 快速原型开发、教学演示、简单测试
+**运行命令**:
+```bash
+python run_hardcoded.py [example_type]
+# 或交互式选择
+python run_hardcoded.py
+```
+
+### 2. 场景运行方式 (Scenario-based Approach)
+**特点**: 使用传统的多配置文件方式（config.yml, components.yml等）
+**适用场景**: 复杂仿真配置、团队协作、版本控制
+**运行命令**:
+```bash
+python run_scenario.py [example_type]
+# 或交互式选择
+python run_scenario.py
+```
+
+### 3. 统一场景运行方式 (Unified Scenario Approach)
+**特点**: 优先使用统一配置文件，提供更好的配置管理
+**适用场景**: 标准化配置、批量运行、配置模板化
+**运行命令**:
+```bash
+python run_unified_scenario.py [example_type]
+# 或交互式选择
+python run_unified_scenario.py
+```
+
+### 4. 通用配置运行方式 (Universal Config Approach) - 推荐
+**特点**: 使用universal_config.yml提供最完整的功能支持
+**适用场景**: 生产环境、高级功能需求、性能优化
+**运行命令**:
+```bash
+python run_universal_config.py [example_type]
+# 或交互式选择
+python run_universal_config.py
+```
+
+### 可用的示例类型 (Available Example Types)
+- `agent_based`: 智能体示例
+- `canal_model`: 渠道模型示例
+- `non_agent_based`: 非智能体示例
+- `identification`: 参数辨识示例
+- `demo`: 演示示例
+- `watertank`: 水箱示例
+- `notebooks`: Jupyter笔记本示例
+- `mission_example_1`: Mission示例1 - 基础物理仿真和高级控制
+- `mission_example_2`: Mission示例2 - 闭环控制系统
+- `mission_example_3`: Mission示例3 - 增强感知系统
+- `mission_example_5`: Mission示例5 - 水轮机闸门仿真
+- `mission_scenarios`: Mission场景示例 - 引绰济辽工程仿真
+- `mission_data`: Mission示例共享数据文件
+
+### 配置文件说明
+- **universal_config.yml**: 通用配置文件，包含所有高级功能配置
+- **各子目录配置**: 每个示例子目录可包含专用的配置文件
+- **兼容性**: 支持传统的多文件配置方式作为备选方案
+
+## Mission示例说明 (Mission Examples)
+
+从mission目录迁移的示例提供了完整的水利仿真系统案例，展示了从基础物理仿真到复杂控制系统的完整实现。
+
+### Mission Example 1: 基础物理仿真和高级控制
+**目录**: `mission_example_1`
+**包含子示例**:
+- `01_basic_simulation`: 基础仿真入门
+- `02_advanced_control`: 高级控制策略
+- `03_fault_tolerance`: 容错机制
+- `04_digital_twin_advanced`: 高级数字孪生
+- `05_central_mpc_dispatcher`: 中央MPC调度
+
+**特点**: 从简单到复杂的渐进式学习路径，涵盖物理建模、控制算法、容错设计等核心概念。
+
+### Mission Example 2: 闭环控制系统
+**目录**: `mission_example_2`
+**包含子示例**:
+- `01_local_control`: 本地控制
+- `02_hierarchical_control`: 分层控制
+- `03_watershed_coordination`: 流域协调
+
+**特点**: 专注于控制系统设计，展示从单点控制到分布式协调的完整控制架构。
+
+### Mission Example 3: 增强感知系统
+**目录**: `mission_example_3`
+**包含子示例**:
+- `01_enhanced_perception`: 增强感知能力
+
+**特点**: 展示智能感知和数据处理技术在水利系统中的应用。
+
+### Mission Example 5: 水轮机闸门仿真
+**目录**: `mission_example_5`
+**包含子示例**:
+- `01_turbine_gate_simulation`: 水轮机闸门基础仿真
+- `02_multi_unit_coordination`: 多机组协调
+- `03_economic_dispatch`: 经济调度
+- `04_gate_scheduling`: 闸门调度
+
+**特点**: 专门针对水电站运行的仿真示例，包含经济性分析和优化调度。
+
+### Mission Scenarios: 引绰济辽工程仿真
+**目录**: `mission_scenarios`
+**包含子示例**:
+- `yinchuojiliao`: 引绰济辽工程完整仿真场景
+
+**特点**: 展示大型跨流域调水工程的完整仿真实现，包含多泵站协调控制、长距离输水系统建模、复杂水力学计算等核心技术。
+
+### 迁移指南
+详细的迁移指南请参考 `MIGRATION_GUIDE.md` 文件，其中包含:
+- 配置文件迁移步骤
+- 功能对比和映射
+- 最佳实践建议
+- 常见问题解答

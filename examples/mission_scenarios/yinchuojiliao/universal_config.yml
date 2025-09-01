@@ -1,0 +1,594 @@
+# 引绰济辽工程仿真专用通用配置文件
+# 针对引绰济辽跨流域调水工程的专业仿真配置
+
+# 基本信息
+metadata:
+  name: "引绰济辽工程仿真配置"
+  version: "1.0.0"
+  description: "内蒙古引绰济辽跨流域调水工程数字孪生仿真专用配置"
+  project: "引绰济辽工程"
+  location: "内蒙古自治区"
+  author: "CHS-SDK Team"
+  created_date: "2024-01-20"
+  last_modified: "2024-01-20"
+
+# 工程基本信息
+project_info:
+  name: "引绰济辽工程"
+  type: "跨流域调水工程"
+  source_basin: "绰尔河流域"
+  target_basin: "辽河流域"
+  
+  design_parameters:
+    total_length: 263.0      # km
+    design_flow: 43.0        # m³/s
+    annual_transfer: 9.84e8  # m³/year
+    
+  construction_info:
+    start_year: 2014
+    completion_year: 2022
+    investment: 170.0e8      # 元
+
+# 仿真配置
+simulation:
+  # 基础参数
+  duration: 168.0  # 仿真时长（小时）- 7天
+  dt: 1.0         # 时间步长（小时）
+  
+  # 引擎设置
+  engine:
+    type: "hydraulic_advanced"  # 专用水力学仿真引擎
+    parallel_processing: true
+    max_threads: 4
+    memory_optimization: true
+    
+  # 水力学求解器
+  solver:
+    type: "saint_venant"  # 圣维南方程求解器
+    scheme: "preissmann"  # Preissmann隐式格式
+    tolerance: 1e-6
+    max_iterations: 1000
+    cfl_number: 0.8
+
+# 物理组件配置
+components:
+  # 文得根水库
+  wendegen_reservoir:
+    type: "Reservoir"
+    description: "引绰济辽工程取水水库"
+    
+    initial_state:
+      water_level: 350.0    # m
+      storage: 1.5e9       # m³
+      
+    parameters:
+      surface_area: 5.0e7   # m²
+      max_capacity: 2.0e9   # m³
+      min_level: 320.0      # m
+      max_level: 380.0      # m
+      dead_storage: 1.0e8   # m³
+      
+    monitoring:
+      critical_levels:
+        flood_level: 375.0   # m
+        normal_level: 350.0  # m
+        dead_level: 325.0    # m
+  
+  # 连接池
+  connection_pool:
+    type: "Reservoir"
+    description: "中间连接调节池"
+    
+    initial_state:
+      water_level: 300.0
+      storage: 1.0e8
+      
+    parameters:
+      surface_area: 1.0e6
+      max_capacity: 2.0e8
+      min_level: 280.0
+      max_level: 320.0
+  
+  # 末端水池
+  terminal_pool:
+    type: "Reservoir"
+    description: "输水工程末端调节池"
+    
+    initial_state:
+      water_level: 250.0
+      storage: 5.0e7
+      
+    parameters:
+      surface_area: 5.0e5
+      max_capacity: 1.0e8
+      min_level: 230.0
+      max_level: 270.0
+      
+    target_operation:
+      normal_level: 250.0
+      supply_level: 245.0
+  
+  # 隧洞系统
+  tunnel_1:
+    type: "UnifiedCanal"
+    model_type: "integral"
+    description: "第一段输水隧洞"
+    
+    initial_state:
+      water_level: 340.0
+      flow_rate: 50.0
+      
+    parameters:
+      length: 5000.0
+      cross_section_area: 100.0
+      roughness: 0.025
+      slope: 0.002
+      
+    design_parameters:
+      design_flow: 80.0     # m³/s
+      max_velocity: 3.0     # m/s
+  
+  tunnel_2:
+    type: "UnifiedCanal"
+    model_type: "integral"
+    description: "第二段输水隧洞"
+    
+    initial_state:
+      water_level: 320.0
+      flow_rate: 50.0
+      
+    parameters:
+      length: 8000.0
+      cross_section_area: 120.0
+      roughness: 0.025
+      slope: 0.0015
+  
+  tunnel_3:
+    type: "UnifiedCanal"
+    model_type: "integral"
+    description: "第三段输水隧洞"
+    
+    initial_state:
+      water_level: 280.0
+      flow_rate: 50.0
+      
+    parameters:
+      length: 6000.0
+      cross_section_area: 100.0
+      roughness: 0.025
+      slope: 0.001
+  
+  # 管道系统
+  pipe_1:
+    type: "Pipe"
+    description: "第一段压力管道"
+    
+    initial_state:
+      pressure: 2.5e6
+      flow_rate: 45.0
+      
+    parameters:
+      length: 3000.0
+      diameter: 3.0
+      roughness: 0.02
+      material: "steel"
+      
+    design_parameters:
+      design_pressure: 4.0e6  # Pa
+      max_velocity: 2.5       # m/s
+  
+  pipe_2:
+    type: "Pipe"
+    description: "第二段压力管道"
+    
+    initial_state:
+      pressure: 2.0e6
+      flow_rate: 45.0
+      
+    parameters:
+      length: 4000.0
+      diameter: 2.8
+      roughness: 0.02
+      material: "steel"
+  
+  # 控制设备
+  inlet_gate:
+    type: "Gate"
+    description: "取水口进水闸门"
+    
+    initial_state:
+      opening: 0.6
+      flow_rate: 50.0
+      
+    parameters:
+      max_flow_capacity: 100.0
+      gate_type: "radial"
+      width: 8.0
+      height: 6.0
+  
+  tunnel1_gate:
+    type: "Gate"
+    description: "隧洞1出口控制闸门"
+    
+    initial_state:
+      opening: 0.7
+      flow_rate: 50.0
+      
+    parameters:
+      max_flow_capacity: 80.0
+      gate_type: "sluice"
+      width: 6.0
+      height: 5.0
+  
+  pipe1_valve:
+    type: "Valve"
+    description: "管道1调节阀门"
+    
+    initial_state:
+      opening: 0.8
+      flow_rate: 45.0
+      
+    parameters:
+      max_flow_capacity: 60.0
+      valve_type: "butterfly"
+      diameter: 3.0
+  
+  outlet_valve:
+    type: "Valve"
+    description: "末端出水阀门"
+    
+    initial_state:
+      opening: 0.75
+      flow_rate: 45.0
+      
+    parameters:
+      max_flow_capacity: 60.0
+      valve_type: "gate"
+      diameter: 2.8
+
+# 系统拓扑
+topology:
+  connections:
+    - upstream: "wendegen_reservoir"
+      downstream: "inlet_gate"
+      type: "outlet"
+    - upstream: "inlet_gate"
+      downstream: "tunnel_1"
+      type: "inlet"
+    - upstream: "tunnel_1"
+      downstream: "tunnel1_gate"
+      type: "outlet"
+    - upstream: "tunnel1_gate"
+      downstream: "connection_pool"
+      type: "inlet"
+    - upstream: "connection_pool"
+      downstream: "tunnel_2"
+      type: "outlet"
+    - upstream: "tunnel_2"
+      downstream: "pipe_1"
+      type: "transition"
+    - upstream: "pipe_1"
+      downstream: "pipe1_valve"
+      type: "inline"
+    - upstream: "pipe1_valve"
+      downstream: "tunnel_3"
+      type: "transition"
+    - upstream: "tunnel_3"
+      downstream: "pipe_2"
+      type: "transition"
+    - upstream: "pipe_2"
+      downstream: "outlet_valve"
+      type: "inline"
+    - upstream: "outlet_valve"
+      downstream: "terminal_pool"
+      type: "inlet"
+
+# 控制器配置
+controllers:
+  # 隧洞1水位控制
+  taoriver_ctrl:
+    type: "PIDController"
+    description: "控制隧洞1水位稳定"
+    
+    controlled_id: "tunnel1_gate"
+    observed_id: "tunnel_1"
+    observation_key: "water_level"
+    
+    config:
+      Kp: -0.1
+      Ki: -0.01
+      Kd: -0.005
+      setpoint: 340.0
+      output_limits: [0.1, 1.0]
+      sample_time: 1.0
+      
+    tuning:
+      auto_tune: true
+      method: "ziegler_nichols"
+  
+  # 管道压力控制
+  pipe_pressure_ctrl:
+    type: "PIDController"
+    description: "控制管道1压力稳定"
+    
+    controlled_id: "pipe1_valve"
+    observed_id: "pipe_1"
+    observation_key: "pressure"
+    
+    config:
+      Kp: -1e-7
+      Ki: -1e-8
+      Kd: -5e-8
+      setpoint: 2.5e6
+      output_limits: [0.2, 1.0]
+      sample_time: 1.0
+
+# 智能体配置
+agents:
+  # 数字孪生体
+  digital_twins:
+    enabled: true
+    components: "all"  # 为所有组件创建数字孪生体
+    
+    config:
+      update_frequency: 1.0
+      state_topic_prefix: "state/"
+      synchronization_tolerance: 0.01
+  
+  # 中央调度智能体
+  central_dispatcher:
+    type: "CentralDispatcherAgent"
+    description: "中央调度控制系统"
+    
+    config:
+      monitored_component_id: "terminal_pool"
+      controlled_component_id: "inlet_gate"
+      target_water_level: 250.0
+      control_gain: 0.05
+      dispatch_interval: 6.0  # hours
+      
+    optimization:
+      objective: "minimize_energy_cost"
+      constraints:
+        - "water_level_bounds"
+        - "flow_rate_limits"
+        - "pressure_constraints"
+  
+  # 应急处理智能体
+  emergency_agent:
+    type: "EmergencyAgent"
+    description: "应急安全处理系统"
+    
+    config:
+      monitored_component_ids:
+        - "pipe_1"
+        - "pipe_2"
+      pressure_threshold: 1.5e6  # Pa
+      
+      emergency_actions:
+        close_valves:
+          - "pipe1_valve"
+          - "outlet_valve"
+        reduce_gates:
+          - "inlet_gate"
+        
+      response_time: 5.0  # seconds
+  
+  # CSV入流数据智能体
+  csv_inflow_agent:
+    type: "CsvInflowAgent"
+    description: "历史入流数据驱动"
+    
+    config:
+      target_component_id: "wendegen_reservoir"
+      csv_file_path: "data/historical_inflow.csv"
+      time_column: "time"
+      inflow_column: "inflow"
+      interpolation_method: "linear"
+      
+    data_processing:
+      time_format: "%Y-%m-%d %H:%M:%S"
+      units:
+        time: "hours"
+        inflow: "m3/s"
+
+# 运行参数
+operation:
+  # 调度策略
+  dispatch_strategy:
+    type: "adaptive"  # fixed, adaptive, optimal
+    
+    parameters:
+      base_flow: 43.0      # m³/s
+      peak_flow: 80.0      # m³/s
+      min_flow: 20.0       # m³/s
+      
+    schedule:
+      peak_hours: [8, 9, 10, 18, 19, 20]  # 用水高峰时段
+      low_hours: [0, 1, 2, 3, 4, 5]       # 用水低谷时段
+  
+  # 安全运行
+  safety:
+    emergency_shutdown:
+      enabled: true
+      triggers:
+        - "pressure_too_low"
+        - "pressure_too_high"
+        - "flow_rate_exceeded"
+        - "water_level_critical"
+    
+    backup_systems:
+      enabled: true
+      redundancy_level: 2
+
+# 监控配置
+monitoring:
+  # 关键监控点
+  critical_points:
+    - component: "wendegen_reservoir"
+      variables: ["water_level", "storage", "outflow"]
+      thresholds:
+        water_level: {min: 325.0, max: 375.0}
+        
+    - component: "terminal_pool"
+      variables: ["water_level", "storage", "inflow"]
+      thresholds:
+        water_level: {min: 235.0, max: 265.0}
+        
+    - component: "pipe_1"
+      variables: ["pressure", "flow_rate"]
+      thresholds:
+        pressure: {min: 1.5e6, max: 4.0e6}
+        
+    - component: "pipe_2"
+      variables: ["pressure", "flow_rate"]
+      thresholds:
+        pressure: {min: 1.0e6, max: 3.5e6}
+  
+  # 报警系统
+  alarms:
+    enabled: true
+    
+    levels:
+      - name: "info"
+        color: "blue"
+      - name: "warning"
+        color: "yellow"
+      - name: "critical"
+        color: "red"
+      - name: "emergency"
+        color: "purple"
+
+# 数据管理
+data_management:
+  # 输入数据
+  input:
+    historical_data:
+      inflow_data: "data/historical_inflow.csv"
+      weather_data: "data/weather_data.csv"
+      demand_data: "data/water_demand.csv"
+    
+    real_time_data:
+      enabled: false
+      sources:
+        - "scada_system"
+        - "weather_station"
+        - "flow_meters"
+  
+  # 输出数据
+  output:
+    formats: ["yaml", "json", "csv"]
+    
+    reports:
+      - type: "operation_summary"
+        frequency: "daily"
+      - type: "performance_analysis"
+        frequency: "weekly"
+      - type: "safety_report"
+        frequency: "monthly"
+
+# 性能优化
+performance:
+  # 计算优化
+  computation:
+    parallel_components: true
+    vectorized_operations: true
+    memory_pooling: true
+    
+  # 数据优化
+  data_optimization:
+    compression: true
+    caching: true
+    lazy_loading: true
+    
+  # 目标性能
+  targets:
+    simulation_speed: 1.0    # 实时倍数
+    memory_usage: 1024       # MB
+    cpu_usage: 70            # %
+
+# 可视化
+visualization:
+  # 实时监控界面
+  dashboard:
+    enabled: true
+    
+    panels:
+      - type: "system_overview"
+        components: ["wendegen_reservoir", "terminal_pool"]
+      - type: "flow_diagram"
+        show_flows: true
+        show_pressures: true
+      - type: "control_panel"
+        controllers: ["taoriver_ctrl", "pipe_pressure_ctrl"]
+      - type: "alarm_panel"
+        show_history: true
+  
+  # 结果分析图表
+  analysis_plots:
+    - type: "water_balance"
+      components: ["wendegen_reservoir", "terminal_pool"]
+    - type: "pressure_profile"
+      components: ["pipe_1", "pipe_2"]
+    - type: "flow_distribution"
+      components: "all_channels"
+    - type: "control_performance"
+      controllers: "all"
+
+# 验证和校准
+validation:
+  # 物理约束检查
+  physical_constraints:
+    mass_conservation: true
+    energy_conservation: true
+    momentum_conservation: true
+    
+  # 工程约束检查
+  engineering_constraints:
+    pressure_limits: true
+    flow_limits: true
+    level_limits: true
+    
+  # 模型校准
+  calibration:
+    enabled: true
+    
+    parameters:
+      - "roughness_coefficients"
+      - "loss_coefficients"
+      - "control_parameters"
+    
+    methods:
+      - "least_squares"
+      - "genetic_algorithm"
+      - "particle_swarm"
+
+# 扩展功能
+extensions:
+  # 预测分析
+  forecasting:
+    enabled: false
+    
+    models:
+      - type: "inflow_prediction"
+        horizon: 72  # hours
+      - type: "demand_prediction"
+        horizon: 168  # hours
+  
+  # 优化调度
+  optimization:
+    enabled: false
+    
+    objectives:
+      - "minimize_energy_cost"
+      - "maximize_water_supply"
+      - "minimize_risk"
+  
+  # 数字孪生增强
+  digital_twin_enhanced:
+    enabled: false
+    
+    features:
+      - "predictive_maintenance"
+      - "fault_diagnosis"
+      - "performance_optimization"

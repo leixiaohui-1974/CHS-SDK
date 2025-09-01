@@ -1,0 +1,360 @@
+# 场景通用配置文件
+# 适用于scenarios目录下的所有仿真场景
+# 提供统一的配置管理和高级功能支持
+
+# 基本信息
+metadata:
+  name: "场景仿真通用配置"
+  version: "1.0.0"
+  description: "为scenarios目录提供统一的配置管理"
+  author: "CHS-SDK Team"
+  created_date: "2024-01-20"
+  last_modified: "2024-01-20"
+
+# 仿真引擎配置
+simulation:
+  # 基础参数
+  duration: 168.0  # 仿真时长（小时）
+  dt: 1.0         # 时间步长（小时）
+  
+  # 引擎设置
+  engine:
+    type: "advanced"  # 使用高级仿真引擎
+    parallel_processing: true
+    max_threads: 4
+    memory_optimization: true
+    
+  # 数值求解器
+  solver:
+    type: "adaptive_runge_kutta"
+    tolerance: 1e-6
+    max_iterations: 1000
+    adaptive_step: true
+
+# 场景配置
+scenarios:
+  # 引绰济辽工程仿真
+  yinchuojiliao:
+    name: "引绰济辽工程仿真"
+    description: "内蒙古引绰济辽跨流域调水工程数字孪生仿真"
+    config_path: "mission/scenarios/yinchuojiliao"
+    
+    # 场景特定参数
+    parameters:
+      water_transfer_capacity: 100.0  # m³/s
+      emergency_threshold: 1.5e6      # Pa
+      control_interval: 6.0           # hours
+      
+    # 监控重点
+    monitoring:
+      critical_components:
+        - "wendegen_reservoir"
+        - "terminal_pool"
+        - "pipe_1"
+        - "pipe_2"
+      key_variables:
+        - "water_level"
+        - "pressure"
+        - "flow_rate"
+
+# 组件配置模板
+component_templates:
+  # 水库模板
+  reservoir:
+    default_parameters:
+      surface_area: 1.0e6
+      max_capacity: 1.0e8
+      min_level: 200.0
+      max_level: 400.0
+    
+    monitoring:
+      - "water_level"
+      - "storage"
+      - "inflow"
+      - "outflow"
+  
+  # 管道模板
+  pipe:
+    default_parameters:
+      diameter: 3.0
+      roughness: 0.02
+      max_pressure: 5.0e6
+    
+    monitoring:
+      - "pressure"
+      - "flow_rate"
+      - "velocity"
+  
+  # 隧洞模板
+  tunnel:
+    default_parameters:
+      cross_section_area: 100.0
+      roughness: 0.025
+      slope: 0.001
+    
+    monitoring:
+      - "water_level"
+      - "flow_rate"
+      - "velocity"
+
+# 智能体配置
+agents:
+  # 全局智能体设置
+  global_settings:
+    communication_protocol: "mqtt"
+    message_timeout: 30.0
+    retry_attempts: 3
+    
+  # 数字孪生体配置
+  digital_twin:
+    update_frequency: 1.0  # Hz
+    state_topics:
+      prefix: "state/"
+      format: "json"
+    
+    synchronization:
+      enabled: true
+      tolerance: 0.01
+  
+  # 中央调度配置
+  central_dispatcher:
+    dispatch_interval: 6.0  # hours
+    optimization_method: "genetic_algorithm"
+    
+    objectives:
+      - name: "water_level_stability"
+        weight: 0.4
+      - name: "energy_efficiency"
+        weight: 0.3
+      - name: "safety_margin"
+        weight: 0.3
+  
+  # 应急处理配置
+  emergency_agent:
+    monitoring_frequency: 0.1  # Hz
+    response_time: 5.0         # seconds
+    
+    thresholds:
+      pressure_low: 1.5e6   # Pa
+      pressure_high: 4.5e6  # Pa
+      flow_rate_max: 120.0  # m³/s
+      water_level_min: 200.0  # m
+      water_level_max: 380.0  # m
+
+# 控制器配置
+controllers:
+  # PID控制器默认参数
+  pid_defaults:
+    Kp: 1.0
+    Ki: 0.1
+    Kd: 0.01
+    output_limits: [0.0, 1.0]
+    sample_time: 1.0
+    
+  # 自适应控制
+  adaptive_control:
+    enabled: true
+    adaptation_rate: 0.01
+    parameter_bounds:
+      Kp: [0.1, 10.0]
+      Ki: [0.01, 1.0]
+      Kd: [0.001, 0.1]
+
+# 数据管理
+data_management:
+  # 输入数据
+  input:
+    data_directory: "data"
+    supported_formats: ["csv", "json", "yaml"]
+    
+    # CSV文件配置
+    csv_settings:
+      delimiter: ","
+      encoding: "utf-8"
+      time_format: "%Y-%m-%d %H:%M:%S"
+      interpolation: "linear"
+  
+  # 输出数据
+  output:
+    directory: "output"
+    formats: ["yaml", "json", "csv"]
+    
+    # 数据保存设置
+    save_settings:
+      compress: true
+      precision: 6
+      include_metadata: true
+      
+    # 实时数据流
+    streaming:
+      enabled: true
+      buffer_size: 1000
+      flush_interval: 60.0  # seconds
+
+# 调试和诊断
+debugging:
+  # 日志配置
+  logging:
+    level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+    file: "debug.log"
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    
+    # 组件特定日志
+    component_logging:
+      enabled: true
+      detail_level: "medium"  # low, medium, high
+  
+  # 断点和检查点
+  checkpoints:
+    enabled: true
+    interval: 24.0  # hours
+    auto_save: true
+    
+  # 错误处理
+  error_handling:
+    auto_recovery: true
+    max_recovery_attempts: 3
+    fallback_mode: "safe_shutdown"
+
+# 性能监控
+performance:
+  # 监控设置
+  monitoring:
+    enabled: true
+    sampling_interval: 1.0  # seconds
+    
+    metrics:
+      - "cpu_usage"
+      - "memory_usage"
+      - "simulation_speed"
+      - "convergence_rate"
+  
+  # 优化设置
+  optimization:
+    auto_tuning: true
+    performance_targets:
+      simulation_speed: 1.0  # real-time ratio
+      memory_limit: 2048     # MB
+      cpu_limit: 80          # percentage
+  
+  # 报告生成
+  reporting:
+    enabled: true
+    format: "html"
+    include_plots: true
+    auto_open: false
+
+# 可视化配置
+visualization:
+  # 实时可视化
+  real_time:
+    enabled: true
+    update_interval: 5.0  # seconds
+    
+    plots:
+      - type: "time_series"
+        variables: ["water_level", "flow_rate"]
+      - type: "system_topology"
+        show_flows: true
+      - type: "control_dashboard"
+        show_setpoints: true
+  
+  # 结果可视化
+  post_processing:
+    enabled: true
+    
+    plots:
+      - type: "summary_dashboard"
+      - type: "component_analysis"
+      - type: "performance_metrics"
+      - type: "error_analysis"
+    
+    export_formats: ["png", "pdf", "svg"]
+    resolution: 300  # DPI
+
+# 验证和测试
+validation:
+  # 配置验证
+  config_validation:
+    enabled: true
+    strict_mode: false
+    
+    checks:
+      - "parameter_ranges"
+      - "component_compatibility"
+      - "topology_consistency"
+      - "agent_dependencies"
+  
+  # 仿真验证
+  simulation_validation:
+    enabled: true
+    
+    checks:
+      - "mass_conservation"
+      - "energy_conservation"
+      - "stability_analysis"
+      - "convergence_check"
+  
+  # 结果验证
+  result_validation:
+    enabled: true
+    
+    checks:
+      - "physical_constraints"
+      - "boundary_conditions"
+      - "trend_analysis"
+      - "anomaly_detection"
+
+# 扩展功能
+extensions:
+  # 机器学习
+  machine_learning:
+    enabled: false
+    
+    models:
+      - type: "predictive_maintenance"
+        target: "component_health"
+      - type: "optimal_control"
+        target: "energy_efficiency"
+  
+  # 云计算
+  cloud_computing:
+    enabled: false
+    provider: "aws"  # aws, azure, gcp
+    
+    resources:
+      compute_instances: 2
+      storage_gb: 100
+  
+  # API接口
+  api_interface:
+    enabled: false
+    port: 8080
+    
+    endpoints:
+      - "/status"
+      - "/results"
+      - "/control"
+
+# 安全配置
+security:
+  # 访问控制
+  access_control:
+    enabled: false
+    authentication: "token"  # token, oauth, ldap
+    
+  # 数据加密
+  encryption:
+    enabled: false
+    algorithm: "AES-256"
+    
+  # 审计日志
+  audit_logging:
+    enabled: true
+    file: "audit.log"
+    
+    events:
+      - "configuration_changes"
+      - "simulation_start_stop"
+      - "emergency_actions"
+      - "data_access"

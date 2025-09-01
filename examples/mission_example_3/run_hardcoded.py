@@ -21,12 +21,12 @@ project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 try:
-    from chs_sdk.core.simulation_builder import SimulationBuilder
-    from chs_sdk.core.mas_runner import MASRunner
-    from chs_sdk.agents.enhanced_perception_agent import EnhancedPerceptionAgent
-    from chs_sdk.components.reservoir import Reservoir
-    from chs_sdk.utils.logger import setup_logger
-    from chs_sdk.utils.visualization import plot_simulation_results
+    from core_lib.core_engine.testing.simulation_builder import SimulationBuilder
+    from core_lib.core_engine.mas_runner import MASRunner
+    from core_lib.central_agents.enhanced_perception_agent import EnhancedPerceptionAgent
+    from core_lib.hydro_nodes.reservoir import Reservoir
+    from core_lib.utils.logger import setup_logger
+    from core_lib.utils.visualization import plot_simulation_results
 except ImportError as e:
     print(f"导入错误: {e}")
     print("请确保CHS-SDK已正确安装并且在Python路径中")

@@ -29,22 +29,108 @@
 
 ## 如何运行
 
-本目录中的所有示例都已重构为配置文件驱动的方式，你可以按顺序依次执行这些脚本，来理解不同层次的控制策略：
+本目录中的所有示例支持四种不同的运行方式，你可以按顺序依次执行这些脚本，来理解不同层次的控制策略：
 
-### 配置文件驱动方式（推荐）
+### 方式一：硬编码方式
+
+```bash
+# 交互式选择场景
+python run_hardcoded.py
+
+# 直接指定场景编号
+python run_hardcoded.py 1  # 本地闭环控制
+python run_hardcoded.py 2  # 分层控制
+python run_hardcoded.py 3  # 流域联合调度
+```
+
+**特点**:
+- 参数直接在代码中定义
+- 代码逻辑清晰，适合学习和理解
+- 快速测试和演示
+- 完整集成调试工具
+
+**适用场景**: 学习代码逻辑、快速原型验证
+
+### 方式二：场景运行方式
+
+```bash
+# 交互式选择场景
+python run_scenario.py
+
+# 直接指定场景编号
+python run_scenario.py 1  # 本地闭环控制
+python run_scenario.py 2  # 分层控制
+python run_scenario.py 3  # 流域联合调度
+```
+
+**特点**:
+- 使用传统的多配置文件方式（agents.yml、components.yml、config.yml等）
+- 支持交互式场景选择
+- 每个场景独立配置
+- 灵活的参数调整
+
+**适用场景**: 传统配置管理、多场景对比测试
+
+### 方式三：统一场景运行方式
+
+```bash
+# 交互式选择场景
+python run_unified_scenario.py
+
+# 直接指定场景编号
+python run_unified_scenario.py 1  # 本地闭环控制
+python run_unified_scenario.py 2  # 分层控制
+python run_unified_scenario.py 3  # 流域联合调度
+```
+
+**特点**:
+- 使用统一配置文件（universal_config_2_x.yml）
+- 简化的配置管理
+- 支持交互式场景选择
+- 自动配置文件查找和回退
+
+**适用场景**: 简化配置管理、标准化仿真流程
+
+### 方式四：通用配置运行方式（推荐）
+
+```bash
+# 交互式选择场景
+python run_universal_config.py
+
+# 直接指定场景编号
+python run_universal_config.py 1  # 本地闭环控制
+python run_universal_config.py 2  # 分层控制
+python run_universal_config.py 3  # 流域联合调度
+```
+
+**特点**:
+- 使用最完整的通用配置文件（universal_config.yml）
+- 支持所有高级功能（调试、性能监控、可视化等）
+- 智能错误处理和恢复
+- 自动验证和结果分析
+- 配置文件验证和优化建议
+
+**适用场景**: 生产环境、完整功能测试、性能分析
+
+### 传统配置文件驱动方式（兼容性）
 
 使用 `run_unified_scenario` 统一仿真运行器，代码简洁、易于维护：
 
 ```bash
 # 示例 2.1: 本地闭环控制
-python mission/example_2/run_config_2_1.py
+python run_config_2_1.py
 
 # 示例 2.2: 分层控制
-python mission/example_2/run_config_2_2.py
+python run_config_2_2.py
 
 # 示例 2.3: 流域联合调度
-python mission/example_2/run_config_2_3.py
+python run_config_2_3.py
 ```
+
+**特点**:
+- 保持向后兼容性
+- 每个场景独立的运行脚本
+- 传统的配置文件结构
 
 ### 配置文件说明
 - `config_2_1.yml`: 本地闭环控制系统配置
@@ -80,12 +166,26 @@ python mission/example_2/run_config_2_3.py
 ```
 mission/example_2/
 ├── README.zh-CN.md              # 本文档
+├── run_hardcoded.py             # 硬编码运行方式（新增）
+├── run_scenario.py              # 场景运行方式（新增）
+├── run_unified_scenario.py      # 统一场景运行方式（新增）
+├── run_universal_config.py      # 通用配置运行方式（新增）
+├── universal_config.yml         # 通用配置文件（新增）
 ├── config_2_1.yml              # 本地闭环控制配置
 ├── config_2_2.yml              # 分层控制配置
 ├── config_2_3.yml              # 流域联合调度配置
-├── run_config_2_1.py           # 本地闭环控制运行脚本
-├── run_config_2_2.py           # 分层控制运行脚本
-└── run_config_2_3.py           # 流域联合调度运行脚本
+├── run_config_2_1.py           # 本地闭环控制运行脚本（兼容性）
+├── run_config_2_2.py           # 分层控制运行脚本（兼容性）
+├── run_config_2_3.py           # 流域联合调度运行脚本（兼容性）
+├── example_2_1_local_closed_loop.py    # 原始硬编码脚本（兼容性）
+├── example_2_2_hierarchical_control.py # 原始硬编码脚本（兼容性）
+├── example_2_3_joint_dispatch.py       # 原始硬编码脚本（兼容性）
+├── example_2_1/             # 本地闭环控制子场景目录（新增）
+│   └── universal_config.yml # 子场景通用配置文件
+├── example_2_2/             # 分层控制子场景目录（新增）
+│   └── universal_config.yml # 子场景通用配置文件
+└── example_2_3/             # 流域联合调度子场景目录（新增）
+    └── universal_config.yml # 子场景通用配置文件
 ```
 
 ## 技术特性
