@@ -13,37 +13,38 @@ class LLMDispatchCommanderAgent(Agent):
     """
 
     def __init__(self, agent_id: str, message_bus, central_dispatcher_id: str):
-        super().__init__(agent_id, message_bus)
+        super().__init__(agent_id)
+        self.message_bus = message_bus
         self.central_dispatcher_id = central_dispatcher_id
         
         # Topic for receiving high-level natural language commands
-        self.command_topic = f"{self.id}.command.natural_language"
+        self.command_topic = f"{self.agent_id}.command.natural_language"
         
         # Topic to send structured commands to the Central Dispatcher
         self.dispatcher_control_topic = f"{self.central_dispatcher_id}.control.set_strategy"
         
-        self._message_bus.subscribe(self.command_topic, self.handle_command)
+        self.message_bus.subscribe(self.command_topic, self.handle_command)
 
     def run(self, current_time: float):
         # This agent is event-driven and responds to messages,
         # so its run method might not be used in a running simulation.
         pass
-        print(f"[{self.id}] Initialized. Listening for commands on '{self.command_topic}'.")
+        print(f"[{self.agent_id}] Initialized. Listening for commands on '{self.command_topic}'.")
 
-    def handle_command(self, topic: str, payload: dict):
+    def handle_command(self, message: dict):
         """Callback to handle incoming natural language commands."""
-        command = payload.get('text', '')
-        print(f"[{self.id}] Received command: '{command}'")
+        command = message.get('text', '')
+        print(f"[{self.agent_id}] Received command: '{command}'")
         
         # Use LLM to interpret the command and generate a structured strategy
         structured_command = self._call_llm_for_dispatch_strategy(command)
         
         if structured_command:
-            print(f"[{self.id}] Interpreted strategy: {structured_command}")
-            print(f"[{self.id}] Publishing structured command to '{self.dispatcher_control_topic}'")
-            self._message_bus.publish(self.dispatcher_control_topic, structured_command)
+            print(f"[{self.agent_id}] Interpreted strategy: {structured_command}")
+            print(f"[{self.agent_id}] Publishing structured command to '{self.dispatcher_control_topic}'")
+            self.message_bus.publish(self.dispatcher_control_topic, structured_command)
         else:
-            print(f"[{self.id}] Could not interpret the command.")
+            print(f"[{self.agent_id}] Could not interpret the command.")
 
     def _call_llm_for_dispatch_strategy(self, command: str) -> dict:
         """

@@ -49,7 +49,18 @@ def plot_results(csv_files, plot_title, output_image_path):
     for scenario_name, file_path in csv_files.items():
         if file_path:
             df = pd.read_csv(file_path)
-            ax.plot(df['time'], df['target_reservoir.water_level'], label=scenario_name, linewidth=2.5)
+            # Try different possible column names for the target reservoir water level
+            water_level_col = None
+            possible_cols = ['target_reservoir_water_level', 'downstream_reservoir_water_level', 'canal_2_water_level']
+            for col in possible_cols:
+                if col in df.columns:
+                    water_level_col = col
+                    break
+            
+            if water_level_col:
+                ax.plot(df['time'], df[water_level_col], label=scenario_name, linewidth=2.5)
+            else:
+                print(f"Warning: No suitable water level column found for {scenario_name}. Available columns: {list(df.columns)}")
 
     ax.set_title(plot_title, fontsize=18, weight='bold')
     ax.set_xlabel("Time (seconds)", fontsize=14)

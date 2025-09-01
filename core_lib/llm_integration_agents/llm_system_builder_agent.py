@@ -38,21 +38,21 @@ class LLMSystemBuilderAgent(Agent):
             description (str): A natural language text describing the water system.
                                e.g., "A reservoir feeds a single river channel through a gate."
         """
-        print(f"[{self.id}] Received system description: '{description}'")
-        print(f"[{self.id}] Calling LLM to generate configuration...")
+        print(f"[{self.agent_id}] Received system description: '{description}'")
+        print(f"[{self.agent_id}] Calling LLM to generate configuration...")
 
         # In a real implementation, this would involve a complex prompt explaining
         # the YAML structure and providing examples.
         llm_output = self._call_llm_for_config(description)
 
-        print(f"[{self.id}] LLM call successful. Parsing generated configurations.")
+        print(f"[{self.agent_id}] LLM call successful. Parsing generated configurations.")
         self.generated_configs = {
             'components': yaml.dump(llm_output['components']),
             'topology': yaml.dump(llm_output['topology']),
             'agents': yaml.dump(llm_output['agents'])
         }
 
-        print(f"[{self.id}] System configuration generated successfully.")
+        print(f"[{self.agent_id}] System configuration generated successfully.")
         return self.generated_configs
 
     def _call_llm_for_config(self, description: str) -> dict:

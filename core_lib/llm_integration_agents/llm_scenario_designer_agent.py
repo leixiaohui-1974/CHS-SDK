@@ -37,15 +37,15 @@ class LLMScenarioDesignerAgent(Agent):
                                status to 0. Then at timestep 200, start a heavy
                                rainfall event with an intensity of 50."
         """
-        print(f"[{self.id}] Received scenario description: '{description}'")
-        print(f"[{self.id}] Calling LLM to generate scenario script...")
+        print(f"[{self.agent_id}] Received scenario description: '{description}'")
+        print(f"[{self.agent_id}] Calling LLM to generate scenario script...")
 
         llm_output = self._call_llm_for_scenario(description)
 
-        print(f"[{self.id}] LLM call successful. Formatting scenario.")
+        print(f"[{self.agent_id}] LLM call successful. Formatting scenario.")
         self.generated_scenario = yaml.dump({'scenario': llm_output})
         
-        print(f"[{self.id}] Scenario script generated successfully.")
+        print(f"[{self.agent_id}] Scenario script generated successfully.")
         return self.generated_scenario
 
     def _call_llm_for_scenario(self, description: str) -> list:

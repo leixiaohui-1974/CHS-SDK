@@ -55,7 +55,7 @@ def run_scenario(scenario_name, config, base_components, canal_params, config_pa
 
     # Add all simulation objects to the harness
     for component in all_components:
-        harness.add_component(component)
+        harness.add_component(component.name, component)
 
     for conn in connections:
         harness.add_connection(conn['upstream'], conn['downstream'])

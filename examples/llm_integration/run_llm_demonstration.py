@@ -76,10 +76,10 @@ def demonstrate_dispatch_commander():
     
     # 3. 模拟中央调度器，订阅LLM指挥官将要发布的结构化指令
     received_command = None
-    def dispatcher_listener(topic, payload):
+    def dispatcher_listener(message):
         nonlocal received_command
-        print(f"\n[模拟的中央调度器] 接收到指令！主题: '{topic}', 载荷: {payload}")
-        received_command = payload
+        print(f"\n[模拟的中央调度器] 接收到指令！载荷: {message}")
+        received_command = message
 
     message_bus.subscribe(commander_agent.dispatcher_control_topic, dispatcher_listener)
     
