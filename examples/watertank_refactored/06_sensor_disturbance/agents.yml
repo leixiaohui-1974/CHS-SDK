@@ -34,9 +34,11 @@ agents:
   - id: inflow_aggregator_agent
     class: core_lib.local_agents.utility.signal_aggregator_agent.SignalAggregatorAgent
     config:
-      input_topics:
-        - control_signal_topic
-        - disturbance_signal_topic
+      input_configs:
+        - topic: control_signal_topic
+          key: control_signal
+        - topic: disturbance_signal_topic
+          key: inflow_rate
       output_topic: aggregated_inflow_topic
 
   # Agent 4: The Physical I/O Agent, simulating a noisy sensor.

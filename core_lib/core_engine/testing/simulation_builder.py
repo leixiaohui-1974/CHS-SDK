@@ -220,12 +220,18 @@ class SimulationBuilder:
         Run the multi-agent simulation using the harness.
         """
         self.harness.run_mas_simulation()
+        # Export output data to CSV files if configured
+        if hasattr(self.harness, '_output_configs'):
+            self.harness.export_output_data()
     
     def run_simple_simulation(self):
         """
         Run a simple simulation without agents.
         """
         self.harness.run_simulation()
+        # Export output data to CSV files if configured
+        if hasattr(self.harness, '_output_configs'):
+            self.harness.export_output_data()
     
     def get_component(self, component_id: str):
         """

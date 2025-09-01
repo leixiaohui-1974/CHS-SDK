@@ -1,901 +1,901 @@
 simulation_history:
 - time: 0
   target_reservoir:
-    water_level: 14.0
+    water_level: 13.97099642263444
     outflow: 23.202861892447665
-    volume: 0
+    volume: 11176.797138107553
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 23.17881493156395
 - time: 1.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.942022903969987
+    outflow: 23.17881493156395
+    volume: 11153.61832317599
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 23.154767957739214
 - time: 2.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.913079444022813
+    outflow: 23.154767957739214
+    volume: 11130.46355521825
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 23.130720970946538
 - time: 3.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.88416604280913
+    outflow: 23.130720970946538
+    volume: 11107.332834247303
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 23.10667397115893
 - time: 4.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.85528270034518
+    outflow: 23.10667397115893
+    volume: 11084.226160276145
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 23.0826269583493
 - time: 5.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.826429416647246
+    outflow: 23.0826269583493
+    volume: 11061.143533317796
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 23.058579932490492
 - time: 6.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.797606191731631
+    outflow: 23.058579932490492
+    volume: 11038.084953385305
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 23.034532893555237
 - time: 7.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.768813025614689
+    outflow: 23.034532893555237
+    volume: 11015.05042049175
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 23.01048584151621
 - time: 8.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.740049918312794
+    outflow: 23.01048584151621
+    volume: 10992.039934650234
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.98643877634598
 - time: 9.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.71131686984236
+    outflow: 22.98643877634598
+    volume: 10969.053495873888
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.96239169801704
 - time: 10.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.68261388021984
+    outflow: 22.96239169801704
+    volume: 10946.091104175872
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.938344606501794
 - time: 11.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.653940949461711
+    outflow: 22.938344606501794
+    volume: 10923.15275956937
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.914297501772555
 - time: 12.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.625298077584496
+    outflow: 22.914297501772555
+    volume: 10900.238462067597
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.890250383801554
 - time: 13.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.596685264604744
+    outflow: 22.890250383801554
+    volume: 10877.348211683795
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.866203252560936
 - time: 14.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.568102510539042
+    outflow: 22.866203252560936
+    volume: 10854.482008431234
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.84215610802275
 - time: 15.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.539549815404014
+    outflow: 22.84215610802275
+    volume: 10831.639852323211
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.818108950158962
 - time: 16.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.511027179216315
+    outflow: 22.818108950158962
+    volume: 10808.821743373052
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.794061778941444
 - time: 17.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.482534601992638
+    outflow: 22.794061778941444
+    volume: 10786.02768159411
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.77001459434199
 - time: 18.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.454072083749711
+    outflow: 22.77001459434199
+    volume: 10763.257666999769
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.745967396332297
 - time: 19.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.425639624504294
+    outflow: 22.745967396332297
+    volume: 10740.511699603436
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.721920184883963
 - time: 20.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.39723722427319
+    outflow: 22.721920184883963
+    volume: 10717.789779418552
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.697872959968528
 - time: 21.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.368864883073229
+    outflow: 22.697872959968528
+    volume: 10695.091906458583
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.67382572155739
 - time: 22.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.340522600921283
+    outflow: 22.67382572155739
+    volume: 10672.418080737027
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.649778469621904
 - time: 23.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.312210377834255
+    outflow: 22.649778469621904
+    volume: 10649.768302267405
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.62573120413331
 - time: 24.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.28392821382909
+    outflow: 22.62573120413331
+    volume: 10627.142571063272
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.601683925062762
 - time: 25.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.255676108922762
+    outflow: 22.601683925062762
+    volume: 10604.54088713821
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.57763663238131
 - time: 26.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.227454063132287
+    outflow: 22.57763663238131
+    volume: 10581.963250505829
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.55358932605994
 - time: 27.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.19926207647471
+    outflow: 22.55358932605994
+    volume: 10559.409661179769
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.5295420060695
 - time: 28.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.171100148967122
+    outflow: 22.5295420060695
+    volume: 10536.880119173698
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.5054946723808
 - time: 29.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.142968280626647
+    outflow: 22.5054946723808
+    volume: 10514.374624501317
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.48144732496451
 - time: 30.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.11486647147044
+    outflow: 22.48144732496451
+    volume: 10491.893177176353
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.457399963791225
 - time: 31.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.086794721515703
+    outflow: 22.457399963791225
+    volume: 10469.435777212562
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.433352588831447
 - time: 32.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.058753030779663
+    outflow: 22.433352588831447
+    volume: 10447.00242462373
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.40930520005558
 - time: 33.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.030741399279593
+    outflow: 22.40930520005558
+    volume: 10424.593119423675
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.38525779743393
 - time: 34.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 13.0027598270328
+    outflow: 22.38525779743393
+    volume: 10402.20786162624
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.36121038093671
 - time: 35.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.974808314056629
+    outflow: 22.36121038093671
+    volume: 10379.846651245303
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.337162950534037
 - time: 36.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.946886860368462
+    outflow: 22.337162950534037
+    volume: 10357.509488294769
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.31311550619593
 - time: 37.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.918995465985715
+    outflow: 22.31311550619593
+    volume: 10335.196372788572
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.289068047892307
 - time: 38.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.89113413092585
+    outflow: 22.289068047892307
+    volume: 10312.90730474068
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.265020575593002
 - time: 39.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.86330285520636
+    outflow: 22.265020575593002
+    volume: 10290.642284165087
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.240973089267737
 - time: 40.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.835501638844775
+    outflow: 22.240973089267737
+    volume: 10268.40131107582
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.216925588886134
 - time: 41.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.807730481858668
+    outflow: 22.216925588886134
+    volume: 10246.184385486935
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.192878074417735
 - time: 42.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.779989384265646
+    outflow: 22.192878074417735
+    volume: 10223.991507412517
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.168830545831963
 - time: 43.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.752278346083356
+    outflow: 22.168830545831963
+    volume: 10201.822676866685
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.144783003098148
 - time: 44.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.724597367329483
+    outflow: 22.144783003098148
+    volume: 10179.677893863587
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.120735446185524
 - time: 45.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.696946448021752
+    outflow: 22.120735446185524
+    volume: 10157.557158417401
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.096687875063225
 - time: 46.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.669325588177923
+    outflow: 22.096687875063225
+    volume: 10135.460470542339
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.07264028970027
 - time: 47.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.6417347878158
+    outflow: 22.07264028970027
+    volume: 10113.38783025264
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.048592690065597
 - time: 48.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.614174046953217
+    outflow: 22.048592690065597
+    volume: 10091.339237562574
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.024545076128028
 - time: 49.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.586643365608056
+    outflow: 22.024545076128028
+    volume: 10069.314692486445
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 22.000497447856283
 - time: 50.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.559142743798237
+    outflow: 22.000497447856283
+    volume: 10047.314195038589
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.97644980521899
 - time: 51.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.531672181541712
+    outflow: 21.97644980521899
+    volume: 10025.33774523337
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.952402148184667
 - time: 52.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.504231678856481
+    outflow: 21.952402148184667
+    volume: 10003.385343085185
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.928354476721726
 - time: 53.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.476821235760578
+    outflow: 21.928354476721726
+    volume: 9981.456988608463
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.904306790798476
 - time: 54.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.44944085227208
+    outflow: 21.904306790798476
+    volume: 9959.552681817664
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.880259090383124
 - time: 55.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.4220905284091
+    outflow: 21.880259090383124
+    volume: 9937.67242272728
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.85621137544377
 - time: 56.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.394770264189797
+    outflow: 21.85621137544377
+    volume: 9915.816211351837
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.832163645948413
 - time: 57.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.367480059632362
+    outflow: 21.832163645948413
+    volume: 9893.98404770589
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.808115901864937
 - time: 58.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.34021991475503
+    outflow: 21.808115901864937
+    volume: 9872.175931804024
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.78406814316113
 - time: 59.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.312989829576079
+    outflow: 21.78406814316113
+    volume: 9850.391863660863
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.760020369804668
 - time: 60.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.285789804113824
+    outflow: 21.760020369804668
+    volume: 9828.63184329106
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.735972581763114
 - time: 61.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.258619838386622
+    outflow: 21.735972581763114
+    volume: 9806.895870709297
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.711924779003937
 - time: 62.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.231479932412867
+    outflow: 21.711924779003937
+    volume: 9785.183945930294
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.687876961494485
 - time: 63.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.204370086211
+    outflow: 21.687876961494485
+    volume: 9763.4960689688
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.663829129202004
 - time: 64.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.177290299799497
+    outflow: 21.663829129202004
+    volume: 9741.832239839598
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.639781282093626
 - time: 65.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.150240573196879
+    outflow: 21.639781282093626
+    volume: 9720.192458557503
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.615733420136376
 - time: 66.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.12322090642171
+    outflow: 21.615733420136376
+    volume: 9698.576725137367
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.59168554329717
 - time: 67.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.096231299492588
+    outflow: 21.59168554329717
+    volume: 9676.98503959407
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.567637651542817
 - time: 68.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.069271752428161
+    outflow: 21.567637651542817
+    volume: 9655.417401942528
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.543589744840006
 - time: 69.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.04234226524711
+    outflow: 21.543589744840006
+    volume: 9633.873812197688
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.51954182315531
 - time: 70.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 12.015442837968164
+    outflow: 21.51954182315531
+    volume: 9612.354270374532
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.49549388645521
 - time: 71.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.988573470610095
+    outflow: 21.49549388645521
+    volume: 9590.858776488076
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.471445934706058
 - time: 72.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.96173416319171
+    outflow: 21.471445934706058
+    volume: 9569.387330553369
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.447397967874092
 - time: 73.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.93492491573187
+    outflow: 21.447397967874092
+    volume: 9547.939932585496
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.42334998592545
 - time: 74.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.908145728249462
+    outflow: 21.42334998592545
+    volume: 9526.51658259957
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.399301988826146
 - time: 75.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.88139660076343
+    outflow: 21.399301988826146
+    volume: 9505.117280610744
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.375253976542076
 - time: 76.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.854677533292751
+    outflow: 21.375253976542076
+    volume: 9483.742026634201
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.351205949039024
 - time: 77.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.827988525856453
+    outflow: 21.351205949039024
+    volume: 9462.390820685163
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.32715790628266
 - time: 78.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.8013295784736
+    outflow: 21.32715790628266
+    volume: 9441.06366277888
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.30310984823854
 - time: 79.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.774700691163302
+    outflow: 21.30310984823854
+    volume: 9419.760552930642
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.2790617748721
 - time: 80.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.748101863944711
+    outflow: 21.2790617748721
+    volume: 9398.48149115577
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.255013686148654
 - time: 81.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.721533096837026
+    outflow: 21.255013686148654
+    volume: 9377.226477469621
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.23096558203341
 - time: 82.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.694994389859485
+    outflow: 21.23096558203341
+    volume: 9355.995511887588
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.20691746249144
 - time: 83.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.66848574303137
+    outflow: 21.20691746249144
+    volume: 9334.788594425096
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.182869327487715
 - time: 84.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.64200715637201
+    outflow: 21.182869327487715
+    volume: 9313.605725097608
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.15882117698708
 - time: 85.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.615558629900777
+    outflow: 21.15882117698708
+    volume: 9292.446903920621
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.13477301095425
 - time: 86.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.589140163637085
+    outflow: 21.13477301095425
+    volume: 9271.312130909668
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.110724829353842
 - time: 87.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.562751757600392
+    outflow: 21.110724829353842
+    volume: 9250.201406080314
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.086676632150326
 - time: 88.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.536393411810204
+    outflow: 21.086676632150326
+    volume: 9229.114729448163
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.062628419308066
 - time: 89.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.510065126286069
+    outflow: 21.062628419308066
+    volume: 9208.052101028856
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.038580190791297
 - time: 90.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.48376690104758
+    outflow: 21.038580190791297
+    volume: 9187.013520838065
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 21.01453194656414
 - time: 91.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.457498736114376
+    outflow: 21.01453194656414
+    volume: 9165.9989888915
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 20.990483686590586
 - time: 92.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.431260631506138
+    outflow: 20.990483686590586
+    volume: 9145.00850520491
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 20.9664354108345
 - time: 93.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.405052587242594
+    outflow: 20.9664354108345
+    volume: 9124.042069794075
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 20.942387119259624
 - time: 94.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.37887460334352
+    outflow: 20.942387119259624
+    volume: 9103.099682674816
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 20.918338811829578
 - time: 95.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.352726679828734
+    outflow: 20.918338811829578
+    volume: 9082.181343862987
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 20.894290488507856
 - time: 96.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.3266088167181
+    outflow: 20.894290488507856
+    volume: 9061.287053374479
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 20.870242149257823
 - time: 97.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.300521014031526
+    outflow: 20.870242149257823
+    volume: 9040.416811225221
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 20.84619379404272
 - time: 98.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.274463271788973
+    outflow: 20.84619379404272
+    volume: 9019.570617431178
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 20.822145422825653
 - time: 99.0
   target_reservoir:
-    water_level: 14.0
-    outflow: 23.202861892447665
-    volume: 0
+    water_level: 11.248435590010441
+    outflow: 20.822145422825653
+    volume: 8998.748472008352
     inflow: 0.0
   control_gate:
     opening: 0.5
-    outflow: 23.202861892447665
+    outflow: 20.79809703556961

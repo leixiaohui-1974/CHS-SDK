@@ -219,3 +219,60 @@ class SimulationBuilder(BaseYamlLoader):
 
                 self.harness.add_agent(instance)
         logging.info("Agents and controllers loaded.")
+        
+        # Process output configuration to create TopicLoggerAgents
+        self._process_output_config()
+    
+    def _process_output_config(self):
+        """Process output configuration to create TopicLoggerAgents for data logging."""
+        if not self.config or 'output' not in self.config:
+            logging.info("No output configuration found.")
+            return
+            
+        output_configs = self.config['output']
+        if not isinstance(output_configs, list):
+            logging.warning("Output configuration should be a list.")
+            return
+            
+        logging.info(f"Processing {len(output_configs)} output configurations...")
+        
+        for i, output_config in enumerate(output_configs):
+            if not isinstance(output_config, dict):
+                logging.warning(f"Output config {i} is not a dictionary, skipping.")
+                continue
+                
+            topic = output_config.get('topic')
+            file_name = output_config.get('file')
+            
+            if not topic or not file_name:
+                logging.warning(f"Output config {i} missing 'topic' or 'file', skipping.")
+                continue
+                
+            # Create a TopicLoggerAgent for this topic
+            logger_agent_id = f"logger_{topic.replace('/', '_').replace(' ', '_')}"
+            
+            try:
+                logger_agent = self.object_factory.create({
+                    'class': 'core_lib.local_agents.utility.topic_logger_agent.TopicLoggerAgent',
+                    'config': {
+                        'topic_to_log': topic
+                    }
+                }, agent_id=logger_agent_id, message_bus=self.message_bus)
+                
+                self.harness.add_agent(logger_agent)
+                
+                # Store the mapping for later CSV export
+                if not hasattr(self.harness, '_output_configs'):
+                    self.harness._output_configs = []
+                self.harness._output_configs.append({
+                    'topic': topic,
+                    'file': file_name,
+                    'agent_id': logger_agent_id
+                })
+                
+                logging.info(f"Created TopicLoggerAgent '{logger_agent_id}' for topic '{topic}' -> '{file_name}'")
+                
+            except Exception as e:
+                logging.error(f"Failed to create TopicLoggerAgent for topic '{topic}': {e}")
+                
+        logging.info("Output configuration processing completed.")

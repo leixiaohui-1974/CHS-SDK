@@ -122,6 +122,122 @@ def run_multi_component_simulation():
     print("\n--- Running Simulation ---")
     harness.run_simulation()
     print("\n--- Simulation Complete ---")
+    
+    # 5. --- Analyze Results ---
+    print("\n--- Analyzing Results ---")
+    
+    # Extract data from simulation history
+    times = [step['time'] for step in harness.history]
+    reservoir_levels = [step['reservoir_1']['water_level'] for step in harness.history]
+    channel_volumes = [step['channel_1']['volume'] for step in harness.history]
+    gate1_openings = [step['gate_1']['opening'] for step in harness.history]
+    gate2_openings = [step['gate_2']['opening'] for step in harness.history]
+    
+    # Calculate performance metrics for reservoir level control
+    reservoir_setpoint = 18.0
+    final_reservoir_level = reservoir_levels[-1]
+    reservoir_steady_state_error = abs(final_reservoir_level - reservoir_setpoint)
+    
+    # Calculate performance metrics for channel volume control
+    channel_setpoint = 4e5
+    final_channel_volume = channel_volumes[-1]
+    channel_steady_state_error = abs(final_channel_volume - channel_setpoint)
+    
+    # Calculate RMSE for both controllers
+    import math
+    reservoir_rmse = math.sqrt(sum((level - reservoir_setpoint)**2 for level in reservoir_levels) / len(reservoir_levels))
+    channel_rmse = math.sqrt(sum((vol - channel_setpoint)**2 for vol in channel_volumes) / len(channel_volumes))
+    
+    print(f"\n=== Multi-Component PID Control Performance Analysis ===")
+    print(f"\n--- Reservoir Level Control ---")
+    print(f"Target water level (setpoint): {reservoir_setpoint:.2f} m")
+    print(f"Initial water level: {reservoir_levels[0]:.2f} m")
+    print(f"Final water level: {final_reservoir_level:.2f} m")
+    print(f"Steady-state error: {reservoir_steady_state_error:.4f} m")
+    print(f"RMSE: {reservoir_rmse:.4f} m")
+    
+    print(f"\n--- Channel Volume Control ---")
+    print(f"Target volume (setpoint): {channel_setpoint:.0f} m³")
+    print(f"Initial volume: {channel_volumes[0]:.0f} m³")
+    print(f"Final volume: {final_channel_volume:.0f} m³")
+    print(f"Steady-state error: {channel_steady_state_error:.0f} m³")
+    print(f"RMSE: {channel_rmse:.0f} m³")
+    
+    # Create visualization
+    try:
+        import matplotlib.pyplot as plt
+        
+        fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(15, 10))
+        
+        # Plot reservoir water level
+        ax1.plot(times, reservoir_levels, 'b-', linewidth=2, label='Water Level')
+        ax1.axhline(y=reservoir_setpoint, color='r', linestyle='--', linewidth=2, label='Setpoint')
+        ax1.set_xlabel('Time (s)')
+        ax1.set_ylabel('Water Level (m)')
+        ax1.set_title('Reservoir Water Level Control')
+        ax1.legend()
+        ax1.grid(True, alpha=0.3)
+        
+        # Plot channel volume
+        ax2.plot(times, channel_volumes, 'g-', linewidth=2, label='Volume')
+        ax2.axhline(y=channel_setpoint, color='r', linestyle='--', linewidth=2, label='Setpoint')
+        ax2.set_xlabel('Time (s)')
+        ax2.set_ylabel('Volume (m³)')
+        ax2.set_title('Channel Volume Control')
+        ax2.legend()
+        ax2.grid(True, alpha=0.3)
+        
+        # Plot gate 1 opening (controls reservoir level)
+        ax3.plot(times, gate1_openings, 'orange', linewidth=2, label='Gate 1 Opening')
+        ax3.set_xlabel('Time (s)')
+        ax3.set_ylabel('Opening (0-1)')
+        ax3.set_title('Gate 1 Opening (Reservoir Control)')
+        ax3.legend()
+        ax3.grid(True, alpha=0.3)
+        
+        # Plot gate 2 opening (controls channel volume)
+        ax4.plot(times, gate2_openings, 'purple', linewidth=2, label='Gate 2 Opening')
+        ax4.set_xlabel('Time (s)')
+        ax4.set_ylabel('Opening (0-1)')
+        ax4.set_title('Gate 2 Opening (Channel Control)')
+        ax4.legend()
+        ax4.grid(True, alpha=0.3)
+        
+        plt.tight_layout()
+        plt.savefig('02_multi_component_results.png', dpi=300, bbox_inches='tight')
+        print(f"\nResults plot saved as '02_multi_component_results.png'")
+        
+    except ImportError:
+        print("\nMatplotlib not available, skipping visualization")
+    
+    # Validate control performance
+    print("\n=== Control Performance Validation ===")
+    
+    # Reservoir control validation
+    if reservoir_steady_state_error < 0.5:
+        print("✓ PASS: Reservoir steady-state error is acceptable (< 0.5 m)")
+    else:
+        print("✗ FAIL: Reservoir steady-state error is too large (>= 0.5 m)")
+    
+    # Channel control validation
+    if channel_steady_state_error < 50000:  # 50,000 m³ tolerance
+        print("✓ PASS: Channel volume steady-state error is acceptable (< 50,000 m³)")
+    else:
+        print("✗ FAIL: Channel volume steady-state error is too large (>= 50,000 m³)")
+    
+    # Overall system stability
+    reservoir_variation = max(reservoir_levels[-10:]) - min(reservoir_levels[-10:])
+    channel_variation = max(channel_volumes[-10:]) - min(channel_volumes[-10:])
+    
+    if reservoir_variation < 0.1:
+        print("✓ PASS: Reservoir level is stable in final 10 steps")
+    else:
+        print("✗ FAIL: Reservoir level is still oscillating")
+    
+    if channel_variation < 10000:
+        print("✓ PASS: Channel volume is stable in final 10 steps")
+    else:
+        print("✗ FAIL: Channel volume is still oscillating")
 
 if __name__ == "__main__":
     run_multi_component_simulation()

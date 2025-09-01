@@ -8,7 +8,7 @@ from typing import List
 
 class TopicLoggerAgent(Agent):
     """
-    Subscribes to a specific topic and stores the last received message as its state.
+    Subscribes to a specific topic and stores all received messages with timestamps.
     This allows the SimulationHarness to capture and log any data published
     on the message bus.
     """
@@ -18,18 +18,29 @@ class TopicLoggerAgent(Agent):
         self.bus = message_bus
         self.topic = topic_to_log
         self._state: State = {}  # The state will hold the content of the last message
+        self.message_history: List[dict] = []  # Store all messages with timestamps
+        self.current_time = 0.0
 
         self.bus.subscribe(self.topic, self.handle_message)
         print(f"[{self.agent_id}] Initialized. Subscribed to log topic '{self.topic}'.")
 
     def handle_message(self, message: Message):
-        """Stores the received message."""
+        """Stores the received message and adds it to history."""
         self._state = message
+        # Add message to history with current simulation time
+        self.message_history.append({
+            'time': self.current_time,
+            'message': dict(message) if message else {}
+        })
 
     def run(self, current_time: float):
-        """The agent's behavior is purely reactive, so this method does nothing."""
-        pass
+        """Update the current time for timestamping messages."""
+        self.current_time = current_time
 
     def get_state(self) -> State:
         """Returns the last message that was received."""
         return self._state
+    
+    def get_message_history(self) -> List[dict]:
+        """Returns the complete message history."""
+        return self.message_history

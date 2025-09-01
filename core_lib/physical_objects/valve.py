@@ -107,8 +107,10 @@ class Valve(PhysicalObjectInterface, Identifiable):
     def handle_action_message(self, message: Message):
         """Callback to handle incoming action messages from the bus."""
         new_target = message.get('control_signal')
+        print(f"[{self.name}] Received action message: {message}")
         if isinstance(new_target, (int, float)):
             self.target_opening = max(0.0, min(100.0, new_target))
+            print(f"[{self.name}] Updated target_opening to: {self.target_opening}")
 
     def step(self, action: Dict[str, Any], dt: float) -> State:
         """
@@ -120,6 +122,7 @@ class Valve(PhysicalObjectInterface, Identifiable):
                 self.target_opening = max(0.0, min(100.0, control_signal))
 
         self._state['opening'] = self.target_opening
+        print(f"[{self.name}] Step: target_opening={self.target_opening}, _state['opening']={self._state['opening']}")
 
         opening_percent = self._state.get('opening', 0)
 

@@ -8,7 +8,7 @@ components:
     name: "valve_controlled_tank"
     inflow_topic: inflow_disturbance_topic # Subscribes to the disturbance agent
     initial_state:
-      water_level: 12.0 # Starts above the setpoint
+      water_level: 16.0 # Starts slightly above the setpoint for testing
     parameters:
       surface_area: 1.8
 
@@ -20,8 +20,8 @@ components:
     # This valve is controlled by an agent publishing to this topic.
     action_topic: valve_command_topic
     initial_state:
-      opening: 10.0 # Initial opening in percent
+      opening: 50.0 # Increased initial opening to handle larger flow
     parameters:
       # These are example physical parameters for the valve.
       discharge_coefficient: 0.7
-      diameter: 0.5
+      diameter: 4.0  # Further increased diameter to handle larger flow rates

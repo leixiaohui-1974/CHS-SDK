@@ -188,7 +188,7 @@ class SimulationHarness:
                     observation = observed_component.get_state().get(spec.observation_key, 0)
                     
                     # 计算控制动作
-                    action = spec.controller.compute_control_action(observation)
+                    action = spec.controller.compute_control_action({'process_variable': observation}, self.dt)
                     controller_actions[spec.controlled_id] = action
                     
                 except Exception as e:
@@ -258,3 +258,77 @@ class SimulationHarness:
 
         for component_id, state in new_states.items():
             self.components[component_id].set_state(state)
+    
+    def export_output_data(self, output_dir: str = "output"):
+        """Export logged data from TopicLoggerAgents to CSV files."""
+        import os
+        import pandas as pd
+        from pathlib import Path
+        
+        if not hasattr(self, '_output_configs'):
+            print("No output configurations found for CSV export.")
+            return
+            
+        # Create output directory if it doesn't exist
+        output_path = Path(output_dir)
+        output_path.mkdir(exist_ok=True)
+        
+        print(f"Exporting {len(self._output_configs)} output files to '{output_dir}'...")
+        
+        for output_config in self._output_configs:
+            topic = output_config['topic']
+            file_name = output_config['file']
+            agent_id = output_config['agent_id']
+            
+            # Find the TopicLoggerAgent
+            logger_agent = None
+            for agent in self.agents:
+                if hasattr(agent, 'agent_id') and agent.agent_id == agent_id:
+                    logger_agent = agent
+                    break
+                    
+            if not logger_agent:
+                print(f"Warning: TopicLoggerAgent '{agent_id}' not found, skipping '{file_name}'")
+                continue
+                
+            # Extract data from the TopicLoggerAgent's message history
+            data_rows = []
+            
+            # Get message history from the TopicLoggerAgent
+            if hasattr(logger_agent, 'get_message_history'):
+                message_history = logger_agent.get_message_history()
+                
+                for entry in message_history:
+                    time_val = entry.get('time', 0)
+                    message = entry.get('message', {})
+                    
+                    # Create a row with time and all message data
+                    row = {'time': time_val}
+                    
+                    # Add all message fields to the row
+                    if isinstance(message, dict):
+                        for key, value in message.items():
+                            # Convert values to appropriate types for CSV
+                            if isinstance(value, (int, float, str, bool)):
+                                row[key] = value
+                            else:
+                                row[key] = str(value)
+                    
+                    data_rows.append(row)
+            else:
+                print(f"Warning: TopicLoggerAgent '{agent_id}' does not have message history method")
+            
+            if data_rows:
+                # Create DataFrame and save to CSV
+                df = pd.DataFrame(data_rows)
+                file_path = output_path / file_name
+                df.to_csv(file_path, index=False)
+                print(f"Exported '{file_name}' with {len(data_rows)} rows")
+            else:
+                print(f"Warning: No data found for topic '{topic}', creating empty file '{file_name}'")
+                # Create empty CSV with just headers
+                df = pd.DataFrame(columns=['time'])
+                file_path = output_path / file_name
+                df.to_csv(file_path, index=False)
+                
+        print("CSV export completed.")

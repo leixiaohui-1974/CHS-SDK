@@ -101,6 +101,95 @@ def run_getting_started_simulation():
     print("\n--- Running Simulation ---")
     harness.run_simulation()
     print("\n--- Simulation Complete ---")
+    
+    # 4. --- Analyze Results ---
+    print("\n--- Analyzing Results ---")
+    
+    # Extract data from simulation history
+    times = [step['time'] for step in harness.history]
+    water_levels = [step['reservoir_1']['water_level'] for step in harness.history]
+    gate_openings = [step['gate_1']['opening'] for step in harness.history]
+    
+    # Calculate performance metrics
+    setpoint = 12.0
+    final_water_level = water_levels[-1]
+    steady_state_error = abs(final_water_level - setpoint)
+    
+    # Calculate settling time (time to reach within 2% of setpoint)
+    tolerance = 0.02 * setpoint
+    settling_time = None
+    for i, level in enumerate(water_levels):
+        if abs(level - setpoint) <= tolerance:
+            settling_time = times[i]
+            break
+    
+    # Calculate overshoot
+    max_level = max(water_levels)
+    overshoot = max(0, max_level - setpoint)
+    overshoot_percent = (overshoot / setpoint) * 100 if setpoint != 0 else 0
+    
+    print(f"\n=== PID Control Performance Analysis ===")
+    print(f"Target water level (setpoint): {setpoint:.2f} m")
+    print(f"Initial water level: {water_levels[0]:.2f} m")
+    print(f"Final water level: {final_water_level:.2f} m")
+    print(f"Steady-state error: {steady_state_error:.4f} m")
+    print(f"Maximum overshoot: {overshoot:.4f} m ({overshoot_percent:.2f}%)")
+    if settling_time is not None:
+        print(f"Settling time (2% tolerance): {settling_time:.1f} s")
+    else:
+        print("System did not settle within simulation time")
+    
+    # Calculate RMSE
+    import math
+    rmse = math.sqrt(sum((level - setpoint)**2 for level in water_levels) / len(water_levels))
+    print(f"Root Mean Square Error (RMSE): {rmse:.4f} m")
+    
+    # Create visualization
+    try:
+        import matplotlib.pyplot as plt
+        
+        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8))
+        
+        # Plot water level
+        ax1.plot(times, water_levels, 'b-', linewidth=2, label='Water Level')
+        ax1.axhline(y=setpoint, color='r', linestyle='--', linewidth=2, label='Setpoint')
+        ax1.set_xlabel('Time (s)')
+        ax1.set_ylabel('Water Level (m)')
+        ax1.set_title('PID Control of Reservoir Water Level')
+        ax1.legend()
+        ax1.grid(True, alpha=0.3)
+        
+        # Plot gate opening
+        ax2.plot(times, gate_openings, 'g-', linewidth=2, label='Gate Opening')
+        ax2.set_xlabel('Time (s)')
+        ax2.set_ylabel('Gate Opening (0-1)')
+        ax2.set_title('PID Controller Output (Gate Opening)')
+        ax2.legend()
+        ax2.grid(True, alpha=0.3)
+        
+        plt.tight_layout()
+        plt.savefig('01_getting_started_results.png', dpi=300, bbox_inches='tight')
+        print(f"\nResults plot saved as '01_getting_started_results.png'")
+        
+    except ImportError:
+        print("\nMatplotlib not available, skipping visualization")
+    
+    # Validate control performance
+    print("\n=== Control Performance Validation ===")
+    if steady_state_error < 0.1:
+        print("✓ PASS: Steady-state error is acceptable (< 0.1 m)")
+    else:
+        print("✗ FAIL: Steady-state error is too large (>= 0.1 m)")
+    
+    if overshoot_percent < 20:
+        print("✓ PASS: Overshoot is acceptable (< 20%)")
+    else:
+        print("✗ FAIL: Overshoot is too large (>= 20%)")
+    
+    if settling_time is not None and settling_time < 50:
+        print("✓ PASS: Settling time is acceptable (< 50 s)")
+    else:
+        print("✗ FAIL: Settling time is too long or system did not settle")
 
 if __name__ == "__main__":
     run_getting_started_simulation()

@@ -87,6 +87,7 @@ class LocalControlAgent(Agent):
         if observation_for_controller is not None:
             # Compute the control action using the encapsulated controller
             control_signal = self.controller.compute_control_action(observation_for_controller, self.dt)
+            print(f"[{self.agent_id}] Observation: {observation_for_controller}, Control Signal: {control_signal}")
             # Publish the computed action to the action topic(s)
             self.publish_action(control_signal)
 
@@ -109,12 +110,12 @@ class LocalControlAgent(Agent):
             # Multi-Action Mode: Controller provided a dictionary of topic -> signal
             for topic, signal_value in control_signal.items():
                 if topic is not None and signal_value is not None:
-                    action_message: Message = {'value': signal_value, 'agent_id': self.agent_id}
+                    action_message: Message = {'control_signal': signal_value, 'agent_id': self.agent_id}
                     self.bus.publish(topic, action_message)
         else:
             # Single Action Mode: Publish a single control signal to the pre-configured topic
             if self.action_topic is not None:
-                action_message: Message = {'value': control_signal, 'agent_id': self.agent_id}
+                action_message: Message = {'control_signal': control_signal, 'agent_id': self.agent_id}
                 self.bus.publish(self.action_topic, action_message)
 
     def run(self, current_time: float):

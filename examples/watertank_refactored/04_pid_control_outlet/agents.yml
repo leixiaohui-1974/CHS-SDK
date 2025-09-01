@@ -36,14 +36,14 @@ agents:
       controller:
         class: core_lib.local_agents.control.pid_controller.PIDController
         config:
-          # NOTE: We use POSITIVE gains here.
-          # The original script used negative gains because its output was directly
-          # the outflow. Here, the output is valve opening (0-100), which is a
-          # direct-acting relationship: higher level requires higher opening.
-          setpoint: 10.0
-          Kp: 1.5
-          Ki: 0.1
-          Kd: 0.08
+          # NOTE: We use NEGATIVE gains here for outlet valve control.
+          # When water level is above setpoint, we need positive valve opening.
+          # Since error = setpoint - process_variable will be negative when level > setpoint,
+          # we use negative gains to get positive control output.
+          setpoint: 25.0  # Adjusted setpoint closer to equilibrium
+          Kp: -2.0        # Moderate proportional gain
+          Ki: -0.1        # Moderate integral gain
+          Kd: -0.05       # Small derivative gain for stability
           # The output range is the valve opening percentage
           min_output: 0.0
           max_output: 100.0

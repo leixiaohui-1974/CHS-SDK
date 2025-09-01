@@ -88,7 +88,7 @@ class PhysicalIOAgent(Agent):
                 actual_signal = 0
 
             if log_topic:
-                self.bus.publish(log_topic, Message(self.agent_id, {"value": actual_signal}))
+                self.bus.publish(log_topic, {"value": actual_signal})
 
         setattr(obj, target_attr, actual_signal)
 

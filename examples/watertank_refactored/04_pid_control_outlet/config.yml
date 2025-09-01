@@ -3,3 +3,11 @@ simulation:
   duration: 300
   # Time step for the simulation in seconds.
   dt: 1.0
+
+output:
+  - topic: "water_level_topic/water_level"
+    file: "simulation_log.csv"
+  - topic: "valve_command_topic"
+    file: "valve_commands.csv"
+  - topic: "inflow_disturbance_topic"
+    file: "inflow_disturbance.csv"

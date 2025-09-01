@@ -26,7 +26,7 @@ agents:
     class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
     config:
       observation_topic: water_level_topic
-      observation_key: value
+      observation_key: water_level
       action_topic: clean_pump_command_topic # Publishes the clean command here
       dt: 1.0
       controller:
