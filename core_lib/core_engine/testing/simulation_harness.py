@@ -2,6 +2,7 @@
 A testing and simulation harness for running the Smart Water Platform.
 """
 import threading
+import copy
 from collections import deque
 from core_lib.core.interfaces import Simulatable, Agent, Controller
 from core_lib.central_coordination.collaboration.message_bus import MessageBus
