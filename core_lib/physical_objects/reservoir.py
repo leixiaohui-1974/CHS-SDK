@@ -27,6 +27,9 @@ class Reservoir(PhysicalObjectInterface):
         elif 'surface_area' not in self._params and 'area' not in self._params:
             raise ValueError("Reservoir parameters must include either 'storage_curve' or 'surface_area'/'area'.")
 
+        # 补全缺失的初始状态：如果只提供了 water_level 而没有 volume，则计算 volume
+        self._complete_initial_state()
+
         self.bus = message_bus
         # 为了灵活性，从构造函数参数或parameters字典中获取入流主题
         self.inflow_topic = inflow_topic or self._params.get('inflow_topic')
@@ -45,6 +48,37 @@ class Reservoir(PhysicalObjectInterface):
             print(f"水库 '{self.name}' 已订阅数据入流主题 '{self.inflow_topic}'.")
 
         print(f"水库 '{self.name}' 已创建，初始状态为 {self._state}.")
+
+    def _complete_initial_state(self):
+        """补全缺失的初始状态：如果只提供了 water_level 而没有 volume，则计算 volume；反之亦然。"""
+        has_level = 'water_level' in self._state
+        has_volume = 'volume' in self._state
+        
+        if has_level and not has_volume:
+            # 根据 water_level 计算 volume
+            if hasattr(self, 'storage_curve_np'):
+                # 使用库容曲线
+                volume = np.interp(self._state['water_level'], self._levels, self._volumes)
+            else:
+                # 使用线性关系
+                area = self._params.get('surface_area', self._params.get('area', 1.0))
+                volume = self._state['water_level'] * area
+            self._state['volume'] = volume
+            self._initial_state['volume'] = volume
+            print(f"根据水位 {self._state['water_level']} m 计算得到初始体积 {volume} m³")
+        elif has_volume and not has_level:
+            # 根据 volume 计算 water_level
+            level = self._get_level_from_volume(self._state['volume'])
+            self._state['water_level'] = level
+            self._initial_state['water_level'] = level
+            print(f"根据体积 {self._state['volume']} m³ 计算得到初始水位 {level} m")
+        elif not has_level and not has_volume:
+            # 两者都没有，设置默认值
+            self._state['water_level'] = 0.0
+            self._state['volume'] = 0.0
+            self._initial_state['water_level'] = 0.0
+            self._initial_state['volume'] = 0.0
+            print("警告：初始状态中既没有水位也没有体积，设置为默认值 0")
 
     def _validate_and_prepare_storage_curve(self):
         """验证库容曲线并为其准备插值计算。"""

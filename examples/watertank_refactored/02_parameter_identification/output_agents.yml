@@ -1,0 +1,2970 @@
+simulation_history:
+- time: 0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - &id001 !!python/object/apply:numpy.dtype
+      args:
+      - f8
+      - false
+      - true
+      state: !!python/tuple
+      - 3
+      - <
+      - null
+      - null
+      - null
+      - -1
+      - -1
+      - 0
+    - !!binary |
+      1e+RBHIR2D8=
+    outflow: 3.9359028275542904
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      4HNtgxUN4j8=
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      fo8kkIvAAkA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      Ptc2WNEgDEA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 1.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      /R5JIBeBBUA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      Ptc2WNEgEEA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 2.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      fK5tsKJBCEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      3UJSBDoxEkA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 3.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      +j2SQC4CC0A=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      fK5tsKJBFEA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 4.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      ec220LnCDUA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      GxqJXAtSFkA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 5.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      fK5tsKJBEEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      uoWkCHRiGEA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 6.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      O/Z/eOihEUA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      WfG/tNxyGkA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 7.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      +j2SQC4CE0A=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      +FzbYEWDHEA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 8.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      uoWkCHRiFEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      l8j2DK6THkA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 9.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      ec220LnCFUA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      GxqJXAtSIEA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 10.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      OBXJmP8iF0A=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      6s+Wsj9aIUA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 11.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      +FzbYEWDGEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      uoWkCHRiIkA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 12.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      uKTtKIvjGUA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      ijuyXqhqI0A=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 13.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      eOz/8NBDG0A=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      WvG/tNxyJEA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 14.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      ODQSuRakHEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      KqfNChF7JUA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 15.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      +HskgVwEHkA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      +lzbYEWDJkA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 16.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      uMM2SaJkH0A=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      yhLptnmLJ0A=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 17.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      vIWkCHRiIEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      msj2DK6TKEA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 18.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      nKmt7JYSIUA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      an4EY+KbKUA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 19.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      fM220LnCIUA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      OjQSuRakKkA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 20.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      XPG/tNxyIkA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      CuofD0usK0A=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 21.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      PBXJmP8iI0A=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      2p8tZX+0LEA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 22.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      HDnSfCLTI0A=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      qlU7u7O8LUA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 23.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      egtJEejELkA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 24.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      SsFWZxzNL0A=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 25.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      jTuyXqhqMEA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 26.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      dRa5icLuMEA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 27.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      XfG/tNxyMUA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 28.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      RczG3/b2MUA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 29.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      LafNChF7MkA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 30.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      FYLUNSv/MkA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 31.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      /VzbYEWDM0A=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 32.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      5Tfii18HNEA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 33.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      zRLptnmLNEA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 34.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      te3v4ZMPNUA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 35.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      ncj2DK6TNUA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 36.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      haP9N8gXNkA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 37.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      bX4EY+KbNkA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 38.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      VVkLjvwfN0A=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 39.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      PTQSuRakN0A=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 40.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      JQ8Z5DAoOEA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 41.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      DeofD0usOEA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 42.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      9cQmOmUwOUA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 43.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      3Z8tZX+0OUA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 44.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      xXo0kJk4OkA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 45.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      rVU7u7O8OkA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 46.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      lTBC5s1AO0A=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 47.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      fQtJEejEO0A=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 48.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      ZeZPPAJJPEA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: 0.2
+- time: 49.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 1.5
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      TcFWZxzNPEA=
+    inflow: 1.5
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 50.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AmkqXwOePEA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 51.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      txD+VupuPEA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 52.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      bLjRTtE/PEA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 53.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      IWClRrgQPEA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 54.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      1gd5Pp/hO0A=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 55.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      i69MNoayO0A=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 56.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      QFcgLm2DO0A=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 57.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      9f7zJVRUO0A=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 58.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      qqbHHTslO0A=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 59.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      X06bFSL2OkA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 60.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      FPZuDQnHOkA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 61.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      yZ1CBfCXOkA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 62.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      fkUW/dZoOkA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 63.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      M+3p9L05OkA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 64.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      6JS97KQKOkA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 65.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      nTyR5IvbOUA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 66.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      UuRk3HKsOUA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 67.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      B4w41Fl9OUA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 68.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      vDMMzEBOOUA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 69.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      cdvfwycfOUA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 70.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      JoOzuw7wOEA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 71.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      2yqHs/XAOEA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 72.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      kNJaq9yROEA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 73.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      RXouo8NiOEA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 74.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      +iECm6ozOEA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 75.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      r8nVkpEEOEA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 76.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      ZHGpinjVN0A=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 77.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      GRl9gl+mN0A=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 78.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      zsBQekZ3N0A=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 79.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      g2gkci1IN0A=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 80.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      OBD4aRQZN0A=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 81.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      7bfLYfvpNkA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 82.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      ol+fWeK6NkA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 83.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      VwdzUcmLNkA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 84.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      DK9GSbBcNkA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 85.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      wVYaQZctNkA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 86.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      dv7tOH7+NUA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 87.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      K6bBMGXPNUA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 88.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      4E2VKEygNUA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 89.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      lfVoIDNxNUA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 90.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      Sp08GBpCNUA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 91.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      /0QQEAETNUA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 92.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      tOzjB+jjNEA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 93.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      aZS3/860NEA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 94.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      HjyL97WFNEA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 95.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      0+Ne75xWNEA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 96.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iIsy54MnNEA=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 97.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      PTMG32r4M0A=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 98.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      8trZ1lHJM0A=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      iUSnLUM72j8=
+- time: 99.0
+  real_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAAAA=
+    outflow: 3.9359028275542904
+    volume: 0
+    inflow: 0.8
+  twin_reservoir:
+    water_level: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      AAAAAAAAJEA=
+    outflow: 0.9839757068885726
+    volume: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      p4KtzjiaM0A=
+    inflow: 0.8
+  real_valve:
+    opening: 100.0
+    outflow: 3.9359028275542904
+    discharge_coefficient: 0.8
+  twin_valve:
+    opening: 100.0
+    outflow: 0.9839757068885726
+    discharge_coefficient: !!python/object/apply:numpy._core.multiarray.scalar
+    - *id001
+    - !!binary |
+      41dm0bfl1j8=
