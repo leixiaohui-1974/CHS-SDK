@@ -14,18 +14,73 @@ CHS-SDK 的设计基于以下三大核心概念：
 
 ## 快速开始
 
-在本平台中，所有仿真都通过一个统一的入口脚本 `run_scenario.py` 来启动。您无需编写任何 Python 代码，只需准备一个包含配置文件的**场景文件夹**。
+### 示例运行方式
 
-**标准执行命令:**
+本平台提供两种类型的示例，每种都有不同的运行方式：
 
+#### 1. YAML配置示例（声明式）
+
+这类示例通过YAML文件完全定义仿真场景，使用统一的运行脚本。这些示例包含完整的四个YAML配置文件，无需编写Python代码。
+
+**特征标识：**
+- 包含 `.scenario_config` 标识文件
+- 包含完整的 `config.yml`、`components.yml`、`topology.yml`、`agents.yml` 文件
+- 目录中没有独立的 `run_*.py` 脚本
+
+**运行命令：**
 ```bash
-python run_scenario.py --scenario_path <path_to_your_scenario_folder>
+python run_scenario.py <示例目录路径>
 ```
 
-例如，要运行 `yinchuojiliao` 场景，执行：
-
+**示例：**
 ```bash
-python run_scenario.py --scenario_path mission/scenarios/yinchuojiliao
+# 运行集中式紧急防洪调度示例
+python run_scenario.py examples/agent_based/06_centralized_emergency_override
+
+# 运行分层分布式控制示例
+python run_scenario.py examples/canal_model/hierarchical_distributed_control_example
+```
+
+#### 2. Python脚本示例（编程式）
+
+这类示例包含自定义的Python逻辑和算法实现，需要直接运行对应的Python脚本。
+
+**特征标识：**
+- 包含独立的运行脚本（如 `run_identification.py`、`run_simulation.py` 等）
+- 可能包含YAML配置文件，但主要逻辑在Python脚本中
+- 通常用于演示特定算法或复杂控制逻辑
+
+**运行命令：**
+```bash
+cd <示例目录>
+python <示例脚本名称>.py
+```
+
+**示例：**
+```bash
+# 运行水库参数辨识示例
+cd examples/identification/01_reservoir_storage_curve
+python run_identification.py
+
+# 运行多组件系统仿真示例
+cd examples/non_agent_based/02_multi_component_systems
+python run_multi_component_simulation.py
+```
+
+### 自动检测示例类型
+
+平台提供了自动检测工具来识别示例类型：
+
+```python
+from core_lib.utils.example_detector import detect_example_type, get_run_command
+
+# 检测示例类型
+example_type = detect_example_type("examples/agent_based/06_centralized_emergency_override")
+print(example_type)  # 输出: "run_scenario.py"
+
+# 获取运行命令
+command = get_run_command("examples/identification/01_reservoir_storage_curve")
+print(command)  # 输出: "cd examples/identification/01_reservoir_storage_curve && python run_identification.py"
 ```
 
 ## 场景文件夹结构

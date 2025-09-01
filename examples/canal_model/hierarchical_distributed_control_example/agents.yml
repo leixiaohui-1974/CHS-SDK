@@ -65,6 +65,9 @@ agents:
       # but the PID controllers expect water level setpoints.
       # This will be corrected in the next step.
       target_water_levels: [5.0, 5.0]  # The MPC's target levels
+      mpc_pid_model_kp: 0.5  # PID model proportional gain for MPC
+      initial_setpoint_guess: [5.0, 5.0]  # Initial setpoint guess for optimization
+      level_setpoint_bounds: [[4.0, 6.0], [4.0, 6.0]]  # Bounds for water level setpoints
       normal_setpoints: [0.5, 0.5]     # The MPC's target/initial openings
       emergency_setpoint: 0.1
       flood_thresholds: [5.8, 5.8]

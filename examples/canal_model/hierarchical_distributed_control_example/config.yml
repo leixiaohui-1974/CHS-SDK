@@ -1,4 +1,9 @@
 # Simulation Configuration for the Complex Fault Scenario Example
+metadata:
+  run_with: run_scenario.py
+  example_type: yaml_config
+  description: Hierarchical distributed control example with complex fault scenarios
+
 simulation:
   duration: 10800 # 3 hours
   dt: 10 # seconds

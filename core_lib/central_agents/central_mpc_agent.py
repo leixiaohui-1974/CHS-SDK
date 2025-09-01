@@ -115,7 +115,7 @@ class CentralMPCAgent(Agent):
         g = 9.81  # Gravitational acceleration
         num_canals = len(self.state_keys)
         level_setpoints = level_setpoints_sequence.reshape((self.horizon, num_canals))
-        predicted_levels = np.copy(initial_levels)
+        predicted_levels = np.copy(initial_levels).astype(float)
 
         for i in range(self.horizon):
             # --- Model the behavior of the downstream PID controllers ---

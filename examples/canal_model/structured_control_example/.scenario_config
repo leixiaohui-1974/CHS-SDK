@@ -1,0 +1,3 @@
+run_with: run_scenario.py
+example_type: yaml_config
+description: YAML-based simulation example using declarative configuration
