@@ -82,10 +82,21 @@ services:
       # WebSocket
       WEBSOCKET_HEARTBEAT_INTERVAL: ${WEBSOCKET_HEARTBEAT_INTERVAL:-30}
       MAX_WEBSOCKET_CONNECTIONS: ${MAX_WEBSOCKET_CONNECTIONS:-1000}
+      WEBSOCKET_MONITOR_ENABLED: ${WEBSOCKET_MONITOR_ENABLED:-true}
+      
+      # Monitoring
+      MONITOR_INTERVAL: ${MONITOR_INTERVAL:-5}
+      MAX_HISTORY_SIZE: ${MAX_HISTORY_SIZE:-1000}
+      
+      # Aliyun Cloud
+      ALIYUN_ACCESS_KEY_ID: ${ALIYUN_ACCESS_KEY_ID}
+      ALIYUN_ACCESS_KEY_SECRET: ${ALIYUN_ACCESS_KEY_SECRET}
+      ALIYUN_REGION: ${ALIYUN_REGION:-cn-hangzhou}
     volumes:
       - ./logs:/app/logs
       - ./data:/app/data
       - ./uploads:/app/uploads
+      - ./temp:/app/temp
     ports:
       - "${API_PORT:-8000}:8000"
     networks:
@@ -97,7 +108,7 @@ services:
         condition: service_healthy
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/monitor/health"]
       interval: 30s
       timeout: 10s
       retries: 3

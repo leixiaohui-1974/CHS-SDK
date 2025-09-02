@@ -52,7 +52,7 @@ COPY api/ ./api/
 COPY --from=frontend-builder /app/frontend/dist ./static/
 
 # Create necessary directories
-RUN mkdir -p /app/logs /app/data /app/uploads && \
+RUN mkdir -p /app/logs /app/data /app/uploads /app/temp /app/data/monitoring /app/data/simulations && \
     chown -R appuser:appuser /app
 
 # Switch to non-root user
@@ -60,7 +60,7 @@ USER appuser
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:$PORT/health || exit 1
+    CMD curl -f http://localhost:$PORT/api/monitor/health || exit 1
 
 # Expose port
 EXPOSE $PORT

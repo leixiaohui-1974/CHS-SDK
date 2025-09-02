@@ -20,6 +20,14 @@ from routes.simulation import router as simulation_router
 from routes.websocket import router as websocket_router, cleanup_websocket_resources
 from routes.auth import router as auth_router
 from routes.monitoring import router as monitoring_router, set_performance_middleware
+from routes.analysis import router as analysis_router
+from routes.scenario import router as scenario_router
+from routes.validator import router as validator_router
+from api.routes.configurator import router as configurator_router
+from api.routes.runner import router as runner_router
+from routes.monitor import router as monitor_router
+from routes.aliyun import router as aliyun_router
+from startup.monitor_startup import lifespan
 
 # 导入性能和缓存模块
 from middleware.performance import PerformanceMonitoringMiddleware, RateLimitingMiddleware
@@ -45,7 +53,8 @@ app = FastAPI(
     version=settings.app_version,
     docs_url=settings.docs_url,
     redoc_url=settings.redoc_url,
-    openapi_url=settings.openapi_url
+    openapi_url=settings.openapi_url,
+    lifespan=lifespan
 )
 
 # 创建性能监控中间件实例
@@ -79,6 +88,13 @@ app.include_router(simulation_router, prefix=settings.api_prefix)
 app.include_router(websocket_router, prefix=settings.api_prefix)
 app.include_router(auth_router, prefix=settings.api_prefix)
 app.include_router(monitoring_router, prefix=settings.api_prefix)
+app.include_router(analysis_router, prefix=settings.api_prefix)
+app.include_router(scenario_router, prefix=settings.api_prefix)
+app.include_router(validator_router, prefix=settings.api_prefix)
+app.include_router(configurator_router, prefix=settings.api_prefix)
+app.include_router(runner_router, prefix=settings.api_prefix)
+app.include_router(monitor_router, prefix=settings.api_prefix)
+app.include_router(aliyun_router, prefix=settings.api_prefix)
 
 EXAMPLES_DIR = Path("examples")
 
