@@ -65,13 +65,13 @@ class Reservoir(PhysicalObjectInterface):
                 volume = self._state['water_level'] * area
             self._state['volume'] = volume
             self._initial_state['volume'] = volume
-            print(f"根据水位 {self._state['water_level']} m 计算得到初始体积 {volume} m³")
+            print(f"根据水位 {self._state['water_level']} m 计算得到初始体积 {volume} m^3")
         elif has_volume and not has_level:
             # 根据 volume 计算 water_level
             level = self._get_level_from_volume(self._state['volume'])
             self._state['water_level'] = level
             self._initial_state['water_level'] = level
-            print(f"根据体积 {self._state['volume']} m³ 计算得到初始水位 {level} m")
+            print(f"根据体积 {self._state['volume']} m^3 计算得到初始水位 {level} m")
         elif not has_level and not has_volume:
             # 两者都没有，设置默认值
             self._state['water_level'] = 0.0

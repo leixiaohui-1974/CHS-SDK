@@ -18,8 +18,12 @@
 2. 交互式菜单：python run_hardcoded.py
 """
 
-import sys
+# 设置环境变量强制使用UTF-8编码
 import os
+os.environ['PYTHONIOENCODING'] = 'utf-8'
+os.environ['PYTHONUTF8'] = '1'
+
+import sys
 import argparse
 import time
 from pathlib import Path

@@ -32,6 +32,7 @@ sys.path.insert(0, str(project_root))
 import yaml
 from core_lib.physical_objects.unified_canal import UnifiedCanal
 from core_lib.physical_objects.gate import Gate
+from core_lib.physical_objects.reservoir import Reservoir
 from core_lib.physical_objects.water_turbine import WaterTurbine
 from core_lib.local_agents.io.physical_io_agent import PhysicalIOAgent
 from core_lib.local_agents.control.local_control_agent import LocalControlAgent
@@ -40,7 +41,7 @@ from core_lib.central_agents.central_mpc_agent import CentralMPCAgent
 from core_lib.central_coordination.dispatch.central_dispatcher import CentralDispatcherAgent
 from core_lib.disturbances.rainfall_agent import RainfallAgent
 from core_lib.disturbances.water_use_agent import WaterUseAgent
-from core_lib.disturbances.inflow_forecaster_agent import InflowForecasterAgent
+# from core_lib.disturbances.inflow_forecaster_agent import InflowForecasterAgent  # Module not found
 from core_lib.core_engine.testing.simulation_harness import SimulationHarness
 from core_lib.central_coordination.collaboration.message_bus import MessageBus
 from core_lib.debug.log_manager import get_log_manager, setup_logging
@@ -88,6 +89,12 @@ def create_components_from_config(config: Dict[str, Any]) -> Dict[str, Any]:
                 initial_state=comp_config.get('initial_state', {}),
                 parameters=comp_config.get('parameters', {})
             )
+        elif comp_type == 'Reservoir':
+            components[comp_name] = Reservoir(
+                name=comp_config.get('name', comp_name),
+                initial_state=comp_config.get('initial_state', {}),
+                parameters=comp_config.get('parameters', {})
+            )
         else:
             logger.warning(f"未知的组件类型: {comp_type}，跳过组件 {comp_name}")
     
@@ -123,8 +130,8 @@ def create_agents_from_config(config: Dict[str, Any], components: Dict[str, Any]
                 if target_component:
                     agents[agent_name] = DigitalTwinAgent(
                         agent_id=agent_id,
+                        simulated_object=target_component,
                         message_bus=message_bus,
-                        target_component=target_component,
                         **agent_config.get('config', {})
                     )
             elif agent_type == 'CentralMPCAgent':
@@ -134,7 +141,7 @@ def create_agents_from_config(config: Dict[str, Any], components: Dict[str, Any]
                     **agent_config.get('config', {})
                 )
             elif agent_type == 'CentralDispatcher':
-                agents[agent_name] = CentralDispatcher(
+                agents[agent_name] = CentralDispatcherAgent(
                     agent_id=agent_id,
                     message_bus=message_bus,
                     **agent_config.get('config', {})

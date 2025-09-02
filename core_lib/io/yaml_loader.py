@@ -19,7 +19,7 @@ class BaseYamlLoader:
         """Loads a single YAML file from the scenario directory."""
         file_path = self.scenario_path / file_name
         try:
-            with open(file_path, 'r') as f:
+            with open(file_path, 'r', encoding='utf-8') as f:
                 return yaml.safe_load(f)
         except FileNotFoundError:
             logging.warning(f"Configuration file not found: {file_path}. Skipping.")

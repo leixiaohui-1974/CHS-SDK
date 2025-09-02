@@ -1,15 +1,18 @@
 # 智能体配置
 
 agents:
-  perception_agent:
-    agent_id: "res_perceiver_1"
-    cognitive_config:
-      history_size: 20
-      target_variables:
-        - "water_level"
-      anomaly_detection:
-        contamination: 0.1
-      predictive_warning:
-        trend_window: 3
-        thresholds:
-          water_level: -5.0
+  - id: perception_agent
+    class: DigitalTwinAgent
+    config:
+      simulated_object_id: reservoir
+      state_topic: "perception/reservoir/state"
+      cognitive_config:
+        history_size: 20
+        target_variables:
+          - "water_level"
+        anomaly_detection:
+          contamination: 0.1
+        predictive_warning:
+          trend_window: 3
+          thresholds:
+            water_level: -5.0

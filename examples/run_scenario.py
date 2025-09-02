@@ -18,8 +18,12 @@
 2. 交互式菜单：python run_scenario.py
 """
 
-import sys
+# 设置环境变量强制使用UTF-8编码
 import os
+os.environ['PYTHONIOENCODING'] = 'utf-8'
+os.environ['PYTHONUTF8'] = '1'
+
+import sys
 import argparse
 import time
 from pathlib import Path
@@ -181,9 +185,7 @@ class ExamplesScenarioRunner:
             
             # 调用run_scenario模块
             results = run_scenario_from_config(
-                config_path=str(config_path),
-                debug=self.debug_mode,
-                performance_monitor=self.performance_monitor
+                scenario_path=str(example_dir)
             )
             
             # 恢复原工作目录
@@ -315,11 +317,13 @@ class ExamplesScenarioRunner:
         print("\n可用示例：")
         if not self.examples:
             print("未找到任何可用的示例配置文件")
-            return
+            return {}
         
         for key, example in self.examples.items():
             config_exists = "✓" if Path(example['config_path']).exists() else "✗"
             print(f"  {key}: {example['name']} - {example['description']} [{config_exists}]")
+        
+        return self.examples
 
 def main():
     """主函数"""

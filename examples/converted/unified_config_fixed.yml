@@ -1,0 +1,53 @@
+agents:
+  central_dispatcher:
+    class: CentralDispatcherAgent
+    config:
+      command_topic: command/gate/flood
+      dispatcher_params:
+        high_level: 100.0
+        high_setpoint: 0.1
+        low_level: 0.0
+        low_setpoint: 1.0
+      mode: rule
+      observation_key: water_level
+      subscribed_topic: state/reservoir/main
+    id: central_dispatcher
+  reservoir_twin:
+    class: DigitalTwinAgent
+    config:
+      simulated_object_id: main_reservoir
+      state_topic: state/reservoir/main
+    id: reservoir_twin
+components:
+  flood_gate:
+    class: Gate
+    id: flood_gate
+    initial_state:
+      opening: 0.1
+    parameters:
+      discharge_coefficient: 0.8
+      width: 5.0
+  main_reservoir:
+    class: Reservoir
+    id: main_reservoir
+    initial_state:
+      water_level: 98.0
+    parameters:
+      area: 1000.0
+      inflow: 100.0
+      storage_curve:
+      - - 0
+        - 0
+      - - 100000
+        - 100
+metadata:
+  description: Centralized emergency override control example
+  example_type: yaml_config
+  run_with: run_scenario.py
+simulation:
+  dt: 1.0
+  duration: 200
+topology:
+  connections:
+  - downstream: flood_gate
+    upstream: main_reservoir

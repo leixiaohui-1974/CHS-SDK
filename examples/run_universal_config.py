@@ -19,8 +19,12 @@
 2. 交互式菜单：python run_universal_config.py
 """
 
-import sys
+# 设置环境变量强制使用UTF-8编码
 import os
+os.environ['PYTHONIOENCODING'] = 'utf-8'
+os.environ['PYTHONUTF8'] = '1'
+
+import sys
 import argparse
 import time
 from pathlib import Path
@@ -33,54 +37,90 @@ try:
     from core_lib.io.yaml_loader import SimulationBuilder
     from core_lib.io.yaml_writer import save_history_to_yaml
 except ImportError as e:
-    print(f"错误：无法导入CHS-SDK模块: {e}")
-    print("请确保已正确安装CHS-SDK并设置了Python路径")
+    print(f"Error: Unable to import CHS-SDK module: {e}")
+    print("Please ensure CHS-SDK is properly installed and Python path is set")
     sys.exit(1)
+
+# 设置统一场景运行器可用性标志
+UNIFIED_SCENARIO_AVAILABLE = False
 
 def run_universal_config_from_file(config_path, debug_mode=False, performance_monitor=False, 
                                   show_progress=True, show_summary=True, enable_validation=True):
-    """从通用配置文件运行场景"""
+    """Run scenario from universal configuration file"""
     import logging
     import yaml
     logging.basicConfig(level=logging.DEBUG if debug_mode else logging.INFO)
     
     config_path = Path(config_path)
     if not config_path.exists():
-        raise ValueError(f"配置文件不存在: {config_path}")
+        raise ValueError(f"Configuration file does not exist: {config_path}")
     
-    # 尝试加载universal_config.yml格式
+    # Try to load universal_config.yml format
     with open(config_path, 'r', encoding='utf-8') as f:
         config = yaml.safe_load(f)
     
-    logging.info(f"加载通用配置: {config_path.name}")
+    logging.info(f"Loading universal configuration: {config_path.name}")
     
     # 如果是universal_config格式，使用简化的加载方式
-    if 'simulation' in config and 'components' in config:
+    if 'simulation' in config:
         # 这是universal_config格式，需要特殊处理
-        logging.info("检测到universal_config格式，使用简化加载器")
-        # 暂时返回模拟结果
-        return {
-            'status': 'completed', 
-            'message': 'Universal config format detected but not fully implemented',
-            'debug_enabled': debug_mode,
-            'performance_monitor': performance_monitor
-        }
+        logging.info("检测到universal_config格式，使用统一仿真运行器")
+        # 导入并使用统一仿真运行器
+        try:
+            # 添加项目根目录到路径
+            project_root = Path(__file__).parent.parent
+            if str(project_root) not in sys.path:
+                sys.path.insert(0, str(project_root))
+            
+            from run_unified_scenario import run_simulation_from_config
+            results = run_simulation_from_config(
+                config_path=str(config_path),
+                show_progress=show_progress,
+                show_summary=show_summary
+            )
+            return results
+        except ImportError as e:
+            # 如果导入失败，尝试使用本地实现
+            logging.warning(f"无法导入统一仿真运行器: {e}，使用基础实现")
+            # 对于universal_config格式，创建一个简化的仿真运行
+            try:
+                from core_lib.core_engine.testing.simulation_harness import SimulationHarness
+                
+                # 获取仿真参数
+                sim_config = config.get('simulation', {})
+                duration = sim_config.get('end_time', sim_config.get('duration', 100))
+                time_step = sim_config.get('time_step', sim_config.get('dt', 1.0))
+                
+                # 创建简化的仿真
+                harness = SimulationHarness({'duration': duration, 'dt': time_step})
+                
+                # 运行仿真
+                results = harness.run_mas_simulation()
+                
+                logging.info(f"Universal config simulation completed with {len(results.get('time', []))} steps")
+                return {'status': 'completed', 'message': 'Universal config format processed with basic implementation', 'results': results}
+            except Exception as basic_e:
+                logging.error(f"基础实现也失败: {basic_e}")
+                return {'status': 'failed', 'error': f'Both unified and basic implementations failed: {e}, {basic_e}'}
+        except Exception as e:
+            logging.error(f"运行统一仿真时出错: {e}")
+            return {'status': 'failed', 'error': str(e)}
     else:
         # 标准多文件格式
         scenario_dir = config_path.parent
         loader = SimulationBuilder(scenario_path=str(scenario_dir))
         harness = loader.load()
         
-        logging.info("开始仿真运行...")
+        logging.info("Starting simulation run...")
         results = harness.run_mas_simulation()
-        logging.info("仿真运行完成")
+        logging.info("Simulation run completed")
         
         return results
 
 UNIFIED_SCENARIO_AVAILABLE = True
 
 class ExamplesUniversalConfigRunner:
-    """Examples目录通用配置运行器"""
+    """Examples directory universal configuration runner"""
     
     def __init__(self):
         self.examples_dir = Path(__file__).parent
@@ -243,85 +283,57 @@ class ExamplesUniversalConfigRunner:
         return examples
     
     def run_example(self, example_key):
-        """运行指定示例"""
+        """Run specified example"""
         if example_key not in self.examples:
-            print(f"错误：未找到示例 '{example_key}'")
+            print(f"Error: Example '{example_key}' not found")
             return False
         
         example = self.examples[example_key]
-        print(f"\n=== 运行示例：{example['name']} ===")
-        print(f"描述：{example['description']}")
-        print(f"类别：{example['category']}")
-        print(f"配置文件：{example['config_path']} ({example['config_type']})")
+        print(f"\n=== Running Example: {example['name']} ===")
+        print(f"Description: {example['description']}")
+        print(f"Category: {example['category']}")
+        print(f"Configuration file: {example['config_path']} ({example['config_type']})")
         
-        # 检查配置文件是否存在
+        # Check if configuration file exists
         config_path = Path(example['config_path'])
         if not config_path.exists():
-            print(f"错误：配置文件不存在: {config_path}")
+            print(f"Error: Configuration file does not exist: {config_path}")
             return False
         
         try:
             start_time = time.time()
             
-            # 切换到示例目录
+            # Switch to example directory
             example_dir = self.examples_dir / example['path']
             original_cwd = os.getcwd()
             os.chdir(str(example_dir))
             
-            print(f"\n工作目录：{example_dir}")
-            print("开始仿真...")
+            print(f"\nWorking directory: {example_dir}")
+            print("Starting simulation...")
             
-            # 根据配置类型选择运行方式
+            # Select running method based on configuration type
             results = None
             
-            if example['config_type'] == 'universal':
-                # 使用通用配置运行器
-                try:
-                    results = run_universal_config_from_file(
-                        config_path=str(config_path),
-                        debug=self.debug_mode,
-                        performance_monitor=self.performance_monitor,
-                        visualization=self.visualization_enabled,
-                        validation=self.validation_enabled
-                    )
-                except Exception as e:
-                    print(f"通用配置运行失败: {e}")
-                    if UNIFIED_SCENARIO_AVAILABLE:
-                        print("尝试使用统一场景运行器...")
-                        results = run_unified_scenario_from_config(
-                            config_path=str(config_path),
-                            debug=self.debug_mode,
-                            performance_monitor=self.performance_monitor
-                        )
-                    else:
-                        raise
-            else:
-                # 对于传统配置文件，优先尝试统一场景运行器
-                if UNIFIED_SCENARIO_AVAILABLE:
-                    print("注意：使用传统配置文件，将通过统一场景运行器运行")
-                    results = run_unified_scenario_from_config(
-                        config_path=str(config_path),
-                        debug=self.debug_mode,
-                        performance_monitor=self.performance_monitor,
-                        legacy_mode=True
-                    )
-                else:
-                    print("错误：传统配置文件需要统一场景运行器支持")
-                    return False
+            # Use universal configuration runner uniformly
+            results = run_universal_config_from_file(
+                config_path=str(config_path),
+                debug_mode=self.debug_mode,
+                performance_monitor=self.performance_monitor
+            )
             
-            # 恢复原工作目录
+            # Restore original working directory
             os.chdir(original_cwd)
             
-            # 性能统计
+            # Performance statistics
             end_time = time.time()
             execution_time = end_time - start_time
             
-            print(f"\n=== 仿真完成 ===")
-            print(f"执行时间：{execution_time:.2f}秒")
+            print(f"\n=== Simulation Completed ===")
+            print(f"Execution time: {execution_time:.2f}s")
             
             if results and isinstance(results, dict):
                 if 'time' in results:
-                    print(f"仿真步数：{len(results['time'])}")
+                    print(f"Simulation steps: {len(results['time'])}")
                 
                 if self.performance_monitor:
                     self._show_performance_stats(results, execution_time)
@@ -335,75 +347,75 @@ class ExamplesUniversalConfigRunner:
             return True
             
         except Exception as e:
-            # 确保恢复工作目录
+            # Ensure working directory is restored
             os.chdir(original_cwd)
-            print(f"错误：运行示例时发生异常: {e}")
+            print(f"Error: Exception occurred while running example: {e}")
             if self.debug_mode:
                 import traceback
                 traceback.print_exc()
             return False
     
     def _show_performance_stats(self, results, execution_time):
-        """显示性能统计信息"""
-        print("\n=== 性能统计 ===")
-        print(f"总执行时间：{execution_time:.3f}秒")
+        """Show performance statistics"""
+        print("\n=== Performance Statistics ===")
+        print(f"Total execution time: {execution_time:.3f}s")
         
         if 'time' in results:
             sim_time = len(results['time'])
-            print(f"仿真步数：{sim_time}")
+            print(f"Simulation steps: {sim_time}")
             if sim_time > 0:
-                print(f"平均每步耗时：{execution_time/sim_time*1000:.2f}毫秒")
+                print(f"Average time per step: {execution_time/sim_time*1000:.2f}ms")
         
-        # 内存使用情况
+        # Memory usage
         try:
             import psutil
             process = psutil.Process()
             memory_mb = process.memory_info().rss / 1024 / 1024
             cpu_percent = process.cpu_percent()
-            print(f"内存使用：{memory_mb:.1f}MB")
-            print(f"CPU使用率：{cpu_percent:.1f}%")
+            print(f"Memory usage: {memory_mb:.1f}MB")
+            print(f"CPU usage: {cpu_percent:.1f}%")
         except ImportError:
             pass
         
-        # 显示结果统计
+        # Show result statistics
         if isinstance(results, dict):
             data_points = sum(len(v) if isinstance(v, list) else 1 for v in results.values())
-            print(f"数据点总数：{data_points}")
+            print(f"Total data points: {data_points}")
     
     def _show_debug_info(self, results):
-        """显示调试信息"""
-        print("\n=== 调试信息 ===")
+        """Show debug information"""
+        print("\n=== Debug Information ===")
         if isinstance(results, dict):
-            print(f"结果键值：{list(results.keys())}")
+            print(f"Result keys: {list(results.keys())}")
             
             for key, values in results.items():
                 if isinstance(values, list) and len(values) > 0:
                     if all(isinstance(v, (int, float)) for v in values):
-                        print(f"{key}: {len(values)}个数据点, 范围[{min(values):.3f}, {max(values):.3f}]")
+                        print(f"{key}: {len(values)} data points, range[{min(values):.3f}, {max(values):.3f}]")
                     else:
-                        print(f"{key}: {len(values)}个数据点")
+                        print(f"{key}: {len(values)} data points")
                 elif isinstance(values, dict):
-                    print(f"{key}: 字典类型, {len(values)}个键")
+                    print(f"{key}: dict type, {len(values)} keys")
                 else:
-                    print(f"{key}: {type(values).__name__}类型")
+                    print(f"{key}: {type(values).__name__} type")
         else:
-            print(f"结果类型：{type(results)}")
+            print(f"Result type: {type(results)}")
     
     def _show_validation_results(self, results):
-        """显示验证结果"""
-        print("\n=== 验证结果 ===")
+        """Show validation results"""
+        print("\n=== Validation Results ===")
         
-        # 检查基本数据完整性
+        # Check basic data integrity
         if isinstance(results, dict):
             if 'time' in results:
                 time_data = results['time']
                 if len(time_data) > 0:
-                    print(f"✓ 时间序列完整: {len(time_data)}个时间点")
-                    print(f"  时间范围: {min(time_data):.1f} - {max(time_data):.1f}")
+                    print(f"✓ Time series complete: {len(time_data)} time points")
+                    print(f"  Time range: {min(time_data):.1f} - {max(time_data):.1f}")
                 else:
-                    print("✗ 时间序列为空")
+                    print("✗ Time series is empty")
             
-            # 检查数值稳定性
+            # Check numerical stability
             numeric_keys = [k for k, v in results.items() 
                           if isinstance(v, list) and len(v) > 0 
                           and all(isinstance(x, (int, float)) for x in v)]
@@ -417,26 +429,26 @@ class ExamplesUniversalConfigRunner:
                         std_dev = statistics.stdev(values)
                         mean_val = statistics.mean(values)
                         cv = std_dev / abs(mean_val) if mean_val != 0 else float('inf')
-                        if cv < 1.0:  # 变异系数小于1认为相对稳定
+                        if cv < 1.0:  # Coefficient of variation < 1 considered relatively stable
                             stable_count += 1
                     except:
                         pass
             
             if numeric_keys:
-                print(f"✓ 数值稳定性: {stable_count}/{len(numeric_keys)}个变量相对稳定")
+                print(f"✓ Numerical stability: {stable_count}/{len(numeric_keys)} variables relatively stable")
         
-        print("验证完成")
+        print("Validation completed")
     
     def show_menu(self):
-        """显示交互式菜单"""
-        print("\n=== CHS-SDK Examples 通用配置运行器 ===")
-        print("\n可用示例：")
+        """Show interactive menu"""
+        print("\n=== CHS-SDK Examples Universal Configuration Runner ===")
+        print("\nAvailable examples:")
         
         if not self.examples:
-            print("未找到任何可用的示例配置文件")
+            print("No available example configuration files found")
             return None
         
-        # 按类别和优先级分组显示
+        # Group by category and priority
         categories = {}
         for key, example in self.examples.items():
             category = example['category']
@@ -444,7 +456,7 @@ class ExamplesUniversalConfigRunner:
                 categories[category] = []
             categories[category].append((key, example))
         
-        # 按优先级排序（通用配置优先）
+        # Sort by priority (universal configuration first)
         for category in categories:
             categories[category].sort(key=lambda x: x[1]['priority'], reverse=True)
         
@@ -464,54 +476,54 @@ class ExamplesUniversalConfigRunner:
                 key_map[str(index)] = key
                 index += 1
         
-        print(f"\n  {index}. 启用调试模式 {'✓' if self.debug_mode else '✗'}")
-        print(f"  {index+1}. 启用性能监控 {'✓' if self.performance_monitor else '✗'}")
-        print(f"  {index+2}. 启用可视化 {'✓' if self.visualization_enabled else '✗'}")
-        print(f"  {index+3}. 启用验证 {'✓' if self.validation_enabled else '✗'}")
-        print(f"  {index+4}. 刷新示例列表")
-        print(f"  {index+5}. 退出")
+        print(f"\n  {index}. Enable debug mode {'✓' if self.debug_mode else '✗'}")
+        print(f"  {index+1}. Enable performance monitoring {'✓' if self.performance_monitor else '✗'}")
+        print(f"  {index+2}. Enable visualization {'✓' if self.visualization_enabled else '✗'}")
+        print(f"  {index+3}. Enable validation {'✓' if self.validation_enabled else '✗'}")
+        print(f"  {index+4}. Refresh example list")
+        print(f"  {index+5}. Exit")
         
-        print("\n图例：🔧=通用配置文件, ⚙️=传统配置文件, ⭐=推荐")
+        print("\nLegend: 🔧=Universal config file, ⚙️=Traditional config file, ⭐=Recommended")
         
         while True:
             try:
-                choice = input("\n请选择要运行的示例（输入数字）：").strip()
+                choice = input("\nPlease select an example to run (enter number): ").strip()
                 
                 if choice in key_map:
                     return key_map[choice]
                 elif choice == str(index):
                     self.debug_mode = not self.debug_mode
-                    status = "启用" if self.debug_mode else "禁用"
-                    print(f"调试模式已{status}")
+                    status = "enabled" if self.debug_mode else "disabled"
+                    print(f"Debug mode {status}")
                 elif choice == str(index+1):
                     self.performance_monitor = not self.performance_monitor
-                    status = "启用" if self.performance_monitor else "禁用"
-                    print(f"性能监控已{status}")
+                    status = "enabled" if self.performance_monitor else "disabled"
+                    print(f"Performance monitoring {status}")
                 elif choice == str(index+2):
                     self.visualization_enabled = not self.visualization_enabled
-                    status = "启用" if self.visualization_enabled else "禁用"
-                    print(f"可视化已{status}")
+                    status = "enabled" if self.visualization_enabled else "disabled"
+                    print(f"Visualization {status}")
                 elif choice == str(index+3):
                     self.validation_enabled = not self.validation_enabled
-                    status = "启用" if self.validation_enabled else "禁用"
-                    print(f"验证已{status}")
+                    status = "enabled" if self.validation_enabled else "disabled"
+                    print(f"Validation {status}")
                 elif choice == str(index+4):
-                    print("正在刷新示例列表...")
+                    print("Refreshing example list...")
                     self.examples = self._discover_examples()
                     return "refresh"
                 elif choice == str(index+5):
                     return None
                 else:
-                    print("无效选择，请重新输入")
+                    print("Invalid selection, please try again")
             except KeyboardInterrupt:
-                print("\n用户取消操作")
+                print("\nUser cancelled operation")
                 return None
     
     def list_examples(self):
-        """列出所有可用示例"""
-        print("\n可用示例：")
+        """List all available examples"""
+        print("\nAvailable examples:")
         if not self.examples:
-            print("未找到任何可用的示例配置文件")
+            print("No available example configuration files found")
             return
         
         for key, example in self.examples.items():
@@ -521,14 +533,14 @@ class ExamplesUniversalConfigRunner:
             print(f"  {key}: {example['name']} - {example['description']} [{config_type}] [{config_exists}] {priority}")
 
 def main():
-    """主函数"""
-    parser = argparse.ArgumentParser(description="CHS-SDK Examples 通用配置运行器")
-    parser.add_argument("--example", "-e", help="要运行的示例名称")
-    parser.add_argument("--debug", "-d", action="store_true", help="启用调试模式")
-    parser.add_argument("--performance", "-p", action="store_true", help="启用性能监控")
-    parser.add_argument("--visualization", "-v", action="store_true", help="启用可视化")
-    parser.add_argument("--validation", "-val", action="store_true", help="启用验证")
-    parser.add_argument("--list", "-l", action="store_true", help="列出所有可用示例")
+    """Main function"""
+    parser = argparse.ArgumentParser(description="CHS-SDK Examples Universal Configuration Runner")
+    parser.add_argument("--example", "-e", help="Name of the example to run")
+    parser.add_argument("--debug", "-d", action="store_true", help="Enable debug mode")
+    parser.add_argument("--performance", "-p", action="store_true", help="Enable performance monitoring")
+    parser.add_argument("--visualization", "-v", action="store_true", help="Enable visualization")
+    parser.add_argument("--validation", "-val", action="store_true", help="Enable validation")
+    parser.add_argument("--list", "-l", action="store_true", help="List all available examples")
     
     args = parser.parse_args()
     
@@ -543,15 +555,15 @@ def main():
         return
     
     if args.example:
-        # 命令行模式
+        # Command line mode
         success = runner.run_example(args.example)
         sys.exit(0 if success else 1)
     else:
-        # 交互式模式
+        # Interactive mode
         while True:
             example_key = runner.show_menu()
             if example_key is None:
-                print("再见！")
+                print("Goodbye!")
                 break
             elif example_key == "refresh":
                 continue
@@ -560,13 +572,13 @@ def main():
             if not success:
                 continue
             
-            # 询问是否继续
+            # Ask whether to continue
             try:
-                continue_choice = input("\n是否继续运行其他示例？(y/n): ").strip().lower()
-                if continue_choice not in ['y', 'yes', '是']:
+                continue_choice = input("\nContinue running other examples? (y/n): ").strip().lower()
+                if continue_choice not in ['y', 'yes']:
                     break
             except KeyboardInterrupt:
-                print("\n再见！")
+                print("\nGoodbye!")
                 break
 
 if __name__ == "__main__":

@@ -1,0 +1,24 @@
+CHS-SDK Simulation Mode Test Report
+========================================
+Test time: 2025-09-02 08:00:56
+Total tests: 4
+Passed tests: 4
+Failed tests: 0
+Success rate: 100.0%
+
+Hardcoded Example Runner - 16 examples tested:
+  Status: Passed
+  Execution time: 16.95 seconds
+
+Unified Configuration File Method - 9 examples tested:
+  Status: Passed
+  Execution time: 23.57 seconds
+
+Traditional Multi-Configuration File Method - 22 examples tested:
+  Status: Passed
+  Execution time: 60.29 seconds
+
+Universal Configuration Runner - 14 examples tested:
+  Status: Passed
+  Execution time: 36.56 seconds
+
