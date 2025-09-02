@@ -1,0 +1,26 @@
+{
+  "build_info": {
+    "start_time": "2025-09-02T20:51:18.045683",
+    "end_time": "2025-09-02T20:51:49.467128",
+    "duration_seconds": 31.421445,
+    "project_root": "E:\\OneDrive\\Documents\\GitHub\\CHS-SDK"
+  },
+  "file_statistics": {
+    "total_files": 1023,
+    "processed_files": 1023,
+    "failed_files": 0,
+    "success_rate": 100.0
+  },
+  "file_categories": {
+    "other": 103,
+    "markdown": 127,
+    "python": 346,
+    "text": 6,
+    "json": 58,
+    "yaml": 317,
+    "docker": 1,
+    "web": 59,
+    "config": 2,
+    "shell": 4
+  }
+}

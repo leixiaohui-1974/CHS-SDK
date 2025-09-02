@@ -18,22 +18,61 @@ class CentralPerceptionAgent(Agent):
     def __init__(self,
                  agent_id: str,
                  message_bus: MessageBus,
-                 subscribed_topics: Dict[str, str],
-                 global_state_topic: str):
+                 data_collection: Dict[str, Any] = None,
+                 subscribe_topics: List[str] = None,
+                 data_fusion_config: Dict[str, Any] = None,
+                 centralized_twin_config: Dict[str, Any] = None,
+                 global_evaluation_config: Dict[str, Any] = None,
+                 global_prediction_config: Dict[str, Any] = None,
+                 publish_topics: List[str] = None,
+                 subscribed_topics: Dict[str, str] = None,
+                 global_state_topic: str = None):
         """
         Initializes the CentralPerceptionAgent.
 
         Args:
             agent_id: The unique ID of this agent.
             message_bus: The system's message bus for communication.
-            subscribed_topics: A dictionary mapping a component ID to its state topic.
-                               Example: {'pump_station_1': 'state.pumps.1', 'valve_station_1': 'state.valves.1'}
-            global_state_topic: The topic on which to publish the aggregated state.
+            data_collection: Data collection configuration
+            subscribe_topics: List of topics to subscribe to
+            data_fusion_config: Data fusion configuration
+            centralized_twin_config: Centralized twin configuration
+            global_evaluation_config: Global evaluation configuration
+            global_prediction_config: Global prediction configuration
+            publish_topics: List of topics to publish to
+            subscribed_topics: Legacy parameter for backward compatibility
+            global_state_topic: Legacy parameter for backward compatibility
         """
         super().__init__(agent_id)
         self.bus = message_bus
-        self.subscribed_topics = subscribed_topics
-        self.global_state_topic = global_state_topic
+        
+        # Handle legacy parameters for backward compatibility
+        if subscribed_topics is not None:
+            self.subscribed_topics = subscribed_topics
+        else:
+            # Convert subscribe_topics list to a dictionary format
+            self.subscribed_topics = {}
+            if subscribe_topics:
+                for i, topic in enumerate(subscribe_topics):
+                    component_id = f"component_{i}"
+                    self.subscribed_topics[component_id] = topic
+        
+        if global_state_topic is not None:
+            self.global_state_topic = global_state_topic
+        else:
+            # Use the first publish topic as global state topic
+            if publish_topics and len(publish_topics) > 0:
+                self.global_state_topic = publish_topics[0]
+            else:
+                self.global_state_topic = "agent.central_perception.system_state"
+        
+        # Store configuration parameters
+        self.data_collection = data_collection or {}
+        self.data_fusion_config = data_fusion_config or {}
+        self.centralized_twin_config = centralized_twin_config or {}
+        self.global_evaluation_config = global_evaluation_config or {}
+        self.global_prediction_config = global_prediction_config or {}
+        self.publish_topics = publish_topics or []
 
         # The unified, global state of the network
         self.global_state: Dict[str, State] = {comp_id: {} for comp_id in self.subscribed_topics.keys()}

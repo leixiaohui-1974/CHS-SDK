@@ -1,0 +1,38 @@
+{
+  "last_indexed": "2025-09-02T21:15:11.350587",
+  "total_documents": 4647,
+  "document_types": {
+    "documentation": 2185,
+    "class_definition": 517,
+    "function_definition": 1295,
+    "module_documentation": 233,
+    "general_configuration": 162,
+    "text_document": 6,
+    "agent_configuration": 118,
+    "agent_definition": 109,
+    "template_configuration": 1,
+    "scenario_configuration": 21
+  },
+  "file_types": {
+    "markdown": 2185,
+    "python": 2154,
+    "yaml": 302,
+    "text": 6
+  },
+  "tags": [
+    "chs-sdk",
+    "python",
+    "document",
+    "configuration",
+    "text",
+    "scenario",
+    "agent",
+    "class",
+    "markdown",
+    "module",
+    "api",
+    "documentation",
+    "yaml",
+    "function"
+  ]
+}

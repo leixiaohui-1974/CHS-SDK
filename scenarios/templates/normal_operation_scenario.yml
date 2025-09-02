@@ -1,0 +1,348 @@
+# 正常运行场景模板
+name: "normal_operation_scenario"
+description: "正常运行场景，模拟标准工况下的水利系统运行"
+category: "normal_operation"
+version: "1.0"
+created_at: "2024-01-23T11:00:00"
+
+# 场景参数定义
+parameters:
+  target_water_level:
+    type: "float"
+    description: "目标水位 (m)"
+    required: true
+    min: 30.0
+    max: 80.0
+    default: 60.0
+  
+  normal_flow_rate:
+    type: "float"
+    description: "正常流量 (m³/s)"
+    required: true
+    min: 50.0
+    max: 500.0
+    default: 200.0
+  
+  supply_demand_ratio:
+    type: "float"
+    description: "供需比例"
+    required: false
+    min: 0.8
+    max: 1.2
+    default: 1.0
+  
+  efficiency_target:
+    type: "float"
+    description: "效率目标"
+    required: false
+    min: 0.7
+    max: 0.95
+    default: 0.85
+  
+  maintenance_interval:
+    type: "float"
+    description: "维护间隔 (小时)"
+    required: false
+    min: 24.0
+    max: 168.0
+    default: 72.0
+
+# 智能体配置
+agents_config:
+  central_mpc:
+    mode: "rule"
+    objective_config:
+      water_level_control_weight: 0.6
+      flow_optimization_weight: 0.5
+      energy_efficiency_weight: 0.4
+    
+    constraints_config:
+      target_water_level: "${target_water_level}"
+      normal_flow_rate: "${normal_flow_rate}"
+      efficiency_threshold: "${efficiency_target}"
+  
+  gate_agents:
+    Gate_1:
+      control_mode: "automatic"
+      max_opening_rate: 0.08
+      priority_level: "high"
+      optimization_enabled: true
+    
+    Gate_2:
+      control_mode: "automatic"
+      max_opening_rate: 0.06
+      priority_level: "medium"
+      optimization_enabled: true
+    
+    Gate_3:
+      control_mode: "automatic"
+      max_opening_rate: 0.06
+      priority_level: "medium"
+      optimization_enabled: true
+  
+  perception_agents:
+    central_perception:
+      normal_operation_monitoring: true
+      performance_tracking: true
+      prediction_horizon: 4.0
+    
+    river_channel_perception:
+      flow_optimization: true
+      water_quality_monitoring: true
+      sediment_monitoring: false
+
+# 扰动配置
+disturbances:
+  - agent_id: "Normal_Inflow_Agent"
+    type: "inflow_variation"
+    parameters:
+      base_flow: "${normal_flow_rate}"
+      variation_amplitude: 0.1  # ±10% variation
+      variation_period: 24.0    # 24-hour cycle
+      start_time: 0.0
+      duration: 168.0  # 7天
+      target_components:
+        - "upstream_reservoir"
+  
+  - agent_id: "Daily_Demand_Agent"
+    type: "water_demand"
+    parameters:
+      base_demand: 150.0  # m³/s
+      peak_factor: 1.3
+      peak_hours: [8, 12, 18, 20]  # Peak demand hours
+      demand_ratio: "${supply_demand_ratio}"
+      start_time: 0.0
+      duration: 168.0
+      target_components:
+        - "downstream_reservoir"
+  
+  - agent_id: "Weather_Variation_Agent"
+    type: "weather"
+    parameters:
+      temperature_range: [15, 25]  # °C
+      humidity_range: [60, 80]     # %
+      wind_speed_range: [2, 8]     # m/s
+      evaporation_factor: 1.0
+      start_time: 0.0
+      duration: 168.0
+      target_components:
+        - "upstream_reservoir"
+        - "downstream_reservoir"
+
+# 控制目标
+objectives:
+  primary:
+    type: "water_level_control"
+    target: "maintain_target_level"
+    weight: 0.6
+    constraints:
+      target_level: "${target_water_level}"
+      tolerance: 2.0  # ±2m tolerance
+  
+  secondary:
+    type: "flow_optimization"
+    target: "optimize_flow_distribution"
+    weight: 0.5
+    constraints:
+      target_flow: "${normal_flow_rate}"
+      flow_balance_tolerance: 0.05
+  
+  tertiary:
+    type: "energy_efficiency"
+    target: "maximize_efficiency"
+    weight: 0.4
+    constraints:
+      min_efficiency: "${efficiency_target}"
+      max_energy_consumption: 1000.0  # kWh/day
+
+# 约束条件
+constraints:
+  operational_constraints:
+    water_level_range: [40.0, 75.0]  # m
+    flow_rate_range: [100.0, 400.0]  # m³/s
+    gate_opening_range: [0.1, 0.9]   # 10%-90%
+  
+  performance_constraints:
+    min_supply_reliability: 0.95
+    max_water_loss: 0.05  # 5% maximum loss
+    min_system_efficiency: "${efficiency_target}"
+  
+  safety_constraints:
+    max_water_level: 80.0  # m
+    min_water_level: 30.0  # m
+    emergency_response_time: 10.0  # minutes
+
+# 运行策略
+operation_strategy:
+  daily_schedule:
+    - time_range: [0, 6]
+      operation_mode: "low_demand"
+      target_efficiency: 0.9
+      gate_opening_factor: 0.8
+    
+    - time_range: [6, 10]
+      operation_mode: "morning_peak"
+      target_efficiency: 0.85
+      gate_opening_factor: 1.1
+    
+    - time_range: [10, 16]
+      operation_mode: "normal"
+      target_efficiency: 0.85
+      gate_opening_factor: 1.0
+    
+    - time_range: [16, 22]
+      operation_mode: "evening_peak"
+      target_efficiency: 0.8
+      gate_opening_factor: 1.2
+    
+    - time_range: [22, 24]
+      operation_mode: "night"
+      target_efficiency: 0.9
+      gate_opening_factor: 0.9
+  
+  optimization_rules:
+    - condition: "water_level > target_level + 3"
+      action: "increase_discharge"
+      parameters:
+        discharge_increase: 0.1
+    
+    - condition: "water_level < target_level - 3"
+      action: "decrease_discharge"
+      parameters:
+        discharge_decrease: 0.1
+    
+    - condition: "efficiency < efficiency_target"
+      action: "optimize_gate_operations"
+      parameters:
+        optimization_intensity: 0.2
+
+# 性能指标
+performance_metrics:
+  - name: "water_level_stability"
+    description: "水位稳定性"
+    calculation: "1 - std(water_level) / mean(water_level)"
+    target: "> 0.95"
+  
+  - name: "flow_efficiency"
+    description: "流量效率"
+    calculation: "actual_flow / target_flow"
+    target: "0.95 - 1.05"
+  
+  - name: "energy_efficiency"
+    description: "能源效率"
+    calculation: "useful_work / total_energy_consumption"
+    target: ">= ${efficiency_target}"
+  
+  - name: "supply_reliability"
+    description: "供水可靠性"
+    calculation: "satisfied_demand / total_demand"
+    target: "> 0.95"
+  
+  - name: "system_availability"
+    description: "系统可用性"
+    calculation: "operational_time / total_time"
+    target: "> 0.98"
+
+# 场景事件时间线
+event_timeline:
+  - time: 0.0
+    event: "normal_operation_start"
+    description: "正常运行开始"
+  
+  - time: 6.0
+    event: "morning_peak_start"
+    description: "晨峰开始"
+  
+  - time: 10.0
+    event: "normal_operation_resume"
+    description: "恢复正常运行"
+  
+  - time: 18.0
+    event: "evening_peak_start"
+    description: "晚峰开始"
+  
+  - time: 22.0
+    event: "night_operation_start"
+    description: "夜间运行开始"
+  
+  - time: 72.0
+    event: "routine_maintenance_check"
+    description: "例行维护检查"
+    trigger_condition: "time % maintenance_interval == 0"
+  
+  - time: 168.0
+    event: "weekly_performance_review"
+    description: "周性能评估"
+
+# 维护策略
+maintenance_strategy:
+  preventive_maintenance:
+    - component: "gates"
+      interval: "${maintenance_interval}"
+      duration: 2.0  # hours
+      impact: "partial_operation"
+    
+    - component: "sensors"
+      interval: 24.0  # hours
+      duration: 0.5  # hours
+      impact: "minimal"
+    
+    - component: "control_system"
+      interval: 168.0  # hours (weekly)
+      duration: 1.0   # hours
+      impact: "temporary_manual_mode"
+  
+  condition_based_maintenance:
+    - trigger: "efficiency < 0.8"
+      action: "performance_optimization"
+      priority: "high"
+    
+    - trigger: "vibration_level > threshold"
+      action: "mechanical_inspection"
+      priority: "medium"
+    
+    - trigger: "sensor_drift > 5%"
+      action: "calibration"
+      priority: "low"
+
+# 质量控制
+quality_control:
+  water_quality_parameters:
+    - parameter: "turbidity"
+      target_range: [0, 5]  # NTU
+      monitoring_frequency: "continuous"
+    
+    - parameter: "ph"
+      target_range: [6.5, 8.5]
+      monitoring_frequency: "hourly"
+    
+    - parameter: "dissolved_oxygen"
+      target_range: [5, 12]  # mg/L
+      monitoring_frequency: "hourly"
+  
+  control_actions:
+    - condition: "turbidity > 5"
+      action: "reduce_flow_rate"
+      parameters:
+        reduction_factor: 0.1
+    
+    - condition: "ph < 6.5 or ph > 8.5"
+      action: "water_treatment_alert"
+      priority: "high"
+
+# 验证规则
+validation_rules:
+  - rule: "30 <= target_water_level <= 80"
+    message: "目标水位必须在30-80m之间"
+  
+  - rule: "50 <= normal_flow_rate <= 500"
+    message: "正常流量必须在50-500m³/s之间"
+  
+  - rule: "0.8 <= supply_demand_ratio <= 1.2"
+    message: "供需比例必须在0.8-1.2之间"
+  
+  - rule: "0.7 <= efficiency_target <= 0.95"
+    message: "效率目标必须在70%-95%之间"
+  
+  - rule: "maintenance_interval >= 24"
+    message: "维护间隔不能少于24小时"

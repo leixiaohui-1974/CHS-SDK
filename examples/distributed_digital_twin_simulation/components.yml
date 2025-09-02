@@ -1,0 +1,162 @@
+# 分布式数字孪生与优化控制仿真案例 - 物理组件配置
+# 系统拓扑：上游水库 -> Gate_1(3孔) -> Channel_1 -> Diversion_1 -> Gate_2 -> Channel_2 -> Diversion_2 -> Gate_3 -> 下游水库
+
+components:
+  # 上游水库
+  - id: Upstream_Reservoir
+    class: Reservoir
+    initial_state:
+      water_level: 15.0  # 初始水位 (m)
+      volume: 15000000   # 初始库容 (m³)
+    parameters:
+      area: 1000000      # 水面面积 (m²)
+      storage_curve:     # 库容曲线 [[volume_m3, level_m], ...]
+        - [0, 0]
+        - [30000000, 30]
+      inflow: 100.0      # 恒定入流 (m³/s)
+
+  # 节制闸1 (3孔闸门)
+  - id: Gate_1
+    class: Gate
+    initial_state:
+      opening: 0.5       # 初始开度 (0-1)
+    parameters:
+      width: 15.0        # 闸门总宽度 (m)
+      discharge_coefficient: 0.8
+      number_of_gates: 3 # 3个独立闸孔
+      # 执行器干扰配置
+      actuator_delay: 2.0     # 执行器延迟 (s)
+      actuator_noise_std: 0.02 # 执行器噪声标准差
+      mechanical_aging: 0.95   # 机械老化系数
+
+  # 明渠段1 (使用RiverChannel类进行一维水力学仿真)
+  - id: Channel_1
+    class: RiverChannel
+    initial_state:
+      water_level: 8.0   # 初始水位 (m)
+      volume: 800000     # 初始水量 (m³)
+    parameters:
+      length: 5000       # 渠道长度 (m)
+      width: 20          # 渠道宽度 (m)
+      slope: 0.0005      # 渠道坡度
+      manning_n: 0.025   # 曼宁糙率系数
+      # 监测点噪声配置
+      water_level_noise_std: 0.05  # 水位监测噪声 (m)
+      flow_noise_std: 2.0          # 流量监测噪声 (m³/s)
+
+  # 分水口1
+  - id: Diversion_1
+    class: core_lib.physical_objects.disturbance_node.DisturbanceNode
+    initial_state:
+      outflow: 15.0      # 初始分水流量 (m³/s)
+    parameters:
+      action_topic: 'disturbance/diversion_1'
+      action_key: 'outflow'
+      # 流量监测噪声
+      flow_noise_std: 1.0
+
+  # 节制闸2 (单孔闸门)
+  - id: Gate_2
+    class: Gate
+    initial_state:
+      opening: 0.6
+    parameters:
+      width: 8.0
+      discharge_coefficient: 0.75
+      number_of_gates: 1
+      # 执行器干扰配置
+      actuator_delay: 1.5
+      actuator_noise_std: 0.015
+      mechanical_aging: 0.97
+
+  # 明渠段2
+  - id: Channel_2
+    class: RiverChannel
+    initial_state:
+      water_level: 6.0
+      volume: 600000
+    parameters:
+      length: 4000
+      width: 18
+      slope: 0.0008
+      manning_n: 0.03
+      # 监测点噪声配置
+      water_level_noise_std: 0.04
+      flow_noise_std: 1.8
+
+  # 分水口2
+  - id: Diversion_2
+    class: core_lib.physical_objects.disturbance_node.DisturbanceNode
+    initial_state:
+      outflow: 12.0
+    parameters:
+      action_topic: 'disturbance/diversion_2'
+      action_key: 'outflow'
+      # 流量监测噪声
+      flow_noise_std: 0.8
+
+  # 节制闸3 (单孔闸门)
+  - id: Gate_3
+    class: Gate
+    initial_state:
+      opening: 0.7
+    parameters:
+      width: 6.0
+      discharge_coefficient: 0.7
+      number_of_gates: 1
+      # 执行器干扰配置
+      actuator_delay: 1.8
+      actuator_noise_std: 0.018
+      mechanical_aging: 0.96
+
+  # 下游水库
+  - id: Downstream_Reservoir
+    class: Reservoir
+    initial_state:
+      water_level: 12.0
+      volume: 12000000
+    parameters:
+      area: 1000000
+      storage_curve:
+        - [0, 0]
+        - [25000000, 25]
+      outflow: 80.0      # 恒定出流 (m³/s)
+
+# 监测点配置 - 为所有关键位置添加传感器噪声
+monitoring_points:
+  # 水位监测点
+  water_level_sensors:
+    - component: Gate_1
+      locations: ["upstream", "downstream"]
+      noise_std: 0.03
+    - component: Gate_2
+      locations: ["upstream", "downstream"]
+      noise_std: 0.025
+    - component: Gate_3
+      locations: ["upstream", "downstream"]
+      noise_std: 0.02
+  
+  # 流量监测点
+  flow_sensors:
+    - component: Gate_1
+      measurement: "total_flow"
+      noise_std: 3.0
+    - component: Gate_2
+      measurement: "flow"
+      noise_std: 2.0
+    - component: Gate_3
+      measurement: "flow"
+      noise_std: 1.5
+    - component: Diversion_1
+      measurement: "outflow"
+      noise_std: 1.0
+    - component: Diversion_2
+      measurement: "outflow"
+      noise_std: 0.8
+  
+  # 雨量监测点
+  rainfall_sensors:
+    - component: Channel_1
+      noise_std: 0.5  # mm/h
+    - component: Channel_2
+      noise_std: 0.4  # mm/h

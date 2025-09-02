@@ -1,0 +1,186 @@
+# 洪水控制场景实例 001
+scenario_id: "flood_control_instance_001"
+template_name: "flood_control_scenario"
+status: "inactive"
+created_at: "2024-01-23T12:00:00"
+last_modified: "2024-01-23T12:00:00"
+
+# 场景描述
+description: "中等强度洪水控制测试场景 - 模拟50mm/h降雨强度下的系统响应"
+tags: ["flood_control", "medium_intensity", "test"]
+
+# 参数配置（覆盖模板默认值）
+parameters:
+  rainfall_intensity: 75.0      # mm/h - 中等强度降雨
+  rainfall_duration: 8.0        # 小时 - 持续8小时
+  initial_reservoir_level: 55.0 # m - 初始水位稍高
+  emergency_threshold: 85.0     # m - 紧急阈值
+  gate_response_time: 3.0       # 分钟 - 快速响应
+
+# 场景特定配置
+scenario_config:
+  test_objectives:
+    - "验证中等强度降雨下的系统响应能力"
+    - "测试闸门协调控制策略"
+    - "评估洪水预警系统的有效性"
+  
+  expected_outcomes:
+    - "水位保持在安全范围内"
+    - "闸门响应时间不超过3分钟"
+    - "下游流量控制在安全范围"
+  
+  monitoring_focus:
+    - "水位变化趋势"
+    - "闸门开度调整频率"
+    - "系统响应时间"
+    - "能耗水平"
+
+# 自定义事件
+custom_events:
+  - time: 25.0
+    event: "manual_intervention_test"
+    description: "人工干预测试点"
+    parameters:
+      intervention_type: "gate_manual_override"
+      target_gate: "Gate_1"
+      override_duration: 5.0  # 分钟
+  
+  - time: 35.0
+    event: "communication_failure_simulation"
+    description: "通信故障模拟"
+    parameters:
+      affected_agents: ["Gate_2_Agent"]
+      failure_duration: 10.0  # 分钟
+      backup_mode: "local_control"
+
+# 性能基准
+performance_benchmarks:
+  water_level_control:
+    max_deviation: 3.0  # m
+    recovery_time: 15.0 # 分钟
+  
+  gate_response:
+    max_response_time: 3.0  # 分钟
+    coordination_delay: 1.0 # 分钟
+  
+  flow_control:
+    max_downstream_flow: 750.0  # m³/s
+    flow_stability: 0.9  # 稳定性指数
+
+# 测试条件
+test_conditions:
+  weather:
+    temperature: 20.0  # °C
+    humidity: 85.0     # %
+    wind_speed: 15.0   # km/h
+  
+  initial_system_state:
+    all_gates_operational: true
+    communication_status: "normal"
+    power_supply: "stable"
+    maintenance_status: "up_to_date"
+  
+  external_factors:
+    downstream_capacity: "normal"
+    upstream_conditions: "stable"
+    emergency_services: "on_standby"
+
+# 数据收集配置
+data_collection:
+  sampling_interval: 1.0  # 分钟
+  
+  key_variables:
+    - "upstream_water_level"
+    - "downstream_water_level"
+    - "gate_1_opening"
+    - "gate_2_opening"
+    - "gate_3_opening"
+    - "total_discharge"
+    - "rainfall_intensity"
+    - "system_energy_consumption"
+  
+  derived_metrics:
+    - "flood_risk_index"
+    - "response_efficiency"
+    - "water_balance"
+    - "control_stability"
+
+# 成功标准
+success_criteria:
+  critical:
+    - "max_water_level < emergency_threshold"
+    - "no_overflow_events"
+    - "gate_response_time <= 3.0 minutes"
+  
+  important:
+    - "water_level_deviation < 3.0 m"
+    - "downstream_flow < 750 m³/s"
+    - "system_availability > 0.95"
+  
+  desirable:
+    - "energy_efficiency > 0.8"
+    - "control_smoothness > 0.85"
+    - "prediction_accuracy > 0.9"
+
+# 风险评估
+risk_assessment:
+  identified_risks:
+    - risk: "水位超过紧急阈值"
+      probability: "low"
+      impact: "high"
+      mitigation: "快速闸门响应 + 预警系统"
+    
+    - risk: "闸门故障"
+      probability: "medium"
+      impact: "medium"
+      mitigation: "冗余控制 + 手动备份"
+    
+    - risk: "通信中断"
+      probability: "low"
+      impact: "medium"
+      mitigation: "本地自主控制模式"
+  
+  contingency_plans:
+    - scenario: "单个闸门故障"
+      action: "其他闸门补偿控制"
+      backup_resources: ["manual_operation", "emergency_discharge"]
+    
+    - scenario: "多个闸门故障"
+      action: "紧急泄洪程序"
+      backup_resources: ["emergency_spillway", "evacuation_alert"]
+
+# 后处理分析
+post_analysis:
+  report_sections:
+    - "场景执行摘要"
+    - "关键性能指标分析"
+    - "系统响应评估"
+    - "改进建议"
+  
+  comparison_baselines:
+    - "历史洪水事件数据"
+    - "设计标准要求"
+    - "其他类似场景结果"
+  
+  visualization_requirements:
+    - "水位时间序列图"
+    - "闸门开度变化图"
+    - "流量分布图"
+    - "系统响应时间分析图"
+
+# 学习和优化
+learning_objectives:
+  model_improvement:
+    - "闸门响应模型参数调优"
+    - "洪水预测模型精度提升"
+    - "控制策略优化"
+  
+  knowledge_extraction:
+    - "最优闸门操作序列"
+    - "关键决策点识别"
+    - "系统瓶颈分析"
+  
+  future_scenarios:
+    - "基于结果生成变体场景"
+    - "极端条件测试场景"
+    - "多目标优化场景"

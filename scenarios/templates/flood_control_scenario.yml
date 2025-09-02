@@ -1,0 +1,207 @@
+# 洪水控制场景模板
+name: "flood_control_scenario"
+description: "洪水控制场景，模拟强降雨条件下的水利系统响应"
+category: "flood_control"
+version: "1.0"
+created_at: "2024-01-23T10:00:00"
+
+# 场景参数定义
+parameters:
+  rainfall_intensity:
+    type: "float"
+    description: "降雨强度 (mm/h)"
+    required: true
+    min: 0.0
+    max: 200.0
+    default: 50.0
+  
+  rainfall_duration:
+    type: "float"
+    description: "降雨持续时间 (小时)"
+    required: true
+    min: 0.5
+    max: 72.0
+    default: 6.0
+  
+  initial_reservoir_level:
+    type: "float"
+    description: "初始水库水位 (m)"
+    required: false
+    min: 0.0
+    max: 100.0
+    default: 50.0
+  
+  emergency_threshold:
+    type: "float"
+    description: "紧急水位阈值 (m)"
+    required: false
+    min: 0.0
+    max: 100.0
+    default: 85.0
+  
+  gate_response_time:
+    type: "float"
+    description: "闸门响应时间 (分钟)"
+    required: false
+    min: 1.0
+    max: 60.0
+    default: 5.0
+
+# 智能体配置
+agents_config:
+  central_mpc:
+    mode: "emergency"
+    objective_config:
+      flood_prevention_weight: 0.8
+      water_supply_weight: 0.2
+      energy_efficiency_weight: 0.1
+    
+    constraints_config:
+      max_water_level: "${emergency_threshold}"
+      min_flow_rate: 10.0
+      max_gate_opening_rate: 0.1
+  
+  gate_agents:
+    Gate_1:
+      control_mode: "emergency"
+      max_opening_rate: 0.15
+      priority_level: "high"
+    
+    Gate_2:
+      control_mode: "emergency"
+      max_opening_rate: 0.1
+      priority_level: "medium"
+    
+    Gate_3:
+      control_mode: "emergency"
+      max_opening_rate: 0.1
+      priority_level: "medium"
+  
+  perception_agents:
+    central_perception:
+      alert_threshold: 0.9
+      data_fusion_weight:
+        water_level: 0.4
+        flow_rate: 0.3
+        rainfall: 0.3
+    
+    river_channel_perception:
+      anomaly_detection: true
+      prediction_horizon: 2.0
+
+# 扰动配置
+disturbances:
+  - agent_id: "Rainfall_Agent"
+    type: "rainfall"
+    parameters:
+      intensity: "${rainfall_intensity}"
+      duration: "${rainfall_duration}"
+      start_time: 10.0
+      spatial_distribution: "uniform"
+      target_components:
+        - "upstream_reservoir"
+        - "river_channel_1"
+        - "river_channel_2"
+  
+  - agent_id: "Emergency_Demand_Agent"
+    type: "water_demand"
+    parameters:
+      demand_increase_factor: 1.5
+      start_time: 15.0
+      duration: "${rainfall_duration}"
+      target_components:
+        - "downstream_reservoir"
+
+# 控制目标
+objectives:
+  primary:
+    type: "flood_prevention"
+    target: "minimize_overflow_risk"
+    weight: 0.8
+    constraints:
+      max_water_level: "${emergency_threshold}"
+      safety_margin: 2.0
+  
+  secondary:
+    type: "water_supply"
+    target: "maintain_supply"
+    weight: 0.2
+    constraints:
+      min_supply_rate: 0.7  # 70% of normal supply
+
+# 约束条件
+constraints:
+  system_constraints:
+    max_total_discharge: 1000.0  # m³/s
+    min_reservoir_level: 10.0    # m
+    max_gate_operation_frequency: 5  # operations per hour
+  
+  safety_constraints:
+    emergency_response_time: "${gate_response_time}"  # minutes
+    flood_warning_lead_time: 30.0  # minutes
+    max_downstream_flow_rate: 800.0  # m³/s
+  
+  operational_constraints:
+    gate_coordination_delay: 2.0  # minutes between gate operations
+    minimum_gate_opening: 0.05   # 5% minimum opening
+    maximum_gate_opening: 1.0    # 100% maximum opening
+
+# 性能指标
+performance_metrics:
+  - name: "flood_risk_index"
+    description: "洪水风险指数"
+    calculation: "max_water_level / emergency_threshold"
+    target: "< 0.95"
+  
+  - name: "response_time"
+    description: "系统响应时间"
+    calculation: "time_to_gate_action"
+    target: "< ${gate_response_time} minutes"
+  
+  - name: "water_supply_reliability"
+    description: "供水可靠性"
+    calculation: "actual_supply / target_supply"
+    target: "> 0.7"
+
+# 场景事件时间线
+event_timeline:
+  - time: 0.0
+    event: "scenario_start"
+    description: "场景开始，系统处于正常运行状态"
+  
+  - time: 10.0
+    event: "rainfall_start"
+    description: "降雨开始"
+    parameters:
+      intensity: "${rainfall_intensity}"
+  
+  - time: 15.0
+    event: "emergency_demand_increase"
+    description: "紧急用水需求增加"
+  
+  - time: 20.0
+    event: "flood_warning_threshold"
+    description: "达到洪水预警阈值"
+    trigger_condition: "water_level > 0.8 * emergency_threshold"
+  
+  - time: "${rainfall_duration + 10}"
+    event: "rainfall_end"
+    description: "降雨结束"
+  
+  - time: "${rainfall_duration + 30}"
+    event: "recovery_phase"
+    description: "系统恢复阶段开始"
+
+# 验证规则
+validation_rules:
+  - rule: "rainfall_intensity > 0"
+    message: "降雨强度必须大于0"
+  
+  - rule: "rainfall_duration > 0"
+    message: "降雨持续时间必须大于0"
+  
+  - rule: "initial_reservoir_level < emergency_threshold"
+    message: "初始水库水位不能超过紧急阈值"
+  
+  - rule: "gate_response_time > 0"
+    message: "闸门响应时间必须大于0"

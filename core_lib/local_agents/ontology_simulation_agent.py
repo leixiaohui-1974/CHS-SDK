@@ -9,9 +9,11 @@ class OntologySimulationAgent(Agent):
     1. 本体仿真智能体
     作为高保真的虚拟物理世界，为其他智能体提供“真实”的仿真环境。
     """
-    def __init__(self, agent_id: str, broker: MessageBus, initial_state: dict):
+    def __init__(self, agent_id: str, message_bus: MessageBus, initial_state: dict = None, **kwargs):
         super().__init__(agent_id)
-        self.broker = broker
+        self.broker = message_bus
+        if initial_state is None:
+            initial_state = {}
         # 物理状态
         self.upstream_level = initial_state.get('upstream_level', 5.0)  # m
         self.downstream_level = initial_state.get('downstream_level', 4.5) # m
@@ -98,3 +100,11 @@ class OntologySimulationAgent(Agent):
         if time_step % 10 == 0:
             print(f"--- Step {time_step}: SIMULATOR STATE ---")
             print(f"  Levels (U/D): {self.upstream_level:.3f}m / {self.downstream_level:.3f}m | Gate Opening: {self.gate_opening:.2%} | Gate Flow: {self.gate_flow:.2f} m^3/s")
+
+    def run(self, current_time: float):
+        """
+        实现Agent基类要求的run方法
+        """
+        # 将current_time转换为时间步
+        time_step = int(current_time)
+        self.run_step(time_step)

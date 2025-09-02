@@ -1,0 +1,111 @@
+{
+  "WaterUseAgent": {
+    "type": "disturbance",
+    "category": "water_management",
+    "description": "水资源使用智能体，模拟用水需求变化",
+    "required_params": [
+      "topic",
+      "start_time",
+      "duration",
+      "demand_rate"
+    ],
+    "optional_params": [
+      "disturbance_type",
+      "target_components",
+      "demand_patterns"
+    ],
+    "use_cases": [
+      "drought_simulation",
+      "peak_demand_analysis",
+      "water_allocation"
+    ],
+    "tags": [
+      "water",
+      "demand",
+      "disturbance"
+    ],
+    "complexity": "medium",
+    "popularity_score": 0.8
+  },
+  "FloodControlAgent": {
+    "type": "control",
+    "category": "flood_management",
+    "description": "洪水控制智能体，实现自动化洪水防控",
+    "required_params": [
+      "agent_id",
+      "message_bus",
+      "control_targets"
+    ],
+    "optional_params": [
+      "control_strategy",
+      "safety_margins",
+      "response_time"
+    ],
+    "use_cases": [
+      "flood_prevention",
+      "emergency_response",
+      "dam_control"
+    ],
+    "tags": [
+      "flood",
+      "control",
+      "emergency"
+    ],
+    "complexity": "high",
+    "popularity_score": 0.9
+  },
+  "MonitoringAgent": {
+    "type": "monitoring",
+    "category": "system_monitoring",
+    "description": "系统监控智能体，实时监测系统状态",
+    "required_params": [
+      "agent_id",
+      "message_bus",
+      "monitoring_targets"
+    ],
+    "optional_params": [
+      "alert_thresholds",
+      "sampling_rate",
+      "data_storage"
+    ],
+    "use_cases": [
+      "real_time_monitoring",
+      "anomaly_detection",
+      "performance_analysis"
+    ],
+    "tags": [
+      "monitoring",
+      "real_time",
+      "analysis"
+    ],
+    "complexity": "low",
+    "popularity_score": 0.7
+  },
+  "ScenarioConfigurationAgent": {
+    "type": "configuration",
+    "category": "scenario_management",
+    "description": "情景配置智能体，动态管理仿真场景",
+    "required_params": [
+      "agent_id",
+      "message_bus",
+      "scenario_manager"
+    ],
+    "optional_params": [
+      "auto_switch",
+      "validation_rules",
+      "backup_scenarios"
+    ],
+    "use_cases": [
+      "scenario_switching",
+      "parameter_tuning",
+      "batch_simulation"
+    ],
+    "tags": [
+      "scenario",
+      "configuration",
+      "management"
+    ],
+    "complexity": "medium",
+    "popularity_score": 0.6
+  }
+}

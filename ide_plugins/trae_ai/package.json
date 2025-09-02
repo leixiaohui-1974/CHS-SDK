@@ -1,0 +1,423 @@
+{
+  "name": "chs-sdk-trae-extension",
+  "displayName": "CHS-SDK for Trae AI",
+  "description": "Intelligent agent development extension for CHS-SDK in Trae AI IDE",
+  "version": "1.0.0",
+  "publisher": "chs-sdk",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other",
+    "Snippets",
+    "Language Packs",
+    "Machine Learning"
+  ],
+  "keywords": [
+    "chs-sdk",
+    "intelligent-agents",
+    "water-resources",
+    "simulation",
+    "ai",
+    "trae"
+  ],
+  "activationEvents": [
+    "onLanguage:python",
+    "onLanguage:yaml",
+    "workspaceContains:**/agents.yml",
+    "workspaceContains:**/scenarios.yml",
+    "onCommand:chs-sdk.createAgent",
+    "onCommand:chs-sdk.createScenario",
+    "onView:chs-sdk-explorer"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "chs-sdk.createAgent",
+        "title": "Create New Agent",
+        "category": "CHS-SDK",
+        "icon": "$(add)"
+      },
+      {
+        "command": "chs-sdk.createScenario",
+        "title": "Create New Scenario",
+        "category": "CHS-SDK",
+        "icon": "$(file-add)"
+      },
+      {
+        "command": "chs-sdk.configureScenario",
+        "title": "Configure Scenario",
+        "category": "CHS-SDK",
+        "icon": "$(settings-gear)"
+      },
+      {
+        "command": "chs-sdk.runSimulation",
+        "title": "Run Simulation",
+        "category": "CHS-SDK",
+        "icon": "$(play)"
+      },
+      {
+        "command": "chs-sdk.debugAgent",
+        "title": "Debug Agent",
+        "category": "CHS-SDK",
+        "icon": "$(debug-alt)"
+      },
+      {
+        "command": "chs-sdk.validateConfiguration",
+        "title": "Validate Configuration",
+        "category": "CHS-SDK",
+        "icon": "$(check)"
+      },
+      {
+        "command": "chs-sdk.searchKnowledge",
+        "title": "Search Knowledge Base",
+        "category": "CHS-SDK",
+        "icon": "$(search)"
+      },
+      {
+        "command": "chs-sdk.getRecommendations",
+        "title": "Get AI Recommendations",
+        "category": "CHS-SDK",
+        "icon": "$(lightbulb)"
+      },
+      {
+        "command": "chs-sdk.refreshExplorer",
+        "title": "Refresh",
+        "category": "CHS-SDK",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "chs-sdk.openDocumentation",
+        "title": "Open Documentation",
+        "category": "CHS-SDK",
+        "icon": "$(book)"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "chs-sdk.createAgent",
+          "when": "workspaceFolder"
+        },
+        {
+          "command": "chs-sdk.createScenario",
+          "when": "workspaceFolder"
+        },
+        {
+          "command": "chs-sdk.configureScenario",
+          "when": "workspaceFolder"
+        },
+        {
+          "command": "chs-sdk.runSimulation",
+          "when": "workspaceFolder"
+        },
+        {
+          "command": "chs-sdk.debugAgent",
+          "when": "workspaceFolder"
+        },
+        {
+          "command": "chs-sdk.validateConfiguration",
+          "when": "workspaceFolder"
+        },
+        {
+          "command": "chs-sdk.searchKnowledge",
+          "when": "workspaceFolder"
+        },
+        {
+          "command": "chs-sdk.getRecommendations",
+          "when": "workspaceFolder"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "chs-sdk.createAgent",
+          "when": "explorerResourceIsFolder",
+          "group": "chs-sdk@1"
+        },
+        {
+          "command": "chs-sdk.createScenario",
+          "when": "explorerResourceIsFolder",
+          "group": "chs-sdk@2"
+        },
+        {
+          "command": "chs-sdk.validateConfiguration",
+          "when": "resourceExtname == .yml || resourceExtname == .yaml",
+          "group": "chs-sdk@3"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "chs-sdk.getRecommendations",
+          "when": "editorLangId == python || editorLangId == yaml",
+          "group": "chs-sdk@1"
+        },
+        {
+          "command": "chs-sdk.searchKnowledge",
+          "when": "editorLangId == python || editorLangId == yaml",
+          "group": "chs-sdk@2"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "chs-sdk.refreshExplorer",
+          "when": "view == chs-sdk-explorer",
+          "group": "navigation"
+        },
+        {
+          "command": "chs-sdk.createAgent",
+          "when": "view == chs-sdk-explorer",
+          "group": "navigation"
+        },
+        {
+          "command": "chs-sdk.createScenario",
+          "when": "view == chs-sdk-explorer",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "chs-sdk.configureScenario",
+          "when": "view == chs-sdk-explorer && viewItem == scenario",
+          "group": "inline"
+        },
+        {
+          "command": "chs-sdk.debugAgent",
+          "when": "view == chs-sdk-explorer && viewItem == agent",
+          "group": "inline"
+        },
+        {
+          "command": "chs-sdk.runSimulation",
+          "when": "view == chs-sdk-explorer && viewItem == scenario",
+          "group": "inline"
+        }
+      ]
+    },
+    "views": {
+      "explorer": [
+        {
+          "id": "chs-sdk-explorer",
+          "name": "CHS-SDK",
+          "when": "workspaceFolder",
+          "icon": "$(symbol-class)",
+          "contextualTitle": "CHS-SDK Explorer"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "chs-sdk-explorer",
+        "contents": "Welcome to CHS-SDK!\n\nTo get started, create your first intelligent agent or scenario.\n\n[Create Agent](command:chs-sdk.createAgent)\n\n[Create Scenario](command:chs-sdk.createScenario)\n\n[Open Documentation](command:chs-sdk.openDocumentation)",
+        "when": "workspaceFolder"
+      }
+    ],
+    "configuration": {
+      "title": "CHS-SDK",
+      "properties": {
+        "chs-sdk.knowledgeBase.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable knowledge base integration for intelligent suggestions"
+        },
+        "chs-sdk.knowledgeBase.apiUrl": {
+          "type": "string",
+          "default": "http://localhost:8080",
+          "description": "Knowledge base API URL"
+        },
+        "chs-sdk.knowledgeBase.autoIndex": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically index project files for knowledge base"
+        },
+        "chs-sdk.recommendations.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable AI-powered recommendations"
+        },
+        "chs-sdk.recommendations.maxResults": {
+          "type": "number",
+          "default": 5,
+          "minimum": 1,
+          "maximum": 20,
+          "description": "Maximum number of recommendations to show"
+        },
+        "chs-sdk.validation.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable real-time configuration validation"
+        },
+        "chs-sdk.validation.showWarnings": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show validation warnings in editor"
+        },
+        "chs-sdk.simulation.defaultTimeout": {
+          "type": "number",
+          "default": 300,
+          "minimum": 10,
+          "maximum": 3600,
+          "description": "Default simulation timeout in seconds"
+        },
+        "chs-sdk.debugging.verboseLogging": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable verbose logging for debugging"
+        },
+        "chs-sdk.templates.customPath": {
+          "type": "string",
+          "default": "",
+          "description": "Custom path for agent and scenario templates"
+        },
+        "chs-sdk.ui.showWelcomeMessage": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show welcome message on first use"
+        }
+      }
+    },
+    "snippets": [
+      {
+        "language": "python",
+        "path": "./snippets/python.json"
+      },
+      {
+        "language": "yaml",
+        "path": "./snippets/yaml.json"
+      }
+    ],
+    "languages": [
+      {
+        "id": "chs-agent",
+        "aliases": ["CHS Agent", "chs-agent"],
+        "extensions": [".agent.py"],
+        "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "chs-scenario",
+        "aliases": ["CHS Scenario", "chs-scenario"],
+        "extensions": [".scenario.yml", ".scenario.yaml"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "chs-agent",
+        "scopeName": "source.python.chs-agent",
+        "path": "./syntaxes/chs-agent.tmLanguage.json"
+      },
+      {
+        "language": "chs-scenario",
+        "scopeName": "source.yaml.chs-scenario",
+        "path": "./syntaxes/chs-scenario.tmLanguage.json"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "chs-sdk.createAgent",
+        "key": "ctrl+shift+a",
+        "mac": "cmd+shift+a",
+        "when": "workspaceFolder"
+      },
+      {
+        "command": "chs-sdk.createScenario",
+        "key": "ctrl+shift+s",
+        "mac": "cmd+shift+s",
+        "when": "workspaceFolder"
+      },
+      {
+        "command": "chs-sdk.runSimulation",
+        "key": "ctrl+shift+r",
+        "mac": "cmd+shift+r",
+        "when": "workspaceFolder"
+      },
+      {
+        "command": "chs-sdk.searchKnowledge",
+        "key": "ctrl+shift+k",
+        "mac": "cmd+shift+k",
+        "when": "workspaceFolder"
+      },
+      {
+        "command": "chs-sdk.getRecommendations",
+        "key": "ctrl+shift+i",
+        "mac": "cmd+shift+i",
+        "when": "editorTextFocus"
+      }
+    ],
+    "taskDefinitions": [
+      {
+        "type": "chs-sdk",
+        "required": ["command"],
+        "properties": {
+          "command": {
+            "type": "string",
+            "description": "The CHS-SDK command to execute"
+          },
+          "args": {
+            "type": "array",
+            "description": "Arguments for the command"
+          },
+          "cwd": {
+            "type": "string",
+            "description": "Working directory"
+          }
+        }
+      }
+    ],
+    "problemMatchers": [
+      {
+        "name": "chs-sdk-validation",
+        "owner": "chs-sdk",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "pattern": {
+          "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "severity": 4,
+          "message": 5
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@types/node": "16.x",
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "@typescript-eslint/parser": "^5.45.0",
+    "eslint": "^8.28.0",
+    "typescript": "^4.9.4",
+    "@vscode/test-electron": "^2.2.0",
+    "@vscode/vsce": "^2.15.0"
+  },
+  "dependencies": {
+    "axios": "^1.2.0",
+    "yaml": "^2.2.0",
+    "jsonschema": "^1.4.0",
+    "ws": "^8.11.0",
+    "node-fetch": "^3.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/chs-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/chs-sdk/issues"
+  },
+  "homepage": "https://github.com/your-org/chs-sdk#readme",
+  "license": "MIT",
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#1e3a8a",
+    "theme": "dark"
+  }
+}

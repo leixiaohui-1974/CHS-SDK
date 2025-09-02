@@ -1,0 +1,701 @@
+# 分布式数字孪生与优化控制仿真案例 - 智能体配置
+# 包含物理仿真层、分布式感知层、控制层、中心协调层和扰动层
+
+agents:
+  # ========== 物理本体仿真层 ==========
+  # 统一物理仿真智能体
+  - id: ontology_simulation
+    class: core_lib.local_agents.ontology_simulation_agent.OntologySimulationAgent
+    config:
+      simulation_step: 60.0  # 仿真步长 (秒)
+      components_file: "components.yml"
+      topology_file: "topology.yml"
+      # 全面监测点配置
+      monitoring_config:
+        enable_noise: true
+        noise_seed: 42
+        data_logging: true
+        log_interval: 60  # 每分钟记录一次
+      # 执行器干扰模拟
+      actuator_disturbance:
+        enable: true
+        aging_simulation: true
+        delay_simulation: true
+      # 发布主题配置
+      publish_topics:
+        - "simulation/water_levels"
+        - "simulation/flow_rates"
+        - "simulation/gate_openings"
+        - "simulation/rainfall"
+        - "simulation/system_state"
+
+  # ========== 分布式数字孪生与感知层 ==========
+  # 渠道孪生智能体1 - 积分时滞模型
+  - id: Channel1_Twin_Agent
+    class: core_lib.local_agents.perception.river_channel_perception_agent.RiverChannelPerceptionAgent
+    config:
+      # 关联的物理组件
+      target_component: "Channel_1"
+      simulated_object_id: "Channel_1"
+      state_topic: "state.channel1.level"
+      # 数字孪生模型配置 - 积分时滞模型
+      digital_twin_model:
+        type: "IntegralDelayModel"
+        default_model: true
+        parameters:
+          time_delay: 300.0      # 初始时滞 (秒)
+          integral_coefficient: 0.8  # 初始积分系数
+          update_interval: 60.0   # 模型更新间隔
+      # 在线辨识配置
+      identification_config:
+        enable: true
+        method: "recursive_least_squares"
+        parameters:
+          forgetting_factor: 0.98
+          initial_covariance: 1000.0
+          parameter_bounds:
+            time_delay: [60.0, 600.0]
+            integral_coefficient: [0.1, 2.0]
+        update_frequency: 60.0  # 每分钟更新一次
+      # 数据清洗配置
+      cleaner_config:
+        enable: true
+        methods:
+          - "outlier_detection"    # 异常值检测
+          - "noise_filtering"      # 噪声滤波
+          - "data_validation"      # 数据验证
+        parameters:
+          outlier_threshold: 3.0   # 3倍标准差
+          filter_window: 5         # 滑动窗口大小
+      # 评价配置
+      evaluation_config:
+        enable: true
+        metrics:
+          - "water_level_deviation"  # 水位偏差
+          - "flow_rate_accuracy"     # 流量精度
+          - "model_fitness"          # 模型拟合度
+        thresholds:
+          water_level_deviation: 0.1  # 允许偏差 (m)
+          flow_rate_accuracy: 0.05     # 允许误差 (5%)
+      # 预测配置
+      prediction_config:
+        enable: true
+        horizon: 1800.0  # 预测时域 (30分钟)
+        interval: 60.0   # 预测间隔
+        variables:
+          - "water_level"
+          - "flow_rate"
+      # 订阅主题
+      subscribe_topics:
+        - "simulation/water_levels/Channel_1"
+        - "simulation/flow_rates/Channel_1"
+        - "simulation/rainfall/Channel_1"
+      # 发布主题
+      publish_topics:
+        - "agent.Channel1_Twin_Agent.cleaned_data"
+        - "agent.Channel1_Twin_Agent.identified_parameters"
+        - "agent.Channel1_Twin_Agent.predictions"
+        - "agent.Channel1_Twin_Agent.evaluation"
+
+  # 渠道孪生智能体2 - 积分时滞模型
+  - id: Channel2_Twin_Agent
+    class: core_lib.local_agents.perception.river_channel_perception_agent.RiverChannelPerceptionAgent
+    config:
+      target_component: "Channel_2"
+      simulated_object_id: "Channel_2"
+      state_topic: "state.channel2.level"
+      digital_twin_model:
+        type: "IntegralDelayModel"
+        default_model: true
+        parameters:
+          time_delay: 240.0
+          integral_coefficient: 0.75
+          update_interval: 60.0
+      identification_config:
+        enable: true
+        method: "recursive_least_squares"
+        parameters:
+          forgetting_factor: 0.98
+          initial_covariance: 1000.0
+          parameter_bounds:
+            time_delay: [60.0, 480.0]
+            integral_coefficient: [0.1, 2.0]
+        update_frequency: 60.0
+      cleaner_config:
+        enable: true
+        methods:
+          - "outlier_detection"
+          - "noise_filtering"
+          - "data_validation"
+        parameters:
+          outlier_threshold: 3.0
+          filter_window: 5
+      evaluation_config:
+        enable: true
+        metrics:
+          - "water_level_deviation"
+          - "flow_rate_accuracy"
+          - "model_fitness"
+        thresholds:
+          water_level_deviation: 0.1
+          flow_rate_accuracy: 0.05
+      prediction_config:
+        enable: true
+        horizon: 1800.0
+        interval: 60.0
+        variables:
+          - "water_level"
+          - "flow_rate"
+      subscribe_topics:
+        - "simulation/water_levels/Channel_2"
+        - "simulation/flow_rates/Channel_2"
+        - "simulation/rainfall/Channel_2"
+      publish_topics:
+        - "agent.Channel2_Twin_Agent.cleaned_data"
+        - "agent.Channel2_Twin_Agent.identified_parameters"
+        - "agent.Channel2_Twin_Agent.predictions"
+        - "agent.Channel2_Twin_Agent.evaluation"
+
+  # 闸站感知智能体1 - RLS辨识
+  - id: Gate1_Perception_Agent
+    class: core_lib.local_agents.perception.gate_perception_agent.GatePerceptionAgent
+    config:
+      physical_object_name: "Gate_1"
+      # 数据清洗配置
+      cleaner_config:
+        enable: true
+        data_types:
+          - "upstream_water_level"    # 上游水位
+          - "downstream_water_level"  # 下游水位
+          - "total_flow"              # 总流量
+          - "gate_openings"           # 3个闸孔开度
+        methods:
+          - "outlier_detection"
+          - "noise_filtering"
+          - "consistency_check"       # 一致性检查
+        parameters:
+          outlier_threshold: 2.5
+          filter_window: 3
+          consistency_tolerance: 0.1
+      # RLS辨识配置
+      identification_config:
+        enable: true
+        method: "RLS"  # 递归最小二乘
+        target_parameter: "comprehensive_discharge_coefficient"
+        parameters:
+          forgetting_factor: 0.95
+          initial_covariance: 500.0
+          parameter_bounds: [0.5, 1.2]  # 综合流量系数范围
+        update_frequency: 60.0
+        model_structure:
+          inputs: ["water_head", "gate_opening"]
+          output: "flow_rate"
+          equation: "Q = Cd * A * sqrt(2*g*H)"
+      subscribe_topics:
+        - "simulation/water_levels/Gate_1"
+        - "simulation/flow_rates/Gate_1"
+        - "simulation/gate_openings/Gate_1"
+      publish_topics:
+        - "agent.Gate1_Perception_Agent.cleaned_data"
+        - "agent.Gate1_Perception_Agent.identified_parameters"
+        - "agent.Gate1_Perception_Agent.flow_coefficient"
+
+  # 闸站感知智能体2 - RLS辨识
+  - id: Gate2_Perception_Agent
+    class: core_lib.local_agents.perception.gate_perception_agent.GatePerceptionAgent
+    config:
+      physical_object_name: "Gate_2"
+      cleaner_config:
+        enable: true
+        data_types:
+          - "upstream_water_level"
+          - "downstream_water_level"
+          - "flow_rate"
+          - "gate_opening"
+        methods:
+          - "outlier_detection"
+          - "noise_filtering"
+          - "consistency_check"
+        parameters:
+          outlier_threshold: 2.5
+          filter_window: 3
+          consistency_tolerance: 0.1
+      identification_config:
+        enable: true
+        method: "RLS"
+        target_parameter: "discharge_coefficient"
+        parameters:
+          forgetting_factor: 0.95
+          initial_covariance: 500.0
+          parameter_bounds: [0.5, 1.0]
+        update_frequency: 60.0
+        model_structure:
+          inputs: ["water_head", "gate_opening"]
+          output: "flow_rate"
+          equation: "Q = Cd * A * sqrt(2*g*H)"
+      subscribe_topics:
+        - "simulation/water_levels/Gate_2"
+        - "simulation/flow_rates/Gate_2"
+        - "simulation/gate_openings/Gate_2"
+      publish_topics:
+        - "agent.Gate2_Perception_Agent.cleaned_data"
+        - "agent.Gate2_Perception_Agent.identified_parameters"
+        - "agent.Gate2_Perception_Agent.flow_coefficient"
+
+  # 闸站感知智能体3 - RLS辨识
+  - id: Gate3_Perception_Agent
+    class: core_lib.local_agents.perception.gate_perception_agent.GatePerceptionAgent
+    config:
+      physical_object_name: "Gate_3"
+      cleaner_config:
+        enable: true
+        data_types:
+          - "upstream_water_level"
+          - "downstream_water_level"
+          - "flow_rate"
+          - "gate_opening"
+        methods:
+          - "outlier_detection"
+          - "noise_filtering"
+          - "consistency_check"
+        parameters:
+          outlier_threshold: 2.5
+          filter_window: 3
+          consistency_tolerance: 0.1
+      identification_config:
+        enable: true
+        method: "RLS"
+        target_parameter: "discharge_coefficient"
+        parameters:
+          forgetting_factor: 0.95
+          initial_covariance: 500.0
+          parameter_bounds: [0.4, 0.9]
+        update_frequency: 60.0
+        model_structure:
+          inputs: ["water_head", "gate_opening"]
+          output: "flow_rate"
+          equation: "Q = Cd * A * sqrt(2*g*H)"
+      subscribe_topics:
+        - "simulation/water_levels/Gate_3"
+        - "simulation/flow_rates/Gate_3"
+        - "simulation/gate_openings/Gate_3"
+      publish_topics:
+        - "agent.Gate3_Perception_Agent.cleaned_data"
+        - "agent.Gate3_Perception_Agent.identified_parameters"
+        - "agent.Gate3_Perception_Agent.flow_coefficient"
+
+  # ========== 控制智能体层 ==========
+  # 本地闸门控制智能体1 - 3孔闸门
+  - id: Gate1_Control_Agent
+    class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
+    config:
+      target_component: "Gate_1"
+      control_type: "gate_control"
+      # 数据源配置 - 订阅感知智能体的清洗数据
+      data_sources:
+        primary_data: "agent.Gate1_Perception_Agent.cleaned_data"
+        identified_params: "agent.Gate1_Perception_Agent.identified_parameters"
+        flow_coefficient: "agent.Gate1_Perception_Agent.flow_coefficient"
+      # 控制目标订阅
+      control_targets:
+        target_level: "agent.central_mpc.gate1_target_level"
+        optimization_results: "agent.central_mpc.gate1_optimization"
+      # 流量分配策略配置
+      allocation_config:
+        allocation_table_path: "gate_flow_allocation_3gates.csv"
+        gate_count: 3
+        allocation_method: "proportional_distribution"
+        constraints:
+          max_opening_rate: 0.1   # 最大开度变化率 (/s)
+          min_opening: 0.0
+          max_opening: 1.0
+      # 控制器参数
+      controller_config:
+        type: "PID"
+        parameters:
+          kp: 2.0
+          ki: 0.5
+          kd: 0.1
+          output_limits: [-0.1, 0.1]  # 开度变化限制
+        anti_windup: true
+      # 发布主题
+      publish_topics:
+        - "control/gate1/commands"
+        - "control/gate1/status"
+        - "agent.Gate1_Control_Agent.allocation_results"
+
+  # 本地闸门控制智能体2 - 单孔闸门
+  - id: Gate2_Control_Agent
+    class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
+    config:
+      target_component: "Gate_2"
+      control_type: "gate_control"
+      data_sources:
+        primary_data: "agent.Gate2_Perception_Agent.cleaned_data"
+        identified_params: "agent.Gate2_Perception_Agent.identified_parameters"
+        flow_coefficient: "agent.Gate2_Perception_Agent.flow_coefficient"
+      control_targets:
+        target_level: "agent.central_mpc.gate2_target_level"
+        optimization_results: "agent.central_mpc.gate2_optimization"
+      # 单孔闸门分配策略
+      allocation_config:
+        allocation_table_path: "gate_flow_allocation_1gate.csv"
+        gate_count: 1
+        allocation_method: "direct_control"
+        constraints:
+          max_opening_rate: 0.08
+          min_opening: 0.0
+          max_opening: 1.0
+      controller_config:
+        type: "PID"
+        parameters:
+          kp: 1.8
+          ki: 0.4
+          kd: 0.08
+          output_limits: [-0.08, 0.08]
+        anti_windup: true
+      publish_topics:
+        - "control/gate2/commands"
+        - "control/gate2/status"
+        - "agent.Gate2_Control_Agent.allocation_results"
+
+  # 本地闸门控制智能体3 - 单孔闸门
+  - id: Gate3_Control_Agent
+    class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
+    config:
+      target_component: "Gate_3"
+      control_type: "gate_control"
+      data_sources:
+        primary_data: "agent.Gate3_Perception_Agent.cleaned_data"
+        identified_params: "agent.Gate3_Perception_Agent.identified_parameters"
+        flow_coefficient: "agent.Gate3_Perception_Agent.flow_coefficient"
+      control_targets:
+        target_level: "agent.central_mpc.gate3_target_level"
+        optimization_results: "agent.central_mpc.gate3_optimization"
+      allocation_config:
+        allocation_table_path: "gate_flow_allocation_1gate.csv"
+        gate_count: 1
+        allocation_method: "direct_control"
+        constraints:
+          max_opening_rate: 0.06
+          min_opening: 0.0
+          max_opening: 1.0
+      controller_config:
+        type: "PID"
+        parameters:
+          kp: 1.5
+          ki: 0.3
+          kd: 0.06
+          output_limits: [-0.06, 0.06]
+        anti_windup: true
+      publish_topics:
+        - "control/gate3/commands"
+        - "control/gate3/status"
+        - "agent.Gate3_Control_Agent.allocation_results"
+
+  # ========== 中心感知与孪生层 ==========
+  # 中心感知智能体 - 数据融合与全局孪生
+  - id: central_perception
+    class: core_lib.central_coordination.perception.central_perception_agent.CentralPerceptionAgent
+    config:
+      # 数据采集配置 - 分钟级频率
+      data_collection:
+        frequency: 60.0  # 每分钟采集一次
+        timeout: 30.0    # 数据等待超时
+      # 订阅所有分布式孪生体数据
+      subscribe_topics:
+        # 渠道孪生数据
+        - "agent.Channel1_Twin_Agent.cleaned_data"
+        - "agent.Channel1_Twin_Agent.identified_parameters"
+        - "agent.Channel1_Twin_Agent.predictions"
+        - "agent.Channel1_Twin_Agent.evaluation"
+        - "agent.Channel2_Twin_Agent.cleaned_data"
+        - "agent.Channel2_Twin_Agent.identified_parameters"
+        - "agent.Channel2_Twin_Agent.predictions"
+        - "agent.Channel2_Twin_Agent.evaluation"
+        # 闸站感知数据
+        - "agent.Gate1_Perception_Agent.cleaned_data"
+        - "agent.Gate1_Perception_Agent.identified_parameters"
+        - "agent.Gate2_Perception_Agent.cleaned_data"
+        - "agent.Gate2_Perception_Agent.identified_parameters"
+        - "agent.Gate3_Perception_Agent.cleaned_data"
+        - "agent.Gate3_Perception_Agent.identified_parameters"
+      # 数据融合与清洗配置
+      data_fusion_config:
+        enable: true
+        methods:
+          - "global_consistency_check"   # 全局一致性校验
+          - "cross_validation"           # 交叉验证
+          - "temporal_alignment"         # 时间对齐
+          - "spatial_interpolation"      # 空间插值
+        parameters:
+          consistency_threshold: 0.15
+          validation_window: 300.0  # 5分钟验证窗口
+          alignment_tolerance: 30.0 # 30秒对齐容差
+      # 集中式数字孪生配置
+      centralized_twin_config:
+        enable: true
+        model_type: "integrated_system_model"
+        components:
+          - "Upstream_Reservoir"
+          - "Gate_1"
+          - "Channel_1"
+          - "Diversion_1"
+          - "Gate_2"
+          - "Channel_2"
+          - "Diversion_2"
+          - "Gate_3"
+          - "Downstream_Reservoir"
+        synchronization:
+          frequency: 60.0
+          correction_method: "kalman_filter"
+          state_variables:
+            - "water_levels"
+            - "flow_rates"
+            - "gate_openings"
+      # 全局状态评价配置
+      global_evaluation_config:
+        enable: true
+        metrics:
+          - "system_water_balance"      # 系统水量平衡
+          - "flow_continuity"           # 流量连续性
+          - "control_performance"       # 控制性能
+          - "prediction_accuracy"       # 预测精度
+        thresholds:
+          water_balance_error: 0.05     # 5%水量平衡误差
+          flow_continuity_error: 0.03   # 3%流量连续性误差
+      # 全局预测配置
+      global_prediction_config:
+        enable: true
+        horizon: 3600.0  # 1小时预测时域
+        interval: 300.0  # 5分钟预测间隔
+        variables:
+          - "system_water_levels"
+          - "system_flow_rates"
+          - "flood_risk_indicators"
+        uncertainty_quantification: true
+      # 发布主题
+      publish_topics:
+        - "agent.central_perception.system_state"
+        - "agent.central_perception.system_prediction"
+        - "agent.central_perception.global_evaluation"
+        - "agent.central_perception.fusion_results"
+
+  # ========== 中心优化协调层 ==========
+  # 中心MPC智能体 - 全局滚动优化
+  - id: central_mpc
+    class: core_lib.central_coordination.dispatch.central_dispatcher.CentralDispatcherAgent
+    config:
+      # 运行模式配置
+      mode: "rule"  # 使用规则模式而不是MPC模式
+      subscribed_topic: "agent.central_perception.system_state"
+      observation_key: "system_state"
+      command_topic: "central_mpc.commands"
+      dispatcher_params:
+        threshold: 0.5
+        action: "regulate"
+      # 数据源配置 - 主要订阅中心感知智能体数据
+      data_sources:
+        primary_data: "agent.central_perception.system_state"
+        prediction_data: "agent.central_perception.system_prediction"
+        evaluation_data: "agent.central_perception.global_evaluation"
+        fusion_results: "agent.central_perception.fusion_results"
+      # MPC优化配置
+      mpc_config:
+        prediction_horizon: 1800.0    # 30分钟预测时域
+        control_horizon: 900.0        # 15分钟控制时域
+        optimization_interval: 300.0  # 5分钟优化间隔
+        solver: "ipopt"
+        max_iterations: 100
+        tolerance: 1e-6
+      # 优化目标配置
+      objective_config:
+        primary_objectives:
+          - name: "water_level_tracking"
+            weight: 1.0
+            target_variables:
+              - "Gate_1_upstream_level"
+              - "Gate_2_upstream_level"
+              - "Gate_3_upstream_level"
+          - name: "flow_regulation"
+            weight: 0.8
+            target_variables:
+              - "Gate_1_flow"
+              - "Gate_2_flow"
+              - "Gate_3_flow"
+        secondary_objectives:
+          - name: "energy_efficiency"
+            weight: 0.3
+          - name: "actuator_smoothness"
+            weight: 0.5
+      # 约束配置
+      constraints_config:
+        water_level_constraints:
+          Gate_1_upstream: [5.0, 20.0]   # 水位范围 (m)
+          Gate_2_upstream: [3.0, 15.0]
+          Gate_3_upstream: [2.0, 12.0]
+        flow_constraints:
+          Gate_1: [0.0, 200.0]           # 流量范围 (m³/s)
+          Gate_2: [0.0, 150.0]
+          Gate_3: [0.0, 100.0]
+        gate_opening_constraints:
+          Gate_1: [0.0, 1.0]             # 开度范围
+          Gate_2: [0.0, 1.0]
+          Gate_3: [0.0, 1.0]
+        rate_constraints:
+          max_opening_rate: 0.1          # 最大开度变化率 (/s)
+      # 扰动处理配置
+      disturbance_config:
+        rainfall_prediction: true
+        water_demand_forecast: true
+        uncertainty_bounds:
+          rainfall: 0.2      # 20%不确定性
+          demand: 0.15       # 15%不确定性
+      # 发布主题
+      publish_topics:
+        - "agent.central_mpc.gate1_target_level"
+        - "agent.central_mpc.gate2_target_level"
+        - "agent.central_mpc.gate3_target_level"
+        - "agent.central_mpc.gate1_optimization"
+        - "agent.central_mpc.gate2_optimization"
+        - "agent.central_mpc.gate3_optimization"
+        - "agent.central_mpc.system_optimization_results"
+        - "agent.central_mpc.performance_metrics"
+
+  # ========== 扰动智能体层 ==========
+  # 降雨扰动智能体
+  - id: Rainfall_Agent
+    class: core_lib.disturbances.rainfall_agent.RainfallAgent
+    config:
+      # 必需参数
+      topic: "disturbance/rainfall/inflow"
+      start_time: 3600.0    # 1小时后开始降雨
+      duration: 1800.0      # 持续30分钟
+      inflow_rate: 25.0     # 降雨入流量 (m³/s)
+      # 扩展配置
+      disturbance_type: "rainfall"
+      # 目标组件 - 向两个渠道施加降雨扰动
+      target_components:
+        - "Channel_1"
+        - "Channel_2"
+      # 降雨模式配置
+      rainfall_patterns:
+        # 基础降雨模式
+        base_pattern:
+          type: "sinusoidal"
+          amplitude: 5.0      # 基础降雨强度 (mm/h)
+          period: 86400.0     # 24小时周期 (秒)
+          phase_shift: 0.0
+        # 随机扰动
+        random_component:
+          enable: true
+          distribution: "normal"
+          mean: 0.0
+          std_dev: 2.0        # 随机扰动标准差 (mm/h)
+          correlation_time: 3600.0  # 1小时相关时间
+        # 极端事件模拟
+        extreme_events:
+          enable: true
+          storm_probability: 0.05    # 5%概率发生暴雨
+          storm_intensity: [20.0, 50.0]  # 暴雨强度范围 (mm/h)
+          storm_duration: [1800.0, 7200.0]  # 暴雨持续时间范围 (秒)
+      # 空间分布配置
+      spatial_distribution:
+        Channel_1:
+          weight: 1.0
+          delay: 0.0          # 无延迟
+        Channel_2:
+          weight: 0.8         # 下游降雨强度稍弱
+          delay: 600.0        # 10分钟延迟
+      # 发布配置
+      publish_config:
+        frequency: 60.0       # 每分钟更新一次
+        topics:
+          - "disturbance/rainfall/Channel_1"
+          - "disturbance/rainfall/Channel_2"
+          - "disturbance/rainfall/forecast"  # 降雨预报
+      # 预报配置
+      forecast_config:
+        enable: true
+        horizon: 7200.0     # 2小时预报时域
+        resolution: 300.0   # 5分钟预报分辨率
+        uncertainty: 0.3    # 30%预报不确定性
+
+  # 用水需求扰动智能体
+  - id: Water_Use_Agent
+    class: core_lib.disturbances.water_use_agent.WaterUseAgent
+    config:
+      # WaterUseAgent 构造函数必需参数
+      topic: "disturbance/water_use"
+      start_time: 3600.0    # 1小时后开始
+      duration: 7200.0      # 持续2小时
+      demand_rate: 20.0     # 需水量 20 m³/s
+      disturbance_type: "water_demand"
+      # 目标组件 - 两个分水口的用水需求
+      target_components:
+        - "Diversion_1"
+        - "Diversion_2"
+      # 用水模式配置
+      demand_patterns:
+        # 日用水模式
+        daily_pattern:
+          type: "multi_peak"
+          peaks:
+            - time: 28800.0   # 8:00 AM (秒)
+              intensity: 1.2  # 120%基准需水
+            - time: 43200.0   # 12:00 PM
+              intensity: 1.0  # 100%基准需水
+            - time: 64800.0   # 6:00 PM
+              intensity: 1.5  # 150%基准需水
+          base_demand:
+            Diversion_1: 15.0  # 基准需水量 (m³/s)
+            Diversion_2: 12.0
+        # 季节性变化
+        seasonal_variation:
+          enable: true
+          amplitude: 0.3      # 30%季节变化
+          period: 31536000.0  # 365天周期 (秒)
+        # 随机波动
+        random_fluctuation:
+          enable: true
+          distribution: "normal"
+          std_dev: 0.1        # 10%随机波动
+          correlation_time: 1800.0  # 30分钟相关时间
+      # 特殊事件模拟
+      special_events:
+        enable: true
+        # 灌溉高峰期
+        irrigation_peak:
+          probability: 0.1    # 10%概率
+          duration: [3600.0, 10800.0]  # 1-3小时
+          intensity_multiplier: [1.5, 2.5]  # 1.5-2.5倍需水
+        # 节假日减少
+        holiday_reduction:
+          probability: 0.05   # 5%概率
+          duration: [21600.0, 86400.0]  # 6-24小时
+          intensity_multiplier: [0.3, 0.7]  # 30-70%需水
+      # 空间分布配置
+      spatial_distribution:
+        Diversion_1:
+          priority: "high"    # 高优先级用水
+          elasticity: 0.2     # 低弹性（必需用水）
+        Diversion_2:
+          priority: "medium"  # 中等优先级
+          elasticity: 0.5     # 中等弹性
+      # 发布配置
+      publish_config:
+        frequency: 60.0
+        topics:
+          - "disturbance/diversion_1"
+          - "disturbance/diversion_2"
+          - "disturbance/demand_forecast"  # 需水预测
+      # 预测配置
+      forecast_config:
+        enable: true
+        horizon: 10800.0    # 3小时预测时域
+        resolution: 300.0   # 5分钟预测分辨率
+        uncertainty: 0.2    # 20%预测不确定性
+        methods:
+          - "time_series_analysis"
+          - "pattern_recognition"
+          - "machine_learning"

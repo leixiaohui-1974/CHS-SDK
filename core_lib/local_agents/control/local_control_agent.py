@@ -15,30 +15,57 @@ class LocalControlAgent(Agent):
     and can optionally be guided by high-level commands.
     """
 
-    def __init__(self, agent_id: str, controller: Controller, message_bus: MessageBus,
-                 observation_topic: str, observation_key: str, action_topic: str,
-                 dt: float, command_topic: Optional[str] = None, feedback_topic: Optional[str] = None):
+    def __init__(self, agent_id: str, message_bus: MessageBus, dt: float,
+                 target_component: str, control_type: str, data_sources: dict,
+                 control_targets: dict, allocation_config: dict, controller_config: dict,
+                 controller: Optional[Controller] = None, 
+                 observation_topic: Optional[str] = None, observation_key: Optional[str] = None, 
+                 action_topic: Optional[str] = None, command_topic: Optional[str] = None, 
+                 feedback_topic: Optional[str] = None, **kwargs):
         """
         Initializes the LocalControlAgent.
 
         Args:
             agent_id: The unique ID for this agent.
-            controller: The control algorithm instance (e.g., PIDController).
             message_bus: The system's message bus for communication.
+            dt: The simulation time step.
+            target_component: The physical component this agent controls.
+            control_type: The type of control (e.g., 'gate_control').
+            data_sources: Dictionary of data source topics.
+            control_targets: Dictionary of control target topics.
+            allocation_config: Configuration for flow allocation.
+            controller_config: Configuration for the controller.
+            controller: The control algorithm instance (e.g., PIDController).
             observation_topic: The topic to listen to for state updates.
             observation_key: The specific key in the observation message to use as a process variable.
             action_topic: The topic to publish control actions to.
-            dt: The simulation time step, required for the controller.
             command_topic: The topic for receiving high-level commands.
             feedback_topic: The topic for receiving state feedback from the controlled object.
         """
         super().__init__(agent_id)
-        self.controller = controller
         self.bus = message_bus
-        self.observation_topic = observation_topic
-        self.observation_key = observation_key
-        self.action_topic = action_topic
         self.dt = dt
+        self.target_component = target_component
+        self.control_type = control_type
+        self.data_sources = data_sources
+        self.control_targets = control_targets
+        self.allocation_config = allocation_config
+        self.controller_config = controller_config
+        
+        # Set up topics from configuration
+        self.observation_topic = observation_topic or data_sources.get('primary_data')
+        self.observation_key = observation_key or 'value'
+        self.action_topic = action_topic or f'control.{target_component}.action'
+        self.command_topic = command_topic
+        self.feedback_topic = feedback_topic
+        
+        # Initialize controller if provided, otherwise create from config
+        if controller:
+            self.controller = controller
+        else:
+            # Create controller from config (simplified for now)
+            self.controller = None
+            
         self.latest_feedback: State = {}
 
         self.bus.subscribe(self.observation_topic, self.handle_observation)

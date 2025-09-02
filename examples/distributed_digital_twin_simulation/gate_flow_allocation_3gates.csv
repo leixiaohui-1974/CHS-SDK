@@ -1,0 +1,65 @@
+# 3孔闸门流量分配策略表 (Gate_1)
+# 列说明：
+# target_flow: 目标总流量 (m³/s)
+# gate1_opening: 第1个闸孔开度 (0-1)
+# gate2_opening: 第2个闸孔开度 (0-1) 
+# gate3_opening: 第3个闸孔开度 (0-1)
+# allocation_strategy: 分配策略描述
+# priority_order: 闸孔优先级顺序
+
+target_flow,gate1_opening,gate2_opening,gate3_opening,allocation_strategy,priority_order
+0.0,0.0,0.0,0.0,all_closed,none
+5.0,0.1,0.0,0.0,single_gate_low_flow,1-2-3
+10.0,0.2,0.0,0.0,single_gate_low_flow,1-2-3
+15.0,0.3,0.0,0.0,single_gate_medium_flow,1-2-3
+20.0,0.4,0.0,0.0,single_gate_medium_flow,1-2-3
+25.0,0.5,0.0,0.0,single_gate_high_flow,1-2-3
+30.0,0.6,0.0,0.0,single_gate_high_flow,1-2-3
+35.0,0.7,0.0,0.0,single_gate_very_high_flow,1-2-3
+40.0,0.8,0.0,0.0,single_gate_very_high_flow,1-2-3
+45.0,0.9,0.0,0.0,single_gate_maximum_flow,1-2-3
+50.0,1.0,0.0,0.0,single_gate_full_open,1-2-3
+55.0,1.0,0.1,0.0,two_gates_start,1-2-3
+60.0,1.0,0.2,0.0,two_gates_low_flow,1-2-3
+65.0,1.0,0.3,0.0,two_gates_medium_flow,1-2-3
+70.0,1.0,0.4,0.0,two_gates_medium_flow,1-2-3
+75.0,1.0,0.5,0.0,two_gates_high_flow,1-2-3
+80.0,1.0,0.6,0.0,two_gates_high_flow,1-2-3
+85.0,1.0,0.7,0.0,two_gates_very_high_flow,1-2-3
+90.0,1.0,0.8,0.0,two_gates_very_high_flow,1-2-3
+95.0,1.0,0.9,0.0,two_gates_maximum_flow,1-2-3
+100.0,1.0,1.0,0.0,two_gates_full_open,1-2-3
+105.0,1.0,1.0,0.1,three_gates_start,1-2-3
+110.0,1.0,1.0,0.2,three_gates_low_flow,1-2-3
+115.0,1.0,1.0,0.3,three_gates_medium_flow,1-2-3
+120.0,1.0,1.0,0.4,three_gates_medium_flow,1-2-3
+125.0,1.0,1.0,0.5,three_gates_high_flow,1-2-3
+130.0,1.0,1.0,0.6,three_gates_high_flow,1-2-3
+135.0,1.0,1.0,0.7,three_gates_very_high_flow,1-2-3
+140.0,1.0,1.0,0.8,three_gates_very_high_flow,1-2-3
+145.0,1.0,1.0,0.9,three_gates_maximum_flow,1-2-3
+150.0,1.0,1.0,1.0,three_gates_full_open,1-2-3
+155.0,1.0,1.0,1.0,overflow_condition,1-2-3
+160.0,1.0,1.0,1.0,overflow_condition,1-2-3
+165.0,1.0,1.0,1.0,overflow_condition,1-2-3
+170.0,1.0,1.0,1.0,overflow_condition,1-2-3
+175.0,1.0,1.0,1.0,overflow_condition,1-2-3
+180.0,1.0,1.0,1.0,overflow_condition,1-2-3
+185.0,1.0,1.0,1.0,overflow_condition,1-2-3
+190.0,1.0,1.0,1.0,overflow_condition,1-2-3
+195.0,1.0,1.0,1.0,overflow_condition,1-2-3
+200.0,1.0,1.0,1.0,maximum_capacity,1-2-3
+
+# 均匀分配策略（备选方案）
+# target_flow,gate1_opening,gate2_opening,gate3_opening,allocation_strategy,priority_order
+# 30.0,0.2,0.2,0.2,uniform_distribution,equal
+# 60.0,0.4,0.4,0.4,uniform_distribution,equal
+# 90.0,0.6,0.6,0.6,uniform_distribution,equal
+# 120.0,0.8,0.8,0.8,uniform_distribution,equal
+# 150.0,1.0,1.0,1.0,uniform_distribution,equal
+
+# 优化分配策略（考虑水力效率）
+# target_flow,gate1_opening,gate2_opening,gate3_opening,allocation_strategy,priority_order
+# 45.0,0.5,0.4,0.3,efficiency_optimized,1-2-3
+# 90.0,0.8,0.7,0.6,efficiency_optimized,1-2-3
+# 135.0,1.0,0.9,0.8,efficiency_optimized,1-2-3

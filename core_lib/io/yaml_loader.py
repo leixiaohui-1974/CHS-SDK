@@ -190,7 +190,13 @@ class SimulationBuilder(BaseYamlLoader):
                     for k, v in list(d.items()):
                         if k == 'obj_id' or k == 'simulated_object_id' or k == 'target_model_id' or k == 'target_component_id':
                             if k == 'simulated_object_id':
-                                d['simulated_object'] = self.component_instances[v]
+                                print(f"Resolving simulated_object_id '{v}' for agent '{agent_id}'")
+                                if v in self.component_instances:
+                                    d['simulated_object'] = self.component_instances[v]
+                                    print(f"Successfully resolved to: {type(self.component_instances[v])}")
+                                else:
+                                    print(f"ERROR: Component '{v}' not found in component_instances")
+                                    print(f"Available components: {list(self.component_instances.keys())}")
                             elif k == 'target_model_id':
                                 d['target_model'] = self.component_instances[v]
                             elif k == 'target_component_id':

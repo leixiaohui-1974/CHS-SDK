@@ -1,0 +1,15 @@
+{
+  "storage": {
+    "type": "file",
+    "path": "E:\\OneDrive\\Documents\\GitHub\\CHS-SDK\\knowledge_base\\data"
+  },
+  "indexing": {
+    "enabled": true,
+    "batch_size": 100,
+    "max_file_size": 10485760
+  },
+  "semantic_search": {
+    "enabled": true,
+    "model": "sentence-transformers/all-MiniLM-L6-v2"
+  }
+}

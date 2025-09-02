@@ -1,0 +1,182 @@
+# 分布式数字孪生与优化控制仿真案例 - 系统拓扑配置
+# 定义物理组件之间的连接关系
+
+topology:
+  # 系统连接关系
+  connections:
+    # 上游水库 -> 节制闸1
+    - upstream: Upstream_Reservoir
+      downstream: Gate_1
+      connection_type: "reservoir_to_gate"
+    
+    # 节制闸1 -> 明渠段1
+    - upstream: Gate_1
+      downstream: Channel_1
+      connection_type: "gate_to_channel"
+    
+    # 明渠段1 -> 分水口1
+    - upstream: Channel_1
+      downstream: Diversion_1
+      connection_type: "channel_to_diversion"
+    
+    # 分水口1 -> 节制闸2
+    - upstream: Diversion_1
+      downstream: Gate_2
+      connection_type: "diversion_to_gate"
+    
+    # 节制闸2 -> 明渠段2
+    - upstream: Gate_2
+      downstream: Channel_2
+      connection_type: "gate_to_channel"
+    
+    # 明渠段2 -> 分水口2
+    - upstream: Channel_2
+      downstream: Diversion_2
+      connection_type: "channel_to_diversion"
+    
+    # 分水口2 -> 节制闸3
+    - upstream: Diversion_2
+      downstream: Gate_3
+      connection_type: "diversion_to_gate"
+    
+    # 节制闸3 -> 下游水库
+    - upstream: Gate_3
+      downstream: Downstream_Reservoir
+      connection_type: "gate_to_reservoir"
+
+  # 节点详细信息
+  nodes:
+    - id: Upstream_Reservoir
+      type: reservoir
+      position: [0, 0]
+      description: "上游水库，系统主要水源"
+    
+    - id: Gate_1
+      type: gate
+      position: [1, 0]
+      description: "节制闸1，3孔闸门，主要调节设施"
+      properties:
+        gate_count: 3
+        control_priority: high
+    
+    - id: Channel_1
+      type: channel
+      position: [2, 0]
+      description: "明渠段1，一维水力学仿真"
+      properties:
+        hydraulic_model: "1D_river_channel"
+        monitoring_density: high
+    
+    - id: Diversion_1
+      type: diversion
+      position: [3, 0]
+      description: "分水口1，第一个用水分流点"
+      properties:
+        diversion_capacity: 30.0  # m³/s
+    
+    - id: Gate_2
+      type: gate
+      position: [4, 0]
+      description: "节制闸2，单孔闸门"
+      properties:
+        gate_count: 1
+        control_priority: medium
+    
+    - id: Channel_2
+      type: channel
+      position: [5, 0]
+      description: "明渠段2，一维水力学仿真"
+      properties:
+        hydraulic_model: "1D_river_channel"
+        monitoring_density: high
+    
+    - id: Diversion_2
+      type: diversion
+      position: [6, 0]
+      description: "分水口2，第二个用水分流点"
+      properties:
+        diversion_capacity: 25.0  # m³/s
+    
+    - id: Gate_3
+      type: gate
+      position: [7, 0]
+      description: "节制闸3，单孔闸门，末端调节"
+      properties:
+        gate_count: 1
+        control_priority: low
+    
+    - id: Downstream_Reservoir
+      type: reservoir
+      position: [8, 0]
+      description: "下游水库，系统出口"
+
+  # 系统边界条件
+  boundary_conditions:
+    # 上游边界
+    upstream_boundary:
+      component: Upstream_Reservoir
+      type: "inflow"
+      value: 100.0  # m³/s
+      description: "上游水库恒定入流"
+    
+    # 下游边界
+    downstream_boundary:
+      component: Downstream_Reservoir
+      type: "outflow"
+      value: 80.0   # m³/s
+      description: "下游水库恒定出流"
+    
+    # 侧向边界（分水口）
+    lateral_boundaries:
+      - component: Diversion_1
+        type: "variable_outflow"
+        description: "分水口1可变分水流量"
+      - component: Diversion_2
+        type: "variable_outflow"
+        description: "分水口2可变分水流量"
+
+  # 控制回路定义
+  control_loops:
+    - name: "Gate_1_Control_Loop"
+      controlled_component: Gate_1
+      sensor_components: ["Gate_1"]
+      controller_agent: "Gate1_Control_Agent"
+      target_variable: "water_level"
+    
+    - name: "Gate_2_Control_Loop"
+      controlled_component: Gate_2
+      sensor_components: ["Gate_2"]
+      controller_agent: "Gate2_Control_Agent"
+      target_variable: "water_level"
+    
+    - name: "Gate_3_Control_Loop"
+      controlled_component: Gate_3
+      sensor_components: ["Gate_3"]
+      controller_agent: "Gate3_Control_Agent"
+      target_variable: "water_level"
+
+  # 数据流路径
+  data_flow_paths:
+    # 物理数据流
+    physical_data:
+      - from: "sensors"
+        to: "perception_agents"
+        data_types: ["water_level", "flow_rate", "gate_opening", "rainfall"]
+      
+      - from: "perception_agents"
+        to: "central_perception"
+        data_types: ["cleaned_data", "identified_parameters", "predictions"]
+      
+      - from: "central_perception"
+        to: "central_mpc"
+        data_types: ["system_state", "global_prediction"]
+    
+    # 控制指令流
+    control_commands:
+      - from: "central_mpc"
+        to: "local_controllers"
+        data_types: ["target_levels", "optimization_results"]
+      
+      - from: "local_controllers"
+        to: "actuators"
+        data_types: ["gate_commands", "flow_allocations"]

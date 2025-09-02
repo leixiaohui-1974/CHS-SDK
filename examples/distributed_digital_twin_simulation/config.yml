@@ -1,0 +1,430 @@
+# 分布式数字孪生与优化控制仿真案例 - 主配置文件
+# 基于CHS-SDK增强版核心库的完全分布式、高保真数字孪生仿真系统
+
+# ========== 仿真基础配置 ==========
+simulation:
+  name: "Distributed_Digital_Twin_Simulation"
+  description: "完全分布式、高保真的数字孪生与优化控制仿真案例"
+  version: "1.0.0"
+  
+  # 时间配置
+  time_config:
+    start_time: 0.0           # 仿真开始时间 (秒)
+    end_time: 86400.0         # 仿真结束时间 (24小时)
+    time_step: 60.0           # 基础时间步长 (1分钟)
+    real_time_factor: 1.0     # 实时倍数
+  
+  # 求解器配置
+  solver_config:
+    type: "adaptive_runge_kutta"
+    tolerance: 1e-6
+    max_step_size: 60.0
+    min_step_size: 1.0
+  
+  # 并行计算配置
+  parallel_config:
+    enable: true
+    num_threads: 8
+    load_balancing: "dynamic"
+
+# ========== 系统架构配置 ==========
+architecture:
+  # 分层架构定义
+  layers:
+    - name: "Physical_Entity_Simulation_Layer"
+      description: "物理本体仿真层，统一仿真所有物理实体"
+      agents: ["ontology_simulation"]
+    
+    - name: "Distributed_Perception_Layer"
+      description: "分布式数字孪生与感知层"
+      agents: 
+        - "Channel1_Twin_Agent"
+        - "Channel2_Twin_Agent"
+        - "Gate1_Perception_Agent"
+        - "Gate2_Perception_Agent"
+        - "Gate3_Perception_Agent"
+    
+    - name: "Local_Control_Layer"
+      description: "本地控制层"
+      agents:
+        - "Gate1_Control_Agent"
+        - "Gate2_Control_Agent"
+        - "Gate3_Control_Agent"
+    
+    - name: "Central_Coordination_Layer"
+      description: "中心感知与优化协调层"
+      agents:
+        - "central_perception"
+        - "central_mpc"
+    
+    - name: "Disturbance_Layer"
+      description: "扰动智能体层"
+      agents:
+        - "Rainfall_Agent"
+        - "Water_Use_Agent"
+  
+  # 通信架构
+  communication:
+    protocol: "MQTT"
+    broker_config:
+      host: "localhost"
+      port: 1883
+      keepalive: 60
+    
+    # 主题命名规范
+    topic_structure:
+      simulation_data: "simulation/{component_type}/{component_id}/{data_type}"
+      agent_data: "agent.{agent_id}.{data_category}"
+      control_commands: "control/{component_id}/{command_type}"
+      disturbance_data: "disturbance/{disturbance_type}/{target_component}"
+
+# ========== 组件和拓扑配置 ==========
+components_file: "components.yml"
+topology_file: "topology.yml"
+agents_file: "agents.yml"
+
+# ========== 监测与数据采集配置 ==========
+monitoring:
+  # 全面监测点配置
+  comprehensive_monitoring:
+    enable: true
+    frequency: 60.0  # 监测频率 (秒)
+    
+    # 水位监测点
+    water_level_monitoring:
+      - component: "Gate_1"
+        locations: ["upstream", "downstream"]
+        noise_config:
+          enable: true
+          distribution: "normal"
+          std_dev: 0.03
+          bias: 0.01
+      - component: "Gate_2"
+        locations: ["upstream", "downstream"]
+        noise_config:
+          enable: true
+          distribution: "normal"
+          std_dev: 0.025
+          bias: 0.008
+      - component: "Gate_3"
+        locations: ["upstream", "downstream"]
+        noise_config:
+          enable: true
+          distribution: "normal"
+          std_dev: 0.02
+          bias: 0.005
+    
+    # 流量监测点
+    flow_monitoring:
+      - component: "Gate_1"
+        measurement_type: "total_flow"
+        noise_config:
+          enable: true
+          distribution: "normal"
+          std_dev: 3.0
+          bias: 0.5
+      - component: "Gate_2"
+        measurement_type: "flow"
+        noise_config:
+          enable: true
+          distribution: "normal"
+          std_dev: 2.0
+          bias: 0.3
+      - component: "Gate_3"
+        measurement_type: "flow"
+        noise_config:
+          enable: true
+          distribution: "normal"
+          std_dev: 1.5
+          bias: 0.2
+      - component: "Diversion_1"
+        measurement_type: "outflow"
+        noise_config:
+          enable: true
+          distribution: "normal"
+          std_dev: 1.0
+          bias: 0.1
+      - component: "Diversion_2"
+        measurement_type: "outflow"
+        noise_config:
+          enable: true
+          distribution: "normal"
+          std_dev: 0.8
+          bias: 0.08
+    
+    # 雨量监测点
+    rainfall_monitoring:
+      - component: "Channel_1"
+        noise_config:
+          enable: true
+          distribution: "normal"
+          std_dev: 0.5  # mm/h
+          bias: 0.1
+      - component: "Channel_2"
+        noise_config:
+          enable: true
+          distribution: "normal"
+          std_dev: 0.4
+          bias: 0.08
+
+# ========== 执行器干扰配置 ==========
+actuator_disturbance:
+  enable: true
+  
+  # 闸门执行器配置
+  gate_actuators:
+    Gate_1:
+      delay: 2.0              # 执行延迟 (秒)
+      noise_std: 0.02         # 执行噪声标准差
+      aging_factor: 0.95      # 机械老化系数
+      stiction_threshold: 0.01 # 静摩擦阈值
+      backlash: 0.005         # 回程间隙
+    
+    Gate_2:
+      delay: 1.5
+      noise_std: 0.015
+      aging_factor: 0.97
+      stiction_threshold: 0.008
+      backlash: 0.003
+    
+    Gate_3:
+      delay: 1.8
+      noise_std: 0.018
+      aging_factor: 0.96
+      stiction_threshold: 0.009
+      backlash: 0.004
+
+# ========== 流量分配策略配置 ==========
+flow_allocation:
+  # 3孔闸门分配策略 (Gate_1)
+  three_gate_strategy:
+    file_path: "gate_flow_allocation_3gates.csv"
+    allocation_method: "sequential_priority"  # 顺序优先分配
+    priority_order: [1, 2, 3]  # 闸孔优先级
+    balancing_threshold: 0.1   # 平衡阈值
+  
+  # 单孔闸门分配策略 (Gate_2, Gate_3)
+  single_gate_strategy:
+    file_path: "gate_flow_allocation_1gate.csv"
+    allocation_method: "direct_control"  # 直接控制
+    safety_margin: 0.05       # 安全裕度
+
+# ========== 数字孪生模型配置 ==========
+digital_twin:
+  # 渠道积分时滞模型配置
+  channel_models:
+    Channel_1:
+      model_type: "IntegralDelayModel"
+      initial_parameters:
+        time_delay: 300.0      # 初始时滞 (秒)
+        integral_coefficient: 0.8
+      identification:
+        enable: true
+        method: "RLS"
+        update_frequency: 60.0
+    
+    Channel_2:
+      model_type: "IntegralDelayModel"
+      initial_parameters:
+        time_delay: 240.0
+        integral_coefficient: 0.75
+      identification:
+        enable: true
+        method: "RLS"
+        update_frequency: 60.0
+  
+  # 闸门流量系数辨识配置
+  gate_identification:
+    Gate_1:
+      parameter: "comprehensive_discharge_coefficient"
+      initial_value: 0.8
+      bounds: [0.5, 1.2]
+      rls_config:
+        forgetting_factor: 0.95
+        initial_covariance: 500.0
+    
+    Gate_2:
+      parameter: "discharge_coefficient"
+      initial_value: 0.75
+      bounds: [0.5, 1.0]
+      rls_config:
+        forgetting_factor: 0.95
+        initial_covariance: 500.0
+    
+    Gate_3:
+      parameter: "discharge_coefficient"
+      initial_value: 0.7
+      bounds: [0.4, 0.9]
+      rls_config:
+        forgetting_factor: 0.95
+        initial_covariance: 500.0
+
+# ========== 控制系统配置 ==========
+control_system:
+  # 本地控制器配置
+  local_controllers:
+    Gate_1:
+      controller_type: "PID"
+      parameters:
+        kp: 2.0
+        ki: 0.5
+        kd: 0.1
+      constraints:
+        max_opening_rate: 0.1  # /s
+        output_limits: [-0.1, 0.1]
+    
+    Gate_2:
+      controller_type: "PID"
+      parameters:
+        kp: 1.8
+        ki: 0.4
+        kd: 0.08
+      constraints:
+        max_opening_rate: 0.08
+        output_limits: [-0.08, 0.08]
+    
+    Gate_3:
+      controller_type: "PID"
+      parameters:
+        kp: 1.5
+        ki: 0.3
+        kd: 0.06
+      constraints:
+        max_opening_rate: 0.06
+        output_limits: [-0.06, 0.06]
+  
+  # 中心MPC配置
+  central_mpc:
+    prediction_horizon: 1800.0  # 30分钟
+    control_horizon: 900.0      # 15分钟
+    optimization_interval: 300.0 # 5分钟
+    solver: "ipopt"
+    
+    # 优化目标权重
+    objective_weights:
+      water_level_tracking: 1.0
+      flow_regulation: 0.8
+      energy_efficiency: 0.3
+      actuator_smoothness: 0.5
+    
+    # 系统约束
+    constraints:
+      water_levels:
+        Gate_1_upstream: [5.0, 20.0]
+        Gate_2_upstream: [3.0, 15.0]
+        Gate_3_upstream: [2.0, 12.0]
+      flow_rates:
+        Gate_1: [0.0, 200.0]
+        Gate_2: [0.0, 150.0]
+        Gate_3: [0.0, 100.0]
+      gate_openings:
+        all_gates: [0.0, 1.0]
+      rate_limits:
+        max_opening_rate: 0.1
+
+# ========== 扰动配置 ==========
+disturbances:
+  # 降雨扰动
+  rainfall:
+    enable: true
+    base_intensity: 5.0      # mm/h
+    random_std: 2.0          # 随机扰动标准差
+    storm_probability: 0.05  # 暴雨概率
+    forecast_horizon: 7200.0 # 2小时预报
+  
+  # 用水需求扰动
+  water_demand:
+    enable: true
+    base_demands:
+      Diversion_1: 15.0      # m³/s
+      Diversion_2: 12.0
+    daily_variation: 0.5     # 日变化幅度
+    random_std: 0.1          # 随机波动
+    forecast_horizon: 10800.0 # 3小时预测
+
+# ========== 数据记录与分析配置 ==========
+data_logging:
+  enable: true
+  output_directory: "./simulation_results"
+  
+  # 数据记录频率
+  logging_frequency:
+    high_frequency: 60.0     # 关键数据每分钟记录
+    medium_frequency: 300.0  # 一般数据每5分钟记录
+    low_frequency: 900.0     # 统计数据每15分钟记录
+  
+  # 记录数据类型
+  data_types:
+    - "water_levels"
+    - "flow_rates"
+    - "gate_openings"
+    - "control_commands"
+    - "identification_results"
+    - "mpc_optimization_results"
+    - "disturbance_data"
+    - "performance_metrics"
+  
+  # 数据格式
+  output_formats:
+    - "csv"
+    - "hdf5"
+    - "json"
+
+# ========== 性能监控配置 ==========
+performance_monitoring:
+  enable: true
+  
+  # 监控指标
+  metrics:
+    - "control_performance"
+    - "prediction_accuracy"
+    - "identification_convergence"
+    - "system_stability"
+    - "computational_efficiency"
+  
+  # 报警阈值
+  alert_thresholds:
+    water_level_deviation: 0.2  # m
+    flow_rate_error: 0.1        # 10%
+    control_saturation: 0.9     # 90%
+    identification_error: 0.15  # 15%
+
+# ========== 可视化配置 ==========
+visualization:
+  enable: true
+  real_time_plots:
+    - "system_overview"
+    - "water_levels"
+    - "flow_rates"
+    - "control_actions"
+    - "mpc_predictions"
+  
+  dashboard_config:
+    update_frequency: 30.0   # 30秒更新
+    port: 8080
+    auto_refresh: true
+
+# ========== 验证与测试配置 ==========
+validation:
+  enable: true
+  
+  # 验证场景
+  test_scenarios:
+    - name: "normal_operation"
+      duration: 7200.0       # 2小时
+      disturbances: ["light_rain", "normal_demand"]
+    
+    - name: "storm_event"
+      duration: 3600.0       # 1小时
+      disturbances: ["heavy_rain", "high_demand"]
+    
+    - name: "equipment_failure"
+      duration: 1800.0       # 30分钟
+      disturbances: ["actuator_fault", "sensor_noise"]
+  
+  # 性能指标
+  performance_criteria:
+    water_level_rmse: 0.1    # m
+    flow_tracking_error: 0.05 # 5%
+    control_effort: 0.8      # 最大控制努力
+    stability_margin: 0.2    # 稳定裕度

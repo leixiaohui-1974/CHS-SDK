@@ -1,0 +1,296 @@
+# 干旱管理场景模板
+name: "drought_management_scenario"
+description: "干旱管理场景，模拟低水位条件下的水资源优化配置"
+category: "drought_management"
+version: "1.0"
+created_at: "2024-01-23T10:30:00"
+
+# 场景参数定义
+parameters:
+  water_shortage_level:
+    type: "float"
+    description: "缺水程度 (0-1, 1表示严重缺水)"
+    required: true
+    min: 0.0
+    max: 1.0
+    default: 0.6
+  
+  conservation_target:
+    type: "float"
+    description: "节水目标 (相对于正常用水的比例)"
+    required: true
+    min: 0.1
+    max: 0.9
+    default: 0.3
+  
+  priority_supply_ratio:
+    type: "float"
+    description: "优先供水比例"
+    required: false
+    min: 0.0
+    max: 1.0
+    default: 0.7
+  
+  reservoir_critical_level:
+    type: "float"
+    description: "水库临界水位 (m)"
+    required: false
+    min: 0.0
+    max: 50.0
+    default: 20.0
+  
+  demand_reduction_rate:
+    type: "float"
+    description: "需求削减率 (%/day)"
+    required: false
+    min: 0.0
+    max: 10.0
+    default: 2.0
+
+# 智能体配置
+agents_config:
+  central_mpc:
+    mode: "rule"
+    objective_config:
+      water_conservation_weight: 0.7
+      supply_reliability_weight: 0.8
+      energy_efficiency_weight: 0.3
+    
+    constraints_config:
+      min_water_level: "${reservoir_critical_level}"
+      max_flow_rate: 200.0
+      conservation_target: "${conservation_target}"
+  
+  gate_agents:
+    Gate_1:
+      control_mode: "conservation"
+      max_opening_rate: 0.05
+      priority_level: "high"
+      water_saving_mode: true
+    
+    Gate_2:
+      control_mode: "conservation"
+      max_opening_rate: 0.03
+      priority_level: "medium"
+      water_saving_mode: true
+    
+    Gate_3:
+      control_mode: "conservation"
+      max_opening_rate: 0.03
+      priority_level: "low"
+      water_saving_mode: true
+  
+  perception_agents:
+    central_perception:
+      drought_monitoring: true
+      water_balance_tracking: true
+      prediction_horizon: 7.0  # 7天预测
+    
+    river_channel_perception:
+      low_flow_detection: true
+      water_quality_monitoring: true
+
+# 扰动配置
+disturbances:
+  - agent_id: "Drought_Condition_Agent"
+    type: "environmental"
+    parameters:
+      evaporation_rate_multiplier: 1.5
+      infiltration_rate_multiplier: 0.7
+      start_time: 0.0
+      duration: 168.0  # 7天
+      target_components:
+        - "upstream_reservoir"
+        - "downstream_reservoir"
+        - "river_channel_1"
+        - "river_channel_2"
+  
+  - agent_id: "Reduced_Inflow_Agent"
+    type: "inflow_reduction"
+    parameters:
+      reduction_factor: "${water_shortage_level}"
+      start_time: 0.0
+      duration: 168.0
+      target_components:
+        - "upstream_reservoir"
+  
+  - agent_id: "Priority_Demand_Agent"
+    type: "water_demand"
+    parameters:
+      demand_factor: "${priority_supply_ratio}"
+      priority_level: "high"
+      start_time: 0.0
+      duration: 168.0
+      target_components:
+        - "downstream_reservoir"
+
+# 控制目标
+objectives:
+  primary:
+    type: "water_conservation"
+    target: "maximize_water_savings"
+    weight: 0.7
+    constraints:
+      min_conservation_rate: "${conservation_target}"
+      max_supply_reduction: 0.5
+  
+  secondary:
+    type: "supply_reliability"
+    target: "maintain_critical_supply"
+    weight: 0.8
+    constraints:
+      priority_supply_ratio: "${priority_supply_ratio}"
+      min_emergency_reserve: 0.1
+  
+  tertiary:
+    type: "system_efficiency"
+    target: "optimize_energy_use"
+    weight: 0.3
+    constraints:
+      max_pump_operations: 2  # per day
+
+# 约束条件
+constraints:
+  water_balance_constraints:
+    min_reservoir_level: "${reservoir_critical_level}"
+    max_daily_withdrawal: 500.0  # m³/day
+    emergency_reserve_ratio: 0.15
+  
+  supply_constraints:
+    priority_supply_guarantee: "${priority_supply_ratio}"
+    max_supply_reduction: 0.5
+    min_pressure_maintenance: 0.6
+  
+  operational_constraints:
+    max_gate_operations_per_day: 3
+    min_gate_opening_duration: 30.0  # minutes
+    water_quality_threshold: 0.8
+
+# 水资源分配策略
+water_allocation_strategy:
+  priority_levels:
+    - level: 1
+      description: "生活用水"
+      allocation_ratio: 0.4
+      reduction_limit: 0.1
+    
+    - level: 2
+      description: "工业用水"
+      allocation_ratio: 0.3
+      reduction_limit: 0.3
+    
+    - level: 3
+      description: "农业用水"
+      allocation_ratio: 0.3
+      reduction_limit: 0.6
+  
+  allocation_rules:
+    - condition: "water_shortage_level < 0.3"
+      action: "normal_allocation"
+    
+    - condition: "0.3 <= water_shortage_level < 0.6"
+      action: "moderate_conservation"
+      parameters:
+        reduction_factor: 0.2
+    
+    - condition: "water_shortage_level >= 0.6"
+      action: "strict_conservation"
+      parameters:
+        reduction_factor: "${conservation_target}"
+
+# 性能指标
+performance_metrics:
+  - name: "water_conservation_rate"
+    description: "节水率"
+    calculation: "(normal_consumption - actual_consumption) / normal_consumption"
+    target: ">= ${conservation_target}"
+  
+  - name: "supply_reliability_index"
+    description: "供水可靠性指数"
+    calculation: "delivered_water / demanded_water"
+    target: ">= ${priority_supply_ratio}"
+  
+  - name: "reservoir_sustainability_index"
+    description: "水库可持续性指数"
+    calculation: "current_level / critical_level"
+    target: "> 1.2"
+  
+  - name: "water_use_efficiency"
+    description: "用水效率"
+    calculation: "beneficial_use / total_withdrawal"
+    target: "> 0.85"
+
+# 场景事件时间线
+event_timeline:
+  - time: 0.0
+    event: "drought_scenario_start"
+    description: "干旱场景开始，启动节水模式"
+  
+  - time: 12.0
+    event: "water_shortage_assessment"
+    description: "水资源短缺评估"
+    trigger_condition: "reservoir_level < 0.8 * normal_level"
+  
+  - time: 24.0
+    event: "conservation_measures_activation"
+    description: "节水措施激活"
+    parameters:
+      conservation_level: "moderate"
+  
+  - time: 48.0
+    event: "priority_allocation_start"
+    description: "优先分配策略启动"
+    trigger_condition: "water_shortage_level > 0.4"
+  
+  - time: 72.0
+    event: "strict_conservation_check"
+    description: "严格节水检查点"
+    trigger_condition: "water_shortage_level > 0.6"
+  
+  - time: 120.0
+    event: "mid_scenario_assessment"
+    description: "场景中期评估"
+  
+  - time: 168.0
+    event: "drought_scenario_end"
+    description: "干旱场景结束"
+
+# 自适应策略
+adaptive_strategies:
+  water_level_triggers:
+    - threshold: 0.9
+      action: "normal_operation"
+    
+    - threshold: 0.7
+      action: "moderate_conservation"
+      parameters:
+        gate_opening_reduction: 0.2
+    
+    - threshold: 0.5
+      action: "strict_conservation"
+      parameters:
+        gate_opening_reduction: 0.4
+        demand_reduction: 0.3
+    
+    - threshold: 0.3
+      action: "emergency_conservation"
+      parameters:
+        gate_opening_reduction: 0.6
+        demand_reduction: 0.5
+
+# 验证规则
+validation_rules:
+  - rule: "0 <= water_shortage_level <= 1"
+    message: "缺水程度必须在0-1之间"
+  
+  - rule: "0.1 <= conservation_target <= 0.9"
+    message: "节水目标必须在10%-90%之间"
+  
+  - rule: "priority_supply_ratio > conservation_target"
+    message: "优先供水比例应大于节水目标"
+  
+  - rule: "reservoir_critical_level > 0"
+    message: "水库临界水位必须大于0"
+  
+  - rule: "demand_reduction_rate >= 0"
+    message: "需求削减率不能为负"
