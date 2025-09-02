@@ -1,4 +1,4 @@
-# CHS仿真平台API参考文档
+# CHS-SDK API 参考文档
 
 ## 目录
 
@@ -16,13 +16,35 @@
 
 ## 概述
 
+CHS-SDK 提供完整的 RESTful API 和 WebSocket 接口，支持水利系统仿真、智能体管理、实时监控等功能。所有 API 都遵循 OpenAPI 3.0 规范。
+
 ### 基本信息
 
-- **API版本**: v1.0
-- **基础URL**: `https://api.chs-platform.com/v1`
-- **协议**: HTTPS
+- **Base URL**: `http://localhost:8000/api`
+- **API 版本**: v1
+- **认证方式**: JWT Bearer Token
 - **数据格式**: JSON
 - **字符编码**: UTF-8
+
+## 快速开始
+
+### 1. 获取访问令牌
+
+```bash
+curl -X POST "http://localhost:8000/api/auth/login" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "admin",
+    "password": "password"
+  }'
+```
+
+### 2. 使用令牌访问API
+
+```bash
+curl -X GET "http://localhost:8000/api/simulation/list" \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+```
 
 ### 请求头
 

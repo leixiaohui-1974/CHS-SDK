@@ -1,4 +1,36 @@
-# CHS仿真平台开发者指南
+# CHS-SDK 开发者指南
+
+## 概述
+
+本指南为 CHS-SDK 项目的开发者提供详细的开发环境搭建、代码规范、开发流程和最佳实践指导。CHS-SDK 是一个复杂的水利系统仿真平台，包含多智能体系统、实时监控、数据分析等功能模块。
+
+## 快速开始
+
+### 环境要求
+- Python 3.8+
+- Node.js 16+ (前端开发)
+- Docker (可选)
+- Git
+
+### 快速安装
+
+```bash
+# 克隆项目
+git clone https://github.com/your-org/CHS-SDK.git
+cd CHS-SDK
+
+# 创建虚拟环境
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# 或 venv\Scripts\activate  # Windows
+
+# 安装依赖
+pip install -r requirements.txt
+pip install -r requirements-test.txt
+
+# 启动开发服务器
+uvicorn api.server:app --reload
+```
 
 ## 目录
 
