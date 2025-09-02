@@ -1,0 +1,36 @@
+# 水箱参数辨识 - 统一配置文件
+# 重构后的水箱参数辨识示例
+
+simulation:
+  name: "水箱参数辨识"
+  description: "重构后的水箱参数辨识示例"
+  duration: 200.0
+  time_step: 1.0
+  
+components:
+  watertank:
+    type: "WaterTank"
+    parameters:
+      capacity: 1000.0
+      initial_level: 30.0
+      cross_sectional_area: 100.0
+      discharge_coefficient: 0.6  # 待辨识参数
+    
+identification:
+  enabled: true
+  target_parameters:
+    - "discharge_coefficient"
+  method: "least_squares"
+  reference_data: "reference_data.csv"
+  
+control:
+  enabled: false
+  
+output:
+  format: "json"
+  save_path: "identification_results.json"
+  variables:
+    - "water_level"
+    - "volume"
+    - "discharge_coefficient"
+    - "error"

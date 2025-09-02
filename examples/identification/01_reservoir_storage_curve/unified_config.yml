@@ -1,0 +1,15 @@
+metadata:
+  category: identification
+  description: 统一配置文件，用于 identification/01_reservoir_storage_curve 示例
+  name: 01_reservoir_storage_curve - 统一配置
+  version: '1.0'
+output:
+- file: twin_reservoir_log.csv
+  topic: state/twin_reservoir
+- file: true_reservoir_log.csv
+  topic: state/true_reservoir
+- file: identified_params_log.json
+  topic: identified_parameters/twin_reservoir
+simulation:
+  dt: 3600
+  duration: 720000

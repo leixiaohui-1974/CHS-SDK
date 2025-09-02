@@ -1,0 +1,15 @@
+metadata:
+  category: identification
+  description: 统一配置文件，用于 identification/03_pipe_roughness 示例
+  name: 03_pipe_roughness - 统一配置
+  version: '1.0'
+output:
+- file: twin_pipe_log.csv
+  topic: state/twin_pipe
+- file: true_pipe_log.csv
+  topic: state/true_pipe
+- file: identified_params_log.json
+  topic: identified_parameters/twin_pipe
+simulation:
+  dt: 100
+  duration: 20000

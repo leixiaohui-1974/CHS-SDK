@@ -1,0 +1,88 @@
+# 集中式设定点优化 - 通用配置文件
+# 集中式设定点优化示例
+
+metadata:
+  name: "集中式设定点优化"
+  description: "集中式设定点优化示例"
+  category: "notebooks"
+  version: "1.0"
+
+simulation:
+  time:
+    start: 0.0
+    end: 200.0
+    step: 1.0
+  solver:
+    type: "runge_kutta"
+    tolerance: 1e-6
+
+system:
+  components:
+    - name: "system_1"
+      type: "ControlledSystem"
+      config:
+        initial_state: 20.0
+        time_constant: 10.0
+        gain: 1.5
+        target: 30.0
+    - name: "system_2"
+      type: "ControlledSystem"
+      config:
+        initial_state: 15.0
+        time_constant: 8.0
+        gain: 1.2
+        target: 25.0
+    - name: "system_3"
+      type: "ControlledSystem"
+      config:
+        initial_state: 25.0
+        time_constant: 12.0
+        gain: 1.8
+        target: 35.0
+    - name: "central_optimizer"
+      type: "CentralizedOptimizer"
+      config:
+        algorithm: "gradient_descent"
+        learning_rate: 0.01
+        convergence_threshold: 0.001
+        
+control:
+  enabled: true
+  strategy: "centralized_optimization"
+  optimization:
+    interval: 20.0
+    algorithm: "multi_objective"
+    objectives:
+      - name: "tracking_performance"
+        weight: 1.0
+        type: "minimize_error"
+      - name: "control_effort"
+        weight: 0.1
+        type: "minimize_energy"
+      - name: "system_coupling"
+        weight: 0.05
+        type: "minimize_interaction"
+    constraints:
+      - type: "stability_margin"
+        value: 0.1
+      - type: "actuator_saturation"
+        limits: [-10.0, 10.0]
+        
+monitoring:
+  enabled: true
+  variables:
+    - "system_1.state"
+    - "system_1.setpoint"
+    - "system_1.error"
+    - "system_2.state"
+    - "system_2.setpoint"
+    - "system_2.error"
+    - "system_3.state"
+    - "system_3.setpoint"
+    - "system_3.error"
+    - "central_optimizer.cost"
+    - "central_optimizer.convergence"
+    
+logging:
+  level: "INFO"
+  output_file: "centralized_optimization.log"

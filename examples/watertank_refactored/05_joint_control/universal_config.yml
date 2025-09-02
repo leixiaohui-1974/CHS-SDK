@@ -1,0 +1,76 @@
+# 水箱联合控制 - 通用配置文件
+# 重构后的水箱联合控制示例
+
+metadata:
+  name: "水箱联合控制"
+  description: "重构后的水箱联合控制示例"
+  category: "watertank_refactored"
+  version: "1.0"
+
+simulation:
+  time:
+    start: 0.0
+    end: 400.0
+    step: 1.0
+  solver:
+    type: "runge_kutta"
+    tolerance: 1e-6
+
+system:
+  components:
+    - name: "watertank"
+      type: "WaterTank"
+      config:
+        capacity: 1000.0
+        initial_level: 60.0
+        area: 100.0
+    - name: "inlet_valve"
+      type: "Valve"
+      config:
+        max_flow: 40.0
+        initial_position: 0.4
+    - name: "outlet_valve"
+      type: "Valve"
+      config:
+        max_flow: 50.0
+        initial_position: 0.3
+        
+control:
+  enabled: true
+  strategy: "coordinated"
+  controllers:
+    - name: "inlet_controller"
+      type: "PID"
+      input: "watertank.water_level"
+      output: "inlet_valve.position"
+      setpoint: 65.0
+      parameters:
+        kp: 1.8
+        ki: 0.08
+        kd: 0.6
+    - name: "outlet_controller"
+      type: "PID"
+      input: "watertank.water_level"
+      output: "outlet_valve.position"
+      setpoint: 65.0
+      parameters:
+        kp: -1.2  # 负反馈用于出口控制
+        ki: -0.04
+        kd: -0.4
+  coordination:
+    enabled: true
+    gain: 0.5
+    
+monitoring:
+  enabled: true
+  variables:
+    - "watertank.water_level"
+    - "watertank.volume"
+    - "inlet_valve.flow_rate"
+    - "outlet_valve.flow_rate"
+    - "inlet_controller.output"
+    - "outlet_controller.output"
+    
+logging:
+  level: "INFO"
+  output_file: "joint_control.log"

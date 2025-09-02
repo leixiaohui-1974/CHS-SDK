@@ -1,0 +1,21 @@
+components:
+- class: Reservoir
+  id: tank1
+  inflow_topic: inflow/tank1
+  initial_state:
+    volume: 7.5
+    water_level: 5.0
+  parameters:
+    outlet_coeff: 0.5
+    surface_area: 1.5
+project:
+  category: watertank
+  description: 通用配置文件，用于 watertank/01_simulation 示例
+  name: 01_simulation
+  version: '1.0'
+runtime:
+  logging_level: INFO
+  mode: simulation
+simulation:
+  dt: 1.0
+  duration: 100

@@ -1,0 +1,31 @@
+components:
+- class: Reservoir
+  id: source_reservoir
+  initial_state:
+    water_level: 10.0
+  parameters:
+    area: 1000.0
+    inflow: 50.0
+    storage_curve:
+    - - 0
+      - 0
+    - - 10000
+      - 10
+- class: Gate
+  id: control_gate
+  initial_state:
+    opening: 0.2
+  parameters:
+    discharge_coefficient: 0.6
+    width: 5.0
+project:
+  category: non_agent_based
+  description: 通用配置文件，用于 non_agent_based/08_non_agent_simulation 示例
+  name: 08_non_agent_simulation
+  version: '1.0'
+runtime:
+  logging_level: INFO
+  mode: simulation
+simulation:
+  dt: 1.0
+  duration: 100

@@ -1,0 +1,37 @@
+# 水箱简单仿真 - 通用配置文件
+# 重构后的水箱简单仿真示例
+
+metadata:
+  name: "水箱简单仿真"
+  description: "重构后的水箱简单仿真示例"
+  category: "watertank_refactored"
+  version: "1.0"
+
+simulation:
+  time:
+    start: 0.0
+    end: 100.0
+    step: 1.0
+  solver:
+    type: "euler"
+    tolerance: 1e-6
+
+system:
+  components:
+    - name: "watertank"
+      type: "WaterTank"
+      config:
+        capacity: 1000.0
+        initial_level: 50.0
+        area: 100.0
+        
+monitoring:
+  enabled: true
+  variables:
+    - "water_level"
+    - "volume"
+    - "flow_rate"
+    
+logging:
+  level: "INFO"
+  output_file: "simulation.log"

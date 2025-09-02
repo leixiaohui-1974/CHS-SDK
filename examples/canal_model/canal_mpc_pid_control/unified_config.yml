@@ -1,0 +1,61 @@
+components:
+- action_key: inflow
+  action_topic: reservoir_inflow_control
+  class: Reservoir
+  id: upstream_reservoir
+  initial_state:
+    water_level: 10.0
+  parameters:
+    area: 10000.0
+    inflow: 50.0
+- action_topic: diversion_1_control
+  class: core_lib.physical_objects.disturbance_node.DisturbanceNode
+  id: diversion_before_gate1
+  initial_state:
+    outflow: 0.0
+  parameters: {}
+- action_topic: gate_1_control
+  class: Gate
+  id: gate_1
+  initial_state:
+    opening: 0.5
+  parameters:
+    discharge_coefficient: 0.8
+    width: 5.0
+- action_topic: canal_1_state
+  class: UnifiedCanal
+  id: canal_1
+  initial_state:
+    water_level: 5.0
+  parameters:
+    delay: 300
+    gain: 0.001
+    model_type: integral_delay
+- action_topic: diversion_2_control
+  class: core_lib.physical_objects.disturbance_node.DisturbanceNode
+  id: diversion_before_gate2
+  initial_state:
+    outflow: 0.0
+  parameters: {}
+- action_topic: gate_2_control
+  class: Gate
+  id: gate_2
+  initial_state:
+    opening: 0.5
+  parameters:
+    discharge_coefficient: 0.8
+    width: 5.0
+- action_topic: tail_user_control
+  class: core_lib.physical_objects.disturbance_node.DisturbanceNode
+  id: tail_user
+  initial_state:
+    outflow: 45.0
+  parameters: {}
+metadata:
+  category: canal_model
+  description: 统一配置文件，用于 canal_model/canal_mpc_pid_control 示例
+  name: canal_mpc_pid_control - 统一配置
+  version: '1.0'
+simulation:
+  dt: 10
+  duration: 7200

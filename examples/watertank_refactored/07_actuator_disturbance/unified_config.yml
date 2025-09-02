@@ -1,0 +1,65 @@
+# 水箱执行器干扰 - 统一配置文件
+# 重构后的水箱执行器干扰示例
+
+simulation:
+  name: "水箱执行器干扰"
+  description: "重构后的水箱执行器干扰示例"
+  duration: 300.0
+  time_step: 1.0
+  
+components:
+  watertank:
+    type: "WaterTank"
+    parameters:
+      capacity: 1000.0
+      initial_level: 50.0
+      cross_sectional_area: 100.0
+      target_level: 70.0
+  
+  inlet_valve:
+    type: "Valve"
+    parameters:
+      max_flow_rate: 45.0
+      initial_opening: 0.5
+      actuator_noise: 0.1
+      actuator_bias: 0.05
+      actuator_delay: 2.0
+    
+control:
+  enabled: true
+  type: "robust_PID"
+  target_variable: "water_level"
+  control_variable: "inlet_flow"
+  parameters:
+    kp: 1.8
+    ki: 0.08
+    kd: 0.5
+    setpoint: 70.0
+    anti_windup: true
+    output_limits: [0.0, 1.0]
+  
+disturbances:
+  enabled: true
+  actuator_disturbances:
+    noise:
+      type: "gaussian"
+      std_dev: 0.1
+    bias:
+      value: 0.05
+      drift: 0.002
+    delay:
+      value: 2.0
+      variation: 0.5
+  
+output:
+  format: "json"
+  save_path: "actuator_disturbance_results.json"
+  variables:
+    - "water_level"
+    - "volume"
+    - "inlet_flow"
+    - "valve_position"
+    - "actuator_noise"
+    - "actuator_bias"
+    - "control_signal"
+    - "error"

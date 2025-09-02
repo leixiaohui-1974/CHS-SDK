@@ -1,0 +1,155 @@
+# 渠道系统示例 - 通用配置文件
+metadata:
+  name: "渠道系统仿真"
+  description: "渠道、湖泊、水库和河道的综合仿真系统，展示复杂水利网络建模"
+  version: "1.0"
+  category: "notebooks"
+  author: "CHS-SDK Team"
+  tags: ["canal", "lake", "reservoir", "river", "hydraulics"]
+
+simulation:
+  duration: 300
+  dt: 1.0
+  start_time: 0
+  end_time: 300
+  solver: "runge_kutta"
+  
+components:
+  - class: Lake
+    id: lake_1
+    inflow_topic: inflow/lake_1
+    initial_state:
+      volume: 1000.0
+      water_level: 10.0
+    parameters:
+      surface_area: 100.0
+      outlet_coeff: 0.7
+      max_level: 15.0
+      min_level: 2.0
+      evaporation_rate: 0.001
+      
+  - class: Canal
+    id: canal_1
+    inflow_topic: inflow/canal_1
+    initial_state:
+      flow_rate: 5.0
+      water_depth: 2.0
+    parameters:
+      length: 1000.0
+      width: 10.0
+      slope: 0.001
+      roughness: 0.03
+      side_slope: 1.5
+      seepage_rate: 0.0001
+      
+  - class: Reservoir
+    id: reservoir_1
+    inflow_topic: inflow/reservoir_1
+    initial_state:
+      volume: 500.0
+      water_level: 8.0
+    parameters:
+      surface_area: 50.0
+      outlet_coeff: 0.6
+      max_level: 12.0
+      min_level: 1.0
+      dead_storage: 10.0
+      
+  - class: RiverChannel
+    id: river_1
+    inflow_topic: inflow/river_1
+    initial_state:
+      flow_rate: 10.0
+      water_depth: 3.0
+    parameters:
+      length: 2000.0
+      width: 15.0
+      slope: 0.0005
+      roughness: 0.025
+      bank_height: 5.0
+      meander_coefficient: 1.2
+
+connections:
+  - from: lake_1
+    to: canal_1
+    type: outlet
+    parameters:
+      pipe_diameter: 1.5
+      pipe_length: 50.0
+      friction_factor: 0.02
+  - from: canal_1
+    to: reservoir_1
+    type: flow
+    parameters:
+      transition_length: 100.0
+  - from: reservoir_1
+    to: river_1
+    type: outlet
+    parameters:
+      spillway_width: 5.0
+      spillway_coeff: 1.8
+
+agents:
+  - class: InflowAgent
+    id: lake_inflow
+    action_topic: inflow/lake_1
+    parameters:
+      pattern: "seasonal"
+      base_value: 8.0
+      amplitude: 3.0
+      period: 100.0
+      
+  - class: MonitoringAgent
+    id: system_monitor
+    observation_topics:
+      - state/lake_1
+      - state/canal_1
+      - state/reservoir_1
+      - state/river_1
+    parameters:
+      monitoring_interval: 10.0
+      alert_thresholds:
+        lake_1: {min_level: 3.0, max_level: 14.0}
+        reservoir_1: {min_level: 2.0, max_level: 11.0}
+        
+  - class: FlowControlAgent
+    id: canal_controller
+    observation_topic: state/canal_1
+    action_topic: control/canal_1
+    parameters:
+      target_flow: 5.0
+      control_gain: 0.1
+      
+  - class: WeatherAgent
+    id: weather_effects
+    action_topics:
+      - weather/lake_1
+      - weather/canal_1
+    parameters:
+      rainfall_pattern: "random"
+      evaporation_factor: 1.0
+      temperature_variation: 5.0
+
+output:
+  show_progress: true
+  show_final_summary: true
+  log_level: "INFO"
+  save_history: true
+  export_format: ["csv", "json", "hdf5"]
+  plot_results: true
+  
+visualization:
+  enabled: true
+  real_time: false
+  save_plots: true
+  plot_types: ["time_series", "spatial_profile", "network_diagram"]
+  
+performance:
+  metrics: ["flow_efficiency", "water_balance", "system_stability"]
+  analysis_enabled: true
+  
+validation:
+  enabled: true
+  mass_balance_check: true
+  energy_balance_check: true
+  physical_constraints_check: true

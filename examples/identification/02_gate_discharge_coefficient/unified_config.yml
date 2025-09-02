@@ -1,0 +1,15 @@
+metadata:
+  category: identification
+  description: 统一配置文件，用于 identification/02_gate_discharge_coefficient 示例
+  name: 02_gate_discharge_coefficient - 统一配置
+  version: '1.0'
+output:
+- file: twin_gate_log.csv
+  topic: state/twin_gate
+- file: true_gate_log.csv
+  topic: state/true_gate
+- file: identified_params_log.json
+  topic: identified_parameters/twin_gate
+simulation:
+  dt: 100
+  duration: 20000

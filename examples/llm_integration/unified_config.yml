@@ -1,0 +1,108 @@
+# LLM集成示例 - 统一配置文件
+metadata:
+  name: "LLM集成演示"
+  description: "展示LLM智能体在系统构建、场景设计、调度指挥和数据分析中的应用"
+  version: "1.0"
+  category: "llm_integration"
+
+simulation:
+  duration: 100
+  dt: 1.0
+  
+components:
+  - class: Reservoir
+    id: demo_reservoir
+    inflow_topic: inflow/demo_reservoir
+    initial_state:
+      volume: 20.0
+      water_level: 10.0
+    parameters:
+      surface_area: 2.0
+      outlet_coeff: 0.7
+      
+  - class: Gate
+    id: control_gate
+    control_topic: control/control_gate
+    initial_state:
+      opening: 0.5
+    parameters:
+      max_opening: 1.0
+      discharge_coeff: 0.8
+      gate_width: 2.0
+      
+  - class: RiverChannel
+    id: downstream_river
+    inflow_topic: inflow/downstream_river
+    initial_state:
+      flow_rate: 5.0
+    parameters:
+      length: 1000.0
+      width: 10.0
+      slope: 0.001
+      roughness: 0.03
+
+connections:
+  - from: demo_reservoir
+    to: control_gate
+    type: outlet
+  - from: control_gate
+    to: downstream_river
+    type: flow
+
+agents:
+  - class: LLMSystemBuilderAgent
+    id: llm_builder
+    parameters:
+      model: "gpt-4"
+      temperature: 0.3
+      max_tokens: 2000
+      
+  - class: LLMScenarioDesignerAgent
+    id: llm_designer
+    parameters:
+      model: "gpt-4"
+      creativity_level: 0.7
+      scenario_types: ["flood", "drought", "normal_operation"]
+      
+  - class: LLMDispatchCommanderAgent
+    id: llm_commander
+    observation_topics:
+      - state/demo_reservoir
+      - state/control_gate
+    action_topics:
+      - control/control_gate
+    parameters:
+      model: "gpt-3.5-turbo"
+      decision_interval: 10.0
+      safety_constraints: true
+      
+  - class: LLMDataAnalystAgent
+    id: llm_analyst
+    observation_topics:
+      - state/demo_reservoir
+      - state/control_gate
+      - state/downstream_river
+    parameters:
+      model: "gpt-4"
+      analysis_interval: 20.0
+      report_format: "markdown"
+      
+  - class: InflowAgent
+    id: inflow_generator
+    action_topic: inflow/demo_reservoir
+    parameters:
+      pattern: "variable"
+      base_value: 6.0
+      variation: 2.0
+
+output:
+  show_progress: true
+  show_final_summary: true
+  log_level: "INFO"
+  save_history: true
+  
+llm_config:
+  api_key_env: "OPENAI_API_KEY"
+  timeout: 30
+  retry_attempts: 3
+  rate_limit: 60  # requests per minute

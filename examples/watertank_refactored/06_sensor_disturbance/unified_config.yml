@@ -1,0 +1,66 @@
+# 水箱传感器干扰 - 统一配置文件
+# 重构后的水箱传感器干扰示例
+
+simulation:
+  name: "水箱传感器干扰"
+  description: "重构后的水箱传感器干扰示例"
+  duration: 300.0
+  time_step: 1.0
+  
+components:
+  watertank:
+    type: "WaterTank"
+    parameters:
+      capacity: 1000.0
+      initial_level: 50.0
+      cross_sectional_area: 100.0
+      target_level: 70.0
+  
+  level_sensor:
+    type: "Sensor"
+    parameters:
+      measurement_variable: "water_level"
+      noise_type: "gaussian"
+      noise_std: 2.0
+      bias: 0.5
+      drift_rate: 0.01
+  
+  inlet_valve:
+    type: "Valve"
+    parameters:
+      max_flow_rate: 45.0
+      initial_opening: 0.5
+    
+control:
+  enabled: true
+  type: "robust_PID"
+  target_variable: "measured_water_level"
+  control_variable: "inlet_flow"
+  parameters:
+    kp: 1.5
+    ki: 0.06
+    kd: 0.4
+    setpoint: 70.0
+    filter_enabled: true
+    filter_cutoff: 0.1
+  
+disturbances:
+  enabled: true
+  sensor_noise:
+    type: "white_noise"
+    amplitude: 2.0
+  sensor_bias:
+    value: 0.5
+    drift: 0.01
+  
+output:
+  format: "json"
+  save_path: "sensor_disturbance_results.json"
+  variables:
+    - "water_level"
+    - "measured_water_level"
+    - "volume"
+    - "inlet_flow"
+    - "control_signal"
+    - "error"
+    - "noise"

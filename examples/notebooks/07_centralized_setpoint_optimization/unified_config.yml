@@ -1,0 +1,80 @@
+# 集中式设定点优化 - 统一配置文件
+# 集中式设定点优化示例
+
+simulation:
+  name: "集中式设定点优化"
+  description: "集中式设定点优化示例"
+  duration: 200.0
+  time_step: 1.0
+  
+components:
+  system_1:
+    type: "ControlledSystem"
+    parameters:
+      initial_state: 20.0
+      time_constant: 10.0
+      gain: 1.5
+  
+  system_2:
+    type: "ControlledSystem"
+    parameters:
+      initial_state: 15.0
+      time_constant: 8.0
+      gain: 1.2
+  
+  system_3:
+    type: "ControlledSystem"
+    parameters:
+      initial_state: 25.0
+      time_constant: 12.0
+      gain: 1.8
+  
+  optimizer:
+    type: "CentralizedOptimizer"
+    parameters:
+      algorithm: "gradient_descent"
+      learning_rate: 0.01
+      convergence_threshold: 0.001
+    
+control:
+  enabled: true
+  type: "centralized_optimization"
+  optimization_interval: 20.0
+  parameters:
+    objective_function: "minimize_total_error"
+    constraints:
+      - "system_stability"
+      - "actuator_limits"
+    weights:
+      system_1: 1.0
+      system_2: 1.2
+      system_3: 0.8
+  
+optimization:
+  enabled: true
+  target_variables:
+    - "system_1.setpoint"
+    - "system_2.setpoint"
+    - "system_3.setpoint"
+  objective:
+    type: "weighted_sum"
+    components:
+      - name: "tracking_error"
+        weight: 1.0
+      - name: "control_effort"
+        weight: 0.1
+      - name: "system_interaction"
+        weight: 0.05
+  
+output:
+  format: "json"
+  save_path: "centralized_optimization_results.json"
+  variables:
+    - "system_1.state"
+    - "system_1.setpoint"
+    - "system_2.state"
+    - "system_2.setpoint"
+    - "system_3.state"
+    - "system_3.setpoint"
+    - "total_cost"
+    - "optimization_status"

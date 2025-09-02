@@ -1,0 +1,78 @@
+# 集中式设定点优化示例配置文件
+# 传统配置文件模式
+
+simulation:
+  duration: 200.0
+  dt: 1.0
+  solver: 'euler'
+
+components:
+  system_1:
+    class: ControlledSystem
+    initial_state:
+      value: 20.0
+    parameters:
+      time_constant: 10.0
+      gain: 1.5
+  
+  system_2:
+    class: ControlledSystem
+    initial_state:
+      value: 15.0
+    parameters:
+      time_constant: 8.0
+      gain: 1.2
+  
+  system_3:
+    class: ControlledSystem
+    initial_state:
+      value: 25.0
+    parameters:
+      time_constant: 12.0
+      gain: 1.8
+
+control:
+  centralized_optimizer:
+    type: CentralizedOptimizer
+    systems: [system_1, system_2, system_3]
+    optimization_method: 'quadratic_programming'
+    objective_function: 'minimize_tracking_error'
+    constraints:
+      - type: 'output_bounds'
+        min_value: 0.0
+        max_value: 100.0
+      - type: 'rate_limits'
+        max_rate: 5.0
+    
+  setpoint_strategy:
+    type: DynamicSetpoint
+    target_values: [30.0, 25.0, 35.0]
+    transition_time: 50.0
+    optimization_interval: 10.0
+
+optimization:
+  objective:
+    weights:
+      tracking_error: 1.0
+      control_effort: 0.1
+      smoothness: 0.05
+  
+  constraints:
+    system_limits:
+      min_output: 0.0
+      max_output: 100.0
+    control_limits:
+      max_change_rate: 5.0
+      settling_time: 20.0
+
+output:
+  variables:
+    - system_1.output
+    - system_2.output
+    - system_3.output
+    - centralized_optimizer.setpoint_1
+    - centralized_optimizer.setpoint_2
+    - centralized_optimizer.setpoint_3
+    - centralized_optimizer.cost_function
+  save_to_file: true
+  plot: true

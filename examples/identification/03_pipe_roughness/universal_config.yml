@@ -1,0 +1,56 @@
+downstream_reservoir:
+  initial_state:
+    volume: 1000000
+  parameters:
+    storage_curve:
+    - - 0
+      - 90.0
+    - - 10000000
+      - 100.0
+  type: Reservoir
+output:
+- file: twin_pipe_log.csv
+  topic: state/twin_pipe
+- file: true_pipe_log.csv
+  topic: state/true_pipe
+- file: identified_params_log.json
+  topic: identified_parameters/twin_pipe
+project:
+  category: identification
+  description: 通用配置文件，用于 identification/03_pipe_roughness 示例
+  name: 03_pipe_roughness
+  version: '1.0'
+runtime:
+  logging_level: INFO
+  mode: simulation
+simulation:
+  dt: 100
+  duration: 20000
+true_pipe:
+  initial_state:
+    flow: 0
+  parameters:
+    calculation_method: manning
+    diameter: 1.0
+    length: 1000.0
+    manning_n: 0.012
+  type: Pipe
+twin_pipe:
+  initial_state:
+    flow: 0
+  parameters:
+    calculation_method: manning
+    diameter: 1.0
+    length: 1000.0
+    manning_n: 0.018
+  type: Pipe
+upstream_reservoir:
+  initial_state:
+    volume: 8000000
+  parameters:
+    storage_curve:
+    - - 0
+      - 150.0
+    - - 10000000
+      - 160.0
+  type: Reservoir

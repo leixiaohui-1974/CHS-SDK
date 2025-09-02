@@ -1,0 +1,26 @@
+components:
+- class: Reservoir
+  id: target_reservoir
+  initial_state:
+    water_level: 14.0
+  parameters:
+    area: 800.0
+    inflow: 75.0
+- class: Gate
+  id: control_gate
+  initial_state:
+    opening: 0.5
+  parameters:
+    discharge_coefficient: 0.7
+    width: 4.0
+project:
+  category: agent_based
+  description: 通用配置文件，用于 agent_based/09_agent_based_distributed_control 示例
+  name: 09_agent_based_distributed_control
+  version: '1.0'
+runtime:
+  logging_level: INFO
+  mode: simulation
+simulation:
+  dt: 1.0
+  duration: 300

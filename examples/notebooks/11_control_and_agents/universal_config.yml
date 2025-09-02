@@ -1,0 +1,208 @@
+# 控制与智能体示例 - 通用配置文件
+metadata:
+  name: "控制与智能体系统"
+  description: "展示数字孪生智能体、本地控制智能体和PID控制器的集成应用，演示多层次控制架构"
+  version: "1.0"
+  category: "notebooks"
+  author: "CHS-SDK Team"
+  tags: ["control", "agents", "digital_twin", "pid", "multi_agent"]
+
+simulation:
+  duration: 200
+  dt: 0.5
+  start_time: 0
+  end_time: 200
+  solver: "adaptive_runge_kutta"
+  
+components:
+  - class: Reservoir
+    id: controlled_reservoir
+    inflow_topic: inflow/controlled_reservoir
+    initial_state:
+      volume: 15.0
+      water_level: 7.5
+    parameters:
+      surface_area: 2.0
+      outlet_coeff: 0.65
+      max_level: 15.0
+      min_level: 1.0
+      safety_margin: 0.5
+      
+  - class: Gate
+    id: control_gate
+    control_topic: control/control_gate
+    initial_state:
+      opening: 0.4
+    parameters:
+      max_opening: 1.0
+      discharge_coeff: 0.85
+      gate_width: 1.8
+      response_time: 0.2
+      actuator_limits: [0.0, 1.0]
+      
+  - class: Pump
+    id: inflow_pump
+    control_topic: control/inflow_pump
+    initial_state:
+      flow_rate: 3.0
+      power_consumption: 2.5
+    parameters:
+      max_flow_rate: 10.0
+      efficiency: 0.85
+      power_rating: 5.0
+      startup_time: 2.0
+      shutdown_time: 1.0
+      
+  - class: FlowMeter
+    id: outflow_meter
+    observation_topic: flow/control_gate
+    parameters:
+      accuracy: 0.02
+      response_time: 0.1
+      
+  - class: LevelSensor
+    id: level_sensor
+    observation_topic: level/controlled_reservoir
+    parameters:
+      accuracy: 0.01
+      noise_level: 0.005
+      calibration_offset: 0.0
+
+connections:
+  - from: inflow_pump
+    to: controlled_reservoir
+    type: inflow
+    parameters:
+      pipe_diameter: 0.5
+      pipe_length: 20.0
+  - from: controlled_reservoir
+    to: control_gate
+    type: outlet
+    parameters:
+      pipe_diameter: 0.8
+      pipe_length: 10.0
+  - from: control_gate
+    to: outflow_meter
+    type: flow
+
+agents:
+  - class: DigitalTwinAgent
+    id: reservoir_twin
+    observation_topic: state/controlled_reservoir
+    parameters:
+      update_frequency: 2.0
+      state_variables: ["water_level", "volume", "outflow", "inflow"]
+      prediction_horizon: 10.0
+      model_type: "physics_based"
+      calibration_enabled: true
+      
+  - class: LocalControlAgent
+    id: gate_controller
+    observation_topic: state/controlled_reservoir
+    action_topic: control/control_gate
+    parameters:
+      control_type: "pid"
+      setpoint: 8.0
+      kp: 0.6
+      ki: 0.15
+      kd: 0.08
+      output_limits: [0.0, 1.0]
+      integral_limits: [-0.5, 0.5]
+      derivative_filter: 0.1
+      anti_windup: true
+      
+  - class: PIDController
+    id: pump_controller
+    observation_topic: state/controlled_reservoir
+    action_topic: control/inflow_pump
+    parameters:
+      setpoint: 7.5
+      kp: 2.0
+      ki: 0.5
+      kd: 0.2
+      output_limits: [0.0, 10.0]
+      integral_limits: [-2.0, 2.0]
+      setpoint_tracking: true
+      
+  - class: SupervisoryAgent
+    id: system_supervisor
+    observation_topics:
+      - state/controlled_reservoir
+      - state/control_gate
+      - state/inflow_pump
+    action_topics:
+      - setpoint/gate_controller
+      - setpoint/pump_controller
+    parameters:
+      optimization_interval: 20.0
+      objective: "minimize_energy"
+      constraints:
+        water_level: [3.0, 12.0]
+        flow_rate: [0.5, 8.0]
+        
+  - class: DisturbanceAgent
+    id: demand_disturbance
+    action_topic: demand/controlled_reservoir
+    parameters:
+      pattern: "step_sequence"
+      values: [2.0, 5.0, 1.5, 4.0]
+      times: [0, 50, 100, 150]
+      noise_level: 0.1
+      
+  - class: MonitoringAgent
+    id: system_monitor
+    observation_topics:
+      - state/controlled_reservoir
+      - state/control_gate
+      - state/inflow_pump
+      - performance/gate_controller
+      - performance/pump_controller
+    parameters:
+      monitoring_interval: 5.0
+      alert_levels:
+        water_level: {min: 2.0, max: 12.0}
+        gate_opening: {min: 0.0, max: 1.0}
+        pump_flow: {min: 0.0, max: 9.5}
+      data_logging: true
+      
+  - class: FaultDetectionAgent
+    id: fault_detector
+    observation_topics:
+      - sensor/level_sensor
+      - sensor/outflow_meter
+    parameters:
+      detection_threshold: 0.1
+      confirmation_time: 10.0
+      fault_types: ["sensor_drift", "actuator_fault", "communication_loss"]
+
+output:
+  show_progress: true
+  show_final_summary: true
+  log_level: "INFO"
+  save_history: true
+  export_format: ["csv", "json", "matlab"]
+  plot_results: true
+  
+visualization:
+  enabled: true
+  real_time: true
+  save_plots: true
+  plot_types: ["time_series", "control_performance", "agent_interaction"]
+  dashboard_enabled: true
+  
+performance:
+  metrics: ["control_accuracy", "settling_time", "overshoot", "energy_efficiency"]
+  analysis_enabled: true
+  benchmark_comparison: true
+  
+validation:
+  enabled: true
+  control_stability_check: true
+  agent_coordination_check: true
+  performance_bounds_check: true
+  
+logging:
+  level: "DEBUG"
+  file_rotation: true
+  max_file_size: "10MB"
+  backup_count: 5

@@ -1,0 +1,27 @@
+# Components configuration for Event-Driven Agents example
+# Extracted from config.yml for traditional scenario runner compatibility
+
+components:
+  reservoir_1:
+    type: Reservoir
+    initial_state:
+      volume: 21000000      # m³ (21e6)
+      water_level: 14.0     # m
+    parameters:
+      surface_area: 1500000 # m² (1.5e6)
+      storage_curve:
+        - [0, 0]
+        - [30000000, 20]      # [30e6, 20]
+
+  gate_1:
+    type: Gate
+    initial_state:
+      opening: 0.1          # Initial opening (0-1)
+    parameters:
+      max_rate_of_change: 0.1
+      discharge_coefficient: 0.6
+      width: 10             # m
+      max_opening: 1.0
+    message_bus:
+      enabled: true
+      action_topic: "action.gate.opening"

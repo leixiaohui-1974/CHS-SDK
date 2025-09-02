@@ -1,0 +1,27 @@
+# Components configuration for Pipe and Valve System example
+# Extracted from config.yml for traditional scenario runner compatibility
+
+components:
+  pipe_1:
+    type: Pipe
+    initial_state: {}
+    parameters:
+      diameter: 0.5        # m
+      length: 1000         # m
+      friction_factor: 0.02
+
+  valve_1:
+    type: Valve
+    initial_state:
+      opening: 0.0         # Initial valve opening (0-100%)
+    parameters:
+      diameter: 0.5        # m
+      discharge_coefficient: 0.8
+
+# Valve opening control pattern
+control:
+  valve_opening_pattern:
+    type: sinusoidal
+    amplitude: 50        # % opening amplitude
+    period: 628.3        # seconds (2*pi*100)
+    offset: 50           # % base opening

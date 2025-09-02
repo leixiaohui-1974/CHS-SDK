@@ -1,0 +1,91 @@
+# 水箱执行器干扰 - 通用配置文件
+# 重构后的水箱执行器干扰示例
+
+metadata:
+  name: "水箱执行器干扰"
+  description: "重构后的水箱执行器干扰示例"
+  category: "watertank_refactored"
+  version: "1.0"
+
+simulation:
+  time:
+    start: 0.0
+    end: 300.0
+    step: 1.0
+  solver:
+    type: "euler"
+    tolerance: 1e-6
+
+system:
+  components:
+    - name: "watertank"
+      type: "WaterTank"
+      config:
+        capacity: 1000.0
+        initial_level: 50.0
+        area: 100.0
+    - name: "inlet_valve"
+      type: "Valve"
+      config:
+        max_flow: 45.0
+        initial_position: 0.5
+    - name: "actuator"
+      type: "Actuator"
+      config:
+        target: "inlet_valve"
+        response_time: 2.0
+        noise_std: 0.1
+        bias: 0.05
+        drift_rate: 0.002
+        
+control:
+  enabled: true
+  controllers:
+    - name: "robust_controller"
+      type: "robust_PID"
+      input: "watertank.water_level"
+      output: "actuator.command"
+      setpoint: 70.0
+      parameters:
+        kp: 1.8
+        ki: 0.08
+        kd: 0.5
+      anti_windup:
+        enabled: true
+        limits: [0.0, 1.0]
+        
+disturbances:
+  enabled: true
+  sources:
+    - name: "actuator_noise"
+      type: "gaussian_noise"
+      target: "actuator"
+      parameters:
+        std_dev: 0.1
+    - name: "actuator_bias"
+      type: "bias_drift"
+      target: "actuator"
+      parameters:
+        initial_bias: 0.05
+        drift_rate: 0.002
+    - name: "actuator_delay"
+      type: "time_delay"
+      target: "actuator"
+      parameters:
+        delay: 2.0
+        variation: 0.5
+        
+monitoring:
+  enabled: true
+  variables:
+    - "watertank.water_level"
+    - "inlet_valve.flow_rate"
+    - "actuator.command"
+    - "actuator.output"
+    - "actuator.noise"
+    - "actuator.bias"
+    - "robust_controller.output"
+    
+logging:
+  level: "DEBUG"
+  output_file: "actuator_disturbance.log"

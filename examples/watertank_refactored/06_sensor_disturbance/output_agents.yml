@@ -7,595 +7,595 @@ simulation_history:
     inflow: 3.5
 - time: 1.0
   reservoir_1:
-    water_level: 10.79757097098259
+    water_level: 10.684964649633582
     outflow: 0
-    volume: 21.59514194196518
-    inflow: 8.095141941965181
+    volume: 21.369929299267163
+    inflow: 7.869929299267163
 - time: 2.0
   reservoir_1:
-    water_level: 12.345141941965181
+    water_level: 12.119929299267163
     outflow: 0
-    volume: 24.690283883930363
-    inflow: 3.095141941965182
+    volume: 24.239858598534326
+    inflow: 2.8699292992671634
 - time: 3.0
   reservoir_1:
-    water_level: 11.845141941965181
+    water_level: 11.619929299267163
     outflow: 0
-    volume: 23.690283883930363
+    volume: 23.239858598534326
     inflow: -1.0
 - time: 4.0
   reservoir_1:
-    water_level: 11.345141941965181
+    water_level: 11.119929299267163
     outflow: 0
-    volume: 22.690283883930363
+    volume: 22.239858598534326
     inflow: -1.0
 - time: 5.0
   reservoir_1:
-    water_level: 10.845141941965181
+    water_level: 10.619929299267163
     outflow: 0
-    volume: 21.690283883930363
+    volume: 21.239858598534326
     inflow: -1.0
 - time: 6.0
   reservoir_1:
-    water_level: 10.345141941965181
+    water_level: 10.119929299267163
     outflow: 0
-    volume: 20.690283883930363
+    volume: 20.239858598534326
     inflow: -1.0
 - time: 7.0
   reservoir_1:
-    water_level: 9.855417970822586
+    water_level: 9.716687147183016
     outflow: 0
-    volume: 19.710835941645172
-    inflow: -0.9794479422851905
+    volume: 19.433374294366033
+    inflow: -0.8064843041682946
 - time: 8.0
   reservoir_1:
-    water_level: 9.696166506708638
+    water_level: 9.698299076535948
     outflow: 0
-    volume: 19.392333013417275
-    inflow: -0.3185029282278962
+    volume: 19.396598153071896
+    inflow: -0.036776141294136644
 - time: 9.0
   reservoir_1:
-    water_level: 9.910185414278557
+    water_level: 10.199041843657568
     outflow: 0
-    volume: 19.820370828557113
-    inflow: 0.4280378151398385
+    volume: 20.398083687315136
+    inflow: 1.0014855342432407
 - time: 10.0
   reservoir_1:
-    water_level: 10.042678653522465
+    water_level: 10.425466273563973
     outflow: 0
-    volume: 20.08535730704493
-    inflow: 0.2649864784878157
+    volume: 20.850932547127947
+    inflow: 0.45284885981281037
 - time: 11.0
   reservoir_1:
-    water_level: 10.309456077780613
+    water_level: 10.120629441448374
     outflow: 0
-    volume: 20.618912155561226
-    inflow: 0.5335548485162958
+    volume: 20.241258882896748
+    inflow: -0.6096736642311982
 - time: 12.0
   reservoir_1:
-    water_level: 10.475284698456516
+    water_level: 9.784371655033201
     outflow: 0
-    volume: 20.950569396913032
-    inflow: 0.3316572413518074
+    volume: 19.568743310066402
+    inflow: -0.6725155728303469
 - time: 13.0
   reservoir_1:
-    water_level: 10.123282733576907
+    water_level: 9.701379377932478
     outflow: 0
-    volume: 20.246565467153815
-    inflow: -0.7040039297592168
+    volume: 19.402758755864955
+    inflow: -0.16598455420144742
 - time: 14.0
   reservoir_1:
-    water_level: 10.025514753852958
+    water_level: 9.775890245476061
     outflow: 0
-    volume: 20.051029507705916
-    inflow: -0.1955359594478986
+    volume: 19.551780490952122
+    inflow: 0.14902173508716576
 - time: 15.0
   reservoir_1:
-    water_level: 10.17467879874013
+    water_level: 9.87652100541892
     outflow: 0
-    volume: 20.34935759748026
-    inflow: 0.2983280897743442
+    volume: 19.75304201083784
+    inflow: 0.20126151988572005
 - time: 16.0
   reservoir_1:
-    water_level: 10.028448715558381
+    water_level: 9.982951429109814
     outflow: 0
-    volume: 20.056897431116763
-    inflow: -0.2924601663634963
+    volume: 19.96590285821963
+    inflow: 0.21286084738178623
 - time: 17.0
   reservoir_1:
-    water_level: 9.863306313995624
+    water_level: 9.935185463214804
     outflow: 0
-    volume: 19.726612627991248
-    inflow: -0.33028480312551384
+    volume: 19.870370926429608
+    inflow: -0.09553193179002106
 - time: 18.0
   reservoir_1:
-    water_level: 10.135356816229704
+    water_level: 9.645001899005164
     outflow: 0
-    volume: 20.270713632459408
-    inflow: 0.5441010044681617
+    volume: 19.29000379801033
+    inflow: -0.5803671284192793
 - time: 19.0
   reservoir_1:
-    water_level: 10.314942282527277
+    water_level: 9.867145009408857
     outflow: 0
-    volume: 20.629884565054553
-    inflow: 0.3591709325951431
+    volume: 19.734290018817713
+    inflow: 0.44428622080738434
 - time: 20.0
   reservoir_1:
-    water_level: 10.192749271472271
+    water_level: 10.149266400642038
     outflow: 0
-    volume: 20.385498542944543
-    inflow: -0.2443860221100118
+    volume: 20.298532801284075
+    inflow: 0.5642427824663618
 - time: 21.0
   reservoir_1:
-    water_level: 10.25122392743164
+    water_level: 9.980599803681294
     outflow: 0
-    volume: 20.50244785486328
-    inflow: 0.11694931191873881
+    volume: 19.961199607362587
+    inflow: -0.33733319392148803
 - time: 22.0
   reservoir_1:
-    water_level: 10.520928718008072
+    water_level: 10.17313177763679
     outflow: 0
-    volume: 21.041857436016144
-    inflow: 0.5394095811528635
+    volume: 20.34626355527358
+    inflow: 0.3850639479109913
 - time: 23.0
   reservoir_1:
-    water_level: 10.474411171276525
+    water_level: 10.09430862938252
     outflow: 0
-    volume: 20.94882234255305
-    inflow: -0.0930350934630938
+    volume: 20.18861725876504
+    inflow: -0.15764629650854312
 - time: 24.0
   reservoir_1:
-    water_level: 9.974411171276525
+    water_level: 9.764687356337408
     outflow: 0
-    volume: 19.94882234255305
-    inflow: -1.0
+    volume: 19.529374712674816
+    inflow: -0.6592425460902236
 - time: 25.0
   reservoir_1:
-    water_level: 9.863356367677182
+    water_level: 10.016506426877001
     outflow: 0
-    volume: 19.726712735354365
-    inflow: -0.222109607198684
+    volume: 20.033012853754002
+    inflow: 0.5036381410791875
 - time: 26.0
   reservoir_1:
-    water_level: 10.227842165440446
+    water_level: 10.260103540514391
     outflow: 0
-    volume: 20.455684330880892
-    inflow: 0.7289715955265288
+    volume: 20.520207081028783
+    inflow: 0.48719422727478
 - time: 27.0
   reservoir_1:
-    water_level: 10.442988169138044
+    water_level: 9.922260310567076
     outflow: 0
-    volume: 20.885976338276087
-    inflow: 0.4302920073951948
+    volume: 19.84452062113415
+    inflow: -0.675686459894631
 - time: 28.0
   reservoir_1:
-    water_level: 10.182593571473035
+    water_level: 9.91566331918881
     outflow: 0
-    volume: 20.36518714294607
-    inflow: -0.520789195330018
+    volume: 19.83132663837762
+    inflow: -0.0131939827565285
 - time: 29.0
   reservoir_1:
-    water_level: 10.046108834349285
+    water_level: 10.296162787308278
     outflow: 0
-    volume: 20.09221766869857
-    inflow: -0.2729694742475006
+    volume: 20.592325574616556
+    inflow: 0.7609989362389341
 - time: 30.0
   reservoir_1:
-    water_level: 10.505561688068187
+    water_level: 10.18325924680601
     outflow: 0
-    volume: 21.011123376136375
-    inflow: 0.9189057074378035
+    volume: 20.36651849361202
+    inflow: -0.2258070810045374
 - time: 31.0
   reservoir_1:
-    water_level: 10.60149927891084
+    water_level: 9.701161262767092
     outflow: 0
-    volume: 21.20299855782168
-    inflow: 0.19187518168530415
+    volume: 19.402322525534185
+    inflow: -0.964195968077834
 - time: 32.0
   reservoir_1:
-    water_level: 10.260457868878847
+    water_level: 9.527882147399952
     outflow: 0
-    volume: 20.520915737757694
-    inflow: -0.6820828200639868
+    volume: 19.055764294799904
+    inflow: -0.34655823073428027
 - time: 33.0
   reservoir_1:
-    water_level: 10.375846336729005
+    water_level: 9.860190300775711
     outflow: 0
-    volume: 20.75169267345801
-    inflow: 0.23077693570031754
+    volume: 19.720380601551422
+    inflow: 0.6646163067515198
 - time: 34.0
   reservoir_1:
-    water_level: 10.37593176252031
+    water_level: 10.491193325597706
     outflow: 0
-    volume: 20.75186352504062
-    inflow: 0.0001708515826081558
+    volume: 20.982386651195412
+    inflow: 1.2620060496439887
 - time: 35.0
   reservoir_1:
-    water_level: 9.98551876411944
+    water_level: 10.598707065715718
     outflow: 0
-    volume: 19.97103752823888
-    inflow: -0.7808259968017377
+    volume: 21.197414131431437
+    inflow: 0.21502748023602258
 - time: 36.0
   reservoir_1:
-    water_level: 9.976288011471356
+    water_level: 10.098707065715718
     outflow: 0
-    volume: 19.95257602294271
-    inflow: -0.018461505296167968
+    volume: 20.197414131431437
+    inflow: -1.0
 - time: 37.0
   reservoir_1:
-    water_level: 10.427829881273581
+    water_level: 10.176213718214477
     outflow: 0
-    volume: 20.855659762547162
-    inflow: 0.9030837396044525
+    volume: 20.352427436428954
+    inflow: 0.1550133049975182
 - time: 38.0
   reservoir_1:
-    water_level: 10.45453395741387
+    water_level: 10.486267616422571
     outflow: 0
-    volume: 20.90906791482774
-    inflow: 0.053408152280578935
+    volume: 20.972535232845143
+    inflow: 0.6201077964161885
 - time: 39.0
   reservoir_1:
-    water_level: 9.95453395741387
+    water_level: 10.218814862131907
     outflow: 0
-    volume: 19.90906791482774
-    inflow: -1.0
+    volume: 20.437629724263815
+    inflow: -0.5349055085813297
 - time: 40.0
   reservoir_1:
-    water_level: 9.777331673263834
+    water_level: 9.827650906099684
     outflow: 0
-    volume: 19.55466334652767
-    inflow: -0.3544045683000743
+    volume: 19.65530181219937
+    inflow: -0.7823279120644445
 - time: 41.0
   reservoir_1:
-    water_level: 9.83578475213568
+    water_level: 10.185537247641186
     outflow: 0
-    volume: 19.67156950427136
-    inflow: 0.11690615774369101
+    volume: 20.37107449528237
+    inflow: 0.7157726830830012
 - time: 42.0
   reservoir_1:
-    water_level: 10.073937916623912
+    water_level: 10.925205402445517
     outflow: 0
-    volume: 20.147875833247824
-    inflow: 0.4763063289764618
+    volume: 21.850410804891034
+    inflow: 1.4793363096086638
 - time: 43.0
   reservoir_1:
-    water_level: 10.367891290752114
+    water_level: 10.915823259676126
     outflow: 0
-    volume: 20.73578258150423
-    inflow: 0.587906748256404
+    volume: 21.83164651935225
+    inflow: -0.018764285538781955
 - time: 44.0
   reservoir_1:
-    water_level: 10.367374220941452
+    water_level: 10.415823259676126
     outflow: 0
-    volume: 20.734748441882903
-    inflow: -0.0010341396213259801
+    volume: 20.83164651935225
+    inflow: -1.0
 - time: 45.0
   reservoir_1:
-    water_level: 10.131865068572566
+    water_level: 9.915823259676126
     outflow: 0
-    volume: 20.26373013714513
-    inflow: -0.471018304737773
+    volume: 19.83164651935225
+    inflow: -1.0
 - time: 46.0
   reservoir_1:
-    water_level: 10.103237030098423
+    water_level: 9.84201752521188
     outflow: 0
-    volume: 20.206474060196847
-    inflow: -0.05725607694828394
+    volume: 19.68403505042376
+    inflow: -0.14761146892849364
 - time: 47.0
   reservoir_1:
-    water_level: 10.303817269442265
+    water_level: 10.268144722659278
     outflow: 0
-    volume: 20.60763453888453
-    inflow: 0.4011604786876831
+    volume: 20.536289445318555
+    inflow: 0.8522543948947969
 - time: 48.0
   reservoir_1:
-    water_level: 10.120678098361648
+    water_level: 10.769138332299756
     outflow: 0
-    volume: 20.241356196723295
-    inflow: -0.36627834216123273
+    volume: 21.53827666459951
+    inflow: 1.0019872192809562
 - time: 49.0
   reservoir_1:
-    water_level: 9.937813561989213
+    water_level: 10.770199010028588
     outflow: 0
-    volume: 19.875627123978425
-    inflow: -0.36572907274487015
+    volume: 21.540398020057175
+    inflow: 0.0021213554576655635
 - time: 50.0
   reservoir_1:
-    water_level: 9.202753967980282
+    water_level: 9.397064041633831
     outflow: 0
-    volume: 18.405507935960564
-    inflow: -1.4701191880178626
+    volume: 18.794128083267662
+    inflow: -2.7462699367895143
 - time: 51.0
   reservoir_1:
-    water_level: 9.080468663683753
+    water_level: 8.878682876497233
     outflow: 0
-    volume: 18.160937327367506
-    inflow: -0.24457060859305813
+    volume: 17.757365752994467
+    inflow: -1.0367623302731945
 - time: 52.0
   reservoir_1:
-    water_level: 9.492954361909907
+    water_level: 9.316274678527575
     outflow: 0
-    volume: 18.985908723819815
-    inflow: 0.8249713964523098
+    volume: 18.63254935705515
+    inflow: 0.8751836040606833
 - time: 53.0
   reservoir_1:
-    water_level: 9.739012051059847
+    water_level: 10.056445306902278
     outflow: 0
-    volume: 19.478024102119694
-    inflow: 0.49211537829987906
+    volume: 20.112890613804556
+    inflow: 1.480341256749404
 - time: 54.0
   reservoir_1:
-    water_level: 9.528820663166725
+    water_level: 10.179848598191748
     outflow: 0
-    volume: 19.05764132633345
-    inflow: -0.4203827757862444
+    volume: 20.359697196383497
+    inflow: 0.24680658257894017
 - time: 55.0
   reservoir_1:
-    water_level: 9.308754469799904
+    water_level: 9.578499091078172
     outflow: 0
-    volume: 18.61750893959981
-    inflow: -0.4401323867336402
+    volume: 19.156998182156343
+    inflow: -1.2026990142271536
 - time: 56.0
   reservoir_1:
-    water_level: 9.35246051655023
+    water_level: 9.400679423241208
     outflow: 0
-    volume: 18.70492103310046
-    inflow: 0.08741209350065415
+    volume: 18.801358846482415
+    inflow: -0.355639335673928
 - time: 57.0
   reservoir_1:
-    water_level: 9.619714664629049
+    water_level: 9.519184626209416
     outflow: 0
-    volume: 19.239429329258098
-    inflow: 0.5345082961576344
+    volume: 19.038369252418832
+    inflow: 0.2370104059364171
 - time: 58.0
   reservoir_1:
-    water_level: 10.142840811240651
+    water_level: 9.429961585067332
     outflow: 0
-    volume: 20.285681622481302
-    inflow: 1.0462522932232043
+    volume: 18.859923170134664
+    inflow: -0.17844608228416847
 - time: 59.0
   reservoir_1:
-    water_level: 9.813152848984918
+    water_level: 9.514554816629197
     outflow: 0
-    volume: 19.626305697969837
-    inflow: -0.6593759245114661
+    volume: 19.029109633258393
+    inflow: 0.16918646312372987
 - time: 60.0
   reservoir_1:
-    water_level: 9.059920304322851
+    water_level: 9.462353067650657
     outflow: 0
-    volume: 18.119840608645703
-    inflow: -1.5064650893241356
+    volume: 18.924706135301314
+    inflow: -0.10440349795708026
 - time: 61.0
   reservoir_1:
-    water_level: 9.21448552510058
+    water_level: 9.454473213198025
     outflow: 0
-    volume: 18.42897105020116
-    inflow: 0.30913044155545744
+    volume: 18.90894642639605
+    inflow: -0.01575970890526368
 - time: 62.0
   reservoir_1:
-    water_level: 9.64725839578782
+    water_level: 9.802755039257056
     outflow: 0
-    volume: 19.29451679157564
-    inflow: 0.8655457413744787
+    volume: 19.60551007851411
+    inflow: 0.6965636521180605
 - time: 63.0
   reservoir_1:
-    water_level: 10.051346987625603
+    water_level: 9.98753669184353
     outflow: 0
-    volume: 20.102693975251206
-    inflow: 0.8081771836755676
+    volume: 19.97507338368706
+    inflow: 0.3695633051729479
 - time: 64.0
   reservoir_1:
-    water_level: 9.844524648377098
+    water_level: 9.902969994620891
     outflow: 0
-    volume: 19.689049296754195
-    inflow: -0.41364467849701037
+    volume: 19.805939989241782
+    inflow: -0.16913339444527775
 - time: 65.0
   reservoir_1:
-    water_level: 9.511946378750999
+    water_level: 9.596178327363807
     outflow: 0
-    volume: 19.023892757501997
-    inflow: -0.6651565392521971
+    volume: 19.192356654727615
+    inflow: -0.6135833345141664
 - time: 66.0
   reservoir_1:
-    water_level: 9.807827320464819
+    water_level: 9.667100534820218
     outflow: 0
-    volume: 19.615654640929638
-    inflow: 0.5917618834276412
+    volume: 19.334201069640436
+    inflow: 0.14184441491282263
 - time: 67.0
   reservoir_1:
-    water_level: 10.190969406254668
+    water_level: 10.260745732094799
     outflow: 0
-    volume: 20.381938812509336
-    inflow: 0.7662841715796975
+    volume: 20.521491464189598
+    inflow: 1.1872903945491622
 - time: 68.0
   reservoir_1:
-    water_level: 9.988220386726946
+    water_level: 10.404355723621979
     outflow: 0
-    volume: 19.97644077345389
-    inflow: -0.4054980390554437
+    volume: 20.808711447243958
+    inflow: 0.2872199830543587
 - time: 69.0
   reservoir_1:
-    water_level: 9.203916010972273
+    water_level: 9.774982007804457
     outflow: 0
-    volume: 18.407832021944547
-    inflow: -1.5686087515093439
+    volume: 19.549964015608914
+    inflow: -1.2587474316350433
 - time: 70.0
   reservoir_1:
-    water_level: 9.125861346536642
+    water_level: 9.513262812259544
     outflow: 0
-    volume: 18.251722693073283
-    inflow: -0.15610932887126427
+    volume: 19.02652562451909
+    inflow: -0.5234383910898256
 - time: 71.0
   reservoir_1:
-    water_level: 10.075265125700891
+    water_level: 10.003088268463928
     outflow: 0
-    volume: 20.150530251401783
-    inflow: 1.8988075583284987
+    volume: 20.006176536927857
+    inflow: 0.9796509124087691
 - time: 72.0
   reservoir_1:
-    water_level: 10.624346405765495
+    water_level: 10.153424166322681
     outflow: 0
-    volume: 21.24869281153099
-    inflow: 1.0981625601292078
+    volume: 20.306848332645362
+    inflow: 0.30067179571750535
 - time: 73.0
   reservoir_1:
-    water_level: 10.208007375036521
+    water_level: 9.667485825368201
     outflow: 0
-    volume: 20.416014750073042
-    inflow: -0.8326780614579469
+    volume: 19.334971650736403
+    inflow: -0.9718766819089599
 - time: 74.0
   reservoir_1:
-    water_level: 9.418578126386357
+    water_level: 9.697501915901148
     outflow: 0
-    volume: 18.837156252772715
-    inflow: -1.5788584973003261
+    volume: 19.395003831802295
+    inflow: 0.06003218106589103
 - time: 75.0
   reservoir_1:
-    water_level: 9.435495301743863
+    water_level: 10.110330456960357
     outflow: 0
-    volume: 18.870990603487726
-    inflow: 0.03383435071501062
+    volume: 20.220660913920714
+    inflow: 0.8256570821184195
 - time: 76.0
   reservoir_1:
-    water_level: 10.390810613570624
+    water_level: 10.202049395082712
     outflow: 0
-    volume: 20.781621227141247
-    inflow: 1.9106306236535202
+    volume: 20.404098790165424
+    inflow: 0.18343787624470886
 - time: 77.0
   reservoir_1:
-    water_level: 10.703235251168133
+    water_level: 10.126486553915752
     outflow: 0
-    volume: 21.406470502336266
-    inflow: 0.6248492751950185
+    volume: 20.252973107831505
+    inflow: -0.1511256823339211
 - time: 78.0
   reservoir_1:
-    water_level: 9.940215417261172
+    water_level: 10.097863643915964
     outflow: 0
-    volume: 19.880430834522343
-    inflow: -1.5260396678139219
+    volume: 20.19572728783193
+    inflow: -0.05724581999957601
 - time: 79.0
   reservoir_1:
-    water_level: 9.570859159305602
+    water_level: 9.9594047361363
     outflow: 0
-    volume: 19.141718318611204
-    inflow: -0.7387125159111378
+    volume: 19.9188094722726
+    inflow: -0.2769178155593306
 - time: 80.0
   reservoir_1:
-    water_level: 10.215483332624709
+    water_level: 9.562756919101393
     outflow: 0
-    volume: 20.430966665249418
-    inflow: 1.289248346638213
+    volume: 19.125513838202785
+    inflow: -0.7932956340698158
 - time: 81.0
   reservoir_1:
-    water_level: 10.35130026283283
+    water_level: 9.765964232577375
     outflow: 0
-    volume: 20.70260052566566
-    inflow: 0.27163386041623927
+    volume: 19.53192846515475
+    inflow: 0.40641462695196395
 - time: 82.0
   reservoir_1:
-    water_level: 9.82969865093021
+    water_level: 10.020898845535685
     outflow: 0
-    volume: 19.65939730186042
-    inflow: -1.0432032238052393
+    volume: 20.04179769107137
+    inflow: 0.509869225916622
 - time: 83.0
   reservoir_1:
-    water_level: 9.665197796009695
+    water_level: 9.68281684916446
     outflow: 0
-    volume: 19.33039559201939
-    inflow: -0.32900170984102983
+    volume: 19.36563369832892
+    inflow: -0.6761639927424492
 - time: 84.0
   reservoir_1:
-    water_level: 9.71588648267483
+    water_level: 9.568883494535807
     outflow: 0
-    volume: 19.43177296534966
-    inflow: 0.10137737333026764
+    volume: 19.137766989071615
+    inflow: -0.22786670925730657
 - time: 85.0
   reservoir_1:
-    water_level: 9.916602340115995
+    water_level: 9.892142701242198
     outflow: 0
-    volume: 19.83320468023199
-    inflow: 0.40143171488233276
+    volume: 19.784285402484397
+    inflow: 0.6465184134127833
 - time: 86.0
   reservoir_1:
-    water_level: 10.184549881076082
+    water_level: 10.115694744967387
     outflow: 0
-    volume: 20.369099762152164
-    inflow: 0.5358950819201722
+    volume: 20.231389489934774
+    inflow: 0.4471040874503782
 - time: 87.0
   reservoir_1:
-    water_level: 10.138608193454797
+    water_level: 10.149572891874245
     outflow: 0
-    volume: 20.277216386909593
-    inflow: -0.09188337524257029
+    volume: 20.29914578374849
+    inflow: 0.0677562938137164
 - time: 88.0
   reservoir_1:
-    water_level: 9.958133173453604
+    water_level: 10.273775210415206
     outflow: 0
-    volume: 19.916266346907207
-    inflow: -0.36095004000238595
+    volume: 20.54755042083041
+    inflow: 0.24840463708192217
 - time: 89.0
   reservoir_1:
-    water_level: 9.784696277623569
+    water_level: 10.163266657524886
     outflow: 0
-    volume: 19.569392555247138
-    inflow: -0.3468737916600684
+    volume: 20.326533315049772
+    inflow: -0.22101710578063827
 - time: 90.0
   reservoir_1:
-    water_level: 10.077778474291978
+    water_level: 9.88925131757417
     outflow: 0
-    volume: 20.155556948583957
-    inflow: 0.5861643933368177
+    volume: 19.77850263514834
+    inflow: -0.5480306799014338
 - time: 91.0
   reservoir_1:
-    water_level: 10.445769927987504
+    water_level: 10.000432950085404
     outflow: 0
-    volume: 20.891539855975008
-    inflow: 0.7359829073910498
+    volume: 20.00086590017081
+    inflow: 0.22236326502246828
 - time: 92.0
   reservoir_1:
-    water_level: 10.075912424103917
+    water_level: 10.191613398195026
     outflow: 0
-    volume: 20.151824848207834
-    inflow: -0.7397150077671742
+    volume: 20.38322679639005
+    inflow: 0.38236089621924396
 - time: 93.0
   reservoir_1:
-    water_level: 9.617686349582243
+    water_level: 9.77520336993118
     outflow: 0
-    volume: 19.235372699164486
-    inflow: -0.9164521490433483
+    volume: 19.55040673986236
+    inflow: -0.8328200565276904
 - time: 94.0
   reservoir_1:
-    water_level: 9.916072931858384
+    water_level: 9.306984022582968
     outflow: 0
-    volume: 19.832145863716768
-    inflow: 0.5967731645522809
+    volume: 18.613968045165937
+    inflow: -0.9364386946964229
 - time: 95.0
   reservoir_1:
-    water_level: 10.264658448710726
+    water_level: 9.739080522751328
     outflow: 0
-    volume: 20.529316897421452
-    inflow: 0.6971710337046833
+    volume: 19.478161045502656
+    inflow: 0.8641930003367186
 - time: 96.0
   reservoir_1:
-    water_level: 10.003457447081807
+    water_level: 10.385751420013305
     outflow: 0
-    volume: 20.006914894163614
-    inflow: -0.5224020032578385
+    volume: 20.77150284002661
+    inflow: 1.2933417945239554
 - time: 97.0
   reservoir_1:
-    water_level: 9.69587031977756
+    water_level: 10.148444636496732
     outflow: 0
-    volume: 19.39174063955512
-    inflow: -0.6151742546084928
+    volume: 20.296889272993464
+    inflow: -0.47461356703314606
 - time: 98.0
   reservoir_1:
-    water_level: 9.912910346998892
+    water_level: 9.626976301590046
     outflow: 0
-    volume: 19.825820693997784
-    inflow: 0.4340800544426635
+    volume: 19.253952603180092
+    inflow: -1.0429366698133729
 - time: 99.0
   reservoir_1:
-    water_level: 10.344843523200264
+    water_level: 9.894051809045145
     outflow: 0
-    volume: 20.68968704640053
-    inflow: 0.8638663524027437
+    volume: 19.78810361809029
+    inflow: 0.5341510149101969

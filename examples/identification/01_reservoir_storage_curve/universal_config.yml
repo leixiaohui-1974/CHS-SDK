@@ -1,0 +1,48 @@
+output:
+- file: twin_reservoir_log.csv
+  topic: state/twin_reservoir
+- file: true_reservoir_log.csv
+  topic: state/true_reservoir
+- file: identified_params_log.json
+  topic: identified_parameters/twin_reservoir
+project:
+  category: identification
+  description: 通用配置文件，用于 identification/01_reservoir_storage_curve 示例
+  name: 01_reservoir_storage_curve
+  version: '1.0'
+runtime:
+  logging_level: INFO
+  mode: simulation
+simulation:
+  dt: 3600
+  duration: 720000
+true_reservoir:
+  initial_state:
+    volume: 1500000
+  parameters:
+    inflow_topic: data/inflow
+    storage_curve:
+    - - 0
+      - 100.0
+    - - 1000000
+      - 105.0
+    - - 2000000
+      - 110.0
+    - - 4000000
+      - 120.0
+  type: Reservoir
+twin_reservoir:
+  initial_state:
+    volume: 1500000
+  parameters:
+    inflow_topic: data/inflow
+    storage_curve:
+    - - 0
+      - 98.0
+    - - 1000000
+      - 106.0
+    - - 2000000
+      - 109.0
+    - - 4000000
+      - 122.0
+  type: Reservoir

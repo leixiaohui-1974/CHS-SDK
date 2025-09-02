@@ -1,0 +1,50 @@
+components:
+  pipe_1:
+    initial_state: {}
+    parameters:
+      diameter: 0.5
+      friction_factor: 0.02
+      length: 1000
+    type: Pipe
+  valve_1:
+    initial_state:
+      opening: 0.0
+    parameters:
+      diameter: 0.5
+      discharge_coefficient: 0.8
+    type: Valve
+control:
+  valve_opening_pattern:
+    amplitude: 50
+    offset: 50
+    period: 628.3
+    type: sinusoidal
+metadata:
+  category: non_agent_based
+  description: 统一配置文件，用于 non_agent_based/07_pipe_and_valve 示例
+  name: 07_pipe_and_valve - 统一配置
+  version: '1.0'
+output:
+  delay: 0.01
+  print_interval: 30
+simulation:
+  downstream_head: 20.0
+  dt: 1.0
+  duration: 600
+  upstream_head: 50.0
+visualization:
+  enabled: true
+  plots:
+  - title: Valve Opening vs Time
+    x_data: time
+    y_data: valve_opening
+    ylabel: Valve Opening (%)
+  - title: Pipe Flow vs Time
+    x_data: time
+    y_data: pipe_outflow
+    ylabel: Pipe Outflow (m³/s)
+  - title: Pipe Head Loss vs Time
+    x_data: time
+    y_data: pipe_head_loss
+    ylabel: Pipe Head Loss (m)
+  save_path: 07_pipe_valve_results.png

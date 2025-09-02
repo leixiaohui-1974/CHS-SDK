@@ -1,0 +1,54 @@
+# 简化水库控制示例 - 统一配置文件
+metadata:
+  name: "简化水库控制示例"
+  description: "使用通用工具库构建的水库PID控制系统"
+  version: "1.0"
+  category: "demo"
+
+simulation:
+  duration: 200
+  dt: 1.0
+  
+components:
+  - class: Reservoir
+    id: reservoir_1
+    inflow_topic: inflow/reservoir_1
+    initial_state:
+      volume: 10.0
+      water_level: 5.0
+    parameters:
+      outlet_coeff: 0.6
+      surface_area: 2.0
+      
+  - class: Gate
+    id: gate_1
+    control_topic: control/gate_1
+    initial_state:
+      opening: 0.5
+    parameters:
+      max_opening: 1.0
+      discharge_coeff: 0.8
+      gate_width: 2.0
+
+connections:
+  - from: reservoir_1
+    to: gate_1
+    type: outlet
+
+agents:
+  - class: PIDControlAgent
+    id: pid_controller
+    observation_topic: state/reservoir_1
+    action_topic: control/gate_1
+    parameters:
+      kp: 0.5
+      ki: 0.1
+      kd: 0.05
+      setpoint: 6.0
+      output_limits: [0.0, 1.0]
+
+output:
+  show_progress: true
+  show_final_summary: true
+  log_level: "INFO"
+  save_history: true

@@ -1,0 +1,60 @@
+# 水箱联合控制 - 统一配置文件
+# 重构后的水箱联合控制示例
+
+simulation:
+  name: "水箱联合控制"
+  description: "重构后的水箱联合控制示例"
+  duration: 400.0
+  time_step: 1.0
+  
+components:
+  watertank:
+    type: "WaterTank"
+    parameters:
+      capacity: 1000.0
+      initial_level: 60.0
+      cross_sectional_area: 100.0
+      target_level: 65.0
+  
+  inlet_valve:
+    type: "Valve"
+    parameters:
+      max_flow_rate: 40.0
+      initial_opening: 0.4
+      
+  outlet_valve:
+    type: "Valve"
+    parameters:
+      max_flow_rate: 50.0
+      initial_opening: 0.3
+    
+control:
+  enabled: true
+  type: "coordinated_PID"
+  target_variable: "water_level"
+  control_variables:
+    - "inlet_flow"
+    - "outlet_flow"
+  parameters:
+    inlet_controller:
+      kp: 1.8
+      ki: 0.08
+      kd: 0.6
+    outlet_controller:
+      kp: 1.2
+      ki: 0.04
+      kd: 0.4
+    setpoint: 65.0
+    coordination_gain: 0.5
+  
+output:
+  format: "json"
+  save_path: "joint_control_results.json"
+  variables:
+    - "water_level"
+    - "volume"
+    - "inlet_flow"
+    - "outlet_flow"
+    - "inlet_control_signal"
+    - "outlet_control_signal"
+    - "error"

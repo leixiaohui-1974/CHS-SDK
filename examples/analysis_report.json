@@ -1,0 +1,1134 @@
+{
+  "timestamp": "2025-09-02 09:30:02",
+  "results": {
+    "agent_based/03_event_driven_agents": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 1.5189759731292725, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>, "
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "agent_based/06_centralized_emergency_override": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03917193412780762, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "agent_based/09_agent_based_distributed_control": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03141307830810547, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "agent_based/12_pid_control_comparison": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03577089309692383, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "canal_model/canal_model_comparison": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03054976463317871, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "canal_model/canal_mpc_pid_control": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03895926475524902, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "canal_model/canal_pid_control": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03526711463928223, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "canal_model/complex_fault_scenario_example": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.040834903717041016, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "canal_model/hierarchical_distributed_control_example": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.04259324073791504, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "canal_model/structured_control_example": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03372931480407715, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "non_agent_based/01_getting_started": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.04025459289550781, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "non_agent_based/02_multi_component_systems": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.05172872543334961, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "non_agent_based/07_pipe_and_valve": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03676581382751465, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "non_agent_based/08_non_agent_simulation": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.028435945510864258, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "identification/01_reservoir_storage_curve": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.0340580940246582, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>, "
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "identification/02_gate_discharge_coefficient": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03725266456604004, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "identification/03_pipe_roughness": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03808450698852539, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "demo/simplified_reservoir_control": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.044026851654052734, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "watertank/01_simulation": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': False, 'execution_time': 0.015617609024047852, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "notebooks/07_centralized_setpoint_optimization": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.044597625732421875, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "notebooks/10_canal_system": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.06631255149841309, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "notebooks/11_control_and_agents": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.07949304580688477, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "llm_integration": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': False, 'execution_time': 0.015863895416259766, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "watertank_refactored/01_simple_simulation": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.030465364456176758, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "watertank_refactored/02_parameter_identification": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.032636165618896484, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "watertank_refactored/03_pid_control_inlet": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03574943542480469, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "watertank_refactored/04_pid_control_outlet": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.035665273666381836, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "watertank_refactored/05_joint_control": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.04109549522399902, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "watertank_refactored/06_sensor_disturbance": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.04398632049560547, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    },
+    "watertank_refactored/07_actuator_disturbance": {
+      "硬编码模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "True"
+      },
+      "传统配置文件模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "智能运行器模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.04445362091064453, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+      },
+      "统一配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      },
+      "通用配置模式": {
+        "success": true,
+        "error": "",
+        "details": "",
+        "result_summary": ""
+      }
+    }
+  },
+  "error_patterns": {
+    "硬编码模式": [],
+    "传统配置文件模式": [],
+    "智能运行器模式": [],
+    "统一配置模式": [],
+    "通用配置模式": []
+  },
+  "success_patterns": {
+    "硬编码模式": [
+      "agent_based/03_event_driven_agents",
+      "agent_based/06_centralized_emergency_override",
+      "agent_based/09_agent_based_distributed_control",
+      "agent_based/12_pid_control_comparison",
+      "canal_model/canal_model_comparison",
+      "canal_model/canal_mpc_pid_control",
+      "canal_model/canal_pid_control",
+      "canal_model/complex_fault_scenario_example",
+      "canal_model/hierarchical_distributed_control_example",
+      "canal_model/structured_control_example",
+      "non_agent_based/01_getting_started",
+      "non_agent_based/02_multi_component_systems",
+      "non_agent_based/07_pipe_and_valve",
+      "non_agent_based/08_non_agent_simulation",
+      "identification/01_reservoir_storage_curve",
+      "identification/02_gate_discharge_coefficient",
+      "identification/03_pipe_roughness",
+      "demo/simplified_reservoir_control",
+      "watertank/01_simulation",
+      "notebooks/07_centralized_setpoint_optimization",
+      "notebooks/10_canal_system",
+      "notebooks/11_control_and_agents",
+      "llm_integration",
+      "watertank_refactored/01_simple_simulation",
+      "watertank_refactored/02_parameter_identification",
+      "watertank_refactored/03_pid_control_inlet",
+      "watertank_refactored/04_pid_control_outlet",
+      "watertank_refactored/05_joint_control",
+      "watertank_refactored/06_sensor_disturbance",
+      "watertank_refactored/07_actuator_disturbance"
+    ],
+    "传统配置文件模式": [
+      "agent_based/03_event_driven_agents",
+      "agent_based/06_centralized_emergency_override",
+      "agent_based/09_agent_based_distributed_control",
+      "agent_based/12_pid_control_comparison",
+      "canal_model/canal_model_comparison",
+      "canal_model/canal_mpc_pid_control",
+      "canal_model/canal_pid_control",
+      "canal_model/complex_fault_scenario_example",
+      "canal_model/hierarchical_distributed_control_example",
+      "canal_model/structured_control_example",
+      "non_agent_based/01_getting_started",
+      "non_agent_based/02_multi_component_systems",
+      "non_agent_based/07_pipe_and_valve",
+      "non_agent_based/08_non_agent_simulation",
+      "identification/01_reservoir_storage_curve",
+      "identification/02_gate_discharge_coefficient",
+      "identification/03_pipe_roughness",
+      "demo/simplified_reservoir_control",
+      "watertank/01_simulation",
+      "notebooks/07_centralized_setpoint_optimization",
+      "notebooks/10_canal_system",
+      "notebooks/11_control_and_agents",
+      "llm_integration",
+      "watertank_refactored/01_simple_simulation",
+      "watertank_refactored/02_parameter_identification",
+      "watertank_refactored/03_pid_control_inlet",
+      "watertank_refactored/04_pid_control_outlet",
+      "watertank_refactored/05_joint_control",
+      "watertank_refactored/06_sensor_disturbance",
+      "watertank_refactored/07_actuator_disturbance"
+    ],
+    "智能运行器模式": [
+      "agent_based/03_event_driven_agents",
+      "agent_based/06_centralized_emergency_override",
+      "agent_based/09_agent_based_distributed_control",
+      "agent_based/12_pid_control_comparison",
+      "canal_model/canal_model_comparison",
+      "canal_model/canal_mpc_pid_control",
+      "canal_model/canal_pid_control",
+      "canal_model/complex_fault_scenario_example",
+      "canal_model/hierarchical_distributed_control_example",
+      "canal_model/structured_control_example",
+      "non_agent_based/01_getting_started",
+      "non_agent_based/02_multi_component_systems",
+      "non_agent_based/07_pipe_and_valve",
+      "non_agent_based/08_non_agent_simulation",
+      "identification/01_reservoir_storage_curve",
+      "identification/02_gate_discharge_coefficient",
+      "identification/03_pipe_roughness",
+      "demo/simplified_reservoir_control",
+      "watertank/01_simulation",
+      "notebooks/07_centralized_setpoint_optimization",
+      "notebooks/10_canal_system",
+      "notebooks/11_control_and_agents",
+      "llm_integration",
+      "watertank_refactored/01_simple_simulation",
+      "watertank_refactored/02_parameter_identification",
+      "watertank_refactored/03_pid_control_inlet",
+      "watertank_refactored/04_pid_control_outlet",
+      "watertank_refactored/05_joint_control",
+      "watertank_refactored/06_sensor_disturbance",
+      "watertank_refactored/07_actuator_disturbance"
+    ],
+    "统一配置模式": [
+      "agent_based/03_event_driven_agents",
+      "agent_based/06_centralized_emergency_override",
+      "agent_based/09_agent_based_distributed_control",
+      "agent_based/12_pid_control_comparison",
+      "canal_model/canal_model_comparison",
+      "canal_model/canal_mpc_pid_control",
+      "canal_model/canal_pid_control",
+      "canal_model/complex_fault_scenario_example",
+      "canal_model/hierarchical_distributed_control_example",
+      "canal_model/structured_control_example",
+      "non_agent_based/01_getting_started",
+      "non_agent_based/02_multi_component_systems",
+      "non_agent_based/07_pipe_and_valve",
+      "non_agent_based/08_non_agent_simulation",
+      "identification/01_reservoir_storage_curve",
+      "identification/02_gate_discharge_coefficient",
+      "identification/03_pipe_roughness",
+      "demo/simplified_reservoir_control",
+      "watertank/01_simulation",
+      "notebooks/07_centralized_setpoint_optimization",
+      "notebooks/10_canal_system",
+      "notebooks/11_control_and_agents",
+      "llm_integration",
+      "watertank_refactored/01_simple_simulation",
+      "watertank_refactored/02_parameter_identification",
+      "watertank_refactored/03_pid_control_inlet",
+      "watertank_refactored/04_pid_control_outlet",
+      "watertank_refactored/05_joint_control",
+      "watertank_refactored/06_sensor_disturbance",
+      "watertank_refactored/07_actuator_disturbance"
+    ],
+    "通用配置模式": [
+      "agent_based/03_event_driven_agents",
+      "agent_based/06_centralized_emergency_override",
+      "agent_based/09_agent_based_distributed_control",
+      "agent_based/12_pid_control_comparison",
+      "canal_model/canal_model_comparison",
+      "canal_model/canal_mpc_pid_control",
+      "canal_model/canal_pid_control",
+      "canal_model/complex_fault_scenario_example",
+      "canal_model/hierarchical_distributed_control_example",
+      "canal_model/structured_control_example",
+      "non_agent_based/01_getting_started",
+      "non_agent_based/02_multi_component_systems",
+      "non_agent_based/07_pipe_and_valve",
+      "non_agent_based/08_non_agent_simulation",
+      "identification/01_reservoir_storage_curve",
+      "identification/02_gate_discharge_coefficient",
+      "identification/03_pipe_roughness",
+      "demo/simplified_reservoir_control",
+      "watertank/01_simulation",
+      "notebooks/07_centralized_setpoint_optimization",
+      "notebooks/10_canal_system",
+      "notebooks/11_control_and_agents",
+      "llm_integration",
+      "watertank_refactored/01_simple_simulation",
+      "watertank_refactored/02_parameter_identification",
+      "watertank_refactored/03_pid_control_inlet",
+      "watertank_refactored/04_pid_control_outlet",
+      "watertank_refactored/05_joint_control",
+      "watertank_refactored/06_sensor_disturbance",
+      "watertank_refactored/07_actuator_disturbance"
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+components:
+- class: Reservoir
+  id: upstream_reservoir
+  initial_state:
+    water_level: 10.0
+  parameters:
+    area: 10000.0
+    inflow: 50.0
+- class: Gate
+  id: gate_1
+  initial_state:
+    opening: 0.5
+  parameters:
+    discharge_coefficient: 0.8
+    width: 5.0
+- class: IntegralDelayCanal
+  id: canal_1
+  initial_state:
+    water_level: 5.0
+  parameters:
+    delay: 300
+    gain: 0.001
+- class: IntegralDelayCanal
+  id: canal_2
+  initial_state:
+    water_level: 4.5
+  parameters:
+    delay: 600
+    gain: 0.001
+- class: Gate
+  id: gate_2
+  initial_state:
+    opening: 0.5
+  parameters:
+    discharge_coefficient: 0.8
+    width: 5.0
+- class: IntegralDelayCanal
+  id: canal_3
+  initial_state:
+    water_level: 4.0
+  parameters:
+    delay: 450
+    gain: 0.0008
+metadata:
+  category: agent_based
+  description: 统一配置文件，用于 agent_based/12_pid_control_comparison 示例
+  name: 12_pid_control_comparison - 统一配置
+  version: '1.0'
+simulation:
+  dt: 10
+  duration: 7200

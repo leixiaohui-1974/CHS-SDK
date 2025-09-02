@@ -1,0 +1,48 @@
+# 水箱参数辨识 - 通用配置文件
+# 重构后的水箱参数辨识示例
+
+metadata:
+  name: "水箱参数辨识"
+  description: "重构后的水箱参数辨识示例"
+  category: "watertank_refactored"
+  version: "1.0"
+
+simulation:
+  time:
+    start: 0.0
+    end: 200.0
+    step: 1.0
+  solver:
+    type: "runge_kutta"
+    tolerance: 1e-6
+
+system:
+  components:
+    - name: "watertank"
+      type: "WaterTank"
+      config:
+        capacity: 1000.0
+        initial_level: 30.0
+        area: 100.0
+        discharge_coeff: 0.6
+        
+identification:
+  enabled: true
+  algorithm: "genetic_algorithm"
+  parameters:
+    - name: "discharge_coeff"
+      bounds: [0.3, 0.9]
+      initial_guess: 0.6
+  objective: "minimize_rmse"
+  
+monitoring:
+  enabled: true
+  variables:
+    - "water_level"
+    - "volume"
+    - "parameter_values"
+    - "fitness"
+    
+logging:
+  level: "DEBUG"
+  output_file: "identification.log"

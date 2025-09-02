@@ -1,0 +1,115 @@
+# 控制与智能体示例配置文件
+# 传统配置文件模式
+
+simulation:
+  duration: 200
+  dt: 0.5
+  solver: 'euler'
+
+components:
+  controlled_reservoir:
+    class: Reservoir
+    inflow_topic: inflow/controlled_reservoir
+    initial_state:
+      volume: 15.0
+      water_level: 7.5
+    parameters:
+      surface_area: 2.0
+      outlet_coeff: 0.65
+      
+  control_gate:
+    class: Gate
+    control_topic: control/control_gate
+    initial_state:
+      opening: 0.4
+    parameters:
+      max_opening: 1.0
+      discharge_coeff: 0.85
+      gate_width: 2.5
+      
+  monitoring_sensor:
+    class: Sensor
+    monitor_topic: monitor/water_level
+    parameters:
+      measurement_noise: 0.05
+      update_frequency: 2.0
+
+connections:
+  - from: controlled_reservoir
+    to: control_gate
+    type: outlet
+  - from: controlled_reservoir
+    to: monitoring_sensor
+    type: measurement
+
+agents:
+  digital_twin_agent:
+    type: DigitalTwinAgent
+    monitored_component: controlled_reservoir
+    update_frequency: 1.0
+    prediction_horizon: 20
+    model_parameters:
+      learning_rate: 0.01
+      adaptation_threshold: 0.1
+      
+  local_control_agent:
+    type: LocalControlAgent
+    controlled_component: control_gate
+    control_strategy: adaptive_pid
+    communication_frequency: 2.0
+    decision_parameters:
+      response_time: 5.0
+      safety_margin: 0.2
+
+control:
+  pid_controller:
+    target_variable: controlled_reservoir.water_level
+    control_variable: control_gate.opening
+    setpoint: 10.0
+    kp: 0.6
+    ki: 0.12
+    kd: 0.08
+    output_limits: [0.0, 1.0]
+    anti_windup: true
+    
+  agent_coordination:
+    type: HierarchicalCoordination
+    master_agent: digital_twin_agent
+    slave_agents: [local_control_agent]
+    coordination_frequency: 0.5
+    conflict_resolution: priority_based
+
+inflow:
+  controlled_reservoir:
+    type: multi_step
+    values: [8.0, 12.0, 6.0, 10.0]
+    times: [0, 50, 100, 150]
+    interpolation: linear
+
+monitoring:
+  performance_metrics:
+    - tracking_error
+    - control_effort
+    - agent_response_time
+    - system_stability
+  
+  alert_conditions:
+    - variable: controlled_reservoir.water_level
+      condition: '> 12.0 or < 5.0'
+      action: emergency_shutdown
+    - variable: control_gate.opening
+      condition: '> 0.95'
+      action: notify_operator
+
+output:
+  variables:
+    - controlled_reservoir.water_level
+    - controlled_reservoir.volume
+    - control_gate.opening
+    - control_gate.outflow
+    - digital_twin_agent.prediction
+    - local_control_agent.decision
+    - pid_controller.error
+  save_to_file: true
+  plot: true
+  agent_logs: true

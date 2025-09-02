@@ -1,0 +1,109 @@
+# 渠道系统示例配置文件
+# 传统配置文件模式
+
+simulation:
+  duration: 300
+  dt: 1.0
+  solver: 'euler'
+
+components:
+  lake_1:
+    class: Lake
+    inflow_topic: inflow/lake_1
+    initial_state:
+      volume: 1000.0
+      water_level: 10.0
+    parameters:
+      surface_area: 100.0
+      outlet_coeff: 0.7
+      
+  canal_1:
+    class: Canal
+    inflow_topic: inflow/canal_1
+    initial_state:
+      flow_rate: 5.0
+    parameters:
+      length: 1000.0
+      width: 10.0
+      roughness: 0.025
+      slope: 0.001
+      
+  reservoir_1:
+    class: Reservoir
+    inflow_topic: inflow/reservoir_1
+    initial_state:
+      volume: 500.0
+      water_level: 8.0
+    parameters:
+      surface_area: 50.0
+      outlet_coeff: 0.6
+      
+  river_1:
+    class: River
+    inflow_topic: inflow/river_1
+    initial_state:
+      flow_rate: 10.0
+    parameters:
+      length: 2000.0
+      width: 15.0
+      roughness: 0.03
+      slope: 0.002
+
+connections:
+  - from: lake_1
+    to: canal_1
+    type: outlet
+  - from: canal_1
+    to: reservoir_1
+    type: flow
+  - from: reservoir_1
+    to: river_1
+    type: outlet
+
+control:
+  canal_gate_controller:
+    target_variable: canal_1.flow_rate
+    control_variable: canal_1.gate_opening
+    setpoint: 8.0
+    kp: 0.3
+    ki: 0.05
+    kd: 0.02
+    output_limits: [0.0, 1.0]
+    
+  reservoir_controller:
+    target_variable: reservoir_1.water_level
+    control_variable: reservoir_1.outlet_opening
+    setpoint: 10.0
+    kp: 0.4
+    ki: 0.08
+    kd: 0.03
+    output_limits: [0.0, 1.0]
+
+inflow:
+  lake_1:
+    type: constant
+    value: 12.0
+  canal_1:
+    type: step
+    value: 3.0
+    start_time: 100
+  reservoir_1:
+    type: sine
+    amplitude: 2.0
+    frequency: 0.01
+    offset: 5.0
+  river_1:
+    type: constant
+    value: 8.0
+
+output:
+  variables:
+    - lake_1.water_level
+    - lake_1.volume
+    - canal_1.flow_rate
+    - canal_1.gate_opening
+    - reservoir_1.water_level
+    - reservoir_1.volume
+    - river_1.flow_rate
+  save_to_file: true
+  plot: true

@@ -1,0 +1,5 @@
+simulation_history:
+- time: 0
+  logger_state_twin_gate: {}
+  logger_state_true_gate: {}
+  logger_identified_parameters_twin_gate: {}

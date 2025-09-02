@@ -1,0 +1,31 @@
+components:
+- class: Reservoir
+  id: upstream_reservoir
+  initial_state:
+    water_level: 10.0
+  parameters:
+    area: 10000.0
+    inflow: 50.0
+- class: Gate
+  id: gate_1
+  initial_state:
+    opening: 0.5
+  parameters:
+    discharge_coefficient: 0.8
+    width: 5.0
+- class: Reservoir
+  id: downstream_reservoir
+  initial_state:
+    water_level: 4.0
+  parameters:
+    area: 10000.0
+    inflow: 0.0
+metadata:
+  category: canal_model
+  description: 统一配置文件，用于 canal_model/canal_model_comparison 示例
+  name: canal_model_comparison - 统一配置
+  version: '1.0'
+simulation:
+  end_time: 3600
+  start_time: 0
+  time_step: 10

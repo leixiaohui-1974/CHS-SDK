@@ -1,0 +1,86 @@
+agents:
+  control_agent_gate_1:
+    agent_id: control_agent_gate_1
+    controller:
+      parameters:
+        Kd: -0.1
+        Ki: -0.01
+        Kp: -0.5
+        max_output: 1.0
+        min_output: 0.0
+        setpoint: 12.0
+      type: PIDController
+    message_bus:
+      action_topic: action.gate.opening
+      observation_key: water_level
+      observation_topic: state.reservoir.level
+    type: LocalControlAgent
+  twin_agent_reservoir_1:
+    agent_id: twin_agent_reservoir_1
+    message_bus:
+      state_topic: state.reservoir.level
+    simulated_object: reservoir_1
+    type: DigitalTwinAgent
+analysis:
+  final_state_report: true
+  target_water_level: 12.0
+communication:
+  topics:
+    gate_action: action.gate.opening
+    reservoir_state: state.reservoir.level
+components:
+  gate_1:
+    initial_state:
+      opening: 0.1
+    message_bus:
+      action_topic: action.gate.opening
+      enabled: true
+    parameters:
+      discharge_coefficient: 0.6
+      max_opening: 1.0
+      max_rate_of_change: 0.1
+      width: 10
+    type: Gate
+  reservoir_1:
+    initial_state:
+      volume: 21000000
+      water_level: 14.0
+    parameters:
+      storage_curve:
+      - - 0
+        - 0
+      - - 30000000
+        - 20
+      surface_area: 1500000
+    type: Reservoir
+connections:
+- from: reservoir_1
+  to: gate_1
+project:
+  category: agent_based
+  description: 通用配置文件，用于 agent_based/03_event_driven_agents 示例
+  name: 03_event_driven_agents
+  version: '1.0'
+runtime:
+  logging_level: INFO
+  mode: simulation
+simulation:
+  dt: 1.0
+  duration: 300
+visualization:
+  enabled: true
+  plots:
+  - target_line: 12.0
+    title: Reservoir Water Level vs Time
+    x_data: time
+    y_data: reservoir_water_level
+    ylabel: Water Level (m)
+  - title: Gate Opening vs Time
+    x_data: time
+    y_data: gate_opening
+    ylabel: Gate Opening (0-1)
+  - title: Reservoir Volume vs Time
+    x_data: time
+    y_data: reservoir_volume
+    ylabel: Volume (m³)
+  save_path: 03_mas_results.png

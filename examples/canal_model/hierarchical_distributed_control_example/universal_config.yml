@@ -1,0 +1,74 @@
+components:
+- class: core_lib.physical_objects.reservoir.Reservoir
+  id: upstream_reservoir
+  initial_state:
+    water_level: 10.0
+  parameters:
+    area: 10000.0
+    inflow: 50.0
+- class: core_lib.physical_objects.disturbance_node.DisturbanceNode
+  id: turnout_1
+  initial_state:
+    outflow: 5.0
+  parameters:
+    action_key: outflow
+    action_topic: disturbance/turnout_1
+- class: core_lib.physical_objects.gate.Gate
+  id: gate_1
+  initial_state:
+    opening: 0.5
+  parameters:
+    discharge_coefficient: 0.8
+    width: 5.0
+- class: core_lib.physical_objects.unified_canal.UnifiedCanal
+  id: canal_1
+  initial_state:
+    water_level: 5.0
+  parameters:
+    delay: 300
+    gain: 0.001
+    model_type: integral_delay
+- class: core_lib.physical_objects.disturbance_node.DisturbanceNode
+  id: turnout_2
+  initial_state:
+    outflow: 5.0
+  parameters:
+    action_key: outflow
+    action_topic: disturbance/turnout_2
+- class: core_lib.physical_objects.gate.Gate
+  id: gate_2
+  initial_state:
+    opening: 0.5
+  parameters:
+    discharge_coefficient: 0.8
+    width: 5.0
+- class: core_lib.physical_objects.unified_canal.UnifiedCanal
+  id: canal_2
+  initial_state:
+    water_level: 4.5
+  parameters:
+    delay: 600
+    gain: 0.001
+    model_type: integral_delay
+- class: core_lib.physical_objects.disturbance_node.DisturbanceNode
+  id: terminal_user
+  initial_state:
+    outflow: 10.0
+  parameters:
+    action_key: outflow
+    action_topic: disturbance/terminal_user
+metadata:
+  description: Hierarchical distributed control example with complex fault scenarios
+  example_type: yaml_config
+  run_with: run_scenario.py
+project:
+  category: canal_model
+  description: 通用配置文件，用于 canal_model/hierarchical_distributed_control_example 示例
+  name: hierarchical_distributed_control_example
+  version: '1.0'
+runtime:
+  logging_level: INFO
+  mode: simulation
+simulation:
+  dt: 10
+  duration: 10800

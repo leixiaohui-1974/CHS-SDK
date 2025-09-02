@@ -1,0 +1,59 @@
+analysis:
+  performance_metrics:
+    overshoot_threshold: 20
+    settling_time_threshold: 50
+    settling_tolerance: 0.02
+    steady_state_error_threshold: 0.1
+  visualization:
+    enabled: true
+    output_file: 01_getting_started_results.png
+    plots:
+    - title: PID Control of Reservoir Water Level
+      type: water_level
+    - title: PID Controller Output (Gate Opening)
+      type: gate_opening
+components:
+  gate_1:
+    initial_state:
+      opening: 0.5
+    parameters:
+      discharge_coefficient: 0.6
+      max_rate_of_change: 0.1
+      width: 10
+    type: Gate
+  reservoir_1:
+    initial_state:
+      volume: 21000000
+      water_level: 14.0
+    parameters:
+      storage_curve:
+      - - 0
+        - 0
+      - - 30000000
+        - 20
+      surface_area: 1500000
+    type: Reservoir
+connections:
+- from: reservoir_1
+  to: gate_1
+controllers:
+  pid_controller_1:
+    controlled_component: gate_1
+    observation_key: water_level
+    observed_component: reservoir_1
+    parameters:
+      Kd: -0.1
+      Ki: -0.01
+      Kp: -0.5
+      max_output: 1.0
+      min_output: 0.0
+      setpoint: 12.0
+    type: PIDController
+metadata:
+  category: non_agent_based
+  description: 统一配置文件，用于 non_agent_based/01_getting_started 示例
+  name: 01_getting_started - 统一配置
+  version: '1.0'
+simulation:
+  dt: 1.0
+  duration: 300

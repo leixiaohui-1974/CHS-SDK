@@ -1,0 +1,28 @@
+# 水箱简单仿真 - 统一配置文件
+# 重构后的水箱简单仿真示例
+
+simulation:
+  name: "水箱简单仿真"
+  description: "重构后的水箱简单仿真示例"
+  duration: 100.0
+  time_step: 1.0
+  
+components:
+  watertank:
+    type: "WaterTank"
+    parameters:
+      capacity: 1000.0
+      initial_level: 50.0
+      cross_sectional_area: 100.0
+    
+control:
+  enabled: false
+  
+output:
+  format: "json"
+  save_path: "simulation_results.json"
+  variables:
+    - "water_level"
+    - "volume"
+    - "inflow"
+    - "outflow"

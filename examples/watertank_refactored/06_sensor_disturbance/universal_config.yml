@@ -1,0 +1,84 @@
+# 水箱传感器干扰 - 通用配置文件
+# 重构后的水箱传感器干扰示例
+
+metadata:
+  name: "水箱传感器干扰"
+  description: "重构后的水箱传感器干扰示例"
+  category: "watertank_refactored"
+  version: "1.0"
+
+simulation:
+  time:
+    start: 0.0
+    end: 300.0
+    step: 1.0
+  solver:
+    type: "euler"
+    tolerance: 1e-6
+
+system:
+  components:
+    - name: "watertank"
+      type: "WaterTank"
+      config:
+        capacity: 1000.0
+        initial_level: 50.0
+        area: 100.0
+    - name: "level_sensor"
+      type: "Sensor"
+      config:
+        target: "watertank.water_level"
+        noise_std: 2.0
+        bias: 0.5
+        drift_rate: 0.01
+    - name: "inlet_valve"
+      type: "Valve"
+      config:
+        max_flow: 45.0
+        initial_position: 0.5
+        
+control:
+  enabled: true
+  controllers:
+    - name: "robust_controller"
+      type: "robust_PID"
+      input: "level_sensor.measurement"
+      output: "inlet_valve.position"
+      setpoint: 70.0
+      parameters:
+        kp: 1.5
+        ki: 0.06
+        kd: 0.4
+      filtering:
+        enabled: true
+        type: "low_pass"
+        cutoff_frequency: 0.1
+        
+disturbances:
+  enabled: true
+  sources:
+    - name: "sensor_noise"
+      type: "gaussian_noise"
+      target: "level_sensor"
+      parameters:
+        std_dev: 2.0
+    - name: "sensor_bias"
+      type: "bias_drift"
+      target: "level_sensor"
+      parameters:
+        initial_bias: 0.5
+        drift_rate: 0.01
+        
+monitoring:
+  enabled: true
+  variables:
+    - "watertank.water_level"
+    - "level_sensor.measurement"
+    - "level_sensor.noise"
+    - "level_sensor.bias"
+    - "inlet_valve.flow_rate"
+    - "robust_controller.output"
+    
+logging:
+  level: "DEBUG"
+  output_file: "sensor_disturbance.log"

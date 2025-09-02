@@ -1,0 +1,54 @@
+downstream_reservoir:
+  initial_state:
+    volume: 1000000
+  parameters:
+    storage_curve:
+    - - 0
+      - 90.0
+    - - 10000000
+      - 100.0
+  type: Reservoir
+output:
+- file: twin_gate_log.csv
+  topic: state/twin_gate
+- file: true_gate_log.csv
+  topic: state/true_gate
+- file: identified_params_log.json
+  topic: identified_parameters/twin_gate
+project:
+  category: identification
+  description: 通用配置文件，用于 identification/02_gate_discharge_coefficient 示例
+  name: 02_gate_discharge_coefficient
+  version: '1.0'
+runtime:
+  logging_level: INFO
+  mode: simulation
+simulation:
+  dt: 100
+  duration: 20000
+true_gate:
+  initial_state:
+    opening: 0.5
+  parameters:
+    discharge_coefficient: 0.8
+    height: 2.0
+    width: 2.0
+  type: Gate
+twin_gate:
+  initial_state:
+    opening: 0.5
+  parameters:
+    discharge_coefficient: 0.6
+    height: 2.0
+    width: 2.0
+  type: Gate
+upstream_reservoir:
+  initial_state:
+    volume: 5000000
+  parameters:
+    storage_curve:
+    - - 0
+      - 100.0
+    - - 10000000
+      - 110.0
+  type: Reservoir

@@ -1,0 +1,44 @@
+# 水箱PID入口控制 - 统一配置文件
+# 重构后的水箱PID入口控制示例
+
+simulation:
+  name: "水箱PID入口控制"
+  description: "重构后的水箱PID入口控制示例"
+  duration: 300.0
+  time_step: 1.0
+  
+components:
+  watertank:
+    type: "WaterTank"
+    parameters:
+      capacity: 1000.0
+      initial_level: 40.0
+      cross_sectional_area: 100.0
+      target_level: 70.0
+  
+  inlet_valve:
+    type: "Valve"
+    parameters:
+      max_flow_rate: 50.0
+      initial_opening: 0.5
+    
+control:
+  enabled: true
+  type: "PID"
+  target_variable: "water_level"
+  control_variable: "inlet_flow"
+  parameters:
+    kp: 2.0
+    ki: 0.1
+    kd: 0.5
+    setpoint: 70.0
+  
+output:
+  format: "json"
+  save_path: "pid_control_results.json"
+  variables:
+    - "water_level"
+    - "volume"
+    - "inlet_flow"
+    - "control_signal"
+    - "error"

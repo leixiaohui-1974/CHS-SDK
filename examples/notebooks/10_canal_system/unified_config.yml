@@ -1,0 +1,88 @@
+# 渠道系统示例 - 统一配置文件
+metadata:
+  name: "渠道系统仿真"
+  description: "渠道、湖泊、水库和河道的综合仿真系统"
+  version: "1.0"
+  category: "notebooks"
+
+simulation:
+  duration: 300
+  dt: 1.0
+  
+components:
+  - class: Lake
+    id: lake_1
+    inflow_topic: inflow/lake_1
+    initial_state:
+      volume: 1000.0
+      water_level: 10.0
+    parameters:
+      surface_area: 100.0
+      outlet_coeff: 0.7
+      
+  - class: Canal
+    id: canal_1
+    inflow_topic: inflow/canal_1
+    initial_state:
+      flow_rate: 5.0
+    parameters:
+      length: 1000.0
+      width: 10.0
+      slope: 0.001
+      roughness: 0.03
+      
+  - class: Reservoir
+    id: reservoir_1
+    inflow_topic: inflow/reservoir_1
+    initial_state:
+      volume: 500.0
+      water_level: 8.0
+    parameters:
+      surface_area: 50.0
+      outlet_coeff: 0.6
+      
+  - class: RiverChannel
+    id: river_1
+    inflow_topic: inflow/river_1
+    initial_state:
+      flow_rate: 10.0
+    parameters:
+      length: 2000.0
+      width: 15.0
+      slope: 0.0005
+      roughness: 0.025
+
+connections:
+  - from: lake_1
+    to: canal_1
+    type: outlet
+  - from: canal_1
+    to: reservoir_1
+    type: flow
+  - from: reservoir_1
+    to: river_1
+    type: outlet
+
+agents:
+  - class: InflowAgent
+    id: lake_inflow
+    action_topic: inflow/lake_1
+    parameters:
+      pattern: "constant"
+      value: 8.0
+      
+  - class: MonitoringAgent
+    id: system_monitor
+    observation_topics:
+      - state/lake_1
+      - state/canal_1
+      - state/reservoir_1
+      - state/river_1
+    parameters:
+      monitoring_interval: 10.0
+
+output:
+  show_progress: true
+  show_final_summary: true
+  log_level: "INFO"
+  save_history: true

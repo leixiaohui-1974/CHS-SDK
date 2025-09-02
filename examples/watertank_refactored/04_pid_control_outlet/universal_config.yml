@@ -1,0 +1,59 @@
+# 水箱PID出口控制 - 通用配置文件
+# 重构后的水箱PID出口控制示例
+
+metadata:
+  name: "水箱PID出口控制"
+  description: "重构后的水箱PID出口控制示例"
+  category: "watertank_refactored"
+  version: "1.0"
+
+simulation:
+  time:
+    start: 0.0
+    end: 300.0
+    step: 1.0
+  solver:
+    type: "euler"
+    tolerance: 1e-6
+
+system:
+  components:
+    - name: "watertank"
+      type: "WaterTank"
+      config:
+        capacity: 1000.0
+        initial_level: 80.0
+        area: 100.0
+        inflow_rate: 20.0
+    - name: "outlet_valve"
+      type: "Valve"
+      config:
+        max_flow: 60.0
+        initial_position: 0.3
+        
+control:
+  enabled: true
+  controllers:
+    - name: "outlet_controller"
+      type: "PID"
+      input: "watertank.water_level"
+      output: "outlet_valve.position"
+      setpoint: 50.0
+      parameters:
+        kp: 1.5
+        ki: 0.05
+        kd: 0.8
+        
+monitoring:
+  enabled: true
+  variables:
+    - "watertank.water_level"
+    - "watertank.volume"
+    - "outlet_valve.flow_rate"
+    - "watertank.inflow_rate"
+    - "outlet_controller.error"
+    - "outlet_controller.output"
+    
+logging:
+  level: "INFO"
+  output_file: "outlet_pid_control.log"

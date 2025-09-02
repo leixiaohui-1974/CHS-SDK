@@ -149,6 +149,318 @@ class ExamplesHardcodedRunner:
                 "description": "从mission目录迁移的场景示例，包含引绰济辽工程仿真",
                 "category": "mission",
                 "path": "mission_scenarios"
+            },
+            "centralized_emergency_override": {
+                "name": "集中式紧急覆盖",
+                "description": "集中式紧急覆盖控制示例",
+                "category": "agent_based",
+                "path": "agent_based/06_centralized_emergency_override"
+            },
+            "agent_based_distributed_control": {
+                "name": "智能体分布式控制",
+                "description": "基于智能体的分布式控制示例",
+                "category": "agent_based",
+                "path": "agent_based/09_agent_based_distributed_control"
+            },
+            "pid_control_comparison": {
+                "name": "PID控制对比",
+                "description": "PID控制算法对比示例",
+                "category": "agent_based",
+                "path": "agent_based/12_pid_control_comparison"
+            },
+            "canal_model_comparison": {
+                "name": "渠道模型对比",
+                "description": "渠道模型对比分析示例",
+                "category": "canal_model",
+                "path": "canal_model/canal_model_comparison"
+            },
+            "complex_fault_scenario": {
+                "name": "复杂故障场景",
+                "description": "复杂故障场景处理示例",
+                "category": "canal_model",
+                "path": "canal_model/complex_fault_scenario_example"
+            },
+            "hierarchical_distributed_control": {
+                "name": "分层分布式控制",
+                "description": "分层分布式控制系统示例",
+                "category": "canal_model",
+                "path": "canal_model/hierarchical_distributed_control_example"
+            },
+            "structured_control": {
+                "name": "结构化控制",
+                "description": "结构化控制系统示例",
+                "category": "canal_model",
+                "path": "canal_model/structured_control_example"
+            },
+            "pipe_and_valve": {
+                "name": "管道阀门系统",
+                "description": "管道阀门控制示例",
+                "category": "non_agent_based",
+                "path": "non_agent_based/07_pipe_and_valve"
+            },
+            # Notebooks示例
+            "canal_system_notebook": {
+                "name": "渠道系统笔记本",
+                "description": "渠道、湖泊、水库和河道的综合仿真系统",
+                "category": "notebooks",
+                "path": "notebooks/10_canal_system"
+            },
+            "control_agents_notebook": {
+                "name": "控制智能体笔记本",
+                "description": "数字孪生智能体、本地控制智能体和PID控制器的集成应用",
+                "category": "notebooks",
+                "path": "notebooks/11_control_and_agents"
+            },
+            # Watertank Refactored示例
+            "watertank_simple_sim": {
+                "name": "水箱简单仿真",
+                "description": "重构后的水箱简单仿真示例",
+                "category": "watertank_refactored",
+                "path": "watertank_refactored/01_simple_simulation"
+            },
+            "watertank_pid_inlet": {
+                "name": "水箱PID入口控制",
+                "description": "重构后的水箱PID入口控制示例",
+                "category": "watertank_refactored",
+                "path": "watertank_refactored/03_pid_control_inlet"
+            },
+            "watertank_joint_control": {
+                "name": "水箱联合控制",
+                "description": "重构后的水箱联合控制示例",
+                "category": "watertank_refactored",
+                "path": "watertank_refactored/05_joint_control"
+            },
+            # LLM Integration示例
+            "llm_integration_demo": {
+                "name": "LLM集成演示",
+                "description": "LLM智能体在系统构建、场景设计、调度指挥和数据分析中的应用",
+                "category": "llm_integration",
+                "path": "llm_integration"
+            },
+            # Identification示例
+            "gate_discharge_identification": {
+                "name": "闸门流量系数辨识",
+                "description": "闸门流量系数参数辨识示例",
+                "category": "identification",
+                "path": "identification/02_gate_discharge_coefficient"
+            },
+            "pipe_roughness_identification": {
+                "name": "管道粗糙度辨识",
+                "description": "管道粗糙度参数辨识示例",
+                "category": "identification",
+                "path": "identification/03_pipe_roughness"
+            },
+            "non_agent_simulation": {
+                "name": "非智能体仿真",
+                "description": "非智能体仿真示例",
+                "category": "non_agent_based",
+                "path": "non_agent_based/08_non_agent_simulation"
+            },
+            "gate_discharge_coefficient": {
+                "name": "闸门流量系数辨识",
+                "description": "闸门流量系数参数辨识",
+                "category": "identification",
+                "path": "identification/02_gate_discharge_coefficient"
+            },
+            "pipe_roughness": {
+                "name": "管道糙率辨识",
+                "description": "管道糙率参数辨识",
+                "category": "identification",
+                "path": "identification/03_pipe_roughness"
+            },
+            "watertank_simulation": {
+                "name": "水箱仿真",
+                "description": "水箱系统仿真示例",
+                "category": "watertank",
+                "path": "watertank/01_simulation"
+            },
+            # 补充缺少的watertank_refactored示例
+            "watertank_refactored_02_parameter_identification": {
+                "name": "水箱参数辨识",
+                "description": "重构后的水箱参数辨识示例",
+                "category": "watertank_refactored",
+                "path": "watertank_refactored/02_parameter_identification"
+            },
+            "watertank_refactored_04_pid_control_outlet": {
+                "name": "水箱PID出口控制",
+                "description": "重构后的水箱PID出口控制示例",
+                "category": "watertank_refactored",
+                "path": "watertank_refactored/04_pid_control_outlet"
+            },
+            "watertank_refactored_06_sensor_disturbance": {
+                "name": "水箱传感器干扰",
+                "description": "重构后的水箱传感器干扰示例",
+                "category": "watertank_refactored",
+                "path": "watertank_refactored/06_sensor_disturbance"
+            },
+            "watertank_refactored_07_actuator_disturbance": {
+                "name": "水箱执行器干扰",
+                "description": "重构后的水箱执行器干扰示例",
+                "category": "watertank_refactored",
+                "path": "watertank_refactored/07_actuator_disturbance"
+            },
+            # 补充缺少的identification示例
+            "identification_01_reservoir_storage_curve": {
+                "name": "水库库容曲线辨识",
+                "description": "水库库容曲线参数辨识示例",
+                "category": "identification",
+                "path": "identification/01_reservoir_storage_curve"
+            },
+            "identification_02_gate_discharge_coefficient": {
+                "name": "闸门流量系数辨识",
+                "description": "闸门流量系数参数辨识示例",
+                "category": "identification",
+                "path": "identification/02_gate_discharge_coefficient"
+            },
+            "identification_03_pipe_roughness": {
+                "name": "管道糙率辨识",
+                "description": "管道糙率参数辨识示例",
+                "category": "identification",
+                "path": "identification/03_pipe_roughness"
+            },
+            # 补充缺少的demo示例
+            "demo_simplified_reservoir_control": {
+                "name": "简化水库控制演示",
+                "description": "简化水库控制系统演示示例",
+                "category": "demo",
+                "path": "demo/simplified_reservoir_control"
+            },
+            # 补充缺少的notebooks示例
+            "notebooks_10_canal_system": {
+                "name": "渠道系统笔记本",
+                "description": "渠道系统Jupyter笔记本示例",
+                "category": "notebooks",
+                "path": "notebooks/10_canal_system"
+            },
+            "notebooks_11_control_and_agents": {
+                "name": "控制与智能体笔记本",
+                "description": "控制与智能体Jupyter笔记本示例",
+                "category": "notebooks",
+                "path": "notebooks/11_control_and_agents"
+            },
+            # 补充缺少的llm_integration示例
+            "llm_integration": {
+                "name": "LLM集成示例",
+                "description": "大语言模型集成示例",
+                "category": "llm_integration",
+                "path": "llm_integration"
+            },
+            # 补充缺少的watertank_refactored示例
+            "watertank_refactored_01_simple_simulation": {
+                "name": "水箱简单仿真",
+                "description": "重构后的水箱简单仿真示例",
+                "category": "watertank_refactored",
+                "path": "watertank_refactored/01_simple_simulation"
+            },
+            "watertank_refactored_03_pid_control_inlet": {
+                "name": "水箱PID入口控制",
+                "description": "重构后的水箱PID入口控制示例",
+                "category": "watertank_refactored",
+                "path": "watertank_refactored/03_pid_control_inlet"
+            },
+            "watertank_refactored_05_joint_control": {
+                "name": "水箱联合控制",
+                "description": "重构后的水箱联合控制示例",
+                "category": "watertank_refactored",
+                "path": "watertank_refactored/05_joint_control"
+            },
+            # 补充缺少的canal_model示例
+            "canal_model_canal_model_comparison": {
+                "name": "渠道模型对比",
+                "description": "渠道模型对比分析示例",
+                "category": "canal_model",
+                "path": "canal_model/canal_model_comparison"
+            },
+            "canal_model_hierarchical_distributed_control_example": {
+                "name": "分层分布式控制",
+                "description": "分层分布式控制系统示例",
+                "category": "canal_model",
+                "path": "canal_model/hierarchical_distributed_control_example"
+            },
+            "canal_model_structured_control_example": {
+                "name": "结构化控制",
+                "description": "结构化控制系统示例",
+                "category": "canal_model",
+                "path": "canal_model/structured_control_example"
+            },
+            # 补充缺少的non_agent_based示例
+            "non_agent_based_01_getting_started": {
+                "name": "入门示例",
+                "description": "非智能体系统入门示例",
+                "category": "non_agent_based",
+                "path": "non_agent_based/01_getting_started"
+            },
+            "non_agent_based_02_multi_component_systems": {
+                "name": "多组件系统",
+                "description": "多组件系统示例",
+                "category": "non_agent_based",
+                "path": "non_agent_based/02_multi_component_systems"
+            },
+            "non_agent_based_07_pipe_and_valve": {
+                "name": "管道与阀门",
+                "description": "管道与阀门系统示例",
+                "category": "non_agent_based",
+                "path": "non_agent_based/07_pipe_and_valve"
+            },
+            "non_agent_based_08_non_agent_simulation": {
+                "name": "非智能体仿真",
+                "description": "非智能体仿真示例",
+                "category": "non_agent_based",
+                "path": "non_agent_based/08_non_agent_simulation"
+            },
+            "agent_based_03_event_driven_agents": {
+                "name": "事件驱动智能体",
+                "description": "事件驱动智能体示例",
+                "category": "agent_based",
+                "path": "agent_based/03_event_driven_agents"
+            },
+            "agent_based_06_centralized_emergency_override": {
+                "name": "集中式紧急覆盖",
+                "description": "集中式紧急覆盖示例",
+                "category": "agent_based",
+                "path": "agent_based/06_centralized_emergency_override"
+            },
+            "agent_based_09_agent_based_distributed_control": {
+                "name": "基于智能体的分布式控制",
+                "description": "基于智能体的分布式控制示例",
+                "category": "agent_based",
+                "path": "agent_based/09_agent_based_distributed_control"
+            },
+            "agent_based_12_pid_control_comparison": {
+                "name": "PID控制比较",
+                "description": "PID控制比较示例",
+                "category": "agent_based",
+                "path": "agent_based/12_pid_control_comparison"
+            },
+            "canal_model_canal_mpc_pid_control": {
+                "name": "运河MPC PID控制",
+                "description": "运河MPC PID控制示例",
+                "category": "canal_model",
+                "path": "canal_model/canal_mpc_pid_control"
+            },
+            "canal_model_canal_pid_control": {
+                "name": "运河PID控制",
+                "description": "运河PID控制示例",
+                "category": "canal_model",
+                "path": "canal_model/canal_pid_control"
+            },
+            "canal_model_complex_fault_scenario_example": {
+                "name": "复杂故障场景",
+                "description": "复杂故障场景示例",
+                "category": "canal_model",
+                "path": "canal_model/complex_fault_scenario_example"
+            },
+            "watertank_01_simulation": {
+                "name": "水箱仿真",
+                "description": "水箱仿真示例",
+                "category": "watertank",
+                "path": "watertank/01_simulation"
+            },
+            "notebooks_07_centralized_setpoint_optimization": {
+                "name": "集中式设定点优化",
+                "description": "集中式设定点优化示例",
+                "category": "notebooks",
+                "path": "notebooks/07_centralized_setpoint_optimization"
             }
         }
         
@@ -330,6 +642,16 @@ class ExamplesHardcodedRunner:
                 harness = self.create_multi_component_simulation()
             elif example_key in ["event_driven_agents", "hierarchical_control"]:
                 harness = self.create_agent_based_simulation(example_key)
+            elif example_key == "canal_system_notebook":
+                harness = self.create_canal_system_simulation()
+            elif example_key == "control_agents_notebook":
+                harness = self.create_control_agents_simulation()
+            elif example_key in ["watertank_simple", "watertank_pid_inlet", "watertank_joint_control"]:
+                harness = self.create_watertank_simulation(example_key)
+            elif example_key == "llm_integration_demo":
+                harness = self.create_llm_integration_simulation()
+            elif example_key in ["gate_discharge_identification", "pipe_roughness_identification"]:
+                harness = self.create_identification_simulation(example_key)
             else:
                 # 其他示例的通用处理
                 harness = self.create_getting_started_simulation()
