@@ -1,111 +1,48 @@
-# -*- coding: utf-8 -*-
+from core_lib.llm_services.llm_service import call_tongyi_qianwen_api
+from core_lib.config.unified_config_manager import validate_yaml_content
 
-from core_lib.core.interfaces import Agent
-import yaml
+class LLMSystemBuilderAgent:
+    """建模工程师智能体。"""
+    
+    def get_system_prompt(self):
+        return """
+你是一位精通水利工程建模的顶级专家，专门使用 CHS-SDK。你的任务是将用户的自然语言描述转换成一个结构完整、语法正确的 `universal_config.yml` 文件内容。
 
-class LLMSystemBuilderAgent(Agent):
-    """
-    Implements Role 1: System Architect & Builder.
+你必须严格遵循以下规则：
+1.  你的输出**必须且只能**是YAML格式的文本，绝不能包含任何额外的解释或文字。
+2.  YAML的顶级键必须包含 `components` 和 `topology`。
+3.  你必须理解并使用以下核心概念定义来创建组件：
+    * **被控对象 (Controlled Objects)**: 水文状态需要被管理和控制的物理实体。包括: `RiverChannel`, `Pipe`, `Canal`, `Reservoir`, `Lake`, `Pond`。
+    * **控制对象 (Controlling Objects)**: 能够改变被控对象状态的物理设施。包括: `GateStation`, `PumpStation`, `ValveStation`, `HydropowerStation`。
+    * **组件类型**: 在`components`中创建实例时，`type`字段必须是上述定义的英文名称之一。
+4.  根据用户的描述，在 `components` 列表中创建相应的物理对象实例，并正确填写 `id`, `type`, 和 `params`。
+5.  在 `topology` 列表中描述组件之间的连接关系。
+"""
 
-    This agent takes a high-level, natural language description of a water network
-    and converts it into the structured YAML configuration files required by the
-    simulation engine (`components.yml`, `topology.yml`, `agents.yml`).
+    def run(self, user_prompt: str) -> str:
+        """执行建模任务。"""
+        print(f"[LLMSystemBuilderAgent]: 已接收任务 -> {user_prompt}")
+        system_prompt = self.get_system_prompt()
 
-    In this prototype, the LLM call is simulated. In a real implementation,
-    the `_call_llm_for_config` method would make a request to an LLM API
-    with a carefully crafted prompt.
-    """
-    def __init__(self, agent_id: str, message_bus):
-        super().__init__(agent_id)
-        self.message_bus = message_bus
-        self.generated_configs = {}
-
-    def run(self, current_time: float):
-        # This agent is typically used for pre-simulation setup,
-        # so its run method might not be used in a running simulation.
-        pass
-
-    def step(self, t: int, dt: int):
-        # This agent is typically used for pre-simulation setup,
-        # so its step method might not be used in a running simulation.
-        pass
-
-    def build_system_from_description(self, description: str):
-        """
-        Takes a natural language description and generates system configuration files.
-
-        Args:
-            description (str): A natural language text describing the water system.
-                               e.g., "A reservoir feeds a single river channel through a gate."
-        """
-        print(f"[{self.agent_id}] Received system description: '{description}'")
-        print(f"[{self.agent_id}] Calling LLM to generate configuration...")
-
-        # In a real implementation, this would involve a complex prompt explaining
-        # the YAML structure and providing examples.
-        llm_output = self._call_llm_for_config(description)
-
-        print(f"[{self.agent_id}] LLM call successful. Parsing generated configurations.")
-        self.generated_configs = {
-            'components': yaml.dump(llm_output['components']),
-            'topology': yaml.dump(llm_output['topology']),
-            'agents': yaml.dump(llm_output['agents'])
-        }
-
-        print(f"[{self.agent_id}] System configuration generated successfully.")
-        return self.generated_configs
-
-    def _call_llm_for_config(self, description: str) -> dict:
-        """
-        [SIMULATED] This method simulates a call to an LLM.
-
-        The LLM would be prompted to return a JSON or YAML object containing the
-        three required configuration sections.
-
-        Args:
-            description (str): The natural language input.
-
-        Returns:
-            dict: A dictionary containing the structured configuration.
-        """
-        # This is a hardcoded response for demonstration purposes.
-        # A real LLM would generate this based on the description.
-        if "reservoir" in description.lower() and "gate" in description.lower():
-            return {
-                'components': {
-                    'reservoir_1': {
-                        'type': 'Reservoir',
-                        'params': {'initial_storage': 1000000, 'area': 50000}
-                    },
-                    'gate_1': {
-                        'type': 'Gate',
-                        'params': {'width': 5.0, 'discharge_coefficient': 0.8}
-                    },
-                    'channel_1': {
-                        'type': 'RiverChannel',
-                        'params': {'length': 1000, 'slope': 0.001, 'manning': 0.03}
-                    }
-                },
-                'topology': {
-                    'connections': [
-                        {'from': 'reservoir_1', 'to': 'gate_1'},
-                        {'from': 'gate_1', 'to': 'channel_1'}
-                    ]
-                },
-                'agents': {
-                    'reservoir_perception_agent': {
-                        'type': 'ReservoirPerceptionAgent',
-                        'params': {'physical_component_id': 'reservoir_1'}
-                    },
-                    'gate_control_agent': {
-                        'type': 'GateControlAgent',
-                        'params': {
-                            'physical_component_id': 'gate_1',
-                            'controller_configs': {'type': 'PID', 'kp': 1.0, 'ki': 0.1}
-                        }
-                    }
-                }
-            }
-        else:
-            # Default empty response if the description is not recognized
-            return {'components': {}, 'topology': {}, 'agents': {}}
+        try:
+            generated_yaml = call_tongyi_qianwen_api(user_prompt, system_prompt)
+            print("[LLMSystemBuilderAgent]: 已从大模型获取初步YAML配置。")
+            validation_result = validate_yaml_content(generated_yaml)
+            if validation_result['valid']:
+                print("[LLMSystemBuilderAgent]: 配置验证通过。")
+                return generated_yaml
+            else:
+                print(f"[LLMSystemBuilderAgent]: 配置验证失败: {validation_result['errors']}")
+                print("[LLMSystemBuilderAgent]: 正在尝试进行自我修正...")
+                correction_prompt = (f"你上次生成的YAML配置未能通过验证，错误如下：\n{validation_result['errors']}\n\n请修正以上错误，并根据我的原始需求重新生成一个完整且正确的YAML配置：'{user_prompt}'")
+                corrected_yaml = call_tongyi_qianwen_api(correction_prompt, system_prompt)
+                final_validation = validate_yaml_content(corrected_yaml)
+                if final_validation['valid']:
+                    print("[LLMSystemBuilderAgent]: 修正后的配置验证通过。")
+                    return corrected_yaml
+                else:
+                    raise RuntimeError(f"自我修正失败: {final_validation['errors']}")
+        except Exception as e:
+            error_message = f"建模失败：处理过程中出错 - {e}"
+            print(f"[LLMSystemBuilderAgent]: {error_message}")
+            raise RuntimeError(error_message)

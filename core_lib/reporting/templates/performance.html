@@ -1,0 +1,28 @@
+
+{% extends "standard.html" %}
+
+{% block content %}
+<section class="performance-overview">
+    <h2>⚡ 性能概览</h2>
+    <div class="performance-metrics">
+        {% if data.get('performance') %}
+        {% for metric, value in data.performance.items() %}
+        <div class="performance-card">
+            <h3>{{ metric.replace('_', ' ').title() }}</h3>
+            <div class="metric-value">{{ utils.format_number(value) }}</div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+</section>
+
+{{ super() }}
+
+<section class="performance-analysis">
+    <h2>📊 性能分析</h2>
+    <div class="analysis-content">
+        <!-- 性能分析内容 -->
+    </div>
+</section>
+{% endblock %}
+        

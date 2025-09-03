@@ -14,10 +14,12 @@ from .llm_system_builder_agent import LLMSystemBuilderAgent
 from .llm_scenario_designer_agent import LLMScenarioDesignerAgent
 from .llm_dispatch_commander_agent import LLMDispatchCommanderAgent
 from .llm_data_analyst_agent import LLMDataAnalystAgent
+from .llm_result_analysis_agent import LLMResultAnalysisAgent
 
 __all__ = [
     'LLMSystemBuilderAgent',
     'LLMScenarioDesignerAgent',
     'LLMDispatchCommanderAgent',
-    'LLMDataAnalystAgent'
+    'LLMDataAnalystAgent',
+    'LLMResultAnalysisAgent'
 ]

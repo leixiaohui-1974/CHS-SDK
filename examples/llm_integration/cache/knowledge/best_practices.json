@@ -1,0 +1,39 @@
+[
+  {
+    "id": "pid_tuning_best_practice",
+    "title": "PID控制器参数调优最佳实践",
+    "description": "水位控制系统中PID控制器参数调优的标准流程和注意事项",
+    "domain": "水位控制",
+    "practice_type": "参数调优",
+    "steps": [
+      "分析系统特性和响应时间",
+      "设定初始PID参数",
+      "进行阶跃响应测试",
+      "根据响应曲线调整参数",
+      "验证控制性能和稳定性"
+    ],
+    "benefits": [
+      "提高控制精度",
+      "减少超调",
+      "增强系统稳定性"
+    ],
+    "prerequisites": [
+      "了解系统动态特性",
+      "具备PID理论基础"
+    ],
+    "risks": [
+      "参数设置不当可能导致系统不稳定"
+    ],
+    "success_criteria": [
+      "稳态误差<2%",
+      "超调量<10%",
+      "调节时间<30秒"
+    ],
+    "related_cases": [
+      "reservoir_flood_control_case"
+    ],
+    "confidence_score": 0.9,
+    "usage_count": 0,
+    "last_used": "2025-09-03T23:48:30.851931"
+  }
+]

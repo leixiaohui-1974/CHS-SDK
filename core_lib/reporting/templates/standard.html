@@ -1,0 +1,72 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<section class="executive-summary">
+    <h2>📊 执行摘要</h2>
+    <div class="summary-content">
+        {{ data.get('summary', '分析已完成') }}
+    </div>
+</section>
+
+{% if data.get('kpis') %}
+<section class="kpis">
+    <h2>📈 关键性能指标</h2>
+    <div class="kpi-grid">
+    {% for kpi in data.kpis %}
+        <div class="kpi-card">
+            <h3>{{ kpi.name }}</h3>
+            <div class="kpi-value">{{ utils.format_number(kpi.value) }}</div>
+            <div class="kpi-unit">{{ kpi.unit or '' }}</div>
+            <div class="kpi-description">{{ kpi.description or '' }}</div>
+        </div>
+    {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+{% if charts %}
+<section class="visualizations">
+    <h2>📊 可视化图表</h2>
+    {% for chart_name, chart_path in charts.items() %}
+    <div class="chart-container">
+        <h3>{{ chart_name.replace('_', ' ').title() }}</h3>
+        <img src="{{ chart_path }}" alt="{{ chart_name }}" class="chart-image">
+    </div>
+    {% endfor %}
+</section>
+{% endif %}
+
+{% if data.get('insights') %}
+<section class="insights">
+    <h2>🔍 智能洞察</h2>
+    {% for insight in data.insights %}
+    <div class="insight-card">
+        <h3>{{ insight.title }}</h3>
+        <p>{{ insight.description }}</p>
+        <div class="confidence">置信度: {{ utils.format_percentage(insight.confidence) }}</div>
+        {% if insight.recommendations %}
+        <div class="recommendations">
+            <h4>建议:</h4>
+            <ul>
+            {% for rec in insight.recommendations %}
+                <li>{{ rec }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</section>
+{% endif %}
+
+{% for section in sections %}
+<section id="section-{{ section.id }}" class="custom-section">
+    <h2>{{ section.title }}</h2>
+    <div class="section-content">
+        {{ section.content | safe }}
+    </div>
+</section>
+{% endfor %}
+{% endblock %}
+        

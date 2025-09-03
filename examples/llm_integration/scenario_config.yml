@@ -1,0 +1,114 @@
+# 水利系统仿真场景配置文件
+# 用于演示增强型LLM分析功能
+
+scenario:
+  name: "水库调度优化分析"
+  description: "分析水库在不同入流条件下的调度策略优化"
+  type: "reservoir_control"
+  duration: 24  # 小时
+  time_step: 1  # 小时
+
+# 问题描述
+problem_statement:
+  title: "水库调度策略优化问题"
+  description: |
+    某水库面临汛期调度挑战，需要在保证防洪安全的前提下，
+    最大化发电效益和供水保障。当前调度策略在极端天气条件下
+    表现不佳，需要通过仿真分析找出优化方案。
+  
+  objectives:
+    - 提高防洪安全性
+    - 优化发电效益
+    - 保障下游供水
+    - 减少调度频率
+
+  constraints:
+    - 水位不得超过汛限水位
+    - 下泄流量需满足环保要求
+    - 发电机组运行限制
+
+# 建模思路
+modeling_approach:
+  framework: "多目标优化控制"
+  method: "模型预测控制(MPC)"
+  
+  components:
+    - name: "水库水动力模型"
+      description: "基于水量平衡方程的水库动态模型"
+      equations:
+        - "dV/dt = Q_in - Q_out - E*A"
+        - "h = f(V)"  # 库容-水位关系
+    
+    - name: "发电效益模型"
+      description: "水轮发电机组效率模型"
+      equations:
+        - "P = η * ρ * g * Q * H"
+    
+    - name: "防洪约束模型"
+      description: "基于历史洪水数据的风险评估模型"
+
+  optimization:
+    algorithm: "遗传算法(GA)"
+    objective_function: "加权多目标函数"
+    decision_variables:
+      - "出库流量序列"
+      - "发电机组启停计划"
+
+# 仿真参数
+simulation_parameters:
+  reservoir:
+    capacity: 1000000000  # m³
+    dead_storage: 100000000  # m³
+    flood_limit_level: 145.0  # m
+    normal_level: 142.0  # m
+    dead_level: 120.0  # m
+  
+  turbine:
+    rated_power: 300  # MW
+    efficiency: 0.85
+    min_flow: 50  # m³/s
+    max_flow: 500  # m³/s
+  
+  environmental:
+    min_release: 30  # m³/s
+    max_release: 1000  # m³/s
+
+# 输入数据
+input_data:
+  inflow_forecast:
+    source: "气象预报数据"
+    uncertainty: "±20%"
+    time_horizon: 72  # 小时
+  
+  electricity_price:
+    source: "电力市场数据"
+    pattern: "峰谷分时电价"
+  
+  water_demand:
+    source: "用水计划"
+    priority: "生活用水 > 工业用水 > 农业用水"
+
+# 评价指标
+performance_metrics:
+  safety:
+    - "洪水风险指数"
+    - "水位超限次数"
+    - "下游流量变化率"
+  
+  efficiency:
+    - "发电量"
+    - "发电效益"
+    - "水资源利用率"
+  
+  stability:
+    - "调度频率"
+    - "系统响应时间"
+    - "控制精度"
+
+# 预期结果
+expected_outcomes:
+  - "优化后的调度策略"
+  - "不同场景下的性能对比"
+  - "关键参数敏感性分析"
+  - "风险评估报告"
+  - "运行建议和改进措施"

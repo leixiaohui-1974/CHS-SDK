@@ -1,38 +1,36 @@
 {
-  "last_indexed": "2025-09-03T17:22:42.000557",
-  "total_documents": 6117,
+  "last_indexed": "2025-09-04T00:14:43.395274",
+  "total_documents": 107,
   "document_types": {
-    "documentation": 3069,
-    "general_configuration": 163,
-    "text_document": 6,
-    "function_definition": 1737,
-    "module_documentation": 290,
-    "agent_configuration": 118,
-    "class_definition": 586,
-    "agent_definition": 115,
-    "template_configuration": 1,
-    "scenario_configuration": 32
+    "function_definition": 38,
+    "module_documentation": 10,
+    "agent_configuration": 10,
+    "agent_definition": 9,
+    "class_definition": 18,
+    "text_document": 1,
+    "documentation": 20,
+    "scenario_configuration": 1
   },
   "file_types": {
-    "markdown": 3069,
-    "yaml": 314,
-    "text": 6,
-    "python": 2728
+    "python": 75,
+    "yaml": 11,
+    "text": 1,
+    "markdown": 20
   },
   "tags": [
-    "documentation",
-    "markdown",
-    "configuration",
-    "yaml",
-    "class",
-    "function",
     "python",
-    "api",
-    "agent",
-    "chs-sdk",
-    "text",
+    "yaml",
     "module",
+    "documentation",
+    "chs-sdk",
+    "function",
+    "markdown",
     "scenario",
-    "document"
+    "text",
+    "configuration",
+    "document",
+    "agent",
+    "class",
+    "api"
   ]
 }

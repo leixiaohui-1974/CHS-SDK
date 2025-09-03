@@ -1,0 +1,50 @@
+[
+  {
+    "id": "water_level_control_basics",
+    "title": "水位控制基础原理",
+    "content": "水位控制是水库管理的核心技术，通过调节闸门开度来控制水位高度。基本原理包括PID控制、模糊控制等方法。",
+    "category": "基础理论",
+    "tags": [
+      "水位控制",
+      "PID",
+      "模糊控制"
+    ],
+    "source": "技术手册",
+    "confidence": 1.0,
+    "created_at": "2025-09-03T23:48:30.851854",
+    "updated_at": "2025-09-03T23:48:30.851854",
+    "metadata": {}
+  },
+  {
+    "id": "flood_management_strategies",
+    "title": "洪水管理策略",
+    "content": "洪水管理包括预防、监测、响应和恢复四个阶段。关键是建立有效的预警系统和应急响应机制。",
+    "category": "应急管理",
+    "tags": [
+      "洪水管理",
+      "预警系统",
+      "应急响应"
+    ],
+    "source": "应急手册",
+    "confidence": 1.0,
+    "created_at": "2025-09-03T23:48:30.851885",
+    "updated_at": "2025-09-03T23:48:30.851885",
+    "metadata": {}
+  },
+  {
+    "id": "system_optimization_methods",
+    "title": "系统优化方法",
+    "content": "水利系统优化可采用遗传算法、粒子群优化、模拟退火等智能优化算法，以提高系统性能和效率。",
+    "category": "优化技术",
+    "tags": [
+      "系统优化",
+      "遗传算法",
+      "粒子群优化"
+    ],
+    "source": "研究论文",
+    "confidence": 1.0,
+    "created_at": "2025-09-03T23:48:30.851894",
+    "updated_at": "2025-09-03T23:48:30.851894",
+    "metadata": {}
+  }
+]

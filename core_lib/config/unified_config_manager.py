@@ -642,3 +642,60 @@ class UnifiedConfigManager:
             metadata=source_config.metadata,
             description="转换后的通用配置文件"
         )
+
+
+def validate_yaml_content(yaml_content: str) -> Dict[str, Any]:
+    """
+    验证YAML内容的有效性
+    
+    Args:
+        yaml_content: 要验证的YAML字符串内容
+        
+    Returns:
+        Dict[str, Any]: 验证结果，包含:
+            - valid: bool, 是否有效
+            - errors: List[str], 错误信息列表
+            - warnings: List[str], 警告信息列表（可选）
+    """
+    result = {
+        'valid': True,
+        'errors': [],
+        'warnings': []
+    }
+    
+    try:
+        # 基本YAML语法验证
+        if not yaml_content or not yaml_content.strip():
+            result['valid'] = False
+            result['errors'].append("YAML内容为空")
+            return result
+            
+        # 尝试解析YAML
+        parsed_content = yaml.safe_load(yaml_content)
+        
+        if parsed_content is None:
+            result['valid'] = False
+            result['errors'].append("YAML解析结果为空")
+            return result
+            
+        # 基本结构验证
+        if not isinstance(parsed_content, dict):
+            result['warnings'].append("YAML内容不是字典格式，可能不符合配置文件规范")
+            
+        # 检查常见的配置文件字段
+        if isinstance(parsed_content, dict):
+            # 检查是否包含基本的配置结构
+            common_fields = ['simulation', 'components', 'agents', 'topology', 'disturbances']
+            found_fields = [field for field in common_fields if field in parsed_content]
+            
+            if not found_fields:
+                result['warnings'].append("未找到常见的配置字段，请确认这是一个有效的CHS-SDK配置文件")
+                
+    except yaml.YAMLError as e:
+        result['valid'] = False
+        result['errors'].append(f"YAML语法错误: {str(e)}")
+    except Exception as e:
+        result['valid'] = False
+        result['errors'].append(f"验证过程中发生错误: {str(e)}")
+        
+    return result
