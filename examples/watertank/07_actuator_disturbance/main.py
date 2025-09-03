@@ -59,12 +59,23 @@ def run_actuator_disturbance():
     pid_controller = PIDController(**pid_conf)
     pump_controller = LocalControlAgent(
         agent_id="pump_control_07",
-        controller=pid_controller,
-        message_bus=message_bus,
-        observation_topic=msg_conf['state_topic'],
-        observation_key='water_level',
-        action_topic=msg_conf['command_topic'],
-        dt=sim_conf['time_step']
+        dt=sim_conf['time_step'],
+        target_component="tank_noisy_actuator",
+        control_type="pid",
+        data_sources={
+            "observation_topic": msg_conf['state_topic'],
+            "observation_key": 'water_level'
+        },
+        control_targets={
+            "action_topic": msg_conf['command_topic']
+        },
+        allocation_config={
+            "method": "direct"
+        },
+        controller_config={
+            "controller": pid_controller
+        },
+        message_bus=message_bus
     )
 
     # 6. 创建一个命令处理器来监听水泵指令

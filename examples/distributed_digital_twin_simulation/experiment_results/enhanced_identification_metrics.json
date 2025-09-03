@@ -1,0 +1,56 @@
+{
+  "identification_performance": {
+    "Channel_1": {
+      "final_accuracy": {
+        "integral_coeff_error": 0.13436246574286764,
+        "time_delay_error": 0.5094733701906078,
+        "integral_accuracy_percent": 10.425022838088239,
+        "delay_accuracy_percent": 79.62106519237568
+      },
+      "convergence_time": 50.0,
+      "convergence_rate": 0.02
+    },
+    "Channel_2": {
+      "final_accuracy": {
+        "integral_coeff_error": 1.79,
+        "time_delay_error": 1.4979105398812318,
+        "integral_accuracy_percent": 0.5555555555555536,
+        "delay_accuracy_percent": 50.0696486706256
+      },
+      "convergence_time": 50.0,
+      "convergence_rate": 0.02
+    },
+    "Channel_3": {
+      "final_accuracy": {
+        "integral_coeff_error": 0.11,
+        "time_delay_error": 1.0830849918257406,
+        "integral_accuracy_percent": 8.333333333333325,
+        "delay_accuracy_percent": 61.3183931490807
+      },
+      "convergence_time": 50.0,
+      "convergence_rate": 0.02
+    }
+  },
+  "robustness_performance": {
+    "Channel_1": {
+      "average_robustness_score": 39.55741615648958,
+      "worst_case_score": 39.533002618937715,
+      "robustness_variance": 0.0002383519759018186
+    },
+    "Channel_2": {
+      "average_robustness_score": 23.016768607961687,
+      "worst_case_score": 22.89747255090467,
+      "robustness_variance": 0.006065923320680297
+    },
+    "Channel_3": {
+      "average_robustness_score": 32.35554914243528,
+      "worst_case_score": 32.33458271824461,
+      "robustness_variance": 0.00037046562748943297
+    }
+  },
+  "overall_improvement": {
+    "average_identification_accuracy": 6.4379705756590395,
+    "average_robustness_score": 31.64324463562885,
+    "improvement_grade": "needs_improvement"
+  }
+}

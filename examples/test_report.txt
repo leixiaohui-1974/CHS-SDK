@@ -1,24 +1,2674 @@
 CHS-SDK Simulation Mode Test Report
 ========================================
-Test time: 2025-09-02 08:00:56
+Test time: 2025-09-03 19:27:57
 Total tests: 4
-Passed tests: 4
-Failed tests: 0
-Success rate: 100.0%
+Passed tests: 3
+Failed tests: 1
+Success rate: 75.0%
 
 Hardcoded Example Runner - 16 examples tested:
   Status: Passed
-  Execution time: 16.95 seconds
+  Execution time: 19.54 seconds
 
 Unified Configuration File Method - 9 examples tested:
   Status: Passed
-  Execution time: 23.57 seconds
+  Execution time: 27.85 seconds
 
-Traditional Multi-Configuration File Method - 22 examples tested:
-  Status: Passed
-  Execution time: 60.29 seconds
+Traditional Multi-Configuration File Method - 29 examples tested:
+  Status: Failed
+  Execution time: 86.94 seconds
+  Error message: === agent_based_06_centralized_emergency_override ===
+=== 运行示例：06 Centralized Emergency Override ===
+描述：智能体示例 - 06_centralized_emergency_override
+类别：agent_based
+配置文件：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\agent_based\06_centralized_emergency_override\config.yml
 
-Universal Configuration Runner - 14 examples tested:
+工作目录：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\agent_based\06_centralized_emergency_override
+开始仿真...
+MessageBus created.
+MessageBus created.
+SimulationHarness created.
+根据水位 98.0 m 计算得到初始体积 98000.0 m^3
+水库 'main_reservoir' 从参数中设置初始入流为 100.0 m³/s
+水库 'main_reservoir' 已创建，初始状态为 {'water_level': 98.0, 'outflow': 0, 'volume': np.float64(98000.0)}.
+Component 'main_reservoir' added.
+闸门 'flood_gate' 已创建，初始状态为 {'opening': 0.1, 'outflow': 0}.
+Component 'flood_gate' added.
+Connection added: main_reservoir -> flood_gate
+Component topology set on MessageBus.
+Resolving simulated_object_id 'main_reservoir' for agent 'reservoir_twin'
+Successfully resolved to: <class 'core_lib.physical_objects.reservoir.Reservoir'>
+DigitalTwinAgent 'reservoir_twin' 已为模型 'main_reservoir' 创建。将向主题 'state/reservoir/main' 发布状态。
+New subscription to topic 'state/reservoir/main' for listener <bound method CentralDispatcherAgent.handle_state_message of <core_lib.central_coordination.dispatch.central_dispatcher.CentralDispatcherAgent object at 0x000001E113E59550>>.
+Topological sort complete. Update order determined.
+Simulation harness build complete and ready to run.
+Starting MAS simulation from 0 to 100 with dt=1.0
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+水库 'main_reservoir' 入流已设置为 0 m³/s
+MAS simulation completed at time 100.00s
+Generated 100 steps of history data.
+
+=== 仿真完成 ===
+执行时间：1.48秒
+
+=== agent_based_09_agent_based_distributed_control ===
+=== 运行示例：09 Agent Based Distributed Control ===
+描述：智能体示例 - 09_agent_based_distributed_control
+类别：agent_based
+配置文件：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\agent_based\09_agent_based_distributed_control\config.yml
+
+工作目录：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\agent_based\09_agent_based_distributed_control
+开始仿真...
+MessageBus created.
+MessageBus created.
+SimulationHarness created.
+根据水位 14.0 m 计算得到初始体积 11200.0 m^3
+水库 'target_reservoir' 从参数中设置初始入流为 75.0 m³/s
+水库 'target_reservoir' 已创建，初始状态为 {'water_level': 14.0, 'outflow': 0, 'volume': 11200.0}.
+Component 'target_reservoir' added.
+闸门 'control_gate' 已创建，初始状态为 {'opening': 0.5, 'outflow': 0}.
+Component 'control_gate' added.
+Connection added: target_reservoir -> control_gate
+Component topology set on MessageBus.
+Resolving simulated_object_id 'target_reservoir' for agent 'reservoir_twin'
+Successfully resolved to: <class 'core_lib.physical_objects.reservoir.Reservoir'>
+DigitalTwinAgent 'reservoir_twin' 已为模型 'target_reservoir' 创建。将向主题 'state/reservoir/target' 发布状态。
+Topological sort complete. Update order determined.
+Simulation harness build complete and ready to run.
+Starting MAS simulation from 0 to 100 with dt=1.0
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+水库 'target_reservoir' 入流已设置为 0 m³/s
+MAS simulation completed at time 100.00s
+Generated 100 steps of history data.
+
+=== 仿真完成 ===
+执行时间：1.41秒
+
+=== agent_based_12_pid_control_comparison ===
+INFO:root:加载场景: 12_pid_control_comparison
+INFO:root:SimulationBuilder initialized for scenario: 12_pid_control_comparison
+INFO:root:Setting up simulation infrastructure...
+INFO:root:ObjectFactory initialized with class map: dict_keys(['Reservoir', 'Gate', 'UnifiedCanal', 'Pipe', 'Pump', 'Valve', 'HydropowerStation', 'Lake', 'RiverChannel', 'WaterTurbine', 'RainfallRunoff', 'IntegralDelayCanal', 'PIDController', 'LocalControlAgent', 'DigitalTwinAgent', 'ParameterIdentificationAgent', 'CentralDispatcherAgent', 'CsvInflowAgent', 'EmergencyAgent', 'TopicLoggerAgent'])
+INFO:root:Loading physical components...
+INFO:root:Loaded 6 components.
+INFO:root:Loading topology...
+INFO:root:  - Connecting 'upstream_reservoir' -> 'gate_1'
+INFO:root:  - Connecting 'gate_1' -> 'canal_1'
+INFO:root:  - Connecting 'canal_1' -> 'canal_2'
+INFO:root:  - Connecting 'canal_2' -> 'gate_2'
+INFO:root:  - Connecting 'gate_2' -> 'canal_3'
+INFO:root:Topology loaded.
+INFO:root:Loading agents and controllers...
+
+=== canal_model_canal_mpc_pid_control ===
+INFO:root:加载场景: canal_mpc_pid_control
+INFO:root:SimulationBuilder initialized for scenario: canal_mpc_pid_control
+INFO:root:Setting up simulation infrastructure...
+INFO:root:ObjectFactory initialized with class map: dict_keys(['Reservoir', 'Gate', 'UnifiedCanal', 'Pipe', 'Pump', 'Valve', 'HydropowerStation', 'Lake', 'RiverChannel', 'WaterTurbine', 'RainfallRunoff', 'IntegralDelayCanal', 'PIDController', 'LocalControlAgent', 'DigitalTwinAgent', 'ParameterIdentificationAgent', 'CentralDispatcherAgent', 'CsvInflowAgent', 'EmergencyAgent', 'TopicLoggerAgent'])
+INFO:root:Loading physical components...
+INFO:root:Loaded 7 components.
+INFO:root:Loading topology...
+INFO:root:  - Connecting 'upstream_reservoir' -> 'diversion_before_gate1'
+INFO:root:  - Connecting 'diversion_before_gate1' -> 'gate_1'
+INFO:root:  - Connecting 'gate_1' -> 'canal_1'
+INFO:root:  - Connecting 'canal_1' -> 'diversion_before_gate2'
+INFO:root:  - Connecting 'diversion_before_gate2' -> 'gate_2'
+INFO:root:  - Connecting 'gate_2' -> 'tail_user'
+INFO:root:Topology loaded.
+INFO:root:Loading agents and controllers...
+
+=== canal_model_complex_fault_scenario_example ===
+=== 运行示例：Complex Fault Scenario Example ===
+描述：渠道模型示例 - complex_fault_scenario_example
+类别：canal_model
+配置文件：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\canal_model\complex_fault_scenario_example\config.yml
+
+工作目录：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\canal_model\complex_fault_scenario_example
+开始仿真...
+MessageBus created.
+MessageBus created.
+SimulationHarness created.
+根据水位 10.0 m 计算得到初始体积 100000.0 m^3
+水库 'upstream_reservoir' 从参数中设置初始入流为 50.0 m³/s
+水库 'upstream_reservoir' 已创建，初始状态为 {'water_level': 10.0, 'outflow': 0, 'volume': 100000.0}.
+Component 'upstream_reservoir' added.
+Component 'turnout_1' added.
+闸门 'gate_1' 已创建，初始状态为 {'opening': 0.5, 'outflow': 0}.
+Component 'gate_1' added.
+Component 'canal_1' added.
+Component 'turnout_2' added.
+闸门 'gate_2' 已创建，初始状态为 {'opening': 0.5, 'outflow': 0}.
+Component 'gate_2' added.
+Component 'canal_2' added.
+Component 'terminal_user' added.
+Connection added: upstream_reservoir -> turnout_1
+Connection added: turnout_1 -> gate_1
+Connection added: gate_1 -> canal_1
+Connection added: canal_1 -> turnout_2
+Connection added: turnout_2 -> gate_2
+Connection added: gate_2 -> canal_2
+Connection added: canal_2 -> terminal_user
+Component topology set on MessageBus.
+PhysicalIOAgent 'physical_io_agent' created.
+New subscription to topic 'actuator/gate_1/opening' for listener <function PhysicalIOAgent._subscribe_to_actions.<locals>.<lambda> at 0x000001EC93CDDEE0>.
+  - Subscribed to actuator topic 'actuator/gate_1/opening' for 'gate_1_actuator'.
+New subscription to topic 'actuator/gate_2/opening' for listener <function PhysicalIOAgent._subscribe_to_actions.<locals>.<lambda> at 0x000001EC93CDD6C0>.
+  - Subscribed to actuator topic 'actuator/gate_2/opening' for 'gate_2_actuator'.
+ScenarioAgent 'scenario_agent' initialized with a script of 2 events.
+New subscription to topic 'sensor/canal_1/water_level' for listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')>.
+PIDController created with Kp=0.5, Ki=0.05, Kd=0.1, Setpoint=5.0, OutputRange=[0.0, 1.0].
+New subscription to topic 'sensor/canal_2/water_level' for listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')>.
+PIDController created with Kp=0.6, Ki=0.07, Kd=0.1, Setpoint=5.0, OutputRange=[0.0, 1.0].
+Topological sort complete. Update order determined.
+Simulation harness build complete and ready to run.
+Starting MAS simulation from 0 to 100 with dt=10
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+MAS simulation completed at time 100.00s
+Generated 10 steps of history data.
+
+=== 仿真完成 ===
+执行时间：0.05秒
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_2/water_level'.
+
+=== canal_model_hierarchical_distributed_control_example ===
+=== 运行示例：Hierarchical Distributed Control Example ===
+描述：渠道模型示例 - hierarchical_distributed_control_example
+类别：canal_model
+配置文件：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\canal_model\hierarchical_distributed_control_example\config.yml
+
+工作目录：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\canal_model\hierarchical_distributed_control_example
+开始仿真...
+MessageBus created.
+MessageBus created.
+SimulationHarness created.
+根据水位 10.0 m 计算得到初始体积 100000.0 m^3
+水库 'upstream_reservoir' 从参数中设置初始入流为 50.0 m³/s
+水库 'upstream_reservoir' 已创建，初始状态为 {'water_level': 10.0, 'outflow': 0, 'volume': 100000.0}.
+Component 'upstream_reservoir' added.
+Component 'turnout_1' added.
+闸门 'gate_1' 已创建，初始状态为 {'opening': 0.5, 'outflow': 0}.
+Component 'gate_1' added.
+Component 'canal_1' added.
+Component 'turnout_2' added.
+闸门 'gate_2' 已创建，初始状态为 {'opening': 0.5, 'outflow': 0}.
+Component 'gate_2' added.
+Component 'canal_2' added.
+Component 'terminal_user' added.
+Connection added: upstream_reservoir -> turnout_1
+Connection added: turnout_1 -> gate_1
+Connection added: gate_1 -> canal_1
+Connection added: canal_1 -> turnout_2
+Connection added: turnout_2 -> gate_2
+Connection added: gate_2 -> canal_2
+Connection added: canal_2 -> terminal_user
+Component topology set on MessageBus.
+PhysicalIOAgent 'physical_io_agent' created.
+New subscription to topic 'actuator/gate_1/opening' for listener <function PhysicalIOAgent._subscribe_to_actions.<locals>.<lambda> at 0x00000234DC205F80>.
+  - Subscribed to actuator topic 'actuator/gate_1/opening' for 'gate_1_actuator'.
+New subscription to topic 'actuator/gate_2/opening' for listener <function PhysicalIOAgent._subscribe_to_actions.<locals>.<lambda> at 0x00000234DC2059E0>.
+  - Subscribed to actuator topic 'actuator/gate_2/opening' for 'gate_2_actuator'.
+ScenarioAgent 'scenario_agent' initialized with a script of 2 events.
+New subscription to topic 'sensor/canal_1/water_level' for listener <function CentralMPCAgent.__init__.<locals>.<lambda> at 0x00000234DC206840>.
+New subscription to topic 'sensor/canal_2/water_level' for listener <function CentralMPCAgent.__init__.<locals>.<lambda> at 0x00000234DC205D00>.
+New subscription to topic 'forecast/dummy' for listener <bound method CentralMPCAgent._handle_forecast_message of <core_lib.central_agents.central_mpc_agent.CentralMPCAgent object at 0x00000234DC22C6E0>>.
+New subscription to topic 'sensor/turnout_1/water_level' for listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')>.
+PIDController created with Kp=0.5, Ki=0.05, Kd=0.1, Setpoint=0.0, OutputRange=[0.0, 1.0].
+New subscription to topic 'control/canal_1/setpoint' for listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')>.
+New subscription to topic 'sensor/turnout_2/water_level' for listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')>.
+PIDController created with Kp=0.6, Ki=0.07, Kd=0.1, Setpoint=0.0, OutputRange=[0.0, 1.0].
+New subscription to topic 'control/canal_2/setpoint' for listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')>.
+Topological sort complete. Update order determined.
+Simulation harness build complete and ready to run.
+Starting MAS simulation from 0 to 100 with dt=10
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+MAS simulation completed at time 100.00s
+Generated 10 steps of history data.
+
+=== 仿真完成 ===
+执行时间：0.20秒
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'sensor/turnout_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate1_pid_controller, mode=lu, controlled='gate_1')> from topic 'control/canal_1/setpoint'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'sensor/turnout_2/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent._handle_setpoint_update of StructuredControlAgent(id=gate2_pid_controller, mode=lu, controlled='gate_2')> from topic 'control/canal_2/setpoint'.
+
+=== canal_model_structured_control_example ===
+=== 运行示例：Structured Control Example ===
+描述：渠道模型示例 - structured_control_example
+类别：canal_model
+配置文件：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\canal_model\structured_control_example\config.yml
+
+工作目录：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\canal_model\structured_control_example
+开始仿真...
+MessageBus created.
+MessageBus created.
+SimulationHarness created.
+根据水位 10.0 m 计算得到初始体积 100000.0 m^3
+水库 'upstream_reservoir' 从参数中设置初始入流为 50.0 m³/s
+水库 'upstream_reservoir' 已创建，初始状态为 {'water_level': 10.0, 'outflow': 0, 'volume': 100000.0}.
+Component 'upstream_reservoir' added.
+闸门 'gate_1' 已创建，初始状态为 {'opening': 0.5, 'outflow': 0}.
+Component 'gate_1' added.
+Component 'canal_1' added.
+Component 'canal_2' added.
+闸门 'gate_2' 已创建，初始状态为 {'opening': 0.5, 'outflow': 0}.
+Component 'gate_2' added.
+Connection added: upstream_reservoir -> gate_1
+Connection added: gate_1 -> canal_1
+Connection added: canal_1 -> gate_2
+Connection added: gate_2 -> canal_2
+Component topology set on MessageBus.
+New subscription to topic 'sensor/canal_1/water_level' for listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')>.
+PIDController created with Kp=0.5, Ki=0.05, Kd=0.1, Setpoint=5.0, OutputRange=[0.0, 1.0].
+New subscription to topic 'sensor/canal_1/water_level' for listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')>.
+PIDController created with Kp=0.6, Ki=0.07, Kd=0.1, Setpoint=5.0, OutputRange=[0.0, 1.0].
+Topological sort complete. Update order determined.
+Simulation harness build complete and ready to run.
+Starting MAS simulation from 0 to 100 with dt=10
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+水库 'upstream_reservoir' 入流已设置为 0 m³/s
+MAS simulation completed at time 100.00s
+Generated 10 steps of history data.
+
+=== 仿真完成 ===
+执行时间：0.03秒
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate1_dd_controller, mode=dd, controlled='gate_1')> from topic 'sensor/canal_1/water_level'.
+Unsubscribed listener <bound method StructuredControlAgent.handle_observation of StructuredControlAgent(id=gate2_lu_controller, mode=lu, controlled='gate_2')> from topic 'sensor/canal_1/water_level'.
+
+=== non_agent_based_08_non_agent_simulation ===
+=== 运行示例：08 Non Agent Simulation ===
+描述：非智能体示例 - 08_non_agent_simulation
+类别：non_agent_based
+配置文件：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\non_agent_based\08_non_agent_simulation\config.yml
+
+工作目录：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\non_agent_based\08_non_agent_simulation
+开始仿真...
+MessageBus created.
+MessageBus created.
+SimulationHarness created.
+根据水位 10.0 m 计算得到初始体积 10000.0 m^3
+水库 'source_reservoir' 从参数中设置初始入流为 50.0 m³/s
+水库 'source_reservoir' 已创建，初始状态为 {'water_level': 10.0, 'outflow': 0, 'volume': np.float64(10000.0)}.
+Component 'source_reservoir' added.
+闸门 'control_gate' 已创建，初始状态为 {'opening': 0.2, 'outflow': 0}.
+Component 'control_gate' added.
+Connection added: source_reservoir -> control_gate
+Component topology set on MessageBus.
+Topological sort complete. Update order determined.
+Simulation harness build complete and ready to run.
+Starting MAS simulation from 0 to 100 with dt=1.0
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+水库 'source_reservoir' 入流已设置为 0 m³/s
+MAS simulation completed at time 100.00s
+Generated 100 steps of history data.
+
+=== 仿真完成 ===
+执行时间：0.02秒
+
+=== identification_01_reservoir_storage_curve ===
+=== 运行示例：01 Reservoir Storage Curve ===
+描述：参数辨识示例 - 01_reservoir_storage_curve
+类别：identification
+配置文件：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\identification\01_reservoir_storage_curve\config.yml
+
+工作目录：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\identification\01_reservoir_storage_curve
+开始仿真...
+MessageBus created.
+MessageBus created.
+SimulationHarness created.
+Component topology set on MessageBus.
+New subscription to topic 'state/twin_reservoir' for listener <bound method TopicLoggerAgent.handle_message of <core_lib.local_agents.utility.topic_logger_agent.TopicLoggerAgent object at 0x000001B3BF1D4050>>.
+[logger_state_twin_reservoir] Initialized. Subscribed to log topic 'state/twin_reservoir'.
+New subscription to topic 'state/true_reservoir' for listener <bound method TopicLoggerAgent.handle_message of <core_lib.local_agents.utility.topic_logger_agent.TopicLoggerAgent object at 0x000001B3BF14F9D0>>.
+[logger_state_true_reservoir] Initialized. Subscribed to log topic 'state/true_reservoir'.
+New subscription to topic 'identified_parameters/twin_reservoir' for listener <bound method TopicLoggerAgent.handle_message of <core_lib.local_agents.utility.topic_logger_agent.TopicLoggerAgent object at 0x000001B3BF14F390>>.
+[logger_identified_parameters_twin_reservoir] Initialized. Subscribed to log topic 'identified_parameters/twin_reservoir'.
+Topological sort complete. Update order determined.
+Simulation harness build complete and ready to run.
+Starting MAS simulation from 0 to 100 with dt=3600
+MAS simulation completed at time 3600.00s
+Generated 1 steps of history data.
+
+=== 仿真完成 ===
+执行时间：0.03秒
+
+=== identification_02_gate_discharge_coefficient ===
+=== 运行示例：02 Gate Discharge Coefficient ===
+描述：参数辨识示例 - 02_gate_discharge_coefficient
+类别：identification
+配置文件：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\identification\02_gate_discharge_coefficient\config.yml
+
+工作目录：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\identification\02_gate_discharge_coefficient
+开始仿真...
+MessageBus created.
+MessageBus created.
+SimulationHarness created.
+Component topology set on MessageBus.
+New subscription to topic 'state/twin_gate' for listener <bound method TopicLoggerAgent.handle_message of <core_lib.local_agents.utility.topic_logger_agent.TopicLoggerAgent object at 0x00000247ACC58050>>.
+[logger_state_twin_gate] Initialized. Subscribed to log topic 'state/twin_gate'.
+New subscription to topic 'state/true_gate' for listener <bound method TopicLoggerAgent.handle_message of <core_lib.local_agents.utility.topic_logger_agent.TopicLoggerAgent object at 0x00000247ACBD3610>>.
+[logger_state_true_gate] Initialized. Subscribed to log topic 'state/true_gate'.
+New subscription to topic 'identified_parameters/twin_gate' for listener <bound method TopicLoggerAgent.handle_message of <core_lib.local_agents.utility.topic_logger_agent.TopicLoggerAgent object at 0x00000247ACBD39D0>>.
+[logger_identified_parameters_twin_gate] Initialized. Subscribed to log topic 'identified_parameters/twin_gate'.
+Topological sort complete. Update order determined.
+Simulation harness build complete and ready to run.
+Starting MAS simulation from 0 to 100 with dt=100
+MAS simulation completed at time 100.00s
+Generated 1 steps of history data.
+
+=== 仿真完成 ===
+执行时间：0.02秒
+
+=== identification_03_pipe_roughness ===
+=== 运行示例：03 Pipe Roughness ===
+描述：参数辨识示例 - 03_pipe_roughness
+类别：identification
+配置文件：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\identification\03_pipe_roughness\config.yml
+
+工作目录：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\identification\03_pipe_roughness
+开始仿真...
+MessageBus created.
+MessageBus created.
+SimulationHarness created.
+Component topology set on MessageBus.
+New subscription to topic 'state/twin_pipe' for listener <bound method TopicLoggerAgent.handle_message of <core_lib.local_agents.utility.topic_logger_agent.TopicLoggerAgent object at 0x000001C2A7CCC050>>.
+[logger_state_twin_pipe] Initialized. Subscribed to log topic 'state/twin_pipe'.
+New subscription to topic 'state/true_pipe' for listener <bound method TopicLoggerAgent.handle_message of <core_lib.local_agents.utility.topic_logger_agent.TopicLoggerAgent object at 0x000001C2A7C33610>>.
+[logger_state_true_pipe] Initialized. Subscribed to log topic 'state/true_pipe'.
+New subscription to topic 'identified_parameters/twin_pipe' for listener <bound method TopicLoggerAgent.handle_message of <core_lib.local_agents.utility.topic_logger_agent.TopicLoggerAgent object at 0x000001C2A7C339D0>>.
+[logger_identified_parameters_twin_pipe] Initialized. Subscribed to log topic 'identified_parameters/twin_pipe'.
+Topological sort complete. Update order determined.
+Simulation harness build complete and ready to run.
+Starting MAS simulation from 0 to 100 with dt=100
+MAS simulation completed at time 100.00s
+Generated 1 steps of history data.
+
+=== 仿真完成 ===
+执行时间：0.02秒
+
+=== watertank_refactored_01_simple_simulation ===
+=== 运行示例：01 Simple Simulation ===
+描述：重构水箱示例 - 01_simple_simulation
+类别：watertank_refactored
+配置文件：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\watertank_refactored\01_simple_simulation\config.yml
+
+工作目录：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\watertank_refactored\01_simple_simulation
+开始仿真...
+MessageBus created.
+MessageBus created.
+SimulationHarness created.
+根据水位 2.0 m 计算得到初始体积 20.0 m^3
+New subscription to topic 'inflow_topic' for listener <bound method Reservoir.handle_inflow_message of <core_lib.physical_objects.reservoir.Reservoir object at 0x000001C2A7AEFB60>>.
+水库 'simple_tank' 已订阅数据入流主题 'inflow_topic'.
+水库 'simple_tank' 已创建，初始状态为 {'water_level': 2.0, 'outflow': 0, 'volume': 20.0}.
+Component 'reservoir_1' added.
+Component topology set on MessageBus.
+Topological sort complete. Update order determined.
+Simulation harness build complete and ready to run.
+Starting MAS simulation from 0 to 100 with dt=1.0
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+水库 'simple_tank' 入流已设置为 0 m³/s
+MAS simulation completed at time 100.00s
+Generated 100 steps of history data.
+
+=== 仿真完成 ===
+执行时间：0.49秒
+
+=== watertank_refactored_02_parameter_identification ===
+=== 运行示例：02 Parameter Identification ===
+描述：重构水箱示例 - 02_parameter_identification
+类别：watertank_refactored
+配置文件：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\watertank_refactored\02_parameter_identification\config.yml
+
+工作目录：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\watertank_refactored\02_parameter_identification
+开始仿真...
+MessageBus created.
+MessageBus created.
+SimulationHarness created.
+根据水位 2.0 m 计算得到初始体积 3.0 m^3
+New subscription to topic 'inflow_topic' for listener <bound method Reservoir.handle_inflow_message of <core_lib.physical_objects.reservoir.Reservoir object at 0x0000016D7F92B8C0>>.
+水库 'real_reservoir' 已订阅数据入流主题 'inflow_topic'.
+水库 'real_reservoir' 已创建，初始状态为 {'water_level': 2.0, 'outflow': 0, 'volume': np.float64(3.0)}.
+Component 'real_reservoir' added.
+Valve 'real_valve' created with initial state {'opening': 100.0, 'outflow': 0}.
+Component 'real_valve' added.
+根据水位 2.0 m 计算得到初始体积 3.0 m^3
+New subscription to topic 'inflow_topic' for listener <bound method Reservoir.handle_inflow_message of <core_lib.physical_objects.reservoir.Reservoir object at 0x0000016D7FA5F610>>.
+水库 'twin_reservoir' 已订阅数据入流主题 'inflow_topic'.
+水库 'twin_reservoir' 已创建，初始状态为 {'water_level': 2.0, 'outflow': 0, 'volume': np.float64(3.0)}.
+Component 'twin_reservoir' added.
+Valve 'twin_valve' created with initial state {'opening': 100.0, 'outflow': 0}.
+Component 'twin_valve' added.
+Connection added: real_reservoir -> real_valve
+Connection added: twin_reservoir -> twin_valve
+Component topology set on MessageBus.
+Resolving simulated_object_id 'real_valve' for agent 'real_valve_perception'
+Successfully resolved to: <class 'core_lib.physical_objects.valve.Valve'>
+DigitalTwinAgent 'real_valve_perception' 已为模型 'real_valve' 创建。将向主题 'real_valve_state_topic' 发布状态。
+Resolving simulated_object_id 'twin_reservoir' for agent 'twin_reservoir_perception'
+Successfully resolved to: <class 'core_lib.physical_objects.reservoir.Reservoir'>
+DigitalTwinAgent 'twin_reservoir_perception' 已为模型 'twin_reservoir' 创建。将向主题 'twin_reservoir_level_topic' 发布状态。
+Resolving simulated_object_id 'twin_valve' for agent 'twin_valve_perception'
+Successfully resolved to: <class 'core_lib.physical_objects.valve.Valve'>
+DigitalTwinAgent 'twin_valve_perception' 已为模型 'twin_valve' 创建。将向主题 'twin_valve_state_topic' 发布状态。
+New subscription to topic 'twin_valve_state_topic' for listener <function ParameterIdentificationAgent.__init__.<locals>.<lambda> at 0x0000016D7FAD59E0>.
+[identification_agent] Subscribed to topic 'twin_valve_state_topic' for model key 'openings' using data key 'opening'.
+New subscription to topic 'twin_reservoir_level_topic' for listener <function ParameterIdentificationAgent.__init__.<locals>.<lambda> at 0x0000016D0DAC71A0>.
+[identification_agent] Subscribed to topic 'twin_reservoir_level_topic' for model key 'upstream_levels' using data key 'water_level'.
+New subscription to topic 'downstream_level_topic' for listener <function ParameterIdentificationAgent.__init__.<locals>.<lambda> at 0x0000016D0DAC72E0>.
+[identification_agent] Subscribed to topic 'downstream_level_topic' for model key 'downstream_levels' using data key 'value'.
+New subscription to topic 'real_valve_state_topic' for listener <function ParameterIdentificationAgent.__init__.<locals>.<lambda> at 0x0000016D0DAC7600>.
+[identification_agent] Subscribed to topic 'real_valve_state_topic' for model key 'observed_flows' using data key 'outflow'.
+Topological sort complete. Update order determined.
+Simulation harness build complete and ready to run.
+Starting MAS simulation from 0 to 100 with dt=1.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+  [49.0s] [identification_agent] 已收集 50 个新数据点。正在触发参数辨识。
+[twin_valve] Starting parameter identification for 'discharge_coefficient'.
+[twin_valve] Identification complete. New discharge_coefficient: 0.4099
+  [identification_agent] 数据历史已清除。准备好进入下一个辨识周期。
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+  [99.0s] [identification_agent] 已收集 50 个新数据点。正在触发参数辨识。
+[twin_valve] Starting parameter identification for 'discharge_coefficient'.
+[twin_valve] Identification complete. New discharge_coefficient: 0.3578
+  [identification_agent] 数据历史已清除。准备好进入下一个辨识周期。
+水库 'real_reservoir' 入流已设置为 0 m³/s
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'twin_reservoir' 入流已设置为 0 m³/s
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+[real_valve] Step: target_opening=100.0, _state['opening']=100.0
+[twin_valve] Step: target_opening=100.0, _state['opening']=100.0
+MAS simulation completed at time 100.00s
+Generated 100 steps of history data.
+
+=== 仿真完成 ===
+执行时间：1.76秒
+
+=== watertank_refactored_03_pid_control_inlet ===
+INFO:root:加载场景: 03_pid_control_inlet
+INFO:root:SimulationBuilder initialized for scenario: 03_pid_control_inlet
+INFO:root:Setting up simulation infrastructure...
+INFO:root:ObjectFactory initialized with class map: dict_keys(['Reservoir', 'Gate', 'UnifiedCanal', 'Pipe', 'Pump', 'Valve', 'HydropowerStation', 'Lake', 'RiverChannel', 'WaterTurbine', 'RainfallRunoff', 'IntegralDelayCanal', 'PIDController', 'LocalControlAgent', 'DigitalTwinAgent', 'ParameterIdentificationAgent', 'CentralDispatcherAgent', 'CsvInflowAgent', 'EmergencyAgent', 'TopicLoggerAgent'])
+INFO:root:Loading physical components...
+INFO:root:Loaded 1 components.
+INFO:root:Loading topology...
+INFO:root:Topology loaded.
+INFO:root:Loading agents and controllers...
+INFO:root:CsvInflowAgent 'disturbance_agent' initialized. Loaded data from 'E:\OneDrive\Documents\GitHub\CHS-SDK\examples\watertank_refactored\03_pid_control_inlet\disturbance.csv'.
+
+=== watertank_refactored_04_pid_control_outlet ===
+INFO:root:加载场景: 04_pid_control_outlet
+INFO:root:SimulationBuilder initialized for scenario: 04_pid_control_outlet
+INFO:root:Setting up simulation infrastructure...
+INFO:root:ObjectFactory initialized with class map: dict_keys(['Reservoir', 'Gate', 'UnifiedCanal', 'Pipe', 'Pump', 'Valve', 'HydropowerStation', 'Lake', 'RiverChannel', 'WaterTurbine', 'RainfallRunoff', 'IntegralDelayCanal', 'PIDController', 'LocalControlAgent', 'DigitalTwinAgent', 'ParameterIdentificationAgent', 'CentralDispatcherAgent', 'CsvInflowAgent', 'EmergencyAgent', 'TopicLoggerAgent'])
+INFO:root:Loading physical components...
+INFO:root:Loaded 2 components.
+INFO:root:Loading topology...
+INFO:root:  - Connecting 'reservoir_1' -> 'valve_1'
+INFO:root:Topology loaded.
+INFO:root:Loading agents and controllers...
+INFO:root:CsvInflowAgent 'inflow_disturbance_agent' initialized. Loaded data from 'E:\OneDrive\Documents\GitHub\CHS-SDK\examples\watertank_refactored\04_pid_control_outlet\inflow_disturbance.csv'.
+
+=== watertank_refactored_05_joint_control ===
+INFO:root:加载场景: 05_joint_control
+INFO:root:SimulationBuilder initialized for scenario: 05_joint_control
+INFO:root:Setting up simulation infrastructure...
+INFO:root:ObjectFactory initialized with class map: dict_keys(['Reservoir', 'Gate', 'UnifiedCanal', 'Pipe', 'Pump', 'Valve', 'HydropowerStation', 'Lake', 'RiverChannel', 'WaterTurbine', 'RainfallRunoff', 'IntegralDelayCanal', 'PIDController', 'LocalControlAgent', 'DigitalTwinAgent', 'ParameterIdentificationAgent', 'CentralDispatcherAgent', 'CsvInflowAgent', 'EmergencyAgent', 'TopicLoggerAgent'])
+INFO:root:Loading physical components...
+INFO:root:Loaded 1 components.
+INFO:root:Loading topology...
+INFO:root:Topology loaded.
+INFO:root:Loading agents and controllers...
+INFO:root:CsvInflowAgent 'disturbance_outflow_agent' initialized. Loaded data from 'E:\OneDrive\Documents\GitHub\CHS-SDK\examples\watertank_refactored\05_joint_control\disturbance.csv'.
+
+=== watertank_refactored_06_sensor_disturbance ===
+INFO:root:加载场景: 06_sensor_disturbance
+INFO:root:SimulationBuilder initialized for scenario: 06_sensor_disturbance
+INFO:root:Setting up simulation infrastructure...
+INFO:root:ObjectFactory initialized with class map: dict_keys(['Reservoir', 'Gate', 'UnifiedCanal', 'Pipe', 'Pump', 'Valve', 'HydropowerStation', 'Lake', 'RiverChannel', 'WaterTurbine', 'RainfallRunoff', 'IntegralDelayCanal', 'PIDController', 'LocalControlAgent', 'DigitalTwinAgent', 'ParameterIdentificationAgent', 'CentralDispatcherAgent', 'CsvInflowAgent', 'EmergencyAgent', 'TopicLoggerAgent'])
+INFO:root:Loading physical components...
+INFO:root:Loaded 1 components.
+INFO:root:Loading topology...
+INFO:root:Topology loaded.
+INFO:root:Loading agents and controllers...
+INFO:root:CsvInflowAgent 'disturbance_agent' initialized. Loaded data from 'E:\OneDrive\Documents\GitHub\CHS-SDK\examples\watertank_refactored\06_sensor_disturbance\disturbance.csv'.
+
+=== watertank_refactored_07_actuator_disturbance ===
+INFO:root:加载场景: 07_actuator_disturbance
+INFO:root:SimulationBuilder initialized for scenario: 07_actuator_disturbance
+INFO:root:Setting up simulation infrastructure...
+INFO:root:ObjectFactory initialized with class map: dict_keys(['Reservoir', 'Gate', 'UnifiedCanal', 'Pipe', 'Pump', 'Valve', 'HydropowerStation', 'Lake', 'RiverChannel', 'WaterTurbine', 'RainfallRunoff', 'IntegralDelayCanal', 'PIDController', 'LocalControlAgent', 'DigitalTwinAgent', 'ParameterIdentificationAgent', 'CentralDispatcherAgent', 'CsvInflowAgent', 'EmergencyAgent', 'TopicLoggerAgent'])
+INFO:root:Loading physical components...
+INFO:root:Loaded 1 components.
+INFO:root:Loading topology...
+INFO:root:Topology loaded.
+INFO:root:Loading agents and controllers...
+INFO:root:CsvInflowAgent 'disturbance_agent' initialized. Loaded data from 'E:\OneDrive\Documents\GitHub\CHS-SDK\examples\watertank_refactored\07_actuator_disturbance\disturbance.csv'.
+
+=== mission_example_1_01_basic_simulation ===
+INFO:root:加载场景: 01_basic_simulation
+INFO:root:SimulationBuilder initialized for scenario: 01_basic_simulation
+INFO:root:Setting up simulation infrastructure...
+INFO:root:ObjectFactory initialized with class map: dict_keys(['Reservoir', 'Gate', 'UnifiedCanal', 'Pipe', 'Pump', 'Valve', 'HydropowerStation', 'Lake', 'RiverChannel', 'WaterTurbine', 'RainfallRunoff', 'IntegralDelayCanal', 'PIDController', 'LocalControlAgent', 'DigitalTwinAgent', 'ParameterIdentificationAgent', 'CentralDispatcherAgent', 'CsvInflowAgent', 'EmergencyAgent', 'TopicLoggerAgent'])
+INFO:root:Loading physical components...
+INFO:root:Loaded 2 components.
+INFO:root:Loading topology...
+INFO:root:Topology loaded.
+INFO:root:Loading agents and controllers...
+
+=== mission_example_1_02_advanced_control ===
+INFO:root:加载场景: 02_advanced_control
+INFO:root:SimulationBuilder initialized for scenario: 02_advanced_control
+INFO:root:Setting up simulation infrastructure...
+INFO:root:ObjectFactory initialized with class map: dict_keys(['Reservoir', 'Gate', 'UnifiedCanal', 'Pipe', 'Pump', 'Valve', 'HydropowerStation', 'Lake', 'RiverChannel', 'WaterTurbine', 'RainfallRunoff', 'IntegralDelayCanal', 'PIDController', 'LocalControlAgent', 'DigitalTwinAgent', 'ParameterIdentificationAgent', 'CentralDispatcherAgent', 'CsvInflowAgent', 'EmergencyAgent', 'TopicLoggerAgent'])
+INFO:root:Loading physical components...
+INFO:root:Loaded 4 components.
+INFO:root:Loading topology...
+INFO:root:Topology loaded.
+INFO:root:Loading agents and controllers...
+
+=== mission_example_1_03_fault_tolerance ===
+INFO:root:加载场景: 03_fault_tolerance
+INFO:root:SimulationBuilder initialized for scenario: 03_fault_tolerance
+INFO:root:Setting up simulation infrastructure...
+INFO:root:ObjectFactory initialized with class map: dict_keys(['Reservoir', 'Gate', 'UnifiedCanal', 'Pipe', 'Pump', 'Valve', 'HydropowerStation', 'Lake', 'RiverChannel', 'WaterTurbine', 'RainfallRunoff', 'IntegralDelayCanal', 'PIDController', 'LocalControlAgent', 'DigitalTwinAgent', 'ParameterIdentificationAgent', 'CentralDispatcherAgent', 'CsvInflowAgent', 'EmergencyAgent', 'TopicLoggerAgent'])
+INFO:root:Loading physical components...
+INFO:root:Loaded 5 components.
+INFO:root:Loading topology...
+INFO:root:Topology loaded.
+INFO:root:Loading agents and controllers...
+
+=== mission_example_1_04_digital_twin_advanced ===
+=== 运行示例：04 Digital Twin Advanced ===
+描述：Mission Example 1 - Basic Physics & Advanced Control - 04_digital_twin_advanced
+类别：mission_example_1
+配置文件：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\mission_example_1\04_digital_twin_advanced\config.yml
+
+工作目录：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\mission_example_1\04_digital_twin_advanced
+开始仿真...
+MessageBus created.
+MessageBus created.
+SimulationHarness created.
+Component 'upstream_canal' added.
+Component topology set on MessageBus.
+Resolving simulated_object_id 'upstream_canal' for agent 'digital_twin_agent'
+Successfully resolved to: <class 'core_lib.physical_objects.unified_canal.UnifiedCanal'>
+DigitalTwinAgent 'twin_agent_1' 已为模型 'upstream_canal' 创建。将向主题 'state/canal/level/smoothed' 发布状态。
+  - 已为以下键启用平滑处理: ['water_level']
+Topological sort complete. Update order determined.
+Simulation harness build complete and ready to run.
+Starting MAS simulation from 0 to 100 with dt=1.0
+MAS simulation completed at time 100.00s
+Generated 100 steps of history data.
+
+=== 仿真完成 ===
+执行时间：1.56秒
+
+=== mission_example_1_05_central_mpc_dispatcher ===
+=== 运行示例：05 Central Mpc Dispatcher ===
+描述：Mission Example 1 - Basic Physics & Advanced Control - 05_central_mpc_dispatcher
+类别：mission_example_1
+配置文件：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\mission_example_1\05_central_mpc_dispatcher\config.yml
+
+工作目录：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\mission_example_1\05_central_mpc_dispatcher
+开始仿真...
+MessageBus created.
+MessageBus created.
+SimulationHarness created.
+Component 'canal_upstream' added.
+Component 'canal_downstream' added.
+闸门 'gate_upstream' 已创建，初始状态为 {'opening': 0.5, 'outflow': 0}.
+Component 'gate_upstream' added.
+闸门 'gate_downstream' 已创建，初始状态为 {'opening': 0.4, 'outflow': 0}.
+Component 'gate_downstream' added.
+Component topology set on MessageBus.
+New subscription to topic 'state/canal_upstream/level' for listener <function CentralMPCAgent.__init__.<locals>.<lambda> at 0x000001E55D0F99E0>.
+New subscription to topic 'state/canal_downstream/level' for listener <function CentralMPCAgent.__init__.<locals>.<lambda> at 0x000001E55D0F98A0>.
+New subscription to topic 'forecast/inflow' for listener <bound method CentralMPCAgent._handle_forecast_message of <core_lib.central_agents.central_mpc_agent.CentralMPCAgent object at 0x000001E55D1041A0>>.
+Topological sort complete. Update order determined.
+Simulation harness build complete and ready to run.
+Starting MAS simulation from 0 to 100 with dt=1.0
+MAS simulation completed at time 100.00s
+Generated 100 steps of history data.
+
+=== 仿真完成 ===
+执行时间：0.03秒
+
+=== mission_example_2_01_local_control ===
+INFO:root:加载场景: 01_local_control
+INFO:root:SimulationBuilder initialized for scenario: 01_local_control
+INFO:root:Setting up simulation infrastructure...
+INFO:root:ObjectFactory initialized with class map: dict_keys(['Reservoir', 'Gate', 'UnifiedCanal', 'Pipe', 'Pump', 'Valve', 'HydropowerStation', 'Lake', 'RiverChannel', 'WaterTurbine', 'RainfallRunoff', 'IntegralDelayCanal', 'PIDController', 'LocalControlAgent', 'DigitalTwinAgent', 'ParameterIdentificationAgent', 'CentralDispatcherAgent', 'CsvInflowAgent', 'EmergencyAgent', 'TopicLoggerAgent'])
+INFO:root:Loading physical components...
+INFO:root:Loaded 3 components.
+INFO:root:Loading topology...
+INFO:root:Topology loaded.
+INFO:root:Loading agents and controllers...
+
+=== mission_example_2_02_hierarchical_control ===
+INFO:root:加载场景: 02_hierarchical_control
+INFO:root:SimulationBuilder initialized for scenario: 02_hierarchical_control
+INFO:root:Setting up simulation infrastructure...
+INFO:root:ObjectFactory initialized with class map: dict_keys(['Reservoir', 'Gate', 'UnifiedCanal', 'Pipe', 'Pump', 'Valve', 'HydropowerStation', 'Lake', 'RiverChannel', 'WaterTurbine', 'RainfallRunoff', 'IntegralDelayCanal', 'PIDController', 'LocalControlAgent', 'DigitalTwinAgent', 'ParameterIdentificationAgent', 'CentralDispatcherAgent', 'CsvInflowAgent', 'EmergencyAgent', 'TopicLoggerAgent'])
+INFO:root:Loading physical components...
+INFO:root:Loaded 6 components.
+INFO:root:Loading topology...
+INFO:root:Topology loaded.
+INFO:root:Loading agents and controllers...
+
+=== mission_example_2_03_watershed_coordination ===
+INFO:root:加载场景: 03_watershed_coordination
+INFO:root:SimulationBuilder initialized for scenario: 03_watershed_coordination
+INFO:root:Setting up simulation infrastructure...
+INFO:root:ObjectFactory initialized with class map: dict_keys(['Reservoir', 'Gate', 'UnifiedCanal', 'Pipe', 'Pump', 'Valve', 'HydropowerStation', 'Lake', 'RiverChannel', 'WaterTurbine', 'RainfallRunoff', 'IntegralDelayCanal', 'PIDController', 'LocalControlAgent', 'DigitalTwinAgent', 'ParameterIdentificationAgent', 'CentralDispatcherAgent', 'CsvInflowAgent', 'EmergencyAgent', 'TopicLoggerAgent'])
+INFO:root:Loading physical components...
+INFO:root:Loaded 10 components.
+INFO:root:Loading topology...
+INFO:root:Topology loaded.
+INFO:root:Loading agents and controllers...
+INFO:root:CentralDispatcherAgent 'watershed_coordinator' initializing in 'rule' mode.
+INFO:root:Monitoring 'water_level' on topic 'main_reservoir/water_level'.
+
+=== mission_example_3_01_enhanced_perception ===
+=== 运行示例：01 Enhanced Perception ===
+描述：Mission Example 3 - Enhanced Perception Systems - 01_enhanced_perception
+类别：mission_example_3
+配置文件：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\mission_example_3\01_enhanced_perception\config.yml
+
+工作目录：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\mission_example_3\01_enhanced_perception
+开始仿真...
+MessageBus created.
+MessageBus created.
+SimulationHarness created.
+根据水位 10.0 m 计算得到初始体积 1000.0 m^3
+水库 'reservoir' 从参数中设置初始入流为 0.0 m³/s
+水库 'reservoir' 已创建，初始状态为 {'water_level': 10.0, 'outflow': 0, 'volume': np.float64(1000.0)}.
+Component 'reservoir' added.
+Component topology set on MessageBus.
+Resolving simulated_object_id 'reservoir' for agent 'perception_agent'
+Successfully resolved to: <class 'core_lib.physical_objects.reservoir.Reservoir'>
+CognitiveEnhancer: 已启用异常检测。
+CognitiveEnhancer 已为变量初始化: ['water_level']
+DigitalTwinAgent 'perception_agent' 已为模型 'reservoir' 创建。将向主题 'perception/reservoir/state' 发布状态。
+  - 已启用高级认知功能。
+Topological sort complete. Update order determined.
+Simulation harness build complete and ready to run.
+Starting MAS simulation from 0 to 100 with dt=1.0
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+水库 'reservoir' 入流已设置为 0 m³/s
+MAS simulation completed at time 100.00s
+Generated 100 steps of history data.
+
+=== 仿真完成 ===
+执行时间：33.52秒
+
+=== mission_scenarios_yinchuojiliao ===
+=== 运行示例：Yinchuojiliao ===
+描述：Mission Scenario Examples - yinchuojiliao
+类别：mission_scenarios
+配置文件：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\mission_scenarios\yinchuojiliao\config.yml
+
+工作目录：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\mission_scenarios\yinchuojiliao
+开始仿真...
+MessageBus created.
+MessageBus created.
+SimulationHarness created.
+根据水位 350.0 m 计算得到初始体积 17500000000.0 m^3
+水库 'wendegen_reservoir' 已创建，初始状态为 {'water_level': 350.0, 'outflow': 0, 'volume': 17500000000.0}.
+Component 'wendegen_reservoir' added.
+闸门 'water_intake_gate' 已创建，初始状态为 {'opening': 0.5, 'outflow': 0}.
+Component 'water_intake_gate' added.
+Component 'tunnel_1' added.
+闸门 'taoriver_gate' 已创建，初始状态为 {'opening': 0.6, 'outflow': 0}.
+Component 'taoriver_gate' added.
+Component 'tunnel_2' added.
+闸门 'guiliu_gate' 已创建，初始状态为 {'opening': 0.6, 'outflow': 0}.
+Component 'guiliu_gate' added.
+Component 'tunnel_3' added.
+根据水位 320.0 m 计算得到初始体积 3200000.0 m^3
+水库 'connection_pool' 已创建，初始状态为 {'water_level': 320.0, 'outflow': 0, 'volume': 3200000.0}.
+Component 'connection_pool' added.
+管道 'pipe_1' 已创建，使用 'darcy_weisbach' 方法。
+Component 'pipe_1' added.
+Valve 'online_valve' created with initial state {'setting': 0.7, 'outflow': 0}.
+Component 'online_valve' added.
+管道 'pipe_2' 已创建，使用 'darcy_weisbach' 方法。
+Component 'pipe_2' added.
+Valve 'terminal_valve' created with initial state {'setting': 0.5, 'outflow': 0}.
+Component 'terminal_valve' added.
+根据水位 212.0 m 计算得到初始体积 21200000.0 m^3
+水库 'terminal_pool' 已创建，初始状态为 {'water_level': 212.0, 'outflow': 0, 'volume': 21200000.0}.
+Component 'terminal_pool' added.
+Connection added: wendegen_reservoir -> water_intake_gate
+Connection added: water_intake_gate -> tunnel_1
+Connection added: tunnel_1 -> taoriver_gate
+Connection added: taoriver_gate -> tunnel_2
+Connection added: tunnel_2 -> guiliu_gate
+Connection added: guiliu_gate -> tunnel_3
+Connection added: tunnel_3 -> connection_pool
+Connection added: connection_pool -> pipe_1
+Connection added: pipe_1 -> online_valve
+Connection added: online_valve -> pipe_2
+Connection added: pipe_2 -> terminal_valve
+Connection added: terminal_valve -> terminal_pool
+Component topology set on MessageBus.
+PIDController created with Kp=-0.1, Ki=-0.01, Kd=-0.05, Setpoint=324.2, OutputRange=[0, 1].
+Controller 'taoriver_ctrl' associated with component 'taoriver_gate'.
+PIDController created with Kp=-0.1, Ki=-0.01, Kd=-0.05, Setpoint=320.38, OutputRange=[0, 1].
+Controller 'guiliu_ctrl' associated with component 'guiliu_gate'.
+PIDController created with Kp=0.2, Ki=0.02, Kd=0.1, Setpoint=0.65, OutputRange=[0, 1].
+Controller 'online_valve_ctrl' associated with component 'online_valve'.
+PIDController created with Kp=-0.05, Ki=-0.005, Kd=-0.02, Setpoint=212.5, OutputRange=[0, 1].
+Controller 'terminal_valve_ctrl' associated with component 'terminal_valve'.
+PIDController created with Kp=-0.1, Ki=-0.01, Kd=-0.05, Setpoint=349.5, OutputRange=[0, 1].
+Controller 'intake_gate_ctrl' associated with component 'water_intake_gate'.
+Resolving simulated_object_id 'wendegen_reservoir' for agent 'twin_wendegen_reservoir'
+Successfully resolved to: <class 'core_lib.physical_objects.reservoir.Reservoir'>
+DigitalTwinAgent 'twin_wendegen_reservoir' 已为模型 'wendegen_reservoir' 创建。将向主题 'state/wendegen_reservoir' 发布状态。
+Resolving simulated_object_id 'water_intake_gate' for agent 'twin_water_intake_gate'
+Successfully resolved to: <class 'core_lib.physical_objects.gate.Gate'>
+DigitalTwinAgent 'twin_water_intake_gate' 已为模型 'water_intake_gate' 创建。将向主题 'state/water_intake_gate' 发布状态。
+Resolving simulated_object_id 'tunnel_1' for agent 'twin_tunnel_1'
+Successfully resolved to: <class 'core_lib.physical_objects.unified_canal.UnifiedCanal'>
+DigitalTwinAgent 'twin_tunnel_1' 已为模型 'tunnel_1' 创建。将向主题 'state/tunnel_1' 发布状态。
+Resolving simulated_object_id 'taoriver_gate' for agent 'twin_taoriver_gate'
+Successfully resolved to: <class 'core_lib.physical_objects.gate.Gate'>
+DigitalTwinAgent 'twin_taoriver_gate' 已为模型 'taoriver_gate' 创建。将向主题 'state/taoriver_gate' 发布状态。
+Resolving simulated_object_id 'tunnel_2' for agent 'twin_tunnel_2'
+Successfully resolved to: <class 'core_lib.physical_objects.unified_canal.UnifiedCanal'>
+DigitalTwinAgent 'twin_tunnel_2' 已为模型 'tunnel_2' 创建。将向主题 'state/tunnel_2' 发布状态。
+Resolving simulated_object_id 'guiliu_gate' for agent 'twin_guiliu_gate'
+Successfully resolved to: <class 'core_lib.physical_objects.gate.Gate'>
+DigitalTwinAgent 'twin_guiliu_gate' 已为模型 'guiliu_gate' 创建。将向主题 'state/guiliu_gate' 发布状态。
+Resolving simulated_object_id 'tunnel_3' for agent 'twin_tunnel_3'
+Successfully resolved to: <class 'core_lib.physical_objects.unified_canal.UnifiedCanal'>
+DigitalTwinAgent 'twin_tunnel_3' 已为模型 'tunnel_3' 创建。将向主题 'state/tunnel_3' 发布状态。
+Resolving simulated_object_id 'connection_pool' for agent 'twin_connection_pool'
+Successfully resolved to: <class 'core_lib.physical_objects.reservoir.Reservoir'>
+DigitalTwinAgent 'twin_connection_pool' 已为模型 'connection_pool' 创建。将向主题 'state/connection_pool' 发布状态。
+Resolving simulated_object_id 'pipe_1' for agent 'twin_pipe_1'
+Successfully resolved to: <class 'core_lib.physical_objects.pipe.Pipe'>
+DigitalTwinAgent 'twin_pipe_1' 已为模型 'pipe_1' 创建。将向主题 'state/pipe_1' 发布状态。
+Resolving simulated_object_id 'online_valve' for agent 'twin_online_valve'
+Successfully resolved to: <class 'core_lib.physical_objects.valve.Valve'>
+DigitalTwinAgent 'twin_online_valve' 已为模型 'online_valve' 创建。将向主题 'state/online_valve' 发布状态。
+Resolving simulated_object_id 'pipe_2' for agent 'twin_pipe_2'
+Successfully resolved to: <class 'core_lib.physical_objects.pipe.Pipe'>
+DigitalTwinAgent 'twin_pipe_2' 已为模型 'pipe_2' 创建。将向主题 'state/pipe_2' 发布状态。
+Resolving simulated_object_id 'terminal_valve' for agent 'twin_terminal_valve'
+Successfully resolved to: <class 'core_lib.physical_objects.valve.Valve'>
+DigitalTwinAgent 'twin_terminal_valve' 已为模型 'terminal_valve' 创建。将向主题 'state/terminal_valve' 发布状态。
+Resolving simulated_object_id 'terminal_pool' for agent 'twin_terminal_pool'
+Successfully resolved to: <class 'core_lib.physical_objects.reservoir.Reservoir'>
+DigitalTwinAgent 'twin_terminal_pool' 已为模型 'terminal_pool' 创建。将向主题 'state/terminal_pool' 发布状态。
+New subscription to topic 'state/pipe_1' for listener <bound method EmergencyAgent.handle_state_message of <core_lib.local_agents.supervisory.emergency_agent.EmergencyAgent object at 0x0000016D827B5D30>>.
+New subscription to topic 'state/pipe_2' for listener <bound method EmergencyAgent.handle_state_message of <core_lib.local_agents.supervisory.emergency_agent.EmergencyAgent object at 0x0000016D827B5D30>>.
+New subscription to topic 'state/terminal_pool' for listener <bound method CentralDispatcherAgent.handle_state_message of <core_lib.central_coordination.dispatch.central_dispatcher.CentralDispatcherAgent object at 0x0000016D827B5E80>>.
+Topological sort complete. Update order determined.
+Simulation harness build complete and ready to run.
+Starting MAS simulation from 0 to 100 with dt=1.0
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+水库 'wendegen_reservoir' 入流已设置为 0 m³/s
+水库 'connection_pool' 入流已设置为 0.0 m³/s
+[online_valve] Step: target_opening=100.0, _state['opening']=100.0
+[terminal_valve] Step: target_opening=100.0, _state['opening']=100.0
+水库 'terminal_pool' 入流已设置为 0 m³/s
+MAS simulation completed at time 100.00s
+Generated 100 steps of history data.
+
+=== 仿真完成 ===
+执行时间：1.68秒
+
+=== reservoir_identification ===
+=== 运行示例：水库参数辨识 ===
+描述：水库库容曲线参数辨识
+类别：identification
+配置文件：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\identification\01_reservoir_storage_curve\config.yml
+
+工作目录：E:\OneDrive\Documents\GitHub\CHS-SDK\examples\identification\01_reservoir_storage_curve
+开始仿真...
+MessageBus created.
+MessageBus created.
+SimulationHarness created.
+Component topology set on MessageBus.
+New subscription to topic 'state/twin_reservoir' for listener <bound method TopicLoggerAgent.handle_message of <core_lib.local_agents.utility.topic_logger_agent.TopicLoggerAgent object at 0x000001F52861C050>>.
+[logger_state_twin_reservoir] Initialized. Subscribed to log topic 'state/twin_reservoir'.
+New subscription to topic 'state/true_reservoir' for listener <bound method TopicLoggerAgent.handle_message of <core_lib.local_agents.utility.topic_logger_agent.TopicLoggerAgent object at 0x000001F5285939D0>>.
+[logger_state_true_reservoir] Initialized. Subscribed to log topic 'state/true_reservoir'.
+New subscription to topic 'identified_parameters/twin_reservoir' for listener <bound method TopicLoggerAgent.handle_message of <core_lib.local_agents.utility.topic_logger_agent.TopicLoggerAgent object at 0x000001F528593390>>.
+[logger_identified_parameters_twin_reservoir] Initialized. Subscribed to log topic 'identified_parameters/twin_reservoir'.
+Topological sort complete. Update order determined.
+Simulation harness build complete and ready to run.
+Starting MAS simulation from 0 to 100 with dt=3600
+MAS simulation completed at time 3600.00s
+Generated 1 steps of history data.
+
+=== 仿真完成 ===
+执行时间：0.02秒
+
+Universal Configuration Runner - 49 examples tested:
   Status: Passed
-  Execution time: 36.56 seconds
+  Execution time: 145.92 seconds
 

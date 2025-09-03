@@ -28,8 +28,7 @@ async def basic_auto_learning_example():
     
     # 创建知识库实例（启用自动学习）
     kb = KnowledgeBase(
-        project_root=str(project_root),
-        config_path=str(project_root / "core_lib" / "knowledge" / "knowledge_config.yml")
+        project_root=str(project_root)
     )
     
     try:

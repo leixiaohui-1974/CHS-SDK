@@ -1,0 +1,84 @@
+{
+  "physical": {
+    "active": {
+      "physical": [],
+      "network": []
+    },
+    "history": []
+  },
+  "dynamic": {
+    "active": [
+      "actuator_failure"
+    ],
+    "registered": [
+      "actuator_failure"
+    ]
+  },
+  "network": {
+    "active_disturbances": {
+      "high_delay": {
+        "disturbance_id": "high_delay",
+        "is_active": true,
+        "start_time": 1.0,
+        "end_time": 13.0,
+        "config": {
+          "parameters": {
+            "base_delay": 300,
+            "jitter": 150,
+            "packet_loss": 0.2,
+            "affected_topics": [
+              "*"
+            ],
+            "delay_mode": "random"
+          }
+        },
+        "message_bus_status": {
+          "enabled": true,
+          "base_delay": 0.3,
+          "jitter_range": 0.15,
+          "packet_loss_rate": 0.2,
+          "affected_topics": [
+            "*"
+          ],
+          "affected_agents": [],
+          "pending_messages": 0,
+          "stats": {
+            "total_published": 60,
+            "delayed_messages": 0,
+            "dropped_messages": 0,
+            "delivered_messages": 0
+          }
+        }
+      }
+    },
+    "message_bus_status": {
+      "enabled": true,
+      "base_delay": 0.3,
+      "jitter_range": 0.15,
+      "packet_loss_rate": 0.2,
+      "affected_topics": [
+        "*"
+      ],
+      "affected_agents": [],
+      "pending_messages": 0,
+      "stats": {
+        "total_published": 60,
+        "delayed_messages": 0,
+        "dropped_messages": 0,
+        "delivered_messages": 0
+      }
+    },
+    "disturbance_history": [],
+    "performance_metrics": {
+      "total_messages_processed": 0,
+      "total_delays_applied": 0,
+      "total_packets_dropped": 0,
+      "avg_processing_time_ms": 0.0,
+      "peak_processing_time_ms": 0.0,
+      "cache_hit_rate": 0.0,
+      "cache_size": 0,
+      "batch_buffer_size": 0,
+      "message_pool_size": 0
+    }
+  }
+}

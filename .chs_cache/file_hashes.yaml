@@ -88,7 +88,7 @@
 ".\\\u5206\u5E03\u5F0F\u8BA1\u7B97\u91CD\u6784\uFF08\u5728dist\uFF09.md": 6a5ddce06d029e691c87924470fe0dee
 ".\\\u524D\u7AEF\u5F00\u53D1.md": 62761a587a2b03bf366b2692e3c42fed
 ".\\\u540E\u7AEF\u5F00\u53D1.md": 22da3a96265af2496a369a25bde17f51
-E:\OneDrive\Documents\GitHub\CHS-SDK\.chs_cache\file_hashes.yaml: f5e7dde9963c25fa4854d2da9825938c
+E:\OneDrive\Documents\GitHub\CHS-SDK\.chs_cache\file_hashes.yaml: b8ea87237d916294899e42f70e5d8057
 E:\OneDrive\Documents\GitHub\CHS-SDK\.pytest_cache\README.md: 11c87436abd496719b2727c87d217993
 E:\OneDrive\Documents\GitHub\CHS-SDK\AGENT_ARCHITECTURE.md: 142f6bd1f07c2bcb82c4a6b15f818203
 E:\OneDrive\Documents\GitHub\CHS-SDK\DEPLOYMENT.md: fa50d7e040101553315f5c577413e169
@@ -163,6 +163,7 @@ E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\config\enhanced_yaml_loader.py: 0e
 E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\config\example_universal_config.yml: 587dd6decf0d345ea7e13342de55f697
 E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\config\unified_config_manager.py: d2c7fb4d7fdaa0a314b6ebc13d37a81f
 E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\config\universal_config_template.yml: 4a310a8ce40429edbde05da86e801cb9
+E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\core\enhanced_message_bus.py: 81868515dc90fd281b6df78e1151fd62
 E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\core\interfaces.py: 7712e3f7cafbc31811d722ac237fe137
 E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\core_engine\agent_factory\__init__.py: dab824dd94bfb4042048acb3d4dce897
 E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\core_engine\agent_factory\factory.py: be4eea0123668c36c52023248887f4b5
@@ -174,8 +175,9 @@ E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\core_engine\solver\network_solver.
 E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\core_engine\template\template_manager.py: 7d3a3c0cbe83aac94b24bf18432e8f94
 E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\core_engine\testing\__init__.py: 830c7b71902e5a66b52c1f9394003fb3
 E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\core_engine\testing\common_agents.py: ab2790b78b984199847404f1874794bb
+E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\core_engine\testing\enhanced_simulation_harness.py: 8f2e85560bf928b374266ce1225a8584
 E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\core_engine\testing\simulation_builder.py: e20a2632b86da7a9ac59907327d45ca8
-E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\core_engine\testing\simulation_harness.py: f03153bee64662caecbb392a2cae287c
+E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\core_engine\testing\simulation_harness.py: b526263cca9912df78e7770710ecb902
 E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\data_access\__init__.py: d41d8cd98f00b204e9800998ecf8427e
 E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\data_access\csv_data_source.py: 9688f11467730135d9b5cf8a2f8016c1
 E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\data_access\csv_inflow_agent.py: 896dc292a995eb8a1b39f3325cd87145
@@ -193,7 +195,11 @@ E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\debug\log_analyzer.py: c052ddb3c6b
 E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\debug\log_manager.py: ecb1aa5a153ac9c3af84cafba1b6e4ea
 E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\disturbances\__init__.py: 3378695165b5d57135cdca832e813088
 E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\disturbances\csv_reader_agent.py: 1ca71d1df9bc5e9e64c89ea4a646940f
+E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\disturbances\disturbance_framework.py: 60625a137a9a3dcb3be137c042d4b0cd
 E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\disturbances\dynamic_rainfall_agent.py: e808728eee6454fa92d99c46260a6fd6
+E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\disturbances\network_disturbance.py: a2ee4ec32ad50612e571b5d119d3b4b9
+E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\disturbances\performance_optimized_disturbance_manager.py: cd4efa7ca97f244cb5884533fe9eafa4
+E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\disturbances\performance_optimized_network_manager.py: 399634ab91cd36d5a090b38b56da47d8
 E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\disturbances\rainfall_agent.py: 0f8b25edc742e9978cec3c94ded2fa9a
 E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\disturbances\water_use_agent.py: 66b351da24ae9fe05f2c17161f9a91d3
 E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\disturbances\weather.py: 6fa5e6c7847e3dd819765010fddc4987
@@ -216,6 +222,7 @@ E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\io\yaml_loader.py: 016bbff61b02084
 E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\io\yaml_writer.py: d50b288282c98c9288c93cd8bdc96fd9
 E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\knowledge\auto_learning.py: 6aa3993801298316f883ad73e4938db9
 E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\knowledge\auto_learning_config.yml: 1336db938e82a1a6a6fa52d34afddac9
+E:\OneDrive\Documents\GitHub\CHS-SDK\core_lib\knowledge\knowledge_api.py: 8e416e434efae11e5e71ae994d9b446f
 E:\OneDrive\Documents\GitHub\CHS-SDK\demo_auto_learning.py: d34f0fa82b64498fe8a3e3bfafbca8cf
 E:\OneDrive\Documents\GitHub\CHS-SDK\docker-compose.backup.yml: e685fb91be76c94db32f30d4bd3e9ba2
 E:\OneDrive\Documents\GitHub\CHS-SDK\docker-compose.monitoring.yml: 9ee517e50cc2fc7bd82228e7d326ccb7
@@ -228,7 +235,7 @@ E:\OneDrive\Documents\GitHub\CHS-SDK\requirements-test.txt: 0c86755318d90b5e5bd8
 E:\OneDrive\Documents\GitHub\CHS-SDK\requirements.txt: 8db03dd2990a15ab085fe8d2167df7b9
 E:\OneDrive\Documents\GitHub\CHS-SDK\run_config_template.py: 52385de1c1aa405eb4a4b5bbdfd4218e
 E:\OneDrive\Documents\GitHub\CHS-SDK\run_scenario.py: e42468bb7473cc0436f6e8c9408965d1
-E:\OneDrive\Documents\GitHub\CHS-SDK\run_unified_scenario.py: 36609386a94974b1090110ceea072d18
+E:\OneDrive\Documents\GitHub\CHS-SDK\run_unified_scenario.py: 341b36dca62855db31487bdd4a1bd6e9
 E:\OneDrive\Documents\GitHub\CHS-SDK\test_auto_learning.py: 5f69115a55ad7d296d0d87817d718e63
 E:\OneDrive\Documents\GitHub\CHS-SDK\test_debug_system.py: e8d6a123a0d57c41077d4d0c46711957
 E:\OneDrive\Documents\GitHub\CHS-SDK\test_output_config.py: a6bb4ce6788b917d57ecf0d25cd23f52

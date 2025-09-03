@@ -62,12 +62,18 @@ def run_correctly_refactored_pid_control_outlet():
     # LocalControlAgent 在这里仅用于封装PID逻辑，其发布的动作在主循环中直接读取
     valve_controller = LocalControlAgent(
         agent_id="valve_control_01",
-        controller=pid_controller,
         message_bus=message_bus,
+        dt=sim_conf['time_step'],
+        target_component="valve",
+        control_type="valve_control",
+        data_sources={"primary_data": msg_conf['state_topic']},
+        control_targets={"primary_target": msg_conf['command_topic']},
+        allocation_config={},
+        controller_config={},
+        controller=pid_controller,
         observation_topic=msg_conf['state_topic'],
         observation_key='water_level',
-        action_topic=msg_conf['command_topic'], # 可以是虚拟主题
-        dt=sim_conf['time_step']
+        action_topic=msg_conf['command_topic'] # 可以是虚拟主题
     )
 
     # 6. 运行仿真循环

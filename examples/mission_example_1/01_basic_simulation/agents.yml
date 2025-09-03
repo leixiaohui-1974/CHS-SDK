@@ -1,8 +1,18 @@
 # Defines all agents in the simulation
 agents:
   - id: gate_controller
-    class: LocalControlAgent
-    controller:
+    class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
+    dt: 10.0
+    target_component: gate1
+    control_type: pid
+    data_sources:
+      observation_topic: water_level_topic
+      observation_key: water_level
+    control_targets:
+      action_topic: gate1/opening_command
+    allocation_config:
+      method: direct
+    controller_config:
       class: PIDController
       Kp: 0.5
       Ki: 0.1
@@ -10,10 +20,6 @@ agents:
       setpoint: 2.5
       min_output: 0.0
       max_output: 1.0
-    observation_topic: water_level_topic
-    observation_key: water_level
-    action_topic: gate1/opening_command
-    dt: 10.0
 
   - id: water_level_sensor
     class: core_lib.local_agents.io.physical_io_agent.PhysicalIOAgent

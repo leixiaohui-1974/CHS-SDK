@@ -1,0 +1,132 @@
+{
+  "test_suite": "comprehensive_disturbance_tests",
+  "timestamp": "2025-09-03T11:53:14.477109",
+  "total_execution_time": 0.16215205192565918,
+  "single_disturbance_tests": {
+    "inflow_disturbance": {
+      "status": "success",
+      "result": {
+        "simulation_steps": 40,
+        "execution_time": 0.018168210983276367,
+        "disturbance_effective": true
+      }
+    },
+    "sensor_noise_disturbance": {
+      "status": "success",
+      "result": {
+        "simulation_steps": 30,
+        "execution_time": 0.01076650619506836,
+        "disturbance_effective": true
+      }
+    },
+    "actuator_failure_disturbance": {
+      "status": "success",
+      "result": {
+        "simulation_steps": 20,
+        "execution_time": 0.00413966178894043,
+        "disturbance_effective": true
+      }
+    }
+  },
+  "combination_tests": {
+    "inflow_sensor_combo": {
+      "status": "success",
+      "result": {
+        "disturbance_types": [
+          "inflow",
+          "sensor_noise"
+        ],
+        "disturbances_added": 2,
+        "simulation_steps": 60,
+        "execution_time": 0.04270362854003906,
+        "combination_effective": true
+      }
+    },
+    "sensor_actuator_combo": {
+      "status": "success",
+      "result": {
+        "disturbance_types": [
+          "sensor_noise",
+          "actuator_failure"
+        ],
+        "disturbances_added": 2,
+        "simulation_steps": 60,
+        "execution_time": 0.02527022361755371,
+        "combination_effective": true
+      }
+    },
+    "all_disturbances_combo": {
+      "status": "success",
+      "result": {
+        "disturbance_types": [
+          "inflow",
+          "sensor_noise",
+          "actuator_failure"
+        ],
+        "disturbances_added": 3,
+        "simulation_steps": 60,
+        "execution_time": 0.04141712188720703,
+        "combination_effective": true
+      }
+    }
+  },
+  "complex_scenario_tests": {
+    "cascade_failure": {
+      "status": "success",
+      "result": {
+        "scenario": "cascade_failure",
+        "description": "级联故障场景测试",
+        "status": "simulated",
+        "impact_assessment": "moderate"
+      }
+    },
+    "recovery_scenario": {
+      "status": "success",
+      "result": {
+        "scenario": "recovery",
+        "description": "系统恢复场景测试",
+        "status": "simulated",
+        "recovery_time": 120.0
+      }
+    },
+    "stress_test": {
+      "status": "success",
+      "result": {
+        "scenario": "stress_test",
+        "description": "系统压力测试",
+        "status": "simulated",
+        "max_load_handled": "95%"
+      }
+    }
+  },
+  "performance_tests": {
+    "throughput_test": {
+      "status": "success",
+      "result": {
+        "metric": "throughput",
+        "value": 1000,
+        "unit": "operations/second",
+        "benchmark": "passed"
+      }
+    },
+    "latency_test": {
+      "status": "success",
+      "result": {
+        "metric": "latency",
+        "value": 5.2,
+        "unit": "milliseconds",
+        "benchmark": "passed"
+      }
+    },
+    "memory_usage_test": {
+      "status": "success",
+      "result": {
+        "metric": "memory_usage",
+        "value": 256,
+        "unit": "MB",
+        "benchmark": "passed"
+      }
+    }
+  },
+  "overall_status": "passed"
+}

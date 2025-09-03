@@ -8,6 +8,7 @@ from core_lib.core.interfaces import Simulatable, Agent, Controller
 from core_lib.central_coordination.collaboration.message_bus import MessageBus
 from core_lib.physical_objects.gate import Gate
 from core_lib.physical_objects.reservoir import Reservoir
+from core_lib.disturbances.disturbance_framework import DisturbanceManager, BaseDisturbance
 from typing import List, Dict, Any, NamedTuple
 
 class ControllerSpec(NamedTuple):
@@ -43,6 +44,9 @@ class SimulationHarness:
         self.message_bus = MessageBus()
         self._is_paused = threading.Event()
         self.is_running = False
+        
+        # 扰动管理器
+        self.disturbance_manager = DisturbanceManager()
 
         print("SimulationHarness created.")
 
@@ -75,6 +79,24 @@ class SimulationHarness:
         spec = ControllerSpec(controller, controlled_id, observed_id, observation_key)
         self.controllers[controller_id] = spec
         print(f"Controller '{controller_id}' associated with component '{controlled_id}'.")
+    
+    def add_disturbance(self, disturbance: BaseDisturbance):
+        """添加扰动到仿真中"""
+        self.disturbance_manager.register_disturbance(disturbance)
+        print(f"扰动 {disturbance.config.disturbance_id} 已添加到仿真中")
+    
+    def remove_disturbance(self, disturbance_id: str):
+        """从仿真中移除扰动"""
+        self.disturbance_manager.remove_disturbance(disturbance_id)
+        print(f"扰动 {disturbance_id} 已从仿真中移除")
+    
+    def get_active_disturbances(self) -> List[str]:
+        """获取当前活跃的扰动列表"""
+        return self.disturbance_manager.get_active_disturbances()
+    
+    def get_disturbance_history(self) -> List[Dict[str, Any]]:
+        """获取扰动历史"""
+        return self.disturbance_manager.get_disturbance_history()
 
     def _topological_sort(self):
         """
@@ -214,8 +236,21 @@ class SimulationHarness:
         if controller_actions is None:
             controller_actions = {}
 
+        # 更新扰动状态
+        disturbance_effects = self.disturbance_manager.update(self.t, dt, self.components)
+        
         new_states = {}
         current_step_outflows = {}
+        
+        # 记录哪些组件受到扰动影响，避免自动入流覆盖
+        disturbed_components = set()
+        for disturbance_id, effect in disturbance_effects.items():
+            if 'applied_inflow' in effect:
+                # 找到对应的扰动配置
+                for dist_id, disturbance in self.disturbance_manager.active_disturbances.items():
+                    if dist_id == disturbance_id:
+                        disturbed_components.add(disturbance.config.target_component_id)
+                        break
 
         for component_id in self.sorted_components:
             component = self.components[component_id]
@@ -225,7 +260,9 @@ class SimulationHarness:
             for upstream_id in self.inverse_topology.get(component_id, []):
                 total_inflow += current_step_outflows.get(upstream_id, 0)
 
-            component.set_inflow(total_inflow)
+            # 只有在组件没有受到入流扰动影响时才设置自动计算的入流
+            if component_id not in disturbed_components:
+                component.set_inflow(total_inflow)
 
             if hasattr(component, 'is_stateful') and component.is_stateful:
                 total_outflow = 0

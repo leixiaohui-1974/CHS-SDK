@@ -2,11 +2,17 @@
 agents:
   - id: upstream_controller
     class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
-    agent_id: upstream_pid_controller
-    observation_topic: canal1/water_level
-    observation_key: water_level
-    action_topic: gate1/opening_command
-    controller:
+    dt: 10.0
+    target_component: gate1
+    control_type: pid
+    data_sources:
+      observation_topic: canal1/water_level
+      observation_key: water_level
+    control_targets:
+      action_topic: gate1/opening_command
+    allocation_config:
+      method: direct
+    controller_config:
       class: core_lib.local_agents.control.pid_controller.PIDController
       Kp: 0.6
       Ki: 0.15
@@ -17,11 +23,17 @@ agents:
 
   - id: downstream_controller
     class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
-    agent_id: downstream_pid_controller
-    observation_topic: canal2/water_level
-    observation_key: water_level
-    action_topic: gate2/opening_command
-    controller:
+    dt: 10.0
+    target_component: gate2
+    control_type: pid
+    data_sources:
+      observation_topic: canal2/water_level
+      observation_key: water_level
+    control_targets:
+      action_topic: gate2/opening_command
+    allocation_config:
+      method: direct
+    controller_config:
       class: core_lib.local_agents.control.pid_controller.PIDController
       Kp: 0.4
       Ki: 0.1

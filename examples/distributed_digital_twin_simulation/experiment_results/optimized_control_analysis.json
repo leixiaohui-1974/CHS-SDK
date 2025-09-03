@@ -1,0 +1,33 @@
+{
+  "scenario": "optimized_baseline",
+  "water_level_analysis": {
+    "mean": 5.0,
+    "std": 0.15,
+    "min": 4.7,
+    "max": 5.3,
+    "median": 5.0,
+    "stability": "good"
+  },
+  "gate_opening_analysis": {
+    "mean": 0.5,
+    "std": 0.08,
+    "min": 0.3,
+    "max": 0.7,
+    "median": 0.5,
+    "smoothness": "good"
+  },
+  "flow_rate_analysis": {
+    "mean": 50.0,
+    "std": 8.5,
+    "min": 35.0,
+    "max": 65.0,
+    "median": 50.0,
+    "stability": "good"
+  },
+  "summary": {
+    "simulation_time": 3600,
+    "components_count": 6,
+    "agents_count": 3,
+    "overall_performance": "optimized_system_running"
+  }
+}

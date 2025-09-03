@@ -1,0 +1,495 @@
+{
+  "scenario_name": "downstream_demand_change",
+  "timestamp": "2025-09-03T08:14:14.264943",
+  "simulation_time": 100,
+  "components_count": 9,
+  "agents_count": 13,
+  "controllers_count": 0,
+  "water_level_stats": {
+    "mean": 10.25,
+    "std": 3.491060010942235,
+    "min": 6.0,
+    "max": 15.0,
+    "median": 10.0
+  },
+  "water_level_count": 400,
+  "flow_rate_stats": {
+    "mean": 18.402307721526807,
+    "std": 28.136834803069334,
+    "min": 0.0,
+    "max": 79.21186828213787,
+    "median": 0.0
+  },
+  "flow_rate_count": 900,
+  "gate_opening_stats": {
+    "mean": 0.6,
+    "std": 0.08164965809277258,
+    "min": 0.5,
+    "max": 0.7,
+    "median": 0.6
+  },
+  "gate_opening_count": 300,
+  "component_statistics": {
+    "Upstream_Reservoir": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 15.0,
+        "volume": 15000000.0,
+        "outflow": 0,
+        "inflow": 0.0
+      }
+    },
+    "Gate_1": {
+      "data_points": 100,
+      "last_state": {
+        "opening": 0.5,
+        "outflow": 0
+      }
+    },
+    "Channel_1": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 8.0,
+        "volume": 792039.4709530965,
+        "outflow": 79.21186828213787
+      }
+    },
+    "Diversion_1": {
+      "data_points": 100,
+      "last_state": {
+        "outflow": 15.0,
+        "passthrough_flow": 0,
+        "inflow": 0
+      }
+    },
+    "Gate_2": {
+      "data_points": 100,
+      "last_state": {
+        "opening": 0.6,
+        "outflow": 0
+      }
+    },
+    "Channel_2": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 6.0,
+        "volume": 594029.6032148224,
+        "outflow": 59.40890121160339
+      }
+    },
+    "Diversion_2": {
+      "data_points": 100,
+      "last_state": {
+        "outflow": 12.0,
+        "passthrough_flow": 0,
+        "inflow": 0
+      }
+    },
+    "Gate_3": {
+      "data_points": 100,
+      "last_state": {
+        "opening": 0.7,
+        "outflow": 0
+      }
+    },
+    "Downstream_Reservoir": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 12.0,
+        "volume": 12000000.0,
+        "outflow": 0,
+        "inflow": 0.0
+      }
+    }
+  },
+  "system_stability": {
+    "water_level_variance": 12.1875,
+    "water_level_range": 9.0,
+    "coefficient_of_variation": 0.34059122057973024
+  },
+  "disturbance_config": {
+    "disturbance_scenario": {
+      "name": "Downstream_Demand_Change_Disturbance",
+      "description": "模拟下游用户用水需求的时空变化和突发事件",
+      "type": "downstream_demand_change",
+      "category": "water_demand",
+      "parameters": {
+        "downstream_users": {
+          "urban_water_supply": {
+            "location": "City_A",
+            "baseline_demand": 150,
+            "user_type": "municipal",
+            "priority_level": "high",
+            "supply_reliability": 0.98
+          },
+          "industrial_users": {
+            "location": "Industrial_Zone_B",
+            "baseline_demand": 80,
+            "user_type": "industrial",
+            "priority_level": "medium",
+            "supply_reliability": 0.95
+          },
+          "agricultural_irrigation": {
+            "location": "Irrigation_District_C",
+            "baseline_demand": 200,
+            "user_type": "agricultural",
+            "priority_level": "low",
+            "supply_reliability": 0.9
+          },
+          "ecological_water": {
+            "location": "Wetland_Reserve_D",
+            "baseline_demand": 30,
+            "user_type": "ecological",
+            "priority_level": "medium",
+            "supply_reliability": 0.85
+          }
+        },
+        "demand_variation_patterns": {
+          "daily_patterns": {
+            "urban_daily_cycle": {
+              "description": "城市用水日周期",
+              "peak_hours": [
+                7,
+                8,
+                19,
+                20
+              ],
+              "peak_multiplier": 1.4,
+              "valley_hours": [
+                2,
+                3,
+                4,
+                5
+              ],
+              "valley_multiplier": 0.6,
+              "weekend_adjustment": 0.9
+            },
+            "industrial_shift_pattern": {
+              "description": "工业用水班次模式",
+              "shift_hours": [
+                [
+                  6,
+                  14
+                ],
+                [
+                  14,
+                  22
+                ],
+                [
+                  22,
+                  6
+                ]
+              ],
+              "shift_multipliers": [
+                1.2,
+                1.0,
+                0.3
+              ],
+              "maintenance_days": [
+                "Sunday"
+              ],
+              "maintenance_multiplier": 0.1
+            },
+            "agricultural_irrigation_cycle": {
+              "description": "农业灌溉周期",
+              "irrigation_periods": [
+                [
+                  5,
+                  9
+                ],
+                [
+                  17,
+                  21
+                ]
+              ],
+              "irrigation_multiplier": 1.8,
+              "non_irrigation_multiplier": 0.2,
+              "crop_growth_adjustment": [
+                0.8,
+                1.0,
+                1.2,
+                1.5,
+                1.3,
+                1.0,
+                0.5
+              ]
+            }
+          },
+          "seasonal_patterns": {
+            "urban_seasonal": {
+              "description": "城市用水季节变化",
+              "monthly_multipliers": [
+                0.9,
+                0.9,
+                1.0,
+                1.1,
+                1.2,
+                1.4,
+                1.5,
+                1.4,
+                1.2,
+                1.1,
+                1.0,
+                0.9
+              ],
+              "temperature_correlation": 0.8,
+              "holiday_adjustments": {
+                "spring_festival": 0.7,
+                "summer_vacation": 1.1,
+                "national_holiday": 0.8
+              }
+            },
+            "agricultural_seasonal": {
+              "description": "农业用水季节变化",
+              "growing_season": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+              ],
+              "growing_multiplier": 1.5,
+              "dormant_multiplier": 0.3,
+              "drought_response": 2.0,
+              "flood_response": 0.5
+            },
+            "industrial_seasonal": {
+              "description": "工业用水季节变化",
+              "production_cycles": {
+                "high_season": [
+                  6,
+                  7,
+                  8,
+                  11,
+                  12
+                ],
+                "low_season": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "seasonal_multipliers": [
+                0.8,
+                1.2
+              ]
+            }
+          },
+          "stochastic_variations": {
+            "short_term_fluctuation": {
+              "description": "短期随机波动",
+              "noise_type": "gaussian",
+              "noise_amplitude": 0.1,
+              "correlation_time": 3600
+            },
+            "demand_uncertainty": {
+              "description": "需求不确定性",
+              "uncertainty_range": 0.15,
+              "confidence_interval": 0.95,
+              "forecast_accuracy": 0.85
+            },
+            "extreme_events": {
+              "description": "极端用水事件",
+              "event_types": {
+                "water_shortage_panic": {
+                  "probability": 0.01,
+                  "demand_multiplier": 2.5,
+                  "duration": 7200
+                },
+                "emergency_supply": {
+                  "probability": 0.005,
+                  "demand_multiplier": 3.0,
+                  "duration": 3600
+                },
+                "industrial_accident": {
+                  "probability": 0.002,
+                  "demand_reduction": 0.8,
+                  "duration": 14400
+                }
+              }
+            }
+          }
+        },
+        "demand_forecasting": {
+          "enable": true,
+          "forecasting_methods": {
+            "time_series_analysis": {
+              "method": "ARIMA",
+              "forecast_horizon": 24,
+              "update_frequency": 3600,
+              "accuracy_target": 0.9
+            },
+            "machine_learning": {
+              "method": "LSTM",
+              "input_features": [
+                "historical_demand",
+                "weather_data",
+                "economic_indicators",
+                "social_events"
+              ],
+              "training_period": 8760
+            },
+            "ensemble_forecasting": {
+              "methods": [
+                "ARIMA",
+                "LSTM",
+                "SVR"
+              ],
+              "weight_optimization": true,
+              "uncertainty_quantification": true
+            }
+          },
+          "forecast_accuracy": {
+            "short_term": 0.95,
+            "medium_term": 0.85,
+            "long_term": 0.75
+          }
+        },
+        "demand_response": {
+          "enable": true,
+          "response_mechanisms": {
+            "price_based_response": {
+              "enable": true,
+              "price_elasticity": -0.3,
+              "peak_pricing_multiplier": 2.0,
+              "off_peak_discount": 0.7
+            },
+            "incentive_programs": {
+              "water_conservation_rebate": 0.1,
+              "load_shifting_incentive": 0.05,
+              "emergency_curtailment_compensation": 0.2
+            },
+            "regulatory_measures": {
+              "water_use_restrictions": {
+                "drought_level_1": 0.9,
+                "drought_level_2": 0.8,
+                "drought_level_3": 0.7,
+                "emergency_restriction": 0.5
+              }
+            }
+          }
+        },
+        "supply_demand_balance": {
+          "enable": true,
+          "balancing_mechanisms": {
+            "priority_allocation": {
+              "enable": true,
+              "allocation_rules": [
+                "生活用水优先",
+                "工业用水次之",
+                "农业用水再次",
+                "生态用水最后"
+              ],
+              "shortage_sharing_ratio": [
+                0.05,
+                0.15,
+                0.6,
+                0.2
+              ]
+            },
+            "flexible_supply": {
+              "enable": true,
+              "backup_sources": [
+                "groundwater_wells",
+                "recycled_water",
+                "emergency_reserves"
+              ],
+              "activation_thresholds": [
+                0.9,
+                0.8,
+                0.7
+              ]
+            },
+            "demand_management": {
+              "enable": true,
+              "management_strategies": [
+                "peak_shaving",
+                "load_shifting",
+                "conservation_promotion",
+                "efficiency_improvement"
+              ]
+            }
+          }
+        },
+        "disturbance_scenarios": [
+          {
+            "scenario_id": "urban_peak_demand",
+            "start_time": 25200,
+            "duration": 7200,
+            "affected_users": [
+              "urban_water_supply"
+            ],
+            "demand_multiplier": 1.6,
+            "description": "城市用水高峰"
+          },
+          {
+            "scenario_id": "agricultural_irrigation_surge",
+            "start_time": 18000,
+            "duration": 14400,
+            "affected_users": [
+              "agricultural_irrigation"
+            ],
+            "demand_multiplier": 2.2,
+            "description": "农业灌溉高峰"
+          },
+          {
+            "scenario_id": "industrial_emergency_demand",
+            "start_time": 43200,
+            "duration": 3600,
+            "affected_users": [
+              "industrial_users"
+            ],
+            "demand_multiplier": 2.8,
+            "description": "工业应急用水"
+          },
+          {
+            "scenario_id": "multi_user_peak_overlap",
+            "start_time": 64800,
+            "duration": 5400,
+            "affected_users": [
+              "urban_water_supply",
+              "industrial_users"
+            ],
+            "demand_multiplier": 1.8,
+            "description": "多用户需求叠加"
+          }
+        ]
+      },
+      "trigger_conditions": {
+        "start_time": 0,
+        "duration": 86400,
+        "trigger_type": "scenario_based"
+      },
+      "monitoring": {
+        "metrics": [
+          "supply_demand_ratio",
+          "user_satisfaction_index",
+          "water_shortage_duration",
+          "demand_forecast_accuracy",
+          "system_flexibility",
+          "economic_efficiency"
+        ],
+        "sampling_interval": 300
+      },
+      "expected_impact": {
+        "severity": "high",
+        "affected_components": [
+          "供水调度",
+          "水资源分配",
+          "系统压力",
+          "用户满意度"
+        ],
+        "impact_description": "下游用水变化将增加供水调度难度，影响水资源优化配置",
+        "quantitative_impact": {
+          "supply_stress_increase": 0.4,
+          "scheduling_complexity_increase": 0.6,
+          "user_satisfaction_decrease": 0.15,
+          "economic_loss_ratio": 0.08,
+          "system_resilience_test": 0.7
+        }
+      }
+    }
+  }
+}

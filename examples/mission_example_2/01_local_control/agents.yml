@@ -1,13 +1,18 @@
 # Defines agents for local control scenario
 agents:
   - id: local_controller
-    class: LocalControlAgent
+    class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
+    dt: 10.0
     target_component: gate1
-    control_variable: opening
-    observation_key: water_level
-    observation_topic: reservoir1/water_level
-    action_topic: gate1/opening_command
-    controller:
+    control_type: pid
+    data_sources:
+      observation_topic: reservoir1/water_level
+      observation_key: water_level
+    control_targets:
+      action_topic: gate1/opening_command
+    allocation_config:
+      method: direct
+    controller_config:
       class: PIDController
       Kp: 0.8
       Ki: 0.2

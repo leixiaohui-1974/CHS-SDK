@@ -1,0 +1,384 @@
+{
+  "scenario_name": "sensor_interference",
+  "timestamp": "2025-09-03T20:51:16.604822",
+  "simulation_time": 100,
+  "components_count": 9,
+  "agents_count": 13,
+  "controllers_count": 0,
+  "water_level_stats": {
+    "mean": 10.25,
+    "std": 3.491060010942235,
+    "min": 6.0,
+    "max": 15.0,
+    "median": 10.0
+  },
+  "water_level_count": 400,
+  "flow_rate_stats": {
+    "mean": 18.402307721526807,
+    "std": 28.136834803069334,
+    "min": 0.0,
+    "max": 79.21186828213787,
+    "median": 0.0
+  },
+  "flow_rate_count": 900,
+  "gate_opening_stats": {
+    "mean": 0.6,
+    "std": 0.08164965809277258,
+    "min": 0.5,
+    "max": 0.7,
+    "median": 0.6
+  },
+  "gate_opening_count": 300,
+  "component_statistics": {
+    "Upstream_Reservoir": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 15.0,
+        "volume": 15000000.0,
+        "outflow": 0,
+        "inflow": 0.0
+      }
+    },
+    "Gate_1": {
+      "data_points": 100,
+      "last_state": {
+        "opening": 0.5,
+        "outflow": 0
+      }
+    },
+    "Channel_1": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 8.0,
+        "volume": 792039.4709530965,
+        "outflow": 79.21186828213787
+      }
+    },
+    "Diversion_1": {
+      "data_points": 100,
+      "last_state": {
+        "outflow": 15.0,
+        "passthrough_flow": 0,
+        "inflow": 0
+      }
+    },
+    "Gate_2": {
+      "data_points": 100,
+      "last_state": {
+        "opening": 0.6,
+        "outflow": 0
+      }
+    },
+    "Channel_2": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 6.0,
+        "volume": 594029.6032148224,
+        "outflow": 59.40890121160339
+      }
+    },
+    "Diversion_2": {
+      "data_points": 100,
+      "last_state": {
+        "outflow": 12.0,
+        "passthrough_flow": 0,
+        "inflow": 0
+      }
+    },
+    "Gate_3": {
+      "data_points": 100,
+      "last_state": {
+        "opening": 0.7,
+        "outflow": 0
+      }
+    },
+    "Downstream_Reservoir": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 12.0,
+        "volume": 12000000.0,
+        "outflow": 0,
+        "inflow": 0.0
+      }
+    }
+  },
+  "system_stability": {
+    "water_level_variance": 12.1875,
+    "water_level_range": 9.0,
+    "coefficient_of_variation": 0.34059122057973024
+  },
+  "disturbance_config": {
+    "disturbance_scenario": {
+      "name": "Sensor_Interference_Disturbance",
+      "description": "模拟传感器测量过程中的干扰、噪声和故障",
+      "type": "sensor_interference",
+      "category": "measurement_system",
+      "parameters": {
+        "sensor_systems": {
+          "water_level_sensors": {
+            "locations": [
+              "Upstream_Reservoir",
+              "Channel_1",
+              "Channel_2",
+              "Downstream_Reservoir"
+            ],
+            "baseline_accuracy": 0.02,
+            "measurement_range": [
+              0,
+              30
+            ]
+          },
+          "flow_rate_sensors": {
+            "locations": [
+              "Gate_1",
+              "Gate_2",
+              "Gate_3",
+              "Diversion_1",
+              "Diversion_2"
+            ],
+            "baseline_accuracy": 0.5,
+            "measurement_range": [
+              0,
+              300
+            ]
+          },
+          "gate_position_sensors": {
+            "locations": [
+              "Gate_1",
+              "Gate_2",
+              "Gate_3"
+            ],
+            "baseline_accuracy": 0.01,
+            "measurement_range": [
+              0,
+              1
+            ]
+          }
+        },
+        "interference_types": {
+          "measurement_noise": {
+            "description": "随机测量噪声",
+            "noise_models": {
+              "gaussian_noise": {
+                "mean": 0.0,
+                "std_multiplier": 5.0
+              },
+              "uniform_noise": {
+                "range_multiplier": 3.0
+              },
+              "colored_noise": {
+                "correlation_time": 300,
+                "intensity": 2.5
+              }
+            }
+          },
+          "systematic_bias": {
+            "description": "系统性测量偏差",
+            "bias_types": {
+              "constant_bias": {
+                "water_level": 0.1,
+                "flow_rate": 2.0,
+                "gate_position": 0.02
+              },
+              "drift_bias": {
+                "drift_rate": 0.001,
+                "max_drift": 0.5
+              },
+              "temperature_dependent": {
+                "coefficient": 0.002,
+                "reference_temp": 20
+              }
+            }
+          },
+          "signal_interference": {
+            "description": "电磁和环境干扰",
+            "interference_sources": {
+              "electromagnetic": {
+                "frequency_range": [
+                  50,
+                  60
+                ],
+                "amplitude": 0.05,
+                "intermittent": true
+              },
+              "vibration": {
+                "frequency": 10,
+                "amplitude": 0.02
+              },
+              "weather_related": {
+                "rain_effect": 0.1,
+                "wind_effect": 0.05
+              }
+            }
+          },
+          "sensor_faults": {
+            "description": "传感器硬件故障",
+            "fault_types": {
+              "calibration_error": {
+                "probability": 0.02,
+                "error_magnitude": 0.2,
+                "duration": 3600
+              },
+              "signal_loss": {
+                "probability": 0.01,
+                "duration": 300,
+                "recovery_time": 60
+              },
+              "stuck_reading": {
+                "probability": 0.005,
+                "duration": 1800
+              },
+              "saturation": {
+                "probability": 0.01,
+                "threshold": 0.95
+              }
+            }
+          }
+        },
+        "interference_scenarios": [
+          {
+            "scenario_id": "high_noise_period",
+            "start_time": 7200,
+            "duration": 3600,
+            "affected_sensors": [
+              "all_water_level"
+            ],
+            "interference_type": "measurement_noise",
+            "intensity": "high"
+          },
+          {
+            "scenario_id": "systematic_bias_event",
+            "start_time": 18000,
+            "duration": 7200,
+            "affected_sensors": [
+              "Gate_1_flow",
+              "Gate_2_flow"
+            ],
+            "interference_type": "systematic_bias",
+            "intensity": "medium"
+          },
+          {
+            "scenario_id": "electromagnetic_interference",
+            "start_time": 32400,
+            "duration": 1800,
+            "affected_sensors": [
+              "all_gate_position"
+            ],
+            "interference_type": "signal_interference",
+            "intensity": "high"
+          },
+          {
+            "scenario_id": "sensor_fault_cascade",
+            "start_time": 43200,
+            "duration": 3600,
+            "affected_sensors": [
+              "Channel_1_level",
+              "Channel_2_level"
+            ],
+            "interference_type": "sensor_faults",
+            "intensity": "critical"
+          }
+        ]
+      },
+      "trigger_conditions": {
+        "start_time": 0,
+        "duration": 86400,
+        "trigger_type": "scenario_based"
+      },
+      "data_quality_assessment": {
+        "enable": true,
+        "quality_metrics": [
+          "accuracy",
+          "precision",
+          "completeness",
+          "consistency",
+          "timeliness"
+        ],
+        "quality_thresholds": {
+          "min_accuracy": 0.9,
+          "max_noise_level": 0.1,
+          "min_data_availability": 0.95
+        },
+        "outlier_detection": {
+          "enable": true,
+          "methods": [
+            "statistical_outlier",
+            "physical_constraint_check",
+            "temporal_consistency_check"
+          ],
+          "threshold_multiplier": 3.0
+        }
+      },
+      "data_cleaning": {
+        "enable": true,
+        "cleaning_methods": {
+          "noise_filtering": [
+            "moving_average",
+            "kalman_filter",
+            "median_filter"
+          ],
+          "bias_correction": [
+            "reference_comparison",
+            "historical_calibration",
+            "cross_validation"
+          ],
+          "gap_filling": [
+            "linear_interpolation",
+            "spline_interpolation",
+            "model_based_estimation"
+          ]
+        },
+        "validation_rules": [
+          "physical_feasibility",
+          "temporal_continuity",
+          "spatial_consistency",
+          "mass_balance_check"
+        ]
+      },
+      "redundancy_strategy": {
+        "enable": true,
+        "redundancy_levels": {
+          "critical_sensors": 3,
+          "important_sensors": 2,
+          "regular_sensors": 1
+        },
+        "backup_systems": [
+          "virtual_sensor_network",
+          "model_based_estimation",
+          "neighboring_sensor_inference"
+        ],
+        "fault_tolerance": {
+          "max_failed_sensors": 2,
+          "graceful_degradation": true,
+          "emergency_mode": true
+        }
+      },
+      "monitoring": {
+        "metrics": [
+          "sensor_availability",
+          "measurement_accuracy",
+          "data_quality_index",
+          "fault_detection_rate",
+          "system_observability"
+        ],
+        "sampling_interval": 30
+      },
+      "expected_impact": {
+        "severity": "high",
+        "affected_components": [
+          "状态估计",
+          "控制决策",
+          "系统监测",
+          "故障诊断"
+        ],
+        "impact_description": "传感器干扰将降低系统观测能力，影响状态估计精度和控制性能",
+        "quantitative_impact": {
+          "state_estimation_error": 1.5,
+          "control_performance_loss": 0.2,
+          "false_alarm_rate": 0.05,
+          "missed_detection_rate": 0.1
+        }
+      }
+    }
+  }
+}

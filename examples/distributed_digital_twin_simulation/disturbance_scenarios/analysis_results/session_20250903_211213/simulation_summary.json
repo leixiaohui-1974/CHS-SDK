@@ -1,0 +1,4491 @@
+{
+  "baseline": {
+    "scenario_name": "baseline",
+    "timestamp": "2025-09-03T21:12:15.307371",
+    "simulation_time": 100,
+    "components_count": 9,
+    "agents_count": 13,
+    "controllers_count": 0,
+    "water_level_stats": {
+      "mean": 10.25,
+      "std": 3.491060010942235,
+      "min": 6.0,
+      "max": 15.0,
+      "median": 10.0
+    },
+    "water_level_count": 400,
+    "flow_rate_stats": {
+      "mean": 18.402307721526807,
+      "std": 28.136834803069334,
+      "min": 0.0,
+      "max": 79.21186828213787,
+      "median": 0.0
+    },
+    "flow_rate_count": 900,
+    "gate_opening_stats": {
+      "mean": 0.6,
+      "std": 0.08164965809277258,
+      "min": 0.5,
+      "max": 0.7,
+      "median": 0.6
+    },
+    "gate_opening_count": 300,
+    "component_statistics": {
+      "Upstream_Reservoir": {
+        "data_points": 100,
+        "last_state": {
+          "water_level": 15.0,
+          "volume": 15000000.0,
+          "outflow": 0,
+          "inflow": 0.0
+        }
+      },
+      "Gate_1": {
+        "data_points": 100,
+        "last_state": {
+          "opening": 0.5,
+          "outflow": 0
+        }
+      },
+      "Channel_1": {
+        "data_points": 100,
+        "last_state": {
+          "water_level": 8.0,
+          "volume": 792039.4709530965,
+          "outflow": 79.21186828213787
+        }
+      },
+      "Diversion_1": {
+        "data_points": 100,
+        "last_state": {
+          "outflow": 15.0,
+          "passthrough_flow": 0,
+          "inflow": 0
+        }
+      },
+      "Gate_2": {
+        "data_points": 100,
+        "last_state": {
+          "opening": 0.6,
+          "outflow": 0
+        }
+      },
+      "Channel_2": {
+        "data_points": 100,
+        "last_state": {
+          "water_level": 6.0,
+          "volume": 594029.6032148224,
+          "outflow": 59.40890121160339
+        }
+      },
+      "Diversion_2": {
+        "data_points": 100,
+        "last_state": {
+          "outflow": 12.0,
+          "passthrough_flow": 0,
+          "inflow": 0
+        }
+      },
+      "Gate_3": {
+        "data_points": 100,
+        "last_state": {
+          "opening": 0.7,
+          "outflow": 0
+        }
+      },
+      "Downstream_Reservoir": {
+        "data_points": 100,
+        "last_state": {
+          "water_level": 12.0,
+          "volume": 12000000.0,
+          "outflow": 0,
+          "inflow": 0.0
+        }
+      }
+    },
+    "system_stability": {
+      "water_level_variance": 12.1875,
+      "water_level_range": 9.0,
+      "coefficient_of_variation": 0.34059122057973024
+    }
+  },
+  "basic_disturbances": {
+    "actuator_interference": {
+      "scenario_name": "actuator_interference",
+      "timestamp": "2025-09-03T21:12:15.557635",
+      "simulation_time": 100,
+      "components_count": 9,
+      "agents_count": 13,
+      "controllers_count": 0,
+      "water_level_stats": {
+        "mean": 10.25,
+        "std": 3.491060010942235,
+        "min": 6.0,
+        "max": 15.0,
+        "median": 10.0
+      },
+      "water_level_count": 400,
+      "flow_rate_stats": {
+        "mean": 18.402307721526807,
+        "std": 28.136834803069334,
+        "min": 0.0,
+        "max": 79.21186828213787,
+        "median": 0.0
+      },
+      "flow_rate_count": 900,
+      "gate_opening_stats": {
+        "mean": 0.6,
+        "std": 0.08164965809277258,
+        "min": 0.5,
+        "max": 0.7,
+        "median": 0.6
+      },
+      "gate_opening_count": 300,
+      "component_statistics": {
+        "Upstream_Reservoir": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 15.0,
+            "volume": 15000000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          }
+        },
+        "Gate_1": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.5,
+            "outflow": 0
+          }
+        },
+        "Channel_1": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 8.0,
+            "volume": 792039.4709530965,
+            "outflow": 79.21186828213787
+          }
+        },
+        "Diversion_1": {
+          "data_points": 100,
+          "last_state": {
+            "outflow": 15.0,
+            "passthrough_flow": 0,
+            "inflow": 0
+          }
+        },
+        "Gate_2": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.6,
+            "outflow": 0
+          }
+        },
+        "Channel_2": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 6.0,
+            "volume": 594029.6032148224,
+            "outflow": 59.40890121160339
+          }
+        },
+        "Diversion_2": {
+          "data_points": 100,
+          "last_state": {
+            "outflow": 12.0,
+            "passthrough_flow": 0,
+            "inflow": 0
+          }
+        },
+        "Gate_3": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.7,
+            "outflow": 0
+          }
+        },
+        "Downstream_Reservoir": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 12.0,
+            "volume": 12000000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          }
+        }
+      },
+      "system_stability": {
+        "water_level_variance": 12.1875,
+        "water_level_range": 9.0,
+        "coefficient_of_variation": 0.34059122057973024
+      },
+      "disturbance_config": {
+        "disturbance_scenario": {
+          "name": "Actuator_Interference_Disturbance",
+          "description": "模拟执行器控制系统的干扰、故障和性能退化",
+          "type": "actuator_interference",
+          "category": "control_system",
+          "parameters": {
+            "actuator_systems": {
+              "gate_actuators": {
+                "locations": [
+                  "Gate_1",
+                  "Gate_2",
+                  "Gate_3"
+                ],
+                "actuator_type": "hydraulic",
+                "response_time": 30,
+                "max_speed": 0.02,
+                "position_accuracy": 0.01,
+                "force_capacity": 50000
+              },
+              "pump_actuators": {
+                "locations": [
+                  "Pump_Station_1",
+                  "Pump_Station_2"
+                ],
+                "actuator_type": "electric",
+                "response_time": 5,
+                "max_speed": 0.1,
+                "flow_accuracy": 0.02,
+                "power_capacity": 500
+              },
+              "valve_actuators": {
+                "locations": [
+                  "Control_Valve_1",
+                  "Control_Valve_2",
+                  "Emergency_Valve"
+                ],
+                "actuator_type": "pneumatic",
+                "response_time": 10,
+                "max_speed": 0.05,
+                "position_accuracy": 0.005,
+                "pressure_capacity": 1000
+              }
+            },
+            "interference_types": {
+              "control_signal_interference": {
+                "description": "控制信号传输干扰",
+                "interference_sources": {
+                  "signal_noise": {
+                    "amplitude": 0.2,
+                    "frequency_range": [
+                      0.1,
+                      10
+                    ],
+                    "type": "white_noise"
+                  },
+                  "signal_delay": {
+                    "mean_delay": 5.0,
+                    "delay_variation": 3.0,
+                    "max_delay": 15.0
+                  },
+                  "signal_distortion": {
+                    "harmonic_distortion": 0.1,
+                    "phase_shift": 15,
+                    "amplitude_error": 0.08
+                  }
+                }
+              },
+              "mechanical_degradation": {
+                "description": "机械部件磨损和老化",
+                "degradation_factors": {
+                  "friction_increase": {
+                    "rate": 0.001,
+                    "max_increase": 0.5
+                  },
+                  "backlash_growth": {
+                    "rate": 0.0005,
+                    "max_backlash": 0.1
+                  },
+                  "stiffness_reduction": {
+                    "rate": 0.0002,
+                    "min_stiffness": 0.7
+                  },
+                  "wear_accumulation": {
+                    "wear_rate": 0.001,
+                    "critical_wear": 0.8
+                  }
+                }
+              },
+              "power_system_faults": {
+                "description": "动力系统故障和异常",
+                "fault_types": {
+                  "power_fluctuation": {
+                    "voltage_variation": 0.1,
+                    "frequency_variation": 0.02,
+                    "power_interruption": 0.01
+                  },
+                  "hydraulic_pressure_drop": {
+                    "pressure_loss_rate": 0.05,
+                    "min_pressure": 0.6,
+                    "recovery_time": 300
+                  },
+                  "pneumatic_leakage": {
+                    "leakage_rate": 0.02,
+                    "min_pressure": 0.7,
+                    "detection_delay": 600
+                  }
+                }
+              },
+              "control_system_faults": {
+                "description": "控制系统硬件和软件故障",
+                "fault_categories": {
+                  "sensor_feedback_error": {
+                    "position_error": 0.05,
+                    "velocity_error": 0.1,
+                    "force_error": 0.08
+                  },
+                  "controller_malfunction": {
+                    "gain_drift": 0.2,
+                    "offset_error": 0.03,
+                    "saturation_limit": 0.9
+                  },
+                  "communication_failure": {
+                    "packet_loss": 0.02,
+                    "transmission_delay": 5,
+                    "protocol_error": 0.001
+                  }
+                }
+              }
+            },
+            "interference_scenarios": [
+              {
+                "scenario_id": "control_signal_noise",
+                "start_time": 3600,
+                "duration": 7200,
+                "affected_actuators": [
+                  "Gate_1",
+                  "Gate_2"
+                ],
+                "interference_type": "control_signal_interference",
+                "intensity": "medium",
+                "parameters": {
+                  "noise_amplitude": 0.08,
+                  "signal_delay": 3.0
+                }
+              },
+              {
+                "scenario_id": "mechanical_wear_event",
+                "start_time": 14400,
+                "duration": 21600,
+                "affected_actuators": [
+                  "Gate_3"
+                ],
+                "interference_type": "mechanical_degradation",
+                "intensity": "high",
+                "parameters": {
+                  "friction_multiplier": 2.0,
+                  "backlash_increase": 0.05
+                }
+              },
+              {
+                "scenario_id": "power_system_fault",
+                "start_time": 28800,
+                "duration": 1800,
+                "affected_actuators": [
+                  "Pump_Station_1"
+                ],
+                "interference_type": "power_system_faults",
+                "intensity": "critical",
+                "parameters": {
+                  "voltage_drop": 0.15,
+                  "power_interruption_duration": 60
+                }
+              },
+              {
+                "scenario_id": "control_system_malfunction",
+                "start_time": 50400,
+                "duration": 3600,
+                "affected_actuators": [
+                  "Control_Valve_1",
+                  "Control_Valve_2"
+                ],
+                "interference_type": "control_system_faults",
+                "intensity": "high",
+                "parameters": {
+                  "controller_gain_error": 0.3,
+                  "feedback_delay": 8
+                }
+              }
+            ],
+            "performance_degradation": {
+              "enable": true,
+              "degradation_models": {
+                "exponential_decay": {
+                  "time_constant": 8760,
+                  "initial_performance": 1.0,
+                  "final_performance": 0.8
+                },
+                "linear_degradation": {
+                  "degradation_rate": 0.0001,
+                  "maintenance_recovery": 0.9
+                },
+                "step_degradation": {
+                  "failure_probability": 0.001,
+                  "performance_drop": 0.3,
+                  "repair_time": 86400
+                }
+              }
+            },
+            "fault_detection": {
+              "enable": true,
+              "detection_methods": {
+                "performance_monitoring": {
+                  "response_time_threshold": 1.5,
+                  "accuracy_threshold": 0.05,
+                  "efficiency_threshold": 0.9
+                },
+                "vibration_analysis": {
+                  "frequency_bands": [
+                    10,
+                    100,
+                    1000
+                  ],
+                  "amplitude_threshold": 2.0,
+                  "trend_analysis": true
+                },
+                "thermal_monitoring": {
+                  "temperature_threshold": 80,
+                  "thermal_gradient": 10,
+                  "cooling_efficiency": 0.8
+                }
+              },
+              "diagnostic_algorithms": [
+                "model_based_diagnosis",
+                "data_driven_diagnosis",
+                "expert_system_diagnosis",
+                "machine_learning_diagnosis"
+              ],
+              "alarm_thresholds": {
+                "warning_level": 0.1,
+                "alarm_level": 0.2,
+                "critical_level": 0.4
+              }
+            },
+            "compensation_strategies": {
+              "enable": true,
+              "compensation_methods": {
+                "adaptive_control": {
+                  "enable": true,
+                  "adaptation_rate": 0.1,
+                  "parameter_bounds": [
+                    0.5,
+                    2.0
+                  ],
+                  "stability_margin": 0.2
+                },
+                "feedforward_compensation": {
+                  "enable": true,
+                  "model_accuracy": 0.9,
+                  "update_frequency": 60
+                },
+                "robust_control": {
+                  "enable": true,
+                  "uncertainty_bounds": 0.3,
+                  "performance_weight": 0.8
+                }
+              },
+              "maintenance_scheduling": {
+                "predictive_maintenance": true,
+                "maintenance_intervals": {
+                  "routine_check": 168,
+                  "preventive_maintenance": 720,
+                  "overhaul": 8760
+                },
+                "condition_based_triggers": {
+                  "performance_threshold": 0.85,
+                  "wear_threshold": 0.7,
+                  "fault_frequency": 0.1
+                }
+              }
+            }
+          },
+          "trigger_conditions": {
+            "start_time": 0,
+            "duration": 86400,
+            "trigger_type": "scenario_based"
+          },
+          "monitoring": {
+            "metrics": [
+              "actuator_response_time",
+              "position_accuracy",
+              "control_effectiveness",
+              "energy_efficiency",
+              "fault_occurrence_rate",
+              "maintenance_cost"
+            ],
+            "sampling_interval": 60
+          },
+          "expected_impact": {
+            "severity": "high",
+            "affected_components": [
+              "控制精度",
+              "系统响应",
+              "能耗效率",
+              "设备寿命"
+            ],
+            "impact_description": "执行器干扰将降低控制精度，影响系统响应速度和稳定性",
+            "quantitative_impact": {
+              "control_accuracy_loss": 0.3,
+              "response_time_increase": 1.5,
+              "energy_consumption_increase": 0.2,
+              "maintenance_cost_increase": 0.4,
+              "system_availability_loss": 0.05
+            }
+          }
+        }
+      }
+    },
+    "data_packet_loss": {
+      "scenario_name": "data_packet_loss",
+      "timestamp": "2025-09-03T21:12:15.796501",
+      "simulation_time": 100,
+      "components_count": 9,
+      "agents_count": 13,
+      "controllers_count": 0,
+      "water_level_stats": {
+        "mean": 10.25,
+        "std": 3.491060010942235,
+        "min": 6.0,
+        "max": 15.0,
+        "median": 10.0
+      },
+      "water_level_count": 400,
+      "flow_rate_stats": {
+        "mean": 18.402307721526807,
+        "std": 28.136834803069334,
+        "min": 0.0,
+        "max": 79.21186828213787,
+        "median": 0.0
+      },
+      "flow_rate_count": 900,
+      "gate_opening_stats": {
+        "mean": 0.6,
+        "std": 0.08164965809277258,
+        "min": 0.5,
+        "max": 0.7,
+        "median": 0.6
+      },
+      "gate_opening_count": 300,
+      "component_statistics": {
+        "Upstream_Reservoir": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 15.0,
+            "volume": 15000000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          }
+        },
+        "Gate_1": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.5,
+            "outflow": 0
+          }
+        },
+        "Channel_1": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 8.0,
+            "volume": 792039.4709530965,
+            "outflow": 79.21186828213787
+          }
+        },
+        "Diversion_1": {
+          "data_points": 100,
+          "last_state": {
+            "outflow": 15.0,
+            "passthrough_flow": 0,
+            "inflow": 0
+          }
+        },
+        "Gate_2": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.6,
+            "outflow": 0
+          }
+        },
+        "Channel_2": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 6.0,
+            "volume": 594029.6032148224,
+            "outflow": 59.40890121160339
+          }
+        },
+        "Diversion_2": {
+          "data_points": 100,
+          "last_state": {
+            "outflow": 12.0,
+            "passthrough_flow": 0,
+            "inflow": 0
+          }
+        },
+        "Gate_3": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.7,
+            "outflow": 0
+          }
+        },
+        "Downstream_Reservoir": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 12.0,
+            "volume": 12000000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          }
+        }
+      },
+      "system_stability": {
+        "water_level_variance": 12.1875,
+        "water_level_range": 9.0,
+        "coefficient_of_variation": 0.34059122057973024
+      },
+      "disturbance_config": {
+        "disturbance_scenario": {
+          "name": "Data_Packet_Loss_Disturbance",
+          "description": "模拟分布式智能体间的数据包丢失",
+          "type": "packet_loss",
+          "category": "communication",
+          "parameters": {
+            "loss_levels": {
+              "low": {
+                "loss_rate": 0.01,
+                "burst_loss": false,
+                "recovery_time": 5
+              },
+              "medium": {
+                "loss_rate": 0.05,
+                "burst_loss": true,
+                "burst_duration": 10,
+                "recovery_time": 15
+              },
+              "high": {
+                "loss_rate": 0.15,
+                "burst_loss": true,
+                "burst_duration": 30,
+                "recovery_time": 60
+              },
+              "extreme": {
+                "loss_rate": 0.3,
+                "burst_loss": true,
+                "burst_duration": 60,
+                "recovery_time": 120
+              }
+            },
+            "affected_data_flows": [
+              {
+                "source": "ontology_simulation",
+                "target": "Channel1_Twin_Agent",
+                "data_type": "water_level",
+                "loss_level": "medium"
+              },
+              {
+                "source": "ontology_simulation",
+                "target": "Channel2_Twin_Agent",
+                "data_type": "flow_rate",
+                "loss_level": "medium"
+              },
+              {
+                "source": "Gate1_Perception_Agent",
+                "target": "CentralPerceptionAgent",
+                "data_type": "gate_status",
+                "loss_level": "low"
+              },
+              {
+                "source": "Gate2_Perception_Agent",
+                "target": "CentralPerceptionAgent",
+                "data_type": "gate_status",
+                "loss_level": "low"
+              },
+              {
+                "source": "Gate3_Perception_Agent",
+                "target": "CentralPerceptionAgent",
+                "data_type": "gate_status",
+                "loss_level": "low"
+              },
+              {
+                "source": "CentralMPCAgent",
+                "target": "Gate1_Control_Agent",
+                "data_type": "control_command",
+                "loss_level": "high"
+              }
+            ]
+          },
+          "trigger_conditions": {
+            "start_time": 5400,
+            "duration": 3600,
+            "trigger_type": "time_based"
+          },
+          "recovery_strategy": {
+            "enable_buffering": true,
+            "buffer_size": 100,
+            "retransmission": true,
+            "max_retries": 3,
+            "timeout": 30
+          },
+          "monitoring": {
+            "metrics": [
+              "data_integrity",
+              "information_completeness",
+              "control_accuracy",
+              "system_robustness"
+            ],
+            "sampling_interval": 30
+          },
+          "expected_impact": {
+            "severity": "high",
+            "affected_components": [
+              "数据传输层",
+              "感知智能体",
+              "控制决策"
+            ],
+            "impact_description": "数据丢包将导致信息不完整，影响状态估计精度和控制决策质量"
+          }
+        }
+      }
+    },
+    "diversion_demand_change": {
+      "scenario_name": "diversion_demand_change",
+      "timestamp": "2025-09-03T21:12:16.056996",
+      "simulation_time": 100,
+      "components_count": 9,
+      "agents_count": 13,
+      "controllers_count": 0,
+      "water_level_stats": {
+        "mean": 10.25,
+        "std": 3.491060010942235,
+        "min": 6.0,
+        "max": 15.0,
+        "median": 10.0
+      },
+      "water_level_count": 400,
+      "flow_rate_stats": {
+        "mean": 18.402307721526807,
+        "std": 28.136834803069334,
+        "min": 0.0,
+        "max": 79.21186828213787,
+        "median": 0.0
+      },
+      "flow_rate_count": 900,
+      "gate_opening_stats": {
+        "mean": 0.6,
+        "std": 0.08164965809277258,
+        "min": 0.5,
+        "max": 0.7,
+        "median": 0.6
+      },
+      "gate_opening_count": 300,
+      "component_statistics": {
+        "Upstream_Reservoir": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 15.0,
+            "volume": 15000000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          }
+        },
+        "Gate_1": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.5,
+            "outflow": 0
+          }
+        },
+        "Channel_1": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 8.0,
+            "volume": 792039.4709530965,
+            "outflow": 79.21186828213787
+          }
+        },
+        "Diversion_1": {
+          "data_points": 100,
+          "last_state": {
+            "outflow": 15.0,
+            "passthrough_flow": 0,
+            "inflow": 0
+          }
+        },
+        "Gate_2": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.6,
+            "outflow": 0
+          }
+        },
+        "Channel_2": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 6.0,
+            "volume": 594029.6032148224,
+            "outflow": 59.40890121160339
+          }
+        },
+        "Diversion_2": {
+          "data_points": 100,
+          "last_state": {
+            "outflow": 12.0,
+            "passthrough_flow": 0,
+            "inflow": 0
+          }
+        },
+        "Gate_3": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.7,
+            "outflow": 0
+          }
+        },
+        "Downstream_Reservoir": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 12.0,
+            "volume": 12000000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          }
+        }
+      },
+      "system_stability": {
+        "water_level_variance": 12.1875,
+        "water_level_range": 9.0,
+        "coefficient_of_variation": 0.34059122057973024
+      },
+      "disturbance_config": {
+        "disturbance_scenario": {
+          "name": "Diversion_Demand_Change_Disturbance",
+          "description": "模拟分水口用水需求的时变性和突发性变化",
+          "type": "demand_variation",
+          "category": "water_demand",
+          "parameters": {
+            "diversion_points": {
+              "diversion_1": {
+                "baseline_demand": 15.0,
+                "location": "Channel_1",
+                "priority": "high"
+              },
+              "diversion_2": {
+                "baseline_demand": 12.0,
+                "location": "Channel_2",
+                "priority": "medium"
+              }
+            },
+            "demand_patterns": {
+              "daily_pattern": {
+                "description": "日常用水模式",
+                "peak_hours": [
+                  8,
+                  12,
+                  18
+                ],
+                "peak_multiplier": 1.5,
+                "valley_hours": [
+                  2,
+                  6,
+                  22
+                ],
+                "valley_multiplier": 0.6
+              },
+              "seasonal_variation": {
+                "description": "季节性需求变化",
+                "summer_multiplier": 2.5,
+                "winter_multiplier": 0.4,
+                "transition_period": 3600
+              },
+              "random_fluctuation": {
+                "description": "随机需求波动",
+                "noise_type": "uniform",
+                "variation_range": 0.5,
+                "correlation_time": 1800
+              },
+              "emergency_events": {
+                "description": "突发用水事件",
+                "events": [
+                  {
+                    "type": "irrigation_surge",
+                    "diversion": "diversion_1",
+                    "start_time": 14400,
+                    "duration": 7200,
+                    "demand_multiplier": 4.0,
+                    "ramp_up_time": 600,
+                    "ramp_down_time": 1200
+                  },
+                  {
+                    "type": "industrial_shutdown",
+                    "diversion": "diversion_2",
+                    "start_time": 28800,
+                    "duration": 3600,
+                    "demand_multiplier": 0.1,
+                    "transition_time": 300
+                  },
+                  {
+                    "type": "emergency_supply",
+                    "diversion": "diversion_1",
+                    "start_time": 50400,
+                    "duration": 1800,
+                    "demand_multiplier": 5.0,
+                    "priority_override": true
+                  }
+                ]
+              }
+            },
+            "demand_forecasting": {
+              "enable": true,
+              "forecast_methods": [
+                "historical_pattern",
+                "weather_correlation",
+                "user_behavior_model"
+              ],
+              "forecast_horizon": 7200,
+              "forecast_accuracy": 0.75,
+              "update_frequency": 900
+            }
+          },
+          "trigger_conditions": {
+            "start_time": 0,
+            "duration": 86400,
+            "trigger_type": "continuous"
+          },
+          "constraints": {
+            "physical_limits": {
+              "max_diversion_rate": 50.0,
+              "min_diversion_rate": 0.0
+            },
+            "operational_limits": {
+              "max_change_rate": 5.0,
+              "min_supply_guarantee": 0.8
+            },
+            "priority_rules": [
+              "high_priority_first",
+              "emergency_override",
+              "minimum_allocation_guarantee"
+            ]
+          },
+          "supply_demand_balance": {
+            "enable_optimization": true,
+            "optimization_objectives": [
+              "minimize_supply_deficit",
+              "maximize_user_satisfaction",
+              "minimize_system_stress"
+            ],
+            "balancing_methods": [
+              {
+                "method": "proportional_allocation",
+                "weight": 0.4
+              },
+              {
+                "method": "priority_based_allocation",
+                "weight": 0.6
+              }
+            ],
+            "deficit_handling": {
+              "enable_rationing": true,
+              "rationing_strategy": "proportional",
+              "emergency_reserves": 0.1
+            }
+          },
+          "monitoring": {
+            "metrics": [
+              "demand_satisfaction_rate",
+              "supply_deficit",
+              "water_allocation_efficiency",
+              "system_stress_level",
+              "user_satisfaction_index"
+            ],
+            "sampling_interval": 300,
+            "kpi_thresholds": {
+              "min_satisfaction_rate": 0.85,
+              "max_deficit_ratio": 0.15,
+              "max_stress_level": 0.8
+            }
+          },
+          "expected_impact": {
+            "severity": "medium",
+            "affected_components": [
+              "分水口系统",
+              "渠道水位",
+              "下游供水",
+              "控制策略"
+            ],
+            "impact_description": "分水口需求变化将影响渠道水量分配和下游供水稳定性",
+            "impact_propagation": [
+              {
+                "component": "Channel_1",
+                "delay": 60,
+                "magnitude": "high",
+                "type": "water_level_change"
+              },
+              {
+                "component": "Gate_2",
+                "delay": 300,
+                "magnitude": "medium",
+                "type": "operation_adjustment"
+              },
+              {
+                "component": "Channel_2",
+                "delay": 600,
+                "magnitude": "medium",
+                "type": "flow_redistribution"
+              },
+              {
+                "component": "Downstream_Reservoir",
+                "delay": 1800,
+                "magnitude": "low",
+                "type": "storage_variation"
+              }
+            ]
+          },
+          "adaptive_management": {
+            "enable": true,
+            "strategies": [
+              "dynamic_allocation_adjustment",
+              "demand_response_program",
+              "emergency_protocol_activation"
+            ],
+            "feedback_mechanisms": [
+              "real_time_demand_monitoring",
+              "user_feedback_integration",
+              "system_performance_evaluation"
+            ],
+            "learning_algorithms": [
+              "demand_pattern_recognition",
+              "predictive_model_updating",
+              "optimization_parameter_tuning"
+            ]
+          }
+        }
+      }
+    },
+    "downstream_demand_change": {
+      "scenario_name": "downstream_demand_change",
+      "timestamp": "2025-09-03T21:12:16.324792",
+      "simulation_time": 100,
+      "components_count": 9,
+      "agents_count": 13,
+      "controllers_count": 0,
+      "water_level_stats": {
+        "mean": 10.25,
+        "std": 3.491060010942235,
+        "min": 6.0,
+        "max": 15.0,
+        "median": 10.0
+      },
+      "water_level_count": 400,
+      "flow_rate_stats": {
+        "mean": 18.402307721526807,
+        "std": 28.136834803069334,
+        "min": 0.0,
+        "max": 79.21186828213787,
+        "median": 0.0
+      },
+      "flow_rate_count": 900,
+      "gate_opening_stats": {
+        "mean": 0.6,
+        "std": 0.08164965809277258,
+        "min": 0.5,
+        "max": 0.7,
+        "median": 0.6
+      },
+      "gate_opening_count": 300,
+      "component_statistics": {
+        "Upstream_Reservoir": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 15.0,
+            "volume": 15000000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          }
+        },
+        "Gate_1": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.5,
+            "outflow": 0
+          }
+        },
+        "Channel_1": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 8.0,
+            "volume": 792039.4709530965,
+            "outflow": 79.21186828213787
+          }
+        },
+        "Diversion_1": {
+          "data_points": 100,
+          "last_state": {
+            "outflow": 15.0,
+            "passthrough_flow": 0,
+            "inflow": 0
+          }
+        },
+        "Gate_2": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.6,
+            "outflow": 0
+          }
+        },
+        "Channel_2": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 6.0,
+            "volume": 594029.6032148224,
+            "outflow": 59.40890121160339
+          }
+        },
+        "Diversion_2": {
+          "data_points": 100,
+          "last_state": {
+            "outflow": 12.0,
+            "passthrough_flow": 0,
+            "inflow": 0
+          }
+        },
+        "Gate_3": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.7,
+            "outflow": 0
+          }
+        },
+        "Downstream_Reservoir": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 12.0,
+            "volume": 12000000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          }
+        }
+      },
+      "system_stability": {
+        "water_level_variance": 12.1875,
+        "water_level_range": 9.0,
+        "coefficient_of_variation": 0.34059122057973024
+      },
+      "disturbance_config": {
+        "disturbance_scenario": {
+          "name": "Downstream_Demand_Change_Disturbance",
+          "description": "模拟下游用户用水需求的时空变化和突发事件",
+          "type": "downstream_demand_change",
+          "category": "water_demand",
+          "parameters": {
+            "downstream_users": {
+              "urban_water_supply": {
+                "location": "City_A",
+                "baseline_demand": 150,
+                "user_type": "municipal",
+                "priority_level": "high",
+                "supply_reliability": 0.98
+              },
+              "industrial_users": {
+                "location": "Industrial_Zone_B",
+                "baseline_demand": 80,
+                "user_type": "industrial",
+                "priority_level": "medium",
+                "supply_reliability": 0.95
+              },
+              "agricultural_irrigation": {
+                "location": "Irrigation_District_C",
+                "baseline_demand": 200,
+                "user_type": "agricultural",
+                "priority_level": "low",
+                "supply_reliability": 0.9
+              },
+              "ecological_water": {
+                "location": "Wetland_Reserve_D",
+                "baseline_demand": 30,
+                "user_type": "ecological",
+                "priority_level": "medium",
+                "supply_reliability": 0.85
+              }
+            },
+            "demand_variation_patterns": {
+              "daily_patterns": {
+                "urban_daily_cycle": {
+                  "description": "城市用水日周期",
+                  "peak_hours": [
+                    7,
+                    8,
+                    19,
+                    20
+                  ],
+                  "peak_multiplier": 2.2,
+                  "valley_hours": [
+                    2,
+                    3,
+                    4,
+                    5
+                  ],
+                  "valley_multiplier": 0.3,
+                  "weekend_adjustment": 0.9
+                },
+                "industrial_shift_pattern": {
+                  "description": "工业用水班次模式",
+                  "shift_hours": [
+                    [
+                      6,
+                      14
+                    ],
+                    [
+                      14,
+                      22
+                    ],
+                    [
+                      22,
+                      6
+                    ]
+                  ],
+                  "shift_multipliers": [
+                    1.2,
+                    1.0,
+                    0.3
+                  ],
+                  "maintenance_days": [
+                    "Sunday"
+                  ],
+                  "maintenance_multiplier": 0.1
+                },
+                "agricultural_irrigation_cycle": {
+                  "description": "农业灌溉周期",
+                  "irrigation_periods": [
+                    [
+                      5,
+                      9
+                    ],
+                    [
+                      17,
+                      21
+                    ]
+                  ],
+                  "irrigation_multiplier": 2.5,
+                  "non_irrigation_multiplier": 0.2,
+                  "crop_growth_adjustment": [
+                    0.8,
+                    1.0,
+                    1.2,
+                    1.5,
+                    1.3,
+                    1.0,
+                    0.5
+                  ]
+                }
+              },
+              "seasonal_patterns": {
+                "urban_seasonal": {
+                  "description": "城市用水季节变化",
+                  "monthly_multipliers": [
+                    0.9,
+                    0.9,
+                    1.0,
+                    1.1,
+                    1.2,
+                    1.4,
+                    1.5,
+                    1.4,
+                    1.2,
+                    1.1,
+                    1.0,
+                    0.9
+                  ],
+                  "temperature_correlation": 0.8,
+                  "holiday_adjustments": {
+                    "spring_festival": 0.7,
+                    "summer_vacation": 1.1,
+                    "national_holiday": 0.8
+                  }
+                },
+                "agricultural_seasonal": {
+                  "description": "农业用水季节变化",
+                  "growing_season": [
+                    3,
+                    4,
+                    5,
+                    6,
+                    7,
+                    8,
+                    9
+                  ],
+                  "growing_multiplier": 1.5,
+                  "dormant_multiplier": 0.3,
+                  "drought_response": 2.0,
+                  "flood_response": 0.5
+                },
+                "industrial_seasonal": {
+                  "description": "工业用水季节变化",
+                  "production_cycles": {
+                    "high_season": [
+                      6,
+                      7,
+                      8,
+                      11,
+                      12
+                    ],
+                    "low_season": [
+                      1,
+                      2,
+                      3
+                    ]
+                  },
+                  "seasonal_multipliers": [
+                    0.8,
+                    1.2
+                  ]
+                }
+              },
+              "stochastic_variations": {
+                "short_term_fluctuation": {
+                  "description": "短期随机波动",
+                  "noise_type": "gaussian",
+                  "noise_amplitude": 0.4,
+                  "correlation_time": 3600
+                },
+                "demand_uncertainty": {
+                  "description": "需求不确定性",
+                  "uncertainty_range": 0.35,
+                  "confidence_interval": 0.95,
+                  "forecast_accuracy": 0.85
+                },
+                "extreme_events": {
+                  "description": "极端用水事件",
+                  "event_types": {
+                    "water_shortage_panic": {
+                      "probability": 0.01,
+                      "demand_multiplier": 3.5,
+                      "duration": 7200
+                    },
+                    "emergency_supply": {
+                      "probability": 0.005,
+                      "demand_multiplier": 4.5,
+                      "duration": 3600
+                    },
+                    "industrial_accident": {
+                      "probability": 0.002,
+                      "demand_reduction": 0.8,
+                      "duration": 14400
+                    }
+                  }
+                }
+              }
+            },
+            "demand_forecasting": {
+              "enable": true,
+              "forecasting_methods": {
+                "time_series_analysis": {
+                  "method": "ARIMA",
+                  "forecast_horizon": 24,
+                  "update_frequency": 3600,
+                  "accuracy_target": 0.9
+                },
+                "machine_learning": {
+                  "method": "LSTM",
+                  "input_features": [
+                    "historical_demand",
+                    "weather_data",
+                    "economic_indicators",
+                    "social_events"
+                  ],
+                  "training_period": 8760
+                },
+                "ensemble_forecasting": {
+                  "methods": [
+                    "ARIMA",
+                    "LSTM",
+                    "SVR"
+                  ],
+                  "weight_optimization": true,
+                  "uncertainty_quantification": true
+                }
+              },
+              "forecast_accuracy": {
+                "short_term": 0.95,
+                "medium_term": 0.85,
+                "long_term": 0.75
+              }
+            },
+            "demand_response": {
+              "enable": true,
+              "response_mechanisms": {
+                "price_based_response": {
+                  "enable": true,
+                  "price_elasticity": -0.3,
+                  "peak_pricing_multiplier": 2.0,
+                  "off_peak_discount": 0.7
+                },
+                "incentive_programs": {
+                  "water_conservation_rebate": 0.1,
+                  "load_shifting_incentive": 0.05,
+                  "emergency_curtailment_compensation": 0.2
+                },
+                "regulatory_measures": {
+                  "water_use_restrictions": {
+                    "drought_level_1": 0.9,
+                    "drought_level_2": 0.8,
+                    "drought_level_3": 0.7,
+                    "emergency_restriction": 0.5
+                  }
+                }
+              }
+            },
+            "supply_demand_balance": {
+              "enable": true,
+              "balancing_mechanisms": {
+                "priority_allocation": {
+                  "enable": true,
+                  "allocation_rules": [
+                    "生活用水优先",
+                    "工业用水次之",
+                    "农业用水再次",
+                    "生态用水最后"
+                  ],
+                  "shortage_sharing_ratio": [
+                    0.05,
+                    0.15,
+                    0.6,
+                    0.2
+                  ]
+                },
+                "flexible_supply": {
+                  "enable": true,
+                  "backup_sources": [
+                    "groundwater_wells",
+                    "recycled_water",
+                    "emergency_reserves"
+                  ],
+                  "activation_thresholds": [
+                    0.9,
+                    0.8,
+                    0.7
+                  ]
+                },
+                "demand_management": {
+                  "enable": true,
+                  "management_strategies": [
+                    "peak_shaving",
+                    "load_shifting",
+                    "conservation_promotion",
+                    "efficiency_improvement"
+                  ]
+                }
+              }
+            },
+            "disturbance_scenarios": [
+              {
+                "scenario_id": "urban_peak_demand",
+                "start_time": 25200,
+                "duration": 7200,
+                "affected_users": [
+                  "urban_water_supply"
+                ],
+                "demand_multiplier": 3.0,
+                "description": "城市用水高峰"
+              },
+              {
+                "scenario_id": "agricultural_irrigation_surge",
+                "start_time": 18000,
+                "duration": 14400,
+                "affected_users": [
+                  "agricultural_irrigation"
+                ],
+                "demand_multiplier": 2.2,
+                "description": "农业灌溉高峰"
+              },
+              {
+                "scenario_id": "industrial_emergency_demand",
+                "start_time": 43200,
+                "duration": 3600,
+                "affected_users": [
+                  "industrial_users"
+                ],
+                "demand_multiplier": 4.0,
+                "description": "工业应急用水"
+              },
+              {
+                "scenario_id": "multi_user_peak_overlap",
+                "start_time": 64800,
+                "duration": 5400,
+                "affected_users": [
+                  "urban_water_supply",
+                  "industrial_users"
+                ],
+                "demand_multiplier": 2.5,
+                "description": "多用户需求叠加"
+              }
+            ]
+          },
+          "trigger_conditions": {
+            "start_time": 0,
+            "duration": 86400,
+            "trigger_type": "scenario_based"
+          },
+          "monitoring": {
+            "metrics": [
+              "supply_demand_ratio",
+              "user_satisfaction_index",
+              "water_shortage_duration",
+              "demand_forecast_accuracy",
+              "system_flexibility",
+              "economic_efficiency"
+            ],
+            "sampling_interval": 300
+          },
+          "expected_impact": {
+            "severity": "high",
+            "affected_components": [
+              "供水调度",
+              "水资源分配",
+              "系统压力",
+              "用户满意度"
+            ],
+            "impact_description": "下游用水变化将增加供水调度难度，影响水资源优化配置",
+            "quantitative_impact": {
+              "supply_stress_increase": 0.4,
+              "scheduling_complexity_increase": 0.6,
+              "user_satisfaction_decrease": 0.15,
+              "economic_loss_ratio": 0.08,
+              "system_resilience_test": 0.7
+            }
+          }
+        }
+      }
+    },
+    "inflow_variation": {
+      "scenario_name": "inflow_variation",
+      "timestamp": "2025-09-03T21:12:16.582044",
+      "simulation_time": 100,
+      "components_count": 9,
+      "agents_count": 13,
+      "controllers_count": 0,
+      "water_level_stats": {
+        "mean": 10.25,
+        "std": 3.491060010942235,
+        "min": 6.0,
+        "max": 15.0,
+        "median": 10.0
+      },
+      "water_level_count": 400,
+      "flow_rate_stats": {
+        "mean": 18.402307721526807,
+        "std": 28.136834803069334,
+        "min": 0.0,
+        "max": 79.21186828213787,
+        "median": 0.0
+      },
+      "flow_rate_count": 900,
+      "gate_opening_stats": {
+        "mean": 0.6,
+        "std": 0.08164965809277258,
+        "min": 0.5,
+        "max": 0.7,
+        "median": 0.6
+      },
+      "gate_opening_count": 300,
+      "component_statistics": {
+        "Upstream_Reservoir": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 15.0,
+            "volume": 15000000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          }
+        },
+        "Gate_1": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.5,
+            "outflow": 0
+          }
+        },
+        "Channel_1": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 8.0,
+            "volume": 792039.4709530965,
+            "outflow": 79.21186828213787
+          }
+        },
+        "Diversion_1": {
+          "data_points": 100,
+          "last_state": {
+            "outflow": 15.0,
+            "passthrough_flow": 0,
+            "inflow": 0
+          }
+        },
+        "Gate_2": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.6,
+            "outflow": 0
+          }
+        },
+        "Channel_2": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 6.0,
+            "volume": 594029.6032148224,
+            "outflow": 59.40890121160339
+          }
+        },
+        "Diversion_2": {
+          "data_points": 100,
+          "last_state": {
+            "outflow": 12.0,
+            "passthrough_flow": 0,
+            "inflow": 0
+          }
+        },
+        "Gate_3": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.7,
+            "outflow": 0
+          }
+        },
+        "Downstream_Reservoir": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 12.0,
+            "volume": 12000000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          }
+        }
+      },
+      "system_stability": {
+        "water_level_variance": 12.1875,
+        "water_level_range": 9.0,
+        "coefficient_of_variation": 0.34059122057973024
+      },
+      "disturbance_config": {
+        "disturbance_scenario": {
+          "name": "Inflow_Variation_Disturbance",
+          "description": "模拟上游水库入流的季节性和突发性变化",
+          "type": "inflow_variation",
+          "category": "hydrological",
+          "parameters": {
+            "baseline_inflow": 100.0,
+            "variation_patterns": {
+              "seasonal_variation": {
+                "description": "季节性变化",
+                "amplitude": 60.0,
+                "period": 21600,
+                "phase_shift": 0
+              },
+              "daily_fluctuation": {
+                "description": "日内波动",
+                "amplitude": 30.0,
+                "period": 3600,
+                "phase_shift": 1800
+              },
+              "random_noise": {
+                "description": "随机噪声",
+                "noise_type": "gaussian",
+                "mean": 0.0,
+                "std_deviation": 15.0
+              },
+              "extreme_events": {
+                "description": "极端事件",
+                "events": [
+                  {
+                    "type": "flood",
+                    "start_time": 10800,
+                    "duration": 3600,
+                    "peak_inflow": 300.0,
+                    "rise_time": 900,
+                    "fall_time": 2700
+                  },
+                  {
+                    "type": "drought",
+                    "start_time": 25200,
+                    "duration": 7200,
+                    "minimum_inflow": 20.0,
+                    "transition_time": 1800
+                  },
+                  {
+                    "type": "sudden_change",
+                    "start_time": 43200,
+                    "duration": 1800,
+                    "target_inflow": 200.0,
+                    "change_rate": 2.0
+                  }
+                ]
+              }
+            },
+            "affected_components": [
+              {
+                "component_id": "Upstream_Reservoir",
+                "parameter": "inflow"
+              }
+            ]
+          },
+          "trigger_conditions": {
+            "start_time": 0,
+            "duration": 86400,
+            "trigger_type": "continuous"
+          },
+          "forecasting": {
+            "enable_forecast": true,
+            "forecast_horizon": 3600,
+            "forecast_accuracy": 0.85,
+            "update_interval": 300,
+            "uncertainty_bounds": {
+              "lower_bound": 0.9,
+              "upper_bound": 1.1
+            }
+          },
+          "monitoring": {
+            "metrics": [
+              "reservoir_water_level",
+              "downstream_flow_stability",
+              "gate_operation_frequency",
+              "system_response_time",
+              "control_effort"
+            ],
+            "sampling_interval": 60,
+            "critical_thresholds": {
+              "max_water_level": 25.0,
+              "min_water_level": 5.0,
+              "max_outflow_rate": 250.0,
+              "min_outflow_rate": 10.0
+            }
+          },
+          "expected_impact": {
+            "severity": "high",
+            "affected_components": [
+              "上游水库",
+              "整个渠系",
+              "控制系统",
+              "下游用水"
+            ],
+            "impact_description": "来水变化将直接影响整个水利系统的水量平衡和控制策略",
+            "cascade_effects": [
+              {
+                "effect": "水库水位波动",
+                "delay": 0,
+                "magnitude": "high"
+              },
+              {
+                "effect": "下游流量变化",
+                "delay": 300,
+                "magnitude": "medium"
+              },
+              {
+                "effect": "控制策略调整",
+                "delay": 600,
+                "magnitude": "medium"
+              },
+              {
+                "effect": "用水需求冲突",
+                "delay": 1800,
+                "magnitude": "low"
+              }
+            ]
+          },
+          "adaptive_control": {
+            "enable": true,
+            "strategies": [
+              "dynamic_gate_scheduling",
+              "predictive_water_allocation",
+              "emergency_response_protocol"
+            ],
+            "control_parameters": {
+              "response_sensitivity": 0.8,
+              "adaptation_rate": 0.1,
+              "stability_margin": 0.2
+            }
+          }
+        }
+      }
+    },
+    "network_delay": {
+      "scenario_name": "network_delay",
+      "timestamp": "2025-09-03T21:12:16.839593",
+      "simulation_time": 100,
+      "components_count": 9,
+      "agents_count": 13,
+      "controllers_count": 0,
+      "water_level_stats": {
+        "mean": 10.25,
+        "std": 3.491060010942235,
+        "min": 6.0,
+        "max": 15.0,
+        "median": 10.0
+      },
+      "water_level_count": 400,
+      "flow_rate_stats": {
+        "mean": 18.402307721526807,
+        "std": 28.136834803069334,
+        "min": 0.0,
+        "max": 79.21186828213787,
+        "median": 0.0
+      },
+      "flow_rate_count": 900,
+      "gate_opening_stats": {
+        "mean": 0.6,
+        "std": 0.08164965809277258,
+        "min": 0.5,
+        "max": 0.7,
+        "median": 0.6
+      },
+      "gate_opening_count": 300,
+      "component_statistics": {
+        "Upstream_Reservoir": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 15.0,
+            "volume": 15000000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          }
+        },
+        "Gate_1": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.5,
+            "outflow": 0
+          }
+        },
+        "Channel_1": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 8.0,
+            "volume": 792039.4709530965,
+            "outflow": 79.21186828213787
+          }
+        },
+        "Diversion_1": {
+          "data_points": 100,
+          "last_state": {
+            "outflow": 15.0,
+            "passthrough_flow": 0,
+            "inflow": 0
+          }
+        },
+        "Gate_2": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.6,
+            "outflow": 0
+          }
+        },
+        "Channel_2": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 6.0,
+            "volume": 594029.6032148224,
+            "outflow": 59.40890121160339
+          }
+        },
+        "Diversion_2": {
+          "data_points": 100,
+          "last_state": {
+            "outflow": 12.0,
+            "passthrough_flow": 0,
+            "inflow": 0
+          }
+        },
+        "Gate_3": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.7,
+            "outflow": 0
+          }
+        },
+        "Downstream_Reservoir": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 12.0,
+            "volume": 12000000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          }
+        }
+      },
+      "system_stability": {
+        "water_level_variance": 12.1875,
+        "water_level_range": 9.0,
+        "coefficient_of_variation": 0.34059122057973024
+      },
+      "disturbance_config": {
+        "disturbance_scenario": {
+          "name": "Network_Delay_Disturbance",
+          "description": "模拟分布式智能体间的网络通信延迟",
+          "type": "network_delay",
+          "category": "communication",
+          "parameters": {
+            "delay_levels": {
+              "low": {
+                "base_delay": 200,
+                "jitter": 50,
+                "packet_loss": 0.05
+              },
+              "medium": {
+                "base_delay": 500,
+                "jitter": 100,
+                "packet_loss": 0.1
+              },
+              "high": {
+                "base_delay": 1000,
+                "jitter": 200,
+                "packet_loss": 0.15
+              },
+              "extreme": {
+                "base_delay": 2000,
+                "jitter": 400,
+                "packet_loss": 0.25
+              }
+            },
+            "affected_links": [
+              {
+                "source": "Channel1_Twin_Agent",
+                "target": "CentralPerceptionAgent",
+                "delay_level": "medium"
+              },
+              {
+                "source": "Channel2_Twin_Agent",
+                "target": "CentralPerceptionAgent",
+                "delay_level": "medium"
+              },
+              {
+                "source": "Gate1_Perception_Agent",
+                "target": "Gate1_Control_Agent",
+                "delay_level": "low"
+              },
+              {
+                "source": "Gate2_Perception_Agent",
+                "target": "Gate2_Control_Agent",
+                "delay_level": "low"
+              },
+              {
+                "source": "Gate3_Perception_Agent",
+                "target": "Gate3_Control_Agent",
+                "delay_level": "low"
+              },
+              {
+                "source": "CentralPerceptionAgent",
+                "target": "CentralMPCAgent",
+                "delay_level": "high"
+              }
+            ]
+          },
+          "trigger_conditions": {
+            "start_time": 3600,
+            "duration": 7200,
+            "trigger_type": "time_based"
+          },
+          "monitoring": {
+            "metrics": [
+              "communication_latency",
+              "data_freshness",
+              "control_performance",
+              "system_stability"
+            ],
+            "sampling_interval": 60
+          },
+          "expected_impact": {
+            "severity": "medium",
+            "affected_components": [
+              "分布式感知层",
+              "中心协调层",
+              "控制性能"
+            ],
+            "impact_description": "网络延迟将导致数据传输滞后，影响实时控制精度和系统响应速度"
+          }
+        }
+      }
+    },
+    "node_failure": {
+      "scenario_name": "node_failure",
+      "timestamp": "2025-09-03T21:12:17.172013",
+      "simulation_time": 100,
+      "components_count": 9,
+      "agents_count": 13,
+      "controllers_count": 0,
+      "water_level_stats": {
+        "mean": 10.25,
+        "std": 3.491060010942235,
+        "min": 6.0,
+        "max": 15.0,
+        "median": 10.0
+      },
+      "water_level_count": 400,
+      "flow_rate_stats": {
+        "mean": 18.402307721526807,
+        "std": 28.136834803069334,
+        "min": 0.0,
+        "max": 79.21186828213787,
+        "median": 0.0
+      },
+      "flow_rate_count": 900,
+      "gate_opening_stats": {
+        "mean": 0.6,
+        "std": 0.08164965809277258,
+        "min": 0.5,
+        "max": 0.7,
+        "median": 0.6
+      },
+      "gate_opening_count": 300,
+      "component_statistics": {
+        "Upstream_Reservoir": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 15.0,
+            "volume": 15000000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          }
+        },
+        "Gate_1": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.5,
+            "outflow": 0
+          }
+        },
+        "Channel_1": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 8.0,
+            "volume": 792039.4709530965,
+            "outflow": 79.21186828213787
+          }
+        },
+        "Diversion_1": {
+          "data_points": 100,
+          "last_state": {
+            "outflow": 15.0,
+            "passthrough_flow": 0,
+            "inflow": 0
+          }
+        },
+        "Gate_2": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.6,
+            "outflow": 0
+          }
+        },
+        "Channel_2": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 6.0,
+            "volume": 594029.6032148224,
+            "outflow": 59.40890121160339
+          }
+        },
+        "Diversion_2": {
+          "data_points": 100,
+          "last_state": {
+            "outflow": 12.0,
+            "passthrough_flow": 0,
+            "inflow": 0
+          }
+        },
+        "Gate_3": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.7,
+            "outflow": 0
+          }
+        },
+        "Downstream_Reservoir": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 12.0,
+            "volume": 12000000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          }
+        }
+      },
+      "system_stability": {
+        "water_level_variance": 12.1875,
+        "water_level_range": 9.0,
+        "coefficient_of_variation": 0.34059122057973024
+      },
+      "disturbance_config": {
+        "disturbance_scenario": {
+          "name": "Node_Failure_Disturbance",
+          "description": "模拟分布式智能体节点的故障和恢复",
+          "type": "node_failure",
+          "category": "system_failure",
+          "parameters": {
+            "failure_types": {
+              "partial_failure": {
+                "description": "部分功能失效",
+                "performance_degradation": 0.5,
+                "response_delay": 2.0,
+                "error_rate": 0.1
+              },
+              "complete_failure": {
+                "description": "完全失效",
+                "performance_degradation": 0.0,
+                "response_delay": null,
+                "error_rate": 1.0
+              },
+              "intermittent_failure": {
+                "description": "间歇性故障",
+                "failure_probability": 0.3,
+                "failure_duration": 60,
+                "recovery_duration": 120
+              }
+            },
+            "failure_scenarios": [
+              {
+                "node_id": "Channel1_Twin_Agent",
+                "failure_type": "partial_failure",
+                "start_time": 7200,
+                "duration": 1800,
+                "recovery_time": 300
+              },
+              {
+                "node_id": "Gate2_Perception_Agent",
+                "failure_type": "complete_failure",
+                "start_time": 10800,
+                "duration": 900,
+                "recovery_time": 180
+              },
+              {
+                "node_id": "CentralPerceptionAgent",
+                "failure_type": "intermittent_failure",
+                "start_time": 14400,
+                "duration": 3600
+              },
+              {
+                "node_id": "Gate3_Control_Agent",
+                "failure_type": "partial_failure",
+                "start_time": 18000,
+                "duration": 1200,
+                "recovery_time": 240
+              }
+            ]
+          },
+          "failure_detection": {
+            "enable": true,
+            "detection_methods": [
+              "heartbeat_monitoring",
+              "response_time_analysis",
+              "data_quality_check"
+            ],
+            "detection_threshold": {
+              "heartbeat_timeout": 30,
+              "response_time_limit": 10,
+              "data_quality_threshold": 0.8
+            }
+          },
+          "recovery_strategy": {
+            "enable_redundancy": true,
+            "backup_nodes": [
+              {
+                "primary": "Channel1_Twin_Agent",
+                "backup": "Channel1_Backup_Agent"
+              },
+              {
+                "primary": "CentralPerceptionAgent",
+                "backup": "Backup_Central_Agent"
+              }
+            ],
+            "failover_mechanism": {
+              "automatic_failover": true,
+              "failover_timeout": 60,
+              "health_check_interval": 30
+            },
+            "recovery_procedures": [
+              "restart_failed_node",
+              "restore_data_consistency",
+              "reestablish_connections",
+              "validate_system_state"
+            ]
+          },
+          "monitoring": {
+            "metrics": [
+              "node_availability",
+              "system_reliability",
+              "failover_time",
+              "recovery_time",
+              "data_consistency"
+            ],
+            "sampling_interval": 15
+          },
+          "expected_impact": {
+            "severity": "critical",
+            "affected_components": [
+              "分布式感知层",
+              "控制智能体层",
+              "系统可靠性",
+              "数据一致性"
+            ],
+            "impact_description": "节点故障将导致系统功能缺失，影响整体系统可靠性和控制连续性"
+          },
+          "risk_assessment": {
+            "probability": "medium",
+            "impact_level": "high",
+            "mitigation_priority": "high",
+            "business_continuity_impact": "significant"
+          }
+        }
+      }
+    },
+    "sensor_interference": {
+      "scenario_name": "sensor_interference",
+      "timestamp": "2025-09-03T21:12:17.514319",
+      "simulation_time": 100,
+      "components_count": 9,
+      "agents_count": 13,
+      "controllers_count": 0,
+      "water_level_stats": {
+        "mean": 10.25,
+        "std": 3.491060010942235,
+        "min": 6.0,
+        "max": 15.0,
+        "median": 10.0
+      },
+      "water_level_count": 400,
+      "flow_rate_stats": {
+        "mean": 18.402307721526807,
+        "std": 28.136834803069334,
+        "min": 0.0,
+        "max": 79.21186828213787,
+        "median": 0.0
+      },
+      "flow_rate_count": 900,
+      "gate_opening_stats": {
+        "mean": 0.6,
+        "std": 0.08164965809277258,
+        "min": 0.5,
+        "max": 0.7,
+        "median": 0.6
+      },
+      "gate_opening_count": 300,
+      "component_statistics": {
+        "Upstream_Reservoir": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 15.0,
+            "volume": 15000000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          }
+        },
+        "Gate_1": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.5,
+            "outflow": 0
+          }
+        },
+        "Channel_1": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 8.0,
+            "volume": 792039.4709530965,
+            "outflow": 79.21186828213787
+          }
+        },
+        "Diversion_1": {
+          "data_points": 100,
+          "last_state": {
+            "outflow": 15.0,
+            "passthrough_flow": 0,
+            "inflow": 0
+          }
+        },
+        "Gate_2": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.6,
+            "outflow": 0
+          }
+        },
+        "Channel_2": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 6.0,
+            "volume": 594029.6032148224,
+            "outflow": 59.40890121160339
+          }
+        },
+        "Diversion_2": {
+          "data_points": 100,
+          "last_state": {
+            "outflow": 12.0,
+            "passthrough_flow": 0,
+            "inflow": 0
+          }
+        },
+        "Gate_3": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.7,
+            "outflow": 0
+          }
+        },
+        "Downstream_Reservoir": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 12.0,
+            "volume": 12000000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          }
+        }
+      },
+      "system_stability": {
+        "water_level_variance": 12.1875,
+        "water_level_range": 9.0,
+        "coefficient_of_variation": 0.34059122057973024
+      },
+      "disturbance_config": {
+        "disturbance_scenario": {
+          "name": "Sensor_Interference_Disturbance",
+          "description": "模拟传感器测量过程中的干扰、噪声和故障",
+          "type": "sensor_interference",
+          "category": "measurement_system",
+          "parameters": {
+            "sensor_systems": {
+              "water_level_sensors": {
+                "locations": [
+                  "Upstream_Reservoir",
+                  "Channel_1",
+                  "Channel_2",
+                  "Downstream_Reservoir"
+                ],
+                "baseline_accuracy": 0.02,
+                "measurement_range": [
+                  0,
+                  30
+                ]
+              },
+              "flow_rate_sensors": {
+                "locations": [
+                  "Gate_1",
+                  "Gate_2",
+                  "Gate_3",
+                  "Diversion_1",
+                  "Diversion_2"
+                ],
+                "baseline_accuracy": 0.5,
+                "measurement_range": [
+                  0,
+                  300
+                ]
+              },
+              "gate_position_sensors": {
+                "locations": [
+                  "Gate_1",
+                  "Gate_2",
+                  "Gate_3"
+                ],
+                "baseline_accuracy": 0.01,
+                "measurement_range": [
+                  0,
+                  1
+                ]
+              }
+            },
+            "interference_types": {
+              "measurement_noise": {
+                "description": "随机测量噪声",
+                "noise_models": {
+                  "gaussian_noise": {
+                    "mean": 0.0,
+                    "std_multiplier": 5.0
+                  },
+                  "uniform_noise": {
+                    "range_multiplier": 3.0
+                  },
+                  "colored_noise": {
+                    "correlation_time": 300,
+                    "intensity": 2.5
+                  }
+                }
+              },
+              "systematic_bias": {
+                "description": "系统性测量偏差",
+                "bias_types": {
+                  "constant_bias": {
+                    "water_level": 0.1,
+                    "flow_rate": 2.0,
+                    "gate_position": 0.02
+                  },
+                  "drift_bias": {
+                    "drift_rate": 0.001,
+                    "max_drift": 0.5
+                  },
+                  "temperature_dependent": {
+                    "coefficient": 0.002,
+                    "reference_temp": 20
+                  }
+                }
+              },
+              "signal_interference": {
+                "description": "电磁和环境干扰",
+                "interference_sources": {
+                  "electromagnetic": {
+                    "frequency_range": [
+                      50,
+                      60
+                    ],
+                    "amplitude": 0.05,
+                    "intermittent": true
+                  },
+                  "vibration": {
+                    "frequency": 10,
+                    "amplitude": 0.02
+                  },
+                  "weather_related": {
+                    "rain_effect": 0.1,
+                    "wind_effect": 0.05
+                  }
+                }
+              },
+              "sensor_faults": {
+                "description": "传感器硬件故障",
+                "fault_types": {
+                  "calibration_error": {
+                    "probability": 0.02,
+                    "error_magnitude": 0.2,
+                    "duration": 3600
+                  },
+                  "signal_loss": {
+                    "probability": 0.01,
+                    "duration": 300,
+                    "recovery_time": 60
+                  },
+                  "stuck_reading": {
+                    "probability": 0.005,
+                    "duration": 1800
+                  },
+                  "saturation": {
+                    "probability": 0.01,
+                    "threshold": 0.95
+                  }
+                }
+              }
+            },
+            "interference_scenarios": [
+              {
+                "scenario_id": "high_noise_period",
+                "start_time": 7200,
+                "duration": 3600,
+                "affected_sensors": [
+                  "all_water_level"
+                ],
+                "interference_type": "measurement_noise",
+                "intensity": "high"
+              },
+              {
+                "scenario_id": "systematic_bias_event",
+                "start_time": 18000,
+                "duration": 7200,
+                "affected_sensors": [
+                  "Gate_1_flow",
+                  "Gate_2_flow"
+                ],
+                "interference_type": "systematic_bias",
+                "intensity": "medium"
+              },
+              {
+                "scenario_id": "electromagnetic_interference",
+                "start_time": 32400,
+                "duration": 1800,
+                "affected_sensors": [
+                  "all_gate_position"
+                ],
+                "interference_type": "signal_interference",
+                "intensity": "high"
+              },
+              {
+                "scenario_id": "sensor_fault_cascade",
+                "start_time": 43200,
+                "duration": 3600,
+                "affected_sensors": [
+                  "Channel_1_level",
+                  "Channel_2_level"
+                ],
+                "interference_type": "sensor_faults",
+                "intensity": "critical"
+              }
+            ]
+          },
+          "trigger_conditions": {
+            "start_time": 0,
+            "duration": 86400,
+            "trigger_type": "scenario_based"
+          },
+          "data_quality_assessment": {
+            "enable": true,
+            "quality_metrics": [
+              "accuracy",
+              "precision",
+              "completeness",
+              "consistency",
+              "timeliness"
+            ],
+            "quality_thresholds": {
+              "min_accuracy": 0.9,
+              "max_noise_level": 0.1,
+              "min_data_availability": 0.95
+            },
+            "outlier_detection": {
+              "enable": true,
+              "methods": [
+                "statistical_outlier",
+                "physical_constraint_check",
+                "temporal_consistency_check"
+              ],
+              "threshold_multiplier": 3.0
+            }
+          },
+          "data_cleaning": {
+            "enable": true,
+            "cleaning_methods": {
+              "noise_filtering": [
+                "moving_average",
+                "kalman_filter",
+                "median_filter"
+              ],
+              "bias_correction": [
+                "reference_comparison",
+                "historical_calibration",
+                "cross_validation"
+              ],
+              "gap_filling": [
+                "linear_interpolation",
+                "spline_interpolation",
+                "model_based_estimation"
+              ]
+            },
+            "validation_rules": [
+              "physical_feasibility",
+              "temporal_continuity",
+              "spatial_consistency",
+              "mass_balance_check"
+            ]
+          },
+          "redundancy_strategy": {
+            "enable": true,
+            "redundancy_levels": {
+              "critical_sensors": 3,
+              "important_sensors": 2,
+              "regular_sensors": 1
+            },
+            "backup_systems": [
+              "virtual_sensor_network",
+              "model_based_estimation",
+              "neighboring_sensor_inference"
+            ],
+            "fault_tolerance": {
+              "max_failed_sensors": 2,
+              "graceful_degradation": true,
+              "emergency_mode": true
+            }
+          },
+          "monitoring": {
+            "metrics": [
+              "sensor_availability",
+              "measurement_accuracy",
+              "data_quality_index",
+              "fault_detection_rate",
+              "system_observability"
+            ],
+            "sampling_interval": 30
+          },
+          "expected_impact": {
+            "severity": "high",
+            "affected_components": [
+              "状态估计",
+              "控制决策",
+              "系统监测",
+              "故障诊断"
+            ],
+            "impact_description": "传感器干扰将降低系统观测能力，影响状态估计精度和控制性能",
+            "quantitative_impact": {
+              "state_estimation_error": 1.5,
+              "control_performance_loss": 0.2,
+              "false_alarm_rate": 0.05,
+              "missed_detection_rate": 0.1
+            }
+          }
+        }
+      }
+    }
+  },
+  "combined_disturbances": {
+    "inflow_variation_actuator_interference": {
+      "scenario_name": "inflow_variation_actuator_interference",
+      "timestamp": "2025-09-03T21:12:17.825145",
+      "simulation_time": 100,
+      "components_count": 9,
+      "agents_count": 13,
+      "controllers_count": 0,
+      "water_level_stats": {
+        "mean": 10.25,
+        "std": 3.491060010942235,
+        "min": 6.0,
+        "max": 15.0,
+        "median": 10.0
+      },
+      "water_level_count": 400,
+      "flow_rate_stats": {
+        "mean": 18.402307721526807,
+        "std": 28.136834803069334,
+        "min": 0.0,
+        "max": 79.21186828213787,
+        "median": 0.0
+      },
+      "flow_rate_count": 900,
+      "gate_opening_stats": {
+        "mean": 0.6,
+        "std": 0.08164965809277258,
+        "min": 0.5,
+        "max": 0.7,
+        "median": 0.6
+      },
+      "gate_opening_count": 300,
+      "component_statistics": {
+        "Upstream_Reservoir": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 15.0,
+            "volume": 15000000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          }
+        },
+        "Gate_1": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.5,
+            "outflow": 0
+          }
+        },
+        "Channel_1": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 8.0,
+            "volume": 792039.4709530965,
+            "outflow": 79.21186828213787
+          }
+        },
+        "Diversion_1": {
+          "data_points": 100,
+          "last_state": {
+            "outflow": 15.0,
+            "passthrough_flow": 0,
+            "inflow": 0
+          }
+        },
+        "Gate_2": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.6,
+            "outflow": 0
+          }
+        },
+        "Channel_2": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 6.0,
+            "volume": 594029.6032148224,
+            "outflow": 59.40890121160339
+          }
+        },
+        "Diversion_2": {
+          "data_points": 100,
+          "last_state": {
+            "outflow": 12.0,
+            "passthrough_flow": 0,
+            "inflow": 0
+          }
+        },
+        "Gate_3": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.7,
+            "outflow": 0
+          }
+        },
+        "Downstream_Reservoir": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 12.0,
+            "volume": 12000000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          }
+        }
+      },
+      "system_stability": {
+        "water_level_variance": 12.1875,
+        "water_level_range": 9.0,
+        "coefficient_of_variation": 0.34059122057973024
+      },
+      "disturbance_config": {
+        "scenario_name": "inflow_variation_actuator_interference",
+        "scenario_type": "combined_disturbance",
+        "description": "来水变化与执行器干扰的组合扰动场景，模拟水文条件变化与控制系统故障的叠加影响",
+        "version": "1.0",
+        "created_date": "2024-01-15",
+        "combination_parameters": {
+          "combination_type": "synchronized",
+          "combination_effects": {
+            "superposition": {
+              "enabled": true,
+              "weight_inflow": 0.6,
+              "weight_actuator": 0.4
+            },
+            "interaction": {
+              "enabled": true,
+              "coupling_strength": 0.3,
+              "feedback_delay": 5.0
+            },
+            "cascading": {
+              "enabled": true,
+              "propagation_delay": 10.0,
+              "amplification_factor": 1.2
+            }
+          }
+        },
+        "disturbance_parameters": {
+          "hydrological_system": {
+            "inflow_patterns": {
+              "baseline_inflow": {
+                "value": 50.0,
+                "uncertainty": 0.05
+              },
+              "seasonal_variation": {
+                "enabled": true,
+                "amplitude": 20.0,
+                "period": 8760,
+                "phase_shift": 0.0
+              },
+              "diurnal_fluctuation": {
+                "enabled": true,
+                "amplitude": 5.0,
+                "period": 24,
+                "phase_shift": 6.0
+              },
+              "random_noise": {
+                "enabled": true,
+                "noise_type": "gaussian",
+                "std_deviation": 2.0,
+                "correlation_time": 1.0
+              },
+              "extreme_events": {
+                "flood_events": {
+                  "enabled": true,
+                  "probability": 0.01,
+                  "duration_range": [
+                    6,
+                    48
+                  ],
+                  "magnitude_range": [
+                    100,
+                    200
+                  ]
+                },
+                "drought_events": {
+                  "enabled": true,
+                  "probability": 0.005,
+                  "duration_range": [
+                    72,
+                    720
+                  ],
+                  "magnitude_range": [
+                    5,
+                    15
+                  ]
+                }
+              }
+            },
+            "affected_components": [
+              {
+                "component_id": "reservoir_01",
+                "impact_type": "inflow_disturbance",
+                "sensitivity": 1.0
+              },
+              {
+                "component_id": "canal_01",
+                "impact_type": "flow_propagation",
+                "sensitivity": 0.8
+              }
+            ]
+          },
+          "control_system": {
+            "actuator_interference": {
+              "control_signal_interference": {
+                "enabled": true,
+                "interference_types": [
+                  {
+                    "type": "additive_noise",
+                    "amplitude": 0.1,
+                    "frequency": 0.5
+                  },
+                  {
+                    "type": "multiplicative_noise",
+                    "factor": 0.05,
+                    "correlation": 0.3
+                  },
+                  {
+                    "type": "signal_delay",
+                    "delay_range": [
+                      0.5,
+                      2.0
+                    ]
+                  }
+                ]
+              },
+              "mechanical_degradation": {
+                "enabled": true,
+                "degradation_rate": 0.001,
+                "efficiency_loss": 0.02,
+                "backlash_increase": 0.001
+              },
+              "power_system_faults": {
+                "enabled": true,
+                "fault_types": [
+                  {
+                    "type": "voltage_fluctuation",
+                    "probability": 0.01,
+                    "magnitude_range": [
+                      0.9,
+                      1.1
+                    ],
+                    "duration_range": [
+                      1,
+                      10
+                    ]
+                  },
+                  {
+                    "type": "power_outage",
+                    "probability": 0.001,
+                    "duration_range": [
+                      10,
+                      300
+                    ]
+                  }
+                ]
+              },
+              "control_system_faults": {
+                "enabled": true,
+                "fault_types": [
+                  {
+                    "type": "sensor_bias",
+                    "probability": 0.005,
+                    "bias_range": [
+                      -0.1,
+                      0.1
+                    ],
+                    "duration_range": [
+                      60,
+                      3600
+                    ]
+                  },
+                  {
+                    "type": "controller_saturation",
+                    "probability": 0.002,
+                    "saturation_level": 0.9
+                  }
+                ]
+              }
+            },
+            "affected_actuators": [
+              {
+                "actuator_id": "gate_01",
+                "actuator_type": "sluice_gate",
+                "interference_sensitivity": 0.8,
+                "degradation_rate": 0.001
+              },
+              {
+                "actuator_id": "pump_01",
+                "actuator_type": "water_pump",
+                "interference_sensitivity": 0.9,
+                "degradation_rate": 0.002
+              }
+            ]
+          }
+        },
+        "combined_intensity_levels": {
+          "low": {
+            "inflow_variation_intensity": 0.3,
+            "actuator_interference_intensity": 0.2,
+            "combination_factor": 0.8
+          },
+          "medium": {
+            "inflow_variation_intensity": 0.6,
+            "actuator_interference_intensity": 0.5,
+            "combination_factor": 1.0
+          },
+          "high": {
+            "inflow_variation_intensity": 0.9,
+            "actuator_interference_intensity": 0.8,
+            "combination_factor": 1.3
+          },
+          "extreme": {
+            "inflow_variation_intensity": 1.2,
+            "actuator_interference_intensity": 1.0,
+            "combination_factor": 1.5
+          }
+        },
+        "combined_disturbance_sequences": {
+          "sequence_1": {
+            "name": "progressive_combination",
+            "description": "来水变化逐渐加剧，随后执行器开始出现干扰",
+            "timeline": [
+              {
+                "time": 0,
+                "action": "start_inflow_variation",
+                "intensity": "low"
+              },
+              {
+                "time": 3600,
+                "action": "increase_inflow_variation",
+                "intensity": "medium"
+              },
+              {
+                "time": 7200,
+                "action": "start_actuator_interference",
+                "intensity": "low"
+              },
+              {
+                "time": 10800,
+                "action": "increase_combined_intensity",
+                "intensity": "high"
+              },
+              {
+                "time": 14400,
+                "action": "stabilize_disturbances",
+                "intensity": "medium"
+              },
+              {
+                "time": 18000,
+                "action": "end_disturbances",
+                "intensity": "none"
+              }
+            ]
+          },
+          "sequence_2": {
+            "name": "synchronized_combination",
+            "description": "来水变化与执行器干扰同时发生",
+            "timeline": [
+              {
+                "time": 0,
+                "action": "start_combined_disturbances",
+                "intensity": "medium"
+              },
+              {
+                "time": 1800,
+                "action": "increase_combined_intensity",
+                "intensity": "high"
+              },
+              {
+                "time": 5400,
+                "action": "peak_combined_disturbances",
+                "intensity": "extreme"
+              },
+              {
+                "time": 9000,
+                "action": "decrease_combined_intensity",
+                "intensity": "medium"
+              },
+              {
+                "time": 12600,
+                "action": "end_combined_disturbances",
+                "intensity": "none"
+              }
+            ]
+          },
+          "sequence_3": {
+            "name": "cascading_combination",
+            "description": "来水变化引发执行器故障，形成级联效应",
+            "timeline": [
+              {
+                "time": 0,
+                "action": "start_extreme_inflow",
+                "intensity": "high"
+              },
+              {
+                "time": 1200,
+                "action": "trigger_actuator_overload",
+                "intensity": "medium"
+              },
+              {
+                "time": 2400,
+                "action": "cascading_failures",
+                "intensity": "high"
+              },
+              {
+                "time": 4800,
+                "action": "emergency_response",
+                "intensity": "extreme"
+              },
+              {
+                "time": 7200,
+                "action": "system_recovery",
+                "intensity": "low"
+              },
+              {
+                "time": 10800,
+                "action": "full_recovery",
+                "intensity": "none"
+              }
+            ]
+          }
+        },
+        "adaptive_control_strategies": {
+          "enhanced_forecasting": {
+            "enabled": true,
+            "forecast_horizon": 24,
+            "update_frequency": 1,
+            "uncertainty_quantification": true
+          },
+          "robust_control": {
+            "enabled": true,
+            "control_methods": [
+              "H_infinity",
+              "sliding_mode",
+              "adaptive_mpc"
+            ],
+            "robustness_margin": 0.2
+          },
+          "fault_tolerant_control": {
+            "enabled": true,
+            "redundancy_level": 2,
+            "fault_detection_threshold": 0.1,
+            "reconfiguration_time": 30
+          }
+        },
+        "fault_diagnosis_tolerance": {
+          "fault_detection": {
+            "enabled": true,
+            "detection_methods": [
+              "residual_based",
+              "model_based",
+              "data_driven"
+            ],
+            "detection_threshold": 0.05,
+            "false_alarm_rate": 0.01
+          },
+          "fault_isolation": {
+            "enabled": true,
+            "isolation_time": 10,
+            "isolation_accuracy": 0.95
+          },
+          "fault_tolerance": {
+            "enabled": true,
+            "tolerance_methods": [
+              "actuator_redundancy",
+              "control_reconfiguration",
+              "graceful_degradation"
+            ],
+            "recovery_time": 60
+          }
+        },
+        "performance_optimization": {
+          "multi_objective_optimization": {
+            "enabled": true,
+            "objectives": [
+              "water_level_stability",
+              "flow_rate_accuracy",
+              "energy_efficiency",
+              "system_reliability"
+            ],
+            "optimization_algorithm": "NSGA-II"
+          },
+          "real_time_optimization": {
+            "enabled": true,
+            "optimization_frequency": 300,
+            "convergence_tolerance": 0.001
+          },
+          "learning_optimization": {
+            "enabled": true,
+            "learning_methods": [
+              "reinforcement_learning",
+              "neural_networks",
+              "fuzzy_logic"
+            ],
+            "adaptation_rate": 0.01
+          }
+        },
+        "trigger_conditions": {
+          "time_based": {
+            "enabled": true,
+            "start_time": 0,
+            "duration": 21600
+          },
+          "event_based": {
+            "enabled": true,
+            "trigger_events": [
+              {
+                "event": "high_inflow_detected",
+                "threshold": 80.0,
+                "action": "activate_combined_disturbance"
+              },
+              {
+                "event": "actuator_performance_degraded",
+                "threshold": 0.8,
+                "action": "increase_interference_intensity"
+              }
+            ]
+          },
+          "condition_based": {
+            "enabled": true,
+            "conditions": [
+              {
+                "condition": "water_level > 5.0 AND actuator_efficiency < 0.9",
+                "action": "trigger_extreme_scenario"
+              },
+              {
+                "condition": "inflow_variation > 0.5 AND control_error > 0.1",
+                "action": "activate_fault_tolerance"
+              }
+            ]
+          }
+        },
+        "performance_monitoring": {
+          "hydrological_metrics": [
+            {
+              "metric": "inflow_rate",
+              "unit": "m³/s",
+              "target_range": [
+                45,
+                55
+              ],
+              "critical_threshold": [
+                30,
+                80
+              ]
+            },
+            {
+              "metric": "water_level",
+              "unit": "m",
+              "target_range": [
+                4.5,
+                5.5
+              ],
+              "critical_threshold": [
+                3.0,
+                7.0
+              ]
+            },
+            {
+              "metric": "flow_velocity",
+              "unit": "m/s",
+              "target_range": [
+                0.5,
+                2.0
+              ],
+              "critical_threshold": [
+                0.1,
+                3.0
+              ]
+            }
+          ],
+          "control_metrics": [
+            {
+              "metric": "control_accuracy",
+              "unit": "%",
+              "target_range": [
+                95,
+                100
+              ],
+              "critical_threshold": [
+                80,
+                100
+              ]
+            },
+            {
+              "metric": "actuator_efficiency",
+              "unit": "%",
+              "target_range": [
+                90,
+                100
+              ],
+              "critical_threshold": [
+                70,
+                100
+              ]
+            },
+            {
+              "metric": "response_time",
+              "unit": "s",
+              "target_range": [
+                1,
+                5
+              ],
+              "critical_threshold": [
+                0.5,
+                10
+              ]
+            }
+          ],
+          "system_metrics": [
+            {
+              "metric": "system_stability",
+              "unit": "index",
+              "target_range": [
+                0.8,
+                1.0
+              ],
+              "critical_threshold": [
+                0.6,
+                1.0
+              ]
+            },
+            {
+              "metric": "energy_consumption",
+              "unit": "kWh",
+              "target_range": [
+                100,
+                150
+              ],
+              "critical_threshold": [
+                80,
+                200
+              ]
+            },
+            {
+              "metric": "reliability_index",
+              "unit": "index",
+              "target_range": [
+                0.95,
+                1.0
+              ],
+              "critical_threshold": [
+                0.85,
+                1.0
+              ]
+            }
+          ]
+        },
+        "expected_impact_assessment": {
+          "system_performance_impact": {
+            "water_level_deviation": {
+              "low_intensity": "±0.2m",
+              "medium_intensity": "±0.5m",
+              "high_intensity": "±1.0m",
+              "extreme_intensity": "±2.0m"
+            },
+            "flow_rate_deviation": {
+              "low_intensity": "±5%",
+              "medium_intensity": "±15%",
+              "high_intensity": "±30%",
+              "extreme_intensity": "±50%"
+            },
+            "control_accuracy_degradation": {
+              "low_intensity": "2-5%",
+              "medium_intensity": "5-15%",
+              "high_intensity": "15-30%",
+              "extreme_intensity": "30-50%"
+            }
+          },
+          "economic_impact": {
+            "energy_cost_increase": {
+              "low_intensity": "5-10%",
+              "medium_intensity": "10-25%",
+              "high_intensity": "25-50%",
+              "extreme_intensity": "50-100%"
+            },
+            "maintenance_cost_increase": {
+              "low_intensity": "10-20%",
+              "medium_intensity": "20-40%",
+              "high_intensity": "40-80%",
+              "extreme_intensity": "80-150%"
+            }
+          },
+          "environmental_impact": {
+            "water_quality_degradation": {
+              "low_intensity": "轻微",
+              "medium_intensity": "中等",
+              "high_intensity": "严重",
+              "extreme_intensity": "极严重"
+            },
+            "ecological_disruption": {
+              "low_intensity": "局部影响",
+              "medium_intensity": "区域影响",
+              "high_intensity": "流域影响",
+              "extreme_intensity": "生态系统破坏"
+            }
+          }
+        },
+        "data_logging": {
+          "logging_frequency": {
+            "high_frequency": 1,
+            "medium_frequency": 10,
+            "low_frequency": 60
+          },
+          "logged_variables": [
+            "inflow_rate",
+            "water_level",
+            "gate_opening",
+            "pump_speed",
+            "control_signal",
+            "actuator_efficiency",
+            "system_state",
+            "disturbance_intensity"
+          ],
+          "storage_format": "csv",
+          "file_naming": "inflow_actuator_combined_{timestamp}.csv",
+          "compression": {
+            "enabled": true,
+            "algorithm": "gzip",
+            "compression_level": 6
+          }
+        },
+        "visualization": {
+          "real_time_plots": {
+            "enabled": true,
+            "update_frequency": 5,
+            "plot_types": [
+              "time_series",
+              "phase_portrait",
+              "frequency_spectrum"
+            ]
+          },
+          "static_reports": {
+            "enabled": true,
+            "report_types": [
+              "performance_summary",
+              "disturbance_analysis",
+              "impact_assessment"
+            ],
+            "output_format": [
+              "pdf",
+              "html"
+            ]
+          },
+          "interactive_dashboard": {
+            "enabled": true,
+            "dashboard_url": "http://localhost:8080/dashboard",
+            "refresh_rate": 10
+          }
+        },
+        "validation_testing": {
+          "unit_tests": {
+            "enabled": true,
+            "test_cases": [
+              "inflow_variation_response",
+              "actuator_interference_handling",
+              "combined_disturbance_stability"
+            ]
+          },
+          "integration_tests": {
+            "enabled": true,
+            "test_scenarios": [
+              "end_to_end_simulation",
+              "fault_recovery_sequence",
+              "performance_optimization"
+            ]
+          },
+          "stress_tests": {
+            "enabled": true,
+            "stress_levels": [
+              "maximum_inflow_variation",
+              "complete_actuator_failure",
+              "extreme_combined_disturbance"
+            ]
+          }
+        }
+      }
+    },
+    "network_delay_packet_loss": {
+      "scenario_name": "network_delay_packet_loss",
+      "timestamp": "2025-09-03T21:12:18.082800",
+      "simulation_time": 100,
+      "components_count": 9,
+      "agents_count": 13,
+      "controllers_count": 0,
+      "water_level_stats": {
+        "mean": 10.25,
+        "std": 3.491060010942235,
+        "min": 6.0,
+        "max": 15.0,
+        "median": 10.0
+      },
+      "water_level_count": 400,
+      "flow_rate_stats": {
+        "mean": 18.402307721526807,
+        "std": 28.136834803069334,
+        "min": 0.0,
+        "max": 79.21186828213787,
+        "median": 0.0
+      },
+      "flow_rate_count": 900,
+      "gate_opening_stats": {
+        "mean": 0.6,
+        "std": 0.08164965809277258,
+        "min": 0.5,
+        "max": 0.7,
+        "median": 0.6
+      },
+      "gate_opening_count": 300,
+      "component_statistics": {
+        "Upstream_Reservoir": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 15.0,
+            "volume": 15000000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          }
+        },
+        "Gate_1": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.5,
+            "outflow": 0
+          }
+        },
+        "Channel_1": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 8.0,
+            "volume": 792039.4709530965,
+            "outflow": 79.21186828213787
+          }
+        },
+        "Diversion_1": {
+          "data_points": 100,
+          "last_state": {
+            "outflow": 15.0,
+            "passthrough_flow": 0,
+            "inflow": 0
+          }
+        },
+        "Gate_2": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.6,
+            "outflow": 0
+          }
+        },
+        "Channel_2": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 6.0,
+            "volume": 594029.6032148224,
+            "outflow": 59.40890121160339
+          }
+        },
+        "Diversion_2": {
+          "data_points": 100,
+          "last_state": {
+            "outflow": 12.0,
+            "passthrough_flow": 0,
+            "inflow": 0
+          }
+        },
+        "Gate_3": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.7,
+            "outflow": 0
+          }
+        },
+        "Downstream_Reservoir": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 12.0,
+            "volume": 12000000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          }
+        }
+      },
+      "system_stability": {
+        "water_level_variance": 12.1875,
+        "water_level_range": 9.0,
+        "coefficient_of_variation": 0.34059122057973024
+      },
+      "disturbance_config": {
+        "combined_disturbance_scenario": {
+          "name": "Network_Delay_Packet_Loss_Combined",
+          "description": "网络延迟与数据丢包的组合扰动场景",
+          "type": "combined_network_disturbance",
+          "category": "communication_system",
+          "combination_parameters": {
+            "base_disturbances": {
+              "network_delay": {
+                "reference_file": "../basic_disturbances/network_delay.yml",
+                "weight": 0.6,
+                "interaction_factor": 1.2
+              },
+              "data_packet_loss": {
+                "reference_file": "../basic_disturbances/data_packet_loss.yml",
+                "weight": 0.4,
+                "interaction_factor": 1.3
+              }
+            },
+            "combination_effects": {
+              "synergistic_amplification": {
+                "enable": true,
+                "amplification_factor": 1.5,
+                "threshold_delay": 2000,
+                "threshold_loss_rate": 0.05
+              },
+              "cascading_failures": {
+                "enable": true,
+                "cascade_probability": 0.3,
+                "cascade_delay": 500,
+                "max_cascade_depth": 3
+              },
+              "adaptive_degradation": {
+                "enable": true,
+                "degradation_rate": 0.1,
+                "recovery_time": 30,
+                "resilience_factor": 0.8
+              }
+            }
+          },
+          "parameters": {
+            "network_topology": {
+              "communication_links": {
+                "critical_links": [
+                  {
+                    "link_id": "controller_to_gate1",
+                    "baseline_delay": 100,
+                    "baseline_loss_rate": 0.001,
+                    "bandwidth": 1000,
+                    "priority": "high"
+                  },
+                  {
+                    "link_id": "controller_to_gate2",
+                    "baseline_delay": 120,
+                    "baseline_loss_rate": 0.002,
+                    "bandwidth": 1000,
+                    "priority": "high"
+                  },
+                  {
+                    "link_id": "sensor_to_controller",
+                    "baseline_delay": 80,
+                    "baseline_loss_rate": 0.001,
+                    "bandwidth": 500,
+                    "priority": "medium"
+                  }
+                ],
+                "redundant_links": [
+                  {
+                    "link_id": "backup_controller_link",
+                    "baseline_delay": 200,
+                    "baseline_loss_rate": 0.005,
+                    "bandwidth": 500,
+                    "priority": "low",
+                    "activation_threshold": 0.1
+                  }
+                ]
+              }
+            },
+            "intensity_levels": {
+              "low_impact": {
+                "delay_multiplier": 2.0,
+                "loss_rate_increase": 0.02,
+                "duration_range": [
+                  300,
+                  900
+                ],
+                "recovery_time": 60
+              },
+              "medium_impact": {
+                "delay_multiplier": 5.0,
+                "loss_rate_increase": 0.05,
+                "duration_range": [
+                  900,
+                  1800
+                ],
+                "recovery_time": 120
+              },
+              "high_impact": {
+                "delay_multiplier": 10.0,
+                "loss_rate_increase": 0.1,
+                "duration_range": [
+                  1800,
+                  3600
+                ],
+                "recovery_time": 300
+              },
+              "critical_impact": {
+                "delay_multiplier": 20.0,
+                "loss_rate_increase": 0.2,
+                "duration_range": [
+                  3600,
+                  7200
+                ],
+                "recovery_time": 600
+              }
+            },
+            "temporal_correlation": {
+              "correlation_patterns": {
+                "simultaneous_onset": {
+                  "probability": 0.4,
+                  "time_window": 60
+                },
+                "sequential_onset": {
+                  "probability": 0.4,
+                  "delay_between": [
+                    30,
+                    300
+                  ],
+                  "sequence": [
+                    "delay",
+                    "loss"
+                  ]
+                },
+                "overlapping_periods": {
+                  "probability": 0.2,
+                  "overlap_ratio": 0.6,
+                  "phase_shift": 180
+                }
+              }
+            },
+            "spatial_correlation": {
+              "correlation_distance": 1000,
+              "propagation_speed": 100,
+              "attenuation_factor": 0.1,
+              "affected_regions": {
+                "primary_zone": {
+                  "center": [
+                    "Controller_Node"
+                  ],
+                  "radius": 500,
+                  "impact_intensity": 1.0
+                },
+                "secondary_zone": {
+                  "center": [
+                    "Gateway_Nodes"
+                  ],
+                  "radius": 1000,
+                  "impact_intensity": 0.7
+                },
+                "tertiary_zone": {
+                  "center": [
+                    "Edge_Nodes"
+                  ],
+                  "radius": 2000,
+                  "impact_intensity": 0.4
+                }
+              }
+            },
+            "disturbance_scenarios": [
+              {
+                "scenario_id": "gradual_degradation",
+                "start_time": 3600,
+                "total_duration": 7200,
+                "phases": [
+                  {
+                    "phase": "delay_onset",
+                    "start_offset": 0,
+                    "duration": 1800,
+                    "intensity": "low_impact",
+                    "affected_links": [
+                      "controller_to_gate1"
+                    ]
+                  },
+                  {
+                    "phase": "loss_introduction",
+                    "start_offset": 900,
+                    "duration": 3600,
+                    "intensity": "medium_impact",
+                    "affected_links": [
+                      "controller_to_gate1",
+                      "sensor_to_controller"
+                    ]
+                  },
+                  {
+                    "phase": "combined_peak",
+                    "start_offset": 2700,
+                    "duration": 1800,
+                    "intensity": "high_impact",
+                    "affected_links": [
+                      "all_critical_links"
+                    ]
+                  },
+                  {
+                    "phase": "gradual_recovery",
+                    "start_offset": 4500,
+                    "duration": 2700,
+                    "intensity": "medium_impact",
+                    "recovery_pattern": "exponential"
+                  }
+                ]
+              },
+              {
+                "scenario_id": "burst_interference",
+                "start_time": 21600,
+                "total_duration": 1800,
+                "pattern": "burst",
+                "burst_parameters": {
+                  "burst_count": 5,
+                  "burst_duration": 180,
+                  "burst_interval": 180,
+                  "intensity_progression": [
+                    "medium",
+                    "high",
+                    "critical",
+                    "high",
+                    "medium"
+                  ],
+                  "affected_links_rotation": true
+                }
+              },
+              {
+                "scenario_id": "cascading_failure",
+                "start_time": 43200,
+                "total_duration": 3600,
+                "trigger_conditions": {
+                  "initial_delay_threshold": 1000,
+                  "loss_rate_threshold": 0.03
+                },
+                "cascade_sequence": [
+                  {
+                    "step": 1,
+                    "affected_links": [
+                      "controller_to_gate1"
+                    ],
+                    "intensity": "medium_impact",
+                    "duration": 600
+                  },
+                  {
+                    "step": 2,
+                    "affected_links": [
+                      "controller_to_gate2",
+                      "sensor_to_controller"
+                    ],
+                    "intensity": "high_impact",
+                    "duration": 1200
+                  },
+                  {
+                    "step": 3,
+                    "affected_links": [
+                      "all_links"
+                    ],
+                    "intensity": "critical_impact",
+                    "duration": 1800
+                  }
+                ]
+              }
+            ],
+            "adaptive_responses": {
+              "enable": true,
+              "response_strategies": {
+                "traffic_rerouting": {
+                  "enable": true,
+                  "rerouting_threshold": 0.05,
+                  "backup_path_priority": [
+                    "backup_controller_link"
+                  ],
+                  "switching_delay": 5
+                },
+                "protocol_adaptation": {
+                  "enable": true,
+                  "tcp_window_scaling": true,
+                  "retransmission_timeout": 2.0,
+                  "congestion_control": "cubic"
+                },
+                "qos_adjustment": {
+                  "enable": true,
+                  "priority_queuing": true,
+                  "bandwidth_allocation": {
+                    "critical_traffic": 0.6,
+                    "normal_traffic": 0.3,
+                    "background_traffic": 0.1
+                  }
+                },
+                "error_correction": {
+                  "enable": true,
+                  "forward_error_correction": true,
+                  "automatic_repeat_request": true,
+                  "redundant_transmission": 2
+                }
+              }
+            },
+            "recovery_strategies": {
+              "enable": true,
+              "recovery_phases": {
+                "immediate_response": {
+                  "duration": 60,
+                  "actions": [
+                    "activate_backup_links",
+                    "increase_retransmission",
+                    "reduce_transmission_rate"
+                  ]
+                },
+                "stabilization": {
+                  "duration": 300,
+                  "actions": [
+                    "optimize_routing_tables",
+                    "adjust_qos_parameters",
+                    "monitor_performance_metrics"
+                  ]
+                },
+                "full_recovery": {
+                  "duration": 600,
+                  "actions": [
+                    "restore_normal_operations",
+                    "validate_system_performance",
+                    "update_network_configuration"
+                  ]
+                }
+              },
+              "recovery_validation": {
+                "performance_thresholds": {
+                  "max_acceptable_delay": 500,
+                  "max_acceptable_loss": 0.01,
+                  "min_throughput": 0.9
+                },
+                "validation_duration": 300
+              }
+            }
+          },
+          "trigger_conditions": {
+            "start_time": 0,
+            "duration": 86400,
+            "trigger_type": "scenario_based"
+          },
+          "monitoring": {
+            "metrics": [
+              "end_to_end_delay",
+              "packet_loss_rate",
+              "throughput_efficiency",
+              "jitter_variance",
+              "connection_stability",
+              "recovery_time",
+              "system_availability"
+            ],
+            "sampling_interval": 10
+          },
+          "expected_impact": {
+            "severity": "critical",
+            "affected_components": [
+              "实时控制",
+              "数据传输",
+              "系统监测",
+              "故障诊断"
+            ],
+            "impact_description": "网络延迟与丢包的组合将严重影响系统实时性和可靠性",
+            "quantitative_impact": {
+              "control_loop_performance_loss": 0.5,
+              "data_integrity_degradation": 0.3,
+              "system_response_delay": 3.0,
+              "fault_detection_accuracy": 0.7,
+              "overall_system_efficiency": 0.6
+            }
+          }
+        }
+      }
+    },
+    "node_failure_sensor_interference": {
+      "scenario_name": "node_failure_sensor_interference",
+      "timestamp": "2025-09-03T21:12:18.367733",
+      "simulation_time": 100,
+      "components_count": 9,
+      "agents_count": 13,
+      "controllers_count": 0,
+      "water_level_stats": {
+        "mean": 10.25,
+        "std": 3.491060010942235,
+        "min": 6.0,
+        "max": 15.0,
+        "median": 10.0
+      },
+      "water_level_count": 400,
+      "flow_rate_stats": {
+        "mean": 18.402307721526807,
+        "std": 28.136834803069334,
+        "min": 0.0,
+        "max": 79.21186828213787,
+        "median": 0.0
+      },
+      "flow_rate_count": 900,
+      "gate_opening_stats": {
+        "mean": 0.6,
+        "std": 0.08164965809277258,
+        "min": 0.5,
+        "max": 0.7,
+        "median": 0.6
+      },
+      "gate_opening_count": 300,
+      "component_statistics": {
+        "Upstream_Reservoir": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 15.0,
+            "volume": 15000000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          }
+        },
+        "Gate_1": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.5,
+            "outflow": 0
+          }
+        },
+        "Channel_1": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 8.0,
+            "volume": 792039.4709530965,
+            "outflow": 79.21186828213787
+          }
+        },
+        "Diversion_1": {
+          "data_points": 100,
+          "last_state": {
+            "outflow": 15.0,
+            "passthrough_flow": 0,
+            "inflow": 0
+          }
+        },
+        "Gate_2": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.6,
+            "outflow": 0
+          }
+        },
+        "Channel_2": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 6.0,
+            "volume": 594029.6032148224,
+            "outflow": 59.40890121160339
+          }
+        },
+        "Diversion_2": {
+          "data_points": 100,
+          "last_state": {
+            "outflow": 12.0,
+            "passthrough_flow": 0,
+            "inflow": 0
+          }
+        },
+        "Gate_3": {
+          "data_points": 100,
+          "last_state": {
+            "opening": 0.7,
+            "outflow": 0
+          }
+        },
+        "Downstream_Reservoir": {
+          "data_points": 100,
+          "last_state": {
+            "water_level": 12.0,
+            "volume": 12000000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          }
+        }
+      },
+      "system_stability": {
+        "water_level_variance": 12.1875,
+        "water_level_range": 9.0,
+        "coefficient_of_variation": 0.34059122057973024
+      },
+      "disturbance_config": {
+        "combined_disturbance_scenario": {
+          "name": "Node_Failure_Sensor_Interference_Combined",
+          "description": "节点故障与传感器干扰的组合扰动场景",
+          "type": "combined_system_failure",
+          "category": "hardware_software_system",
+          "combination_parameters": {
+            "base_disturbances": {
+              "node_failure": {
+                "reference_file": "../basic_disturbances/node_failure.yml",
+                "weight": 0.7,
+                "interaction_factor": 1.4
+              },
+              "sensor_interference": {
+                "reference_file": "../basic_disturbances/sensor_interference.yml",
+                "weight": 0.3,
+                "interaction_factor": 1.6
+              }
+            },
+            "combination_effects": {
+              "failure_propagation": {
+                "enable": true,
+                "propagation_probability": 0.4,
+                "propagation_delay": 120,
+                "isolation_effectiveness": 0.8
+              },
+              "observability_degradation": {
+                "enable": true,
+                "degradation_factor": 2.0,
+                "blind_spot_expansion": 1.5,
+                "estimation_uncertainty": 0.4
+              },
+              "recovery_complexity": {
+                "enable": true,
+                "complexity_multiplier": 2.5,
+                "diagnosis_difficulty": 1.8,
+                "repair_time_extension": 1.6
+              }
+            }
+          },
+          "parameters": {
+            "system_architecture": {
+              "node_hierarchy": {
+                "control_nodes": [
+                  {
+                    "node_id": "Central_Controller",
+                    "criticality": "critical",
+                    "redundancy_level": 2,
+                    "sensor_dependencies": [
+                      "water_level_sensors",
+                      "flow_rate_sensors"
+                    ],
+                    "backup_nodes": [
+                      "Backup_Controller_1",
+                      "Backup_Controller_2"
+                    ]
+                  },
+                  {
+                    "node_id": "Local_Controller_1",
+                    "criticality": "high",
+                    "redundancy_level": 1,
+                    "sensor_dependencies": [
+                      "gate_position_sensors",
+                      "local_flow_sensors"
+                    ],
+                    "backup_nodes": [
+                      "Local_Controller_Backup"
+                    ]
+                  },
+                  {
+                    "node_id": "Local_Controller_2",
+                    "criticality": "high",
+                    "redundancy_level": 1,
+                    "sensor_dependencies": [
+                      "channel_level_sensors",
+                      "diversion_flow_sensors"
+                    ],
+                    "backup_nodes": [
+                      "Local_Controller_Backup"
+                    ]
+                  }
+                ],
+                "sensor_nodes": [
+                  {
+                    "node_id": "Sensor_Cluster_A",
+                    "location": "Upstream_Reservoir",
+                    "sensor_types": [
+                      "water_level",
+                      "temperature",
+                      "turbidity"
+                    ],
+                    "communication_node": "Central_Controller",
+                    "backup_communication": [
+                      "Local_Controller_1"
+                    ]
+                  },
+                  {
+                    "node_id": "Sensor_Cluster_B",
+                    "location": "Channel_Network",
+                    "sensor_types": [
+                      "flow_rate",
+                      "water_level",
+                      "gate_position"
+                    ],
+                    "communication_node": "Local_Controller_1",
+                    "backup_communication": [
+                      "Central_Controller"
+                    ]
+                  },
+                  {
+                    "node_id": "Sensor_Cluster_C",
+                    "location": "Downstream_Area",
+                    "sensor_types": [
+                      "water_level",
+                      "flow_rate",
+                      "water_quality"
+                    ],
+                    "communication_node": "Local_Controller_2",
+                    "backup_communication": [
+                      "Central_Controller"
+                    ]
+                  }
+                ]
+              }
+            },
+            "failure_modes": {
+              "node_failure_types": {
+                "hardware_failure": {
+                  "cpu_failure": {
+                    "probability": 0.01,
+                    "mtbf": 8760,
+                    "repair_time": 240,
+                    "impact_severity": "critical"
+                  },
+                  "memory_failure": {
+                    "probability": 0.015,
+                    "mtbf": 6000,
+                    "repair_time": 120,
+                    "impact_severity": "high"
+                  },
+                  "network_interface_failure": {
+                    "probability": 0.02,
+                    "mtbf": 4380,
+                    "repair_time": 60,
+                    "impact_severity": "medium"
+                  }
+                },
+                "software_failure": {
+                  "operating_system_crash": {
+                    "probability": 0.005,
+                    "mtbf": 2000,
+                    "recovery_time": 30,
+                    "impact_severity": "high"
+                  },
+                  "application_hang": {
+                    "probability": 0.01,
+                    "mtbf": 1000,
+                    "recovery_time": 10,
+                    "impact_severity": "medium"
+                  },
+                  "database_corruption": {
+                    "probability": 0.002,
+                    "mtbf": 5000,
+                    "recovery_time": 180,
+                    "impact_severity": "critical"
+                  }
+                }
+              },
+              "sensor_interference_types": {
+                "electromagnetic_interference": {
+                  "source_types": [
+                    "power_line_interference",
+                    "radio_frequency_interference",
+                    "switching_transients"
+                  ],
+                  "intensity_levels": [
+                    "low",
+                    "medium",
+                    "high",
+                    "severe"
+                  ],
+                  "frequency_ranges": [
+                    [
+                      0.1,
+                      1
+                    ],
+                    [
+                      1,
+                      10
+                    ],
+                    [
+                      10,
+                      100
+                    ],
+                    [
+                      100,
+                      1000
+                    ]
+                  ]
+                },
+                "environmental_interference": {
+                  "weather_effects": {
+                    "rain_interference": 0.1,
+                    "wind_vibration": 0.05,
+                    "temperature_drift": 0.02,
+                    "humidity_effect": 0.03
+                  },
+                  "physical_obstruction": {
+                    "debris_accumulation": 0.08,
+                    "vegetation_growth": 0.04,
+                    "sediment_deposition": 0.06
+                  }
+                },
+                "calibration_drift": {
+                  "drift_patterns": {
+                    "linear_drift": 0.001,
+                    "exponential_drift": 0.002,
+                    "periodic_drift": 0.0005
+                  },
+                  "calibration_intervals": 2160
+                }
+              }
+            },
+            "combined_failure_scenarios": [
+              {
+                "scenario_id": "cascading_system_failure",
+                "description": "级联系统故障",
+                "start_time": 7200,
+                "total_duration": 14400,
+                "failure_sequence": [
+                  {
+                    "step": 1,
+                    "time_offset": 0,
+                    "failure_type": "sensor_interference",
+                    "affected_components": [
+                      "Sensor_Cluster_A"
+                    ],
+                    "interference_type": "electromagnetic",
+                    "intensity": "medium",
+                    "duration": 3600
+                  },
+                  {
+                    "step": 2,
+                    "time_offset": 1800,
+                    "failure_type": "node_failure",
+                    "affected_components": [
+                      "Local_Controller_1"
+                    ],
+                    "failure_mode": "hardware_failure",
+                    "failure_subtype": "network_interface_failure",
+                    "duration": 7200
+                  },
+                  {
+                    "step": 3,
+                    "time_offset": 3600,
+                    "failure_type": "sensor_interference",
+                    "affected_components": [
+                      "Sensor_Cluster_B",
+                      "Sensor_Cluster_C"
+                    ],
+                    "interference_type": "environmental",
+                    "intensity": "high",
+                    "duration": 10800
+                  },
+                  {
+                    "step": 4,
+                    "time_offset": 5400,
+                    "failure_type": "node_failure",
+                    "affected_components": [
+                      "Central_Controller"
+                    ],
+                    "failure_mode": "software_failure",
+                    "failure_subtype": "application_hang",
+                    "duration": 1800
+                  }
+                ]
+              },
+              {
+                "scenario_id": "distributed_degradation",
+                "description": "分布式系统退化",
+                "start_time": 28800,
+                "total_duration": 10800,
+                "degradation_pattern": {
+                  "spatial_distribution": {
+                    "affected_zones": [
+                      "upstream",
+                      "midstream",
+                      "downstream"
+                    ],
+                    "propagation_speed": 0.1,
+                    "intensity_gradient": [
+                      1.0,
+                      0.8,
+                      0.6
+                    ]
+                  },
+                  "temporal_evolution": {
+                    "phases": [
+                      {
+                        "phase": "initiation",
+                        "duration": 1800,
+                        "failure_rate": 0.1,
+                        "interference_level": "low"
+                      },
+                      {
+                        "phase": "escalation",
+                        "duration": 3600,
+                        "failure_rate": 0.3,
+                        "interference_level": "medium"
+                      },
+                      {
+                        "phase": "peak_impact",
+                        "duration": 1800,
+                        "failure_rate": 0.5,
+                        "interference_level": "high"
+                      },
+                      {
+                        "phase": "stabilization",
+                        "duration": 3600,
+                        "failure_rate": 0.2,
+                        "interference_level": "medium"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "scenario_id": "coordinated_attack_simulation",
+                "description": "协调攻击仿真",
+                "start_time": 50400,
+                "total_duration": 7200,
+                "attack_vectors": [
+                  {
+                    "vector": "targeted_node_compromise",
+                    "target_nodes": [
+                      "Central_Controller",
+                      "Local_Controller_1"
+                    ],
+                    "attack_method": "malware_injection",
+                    "success_probability": 0.7,
+                    "detection_delay": 600
+                  },
+                  {
+                    "vector": "sensor_jamming",
+                    "target_sensors": [
+                      "all_critical_sensors"
+                    ],
+                    "jamming_method": "broadband_interference",
+                    "coverage_area": 2000,
+                    "jamming_power": "high"
+                  },
+                  {
+                    "vector": "communication_disruption",
+                    "target_links": [
+                      "all_communication_links"
+                    ],
+                    "disruption_method": "signal_flooding",
+                    "bandwidth_consumption": 0.9,
+                    "duration": 3600
+                  }
+                ]
+              }
+            ],
+            "fault_detection_diagnosis": {
+              "detection_mechanisms": {
+                "anomaly_detection": {
+                  "enable": true,
+                  "detection_algorithms": [
+                    "statistical_process_control",
+                    "machine_learning_based",
+                    "model_based_detection"
+                  ],
+                  "detection_threshold": 2.5,
+                  "false_positive_rate": 0.05,
+                  "detection_delay": 30
+                },
+                "health_monitoring": {
+                  "enable": true,
+                  "monitoring_parameters": [
+                    "cpu_utilization",
+                    "memory_usage",
+                    "network_latency",
+                    "sensor_data_quality",
+                    "communication_status"
+                  ],
+                  "monitoring_frequency": 10
+                },
+                "redundancy_checking": {
+                  "enable": true,
+                  "cross_validation": true,
+                  "voting_algorithms": [
+                    "majority_voting",
+                    "weighted_voting"
+                  ],
+                  "consistency_threshold": 0.1
+                }
+              },
+              "diagnosis_capabilities": {
+                "root_cause_analysis": {
+                  "enable": true,
+                  "analysis_methods": [
+                    "fault_tree_analysis",
+                    "bayesian_networks",
+                    "expert_systems"
+                  ],
+                  "diagnosis_accuracy": 0.85,
+                  "diagnosis_time": 300
+                },
+                "failure_localization": {
+                  "enable": true,
+                  "localization_precision": 0.9,
+                  "spatial_resolution": 100,
+                  "temporal_resolution": 60
+                }
+              }
+            },
+            "recovery_repair_strategies": {
+              "immediate_response": {
+                "duration": 300,
+                "actions": [
+                  "isolate_failed_components",
+                  "activate_backup_systems",
+                  "switch_to_degraded_mode",
+                  "alert_maintenance_team"
+                ]
+              },
+              "short_term_mitigation": {
+                "duration": 1800,
+                "actions": [
+                  "reconfigure_system_topology",
+                  "adjust_control_parameters",
+                  "implement_workarounds",
+                  "monitor_system_stability"
+                ]
+              },
+              "long_term_recovery": {
+                "duration": 14400,
+                "actions": [
+                  "repair_failed_hardware",
+                  "restore_software_systems",
+                  "recalibrate_sensors",
+                  "validate_system_performance",
+                  "update_system_documentation"
+                ]
+              },
+              "recovery_validation": {
+                "validation_criteria": {
+                  "functionality_restoration": 0.95,
+                  "performance_recovery": 0.9,
+                  "reliability_verification": 0.98
+                },
+                "validation_duration": 3600
+              }
+            }
+          },
+          "trigger_conditions": {
+            "start_time": 0,
+            "duration": 86400,
+            "trigger_type": "scenario_based"
+          },
+          "monitoring": {
+            "metrics": [
+              "system_availability",
+              "fault_detection_rate",
+              "false_alarm_rate",
+              "mean_time_to_repair",
+              "system_resilience_index",
+              "observability_coverage",
+              "control_performance_degradation"
+            ],
+            "sampling_interval": 30
+          },
+          "expected_impact": {
+            "severity": "critical",
+            "affected_components": [
+              "系统可观测性",
+              "故障诊断能力",
+              "控制系统冗余",
+              "数据完整性"
+            ],
+            "impact_description": "节点故障与传感器干扰的组合将严重影响系统的可观测性和故障恢复能力",
+            "quantitative_impact": {
+              "observability_loss": 0.6,
+              "fault_diagnosis_accuracy": 0.4,
+              "system_availability": 0.7,
+              "recovery_time_increase": 2.5,
+              "operational_cost_increase": 0.8
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,232 @@
+{
+  "scenario_name": "node_failure",
+  "timestamp": "2025-09-03T11:53:36.631226",
+  "simulation_time": 100,
+  "components_count": 9,
+  "agents_count": 13,
+  "controllers_count": 0,
+  "water_level_stats": {
+    "mean": 10.25,
+    "std": 3.491060010942235,
+    "min": 6.0,
+    "max": 15.0,
+    "median": 10.0
+  },
+  "water_level_count": 400,
+  "flow_rate_stats": {
+    "mean": 18.402307721526807,
+    "std": 28.136834803069334,
+    "min": 0.0,
+    "max": 79.21186828213787,
+    "median": 0.0
+  },
+  "flow_rate_count": 900,
+  "gate_opening_stats": {
+    "mean": 0.6,
+    "std": 0.08164965809277258,
+    "min": 0.5,
+    "max": 0.7,
+    "median": 0.6
+  },
+  "gate_opening_count": 300,
+  "component_statistics": {
+    "Upstream_Reservoir": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 15.0,
+        "volume": 15000000.0,
+        "outflow": 0,
+        "inflow": 0.0
+      }
+    },
+    "Gate_1": {
+      "data_points": 100,
+      "last_state": {
+        "opening": 0.5,
+        "outflow": 0
+      }
+    },
+    "Channel_1": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 8.0,
+        "volume": 792039.4709530965,
+        "outflow": 79.21186828213787
+      }
+    },
+    "Diversion_1": {
+      "data_points": 100,
+      "last_state": {
+        "outflow": 15.0,
+        "passthrough_flow": 0,
+        "inflow": 0
+      }
+    },
+    "Gate_2": {
+      "data_points": 100,
+      "last_state": {
+        "opening": 0.6,
+        "outflow": 0
+      }
+    },
+    "Channel_2": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 6.0,
+        "volume": 594029.6032148224,
+        "outflow": 59.40890121160339
+      }
+    },
+    "Diversion_2": {
+      "data_points": 100,
+      "last_state": {
+        "outflow": 12.0,
+        "passthrough_flow": 0,
+        "inflow": 0
+      }
+    },
+    "Gate_3": {
+      "data_points": 100,
+      "last_state": {
+        "opening": 0.7,
+        "outflow": 0
+      }
+    },
+    "Downstream_Reservoir": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 12.0,
+        "volume": 12000000.0,
+        "outflow": 0,
+        "inflow": 0.0
+      }
+    }
+  },
+  "system_stability": {
+    "water_level_variance": 12.1875,
+    "water_level_range": 9.0,
+    "coefficient_of_variation": 0.34059122057973024
+  },
+  "disturbance_config": {
+    "disturbance_scenario": {
+      "name": "Node_Failure_Disturbance",
+      "description": "模拟分布式智能体节点的故障和恢复",
+      "type": "node_failure",
+      "category": "system_failure",
+      "parameters": {
+        "failure_types": {
+          "partial_failure": {
+            "description": "部分功能失效",
+            "performance_degradation": 0.5,
+            "response_delay": 2.0,
+            "error_rate": 0.1
+          },
+          "complete_failure": {
+            "description": "完全失效",
+            "performance_degradation": 0.0,
+            "response_delay": null,
+            "error_rate": 1.0
+          },
+          "intermittent_failure": {
+            "description": "间歇性故障",
+            "failure_probability": 0.3,
+            "failure_duration": 60,
+            "recovery_duration": 120
+          }
+        },
+        "failure_scenarios": [
+          {
+            "node_id": "Channel1_Twin_Agent",
+            "failure_type": "partial_failure",
+            "start_time": 7200,
+            "duration": 1800,
+            "recovery_time": 300
+          },
+          {
+            "node_id": "Gate2_Perception_Agent",
+            "failure_type": "complete_failure",
+            "start_time": 10800,
+            "duration": 900,
+            "recovery_time": 180
+          },
+          {
+            "node_id": "CentralPerceptionAgent",
+            "failure_type": "intermittent_failure",
+            "start_time": 14400,
+            "duration": 3600
+          },
+          {
+            "node_id": "Gate3_Control_Agent",
+            "failure_type": "partial_failure",
+            "start_time": 18000,
+            "duration": 1200,
+            "recovery_time": 240
+          }
+        ]
+      },
+      "failure_detection": {
+        "enable": true,
+        "detection_methods": [
+          "heartbeat_monitoring",
+          "response_time_analysis",
+          "data_quality_check"
+        ],
+        "detection_threshold": {
+          "heartbeat_timeout": 30,
+          "response_time_limit": 10,
+          "data_quality_threshold": 0.8
+        }
+      },
+      "recovery_strategy": {
+        "enable_redundancy": true,
+        "backup_nodes": [
+          {
+            "primary": "Channel1_Twin_Agent",
+            "backup": "Channel1_Backup_Agent"
+          },
+          {
+            "primary": "CentralPerceptionAgent",
+            "backup": "Backup_Central_Agent"
+          }
+        ],
+        "failover_mechanism": {
+          "automatic_failover": true,
+          "failover_timeout": 60,
+          "health_check_interval": 30
+        },
+        "recovery_procedures": [
+          "restart_failed_node",
+          "restore_data_consistency",
+          "reestablish_connections",
+          "validate_system_state"
+        ]
+      },
+      "monitoring": {
+        "metrics": [
+          "node_availability",
+          "system_reliability",
+          "failover_time",
+          "recovery_time",
+          "data_consistency"
+        ],
+        "sampling_interval": 15
+      },
+      "expected_impact": {
+        "severity": "critical",
+        "affected_components": [
+          "分布式感知层",
+          "控制智能体层",
+          "系统可靠性",
+          "数据一致性"
+        ],
+        "impact_description": "节点故障将导致系统功能缺失，影响整体系统可靠性和控制连续性"
+      },
+      "risk_assessment": {
+        "probability": "medium",
+        "impact_level": "high",
+        "mitigation_priority": "high",
+        "business_continuity_impact": "significant"
+      }
+    }
+  }
+}

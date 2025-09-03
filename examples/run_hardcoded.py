@@ -158,6 +158,97 @@ class ExamplesHardcodedRunner:
             },
             "agent_based_distributed_control": {
                 "name": "智能体分布式控制",
+                "description": "基于智能体的分布式控制系统",
+                "category": "agent_based",
+                "path": "agent_based/09_agent_based_distributed_control"
+            },
+            # distributed_digital_twin_simulation 系列示例
+            "distributed_digital_twin_simulation/run_simulation": {
+                "name": "分布式数字孪生仿真",
+                "description": "分布式数字孪生基础仿真",
+                "category": "distributed_digital_twin_simulation",
+                "path": "distributed_digital_twin_simulation/run_simulation"
+            },
+            "distributed_digital_twin_simulation/run_disturbance_simulation": {
+                "name": "分布式数字孪生干扰仿真",
+                "description": "分布式数字孪生干扰仿真",
+                "category": "distributed_digital_twin_simulation",
+                "path": "distributed_digital_twin_simulation/run_disturbance_simulation"
+            },
+            "distributed_digital_twin_simulation/run_comparison_experiment": {
+                "name": "分布式数字孪生对比实验",
+                "description": "分布式数字孪生对比实验",
+                "category": "distributed_digital_twin_simulation",
+                "path": "distributed_digital_twin_simulation/run_comparison_experiment"
+            },
+            "distributed_digital_twin_simulation/test_simple_inflow_disturbance": {
+                "name": "简单入流干扰测试",
+                "description": "简单入流干扰测试",
+                "category": "distributed_digital_twin_simulation",
+                "path": "distributed_digital_twin_simulation/test_simple_inflow_disturbance"
+            },
+            "distributed_digital_twin_simulation/test_inflow_disturbance": {
+                "name": "入流干扰测试",
+                "description": "入流干扰测试",
+                "category": "distributed_digital_twin_simulation",
+                "path": "distributed_digital_twin_simulation/test_inflow_disturbance"
+            },
+            "distributed_digital_twin_simulation/test_network_disturbance": {
+                "name": "网络干扰测试",
+                "description": "网络干扰测试",
+                "category": "distributed_digital_twin_simulation",
+                "path": "distributed_digital_twin_simulation/test_network_disturbance"
+            },
+            "distributed_digital_twin_simulation/test_actuator_failure_disturbance": {
+                "name": "执行器故障干扰测试",
+                "description": "执行器故障干扰测试",
+                "category": "distributed_digital_twin_simulation",
+                "path": "distributed_digital_twin_simulation/test_actuator_failure_disturbance"
+            },
+            "distributed_digital_twin_simulation/test_comprehensive_disturbance": {
+                "name": "综合干扰测试",
+                "description": "综合干扰测试",
+                "category": "distributed_digital_twin_simulation",
+                "path": "distributed_digital_twin_simulation/test_comprehensive_disturbance"
+            },
+            "distributed_digital_twin_simulation/test_multiple_disturbance_types": {
+                "name": "多种干扰类型测试",
+                "description": "多种干扰类型测试",
+                "category": "distributed_digital_twin_simulation",
+                "path": "distributed_digital_twin_simulation/test_multiple_disturbance_types"
+            },
+            "distributed_digital_twin_simulation/comprehensive_disturbance_test_suite": {
+                "name": "综合干扰测试套件",
+                "description": "综合干扰测试套件",
+                "category": "distributed_digital_twin_simulation",
+                "path": "distributed_digital_twin_simulation/comprehensive_disturbance_test_suite"
+            },
+            "distributed_digital_twin_simulation/parameter_identification_analysis": {
+                "name": "参数辨识分析",
+                "description": "参数辨识分析",
+                "category": "distributed_digital_twin_simulation",
+                "path": "distributed_digital_twin_simulation/parameter_identification_analysis"
+            },
+            "distributed_digital_twin_simulation/physical_digital_twin_comparison": {
+                "name": "物理数字孪生对比",
+                "description": "物理数字孪生对比",
+                "category": "distributed_digital_twin_simulation",
+                "path": "distributed_digital_twin_simulation/physical_digital_twin_comparison"
+            },
+            "distributed_digital_twin_simulation/robustness_validation": {
+                "name": "鲁棒性验证",
+                "description": "鲁棒性验证",
+                "category": "distributed_digital_twin_simulation",
+                "path": "distributed_digital_twin_simulation/robustness_validation"
+            },
+            "distributed_digital_twin_simulation/optimized_control_validation": {
+                "name": "优化控制验证",
+                "description": "优化控制验证",
+                "category": "distributed_digital_twin_simulation",
+                "path": "distributed_digital_twin_simulation/optimized_control_validation"
+            },
+            "agent_based_distributed_control_old": {
+                "name": "智能体分布式控制",
                 "description": "基于智能体的分布式控制示例",
                 "category": "agent_based",
                 "path": "agent_based/09_agent_based_distributed_control"
@@ -621,6 +712,62 @@ class ExamplesHardcodedRunner:
         
         return harness
     
+    def run_distributed_digital_twin_example(self, example_key):
+        """运行distributed_digital_twin_simulation系列示例"""
+        import subprocess
+        import sys
+        from pathlib import Path
+        
+        # 提取脚本名称
+        script_name = example_key.split('/')[-1] + '.py'
+        script_path = Path(__file__).parent / 'distributed_digital_twin_simulation' / script_name
+        
+        if not script_path.exists():
+            print(f"错误：脚本文件不存在: {script_path}")
+            return False
+        
+        try:
+            print(f"运行脚本: {script_path}")
+            
+            # 切换到脚本所在目录
+            original_cwd = Path.cwd()
+            script_dir = script_path.parent
+            
+            # 运行脚本，对于distributed_digital_twin_simulation使用更短的超时时间
+            timeout_seconds = 60 if 'distributed_digital_twin_simulation' in example_key else 300
+            result = subprocess.run(
+                [sys.executable, str(script_path)],
+                cwd=str(script_dir),
+                capture_output=True,
+                text=True,
+                encoding='utf-8',
+                errors='ignore',
+                timeout=timeout_seconds
+            )
+            
+            if result.returncode == 0:
+                print("脚本执行成功")
+                if result.stdout:
+                    print("输出:")
+                    print(result.stdout)
+                return True
+            else:
+                print(f"脚本执行失败，返回码: {result.returncode}")
+                if result.stderr:
+                    print("错误信息:")
+                    print(result.stderr)
+                if result.stdout:
+                    print("输出:")
+                    print(result.stdout)
+                return False
+                
+        except subprocess.TimeoutExpired:
+            print("脚本执行超时")
+            return False
+        except Exception as e:
+            print(f"运行脚本时发生异常: {e}")
+            return False
+    
     def run_example(self, example_key):
         """运行指定示例"""
         if example_key not in self.examples:
@@ -652,6 +799,9 @@ class ExamplesHardcodedRunner:
                 harness = self.create_llm_integration_simulation()
             elif example_key in ["gate_discharge_identification", "pipe_roughness_identification"]:
                 harness = self.create_identification_simulation(example_key)
+            elif example_key.startswith("distributed_digital_twin_simulation/"):
+                # 处理distributed_digital_twin_simulation系列示例
+                return self.run_distributed_digital_twin_example(example_key)
             else:
                 # 其他示例的通用处理
                 harness = self.create_getting_started_simulation()

@@ -10,9 +10,16 @@ class GatePerceptionAgent(Agent):
     3. Performing real-time identification of physical parameters (e.g., discharge coefficient).
     4. Publishing the cleaned, high-fidelity state information to the message bus.
     """
-    def __init__(self, agent_id, message_bus, physical_object_name, 
-                 identification_config=None, cleaner_config=None, 
-                 initial_discharge_coefficient=0.6, **kwargs):
+    def __init__(self, agent_id, message_bus, config=None, **kwargs):
+        # Handle different parameter formats
+        if config is None:
+            config = kwargs
+        
+        # Extract parameters from config
+        physical_object_name = config.get('physical_object_name', f'{agent_id}_gate')
+        identification_config = config.get('identification_config', None)
+        cleaner_config = config.get('cleaner_config', None)
+        initial_discharge_coefficient = config.get('initial_discharge_coefficient', 0.6)
         super().__init__(agent_id)
         self.message_bus = message_bus
         self.physical_object_name = physical_object_name

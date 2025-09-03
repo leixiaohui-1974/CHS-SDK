@@ -47,6 +47,13 @@ class Gate(PhysicalObjectInterface):
             return 0
         return C * area * math.sqrt(2 * g * head)
 
+    def calculate_outflow(self, upstream_level: float, opening: float, downstream_level: float = 0, C: Optional[float] = None) -> float:
+        """
+        公共方法：计算通过闸门的流量。
+        这是对私有方法_calculate_outflow的包装，供外部代码调用。
+        """
+        return self._calculate_outflow(upstream_level, opening, downstream_level, C)
+
     def _calculate_opening_for_flow(self, target_flow: float) -> float:
         """孔口公式的反向计算，用于根据目标流量计算所需的闸门开度。"""
         C = self._params.get('discharge_coefficient', 0.6)

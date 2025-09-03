@@ -1,0 +1,8 @@
+{
+  "scenario_name": "baseline",
+  "timestamp": "2025-09-03T08:12:52.117647",
+  "simulation_time": 100,
+  "components_count": 9,
+  "agents_count": 13,
+  "controllers_count": 0
+}

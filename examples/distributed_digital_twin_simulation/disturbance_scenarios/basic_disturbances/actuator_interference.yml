@@ -1,0 +1,264 @@
+# 执行器干扰扰动场景配置
+# 模拟执行器控制过程中的干扰、故障和性能退化
+
+disturbance_scenario:
+  name: "Actuator_Interference_Disturbance"
+  description: "模拟执行器控制系统的干扰、故障和性能退化"
+  type: "actuator_interference"
+  category: "control_system"
+  
+  # 扰动参数配置
+  parameters:
+    # 执行器配置
+    actuator_systems:
+      gate_actuators:
+        locations:
+          - "Gate_1"
+          - "Gate_2"
+          - "Gate_3"
+        actuator_type: "hydraulic"
+        response_time: 30           # 响应时间30秒
+        max_speed: 0.02            # 最大速度2%/秒
+        position_accuracy: 0.01     # 位置精度1%
+        force_capacity: 50000       # 推力容量50kN
+        
+      pump_actuators:
+        locations:
+          - "Pump_Station_1"
+          - "Pump_Station_2"
+        actuator_type: "electric"
+        response_time: 5            # 响应时间5秒
+        max_speed: 0.1             # 最大速度10%/秒
+        flow_accuracy: 0.02        # 流量精度2%
+        power_capacity: 500         # 功率容量500kW
+        
+      valve_actuators:
+        locations:
+          - "Control_Valve_1"
+          - "Control_Valve_2"
+          - "Emergency_Valve"
+        actuator_type: "pneumatic"
+        response_time: 10           # 响应时间10秒
+        max_speed: 0.05            # 最大速度5%/秒
+        position_accuracy: 0.005    # 位置精度0.5%
+        pressure_capacity: 1000     # 压力容量1000kPa
+    
+    # 干扰类型配置
+    interference_types:
+      # 控制信号干扰
+      control_signal_interference:
+        description: "控制信号传输干扰"
+        interference_sources:
+          signal_noise:
+            amplitude: 0.2          # 噪声幅度20% (增强从5%到20%)
+            frequency_range: [0.1, 10] # 频率范围0.1-10Hz
+            type: "white_noise"
+          signal_delay:
+            mean_delay: 5.0         # 平均延迟5秒 (增强从2.0到5.0)
+            delay_variation: 3.0    # 延迟变化3秒 (增强从1.0到3.0)
+            max_delay: 15.0         # 最大延迟15秒 (增强从10.0到15.0)
+          signal_distortion:
+            harmonic_distortion: 0.1 # 谐波失真10% (增强从3%到10%)
+            phase_shift: 15         # 相位偏移15度 (增强从5到15度)
+            amplitude_error: 0.08   # 幅度误差8% (增强从2%到8%)
+            
+      # 机械磨损和老化
+      mechanical_degradation:
+        description: "机械部件磨损和老化"
+        degradation_factors:
+          friction_increase:
+            rate: 0.001             # 摩擦增加率0.1%/天
+            max_increase: 0.5       # 最大增加50%
+          backlash_growth:
+            rate: 0.0005            # 间隙增长率0.05%/天
+            max_backlash: 0.1       # 最大间隙10%
+          stiffness_reduction:
+            rate: 0.0002            # 刚度降低率0.02%/天
+            min_stiffness: 0.7      # 最小刚度70%
+          wear_accumulation:
+            wear_rate: 0.001        # 磨损率
+            critical_wear: 0.8      # 临界磨损80%
+            
+      # 动力系统故障
+      power_system_faults:
+        description: "动力系统故障和异常"
+        fault_types:
+          power_fluctuation:
+            voltage_variation: 0.1  # 电压变化10%
+            frequency_variation: 0.02 # 频率变化2%
+            power_interruption: 0.01 # 断电概率1%
+          hydraulic_pressure_drop:
+            pressure_loss_rate: 0.05 # 压力损失率5%/小时
+            min_pressure: 0.6       # 最小压力60%
+            recovery_time: 300      # 恢复时间5分钟
+          pneumatic_leakage:
+            leakage_rate: 0.02      # 泄漏率2%/小时
+            min_pressure: 0.7       # 最小压力70%
+            detection_delay: 600    # 检测延迟10分钟
+            
+      # 控制系统故障
+      control_system_faults:
+        description: "控制系统硬件和软件故障"
+        fault_categories:
+          sensor_feedback_error:
+            position_error: 0.05    # 位置反馈误差5%
+            velocity_error: 0.1     # 速度反馈误差10%
+            force_error: 0.08       # 力反馈误差8%
+          controller_malfunction:
+            gain_drift: 0.2         # 增益漂移20%
+            offset_error: 0.03      # 偏移误差3%
+            saturation_limit: 0.9   # 饱和限制90%
+          communication_failure:
+            packet_loss: 0.02       # 数据包丢失2%
+            transmission_delay: 5   # 传输延迟5秒
+            protocol_error: 0.001   # 协议错误0.1%
+    
+    # 干扰场景配置
+    interference_scenarios:
+      - scenario_id: "control_signal_noise"
+        start_time: 3600          # 1小时后开始
+        duration: 7200            # 持续2小时
+        affected_actuators: ["Gate_1", "Gate_2"]
+        interference_type: "control_signal_interference"
+        intensity: "medium"
+        parameters:
+          noise_amplitude: 0.08
+          signal_delay: 3.0
+          
+      - scenario_id: "mechanical_wear_event"
+        start_time: 14400         # 4小时后开始
+        duration: 21600           # 持续6小时
+        affected_actuators: ["Gate_3"]
+        interference_type: "mechanical_degradation"
+        intensity: "high"
+        parameters:
+          friction_multiplier: 2.0
+          backlash_increase: 0.05
+          
+      - scenario_id: "power_system_fault"
+        start_time: 28800         # 8小时后开始
+        duration: 1800            # 持续30分钟
+        affected_actuators: ["Pump_Station_1"]
+        interference_type: "power_system_faults"
+        intensity: "critical"
+        parameters:
+          voltage_drop: 0.15
+          power_interruption_duration: 60
+          
+      - scenario_id: "control_system_malfunction"
+        start_time: 50400         # 14小时后开始
+        duration: 3600            # 持续1小时
+        affected_actuators: ["Control_Valve_1", "Control_Valve_2"]
+        interference_type: "control_system_faults"
+        intensity: "high"
+        parameters:
+          controller_gain_error: 0.3
+          feedback_delay: 8
+    
+    # 性能退化模型
+    performance_degradation:
+      enable: true
+      degradation_models:
+        exponential_decay:
+          time_constant: 8760       # 时间常数1年
+          initial_performance: 1.0  # 初始性能100%
+          final_performance: 0.8    # 最终性能80%
+        linear_degradation:
+          degradation_rate: 0.0001  # 退化率0.01%/天
+          maintenance_recovery: 0.9 # 维护恢复90%
+        step_degradation:
+          failure_probability: 0.001 # 故障概率0.1%/天
+          performance_drop: 0.3     # 性能下降30%
+          repair_time: 86400        # 修复时间1天
+    
+    # 故障检测和诊断
+    fault_detection:
+      enable: true
+      detection_methods:
+        performance_monitoring:
+          response_time_threshold: 1.5  # 响应时间阈值1.5倍
+          accuracy_threshold: 0.05      # 精度阈值5%
+          efficiency_threshold: 0.9     # 效率阈值90%
+        vibration_analysis:
+          frequency_bands: [10, 100, 1000] # 频带分析
+          amplitude_threshold: 2.0      # 振幅阈值
+          trend_analysis: true          # 趋势分析
+        thermal_monitoring:
+          temperature_threshold: 80     # 温度阈值80°C
+          thermal_gradient: 10          # 温度梯度10°C/cm
+          cooling_efficiency: 0.8       # 冷却效率80%
+      
+      diagnostic_algorithms:
+        - "model_based_diagnosis"
+        - "data_driven_diagnosis"
+        - "expert_system_diagnosis"
+        - "machine_learning_diagnosis"
+      
+      alarm_thresholds:
+        warning_level: 0.1          # 警告级别10%偏差
+        alarm_level: 0.2            # 报警级别20%偏差
+        critical_level: 0.4         # 严重级别40%偏差
+    
+    # 补偿和修复策略
+    compensation_strategies:
+      enable: true
+      compensation_methods:
+        adaptive_control:
+          enable: true
+          adaptation_rate: 0.1      # 自适应率10%
+          parameter_bounds: [0.5, 2.0] # 参数边界
+          stability_margin: 0.2     # 稳定裕度20%
+        feedforward_compensation:
+          enable: true
+          model_accuracy: 0.9       # 模型精度90%
+          update_frequency: 60      # 更新频率60秒
+        robust_control:
+          enable: true
+          uncertainty_bounds: 0.3   # 不确定性边界30%
+          performance_weight: 0.8   # 性能权重80%
+      
+      maintenance_scheduling:
+        predictive_maintenance: true
+        maintenance_intervals:
+          routine_check: 168        # 例行检查1周
+          preventive_maintenance: 720 # 预防性维护1月
+          overhaul: 8760            # 大修1年
+        condition_based_triggers:
+          performance_threshold: 0.85 # 性能阈值85%
+          wear_threshold: 0.7       # 磨损阈值70%
+          fault_frequency: 0.1      # 故障频率10%/月
+    
+  # 触发条件
+  trigger_conditions:
+    start_time: 0                 # 仿真开始即触发
+    duration: 86400               # 持续24小时
+    trigger_type: "scenario_based"
+    
+  # 性能指标监测
+  monitoring:
+    metrics:
+      - "actuator_response_time"
+      - "position_accuracy"
+      - "control_effectiveness"
+      - "energy_efficiency"
+      - "fault_occurrence_rate"
+      - "maintenance_cost"
+    sampling_interval: 60         # 采样间隔60秒
+    
+  # 预期影响评估
+  expected_impact:
+    severity: "high"
+    affected_components:
+      - "控制精度"
+      - "系统响应"
+      - "能耗效率"
+      - "设备寿命"
+    impact_description: "执行器干扰将降低控制精度，影响系统响应速度和稳定性"
+    
+    # 影响量化分析
+    quantitative_impact:
+      control_accuracy_loss: 0.3   # 控制精度损失30%
+      response_time_increase: 1.5  # 响应时间增加1.5倍
+      energy_consumption_increase: 0.2 # 能耗增加20%
+      maintenance_cost_increase: 0.4   # 维护成本增加40%
+      system_availability_loss: 0.05  # 系统可用性损失5%

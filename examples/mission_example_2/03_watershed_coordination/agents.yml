@@ -14,13 +14,18 @@ agents:
         low_setpoint: 30.0
 
   - id: main_reservoir_controller
-    class: LocalControlAgent
+    class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
+    dt: 10.0
     target_component: main_gate
-    control_variable: opening
-    observation_key: water_level
-    observation_topic: main_reservoir/water_level
-    action_topic: main_gate/opening_command
-    controller:
+    control_type: pid
+    data_sources:
+      observation_topic: main_reservoir/water_level
+      observation_key: water_level
+    control_targets:
+      action_topic: main_gate/opening_command
+    allocation_config:
+      method: direct
+    controller_config:
       class: PIDController
       Kp: 0.8
       Ki: 0.2
@@ -30,13 +35,18 @@ agents:
       max_output: 1.0
 
   - id: tributary_1_controller
-    class: LocalControlAgent
+    class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
+    dt: 10.0
     target_component: tributary_gate_1
-    control_variable: opening
-    observation_key: water_level
-    observation_topic: tributary_reservoir_1/water_level
-    action_topic: tributary_gate_1/opening_command
-    controller:
+    control_type: pid
+    data_sources:
+      observation_topic: tributary_reservoir_1/water_level
+      observation_key: water_level
+    control_targets:
+      action_topic: tributary_gate_1/opening_command
+    allocation_config:
+      method: direct
+    controller_config:
       class: PIDController
       Kp: 0.6
       Ki: 0.15
@@ -46,13 +56,18 @@ agents:
       max_output: 1.0
 
   - id: tributary_2_controller
-    class: LocalControlAgent
+    class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
+    dt: 10.0
     target_component: tributary_gate_2
-    control_variable: opening
-    observation_key: water_level
-    observation_topic: tributary_reservoir_2/water_level
-    action_topic: tributary_gate_2/opening_command
-    controller:
+    control_type: pid
+    data_sources:
+      observation_topic: tributary_reservoir_2/water_level
+      observation_key: water_level
+    control_targets:
+      action_topic: tributary_gate_2/opening_command
+    allocation_config:
+      method: direct
+    controller_config:
       class: PIDController
       Kp: 0.5
       Ki: 0.12

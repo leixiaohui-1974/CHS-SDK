@@ -2,62 +2,86 @@
 agents:
   # --- Central MIMO MPC Agent ---
   - id: central_mpc_agent
-    class: LocalControlAgent
-    controller:
-      class: core_lib.local_agents.control.mpc_controller.MPCController
-      config:
-        horizon: 10
-        dt: 10
-        model_config:
-          canal_area: 20000
-        objective_config:
-          target_level: 5.0
-          q_weight: 1.0
-          r_weight: 0.01
-        control_config:
-          num_actuators: 2
-          bounds:
-            - [0, 60]
-            - [0, 60]
-          action_topics:
-            - gate_1_flow_setpoint
-            - gate_2_flow_setpoint
-    observation_topic: canal_1_state
-    observation_key: water_level
-    action_topic: mpc_actions
+    class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
+    config:
+      dt: 10
+      target_component: canal_1
+      control_type: mpc
+      data_sources:
+        observation_topic: canal_1_state
+        observation_key: water_level
+      control_targets:
+        action_topic: mpc_actions
+      allocation_config:
+        method: direct
+      controller_config:
+        class: core_lib.local_agents.control.mpc_controller.MPCController
+        config:
+          horizon: 10
+          dt: 10
+          model_config:
+            canal_area: 20000
+          objective_config:
+            target_level: 5.0
+            q_weight: 1.0
+            r_weight: 0.01
+          control_config:
+            num_actuators: 2
+            bounds:
+              - [0, 60]
+              - [0, 60]
+            action_topics:
+              - gate_1_flow_setpoint
+              - gate_2_flow_setpoint
 
   # --- Local Flow-Control PID Agents ---
   - id: gate_1_flow_pid_agent
-    class: LocalControlAgent
-    controller:
-      class: PIDController
-      config:
-        Kp: 0.1
-        Ki: 0.02
-        Kd: 0.01
-        setpoint: 50.0
-        min_output: 0.1
-        max_output: 1.0
-    observation_topic: gate_1_state
-    observation_key: outflow
-    command_topic: gate_1_flow_setpoint
-    action_topic: gate_1_control
+    class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
+    config:
+      dt: 10
+      target_component: gate_1
+      control_type: pid
+      data_sources:
+        observation_topic: gate_1_state
+        observation_key: outflow
+        command_topic: gate_1_flow_setpoint
+      control_targets:
+        action_topic: gate_1_control
+      allocation_config:
+        method: direct
+      controller_config:
+        class: PIDController
+        config:
+          Kp: 0.1
+          Ki: 0.02
+          Kd: 0.01
+          setpoint: 50.0
+          min_output: 0.1
+          max_output: 1.0
 
   - id: gate_2_flow_pid_agent
-    class: LocalControlAgent
-    controller:
-      class: PIDController
-      config:
-        Kp: 0.1
-        Ki: 0.02
-        Kd: 0.01
-        setpoint: 45.0
-        min_output: 0.1
-        max_output: 1.0
-    observation_topic: gate_2_state
-    observation_key: outflow
-    command_topic: gate_2_flow_setpoint
-    action_topic: gate_2_control
+    class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
+    config:
+      dt: 10
+      target_component: gate_2
+      control_type: pid
+      data_sources:
+        observation_topic: gate_2_state
+        observation_key: outflow
+        command_topic: gate_2_flow_setpoint
+      control_targets:
+        action_topic: gate_2_control
+      allocation_config:
+        method: direct
+      controller_config:
+        class: PIDController
+        config:
+          Kp: 0.1
+          Ki: 0.02
+          Kd: 0.01
+          setpoint: 45.0
+          min_output: 0.1
+          max_output: 1.0
 
   # --- Perception Agents ---
   - id: canal_1_perception_agent

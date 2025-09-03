@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-02 09:30:02",
+  "timestamp": "2025-09-03 17:08:50",
   "results": {
     "agent_based/03_event_driven_agents": {
       "硬编码模式": {
@@ -18,7 +18,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 1.5189759731292725, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>, "
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 1.635136365890503, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>, c"
       },
       "统一配置模式": {
         "success": true,
@@ -50,7 +50,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03917193412780762, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.04353642463684082, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
       },
       "统一配置模式": {
         "success": true,
@@ -82,7 +82,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03141307830810547, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.034188032150268555, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>"
       },
       "统一配置模式": {
         "success": true,
@@ -114,7 +114,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03577089309692383, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03763580322265625, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
       },
       "统一配置模式": {
         "success": true,
@@ -146,7 +146,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03054976463317871, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.037695884704589844, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>"
       },
       "统一配置模式": {
         "success": true,
@@ -178,7 +178,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03895926475524902, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.04319262504577637, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
       },
       "统一配置模式": {
         "success": true,
@@ -210,7 +210,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03526711463928223, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.0391542911529541, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>, "
       },
       "统一配置模式": {
         "success": true,
@@ -242,7 +242,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.040834903717041016, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.0448756217956543, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>, "
       },
       "统一配置模式": {
         "success": true,
@@ -274,7 +274,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.04259324073791504, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.04724407196044922, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
       },
       "统一配置模式": {
         "success": true,
@@ -306,7 +306,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03372931480407715, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03789377212524414, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
       },
       "统一配置模式": {
         "success": true,
@@ -338,7 +338,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.04025459289550781, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.039629459381103516, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>"
       },
       "统一配置模式": {
         "success": true,
@@ -370,7 +370,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.05172872543334961, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.05399584770202637, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
       },
       "统一配置模式": {
         "success": true,
@@ -402,7 +402,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03676581382751465, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03686809539794922, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
       },
       "统一配置模式": {
         "success": true,
@@ -434,7 +434,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.028435945510864258, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.0330502986907959, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>, "
       },
       "统一配置模式": {
         "success": true,
@@ -466,7 +466,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.0340580940246582, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>, "
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03739666938781738, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
       },
       "统一配置模式": {
         "success": true,
@@ -498,7 +498,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03725266456604004, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.036168575286865234, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>"
       },
       "统一配置模式": {
         "success": true,
@@ -530,7 +530,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03808450698852539, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.038130760192871094, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>"
       },
       "统一配置模式": {
         "success": true,
@@ -562,7 +562,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.044026851654052734, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.04693722724914551, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
       },
       "统一配置模式": {
         "success": true,
@@ -594,7 +594,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': False, 'execution_time': 0.015617609024047852, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': False, 'execution_time': 0.01609206199645996, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>"
       },
       "统一配置模式": {
         "success": true,
@@ -626,7 +626,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.044597625732421875, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.048836469650268555, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>"
       },
       "统一配置模式": {
         "success": true,
@@ -658,7 +658,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.06631255149841309, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.07069826126098633, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
       },
       "统一配置模式": {
         "success": true,
@@ -690,7 +690,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.07949304580688477, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.08113312721252441, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
       },
       "统一配置模式": {
         "success": true,
@@ -722,7 +722,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': False, 'execution_time': 0.015863895416259766, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': False, 'execution_time': 0.01727461814880371, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>"
       },
       "统一配置模式": {
         "success": true,
@@ -754,7 +754,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.030465364456176758, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03065776824951172, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
       },
       "统一配置模式": {
         "success": true,
@@ -786,7 +786,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.032636165618896484, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.033174753189086914, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>"
       },
       "统一配置模式": {
         "success": true,
@@ -818,7 +818,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03574943542480469, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03760504722595215, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
       },
       "统一配置模式": {
         "success": true,
@@ -850,7 +850,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.035665273666381836, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.03563952445983887, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
       },
       "统一配置模式": {
         "success": true,
@@ -882,7 +882,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.04109549522399902, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.04456663131713867, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
       },
       "统一配置模式": {
         "success": true,
@@ -914,7 +914,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.04398632049560547, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.04726576805114746, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
       },
       "统一配置模式": {
         "success": true,
@@ -946,7 +946,7 @@
         "success": true,
         "error": "",
         "details": "",
-        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.04445362091064453, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
+        "result_summary": "{'status': 'success', 'runner_type': 'universal_config', 'result': True, 'execution_time': 0.04570436477661133, 'config_info': ConfigInfo(config_type=<ConfigType.UNIVERSAL_CONFIG: 'universal_config'>,"
       },
       "统一配置模式": {
         "success": true,

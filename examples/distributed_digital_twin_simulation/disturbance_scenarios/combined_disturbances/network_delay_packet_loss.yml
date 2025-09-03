@@ -1,0 +1,298 @@
+# 网络延迟+数据丢包组合扰动场景配置
+# 模拟网络通信中延迟和丢包同时发生的复合干扰
+
+combined_disturbance_scenario:
+  name: "Network_Delay_Packet_Loss_Combined"
+  description: "网络延迟与数据丢包的组合扰动场景"
+  type: "combined_network_disturbance"
+  category: "communication_system"
+  
+  # 组合扰动配置
+  combination_parameters:
+    # 基础扰动组件
+    base_disturbances:
+      network_delay:
+        reference_file: "../basic_disturbances/network_delay.yml"
+        weight: 0.6                    # 权重60%
+        interaction_factor: 1.2        # 交互因子
+        
+      data_packet_loss:
+        reference_file: "../basic_disturbances/data_packet_loss.yml"
+        weight: 0.4                    # 权重40%
+        interaction_factor: 1.3        # 交互因子
+    
+    # 组合效应配置
+    combination_effects:
+      synergistic_amplification:
+        enable: true
+        amplification_factor: 1.5      # 协同放大因子
+        threshold_delay: 2000          # 延迟阈值2秒
+        threshold_loss_rate: 0.05      # 丢包率阈值5%
+        
+      cascading_failures:
+        enable: true
+        cascade_probability: 0.3       # 级联概率30%
+        cascade_delay: 500             # 级联延迟500ms
+        max_cascade_depth: 3           # 最大级联深度
+        
+      adaptive_degradation:
+        enable: true
+        degradation_rate: 0.1          # 退化率10%
+        recovery_time: 30              # 恢复时间30秒
+        resilience_factor: 0.8         # 韧性因子
+  
+  # 扰动参数配置
+  parameters:
+    # 网络拓扑配置
+    network_topology:
+      communication_links:
+        critical_links:
+          - link_id: "controller_to_gate1"
+            baseline_delay: 100        # 基准延迟100ms
+            baseline_loss_rate: 0.001  # 基准丢包率0.1%
+            bandwidth: 1000            # 带宽1Mbps
+            priority: "high"
+            
+          - link_id: "controller_to_gate2"
+            baseline_delay: 120        # 基准延迟120ms
+            baseline_loss_rate: 0.002  # 基准丢包率0.2%
+            bandwidth: 1000            # 带宽1Mbps
+            priority: "high"
+            
+          - link_id: "sensor_to_controller"
+            baseline_delay: 80         # 基准延迟80ms
+            baseline_loss_rate: 0.001  # 基准丢包率0.1%
+            bandwidth: 500             # 带宽500Kbps
+            priority: "medium"
+            
+        redundant_links:
+          - link_id: "backup_controller_link"
+            baseline_delay: 200        # 基准延迟200ms
+            baseline_loss_rate: 0.005  # 基准丢包率0.5%
+            bandwidth: 500             # 带宽500Kbps
+            priority: "low"
+            activation_threshold: 0.1   # 激活阈值10%丢包
+    
+    # 组合扰动强度等级
+    intensity_levels:
+      low_impact:
+        delay_multiplier: 2.0          # 延迟倍数
+        loss_rate_increase: 0.02       # 丢包率增加2%
+        duration_range: [300, 900]     # 持续时间5-15分钟
+        recovery_time: 60              # 恢复时间1分钟
+        
+      medium_impact:
+        delay_multiplier: 5.0          # 延迟倍数
+        loss_rate_increase: 0.05       # 丢包率增加5%
+        duration_range: [900, 1800]    # 持续时间15-30分钟
+        recovery_time: 120             # 恢复时间2分钟
+        
+      high_impact:
+        delay_multiplier: 10.0         # 延迟倍数
+        loss_rate_increase: 0.1        # 丢包率增加10%
+        duration_range: [1800, 3600]   # 持续时间30-60分钟
+        recovery_time: 300             # 恢复时间5分钟
+        
+      critical_impact:
+        delay_multiplier: 20.0         # 延迟倍数
+        loss_rate_increase: 0.2        # 丢包率增加20%
+        duration_range: [3600, 7200]   # 持续时间1-2小时
+        recovery_time: 600             # 恢复时间10分钟
+    
+    # 时间相关性配置
+    temporal_correlation:
+      correlation_patterns:
+        simultaneous_onset:
+          probability: 0.4             # 同时发生概率40%
+          time_window: 60              # 时间窗口1分钟
+          
+        sequential_onset:
+          probability: 0.4             # 顺序发生概率40%
+          delay_between: [30, 300]     # 间隔30秒-5分钟
+          sequence: ["delay", "loss"]  # 先延迟后丢包
+          
+        overlapping_periods:
+          probability: 0.2             # 重叠发生概率20%
+          overlap_ratio: 0.6           # 重叠比例60%
+          phase_shift: 180             # 相位偏移180秒
+    
+    # 空间相关性配置
+    spatial_correlation:
+      correlation_distance: 1000       # 相关距离1km
+      propagation_speed: 100           # 传播速度100m/s
+      attenuation_factor: 0.1          # 衰减因子
+      
+      affected_regions:
+        primary_zone:
+          center: ["Controller_Node"]
+          radius: 500                  # 半径500m
+          impact_intensity: 1.0        # 影响强度100%
+          
+        secondary_zone:
+          center: ["Gateway_Nodes"]
+          radius: 1000                 # 半径1000m
+          impact_intensity: 0.7        # 影响强度70%
+          
+        tertiary_zone:
+          center: ["Edge_Nodes"]
+          radius: 2000                 # 半径2000m
+          impact_intensity: 0.4        # 影响强度40%
+    
+    # 组合扰动场景序列
+    disturbance_scenarios:
+      - scenario_id: "gradual_degradation"
+        start_time: 3600               # 1小时后开始
+        total_duration: 7200           # 总持续时间2小时
+        phases:
+          - phase: "delay_onset"
+            start_offset: 0
+            duration: 1800             # 30分钟
+            intensity: "low_impact"
+            affected_links: ["controller_to_gate1"]
+            
+          - phase: "loss_introduction"
+            start_offset: 900          # 15分钟后
+            duration: 3600             # 60分钟
+            intensity: "medium_impact"
+            affected_links: ["controller_to_gate1", "sensor_to_controller"]
+            
+          - phase: "combined_peak"
+            start_offset: 2700         # 45分钟后
+            duration: 1800             # 30分钟
+            intensity: "high_impact"
+            affected_links: ["all_critical_links"]
+            
+          - phase: "gradual_recovery"
+            start_offset: 4500         # 75分钟后
+            duration: 2700             # 45分钟
+            intensity: "medium_impact"
+            recovery_pattern: "exponential"
+      
+      - scenario_id: "burst_interference"
+        start_time: 21600              # 6小时后开始
+        total_duration: 1800           # 总持续时间30分钟
+        pattern: "burst"
+        burst_parameters:
+          burst_count: 5
+          burst_duration: 180          # 每次爆发3分钟
+          burst_interval: 180          # 爆发间隔3分钟
+          intensity_progression: ["medium", "high", "critical", "high", "medium"]
+          affected_links_rotation: true
+      
+      - scenario_id: "cascading_failure"
+        start_time: 43200              # 12小时后开始
+        total_duration: 3600           # 总持续时间1小时
+        trigger_conditions:
+          initial_delay_threshold: 1000 # 初始延迟阈值1秒
+          loss_rate_threshold: 0.03    # 丢包率阈值3%
+        cascade_sequence:
+          - step: 1
+            affected_links: ["controller_to_gate1"]
+            intensity: "medium_impact"
+            duration: 600
+          - step: 2
+            affected_links: ["controller_to_gate2", "sensor_to_controller"]
+            intensity: "high_impact"
+            duration: 1200
+          - step: 3
+            affected_links: ["all_links"]
+            intensity: "critical_impact"
+            duration: 1800
+    
+    # 自适应响应机制
+    adaptive_responses:
+      enable: true
+      response_strategies:
+        traffic_rerouting:
+          enable: true
+          rerouting_threshold: 0.05    # 重路由阈值5%丢包
+          backup_path_priority: ["backup_controller_link"]
+          switching_delay: 5           # 切换延迟5秒
+          
+        protocol_adaptation:
+          enable: true
+          tcp_window_scaling: true     # TCP窗口缩放
+          retransmission_timeout: 2.0  # 重传超时倍数
+          congestion_control: "cubic"  # 拥塞控制算法
+          
+        qos_adjustment:
+          enable: true
+          priority_queuing: true       # 优先级队列
+          bandwidth_allocation:
+            critical_traffic: 0.6      # 关键流量60%
+            normal_traffic: 0.3        # 普通流量30%
+            background_traffic: 0.1    # 背景流量10%
+          
+        error_correction:
+          enable: true
+          forward_error_correction: true # 前向纠错
+          automatic_repeat_request: true # 自动重传请求
+          redundant_transmission: 2    # 冗余传输2次
+    
+    # 恢复策略配置
+    recovery_strategies:
+      enable: true
+      recovery_phases:
+        immediate_response:
+          duration: 60               # 持续1分钟
+          actions:
+            - "activate_backup_links"
+            - "increase_retransmission"
+            - "reduce_transmission_rate"
+            
+        stabilization:
+          duration: 300              # 持续5分钟
+          actions:
+            - "optimize_routing_tables"
+            - "adjust_qos_parameters"
+            - "monitor_performance_metrics"
+            
+        full_recovery:
+          duration: 600              # 持续10分钟
+          actions:
+            - "restore_normal_operations"
+            - "validate_system_performance"
+            - "update_network_configuration"
+      
+      recovery_validation:
+        performance_thresholds:
+          max_acceptable_delay: 500  # 最大可接受延迟500ms
+          max_acceptable_loss: 0.01  # 最大可接受丢包1%
+          min_throughput: 0.9        # 最小吞吐量90%
+        validation_duration: 300     # 验证持续时间5分钟
+  
+  # 触发条件
+  trigger_conditions:
+    start_time: 0                    # 仿真开始即触发
+    duration: 86400                  # 持续24小时
+    trigger_type: "scenario_based"
+    
+  # 性能指标监测
+  monitoring:
+    metrics:
+      - "end_to_end_delay"
+      - "packet_loss_rate"
+      - "throughput_efficiency"
+      - "jitter_variance"
+      - "connection_stability"
+      - "recovery_time"
+      - "system_availability"
+    sampling_interval: 10            # 采样间隔10秒
+    
+  # 预期影响评估
+  expected_impact:
+    severity: "critical"
+    affected_components:
+      - "实时控制"
+      - "数据传输"
+      - "系统监测"
+      - "故障诊断"
+    impact_description: "网络延迟与丢包的组合将严重影响系统实时性和可靠性"
+    
+    # 影响量化分析
+    quantitative_impact:
+      control_loop_performance_loss: 0.5  # 控制环性能损失50%
+      data_integrity_degradation: 0.3     # 数据完整性退化30%
+      system_response_delay: 3.0          # 系统响应延迟3倍
+      fault_detection_accuracy: 0.7       # 故障检测精度70%
+      overall_system_efficiency: 0.6      # 整体系统效率60%

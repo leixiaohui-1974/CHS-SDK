@@ -1,0 +1,192 @@
+# 控制模式对比实验配置
+# Rule模式 vs MPC模式性能对比实验
+
+experiment_name: "Rule_vs_MPC_Control_Comparison"
+experiment_description: "对比基于规则的控制和模型预测控制在分布式数字孪生仿真系统中的性能表现"
+
+# 实验设置
+experiment_settings:
+  total_simulation_time: 7200.0    # 2小时仿真时间 (秒)
+  time_step: 1.0                    # 仿真时间步长 (秒)
+  data_logging_interval: 10.0       # 数据记录间隔 (秒)
+  
+# 实验场景配置
+test_scenarios:
+  # 场景1：正常运行条件
+  - name: "normal_operation"
+    description: "正常运行条件下的控制性能对比"
+    duration: 3600.0                # 1小时
+    disturbances:
+      rainfall:
+        enabled: false
+      water_demand:
+        enabled: true
+        pattern: "daily_normal"       # 正常日用水模式
+        base_demand: [50.0, 40.0, 30.0]  # 各渠道基础需水量 (m³/s)
+    
+  # 场景2：降雨扰动
+  - name: "rainfall_disturbance"
+    description: "降雨扰动条件下的控制性能对比"
+    duration: 1800.0                # 30分钟
+    disturbances:
+      rainfall:
+        enabled: true
+        start_time: 300.0            # 5分钟后开始降雨
+        duration: 900.0              # 持续15分钟
+        intensity: 25.0              # 降雨强度 (m³/s)
+        pattern: "uniform"           # 均匀降雨
+      water_demand:
+        enabled: true
+        pattern: "daily_normal"
+        base_demand: [50.0, 40.0, 30.0]
+        
+  # 场景3：极端扰动
+  - name: "extreme_disturbance"
+    description: "极端扰动条件下的控制性能对比"
+    duration: 1800.0                # 30分钟
+    disturbances:
+      rainfall:
+        enabled: true
+        start_time: 180.0            # 3分钟后开始暴雨
+        duration: 600.0              # 持续10分钟
+        intensity: 50.0              # 暴雨强度 (m³/s)
+        pattern: "storm"             # 暴雨模式
+      water_demand:
+        enabled: true
+        pattern: "peak_demand"       # 高峰用水模式
+        base_demand: [80.0, 60.0, 45.0]  # 高峰需水量
+
+# 控制模式配置
+control_modes:
+  # Rule模式配置
+  rule_mode:
+    central_agent_class: "CentralDispatcherAgent"
+    mode: "rule"
+    parameters:
+      threshold: 0.5
+      action: "regulate"
+      response_time: 60.0            # 响应时间 (秒)
+      
+  # MPC模式配置  
+  mpc_mode:
+    central_agent_class: "CentralMPCAgent"
+    mode: "mpc"
+    parameters:
+      prediction_horizon: 30         # 30步预测时域
+      dt: 60.0                      # 时间步长
+      q_weight: 1.0                 # 水位跟踪权重
+      r_weight: 0.1                 # 控制平滑权重
+      optimization_interval: 300.0  # 5分钟优化间隔
+
+# 评估指标配置
+evaluation_metrics:
+  # 控制性能指标
+  control_performance:
+    - name: "water_level_tracking_error"
+      description: "水位跟踪误差 (RMSE)"
+      unit: "m"
+      target_variables:
+        - "Gate_1_upstream_level"
+        - "Gate_2_upstream_level" 
+        - "Gate_3_upstream_level"
+      target_values: [10.0, 8.0, 6.0]  # 目标水位
+      
+    - name: "steady_state_error"
+      description: "稳态误差"
+      unit: "m"
+      calculation_window: 600.0      # 10分钟窗口计算稳态误差
+      
+    - name: "overshoot"
+      description: "超调量"
+      unit: "%"
+      
+    - name: "settling_time"
+      description: "调节时间"
+      unit: "s"
+      tolerance: 0.05               # 5%误差带
+      
+    - name: "control_effort"
+      description: "控制努力 (设定点变化率)"
+      unit: "m/s"
+      
+  # 系统稳定性指标
+  system_stability:
+    - name: "oscillation_index"
+      description: "振荡指数"
+      unit: "dimensionless"
+      
+    - name: "disturbance_rejection"
+      description: "扰动抑制能力"
+      unit: "dimensionless"
+      
+  # 能效指标
+  energy_efficiency:
+    - name: "actuator_usage"
+      description: "执行器使用频率"
+      unit: "operations/hour"
+      
+    - name: "control_smoothness"
+      description: "控制平滑度"
+      unit: "dimensionless"
+
+# 数据采集配置
+data_collection:
+  # 状态变量
+  state_variables:
+    water_levels:
+      - "simulation/water_levels/Gate_1_upstream"
+      - "simulation/water_levels/Gate_2_upstream"
+      - "simulation/water_levels/Gate_3_upstream"
+      - "simulation/water_levels/Gate_1_downstream"
+      - "simulation/water_levels/Gate_2_downstream"
+      - "simulation/water_levels/Gate_3_downstream"
+    
+    flow_rates:
+      - "simulation/flows/Gate_1_flow"
+      - "simulation/flows/Gate_2_flow"
+      - "simulation/flows/Gate_3_flow"
+      
+    gate_openings:
+      - "simulation/gate_openings/Gate_1_opening"
+      - "simulation/gate_openings/Gate_2_opening"
+      - "simulation/gate_openings/Gate_3_opening"
+  
+  # 控制指令
+  control_commands:
+    local_commands:
+      - "agent.Gate_1_PID.command"
+      - "agent.Gate_2_PID.command"
+      - "agent.Gate_3_PID.command"
+    
+    central_commands:
+      rule_mode:
+        - "agent.central_dispatcher.gate1_command"
+        - "agent.central_dispatcher.gate2_command"
+        - "agent.central_dispatcher.gate3_command"
+      mpc_mode:
+        - "agent.central_mpc.gate1_target_level"
+        - "agent.central_mpc.gate2_target_level"
+        - "agent.central_mpc.gate3_target_level"
+  
+  # 扰动输入
+  disturbance_inputs:
+    - "disturbance/rainfall/inflow"
+    - "disturbance/water_demand/Channel_1"
+    - "disturbance/water_demand/Channel_2"
+    - "disturbance/water_demand/Channel_3"
+
+# 输出配置
+output_settings:
+  results_directory: "./experiment_results"
+  data_format: "csv"
+  plot_format: "png"
+  report_format: "markdown"
+  
+  # 生成的文件
+  output_files:
+    - "rule_mode_data.csv"          # Rule模式数据
+    - "mpc_mode_data.csv"           # MPC模式数据
+    - "performance_comparison.csv"   # 性能对比数据
+    - "time_series_plots.png"       # 时间序列图
+    - "performance_metrics.png"     # 性能指标图
+    - "control_comparison_report.md" # 对比分析报告

@@ -1,0 +1,274 @@
+{
+  "validation_timestamp": "2025-09-03T11:33:53.922639",
+  "duration_seconds": 0.622353,
+  "total_files": 15,
+  "files_validated": 15,
+  "error_count": 0,
+  "warning_count": 5,
+  "overall_status": "passed",
+  "validation_results": [
+    {
+      "file_path": "agents.yml",
+      "relative_path": "agents.yml",
+      "file_size": 25312,
+      "validation_status": "passed",
+      "errors": [],
+      "warnings": [],
+      "content_summary": {
+        "type": "dictionary",
+        "keys": [
+          "agents"
+        ],
+        "key_count": 1
+      }
+    },
+    {
+      "file_path": "components.yml",
+      "relative_path": "components.yml",
+      "file_size": 4415,
+      "validation_status": "passed",
+      "errors": [],
+      "warnings": [],
+      "content_summary": {
+        "type": "dictionary",
+        "keys": [
+          "components",
+          "monitoring_points"
+        ],
+        "key_count": 2
+      }
+    },
+    {
+      "file_path": "config.yml",
+      "relative_path": "config.yml",
+      "file_size": 11291,
+      "validation_status": "passed_with_warnings",
+      "errors": [],
+      "warnings": [
+        "配置文件缺少推荐字段: solver",
+        "配置文件缺少推荐字段: system_architecture",
+        "仿真配置缺少start_time",
+        "仿真配置缺少end_time",
+        "仿真配置缺少dt（时间步长）"
+      ],
+      "content_summary": {
+        "type": "dictionary",
+        "keys": [
+          "simulation",
+          "architecture",
+          "components_file",
+          "topology_file",
+          "agents_file",
+          "monitoring",
+          "actuator_disturbance",
+          "flow_allocation",
+          "digital_twin",
+          "control_system",
+          "disturbances",
+          "data_logging",
+          "performance_monitoring",
+          "visualization",
+          "validation"
+        ],
+        "key_count": 15
+      }
+    },
+    {
+      "file_path": "disturbance_scenarios\\basic_disturbances\\actuator_interference.yml",
+      "relative_path": "disturbance_scenarios\\basic_disturbances\\actuator_interference.yml",
+      "file_size": 10154,
+      "validation_status": "passed",
+      "errors": [],
+      "warnings": [],
+      "content_summary": {
+        "type": "dictionary",
+        "keys": [
+          "disturbance_scenario"
+        ],
+        "key_count": 1
+      }
+    },
+    {
+      "file_path": "disturbance_scenarios\\basic_disturbances\\data_packet_loss.yml",
+      "relative_path": "disturbance_scenarios\\basic_disturbances\\data_packet_loss.yml",
+      "file_size": 2872,
+      "validation_status": "passed",
+      "errors": [],
+      "warnings": [],
+      "content_summary": {
+        "type": "dictionary",
+        "keys": [
+          "disturbance_scenario"
+        ],
+        "key_count": 1
+      }
+    },
+    {
+      "file_path": "disturbance_scenarios\\basic_disturbances\\diversion_demand_change.yml",
+      "relative_path": "disturbance_scenarios\\basic_disturbances\\diversion_demand_change.yml",
+      "file_size": 6271,
+      "validation_status": "passed",
+      "errors": [],
+      "warnings": [],
+      "content_summary": {
+        "type": "dictionary",
+        "keys": [
+          "disturbance_scenario"
+        ],
+        "key_count": 1
+      }
+    },
+    {
+      "file_path": "disturbance_scenarios\\basic_disturbances\\downstream_demand_change.yml",
+      "relative_path": "disturbance_scenarios\\basic_disturbances\\downstream_demand_change.yml",
+      "file_size": 11005,
+      "validation_status": "passed",
+      "errors": [],
+      "warnings": [],
+      "content_summary": {
+        "type": "dictionary",
+        "keys": [
+          "disturbance_scenario"
+        ],
+        "key_count": 1
+      }
+    },
+    {
+      "file_path": "disturbance_scenarios\\basic_disturbances\\inflow_variation.yml",
+      "relative_path": "disturbance_scenarios\\basic_disturbances\\inflow_variation.yml",
+      "file_size": 4453,
+      "validation_status": "passed",
+      "errors": [],
+      "warnings": [],
+      "content_summary": {
+        "type": "dictionary",
+        "keys": [
+          "disturbance_scenario"
+        ],
+        "key_count": 1
+      }
+    },
+    {
+      "file_path": "disturbance_scenarios\\basic_disturbances\\network_delay.yml",
+      "relative_path": "disturbance_scenarios\\basic_disturbances\\network_delay.yml",
+      "file_size": 2569,
+      "validation_status": "passed",
+      "errors": [],
+      "warnings": [],
+      "content_summary": {
+        "type": "dictionary",
+        "keys": [
+          "disturbance_scenario"
+        ],
+        "key_count": 1
+      }
+    },
+    {
+      "file_path": "disturbance_scenarios\\basic_disturbances\\node_failure.yml",
+      "relative_path": "disturbance_scenarios\\basic_disturbances\\node_failure.yml",
+      "file_size": 3978,
+      "validation_status": "passed",
+      "errors": [],
+      "warnings": [],
+      "content_summary": {
+        "type": "dictionary",
+        "keys": [
+          "disturbance_scenario"
+        ],
+        "key_count": 1
+      }
+    },
+    {
+      "file_path": "disturbance_scenarios\\basic_disturbances\\sensor_interference.yml",
+      "relative_path": "disturbance_scenarios\\basic_disturbances\\sensor_interference.yml",
+      "file_size": 7602,
+      "validation_status": "passed",
+      "errors": [],
+      "warnings": [],
+      "content_summary": {
+        "type": "dictionary",
+        "keys": [
+          "disturbance_scenario"
+        ],
+        "key_count": 1
+      }
+    },
+    {
+      "file_path": "disturbance_scenarios\\combined_disturbances\\inflow_variation_actuator_interference.yml",
+      "relative_path": "disturbance_scenarios\\combined_disturbances\\inflow_variation_actuator_interference.yml",
+      "file_size": 13729,
+      "validation_status": "passed",
+      "errors": [],
+      "warnings": [],
+      "content_summary": {
+        "type": "dictionary",
+        "keys": [
+          "scenario_name",
+          "scenario_type",
+          "description",
+          "version",
+          "created_date",
+          "combination_parameters",
+          "disturbance_parameters",
+          "combined_intensity_levels",
+          "combined_disturbance_sequences",
+          "adaptive_control_strategies",
+          "fault_diagnosis_tolerance",
+          "performance_optimization",
+          "trigger_conditions",
+          "performance_monitoring",
+          "expected_impact_assessment",
+          "data_logging",
+          "visualization",
+          "validation_testing"
+        ],
+        "key_count": 18
+      }
+    },
+    {
+      "file_path": "disturbance_scenarios\\combined_disturbances\\network_delay_packet_loss.yml",
+      "relative_path": "disturbance_scenarios\\combined_disturbances\\network_delay_packet_loss.yml",
+      "file_size": 11291,
+      "validation_status": "passed",
+      "errors": [],
+      "warnings": [],
+      "content_summary": {
+        "type": "dictionary",
+        "keys": [
+          "combined_disturbance_scenario"
+        ],
+        "key_count": 1
+      }
+    },
+    {
+      "file_path": "disturbance_scenarios\\combined_disturbances\\node_failure_sensor_interference.yml",
+      "relative_path": "disturbance_scenarios\\combined_disturbances\\node_failure_sensor_interference.yml",
+      "file_size": 14149,
+      "validation_status": "passed",
+      "errors": [],
+      "warnings": [],
+      "content_summary": {
+        "type": "dictionary",
+        "keys": [
+          "combined_disturbance_scenario"
+        ],
+        "key_count": 1
+      }
+    },
+    {
+      "file_path": "topology.yml",
+      "relative_path": "topology.yml",
+      "file_size": 5022,
+      "validation_status": "passed",
+      "errors": [],
+      "warnings": [],
+      "content_summary": {
+        "type": "dictionary",
+        "keys": [
+          "topology"
+        ],
+        "key_count": 1
+      }
+    }
+  ]
+}

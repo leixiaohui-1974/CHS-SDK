@@ -1,0 +1,427 @@
+{
+  "scenario_name": "actuator_interference",
+  "timestamp": "2025-09-03T16:06:58.493742",
+  "simulation_time": 100,
+  "components_count": 9,
+  "agents_count": 13,
+  "controllers_count": 0,
+  "water_level_stats": {
+    "mean": 10.25,
+    "std": 3.491060010942235,
+    "min": 6.0,
+    "max": 15.0,
+    "median": 10.0
+  },
+  "water_level_count": 400,
+  "flow_rate_stats": {
+    "mean": 18.402307721526807,
+    "std": 28.136834803069334,
+    "min": 0.0,
+    "max": 79.21186828213787,
+    "median": 0.0
+  },
+  "flow_rate_count": 900,
+  "gate_opening_stats": {
+    "mean": 0.6,
+    "std": 0.08164965809277258,
+    "min": 0.5,
+    "max": 0.7,
+    "median": 0.6
+  },
+  "gate_opening_count": 300,
+  "component_statistics": {
+    "Upstream_Reservoir": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 15.0,
+        "volume": 15000000.0,
+        "outflow": 0,
+        "inflow": 0.0
+      }
+    },
+    "Gate_1": {
+      "data_points": 100,
+      "last_state": {
+        "opening": 0.5,
+        "outflow": 0
+      }
+    },
+    "Channel_1": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 8.0,
+        "volume": 792039.4709530965,
+        "outflow": 79.21186828213787
+      }
+    },
+    "Diversion_1": {
+      "data_points": 100,
+      "last_state": {
+        "outflow": 15.0,
+        "passthrough_flow": 0,
+        "inflow": 0
+      }
+    },
+    "Gate_2": {
+      "data_points": 100,
+      "last_state": {
+        "opening": 0.6,
+        "outflow": 0
+      }
+    },
+    "Channel_2": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 6.0,
+        "volume": 594029.6032148224,
+        "outflow": 59.40890121160339
+      }
+    },
+    "Diversion_2": {
+      "data_points": 100,
+      "last_state": {
+        "outflow": 12.0,
+        "passthrough_flow": 0,
+        "inflow": 0
+      }
+    },
+    "Gate_3": {
+      "data_points": 100,
+      "last_state": {
+        "opening": 0.7,
+        "outflow": 0
+      }
+    },
+    "Downstream_Reservoir": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 12.0,
+        "volume": 12000000.0,
+        "outflow": 0,
+        "inflow": 0.0
+      }
+    }
+  },
+  "system_stability": {
+    "water_level_variance": 12.1875,
+    "water_level_range": 9.0,
+    "coefficient_of_variation": 0.34059122057973024
+  },
+  "disturbance_config": {
+    "disturbance_scenario": {
+      "name": "Actuator_Interference_Disturbance",
+      "description": "模拟执行器控制系统的干扰、故障和性能退化",
+      "type": "actuator_interference",
+      "category": "control_system",
+      "parameters": {
+        "actuator_systems": {
+          "gate_actuators": {
+            "locations": [
+              "Gate_1",
+              "Gate_2",
+              "Gate_3"
+            ],
+            "actuator_type": "hydraulic",
+            "response_time": 30,
+            "max_speed": 0.02,
+            "position_accuracy": 0.01,
+            "force_capacity": 50000
+          },
+          "pump_actuators": {
+            "locations": [
+              "Pump_Station_1",
+              "Pump_Station_2"
+            ],
+            "actuator_type": "electric",
+            "response_time": 5,
+            "max_speed": 0.1,
+            "flow_accuracy": 0.02,
+            "power_capacity": 500
+          },
+          "valve_actuators": {
+            "locations": [
+              "Control_Valve_1",
+              "Control_Valve_2",
+              "Emergency_Valve"
+            ],
+            "actuator_type": "pneumatic",
+            "response_time": 10,
+            "max_speed": 0.05,
+            "position_accuracy": 0.005,
+            "pressure_capacity": 1000
+          }
+        },
+        "interference_types": {
+          "control_signal_interference": {
+            "description": "控制信号传输干扰",
+            "interference_sources": {
+              "signal_noise": {
+                "amplitude": 0.2,
+                "frequency_range": [
+                  0.1,
+                  10
+                ],
+                "type": "white_noise"
+              },
+              "signal_delay": {
+                "mean_delay": 5.0,
+                "delay_variation": 3.0,
+                "max_delay": 15.0
+              },
+              "signal_distortion": {
+                "harmonic_distortion": 0.1,
+                "phase_shift": 15,
+                "amplitude_error": 0.08
+              }
+            }
+          },
+          "mechanical_degradation": {
+            "description": "机械部件磨损和老化",
+            "degradation_factors": {
+              "friction_increase": {
+                "rate": 0.001,
+                "max_increase": 0.5
+              },
+              "backlash_growth": {
+                "rate": 0.0005,
+                "max_backlash": 0.1
+              },
+              "stiffness_reduction": {
+                "rate": 0.0002,
+                "min_stiffness": 0.7
+              },
+              "wear_accumulation": {
+                "wear_rate": 0.001,
+                "critical_wear": 0.8
+              }
+            }
+          },
+          "power_system_faults": {
+            "description": "动力系统故障和异常",
+            "fault_types": {
+              "power_fluctuation": {
+                "voltage_variation": 0.1,
+                "frequency_variation": 0.02,
+                "power_interruption": 0.01
+              },
+              "hydraulic_pressure_drop": {
+                "pressure_loss_rate": 0.05,
+                "min_pressure": 0.6,
+                "recovery_time": 300
+              },
+              "pneumatic_leakage": {
+                "leakage_rate": 0.02,
+                "min_pressure": 0.7,
+                "detection_delay": 600
+              }
+            }
+          },
+          "control_system_faults": {
+            "description": "控制系统硬件和软件故障",
+            "fault_categories": {
+              "sensor_feedback_error": {
+                "position_error": 0.05,
+                "velocity_error": 0.1,
+                "force_error": 0.08
+              },
+              "controller_malfunction": {
+                "gain_drift": 0.2,
+                "offset_error": 0.03,
+                "saturation_limit": 0.9
+              },
+              "communication_failure": {
+                "packet_loss": 0.02,
+                "transmission_delay": 5,
+                "protocol_error": 0.001
+              }
+            }
+          }
+        },
+        "interference_scenarios": [
+          {
+            "scenario_id": "control_signal_noise",
+            "start_time": 3600,
+            "duration": 7200,
+            "affected_actuators": [
+              "Gate_1",
+              "Gate_2"
+            ],
+            "interference_type": "control_signal_interference",
+            "intensity": "medium",
+            "parameters": {
+              "noise_amplitude": 0.08,
+              "signal_delay": 3.0
+            }
+          },
+          {
+            "scenario_id": "mechanical_wear_event",
+            "start_time": 14400,
+            "duration": 21600,
+            "affected_actuators": [
+              "Gate_3"
+            ],
+            "interference_type": "mechanical_degradation",
+            "intensity": "high",
+            "parameters": {
+              "friction_multiplier": 2.0,
+              "backlash_increase": 0.05
+            }
+          },
+          {
+            "scenario_id": "power_system_fault",
+            "start_time": 28800,
+            "duration": 1800,
+            "affected_actuators": [
+              "Pump_Station_1"
+            ],
+            "interference_type": "power_system_faults",
+            "intensity": "critical",
+            "parameters": {
+              "voltage_drop": 0.15,
+              "power_interruption_duration": 60
+            }
+          },
+          {
+            "scenario_id": "control_system_malfunction",
+            "start_time": 50400,
+            "duration": 3600,
+            "affected_actuators": [
+              "Control_Valve_1",
+              "Control_Valve_2"
+            ],
+            "interference_type": "control_system_faults",
+            "intensity": "high",
+            "parameters": {
+              "controller_gain_error": 0.3,
+              "feedback_delay": 8
+            }
+          }
+        ],
+        "performance_degradation": {
+          "enable": true,
+          "degradation_models": {
+            "exponential_decay": {
+              "time_constant": 8760,
+              "initial_performance": 1.0,
+              "final_performance": 0.8
+            },
+            "linear_degradation": {
+              "degradation_rate": 0.0001,
+              "maintenance_recovery": 0.9
+            },
+            "step_degradation": {
+              "failure_probability": 0.001,
+              "performance_drop": 0.3,
+              "repair_time": 86400
+            }
+          }
+        },
+        "fault_detection": {
+          "enable": true,
+          "detection_methods": {
+            "performance_monitoring": {
+              "response_time_threshold": 1.5,
+              "accuracy_threshold": 0.05,
+              "efficiency_threshold": 0.9
+            },
+            "vibration_analysis": {
+              "frequency_bands": [
+                10,
+                100,
+                1000
+              ],
+              "amplitude_threshold": 2.0,
+              "trend_analysis": true
+            },
+            "thermal_monitoring": {
+              "temperature_threshold": 80,
+              "thermal_gradient": 10,
+              "cooling_efficiency": 0.8
+            }
+          },
+          "diagnostic_algorithms": [
+            "model_based_diagnosis",
+            "data_driven_diagnosis",
+            "expert_system_diagnosis",
+            "machine_learning_diagnosis"
+          ],
+          "alarm_thresholds": {
+            "warning_level": 0.1,
+            "alarm_level": 0.2,
+            "critical_level": 0.4
+          }
+        },
+        "compensation_strategies": {
+          "enable": true,
+          "compensation_methods": {
+            "adaptive_control": {
+              "enable": true,
+              "adaptation_rate": 0.1,
+              "parameter_bounds": [
+                0.5,
+                2.0
+              ],
+              "stability_margin": 0.2
+            },
+            "feedforward_compensation": {
+              "enable": true,
+              "model_accuracy": 0.9,
+              "update_frequency": 60
+            },
+            "robust_control": {
+              "enable": true,
+              "uncertainty_bounds": 0.3,
+              "performance_weight": 0.8
+            }
+          },
+          "maintenance_scheduling": {
+            "predictive_maintenance": true,
+            "maintenance_intervals": {
+              "routine_check": 168,
+              "preventive_maintenance": 720,
+              "overhaul": 8760
+            },
+            "condition_based_triggers": {
+              "performance_threshold": 0.85,
+              "wear_threshold": 0.7,
+              "fault_frequency": 0.1
+            }
+          }
+        }
+      },
+      "trigger_conditions": {
+        "start_time": 0,
+        "duration": 86400,
+        "trigger_type": "scenario_based"
+      },
+      "monitoring": {
+        "metrics": [
+          "actuator_response_time",
+          "position_accuracy",
+          "control_effectiveness",
+          "energy_efficiency",
+          "fault_occurrence_rate",
+          "maintenance_cost"
+        ],
+        "sampling_interval": 60
+      },
+      "expected_impact": {
+        "severity": "high",
+        "affected_components": [
+          "控制精度",
+          "系统响应",
+          "能耗效率",
+          "设备寿命"
+        ],
+        "impact_description": "执行器干扰将降低控制精度，影响系统响应速度和稳定性",
+        "quantitative_impact": {
+          "control_accuracy_loss": 0.3,
+          "response_time_increase": 1.5,
+          "energy_consumption_increase": 0.2,
+          "maintenance_cost_increase": 0.4,
+          "system_availability_loss": 0.05
+        }
+      }
+    }
+  }
+}

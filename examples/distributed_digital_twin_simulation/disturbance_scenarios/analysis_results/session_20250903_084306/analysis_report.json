@@ -1,0 +1,154 @@
+{
+  "session_info": {
+    "timestamp": "20250903_084306",
+    "total_scenarios": 11,
+    "successful_scenarios": 11,
+    "failed_scenarios": 0
+  },
+  "performance_comparison": {},
+  "disturbance_impact_analysis": {
+    "actuator_interference": {
+      "scenario_name": "actuator_interference",
+      "performance_degradation": {
+        "water_level": {
+          "std_change": 0.0,
+          "mean_change": 0.0
+        },
+        "flow_rate": {
+          "std_change": 0.0,
+          "mean_change": 0.0
+        }
+      }
+    },
+    "data_packet_loss": {
+      "scenario_name": "data_packet_loss",
+      "performance_degradation": {
+        "water_level": {
+          "std_change": 0.0,
+          "mean_change": 0.0
+        },
+        "flow_rate": {
+          "std_change": 0.0,
+          "mean_change": 0.0
+        }
+      }
+    },
+    "diversion_demand_change": {
+      "scenario_name": "diversion_demand_change",
+      "performance_degradation": {
+        "water_level": {
+          "std_change": 0.0,
+          "mean_change": 0.0
+        },
+        "flow_rate": {
+          "std_change": 0.0,
+          "mean_change": 0.0
+        }
+      }
+    },
+    "downstream_demand_change": {
+      "scenario_name": "downstream_demand_change",
+      "performance_degradation": {
+        "water_level": {
+          "std_change": 0.0,
+          "mean_change": 0.0
+        },
+        "flow_rate": {
+          "std_change": 0.0,
+          "mean_change": 0.0
+        }
+      }
+    },
+    "inflow_variation": {
+      "scenario_name": "inflow_variation",
+      "performance_degradation": {
+        "water_level": {
+          "std_change": 0.0,
+          "mean_change": 0.0
+        },
+        "flow_rate": {
+          "std_change": 0.0,
+          "mean_change": 0.0
+        }
+      }
+    },
+    "network_delay": {
+      "scenario_name": "network_delay",
+      "performance_degradation": {
+        "water_level": {
+          "std_change": 0.0,
+          "mean_change": 0.0
+        },
+        "flow_rate": {
+          "std_change": 0.0,
+          "mean_change": 0.0
+        }
+      }
+    },
+    "node_failure": {
+      "scenario_name": "node_failure",
+      "performance_degradation": {
+        "water_level": {
+          "std_change": 0.0,
+          "mean_change": 0.0
+        },
+        "flow_rate": {
+          "std_change": 0.0,
+          "mean_change": 0.0
+        }
+      }
+    },
+    "sensor_interference": {
+      "scenario_name": "sensor_interference",
+      "performance_degradation": {
+        "water_level": {
+          "std_change": 0.0,
+          "mean_change": 0.0
+        },
+        "flow_rate": {
+          "std_change": 0.0,
+          "mean_change": 0.0
+        }
+      }
+    },
+    "inflow_variation_actuator_interference": {
+      "scenario_name": "inflow_variation_actuator_interference",
+      "performance_degradation": {
+        "water_level": {
+          "std_change": 0.0,
+          "mean_change": 0.0
+        },
+        "flow_rate": {
+          "std_change": 0.0,
+          "mean_change": 0.0
+        }
+      }
+    },
+    "network_delay_packet_loss": {
+      "scenario_name": "network_delay_packet_loss",
+      "performance_degradation": {
+        "water_level": {
+          "std_change": 0.0,
+          "mean_change": 0.0
+        },
+        "flow_rate": {
+          "std_change": 0.0,
+          "mean_change": 0.0
+        }
+      }
+    },
+    "node_failure_sensor_interference": {
+      "scenario_name": "node_failure_sensor_interference",
+      "performance_degradation": {
+        "water_level": {
+          "std_change": 0.0,
+          "mean_change": 0.0
+        },
+        "flow_rate": {
+          "std_change": 0.0,
+          "mean_change": 0.0
+        }
+      }
+    }
+  }
+}

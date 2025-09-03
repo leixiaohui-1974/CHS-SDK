@@ -1,0 +1,87 @@
+{
+  "analysis_timestamp": "2025-09-03T21:13:45.212809",
+  "simulation_config": {
+    "time_steps": 500,
+    "time_duration": 49.900000000000006,
+    "sampling_interval": 0.1,
+    "channels_analyzed": [
+      "Channel_1",
+      "Channel_2",
+      "Channel_3"
+    ]
+  },
+  "identification_results": {
+    "convergence_analysis": {
+      "Channel_1": {
+        "average_integral_error": 0.02070018768788598,
+        "average_delay_error": 0.24502327109892,
+        "integral_error_std": 0.01728150937954503,
+        "delay_error_std": 0.14289796122347348
+      },
+      "Channel_2": {
+        "average_integral_error": 0.04259290638637463,
+        "average_delay_error": 0.14451578423265102,
+        "integral_error_std": 0.048503258697459306,
+        "delay_error_std": 0.09256370340847489
+      },
+      "Channel_3": {
+        "average_integral_error": 0.030221399780287556,
+        "average_delay_error": 0.1829028785757791,
+        "integral_error_std": 0.019131029413148617,
+        "delay_error_std": 0.11226323272041208
+      }
+    },
+    "final_accuracy": {
+      "Channel_1": {
+        "integral_coefficient_error": 0.007434907136437269,
+        "time_delay_error": 0.18954485529069665,
+        "integral_accuracy_percent": 95.04339524237515,
+        "delay_accuracy_percent": 92.41820578837213
+      },
+      "Channel_2": {
+        "integral_coefficient_error": 0.03147810926396355,
+        "time_delay_error": 0.13239030778469463,
+        "integral_accuracy_percent": 98.25121615200203,
+        "delay_accuracy_percent": 95.58698974051018
+      },
+      "Channel_3": {
+        "integral_coefficient_error": 0.010434737585570217,
+        "time_delay_error": 0.04579994410438948,
+        "integral_accuracy_percent": 91.30438534535816,
+        "delay_accuracy_percent": 98.36428771055752
+      }
+    },
+    "convergence_time": {
+      "Channel_1": {
+        "integral_convergence_time": 10.200000000000001,
+        "delay_convergence_time": 27.1
+      },
+      "Channel_2": {
+        "integral_convergence_time": 7.0,
+        "delay_convergence_time": 6.1000000000000005
+      },
+      "Channel_3": {
+        "integral_convergence_time": 1.1,
+        "delay_convergence_time": 3.1
+      }
+    }
+  },
+  "key_findings": {
+    "best_performing_channel": {
+      "integral_identification": "Channel_2",
+      "delay_identification": "Channel_3"
+    },
+    "convergence_summary": {},
+    "accuracy_summary": {
+      "average_integral_accuracy": 94.86633224657844,
+      "average_delay_accuracy": 95.45649441314661,
+      "overall_performance": "good"
+    }
+  },
+  "recommendations": [
+    "建议增加积分系数辨识的激励信号强度",
+    "考虑采用自适应辨识算法提高收敛速度",
+    "增加参数辨识的鲁棒性验证",
+    "实施在线参数更新机制"
+  ]
+}

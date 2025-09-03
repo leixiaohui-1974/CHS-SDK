@@ -1,0 +1,250 @@
+{
+  "scenario_name": "inflow_variation",
+  "timestamp": "2025-09-03T08:43:09.089157",
+  "simulation_time": 100,
+  "components_count": 9,
+  "agents_count": 13,
+  "controllers_count": 0,
+  "water_level_stats": {
+    "mean": 10.25,
+    "std": 3.491060010942235,
+    "min": 6.0,
+    "max": 15.0,
+    "median": 10.0
+  },
+  "water_level_count": 400,
+  "flow_rate_stats": {
+    "mean": 18.402307721526807,
+    "std": 28.136834803069334,
+    "min": 0.0,
+    "max": 79.21186828213787,
+    "median": 0.0
+  },
+  "flow_rate_count": 900,
+  "gate_opening_stats": {
+    "mean": 0.6,
+    "std": 0.08164965809277258,
+    "min": 0.5,
+    "max": 0.7,
+    "median": 0.6
+  },
+  "gate_opening_count": 300,
+  "component_statistics": {
+    "Upstream_Reservoir": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 15.0,
+        "volume": 15000000.0,
+        "outflow": 0,
+        "inflow": 0.0
+      }
+    },
+    "Gate_1": {
+      "data_points": 100,
+      "last_state": {
+        "opening": 0.5,
+        "outflow": 0
+      }
+    },
+    "Channel_1": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 8.0,
+        "volume": 792039.4709530965,
+        "outflow": 79.21186828213787
+      }
+    },
+    "Diversion_1": {
+      "data_points": 100,
+      "last_state": {
+        "outflow": 15.0,
+        "passthrough_flow": 0,
+        "inflow": 0
+      }
+    },
+    "Gate_2": {
+      "data_points": 100,
+      "last_state": {
+        "opening": 0.6,
+        "outflow": 0
+      }
+    },
+    "Channel_2": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 6.0,
+        "volume": 594029.6032148224,
+        "outflow": 59.40890121160339
+      }
+    },
+    "Diversion_2": {
+      "data_points": 100,
+      "last_state": {
+        "outflow": 12.0,
+        "passthrough_flow": 0,
+        "inflow": 0
+      }
+    },
+    "Gate_3": {
+      "data_points": 100,
+      "last_state": {
+        "opening": 0.7,
+        "outflow": 0
+      }
+    },
+    "Downstream_Reservoir": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 12.0,
+        "volume": 12000000.0,
+        "outflow": 0,
+        "inflow": 0.0
+      }
+    }
+  },
+  "system_stability": {
+    "water_level_variance": 12.1875,
+    "water_level_range": 9.0,
+    "coefficient_of_variation": 0.34059122057973024
+  },
+  "disturbance_config": {
+    "disturbance_scenario": {
+      "name": "Inflow_Variation_Disturbance",
+      "description": "模拟上游水库入流的季节性和突发性变化",
+      "type": "inflow_variation",
+      "category": "hydrological",
+      "parameters": {
+        "baseline_inflow": 100.0,
+        "variation_patterns": {
+          "seasonal_variation": {
+            "description": "季节性变化",
+            "amplitude": 60.0,
+            "period": 21600,
+            "phase_shift": 0
+          },
+          "daily_fluctuation": {
+            "description": "日内波动",
+            "amplitude": 30.0,
+            "period": 3600,
+            "phase_shift": 1800
+          },
+          "random_noise": {
+            "description": "随机噪声",
+            "noise_type": "gaussian",
+            "mean": 0.0,
+            "std_deviation": 15.0
+          },
+          "extreme_events": {
+            "description": "极端事件",
+            "events": [
+              {
+                "type": "flood",
+                "start_time": 10800,
+                "duration": 3600,
+                "peak_inflow": 300.0,
+                "rise_time": 900,
+                "fall_time": 2700
+              },
+              {
+                "type": "drought",
+                "start_time": 25200,
+                "duration": 7200,
+                "minimum_inflow": 20.0,
+                "transition_time": 1800
+              },
+              {
+                "type": "sudden_change",
+                "start_time": 43200,
+                "duration": 1800,
+                "target_inflow": 200.0,
+                "change_rate": 2.0
+              }
+            ]
+          }
+        },
+        "affected_components": [
+          {
+            "component_id": "Upstream_Reservoir",
+            "parameter": "inflow"
+          }
+        ]
+      },
+      "trigger_conditions": {
+        "start_time": 0,
+        "duration": 86400,
+        "trigger_type": "continuous"
+      },
+      "forecasting": {
+        "enable_forecast": true,
+        "forecast_horizon": 3600,
+        "forecast_accuracy": 0.85,
+        "update_interval": 300,
+        "uncertainty_bounds": {
+          "lower_bound": 0.9,
+          "upper_bound": 1.1
+        }
+      },
+      "monitoring": {
+        "metrics": [
+          "reservoir_water_level",
+          "downstream_flow_stability",
+          "gate_operation_frequency",
+          "system_response_time",
+          "control_effort"
+        ],
+        "sampling_interval": 60,
+        "critical_thresholds": {
+          "max_water_level": 25.0,
+          "min_water_level": 5.0,
+          "max_outflow_rate": 250.0,
+          "min_outflow_rate": 10.0
+        }
+      },
+      "expected_impact": {
+        "severity": "high",
+        "affected_components": [
+          "上游水库",
+          "整个渠系",
+          "控制系统",
+          "下游用水"
+        ],
+        "impact_description": "来水变化将直接影响整个水利系统的水量平衡和控制策略",
+        "cascade_effects": [
+          {
+            "effect": "水库水位波动",
+            "delay": 0,
+            "magnitude": "high"
+          },
+          {
+            "effect": "下游流量变化",
+            "delay": 300,
+            "magnitude": "medium"
+          },
+          {
+            "effect": "控制策略调整",
+            "delay": 600,
+            "magnitude": "medium"
+          },
+          {
+            "effect": "用水需求冲突",
+            "delay": 1800,
+            "magnitude": "low"
+          }
+        ]
+      },
+      "adaptive_control": {
+        "enable": true,
+        "strategies": [
+          "dynamic_gate_scheduling",
+          "predictive_water_allocation",
+          "emergency_response_protocol"
+        ],
+        "control_parameters": {
+          "response_sensitivity": 0.8,
+          "adaptation_rate": 0.1,
+          "stability_margin": 0.2
+        }
+      }
+    }
+  }
+}

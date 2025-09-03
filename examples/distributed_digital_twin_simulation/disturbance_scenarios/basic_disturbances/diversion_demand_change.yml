@@ -1,0 +1,189 @@
+# 分水口用水变化扰动场景配置
+# 模拟分水口用水需求的动态变化
+
+disturbance_scenario:
+  name: "Diversion_Demand_Change_Disturbance"
+  description: "模拟分水口用水需求的时变性和突发性变化"
+  type: "demand_variation"
+  category: "water_demand"
+  
+  # 扰动参数配置
+  parameters:
+    # 分水口配置
+    diversion_points:
+      diversion_1:
+        baseline_demand: 15.0       # 基准需水量 (m³/s)
+        location: "Channel_1"
+        priority: "high"            # 用水优先级
+        
+      diversion_2:
+        baseline_demand: 12.0       # 基准需水量 (m³/s)
+        location: "Channel_2"
+        priority: "medium"          # 用水优先级
+    
+    # 需求变化模式
+    demand_patterns:
+      # 日常变化模式
+      daily_pattern:
+        description: "日常用水模式"
+        peak_hours: [8, 12, 18]     # 用水高峰时段
+        peak_multiplier: 1.5        # 高峰倍数
+        valley_hours: [2, 6, 22]    # 用水低谷时段
+        valley_multiplier: 0.6      # 低谷倍数
+        
+      # 季节性变化
+      seasonal_variation:
+        description: "季节性需求变化"
+        summer_multiplier: 2.5      # 夏季倍数 (增强从1.8到2.5)
+        winter_multiplier: 0.4      # 冬季倍数 (增强从0.7到0.4)
+        transition_period: 3600     # 过渡期1小时
+        
+      # 随机波动
+      random_fluctuation:
+        description: "随机需求波动"
+        noise_type: "uniform"
+        variation_range: 0.5        # 变化范围±50% (增强从±20%到±50%)
+        correlation_time: 1800      # 相关时间30分钟
+        
+      # 突发事件
+      emergency_events:
+        description: "突发用水事件"
+        events:
+          - type: "irrigation_surge"
+            diversion: "diversion_1"
+            start_time: 14400       # 4小时后开始
+            duration: 7200          # 持续2小时
+            demand_multiplier: 4.0  # 需求倍数 (增强从2.5到4.0)
+            ramp_up_time: 600       # 上升时间10分钟
+            ramp_down_time: 1200    # 下降时间20分钟
+            
+          - type: "industrial_shutdown"
+            diversion: "diversion_2"
+            start_time: 28800       # 8小时后开始
+            duration: 3600          # 持续1小时
+            demand_multiplier: 0.1  # 需求倍数
+            transition_time: 300    # 过渡时间5分钟
+            
+          - type: "emergency_supply"
+            diversion: "diversion_1"
+            start_time: 50400       # 14小时后开始
+            duration: 1800          # 持续30分钟
+            demand_multiplier: 5.0  # 需求倍数 (增强从3.0到5.0)
+            priority_override: true # 优先级覆盖
+    
+    # 需求预测配置
+    demand_forecasting:
+      enable: true
+      forecast_methods:
+        - "historical_pattern"
+        - "weather_correlation"
+        - "user_behavior_model"
+      forecast_horizon: 7200        # 预测时长2小时
+      forecast_accuracy: 0.75       # 预测精度75%
+      update_frequency: 900         # 更新频率15分钟
+      
+  # 触发条件
+  trigger_conditions:
+    start_time: 0                   # 仿真开始即触发
+    duration: 86400                 # 持续24小时
+    trigger_type: "continuous"
+    
+  # 用水约束条件
+  constraints:
+    # 物理约束
+    physical_limits:
+      max_diversion_rate: 50.0      # 最大分水率 (m³/s)
+      min_diversion_rate: 0.0       # 最小分水率 (m³/s)
+      
+    # 运行约束
+    operational_limits:
+      max_change_rate: 5.0          # 最大变化率 (m³/s/min)
+      min_supply_guarantee: 0.8     # 最小供水保证率
+      
+    # 优先级约束
+    priority_rules:
+      - "high_priority_first"
+      - "emergency_override"
+      - "minimum_allocation_guarantee"
+    
+  # 供需平衡策略
+  supply_demand_balance:
+    enable_optimization: true
+    optimization_objectives:
+      - "minimize_supply_deficit"
+      - "maximize_user_satisfaction"
+      - "minimize_system_stress"
+    
+    balancing_methods:
+      - method: "proportional_allocation"
+        weight: 0.4
+      - method: "priority_based_allocation"
+        weight: 0.6
+    
+    deficit_handling:
+      enable_rationing: true
+      rationing_strategy: "proportional"
+      emergency_reserves: 0.1       # 应急储备10%
+    
+  # 性能指标监测
+  monitoring:
+    metrics:
+      - "demand_satisfaction_rate"
+      - "supply_deficit"
+      - "water_allocation_efficiency"
+      - "system_stress_level"
+      - "user_satisfaction_index"
+    sampling_interval: 300          # 采样间隔5分钟
+    
+    # 关键性能指标
+    kpi_thresholds:
+      min_satisfaction_rate: 0.85   # 最小满足率85%
+      max_deficit_ratio: 0.15       # 最大缺水比15%
+      max_stress_level: 0.8         # 最大压力水平80%
+    
+  # 预期影响评估
+  expected_impact:
+    severity: "medium"
+    affected_components:
+      - "分水口系统"
+      - "渠道水位"
+      - "下游供水"
+      - "控制策略"
+    impact_description: "分水口需求变化将影响渠道水量分配和下游供水稳定性"
+    
+    # 影响传播分析
+    impact_propagation:
+      - component: "Channel_1"
+        delay: 60                   # 1分钟延迟
+        magnitude: "high"
+        type: "water_level_change"
+      - component: "Gate_2"
+        delay: 300                  # 5分钟延迟
+        magnitude: "medium"
+        type: "operation_adjustment"
+      - component: "Channel_2"
+        delay: 600                  # 10分钟延迟
+        magnitude: "medium"
+        type: "flow_redistribution"
+      - component: "Downstream_Reservoir"
+        delay: 1800                 # 30分钟延迟
+        magnitude: "low"
+        type: "storage_variation"
+    
+  # 适应性管理策略
+  adaptive_management:
+    enable: true
+    strategies:
+      - "dynamic_allocation_adjustment"
+      - "demand_response_program"
+      - "emergency_protocol_activation"
+    
+    feedback_mechanisms:
+      - "real_time_demand_monitoring"
+      - "user_feedback_integration"
+      - "system_performance_evaluation"
+    
+    learning_algorithms:
+      - "demand_pattern_recognition"
+      - "predictive_model_updating"
+      - "optimization_parameter_tuning"

@@ -1,0 +1,136 @@
+{
+  "analysis_timestamp": "2025-09-03T16:40:16.454990",
+  "algorithm_comparison": {
+    "tested_methods": [
+      "递推最小二乘(RLS)",
+      "Kalman滤波",
+      "粒子群优化(PSO)",
+      "混合自适应算法"
+    ],
+    "performance_metrics": {
+      "method_performance": {
+        "rls": {
+          "method_name": "递推最小二乘",
+          "average_total_score": 0.2889236211436869,
+          "average_accuracy_score": 0.34131945877669567,
+          "average_convergence_time": 500.0,
+          "average_final_error": 2.0072185271275447,
+          "std_total_score": 0.03700288314840787,
+          "best_channel": "Channel_1",
+          "worst_channel": "Channel_2"
+        },
+        "kalman": {
+          "method_name": "Kalman滤波",
+          "average_total_score": 0.4134114008995402,
+          "average_accuracy_score": 0.5191591441422003,
+          "average_convergence_time": 500.0,
+          "average_final_error": 1.0916840114457829,
+          "std_total_score": 0.0957568706876106,
+          "best_channel": "Channel_1",
+          "worst_channel": "Channel_2"
+        },
+        "pso": {
+          "method_name": "粒子群优化",
+          "average_total_score": 0.27439579620989313,
+          "average_accuracy_score": 0.32056542315699016,
+          "average_convergence_time": 500.0,
+          "average_final_error": 2.1702806860012305,
+          "std_total_score": 0.028775198187685973,
+          "best_channel": "Channel_1",
+          "worst_channel": "Channel_2"
+        },
+        "hybrid": {
+          "method_name": "混合算法",
+          "average_total_score": 0.2813876609783044,
+          "average_accuracy_score": 0.3305538013975778,
+          "average_convergence_time": 500.0,
+          "average_final_error": 2.0908068221188,
+          "std_total_score": 0.032218890135109944,
+          "best_channel": "Channel_1",
+          "worst_channel": "Channel_2"
+        }
+      },
+      "channel_performance": {
+        "Channel_1": {
+          "best_method": "kalman",
+          "best_score": 0.515892111385644,
+          "score_variance": 0.0074575754644851866,
+          "improvement_potential": 0.20486996352914527
+        },
+        "Channel_2": {
+          "best_method": "kalman",
+          "best_score": 0.28550719883464404,
+          "score_variance": 0.00040336253251190734,
+          "improvement_potential": 0.04891065680240156
+        },
+        "Channel_3": {
+          "best_method": "kalman",
+          "best_score": 0.4388348924783327,
+          "score_variance": 0.004386847172540054,
+          "improvement_potential": 0.16959112706626722
+        }
+      },
+      "overall_improvement": {
+        "best_method": "kalman",
+        "best_method_name": "Kalman滤波",
+        "best_average_score": 0.4134114008995402,
+        "best_average_error": 1.0916840114457829,
+        "best_average_convergence_time": 500.0,
+        "improvement_grade": "satisfactory"
+      }
+    }
+  },
+  "key_findings": {
+    "best_overall_method": {
+      "method": "Kalman滤波",
+      "average_score": 0.4134114008995402,
+      "average_error": 1.0916840114457829,
+      "average_convergence_time": 500.0
+    },
+    "method_ranking": [
+      {
+        "rank": 1,
+        "method": "Kalman滤波",
+        "score": 0.4134114008995402
+      },
+      {
+        "rank": 2,
+        "method": "递推最小二乘",
+        "score": 0.2889236211436869
+      },
+      {
+        "rank": 3,
+        "method": "混合算法",
+        "score": 0.2813876609783044
+      },
+      {
+        "rank": 4,
+        "method": "粒子群优化",
+        "score": 0.27439579620989313
+      }
+    ],
+    "channel_analysis": {
+      "Channel_1": {
+        "best_method": "Kalman滤波",
+        "best_score": 0.515892111385644,
+        "improvement_potential": 0.20486996352914527
+      },
+      "Channel_2": {
+        "best_method": "Kalman滤波",
+        "best_score": 0.28550719883464404,
+        "improvement_potential": 0.04891065680240156
+      },
+      "Channel_3": {
+        "best_method": "Kalman滤波",
+        "best_score": 0.4388348924783327,
+        "improvement_potential": 0.16959112706626722
+      }
+    }
+  },
+  "recommendations": [
+    "需要进一步改进算法设计",
+    "建议结合多种算法的优势",
+    "增加更强的自适应机制",
+    "考虑引入机器学习方法"
+  ]
+}

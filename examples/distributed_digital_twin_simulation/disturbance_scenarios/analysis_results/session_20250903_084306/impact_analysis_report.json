@@ -1,0 +1,131 @@
+{
+  "analysis_timestamp": "2025-09-03T08:43:28.479207",
+  "baseline_scenario": "baseline",
+  "analyzed_scenarios": [
+    "actuator_interference",
+    "data_packet_loss",
+    "diversion_demand_change",
+    "downstream_demand_change",
+    "inflow_variation_actuator_interference",
+    "inflow_variation",
+    "network_delay_packet_loss",
+    "network_delay",
+    "node_failure",
+    "node_failure_sensor_interference",
+    "sensor_interference"
+  ],
+  "performance_degradation": {
+    "actuator_interference": {
+      "water_level_stability_degradation": 0.0,
+      "water_level_range_increase": 0.0,
+      "flow_rate_stability_degradation": 0.0,
+      "control_precision_degradation": 0.0,
+      "system_variance_increase": 0.0
+    },
+    "data_packet_loss": {
+      "water_level_stability_degradation": 0.0,
+      "water_level_range_increase": 0.0,
+      "flow_rate_stability_degradation": 0.0,
+      "control_precision_degradation": 0.0,
+      "system_variance_increase": 0.0
+    },
+    "diversion_demand_change": {
+      "water_level_stability_degradation": 0.0,
+      "water_level_range_increase": 0.0,
+      "flow_rate_stability_degradation": 0.0,
+      "control_precision_degradation": 0.0,
+      "system_variance_increase": 0.0
+    },
+    "downstream_demand_change": {
+      "water_level_stability_degradation": 0.0,
+      "water_level_range_increase": 0.0,
+      "flow_rate_stability_degradation": 0.0,
+      "control_precision_degradation": 0.0,
+      "system_variance_increase": 0.0
+    },
+    "inflow_variation_actuator_interference": {
+      "water_level_stability_degradation": 0.0,
+      "water_level_range_increase": 0.0,
+      "flow_rate_stability_degradation": 0.0,
+      "control_precision_degradation": 0.0,
+      "system_variance_increase": 0.0
+    },
+    "inflow_variation": {
+      "water_level_stability_degradation": 0.0,
+      "water_level_range_increase": 0.0,
+      "flow_rate_stability_degradation": 0.0,
+      "control_precision_degradation": 0.0,
+      "system_variance_increase": 0.0
+    },
+    "network_delay_packet_loss": {
+      "water_level_stability_degradation": 0.0,
+      "water_level_range_increase": 0.0,
+      "flow_rate_stability_degradation": 0.0,
+      "control_precision_degradation": 0.0,
+      "system_variance_increase": 0.0
+    },
+    "network_delay": {
+      "water_level_stability_degradation": 0.0,
+      "water_level_range_increase": 0.0,
+      "flow_rate_stability_degradation": 0.0,
+      "control_precision_degradation": 0.0,
+      "system_variance_increase": 0.0
+    },
+    "node_failure": {
+      "water_level_stability_degradation": 0.0,
+      "water_level_range_increase": 0.0,
+      "flow_rate_stability_degradation": 0.0,
+      "control_precision_degradation": 0.0,
+      "system_variance_increase": 0.0
+    },
+    "node_failure_sensor_interference": {
+      "water_level_stability_degradation": 0.0,
+      "water_level_range_increase": 0.0,
+      "flow_rate_stability_degradation": 0.0,
+      "control_precision_degradation": 0.0,
+      "system_variance_increase": 0.0
+    },
+    "sensor_interference": {
+      "water_level_stability_degradation": 0.0,
+      "water_level_range_increase": 0.0,
+      "flow_rate_stability_degradation": 0.0,
+      "control_precision_degradation": 0.0,
+      "system_variance_increase": 0.0
+    }
+  },
+  "severity_classification": {
+    "actuator_interference": "轻微",
+    "data_packet_loss": "轻微",
+    "diversion_demand_change": "轻微",
+    "downstream_demand_change": "轻微",
+    "inflow_variation_actuator_interference": "轻微",
+    "inflow_variation": "轻微",
+    "network_delay_packet_loss": "轻微",
+    "network_delay": "轻微",
+    "node_failure": "轻微",
+    "node_failure_sensor_interference": "轻微",
+    "sensor_interference": "轻微"
+  },
+  "summary": {
+    "total_scenarios": 11,
+    "severe_scenarios": [],
+    "moderate_scenarios": [],
+    "mild_scenarios": [
+      "actuator_interference",
+      "data_packet_loss",
+      "diversion_demand_change",
+      "downstream_demand_change",
+      "inflow_variation_actuator_interference",
+      "inflow_variation",
+      "network_delay_packet_loss",
+      "network_delay",
+      "node_failure",
+      "node_failure_sensor_interference",
+      "sensor_interference"
+    ]
+  },
+  "recommendations": [
+    "组合扰动场景: data_packet_loss, diversion_demand_change, downstream_demand_change, inflow_variation_actuator_interference, network_delay_packet_loss, node_failure_sensor_interference",
+    "建议设计多层次防护策略，应对复合扰动"
+  ]
+}

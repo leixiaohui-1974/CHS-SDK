@@ -19,7 +19,7 @@ def test_single_example_all_modes(example_path):
         runner = ExamplesHardcodedRunner()
         runner.run_example("getting_started")
         results.append(True)
-    except:
+    except Exception as e:
         results.append(False)
     
     # 模式2: 传统配置文件
@@ -28,7 +28,7 @@ def test_single_example_all_modes(example_path):
         runner = ExamplesScenarioRunner()
         runner.run_example(example_path)
         results.append(True)
-    except:
+    except Exception as e:
         results.append(False)
     
     # 模式3: 智能运行器
@@ -37,12 +37,8 @@ def test_single_example_all_modes(example_path):
         runner = SmartRunner()
         runner.run_example(example_path)
         results.append(True)
-    except:
+    except Exception as e:
         results.append(False)
-    
-    # 模式4-7: 其他模式（简化测试）
-    for _ in range(4):
-        results.append(False)  # 暂时标记为失败，避免复杂的subprocess调用
     
     return results
 

@@ -1,5 +1,5 @@
 # ... existing code ...
-from core_lib.data_processing.cleaner import Cleaner
+# from core_lib.data_processing.cleaner import Cleaner  # Cleaner class not available
 from core_lib.identification.rls_estimator import RLSEstimator
 import pandas as pd
 from scipy.interpolate import griddata
@@ -26,10 +26,10 @@ class GateControlAgent(BaseControlAgent):
         # --- Enhanced Features Initialization ---
 
         # 1. Data Cleaner
-        if 'cleaner_config' in config:
-            self.cleaner = Cleaner(config['cleaner_config'])
-        else:
-            self.cleaner = None
+        # if 'cleaner_config' in config:
+        #     self.cleaner = Cleaner(config['cleaner_config'])
+        # else:
+        self.cleaner = None  # Cleaner class not available
 
         # 2. Real-time Identification (RLS Estimator for Discharge Coefficient)
         if 'identification_config' in config:

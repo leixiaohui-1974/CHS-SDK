@@ -1,0 +1,95 @@
+{
+  "scenario_name": "network_delay",
+  "timestamp": "2025-09-03T08:12:53.727013",
+  "simulation_time": 100,
+  "components_count": 9,
+  "agents_count": 13,
+  "controllers_count": 0,
+  "disturbance_config": {
+    "disturbance_scenario": {
+      "name": "Network_Delay_Disturbance",
+      "description": "模拟分布式智能体间的网络通信延迟",
+      "type": "network_delay",
+      "category": "communication",
+      "parameters": {
+        "delay_levels": {
+          "low": {
+            "base_delay": 50,
+            "jitter": 10,
+            "packet_loss": 0.001
+          },
+          "medium": {
+            "base_delay": 200,
+            "jitter": 50,
+            "packet_loss": 0.01
+          },
+          "high": {
+            "base_delay": 500,
+            "jitter": 100,
+            "packet_loss": 0.05
+          },
+          "extreme": {
+            "base_delay": 1000,
+            "jitter": 200,
+            "packet_loss": 0.1
+          }
+        },
+        "affected_links": [
+          {
+            "source": "Channel1_Twin_Agent",
+            "target": "CentralPerceptionAgent",
+            "delay_level": "medium"
+          },
+          {
+            "source": "Channel2_Twin_Agent",
+            "target": "CentralPerceptionAgent",
+            "delay_level": "medium"
+          },
+          {
+            "source": "Gate1_Perception_Agent",
+            "target": "Gate1_Control_Agent",
+            "delay_level": "low"
+          },
+          {
+            "source": "Gate2_Perception_Agent",
+            "target": "Gate2_Control_Agent",
+            "delay_level": "low"
+          },
+          {
+            "source": "Gate3_Perception_Agent",
+            "target": "Gate3_Control_Agent",
+            "delay_level": "low"
+          },
+          {
+            "source": "CentralPerceptionAgent",
+            "target": "CentralMPCAgent",
+            "delay_level": "high"
+          }
+        ]
+      },
+      "trigger_conditions": {
+        "start_time": 3600,
+        "duration": 7200,
+        "trigger_type": "time_based"
+      },
+      "monitoring": {
+        "metrics": [
+          "communication_latency",
+          "data_freshness",
+          "control_performance",
+          "system_stability"
+        ],
+        "sampling_interval": 60
+      },
+      "expected_impact": {
+        "severity": "medium",
+        "affected_components": [
+          "分布式感知层",
+          "中心协调层",
+          "控制性能"
+        ],
+        "impact_description": "网络延迟将导致数据传输滞后，影响实时控制精度和系统响应速度"
+      }
+    }
+  }
+}

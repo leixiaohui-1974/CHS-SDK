@@ -18,15 +18,22 @@ class CentralPerceptionAgent(Agent):
     def __init__(self,
                  agent_id: str,
                  message_bus: MessageBus,
-                 data_collection: Dict[str, Any] = None,
-                 subscribe_topics: List[str] = None,
-                 data_fusion_config: Dict[str, Any] = None,
-                 centralized_twin_config: Dict[str, Any] = None,
-                 global_evaluation_config: Dict[str, Any] = None,
-                 global_prediction_config: Dict[str, Any] = None,
-                 publish_topics: List[str] = None,
-                 subscribed_topics: Dict[str, str] = None,
-                 global_state_topic: str = None):
+                 config=None,
+                 **kwargs):
+        # Handle different parameter formats
+        if config is None:
+            config = kwargs
+        
+        # Extract parameters from config
+        data_collection = config.get('data_collection', None)
+        subscribe_topics = config.get('subscribe_topics', None)
+        data_fusion_config = config.get('data_fusion_config', None)
+        centralized_twin_config = config.get('centralized_twin_config', None)
+        global_evaluation_config = config.get('global_evaluation_config', None)
+        global_prediction_config = config.get('global_prediction_config', None)
+        publish_topics = config.get('publish_topics', None)
+        subscribed_topics = config.get('subscribed_topics', None)
+        global_state_topic = config.get('global_state_topic', None)
         """
         Initializes the CentralPerceptionAgent.
 

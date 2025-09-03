@@ -1,0 +1,91 @@
+# 数据丢包扰动场景配置
+# 模拟分布式系统中的数据包丢失问题
+
+disturbance_scenario:
+  name: "Data_Packet_Loss_Disturbance"
+  description: "模拟分布式智能体间的数据包丢失"
+  type: "packet_loss"
+  category: "communication"
+  
+  # 扰动参数配置
+  parameters:
+    # 丢包等级配置
+    loss_levels:
+      low:
+        loss_rate: 0.01     # 1% 丢包率
+        burst_loss: false   # 非突发丢包
+        recovery_time: 5    # 恢复时间 (秒)
+      medium:
+        loss_rate: 0.05     # 5% 丢包率
+        burst_loss: true    # 突发丢包
+        burst_duration: 10  # 突发持续时间 (秒)
+        recovery_time: 15   # 恢复时间 (秒)
+      high:
+        loss_rate: 0.15     # 15% 丢包率
+        burst_loss: true    # 突发丢包
+        burst_duration: 30  # 突发持续时间 (秒)
+        recovery_time: 60   # 恢复时间 (秒)
+      extreme:
+        loss_rate: 0.3      # 30% 丢包率
+        burst_loss: true    # 突发丢包
+        burst_duration: 60  # 突发持续时间 (秒)
+        recovery_time: 120  # 恢复时间 (秒)
+    
+    # 影响的数据流
+    affected_data_flows:
+      - source: "ontology_simulation"
+        target: "Channel1_Twin_Agent"
+        data_type: "water_level"
+        loss_level: "medium"
+      - source: "ontology_simulation"
+        target: "Channel2_Twin_Agent"
+        data_type: "flow_rate"
+        loss_level: "medium"
+      - source: "Gate1_Perception_Agent"
+        target: "CentralPerceptionAgent"
+        data_type: "gate_status"
+        loss_level: "low"
+      - source: "Gate2_Perception_Agent"
+        target: "CentralPerceptionAgent"
+        data_type: "gate_status"
+        loss_level: "low"
+      - source: "Gate3_Perception_Agent"
+        target: "CentralPerceptionAgent"
+        data_type: "gate_status"
+        loss_level: "low"
+      - source: "CentralMPCAgent"
+        target: "Gate1_Control_Agent"
+        data_type: "control_command"
+        loss_level: "high"
+  
+  # 触发条件
+  trigger_conditions:
+    start_time: 5400      # 1.5小时后开始 (秒)
+    duration: 3600        # 持续1小时 (秒)
+    trigger_type: "time_based"
+    
+  # 数据恢复策略
+  recovery_strategy:
+    enable_buffering: true
+    buffer_size: 100      # 缓冲区大小
+    retransmission: true
+    max_retries: 3
+    timeout: 30           # 超时时间 (秒)
+    
+  # 性能指标监测
+  monitoring:
+    metrics:
+      - "data_integrity"
+      - "information_completeness"
+      - "control_accuracy"
+      - "system_robustness"
+    sampling_interval: 30  # 采样间隔 (秒)
+    
+  # 预期影响评估
+  expected_impact:
+    severity: "high"
+    affected_components:
+      - "数据传输层"
+      - "感知智能体"
+      - "控制决策"
+    impact_description: "数据丢包将导致信息不完整，影响状态估计精度和控制决策质量"

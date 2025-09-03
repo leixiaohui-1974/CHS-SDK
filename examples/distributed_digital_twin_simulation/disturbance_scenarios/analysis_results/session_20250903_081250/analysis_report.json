@@ -1,0 +1,55 @@
+{
+  "session_info": {
+    "timestamp": "20250903_081250",
+    "total_scenarios": 11,
+    "successful_scenarios": 11,
+    "failed_scenarios": 0
+  },
+  "performance_comparison": {},
+  "disturbance_impact_analysis": {
+    "actuator_interference": {
+      "scenario_name": "actuator_interference",
+      "performance_degradation": {}
+    },
+    "data_packet_loss": {
+      "scenario_name": "data_packet_loss",
+      "performance_degradation": {}
+    },
+    "diversion_demand_change": {
+      "scenario_name": "diversion_demand_change",
+      "performance_degradation": {}
+    },
+    "downstream_demand_change": {
+      "scenario_name": "downstream_demand_change",
+      "performance_degradation": {}
+    },
+    "inflow_variation": {
+      "scenario_name": "inflow_variation",
+      "performance_degradation": {}
+    },
+    "network_delay": {
+      "scenario_name": "network_delay",
+      "performance_degradation": {}
+    },
+    "node_failure": {
+      "scenario_name": "node_failure",
+      "performance_degradation": {}
+    },
+    "sensor_interference": {
+      "scenario_name": "sensor_interference",
+      "performance_degradation": {}
+    },
+    "inflow_variation_actuator_interference": {
+      "scenario_name": "inflow_variation_actuator_interference",
+      "performance_degradation": {}
+    },
+    "network_delay_packet_loss": {
+      "scenario_name": "network_delay_packet_loss",
+      "performance_degradation": {}
+    },
+    "node_failure_sensor_interference": {
+      "scenario_name": "node_failure_sensor_interference",
+      "performance_degradation": {}
+    }
+  }
+}

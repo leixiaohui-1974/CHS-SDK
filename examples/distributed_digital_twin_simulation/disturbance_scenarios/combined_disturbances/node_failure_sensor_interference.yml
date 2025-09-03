@@ -1,0 +1,366 @@
+# 节点故障+传感器干扰组合扰动场景配置
+# 模拟节点故障与传感器干扰同时发生的复合故障
+
+combined_disturbance_scenario:
+  name: "Node_Failure_Sensor_Interference_Combined"
+  description: "节点故障与传感器干扰的组合扰动场景"
+  type: "combined_system_failure"
+  category: "hardware_software_system"
+  
+  # 组合扰动配置
+  combination_parameters:
+    # 基础扰动组件
+    base_disturbances:
+      node_failure:
+        reference_file: "../basic_disturbances/node_failure.yml"
+        weight: 0.7                    # 权重70%
+        interaction_factor: 1.4        # 交互因子
+        
+      sensor_interference:
+        reference_file: "../basic_disturbances/sensor_interference.yml"
+        weight: 0.3                    # 权重30%
+        interaction_factor: 1.6        # 交互因子
+    
+    # 组合效应配置
+    combination_effects:
+      failure_propagation:
+        enable: true
+        propagation_probability: 0.4   # 传播概率40%
+        propagation_delay: 120         # 传播延迟2分钟
+        isolation_effectiveness: 0.8   # 隔离有效性80%
+        
+      observability_degradation:
+        enable: true
+        degradation_factor: 2.0        # 退化因子
+        blind_spot_expansion: 1.5      # 盲点扩展1.5倍
+        estimation_uncertainty: 0.4    # 估计不确定性40%
+        
+      recovery_complexity:
+        enable: true
+        complexity_multiplier: 2.5     # 复杂度倍数
+        diagnosis_difficulty: 1.8      # 诊断难度1.8倍
+        repair_time_extension: 1.6     # 修复时间延长1.6倍
+  
+  # 扰动参数配置
+  parameters:
+    # 系统架构配置
+    system_architecture:
+      node_hierarchy:
+        control_nodes:
+          - node_id: "Central_Controller"
+            criticality: "critical"
+            redundancy_level: 2
+            sensor_dependencies: ["water_level_sensors", "flow_rate_sensors"]
+            backup_nodes: ["Backup_Controller_1", "Backup_Controller_2"]
+            
+          - node_id: "Local_Controller_1"
+            criticality: "high"
+            redundancy_level: 1
+            sensor_dependencies: ["gate_position_sensors", "local_flow_sensors"]
+            backup_nodes: ["Local_Controller_Backup"]
+            
+          - node_id: "Local_Controller_2"
+            criticality: "high"
+            redundancy_level: 1
+            sensor_dependencies: ["channel_level_sensors", "diversion_flow_sensors"]
+            backup_nodes: ["Local_Controller_Backup"]
+            
+        sensor_nodes:
+          - node_id: "Sensor_Cluster_A"
+            location: "Upstream_Reservoir"
+            sensor_types: ["water_level", "temperature", "turbidity"]
+            communication_node: "Central_Controller"
+            backup_communication: ["Local_Controller_1"]
+            
+          - node_id: "Sensor_Cluster_B"
+            location: "Channel_Network"
+            sensor_types: ["flow_rate", "water_level", "gate_position"]
+            communication_node: "Local_Controller_1"
+            backup_communication: ["Central_Controller"]
+            
+          - node_id: "Sensor_Cluster_C"
+            location: "Downstream_Area"
+            sensor_types: ["water_level", "flow_rate", "water_quality"]
+            communication_node: "Local_Controller_2"
+            backup_communication: ["Central_Controller"]
+    
+    # 故障模式配置
+    failure_modes:
+      node_failure_types:
+        hardware_failure:
+          cpu_failure:
+            probability: 0.01          # 发生概率1%
+            mtbf: 8760                 # 平均故障间隔1年
+            repair_time: 240           # 修复时间4小时
+            impact_severity: "critical"
+            
+          memory_failure:
+            probability: 0.015         # 发生概率1.5%
+            mtbf: 6000                 # 平均故障间隔6000小时
+            repair_time: 120           # 修复时间2小时
+            impact_severity: "high"
+            
+          network_interface_failure:
+            probability: 0.02          # 发生概率2%
+            mtbf: 4380                 # 平均故障间隔0.5年
+            repair_time: 60            # 修复时间1小时
+            impact_severity: "medium"
+            
+        software_failure:
+          operating_system_crash:
+            probability: 0.005         # 发生概率0.5%
+            mtbf: 2000                 # 平均故障间隔2000小时
+            recovery_time: 30          # 恢复时间30分钟
+            impact_severity: "high"
+            
+          application_hang:
+            probability: 0.01          # 发生概率1%
+            mtbf: 1000                 # 平均故障间隔1000小时
+            recovery_time: 10          # 恢复时间10分钟
+            impact_severity: "medium"
+            
+          database_corruption:
+            probability: 0.002         # 发生概率0.2%
+            mtbf: 5000                 # 平均故障间隔5000小时
+            recovery_time: 180         # 恢复时间3小时
+            impact_severity: "critical"
+      
+      sensor_interference_types:
+        electromagnetic_interference:
+          source_types:
+            - "power_line_interference"
+            - "radio_frequency_interference"
+            - "switching_transients"
+          intensity_levels: ["low", "medium", "high", "severe"]
+          frequency_ranges: [[0.1, 1], [1, 10], [10, 100], [100, 1000]]  # Hz
+          
+        environmental_interference:
+          weather_effects:
+            rain_interference: 0.1     # 降雨干扰10%
+            wind_vibration: 0.05       # 风振干扰5%
+            temperature_drift: 0.02    # 温度漂移2%
+            humidity_effect: 0.03      # 湿度影响3%
+            
+          physical_obstruction:
+            debris_accumulation: 0.08  # 杂物堆积8%
+            vegetation_growth: 0.04    # 植被生长4%
+            sediment_deposition: 0.06  # 沉积物沉积6%
+            
+        calibration_drift:
+          drift_patterns:
+            linear_drift: 0.001        # 线性漂移0.1%/天
+            exponential_drift: 0.002   # 指数漂移0.2%/天
+            periodic_drift: 0.0005     # 周期性漂移0.05%/天
+          calibration_intervals: 2160 # 校准间隔90天
+    
+    # 组合故障场景
+    combined_failure_scenarios:
+      - scenario_id: "cascading_system_failure"
+        description: "级联系统故障"
+        start_time: 7200             # 2小时后开始
+        total_duration: 14400        # 总持续时间4小时
+        
+        failure_sequence:
+          - step: 1
+            time_offset: 0
+            failure_type: "sensor_interference"
+            affected_components: ["Sensor_Cluster_A"]
+            interference_type: "electromagnetic"
+            intensity: "medium"
+            duration: 3600
+            
+          - step: 2
+            time_offset: 1800          # 30分钟后
+            failure_type: "node_failure"
+            affected_components: ["Local_Controller_1"]
+            failure_mode: "hardware_failure"
+            failure_subtype: "network_interface_failure"
+            duration: 7200
+            
+          - step: 3
+            time_offset: 3600          # 1小时后
+            failure_type: "sensor_interference"
+            affected_components: ["Sensor_Cluster_B", "Sensor_Cluster_C"]
+            interference_type: "environmental"
+            intensity: "high"
+            duration: 10800
+            
+          - step: 4
+            time_offset: 5400          # 1.5小时后
+            failure_type: "node_failure"
+            affected_components: ["Central_Controller"]
+            failure_mode: "software_failure"
+            failure_subtype: "application_hang"
+            duration: 1800
+      
+      - scenario_id: "distributed_degradation"
+        description: "分布式系统退化"
+        start_time: 28800            # 8小时后开始
+        total_duration: 10800        # 总持续时间3小时
+        
+        degradation_pattern:
+          spatial_distribution:
+            affected_zones: ["upstream", "midstream", "downstream"]
+            propagation_speed: 0.1     # 传播速度0.1区域/分钟
+            intensity_gradient: [1.0, 0.8, 0.6]  # 强度梯度
+            
+          temporal_evolution:
+            phases:
+              - phase: "initiation"
+                duration: 1800         # 30分钟
+                failure_rate: 0.1      # 故障率10%
+                interference_level: "low"
+                
+              - phase: "escalation"
+                duration: 3600         # 60分钟
+                failure_rate: 0.3      # 故障率30%
+                interference_level: "medium"
+                
+              - phase: "peak_impact"
+                duration: 1800         # 30分钟
+                failure_rate: 0.5      # 故障率50%
+                interference_level: "high"
+                
+              - phase: "stabilization"
+                duration: 3600         # 60分钟
+                failure_rate: 0.2      # 故障率20%
+                interference_level: "medium"
+      
+      - scenario_id: "coordinated_attack_simulation"
+        description: "协调攻击仿真"
+        start_time: 50400            # 14小时后开始
+        total_duration: 7200         # 总持续时间2小时
+        
+        attack_vectors:
+          - vector: "targeted_node_compromise"
+            target_nodes: ["Central_Controller", "Local_Controller_1"]
+            attack_method: "malware_injection"
+            success_probability: 0.7
+            detection_delay: 600       # 检测延迟10分钟
+            
+          - vector: "sensor_jamming"
+            target_sensors: ["all_critical_sensors"]
+            jamming_method: "broadband_interference"
+            coverage_area: 2000        # 覆盖范围2km
+            jamming_power: "high"
+            
+          - vector: "communication_disruption"
+            target_links: ["all_communication_links"]
+            disruption_method: "signal_flooding"
+            bandwidth_consumption: 0.9 # 带宽消耗90%
+            duration: 3600             # 持续1小时
+    
+    # 故障检测与诊断
+    fault_detection_diagnosis:
+      detection_mechanisms:
+        anomaly_detection:
+          enable: true
+          detection_algorithms:
+            - "statistical_process_control"
+            - "machine_learning_based"
+            - "model_based_detection"
+          detection_threshold: 2.5   # 检测阈值2.5σ
+          false_positive_rate: 0.05  # 误报率5%
+          detection_delay: 30        # 检测延迟30秒
+          
+        health_monitoring:
+          enable: true
+          monitoring_parameters:
+            - "cpu_utilization"
+            - "memory_usage"
+            - "network_latency"
+            - "sensor_data_quality"
+            - "communication_status"
+          monitoring_frequency: 10   # 监测频率10秒
+          
+        redundancy_checking:
+          enable: true
+          cross_validation: true
+          voting_algorithms: ["majority_voting", "weighted_voting"]
+          consistency_threshold: 0.1 # 一致性阈值10%
+      
+      diagnosis_capabilities:
+        root_cause_analysis:
+          enable: true
+          analysis_methods:
+            - "fault_tree_analysis"
+            - "bayesian_networks"
+            - "expert_systems"
+          diagnosis_accuracy: 0.85   # 诊断精度85%
+          diagnosis_time: 300        # 诊断时间5分钟
+          
+        failure_localization:
+          enable: true
+          localization_precision: 0.9 # 定位精度90%
+          spatial_resolution: 100    # 空间分辨率100m
+          temporal_resolution: 60    # 时间分辨率1分钟
+    
+    # 恢复与修复策略
+    recovery_repair_strategies:
+      immediate_response:
+        duration: 300              # 持续5分钟
+        actions:
+          - "isolate_failed_components"
+          - "activate_backup_systems"
+          - "switch_to_degraded_mode"
+          - "alert_maintenance_team"
+        
+      short_term_mitigation:
+        duration: 1800             # 持续30分钟
+        actions:
+          - "reconfigure_system_topology"
+          - "adjust_control_parameters"
+          - "implement_workarounds"
+          - "monitor_system_stability"
+        
+      long_term_recovery:
+        duration: 14400            # 持续4小时
+        actions:
+          - "repair_failed_hardware"
+          - "restore_software_systems"
+          - "recalibrate_sensors"
+          - "validate_system_performance"
+          - "update_system_documentation"
+      
+      recovery_validation:
+        validation_criteria:
+          functionality_restoration: 0.95  # 功能恢复95%
+          performance_recovery: 0.9        # 性能恢复90%
+          reliability_verification: 0.98   # 可靠性验证98%
+        validation_duration: 3600         # 验证持续时间1小时
+  
+  # 触发条件
+  trigger_conditions:
+    start_time: 0                  # 仿真开始即触发
+    duration: 86400                # 持续24小时
+    trigger_type: "scenario_based"
+    
+  # 性能指标监测
+  monitoring:
+    metrics:
+      - "system_availability"
+      - "fault_detection_rate"
+      - "false_alarm_rate"
+      - "mean_time_to_repair"
+      - "system_resilience_index"
+      - "observability_coverage"
+      - "control_performance_degradation"
+    sampling_interval: 30          # 采样间隔30秒
+    
+  # 预期影响评估
+  expected_impact:
+    severity: "critical"
+    affected_components:
+      - "系统可观测性"
+      - "故障诊断能力"
+      - "控制系统冗余"
+      - "数据完整性"
+    impact_description: "节点故障与传感器干扰的组合将严重影响系统的可观测性和故障恢复能力"
+    
+    # 影响量化分析
+    quantitative_impact:
+      observability_loss: 0.6           # 可观测性损失60%
+      fault_diagnosis_accuracy: 0.4     # 故障诊断精度40%
+      system_availability: 0.7          # 系统可用性70%
+      recovery_time_increase: 2.5       # 恢复时间增加2.5倍
+      operational_cost_increase: 0.8    # 运营成本增加80%

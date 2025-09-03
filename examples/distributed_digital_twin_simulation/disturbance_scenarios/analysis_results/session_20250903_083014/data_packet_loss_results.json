@@ -1,0 +1,213 @@
+{
+  "scenario_name": "data_packet_loss",
+  "timestamp": "2025-09-03T08:30:16.027601",
+  "simulation_time": 100,
+  "components_count": 9,
+  "agents_count": 13,
+  "controllers_count": 0,
+  "water_level_stats": {
+    "mean": 10.25,
+    "std": 3.491060010942235,
+    "min": 6.0,
+    "max": 15.0,
+    "median": 10.0
+  },
+  "water_level_count": 400,
+  "flow_rate_stats": {
+    "mean": 18.402307721526807,
+    "std": 28.136834803069334,
+    "min": 0.0,
+    "max": 79.21186828213787,
+    "median": 0.0
+  },
+  "flow_rate_count": 900,
+  "gate_opening_stats": {
+    "mean": 0.6,
+    "std": 0.08164965809277258,
+    "min": 0.5,
+    "max": 0.7,
+    "median": 0.6
+  },
+  "gate_opening_count": 300,
+  "component_statistics": {
+    "Upstream_Reservoir": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 15.0,
+        "volume": 15000000.0,
+        "outflow": 0,
+        "inflow": 0.0
+      }
+    },
+    "Gate_1": {
+      "data_points": 100,
+      "last_state": {
+        "opening": 0.5,
+        "outflow": 0
+      }
+    },
+    "Channel_1": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 8.0,
+        "volume": 792039.4709530965,
+        "outflow": 79.21186828213787
+      }
+    },
+    "Diversion_1": {
+      "data_points": 100,
+      "last_state": {
+        "outflow": 15.0,
+        "passthrough_flow": 0,
+        "inflow": 0
+      }
+    },
+    "Gate_2": {
+      "data_points": 100,
+      "last_state": {
+        "opening": 0.6,
+        "outflow": 0
+      }
+    },
+    "Channel_2": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 6.0,
+        "volume": 594029.6032148224,
+        "outflow": 59.40890121160339
+      }
+    },
+    "Diversion_2": {
+      "data_points": 100,
+      "last_state": {
+        "outflow": 12.0,
+        "passthrough_flow": 0,
+        "inflow": 0
+      }
+    },
+    "Gate_3": {
+      "data_points": 100,
+      "last_state": {
+        "opening": 0.7,
+        "outflow": 0
+      }
+    },
+    "Downstream_Reservoir": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 12.0,
+        "volume": 12000000.0,
+        "outflow": 0,
+        "inflow": 0.0
+      }
+    }
+  },
+  "system_stability": {
+    "water_level_variance": 12.1875,
+    "water_level_range": 9.0,
+    "coefficient_of_variation": 0.34059122057973024
+  },
+  "disturbance_config": {
+    "disturbance_scenario": {
+      "name": "Data_Packet_Loss_Disturbance",
+      "description": "模拟分布式智能体间的数据包丢失",
+      "type": "packet_loss",
+      "category": "communication",
+      "parameters": {
+        "loss_levels": {
+          "low": {
+            "loss_rate": 0.01,
+            "burst_loss": false,
+            "recovery_time": 5
+          },
+          "medium": {
+            "loss_rate": 0.05,
+            "burst_loss": true,
+            "burst_duration": 10,
+            "recovery_time": 15
+          },
+          "high": {
+            "loss_rate": 0.15,
+            "burst_loss": true,
+            "burst_duration": 30,
+            "recovery_time": 60
+          },
+          "extreme": {
+            "loss_rate": 0.3,
+            "burst_loss": true,
+            "burst_duration": 60,
+            "recovery_time": 120
+          }
+        },
+        "affected_data_flows": [
+          {
+            "source": "ontology_simulation",
+            "target": "Channel1_Twin_Agent",
+            "data_type": "water_level",
+            "loss_level": "medium"
+          },
+          {
+            "source": "ontology_simulation",
+            "target": "Channel2_Twin_Agent",
+            "data_type": "flow_rate",
+            "loss_level": "medium"
+          },
+          {
+            "source": "Gate1_Perception_Agent",
+            "target": "CentralPerceptionAgent",
+            "data_type": "gate_status",
+            "loss_level": "low"
+          },
+          {
+            "source": "Gate2_Perception_Agent",
+            "target": "CentralPerceptionAgent",
+            "data_type": "gate_status",
+            "loss_level": "low"
+          },
+          {
+            "source": "Gate3_Perception_Agent",
+            "target": "CentralPerceptionAgent",
+            "data_type": "gate_status",
+            "loss_level": "low"
+          },
+          {
+            "source": "CentralMPCAgent",
+            "target": "Gate1_Control_Agent",
+            "data_type": "control_command",
+            "loss_level": "high"
+          }
+        ]
+      },
+      "trigger_conditions": {
+        "start_time": 5400,
+        "duration": 3600,
+        "trigger_type": "time_based"
+      },
+      "recovery_strategy": {
+        "enable_buffering": true,
+        "buffer_size": 100,
+        "retransmission": true,
+        "max_retries": 3,
+        "timeout": 30
+      },
+      "monitoring": {
+        "metrics": [
+          "data_integrity",
+          "information_completeness",
+          "control_accuracy",
+          "system_robustness"
+        ],
+        "sampling_interval": 30
+      },
+      "expected_impact": {
+        "severity": "high",
+        "affected_components": [
+          "数据传输层",
+          "感知智能体",
+          "控制决策"
+        ],
+        "impact_description": "数据丢包将导致信息不完整，影响状态估计精度和控制决策质量"
+      }
+    }
+  }
+}

@@ -1,0 +1,499 @@
+{
+  "scenario_name": "node_failure_sensor_interference",
+  "timestamp": "2025-09-03T08:12:55.130702",
+  "simulation_time": 100,
+  "components_count": 9,
+  "agents_count": 13,
+  "controllers_count": 0,
+  "disturbance_config": {
+    "combined_disturbance_scenario": {
+      "name": "Node_Failure_Sensor_Interference_Combined",
+      "description": "节点故障与传感器干扰的组合扰动场景",
+      "type": "combined_system_failure",
+      "category": "hardware_software_system",
+      "combination_parameters": {
+        "base_disturbances": {
+          "node_failure": {
+            "reference_file": "../basic_disturbances/node_failure.yml",
+            "weight": 0.7,
+            "interaction_factor": 1.4
+          },
+          "sensor_interference": {
+            "reference_file": "../basic_disturbances/sensor_interference.yml",
+            "weight": 0.3,
+            "interaction_factor": 1.6
+          }
+        },
+        "combination_effects": {
+          "failure_propagation": {
+            "enable": true,
+            "propagation_probability": 0.4,
+            "propagation_delay": 120,
+            "isolation_effectiveness": 0.8
+          },
+          "observability_degradation": {
+            "enable": true,
+            "degradation_factor": 2.0,
+            "blind_spot_expansion": 1.5,
+            "estimation_uncertainty": 0.4
+          },
+          "recovery_complexity": {
+            "enable": true,
+            "complexity_multiplier": 2.5,
+            "diagnosis_difficulty": 1.8,
+            "repair_time_extension": 1.6
+          }
+        }
+      },
+      "parameters": {
+        "system_architecture": {
+          "node_hierarchy": {
+            "control_nodes": [
+              {
+                "node_id": "Central_Controller",
+                "criticality": "critical",
+                "redundancy_level": 2,
+                "sensor_dependencies": [
+                  "water_level_sensors",
+                  "flow_rate_sensors"
+                ],
+                "backup_nodes": [
+                  "Backup_Controller_1",
+                  "Backup_Controller_2"
+                ]
+              },
+              {
+                "node_id": "Local_Controller_1",
+                "criticality": "high",
+                "redundancy_level": 1,
+                "sensor_dependencies": [
+                  "gate_position_sensors",
+                  "local_flow_sensors"
+                ],
+                "backup_nodes": [
+                  "Local_Controller_Backup"
+                ]
+              },
+              {
+                "node_id": "Local_Controller_2",
+                "criticality": "high",
+                "redundancy_level": 1,
+                "sensor_dependencies": [
+                  "channel_level_sensors",
+                  "diversion_flow_sensors"
+                ],
+                "backup_nodes": [
+                  "Local_Controller_Backup"
+                ]
+              }
+            ],
+            "sensor_nodes": [
+              {
+                "node_id": "Sensor_Cluster_A",
+                "location": "Upstream_Reservoir",
+                "sensor_types": [
+                  "water_level",
+                  "temperature",
+                  "turbidity"
+                ],
+                "communication_node": "Central_Controller",
+                "backup_communication": [
+                  "Local_Controller_1"
+                ]
+              },
+              {
+                "node_id": "Sensor_Cluster_B",
+                "location": "Channel_Network",
+                "sensor_types": [
+                  "flow_rate",
+                  "water_level",
+                  "gate_position"
+                ],
+                "communication_node": "Local_Controller_1",
+                "backup_communication": [
+                  "Central_Controller"
+                ]
+              },
+              {
+                "node_id": "Sensor_Cluster_C",
+                "location": "Downstream_Area",
+                "sensor_types": [
+                  "water_level",
+                  "flow_rate",
+                  "water_quality"
+                ],
+                "communication_node": "Local_Controller_2",
+                "backup_communication": [
+                  "Central_Controller"
+                ]
+              }
+            ]
+          }
+        },
+        "failure_modes": {
+          "node_failure_types": {
+            "hardware_failure": {
+              "cpu_failure": {
+                "probability": 0.01,
+                "mtbf": 8760,
+                "repair_time": 240,
+                "impact_severity": "critical"
+              },
+              "memory_failure": {
+                "probability": 0.015,
+                "mtbf": 6000,
+                "repair_time": 120,
+                "impact_severity": "high"
+              },
+              "network_interface_failure": {
+                "probability": 0.02,
+                "mtbf": 4380,
+                "repair_time": 60,
+                "impact_severity": "medium"
+              }
+            },
+            "software_failure": {
+              "operating_system_crash": {
+                "probability": 0.005,
+                "mtbf": 2000,
+                "recovery_time": 30,
+                "impact_severity": "high"
+              },
+              "application_hang": {
+                "probability": 0.01,
+                "mtbf": 1000,
+                "recovery_time": 10,
+                "impact_severity": "medium"
+              },
+              "database_corruption": {
+                "probability": 0.002,
+                "mtbf": 5000,
+                "recovery_time": 180,
+                "impact_severity": "critical"
+              }
+            }
+          },
+          "sensor_interference_types": {
+            "electromagnetic_interference": {
+              "source_types": [
+                "power_line_interference",
+                "radio_frequency_interference",
+                "switching_transients"
+              ],
+              "intensity_levels": [
+                "low",
+                "medium",
+                "high",
+                "severe"
+              ],
+              "frequency_ranges": [
+                [
+                  0.1,
+                  1
+                ],
+                [
+                  1,
+                  10
+                ],
+                [
+                  10,
+                  100
+                ],
+                [
+                  100,
+                  1000
+                ]
+              ]
+            },
+            "environmental_interference": {
+              "weather_effects": {
+                "rain_interference": 0.1,
+                "wind_vibration": 0.05,
+                "temperature_drift": 0.02,
+                "humidity_effect": 0.03
+              },
+              "physical_obstruction": {
+                "debris_accumulation": 0.08,
+                "vegetation_growth": 0.04,
+                "sediment_deposition": 0.06
+              }
+            },
+            "calibration_drift": {
+              "drift_patterns": {
+                "linear_drift": 0.001,
+                "exponential_drift": 0.002,
+                "periodic_drift": 0.0005
+              },
+              "calibration_intervals": 2160
+            }
+          }
+        },
+        "combined_failure_scenarios": [
+          {
+            "scenario_id": "cascading_system_failure",
+            "description": "级联系统故障",
+            "start_time": 7200,
+            "total_duration": 14400,
+            "failure_sequence": [
+              {
+                "step": 1,
+                "time_offset": 0,
+                "failure_type": "sensor_interference",
+                "affected_components": [
+                  "Sensor_Cluster_A"
+                ],
+                "interference_type": "electromagnetic",
+                "intensity": "medium",
+                "duration": 3600
+              },
+              {
+                "step": 2,
+                "time_offset": 1800,
+                "failure_type": "node_failure",
+                "affected_components": [
+                  "Local_Controller_1"
+                ],
+                "failure_mode": "hardware_failure",
+                "failure_subtype": "network_interface_failure",
+                "duration": 7200
+              },
+              {
+                "step": 3,
+                "time_offset": 3600,
+                "failure_type": "sensor_interference",
+                "affected_components": [
+                  "Sensor_Cluster_B",
+                  "Sensor_Cluster_C"
+                ],
+                "interference_type": "environmental",
+                "intensity": "high",
+                "duration": 10800
+              },
+              {
+                "step": 4,
+                "time_offset": 5400,
+                "failure_type": "node_failure",
+                "affected_components": [
+                  "Central_Controller"
+                ],
+                "failure_mode": "software_failure",
+                "failure_subtype": "application_hang",
+                "duration": 1800
+              }
+            ]
+          },
+          {
+            "scenario_id": "distributed_degradation",
+            "description": "分布式系统退化",
+            "start_time": 28800,
+            "total_duration": 10800,
+            "degradation_pattern": {
+              "spatial_distribution": {
+                "affected_zones": [
+                  "upstream",
+                  "midstream",
+                  "downstream"
+                ],
+                "propagation_speed": 0.1,
+                "intensity_gradient": [
+                  1.0,
+                  0.8,
+                  0.6
+                ]
+              },
+              "temporal_evolution": {
+                "phases": [
+                  {
+                    "phase": "initiation",
+                    "duration": 1800,
+                    "failure_rate": 0.1,
+                    "interference_level": "low"
+                  },
+                  {
+                    "phase": "escalation",
+                    "duration": 3600,
+                    "failure_rate": 0.3,
+                    "interference_level": "medium"
+                  },
+                  {
+                    "phase": "peak_impact",
+                    "duration": 1800,
+                    "failure_rate": 0.5,
+                    "interference_level": "high"
+                  },
+                  {
+                    "phase": "stabilization",
+                    "duration": 3600,
+                    "failure_rate": 0.2,
+                    "interference_level": "medium"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "scenario_id": "coordinated_attack_simulation",
+            "description": "协调攻击仿真",
+            "start_time": 50400,
+            "total_duration": 7200,
+            "attack_vectors": [
+              {
+                "vector": "targeted_node_compromise",
+                "target_nodes": [
+                  "Central_Controller",
+                  "Local_Controller_1"
+                ],
+                "attack_method": "malware_injection",
+                "success_probability": 0.7,
+                "detection_delay": 600
+              },
+              {
+                "vector": "sensor_jamming",
+                "target_sensors": [
+                  "all_critical_sensors"
+                ],
+                "jamming_method": "broadband_interference",
+                "coverage_area": 2000,
+                "jamming_power": "high"
+              },
+              {
+                "vector": "communication_disruption",
+                "target_links": [
+                  "all_communication_links"
+                ],
+                "disruption_method": "signal_flooding",
+                "bandwidth_consumption": 0.9,
+                "duration": 3600
+              }
+            ]
+          }
+        ],
+        "fault_detection_diagnosis": {
+          "detection_mechanisms": {
+            "anomaly_detection": {
+              "enable": true,
+              "detection_algorithms": [
+                "statistical_process_control",
+                "machine_learning_based",
+                "model_based_detection"
+              ],
+              "detection_threshold": 2.5,
+              "false_positive_rate": 0.05,
+              "detection_delay": 30
+            },
+            "health_monitoring": {
+              "enable": true,
+              "monitoring_parameters": [
+                "cpu_utilization",
+                "memory_usage",
+                "network_latency",
+                "sensor_data_quality",
+                "communication_status"
+              ],
+              "monitoring_frequency": 10
+            },
+            "redundancy_checking": {
+              "enable": true,
+              "cross_validation": true,
+              "voting_algorithms": [
+                "majority_voting",
+                "weighted_voting"
+              ],
+              "consistency_threshold": 0.1
+            }
+          },
+          "diagnosis_capabilities": {
+            "root_cause_analysis": {
+              "enable": true,
+              "analysis_methods": [
+                "fault_tree_analysis",
+                "bayesian_networks",
+                "expert_systems"
+              ],
+              "diagnosis_accuracy": 0.85,
+              "diagnosis_time": 300
+            },
+            "failure_localization": {
+              "enable": true,
+              "localization_precision": 0.9,
+              "spatial_resolution": 100,
+              "temporal_resolution": 60
+            }
+          }
+        },
+        "recovery_repair_strategies": {
+          "immediate_response": {
+            "duration": 300,
+            "actions": [
+              "isolate_failed_components",
+              "activate_backup_systems",
+              "switch_to_degraded_mode",
+              "alert_maintenance_team"
+            ]
+          },
+          "short_term_mitigation": {
+            "duration": 1800,
+            "actions": [
+              "reconfigure_system_topology",
+              "adjust_control_parameters",
+              "implement_workarounds",
+              "monitor_system_stability"
+            ]
+          },
+          "long_term_recovery": {
+            "duration": 14400,
+            "actions": [
+              "repair_failed_hardware",
+              "restore_software_systems",
+              "recalibrate_sensors",
+              "validate_system_performance",
+              "update_system_documentation"
+            ]
+          },
+          "recovery_validation": {
+            "validation_criteria": {
+              "functionality_restoration": 0.95,
+              "performance_recovery": 0.9,
+              "reliability_verification": 0.98
+            },
+            "validation_duration": 3600
+          }
+        }
+      },
+      "trigger_conditions": {
+        "start_time": 0,
+        "duration": 86400,
+        "trigger_type": "scenario_based"
+      },
+      "monitoring": {
+        "metrics": [
+          "system_availability",
+          "fault_detection_rate",
+          "false_alarm_rate",
+          "mean_time_to_repair",
+          "system_resilience_index",
+          "observability_coverage",
+          "control_performance_degradation"
+        ],
+        "sampling_interval": 30
+      },
+      "expected_impact": {
+        "severity": "critical",
+        "affected_components": [
+          "系统可观测性",
+          "故障诊断能力",
+          "控制系统冗余",
+          "数据完整性"
+        ],
+        "impact_description": "节点故障与传感器干扰的组合将严重影响系统的可观测性和故障恢复能力",
+        "quantitative_impact": {
+          "observability_loss": 0.6,
+          "fault_diagnosis_accuracy": 0.4,
+          "system_availability": 0.7,
+          "recovery_time_increase": 2.5,
+          "operational_cost_increase": 0.8
+        }
+      }
+    }
+  }
+}

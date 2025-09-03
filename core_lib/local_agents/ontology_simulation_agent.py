@@ -9,11 +9,20 @@ class OntologySimulationAgent(Agent):
     1. 本体仿真智能体
     作为高保真的虚拟物理世界，为其他智能体提供“真实”的仿真环境。
     """
-    def __init__(self, agent_id: str, message_bus: MessageBus, initial_state: dict = None, **kwargs):
+    def __init__(self, agent_id: str, message_bus: MessageBus, config: dict = None, **kwargs):
         super().__init__(agent_id)
         self.broker = message_bus
-        if initial_state is None:
-            initial_state = {}
+        if config is None:
+            config = {}
+        
+        # 从config中提取initial_state
+        initial_state = config.get('initial_state', {})
+        
+        # 存储其他配置
+        self.simulation_step = config.get('simulation_step', 60.0)
+        self.components_file = config.get('components_file', 'components.yml')
+        self.topology_file = config.get('topology_file', 'topology.yml')
+        self.monitoring_config = config.get('monitoring_config', {})
         # 物理状态
         self.upstream_level = initial_state.get('upstream_level', 5.0)  # m
         self.downstream_level = initial_state.get('downstream_level', 4.5) # m

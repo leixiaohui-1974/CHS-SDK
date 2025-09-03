@@ -1,31 +1,43 @@
 # Defines all agents for fault tolerance simulation
 agents:
   - id: main_controller
-    class: LocalControlAgent
+    class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
+    dt: 10.0
     target_component: main_gate
-    control_variable: opening
-    observation_key: water_level
-    observation_topic: main_canal/water_level
-    action_topic: main_gate/opening_command
-    controller:
-      kp: 0.5
-      ki: 0.12
-      kd: 0.07
+    control_type: pid
+    data_sources:
+      observation_topic: main_canal/water_level
+      observation_key: water_level
+    control_targets:
+      action_topic: main_gate/opening_command
+    allocation_config:
+      method: direct
+    controller_config:
+      class: PIDController
+      Kp: 0.5
+      Ki: 0.12
+      Kd: 0.07
       setpoint: 2.5
       min_output: 0.0
       max_output: 1.0
 
   - id: backup_controller
-    class: LocalControlAgent
+    class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
+    dt: 10.0
     target_component: backup_gate
-    control_variable: opening
-    observation_key: water_level
-    observation_topic: backup_canal/water_level
-    action_topic: backup_gate/opening_command
-    controller:
-      kp: 0.4
-      ki: 0.1
-      kd: 0.05
+    control_type: pid
+    data_sources:
+      observation_topic: backup_canal/water_level
+      observation_key: water_level
+    control_targets:
+      action_topic: backup_gate/opening_command
+    allocation_config:
+      method: direct
+    controller_config:
+      class: PIDController
+      Kp: 0.4
+      Ki: 0.1
+      Kd: 0.05
       setpoint: 2.0
       min_output: 0.0
       max_output: 1.0

@@ -47,6 +47,14 @@ class Reservoir(PhysicalObjectInterface):
             self.bus.subscribe(self.inflow_topic, self.handle_inflow_message)
             print(f"水库 '{self.name}' 已订阅数据入流主题 '{self.inflow_topic}'.")
 
+        # 处理从components.yml传入的inflow参数
+        if 'inflow' in kwargs:
+            self._inflow = kwargs['inflow']
+            print(f"水库 '{self.name}' 从配置中设置初始入流为 {self._inflow} m³/s")
+        elif 'inflow' in self._params:
+            self._inflow = self._params['inflow']
+            print(f"水库 '{self.name}' 从参数中设置初始入流为 {self._inflow} m³/s")
+
         print(f"水库 '{self.name}' 已创建，初始状态为 {self._state}.")
 
     def _complete_initial_state(self):
@@ -189,6 +197,15 @@ class Reservoir(PhysicalObjectInterface):
             self.topic_outflows[topic] = 0.0
 
         return self._state
+
+    def set_inflow(self, inflow: float):
+        """设置水库的入流量。
+        
+        Args:
+            inflow: 新的入流量 (m³/s)
+        """
+        self._inflow = inflow
+        print(f"水库 '{self.name}' 入流已设置为 {inflow} m³/s")
 
     @property
     def is_stateful(self) -> bool:

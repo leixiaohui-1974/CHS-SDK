@@ -1,13 +1,18 @@
 # Defines agents for hierarchical control scenario
 agents:
   - id: upper_local_controller
-    class: LocalControlAgent
+    class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
+    dt: 10.0
     target_component: upper_gate
-    control_variable: opening
-    observation_key: water_level
-    observation_topic: upper_reservoir/water_level
-    action_topic: upper_gate/opening_command
-    controller:
+    control_type: pid
+    data_sources:
+      observation_topic: upper_reservoir/water_level
+      observation_key: water_level
+    control_targets:
+      action_topic: upper_gate/opening_command
+    allocation_config:
+      method: direct
+    controller_config:
       class: PIDController
       Kp: 0.6
       Ki: 0.15
@@ -17,13 +22,18 @@ agents:
       max_output: 1.0
 
   - id: lower_local_controller
-    class: LocalControlAgent
+    class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
+    dt: 10.0
     target_component: lower_gate
-    control_variable: opening
-    observation_key: water_level
-    observation_topic: lower_reservoir/water_level
-    action_topic: lower_gate/opening_command
-    controller:
+    control_type: pid
+    data_sources:
+      observation_topic: lower_reservoir/water_level
+      observation_key: water_level
+    control_targets:
+      action_topic: lower_gate/opening_command
+    allocation_config:
+      method: direct
+    controller_config:
       class: PIDController
       Kp: 0.5
       Ki: 0.12

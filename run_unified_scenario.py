@@ -34,6 +34,8 @@ from core_lib.physical_objects.unified_canal import UnifiedCanal
 from core_lib.physical_objects.gate import Gate
 from core_lib.physical_objects.reservoir import Reservoir
 from core_lib.physical_objects.water_turbine import WaterTurbine
+from core_lib.physical_objects.integral_delay_canal import IntegralDelayCanal
+from core_lib.physical_objects.disturbance_node import DisturbanceNode
 from core_lib.local_agents.io.physical_io_agent import PhysicalIOAgent
 from core_lib.local_agents.control.local_control_agent import LocalControlAgent
 from core_lib.local_agents.perception.digital_twin_agent import DigitalTwinAgent
@@ -67,36 +69,107 @@ def create_components_from_config(config: Dict[str, Any]) -> Dict[str, Any]:
     if 'components' not in config:
         return components
     
-    for comp_name, comp_config in config['components'].items():
-        comp_type = comp_config.get('type')
-        
-        if comp_type == 'UnifiedCanal':
-            components[comp_name] = UnifiedCanal(
-                name=comp_config.get('name', comp_name),
-                initial_state=comp_config.get('initial_state', {}),
-                model_type=comp_config.get('model_type', 'canal'),
-                parameters=comp_config.get('parameters', {})
-            )
-        elif comp_type == 'Gate':
-            components[comp_name] = Gate(
-                name=comp_config.get('name', comp_name),
-                initial_state=comp_config.get('initial_state', {}),
-                parameters=comp_config.get('parameters', {})
-            )
-        elif comp_type == 'WaterTurbine':
-            components[comp_name] = WaterTurbine(
-                name=comp_config.get('name', comp_name),
-                initial_state=comp_config.get('initial_state', {}),
-                parameters=comp_config.get('parameters', {})
-            )
-        elif comp_type == 'Reservoir':
-            components[comp_name] = Reservoir(
-                name=comp_config.get('name', comp_name),
-                initial_state=comp_config.get('initial_state', {}),
-                parameters=comp_config.get('parameters', {})
-            )
-        else:
-            logger.warning(f"未知的组件类型: {comp_type}，跳过组件 {comp_name}")
+    components_config = config['components']
+    
+    # 处理列表格式的components配置（universal_config格式）
+    if isinstance(components_config, list):
+        for comp_config in components_config:
+            comp_id = comp_config.get('id')
+            comp_class = comp_config.get('class', '')
+            
+            if not comp_id:
+                logger.warning("组件配置缺少id字段，跳过")
+                continue
+            
+            # 根据class字段确定组件类型
+            if 'unified_canal.UnifiedCanal' in comp_class or 'UnifiedCanal' in comp_class:
+                components[comp_id] = UnifiedCanal(
+                    name=comp_config.get('name', comp_id),
+                    initial_state=comp_config.get('initial_state', {}),
+                    model_type=comp_config.get('parameters', {}).get('model_type', 'canal'),
+                    parameters=comp_config.get('parameters', {})
+                )
+            elif 'gate.Gate' in comp_class or 'Gate' in comp_class:
+                components[comp_id] = Gate(
+                    name=comp_config.get('name', comp_id),
+                    initial_state=comp_config.get('initial_state', {}),
+                    parameters=comp_config.get('parameters', {})
+                )
+            elif 'water_turbine.WaterTurbine' in comp_class or 'WaterTurbine' in comp_class:
+                components[comp_id] = WaterTurbine(
+                    name=comp_config.get('name', comp_id),
+                    initial_state=comp_config.get('initial_state', {}),
+                    parameters=comp_config.get('parameters', {})
+                )
+            elif 'reservoir.Reservoir' in comp_class or 'Reservoir' in comp_class:
+                components[comp_id] = Reservoir(
+                    name=comp_config.get('name', comp_id),
+                    initial_state=comp_config.get('initial_state', {}),
+                    parameters=comp_config.get('parameters', {})
+                )
+            elif 'IntegralDelayCanal' in comp_class:
+                # IntegralDelayCanal已弃用，映射到UnifiedCanal
+                components[comp_id] = UnifiedCanal(
+                    name=comp_config.get('name', comp_id),
+                    initial_state=comp_config.get('initial_state', {}),
+                    model_type='integral_delay',
+                    parameters=comp_config.get('parameters', {})
+                )
+            elif 'disturbance_node.DisturbanceNode' in comp_class or 'DisturbanceNode' in comp_class:
+                components[comp_id] = DisturbanceNode(
+                    name=comp_config.get('name', comp_id),
+                    initial_state=comp_config.get('initial_state', {}),
+                    parameters=comp_config.get('parameters', {})
+                )
+            else:
+                logger.warning(f"未知的组件类型: {comp_class}，跳过组件 {comp_id}")
+    
+    # 处理字典格式的components配置（传统格式）
+    elif isinstance(components_config, dict):
+        for comp_name, comp_config in components_config.items():
+            comp_type = comp_config.get('type')
+            
+            if comp_type == 'UnifiedCanal':
+                components[comp_name] = UnifiedCanal(
+                    name=comp_config.get('name', comp_name),
+                    initial_state=comp_config.get('initial_state', {}),
+                    model_type=comp_config.get('model_type', 'canal'),
+                    parameters=comp_config.get('parameters', {})
+                )
+            elif comp_type == 'Gate':
+                components[comp_name] = Gate(
+                    name=comp_config.get('name', comp_name),
+                    initial_state=comp_config.get('initial_state', {}),
+                    parameters=comp_config.get('parameters', {})
+                )
+            elif comp_type == 'WaterTurbine':
+                components[comp_name] = WaterTurbine(
+                    name=comp_config.get('name', comp_name),
+                    initial_state=comp_config.get('initial_state', {}),
+                    parameters=comp_config.get('parameters', {})
+                )
+            elif comp_type == 'Reservoir':
+                components[comp_name] = Reservoir(
+                    name=comp_config.get('name', comp_name),
+                    initial_state=comp_config.get('initial_state', {}),
+                    parameters=comp_config.get('parameters', {})
+                )
+            elif comp_type == 'IntegralDelayCanal':
+                # IntegralDelayCanal已弃用，映射到UnifiedCanal
+                components[comp_name] = UnifiedCanal(
+                    name=comp_config.get('name', comp_name),
+                    initial_state=comp_config.get('initial_state', {}),
+                    model_type='integral_delay',
+                    parameters=comp_config.get('parameters', {})
+                )
+            elif comp_type == 'DisturbanceNode':
+                components[comp_name] = DisturbanceNode(
+                    name=comp_config.get('name', comp_name),
+                    initial_state=comp_config.get('initial_state', {}),
+                    parameters=comp_config.get('parameters', {})
+                )
+            else:
+                logger.warning(f"未知的组件类型: {comp_type}，跳过组件 {comp_name}")
     
     return components
 
@@ -108,7 +181,61 @@ def create_agents_from_config(config: Dict[str, Any], components: Dict[str, Any]
     if 'agents' not in config:
         return agents
     
-    for agent_name, agent_config in config['agents'].items():
+    agents_config = config['agents']
+    
+    # 处理列表格式的agents配置（universal_config格式）
+    if isinstance(agents_config, list):
+        for agent_config in agents_config:
+            agent_class = agent_config.get('class', '')
+            agent_id = agent_config.get('id')
+            
+            if not agent_id:
+                logger.warning("智能体配置缺少id字段，跳过")
+                continue
+            
+            try:
+                if agent_class == 'PIDControlAgent':
+                    # 将PIDControlAgent映射到LocalControlAgent + PIDController
+                    from core_lib.local_agents.control.pid_controller import PIDController
+                    
+                    # 提取PID参数
+                    params = agent_config.get('parameters', {})
+                    observation_topic = agent_config.get('observation_topic', '')
+                    action_topic = agent_config.get('action_topic', '')
+                    
+                    # 创建PID控制器配置
+                    controller_config = {
+                        'class': 'PIDController',
+                        'config': {
+                            'Kp': params.get('kp', 1.0),
+                            'Ki': params.get('ki', 0.1),
+                            'Kd': params.get('kd', 0.05),
+                            'setpoint': params.get('setpoint', 0.0),
+                            'min_output': params.get('output_limits', [0.0, 1.0])[0],
+                            'max_output': params.get('output_limits', [0.0, 1.0])[1]
+                        }
+                    }
+                    
+                    # 创建LocalControlAgent
+                    agents[agent_id] = LocalControlAgent(
+                        agent_id=agent_id,
+                        message_bus=message_bus,
+                        dt=1.0,  # 默认时间步长
+                        target_component='',  # 将从observation_topic推断
+                        control_type='pid',
+                        data_sources={'observation_topic': observation_topic},
+                        control_targets={'action_topic': action_topic},
+                        allocation_config={},
+                        controller_config=controller_config
+                    )
+                else:
+                    logger.warning(f"未知的智能体类型: {agent_class}，跳过智能体 {agent_id}")
+            except Exception as e:
+                logger.error(f"创建智能体 {agent_id} 失败: {e}")
+        return agents
+    
+    # 处理字典格式的agents配置（传统格式）
+    for agent_name, agent_config in agents_config.items():
         agent_type = agent_config.get('type')
         agent_id = agent_config.get('agent_id', agent_name)
         
@@ -120,10 +247,30 @@ def create_agents_from_config(config: Dict[str, Any], components: Dict[str, Any]
                     **agent_config.get('config', {})
                 )
             elif agent_type == 'LocalControlAgent':
+                config_data = agent_config.get('config', {})
+                # 提取必需的参数
+                dt = config_data.get('dt', 1.0)
+                target_component = config_data.get('target_component', '')
+                control_type = config_data.get('control_type', 'default')
+                data_sources = config_data.get('data_sources', {})
+                control_targets = config_data.get('control_targets', {})
+                allocation_config = config_data.get('allocation_config', {})
+                controller_config = config_data.get('controller_config', {})
+                
                 agents[agent_name] = LocalControlAgent(
                     agent_id=agent_id,
                     message_bus=message_bus,
-                    **agent_config.get('config', {})
+                    dt=dt,
+                    target_component=target_component,
+                    control_type=control_type,
+                    data_sources=data_sources,
+                    control_targets=control_targets,
+                    allocation_config=allocation_config,
+                    controller_config=controller_config,
+                    **{k: v for k, v in config_data.items() if k not in [
+                        'dt', 'target_component', 'control_type', 'data_sources',
+                        'control_targets', 'allocation_config', 'controller_config'
+                    ]}
                 )
             elif agent_type == 'DigitalTwinAgent':
                 target_component = components.get(agent_config.get('target_component'))

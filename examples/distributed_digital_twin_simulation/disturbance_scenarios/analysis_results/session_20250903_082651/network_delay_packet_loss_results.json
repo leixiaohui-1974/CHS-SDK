@@ -1,0 +1,485 @@
+{
+  "scenario_name": "network_delay_packet_loss",
+  "timestamp": "2025-09-03T08:26:56.044427",
+  "simulation_time": 100,
+  "components_count": 9,
+  "agents_count": 13,
+  "controllers_count": 0,
+  "water_level_stats": {
+    "mean": 10.25,
+    "std": 3.491060010942235,
+    "min": 6.0,
+    "max": 15.0,
+    "median": 10.0
+  },
+  "water_level_count": 400,
+  "flow_rate_stats": {
+    "mean": 18.402307721526807,
+    "std": 28.136834803069334,
+    "min": 0.0,
+    "max": 79.21186828213787,
+    "median": 0.0
+  },
+  "flow_rate_count": 900,
+  "gate_opening_stats": {
+    "mean": 0.6,
+    "std": 0.08164965809277258,
+    "min": 0.5,
+    "max": 0.7,
+    "median": 0.6
+  },
+  "gate_opening_count": 300,
+  "component_statistics": {
+    "Upstream_Reservoir": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 15.0,
+        "volume": 15000000.0,
+        "outflow": 0,
+        "inflow": 0.0
+      }
+    },
+    "Gate_1": {
+      "data_points": 100,
+      "last_state": {
+        "opening": 0.5,
+        "outflow": 0
+      }
+    },
+    "Channel_1": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 8.0,
+        "volume": 792039.4709530965,
+        "outflow": 79.21186828213787
+      }
+    },
+    "Diversion_1": {
+      "data_points": 100,
+      "last_state": {
+        "outflow": 15.0,
+        "passthrough_flow": 0,
+        "inflow": 0
+      }
+    },
+    "Gate_2": {
+      "data_points": 100,
+      "last_state": {
+        "opening": 0.6,
+        "outflow": 0
+      }
+    },
+    "Channel_2": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 6.0,
+        "volume": 594029.6032148224,
+        "outflow": 59.40890121160339
+      }
+    },
+    "Diversion_2": {
+      "data_points": 100,
+      "last_state": {
+        "outflow": 12.0,
+        "passthrough_flow": 0,
+        "inflow": 0
+      }
+    },
+    "Gate_3": {
+      "data_points": 100,
+      "last_state": {
+        "opening": 0.7,
+        "outflow": 0
+      }
+    },
+    "Downstream_Reservoir": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 12.0,
+        "volume": 12000000.0,
+        "outflow": 0,
+        "inflow": 0.0
+      }
+    }
+  },
+  "system_stability": {
+    "water_level_variance": 12.1875,
+    "water_level_range": 9.0,
+    "coefficient_of_variation": 0.34059122057973024
+  },
+  "disturbance_config": {
+    "combined_disturbance_scenario": {
+      "name": "Network_Delay_Packet_Loss_Combined",
+      "description": "网络延迟与数据丢包的组合扰动场景",
+      "type": "combined_network_disturbance",
+      "category": "communication_system",
+      "combination_parameters": {
+        "base_disturbances": {
+          "network_delay": {
+            "reference_file": "../basic_disturbances/network_delay.yml",
+            "weight": 0.6,
+            "interaction_factor": 1.2
+          },
+          "data_packet_loss": {
+            "reference_file": "../basic_disturbances/data_packet_loss.yml",
+            "weight": 0.4,
+            "interaction_factor": 1.3
+          }
+        },
+        "combination_effects": {
+          "synergistic_amplification": {
+            "enable": true,
+            "amplification_factor": 1.5,
+            "threshold_delay": 2000,
+            "threshold_loss_rate": 0.05
+          },
+          "cascading_failures": {
+            "enable": true,
+            "cascade_probability": 0.3,
+            "cascade_delay": 500,
+            "max_cascade_depth": 3
+          },
+          "adaptive_degradation": {
+            "enable": true,
+            "degradation_rate": 0.1,
+            "recovery_time": 30,
+            "resilience_factor": 0.8
+          }
+        }
+      },
+      "parameters": {
+        "network_topology": {
+          "communication_links": {
+            "critical_links": [
+              {
+                "link_id": "controller_to_gate1",
+                "baseline_delay": 100,
+                "baseline_loss_rate": 0.001,
+                "bandwidth": 1000,
+                "priority": "high"
+              },
+              {
+                "link_id": "controller_to_gate2",
+                "baseline_delay": 120,
+                "baseline_loss_rate": 0.002,
+                "bandwidth": 1000,
+                "priority": "high"
+              },
+              {
+                "link_id": "sensor_to_controller",
+                "baseline_delay": 80,
+                "baseline_loss_rate": 0.001,
+                "bandwidth": 500,
+                "priority": "medium"
+              }
+            ],
+            "redundant_links": [
+              {
+                "link_id": "backup_controller_link",
+                "baseline_delay": 200,
+                "baseline_loss_rate": 0.005,
+                "bandwidth": 500,
+                "priority": "low",
+                "activation_threshold": 0.1
+              }
+            ]
+          }
+        },
+        "intensity_levels": {
+          "low_impact": {
+            "delay_multiplier": 2.0,
+            "loss_rate_increase": 0.02,
+            "duration_range": [
+              300,
+              900
+            ],
+            "recovery_time": 60
+          },
+          "medium_impact": {
+            "delay_multiplier": 5.0,
+            "loss_rate_increase": 0.05,
+            "duration_range": [
+              900,
+              1800
+            ],
+            "recovery_time": 120
+          },
+          "high_impact": {
+            "delay_multiplier": 10.0,
+            "loss_rate_increase": 0.1,
+            "duration_range": [
+              1800,
+              3600
+            ],
+            "recovery_time": 300
+          },
+          "critical_impact": {
+            "delay_multiplier": 20.0,
+            "loss_rate_increase": 0.2,
+            "duration_range": [
+              3600,
+              7200
+            ],
+            "recovery_time": 600
+          }
+        },
+        "temporal_correlation": {
+          "correlation_patterns": {
+            "simultaneous_onset": {
+              "probability": 0.4,
+              "time_window": 60
+            },
+            "sequential_onset": {
+              "probability": 0.4,
+              "delay_between": [
+                30,
+                300
+              ],
+              "sequence": [
+                "delay",
+                "loss"
+              ]
+            },
+            "overlapping_periods": {
+              "probability": 0.2,
+              "overlap_ratio": 0.6,
+              "phase_shift": 180
+            }
+          }
+        },
+        "spatial_correlation": {
+          "correlation_distance": 1000,
+          "propagation_speed": 100,
+          "attenuation_factor": 0.1,
+          "affected_regions": {
+            "primary_zone": {
+              "center": [
+                "Controller_Node"
+              ],
+              "radius": 500,
+              "impact_intensity": 1.0
+            },
+            "secondary_zone": {
+              "center": [
+                "Gateway_Nodes"
+              ],
+              "radius": 1000,
+              "impact_intensity": 0.7
+            },
+            "tertiary_zone": {
+              "center": [
+                "Edge_Nodes"
+              ],
+              "radius": 2000,
+              "impact_intensity": 0.4
+            }
+          }
+        },
+        "disturbance_scenarios": [
+          {
+            "scenario_id": "gradual_degradation",
+            "start_time": 3600,
+            "total_duration": 7200,
+            "phases": [
+              {
+                "phase": "delay_onset",
+                "start_offset": 0,
+                "duration": 1800,
+                "intensity": "low_impact",
+                "affected_links": [
+                  "controller_to_gate1"
+                ]
+              },
+              {
+                "phase": "loss_introduction",
+                "start_offset": 900,
+                "duration": 3600,
+                "intensity": "medium_impact",
+                "affected_links": [
+                  "controller_to_gate1",
+                  "sensor_to_controller"
+                ]
+              },
+              {
+                "phase": "combined_peak",
+                "start_offset": 2700,
+                "duration": 1800,
+                "intensity": "high_impact",
+                "affected_links": [
+                  "all_critical_links"
+                ]
+              },
+              {
+                "phase": "gradual_recovery",
+                "start_offset": 4500,
+                "duration": 2700,
+                "intensity": "medium_impact",
+                "recovery_pattern": "exponential"
+              }
+            ]
+          },
+          {
+            "scenario_id": "burst_interference",
+            "start_time": 21600,
+            "total_duration": 1800,
+            "pattern": "burst",
+            "burst_parameters": {
+              "burst_count": 5,
+              "burst_duration": 180,
+              "burst_interval": 180,
+              "intensity_progression": [
+                "medium",
+                "high",
+                "critical",
+                "high",
+                "medium"
+              ],
+              "affected_links_rotation": true
+            }
+          },
+          {
+            "scenario_id": "cascading_failure",
+            "start_time": 43200,
+            "total_duration": 3600,
+            "trigger_conditions": {
+              "initial_delay_threshold": 1000,
+              "loss_rate_threshold": 0.03
+            },
+            "cascade_sequence": [
+              {
+                "step": 1,
+                "affected_links": [
+                  "controller_to_gate1"
+                ],
+                "intensity": "medium_impact",
+                "duration": 600
+              },
+              {
+                "step": 2,
+                "affected_links": [
+                  "controller_to_gate2",
+                  "sensor_to_controller"
+                ],
+                "intensity": "high_impact",
+                "duration": 1200
+              },
+              {
+                "step": 3,
+                "affected_links": [
+                  "all_links"
+                ],
+                "intensity": "critical_impact",
+                "duration": 1800
+              }
+            ]
+          }
+        ],
+        "adaptive_responses": {
+          "enable": true,
+          "response_strategies": {
+            "traffic_rerouting": {
+              "enable": true,
+              "rerouting_threshold": 0.05,
+              "backup_path_priority": [
+                "backup_controller_link"
+              ],
+              "switching_delay": 5
+            },
+            "protocol_adaptation": {
+              "enable": true,
+              "tcp_window_scaling": true,
+              "retransmission_timeout": 2.0,
+              "congestion_control": "cubic"
+            },
+            "qos_adjustment": {
+              "enable": true,
+              "priority_queuing": true,
+              "bandwidth_allocation": {
+                "critical_traffic": 0.6,
+                "normal_traffic": 0.3,
+                "background_traffic": 0.1
+              }
+            },
+            "error_correction": {
+              "enable": true,
+              "forward_error_correction": true,
+              "automatic_repeat_request": true,
+              "redundant_transmission": 2
+            }
+          }
+        },
+        "recovery_strategies": {
+          "enable": true,
+          "recovery_phases": {
+            "immediate_response": {
+              "duration": 60,
+              "actions": [
+                "activate_backup_links",
+                "increase_retransmission",
+                "reduce_transmission_rate"
+              ]
+            },
+            "stabilization": {
+              "duration": 300,
+              "actions": [
+                "optimize_routing_tables",
+                "adjust_qos_parameters",
+                "monitor_performance_metrics"
+              ]
+            },
+            "full_recovery": {
+              "duration": 600,
+              "actions": [
+                "restore_normal_operations",
+                "validate_system_performance",
+                "update_network_configuration"
+              ]
+            }
+          },
+          "recovery_validation": {
+            "performance_thresholds": {
+              "max_acceptable_delay": 500,
+              "max_acceptable_loss": 0.01,
+              "min_throughput": 0.9
+            },
+            "validation_duration": 300
+          }
+        }
+      },
+      "trigger_conditions": {
+        "start_time": 0,
+        "duration": 86400,
+        "trigger_type": "scenario_based"
+      },
+      "monitoring": {
+        "metrics": [
+          "end_to_end_delay",
+          "packet_loss_rate",
+          "throughput_efficiency",
+          "jitter_variance",
+          "connection_stability",
+          "recovery_time",
+          "system_availability"
+        ],
+        "sampling_interval": 10
+      },
+      "expected_impact": {
+        "severity": "critical",
+        "affected_components": [
+          "实时控制",
+          "数据传输",
+          "系统监测",
+          "故障诊断"
+        ],
+        "impact_description": "网络延迟与丢包的组合将严重影响系统实时性和可靠性",
+        "quantitative_impact": {
+          "control_loop_performance_loss": 0.5,
+          "data_integrity_degradation": 0.3,
+          "system_response_delay": 3.0,
+          "fault_detection_accuracy": 0.7,
+          "overall_system_efficiency": 0.6
+        }
+      }
+    }
+  }
+}

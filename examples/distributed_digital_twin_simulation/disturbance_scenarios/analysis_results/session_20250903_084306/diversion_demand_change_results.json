@@ -1,0 +1,314 @@
+{
+  "scenario_name": "diversion_demand_change",
+  "timestamp": "2025-09-03T08:43:08.516805",
+  "simulation_time": 100,
+  "components_count": 9,
+  "agents_count": 13,
+  "controllers_count": 0,
+  "water_level_stats": {
+    "mean": 10.25,
+    "std": 3.491060010942235,
+    "min": 6.0,
+    "max": 15.0,
+    "median": 10.0
+  },
+  "water_level_count": 400,
+  "flow_rate_stats": {
+    "mean": 18.402307721526807,
+    "std": 28.136834803069334,
+    "min": 0.0,
+    "max": 79.21186828213787,
+    "median": 0.0
+  },
+  "flow_rate_count": 900,
+  "gate_opening_stats": {
+    "mean": 0.6,
+    "std": 0.08164965809277258,
+    "min": 0.5,
+    "max": 0.7,
+    "median": 0.6
+  },
+  "gate_opening_count": 300,
+  "component_statistics": {
+    "Upstream_Reservoir": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 15.0,
+        "volume": 15000000.0,
+        "outflow": 0,
+        "inflow": 0.0
+      }
+    },
+    "Gate_1": {
+      "data_points": 100,
+      "last_state": {
+        "opening": 0.5,
+        "outflow": 0
+      }
+    },
+    "Channel_1": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 8.0,
+        "volume": 792039.4709530965,
+        "outflow": 79.21186828213787
+      }
+    },
+    "Diversion_1": {
+      "data_points": 100,
+      "last_state": {
+        "outflow": 15.0,
+        "passthrough_flow": 0,
+        "inflow": 0
+      }
+    },
+    "Gate_2": {
+      "data_points": 100,
+      "last_state": {
+        "opening": 0.6,
+        "outflow": 0
+      }
+    },
+    "Channel_2": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 6.0,
+        "volume": 594029.6032148224,
+        "outflow": 59.40890121160339
+      }
+    },
+    "Diversion_2": {
+      "data_points": 100,
+      "last_state": {
+        "outflow": 12.0,
+        "passthrough_flow": 0,
+        "inflow": 0
+      }
+    },
+    "Gate_3": {
+      "data_points": 100,
+      "last_state": {
+        "opening": 0.7,
+        "outflow": 0
+      }
+    },
+    "Downstream_Reservoir": {
+      "data_points": 100,
+      "last_state": {
+        "water_level": 12.0,
+        "volume": 12000000.0,
+        "outflow": 0,
+        "inflow": 0.0
+      }
+    }
+  },
+  "system_stability": {
+    "water_level_variance": 12.1875,
+    "water_level_range": 9.0,
+    "coefficient_of_variation": 0.34059122057973024
+  },
+  "disturbance_config": {
+    "disturbance_scenario": {
+      "name": "Diversion_Demand_Change_Disturbance",
+      "description": "模拟分水口用水需求的时变性和突发性变化",
+      "type": "demand_variation",
+      "category": "water_demand",
+      "parameters": {
+        "diversion_points": {
+          "diversion_1": {
+            "baseline_demand": 15.0,
+            "location": "Channel_1",
+            "priority": "high"
+          },
+          "diversion_2": {
+            "baseline_demand": 12.0,
+            "location": "Channel_2",
+            "priority": "medium"
+          }
+        },
+        "demand_patterns": {
+          "daily_pattern": {
+            "description": "日常用水模式",
+            "peak_hours": [
+              8,
+              12,
+              18
+            ],
+            "peak_multiplier": 1.5,
+            "valley_hours": [
+              2,
+              6,
+              22
+            ],
+            "valley_multiplier": 0.6
+          },
+          "seasonal_variation": {
+            "description": "季节性需求变化",
+            "summer_multiplier": 2.5,
+            "winter_multiplier": 0.4,
+            "transition_period": 3600
+          },
+          "random_fluctuation": {
+            "description": "随机需求波动",
+            "noise_type": "uniform",
+            "variation_range": 0.5,
+            "correlation_time": 1800
+          },
+          "emergency_events": {
+            "description": "突发用水事件",
+            "events": [
+              {
+                "type": "irrigation_surge",
+                "diversion": "diversion_1",
+                "start_time": 14400,
+                "duration": 7200,
+                "demand_multiplier": 4.0,
+                "ramp_up_time": 600,
+                "ramp_down_time": 1200
+              },
+              {
+                "type": "industrial_shutdown",
+                "diversion": "diversion_2",
+                "start_time": 28800,
+                "duration": 3600,
+                "demand_multiplier": 0.1,
+                "transition_time": 300
+              },
+              {
+                "type": "emergency_supply",
+                "diversion": "diversion_1",
+                "start_time": 50400,
+                "duration": 1800,
+                "demand_multiplier": 5.0,
+                "priority_override": true
+              }
+            ]
+          }
+        },
+        "demand_forecasting": {
+          "enable": true,
+          "forecast_methods": [
+            "historical_pattern",
+            "weather_correlation",
+            "user_behavior_model"
+          ],
+          "forecast_horizon": 7200,
+          "forecast_accuracy": 0.75,
+          "update_frequency": 900
+        }
+      },
+      "trigger_conditions": {
+        "start_time": 0,
+        "duration": 86400,
+        "trigger_type": "continuous"
+      },
+      "constraints": {
+        "physical_limits": {
+          "max_diversion_rate": 50.0,
+          "min_diversion_rate": 0.0
+        },
+        "operational_limits": {
+          "max_change_rate": 5.0,
+          "min_supply_guarantee": 0.8
+        },
+        "priority_rules": [
+          "high_priority_first",
+          "emergency_override",
+          "minimum_allocation_guarantee"
+        ]
+      },
+      "supply_demand_balance": {
+        "enable_optimization": true,
+        "optimization_objectives": [
+          "minimize_supply_deficit",
+          "maximize_user_satisfaction",
+          "minimize_system_stress"
+        ],
+        "balancing_methods": [
+          {
+            "method": "proportional_allocation",
+            "weight": 0.4
+          },
+          {
+            "method": "priority_based_allocation",
+            "weight": 0.6
+          }
+        ],
+        "deficit_handling": {
+          "enable_rationing": true,
+          "rationing_strategy": "proportional",
+          "emergency_reserves": 0.1
+        }
+      },
+      "monitoring": {
+        "metrics": [
+          "demand_satisfaction_rate",
+          "supply_deficit",
+          "water_allocation_efficiency",
+          "system_stress_level",
+          "user_satisfaction_index"
+        ],
+        "sampling_interval": 300,
+        "kpi_thresholds": {
+          "min_satisfaction_rate": 0.85,
+          "max_deficit_ratio": 0.15,
+          "max_stress_level": 0.8
+        }
+      },
+      "expected_impact": {
+        "severity": "medium",
+        "affected_components": [
+          "分水口系统",
+          "渠道水位",
+          "下游供水",
+          "控制策略"
+        ],
+        "impact_description": "分水口需求变化将影响渠道水量分配和下游供水稳定性",
+        "impact_propagation": [
+          {
+            "component": "Channel_1",
+            "delay": 60,
+            "magnitude": "high",
+            "type": "water_level_change"
+          },
+          {
+            "component": "Gate_2",
+            "delay": 300,
+            "magnitude": "medium",
+            "type": "operation_adjustment"
+          },
+          {
+            "component": "Channel_2",
+            "delay": 600,
+            "magnitude": "medium",
+            "type": "flow_redistribution"
+          },
+          {
+            "component": "Downstream_Reservoir",
+            "delay": 1800,
+            "magnitude": "low",
+            "type": "storage_variation"
+          }
+        ]
+      },
+      "adaptive_management": {
+        "enable": true,
+        "strategies": [
+          "dynamic_allocation_adjustment",
+          "demand_response_program",
+          "emergency_protocol_activation"
+        ],
+        "feedback_mechanisms": [
+          "real_time_demand_monitoring",
+          "user_feedback_integration",
+          "system_performance_evaluation"
+        ],
+        "learning_algorithms": [
+          "demand_pattern_recognition",
+          "predictive_model_updating",
+          "optimization_parameter_tuning"
+        ]
+      }
+    }
+  }
+}

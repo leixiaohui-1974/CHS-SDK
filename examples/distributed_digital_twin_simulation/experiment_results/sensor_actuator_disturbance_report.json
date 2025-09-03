@@ -1,0 +1,40 @@
+{
+  "title": "传感器和执行器扰动影响分析报告",
+  "timestamp": "2025-09-03T16:16:18.153186",
+  "summary": {
+    "simulation_duration": "1.0小时",
+    "channels_analyzed": 3,
+    "gates_analyzed": 3,
+    "disturbance_types": [
+      "传感器扰动",
+      "执行器扰动"
+    ]
+  },
+  "findings": {
+    "sensor_disturbance": {
+      "description": "传感器扰动主要影响水位测量精度，导致控制系统产生错误响应",
+      "affected_channels": [
+        "Channel_1",
+        "Channel_2"
+      ],
+      "impact_severity": "中等到严重",
+      "recovery_time": "扰动结束后5-10分钟"
+    },
+    "actuator_disturbance": {
+      "description": "执行器扰动直接影响闸门控制精度，导致流量控制失效",
+      "affected_gates": [
+        "Gate_1",
+        "Gate_2"
+      ],
+      "impact_severity": "严重",
+      "recovery_time": "需要人工干预或备用系统"
+    }
+  },
+  "recommendations": [
+    "增加传感器冗余配置，实现多传感器数据融合",
+    "实施传感器数据异常检测和滤波算法",
+    "配置执行器备用系统和故障切换机制",
+    "建立实时监控和预警系统",
+    "定期进行设备维护和校准"
+  ]
+}

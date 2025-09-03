@@ -1,0 +1,525 @@
+# 来水变化与执行器干扰组合扰动场景配置
+# Inflow Variation + Actuator Interference Combined Disturbance Scenario
+
+scenario_name: "inflow_variation_actuator_interference"
+scenario_type: "combined_disturbance"
+description: "来水变化与执行器干扰的组合扰动场景，模拟水文条件变化与控制系统故障的叠加影响"
+version: "1.0"
+created_date: "2024-01-15"
+
+# 组合参数配置
+combination_parameters:
+  # 组合类型
+  combination_type: "synchronized"  # synchronized, sequential, cascading
+  
+  # 组合效应
+  combination_effects:
+    # 叠加效应
+    superposition:
+      enabled: true
+      weight_inflow: 0.6
+      weight_actuator: 0.4
+    
+    # 交互效应
+    interaction:
+      enabled: true
+      coupling_strength: 0.3
+      feedback_delay: 5.0  # seconds
+    
+    # 级联效应
+    cascading:
+      enabled: true
+      propagation_delay: 10.0  # seconds
+      amplification_factor: 1.2
+
+# 扰动参数配置
+disturbance_parameters:
+  # 水文系统扰动
+  hydrological_system:
+    # 来水变化模式
+    inflow_patterns:
+      # 基准入流
+      baseline_inflow:
+        value: 50.0  # m³/s
+        uncertainty: 0.05
+      
+      # 季节性变化
+      seasonal_variation:
+        enabled: true
+        amplitude: 20.0  # m³/s
+        period: 8760  # hours (1 year)
+        phase_shift: 0.0
+      
+      # 日内波动
+      diurnal_fluctuation:
+        enabled: true
+        amplitude: 5.0  # m³/s
+        period: 24  # hours
+        phase_shift: 6.0  # hours
+      
+      # 随机噪声
+      random_noise:
+        enabled: true
+        noise_type: "gaussian"
+        std_deviation: 2.0  # m³/s
+        correlation_time: 1.0  # hours
+      
+      # 极端事件
+      extreme_events:
+        flood_events:
+          enabled: true
+          probability: 0.01  # per day
+          duration_range: [6, 48]  # hours
+          magnitude_range: [100, 200]  # m³/s
+        
+        drought_events:
+          enabled: true
+          probability: 0.005  # per day
+          duration_range: [72, 720]  # hours
+          magnitude_range: [5, 15]  # m³/s
+    
+    # 受影响的组件
+    affected_components:
+      - component_id: "reservoir_01"
+        impact_type: "inflow_disturbance"
+        sensitivity: 1.0
+      - component_id: "canal_01"
+        impact_type: "flow_propagation"
+        sensitivity: 0.8
+  
+  # 控制系统扰动
+  control_system:
+    # 执行器干扰配置
+    actuator_interference:
+      # 控制信号干扰
+      control_signal_interference:
+        enabled: true
+        interference_types:
+          - type: "additive_noise"
+            amplitude: 0.1
+            frequency: 0.5  # Hz
+          - type: "multiplicative_noise"
+            factor: 0.05
+            correlation: 0.3
+          - type: "signal_delay"
+            delay_range: [0.5, 2.0]  # seconds
+      
+      # 机械磨损和老化
+      mechanical_degradation:
+        enabled: true
+        degradation_rate: 0.001  # per hour
+        efficiency_loss: 0.02  # per year
+        backlash_increase: 0.001  # per month
+      
+      # 动力系统故障
+      power_system_faults:
+        enabled: true
+        fault_types:
+          - type: "voltage_fluctuation"
+            probability: 0.01  # per hour
+            magnitude_range: [0.9, 1.1]
+            duration_range: [1, 10]  # seconds
+          - type: "power_outage"
+            probability: 0.001  # per hour
+            duration_range: [10, 300]  # seconds
+      
+      # 控制系统故障
+      control_system_faults:
+        enabled: true
+        fault_types:
+          - type: "sensor_bias"
+            probability: 0.005  # per hour
+            bias_range: [-0.1, 0.1]
+            duration_range: [60, 3600]  # seconds
+          - type: "controller_saturation"
+            probability: 0.002  # per hour
+            saturation_level: 0.9
+    
+    # 受影响的执行器
+    affected_actuators:
+      - actuator_id: "gate_01"
+        actuator_type: "sluice_gate"
+        interference_sensitivity: 0.8
+        degradation_rate: 0.001
+      - actuator_id: "pump_01"
+        actuator_type: "water_pump"
+        interference_sensitivity: 0.9
+        degradation_rate: 0.002
+
+# 组合扰动强度等级
+combined_intensity_levels:
+  low:
+    inflow_variation_intensity: 0.3
+    actuator_interference_intensity: 0.2
+    combination_factor: 0.8
+  
+  medium:
+    inflow_variation_intensity: 0.6
+    actuator_interference_intensity: 0.5
+    combination_factor: 1.0
+  
+  high:
+    inflow_variation_intensity: 0.9
+    actuator_interference_intensity: 0.8
+    combination_factor: 1.3
+  
+  extreme:
+    inflow_variation_intensity: 1.2
+    actuator_interference_intensity: 1.0
+    combination_factor: 1.5
+
+# 组合扰动场景序列
+combined_disturbance_sequences:
+  # 序列1：渐进式组合
+  sequence_1:
+    name: "progressive_combination"
+    description: "来水变化逐渐加剧，随后执行器开始出现干扰"
+    timeline:
+      - time: 0
+        action: "start_inflow_variation"
+        intensity: "low"
+      - time: 3600  # 1 hour
+        action: "increase_inflow_variation"
+        intensity: "medium"
+      - time: 7200  # 2 hours
+        action: "start_actuator_interference"
+        intensity: "low"
+      - time: 10800  # 3 hours
+        action: "increase_combined_intensity"
+        intensity: "high"
+      - time: 14400  # 4 hours
+        action: "stabilize_disturbances"
+        intensity: "medium"
+      - time: 18000  # 5 hours
+        action: "end_disturbances"
+        intensity: "none"
+  
+  # 序列2：同步组合
+  sequence_2:
+    name: "synchronized_combination"
+    description: "来水变化与执行器干扰同时发生"
+    timeline:
+      - time: 0
+        action: "start_combined_disturbances"
+        intensity: "medium"
+      - time: 1800  # 30 minutes
+        action: "increase_combined_intensity"
+        intensity: "high"
+      - time: 5400  # 1.5 hours
+        action: "peak_combined_disturbances"
+        intensity: "extreme"
+      - time: 9000  # 2.5 hours
+        action: "decrease_combined_intensity"
+        intensity: "medium"
+      - time: 12600  # 3.5 hours
+        action: "end_combined_disturbances"
+        intensity: "none"
+  
+  # 序列3：级联组合
+  sequence_3:
+    name: "cascading_combination"
+    description: "来水变化引发执行器故障，形成级联效应"
+    timeline:
+      - time: 0
+        action: "start_extreme_inflow"
+        intensity: "high"
+      - time: 1200  # 20 minutes
+        action: "trigger_actuator_overload"
+        intensity: "medium"
+      - time: 2400  # 40 minutes
+        action: "cascading_failures"
+        intensity: "high"
+      - time: 4800  # 80 minutes
+        action: "emergency_response"
+        intensity: "extreme"
+      - time: 7200  # 2 hours
+        action: "system_recovery"
+        intensity: "low"
+      - time: 10800  # 3 hours
+        action: "full_recovery"
+        intensity: "none"
+
+# 自适应控制策略
+adaptive_control_strategies:
+  # 水文预报增强
+  enhanced_forecasting:
+    enabled: true
+    forecast_horizon: 24  # hours
+    update_frequency: 1  # hour
+    uncertainty_quantification: true
+  
+  # 鲁棒控制
+  robust_control:
+    enabled: true
+    control_methods:
+      - "H_infinity"
+      - "sliding_mode"
+      - "adaptive_mpc"
+    robustness_margin: 0.2
+  
+  # 故障容错控制
+  fault_tolerant_control:
+    enabled: true
+    redundancy_level: 2
+    fault_detection_threshold: 0.1
+    reconfiguration_time: 30  # seconds
+
+# 故障诊断与容错
+fault_diagnosis_tolerance:
+  # 故障检测
+  fault_detection:
+    enabled: true
+    detection_methods:
+      - "residual_based"
+      - "model_based"
+      - "data_driven"
+    detection_threshold: 0.05
+    false_alarm_rate: 0.01
+  
+  # 故障隔离
+  fault_isolation:
+    enabled: true
+    isolation_time: 10  # seconds
+    isolation_accuracy: 0.95
+  
+  # 容错策略
+  fault_tolerance:
+    enabled: true
+    tolerance_methods:
+      - "actuator_redundancy"
+      - "control_reconfiguration"
+      - "graceful_degradation"
+    recovery_time: 60  # seconds
+
+# 性能优化策略
+performance_optimization:
+  # 多目标优化
+  multi_objective_optimization:
+    enabled: true
+    objectives:
+      - "water_level_stability"
+      - "flow_rate_accuracy"
+      - "energy_efficiency"
+      - "system_reliability"
+    optimization_algorithm: "NSGA-II"
+  
+  # 实时优化
+  real_time_optimization:
+    enabled: true
+    optimization_frequency: 300  # seconds
+    convergence_tolerance: 0.001
+  
+  # 学习优化
+  learning_optimization:
+    enabled: true
+    learning_methods:
+      - "reinforcement_learning"
+      - "neural_networks"
+      - "fuzzy_logic"
+    adaptation_rate: 0.01
+
+# 触发条件
+trigger_conditions:
+  # 时间触发
+  time_based:
+    enabled: true
+    start_time: 0
+    duration: 21600  # 6 hours
+  
+  # 事件触发
+  event_based:
+    enabled: true
+    trigger_events:
+      - event: "high_inflow_detected"
+        threshold: 80.0  # m³/s
+        action: "activate_combined_disturbance"
+      - event: "actuator_performance_degraded"
+        threshold: 0.8  # efficiency
+        action: "increase_interference_intensity"
+  
+  # 条件触发
+  condition_based:
+    enabled: true
+    conditions:
+      - condition: "water_level > 5.0 AND actuator_efficiency < 0.9"
+        action: "trigger_extreme_scenario"
+      - condition: "inflow_variation > 0.5 AND control_error > 0.1"
+        action: "activate_fault_tolerance"
+
+# 性能指标监测
+performance_monitoring:
+  # 水文指标
+  hydrological_metrics:
+    - metric: "inflow_rate"
+      unit: "m³/s"
+      target_range: [45, 55]
+      critical_threshold: [30, 80]
+    - metric: "water_level"
+      unit: "m"
+      target_range: [4.5, 5.5]
+      critical_threshold: [3.0, 7.0]
+    - metric: "flow_velocity"
+      unit: "m/s"
+      target_range: [0.5, 2.0]
+      critical_threshold: [0.1, 3.0]
+  
+  # 控制指标
+  control_metrics:
+    - metric: "control_accuracy"
+      unit: "%"
+      target_range: [95, 100]
+      critical_threshold: [80, 100]
+    - metric: "actuator_efficiency"
+      unit: "%"
+      target_range: [90, 100]
+      critical_threshold: [70, 100]
+    - metric: "response_time"
+      unit: "s"
+      target_range: [1, 5]
+      critical_threshold: [0.5, 10]
+  
+  # 系统指标
+  system_metrics:
+    - metric: "system_stability"
+      unit: "index"
+      target_range: [0.8, 1.0]
+      critical_threshold: [0.6, 1.0]
+    - metric: "energy_consumption"
+      unit: "kWh"
+      target_range: [100, 150]
+      critical_threshold: [80, 200]
+    - metric: "reliability_index"
+      unit: "index"
+      target_range: [0.95, 1.0]
+      critical_threshold: [0.85, 1.0]
+
+# 预期影响评估
+expected_impact_assessment:
+  # 系统性能影响
+  system_performance_impact:
+    water_level_deviation:
+      low_intensity: "±0.2m"
+      medium_intensity: "±0.5m"
+      high_intensity: "±1.0m"
+      extreme_intensity: "±2.0m"
+    
+    flow_rate_deviation:
+      low_intensity: "±5%"
+      medium_intensity: "±15%"
+      high_intensity: "±30%"
+      extreme_intensity: "±50%"
+    
+    control_accuracy_degradation:
+      low_intensity: "2-5%"
+      medium_intensity: "5-15%"
+      high_intensity: "15-30%"
+      extreme_intensity: "30-50%"
+  
+  # 经济影响
+  economic_impact:
+    energy_cost_increase:
+      low_intensity: "5-10%"
+      medium_intensity: "10-25%"
+      high_intensity: "25-50%"
+      extreme_intensity: "50-100%"
+    
+    maintenance_cost_increase:
+      low_intensity: "10-20%"
+      medium_intensity: "20-40%"
+      high_intensity: "40-80%"
+      extreme_intensity: "80-150%"
+  
+  # 环境影响
+  environmental_impact:
+    water_quality_degradation:
+      low_intensity: "轻微"
+      medium_intensity: "中等"
+      high_intensity: "严重"
+      extreme_intensity: "极严重"
+    
+    ecological_disruption:
+      low_intensity: "局部影响"
+      medium_intensity: "区域影响"
+      high_intensity: "流域影响"
+      extreme_intensity: "生态系统破坏"
+
+# 数据记录配置
+data_logging:
+  # 记录频率
+  logging_frequency:
+    high_frequency: 1  # second
+    medium_frequency: 10  # seconds
+    low_frequency: 60  # seconds
+  
+  # 记录内容
+  logged_variables:
+    - "inflow_rate"
+    - "water_level"
+    - "gate_opening"
+    - "pump_speed"
+    - "control_signal"
+    - "actuator_efficiency"
+    - "system_state"
+    - "disturbance_intensity"
+  
+  # 存储格式
+  storage_format: "csv"
+  file_naming: "inflow_actuator_combined_{timestamp}.csv"
+  
+  # 数据压缩
+  compression:
+    enabled: true
+    algorithm: "gzip"
+    compression_level: 6
+
+# 可视化配置
+visualization:
+  # 实时图表
+  real_time_plots:
+    enabled: true
+    update_frequency: 5  # seconds
+    plot_types:
+      - "time_series"
+      - "phase_portrait"
+      - "frequency_spectrum"
+  
+  # 静态报告
+  static_reports:
+    enabled: true
+    report_types:
+      - "performance_summary"
+      - "disturbance_analysis"
+      - "impact_assessment"
+    output_format: ["pdf", "html"]
+  
+  # 交互式仪表板
+  interactive_dashboard:
+    enabled: true
+    dashboard_url: "http://localhost:8080/dashboard"
+    refresh_rate: 10  # seconds
+
+# 验证和测试
+validation_testing:
+  # 单元测试
+  unit_tests:
+    enabled: true
+    test_cases:
+      - "inflow_variation_response"
+      - "actuator_interference_handling"
+      - "combined_disturbance_stability"
+  
+  # 集成测试
+  integration_tests:
+    enabled: true
+    test_scenarios:
+      - "end_to_end_simulation"
+      - "fault_recovery_sequence"
+      - "performance_optimization"
+  
+  # 压力测试
+  stress_tests:
+    enabled: true
+    stress_levels:
+      - "maximum_inflow_variation"
+      - "complete_actuator_failure"
+      - "extreme_combined_disturbance"

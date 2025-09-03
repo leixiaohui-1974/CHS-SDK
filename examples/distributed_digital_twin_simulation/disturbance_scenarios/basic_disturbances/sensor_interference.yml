@@ -1,0 +1,230 @@
+# 传感器干扰扰动场景配置
+# 模拟传感器测量数据的各种干扰和故障
+
+disturbance_scenario:
+  name: "Sensor_Interference_Disturbance"
+  description: "模拟传感器测量过程中的干扰、噪声和故障"
+  type: "sensor_interference"
+  category: "measurement_system"
+  
+  # 扰动参数配置
+  parameters:
+    # 传感器配置
+    sensor_systems:
+      water_level_sensors:
+        locations:
+          - "Upstream_Reservoir"
+          - "Channel_1"
+          - "Channel_2"
+          - "Downstream_Reservoir"
+        baseline_accuracy: 0.02     # 基准精度 (m)
+        measurement_range: [0, 30]  # 测量范围 (m)
+        
+      flow_rate_sensors:
+        locations:
+          - "Gate_1"
+          - "Gate_2"
+          - "Gate_3"
+          - "Diversion_1"
+          - "Diversion_2"
+        baseline_accuracy: 0.5      # 基准精度 (m³/s)
+        measurement_range: [0, 300] # 测量范围 (m³/s)
+        
+      gate_position_sensors:
+        locations:
+          - "Gate_1"
+          - "Gate_2"
+          - "Gate_3"
+        baseline_accuracy: 0.01     # 基准精度 (开度比)
+        measurement_range: [0, 1]   # 测量范围
+    
+    # 干扰类型配置
+    interference_types:
+      # 测量噪声
+      measurement_noise:
+        description: "随机测量噪声"
+        noise_models:
+          gaussian_noise:
+            mean: 0.0
+            std_multiplier: 5.0     # 标准差倍数 - 增强
+          uniform_noise:
+            range_multiplier: 3.0   # 范围倍数 - 增强
+          colored_noise:
+            correlation_time: 300   # 相关时间5分钟
+            intensity: 2.5          # 增强
+            
+      # 系统性偏差
+      systematic_bias:
+        description: "系统性测量偏差"
+        bias_types:
+          constant_bias:
+            water_level: 0.1        # 水位偏差 (m)
+            flow_rate: 2.0          # 流量偏差 (m³/s)
+            gate_position: 0.02     # 闸门位置偏差
+          drift_bias:
+            drift_rate: 0.001       # 漂移率 (单位/小时)
+            max_drift: 0.5          # 最大漂移
+          temperature_dependent:
+            coefficient: 0.002      # 温度系数
+            reference_temp: 20      # 参考温度 (°C)
+            
+      # 信号干扰
+      signal_interference:
+        description: "电磁和环境干扰"
+        interference_sources:
+          electromagnetic:
+            frequency_range: [50, 60]  # 频率范围 (Hz)
+            amplitude: 0.05         # 干扰幅度
+            intermittent: true      # 间歇性干扰
+          vibration:
+            frequency: 10           # 振动频率 (Hz)
+            amplitude: 0.02         # 振动幅度
+          weather_related:
+            rain_effect: 0.1        # 降雨影响
+            wind_effect: 0.05       # 风力影响
+            
+      # 传感器故障
+      sensor_faults:
+        description: "传感器硬件故障"
+        fault_types:
+          calibration_error:
+            probability: 0.02       # 发生概率2%
+            error_magnitude: 0.2    # 误差幅度
+            duration: 3600          # 持续时间1小时
+          signal_loss:
+            probability: 0.01       # 发生概率1%
+            duration: 300           # 持续时间5分钟
+            recovery_time: 60       # 恢复时间1分钟
+          stuck_reading:
+            probability: 0.005      # 发生概率0.5%
+            duration: 1800          # 持续时间30分钟
+          saturation:
+            probability: 0.01       # 发生概率1%
+            threshold: 0.95         # 饱和阈值
+    
+    # 干扰场景配置
+    interference_scenarios:
+      - scenario_id: "high_noise_period"
+        start_time: 7200          # 2小时后开始
+        duration: 3600            # 持续1小时
+        affected_sensors: ["all_water_level"]
+        interference_type: "measurement_noise"
+        intensity: "high"
+        
+      - scenario_id: "systematic_bias_event"
+        start_time: 18000         # 5小时后开始
+        duration: 7200            # 持续2小时
+        affected_sensors: ["Gate_1_flow", "Gate_2_flow"]
+        interference_type: "systematic_bias"
+        intensity: "medium"
+        
+      - scenario_id: "electromagnetic_interference"
+        start_time: 32400         # 9小时后开始
+        duration: 1800            # 持续30分钟
+        affected_sensors: ["all_gate_position"]
+        interference_type: "signal_interference"
+        intensity: "high"
+        
+      - scenario_id: "sensor_fault_cascade"
+        start_time: 43200         # 12小时后开始
+        duration: 3600            # 持续1小时
+        affected_sensors: ["Channel_1_level", "Channel_2_level"]
+        interference_type: "sensor_faults"
+        intensity: "critical"
+  
+  # 触发条件
+  trigger_conditions:
+    start_time: 0                 # 仿真开始即触发
+    duration: 86400               # 持续24小时
+    trigger_type: "scenario_based"
+    
+  # 数据质量评估
+  data_quality_assessment:
+    enable: true
+    quality_metrics:
+      - "accuracy"
+      - "precision"
+      - "completeness"
+      - "consistency"
+      - "timeliness"
+    
+    quality_thresholds:
+      min_accuracy: 0.9           # 最小精度90%
+      max_noise_level: 0.1        # 最大噪声水平10%
+      min_data_availability: 0.95 # 最小数据可用性95%
+    
+    outlier_detection:
+      enable: true
+      methods:
+        - "statistical_outlier"
+        - "physical_constraint_check"
+        - "temporal_consistency_check"
+      threshold_multiplier: 3.0   # 阈值倍数
+    
+  # 数据清洗和修复
+  data_cleaning:
+    enable: true
+    cleaning_methods:
+      noise_filtering:
+        - "moving_average"
+        - "kalman_filter"
+        - "median_filter"
+      bias_correction:
+        - "reference_comparison"
+        - "historical_calibration"
+        - "cross_validation"
+      gap_filling:
+        - "linear_interpolation"
+        - "spline_interpolation"
+        - "model_based_estimation"
+    
+    validation_rules:
+      - "physical_feasibility"
+      - "temporal_continuity"
+      - "spatial_consistency"
+      - "mass_balance_check"
+    
+  # 冗余和备份策略
+  redundancy_strategy:
+    enable: true
+    redundancy_levels:
+      critical_sensors: 3         # 关键传感器3重冗余
+      important_sensors: 2        # 重要传感器2重冗余
+      regular_sensors: 1          # 普通传感器单点
+    
+    backup_systems:
+      - "virtual_sensor_network"
+      - "model_based_estimation"
+      - "neighboring_sensor_inference"
+    
+    fault_tolerance:
+      max_failed_sensors: 2       # 最大故障传感器数
+      graceful_degradation: true  # 优雅降级
+      emergency_mode: true        # 应急模式
+    
+  # 性能指标监测
+  monitoring:
+    metrics:
+      - "sensor_availability"
+      - "measurement_accuracy"
+      - "data_quality_index"
+      - "fault_detection_rate"
+      - "system_observability"
+    sampling_interval: 30         # 采样间隔30秒
+    
+  # 预期影响评估
+  expected_impact:
+    severity: "high"
+    affected_components:
+      - "状态估计"
+      - "控制决策"
+      - "系统监测"
+      - "故障诊断"
+    impact_description: "传感器干扰将降低系统观测能力，影响状态估计精度和控制性能"
+    
+    # 影响量化分析
+    quantitative_impact:
+      state_estimation_error: 1.5  # 状态估计误差倍数
+      control_performance_loss: 0.2 # 控制性能损失20%
+      false_alarm_rate: 0.05      # 误报率5%
+      missed_detection_rate: 0.1  # 漏检率10%

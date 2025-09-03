@@ -7,7 +7,7 @@ agents:
   - id: disturbance_outflow_agent
     class: core_lib.data_access.csv_inflow_agent.CsvInflowAgent
     config:
-      csv_file_path: "examples/watertank_refactored/05_joint_control/disturbance.csv"
+      csv_file_path: "E:\\OneDrive\\Documents\\GitHub\\CHS-SDK\\examples\\watertank_refactored\\05_joint_control\\disturbance.csv"
       time_column: "time"
       data_column: "outflow_rate"
       inflow_topic: "disturbance_outflow_topic"

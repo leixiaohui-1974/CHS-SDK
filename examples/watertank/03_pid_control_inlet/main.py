@@ -68,12 +68,18 @@ def run_correctly_refactored_pid_control():
     )
     pump_controller = LocalControlAgent(
         agent_id="pump_control_01",
-        controller=pid_controller,
         message_bus=message_bus,
+        dt=sim_conf['time_step'],
+        target_component="pump",
+        control_type="pump_control",
+        data_sources={"primary_data": msg_conf['state_topic']},
+        control_targets={"primary_target": msg_conf['command_topic']},
+        allocation_config={},
+        controller_config={},
+        controller=pid_controller,
         observation_topic=msg_conf['state_topic'],
         observation_key='water_level',
-        action_topic=msg_conf['command_topic'],
-        dt=sim_conf['time_step']
+        action_topic=msg_conf['command_topic']
     )
 
     # 6. 运行仿真循环

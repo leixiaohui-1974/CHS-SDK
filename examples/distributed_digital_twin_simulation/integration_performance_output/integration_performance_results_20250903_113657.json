@@ -1,0 +1,171 @@
+{
+  "validation_suite": "integration_performance_validation",
+  "timestamp": "2025-09-03T11:36:57.436296",
+  "total_execution_time": 3.656059503555298,
+  "basic_integration": {
+    "component_integration": {
+      "status": "success",
+      "result": {
+        "components_added": 2,
+        "agents_added": 1,
+        "simulation_steps": 10,
+        "integration_successful": true
+      }
+    },
+    "agent_integration": {
+      "status": "success",
+      "result": {
+        "agents_count": 3,
+        "simulation_steps": 30,
+        "total_agent_steps": 0,
+        "agent_integration_successful": false
+      }
+    },
+    "disturbance_integration": {
+      "status": "success",
+      "result": {
+        "disturbances_added": 2,
+        "simulation_steps": 20,
+        "disturbance_history_count": 3,
+        "disturbance_integration_successful": true
+      }
+    },
+    "message_bus_integration": {
+      "status": "success",
+      "result": {
+        "message_bus_available": true,
+        "message_passing_functional": true,
+        "integration_successful": true
+      }
+    }
+  },
+  "stress_tests": {
+    "high_frequency_simulation": {
+      "status": "success",
+      "result": {
+        "time_step": 0.1,
+        "simulation_duration": 50,
+        "execution_time": 0.011002540588378906,
+        "simulation_steps": 500,
+        "steps_per_second": 45444.04957961342,
+        "high_frequency_successful": true
+      },
+      "performance": {
+        "duration_seconds": 1,
+        "cpu_usage": {
+          "avg": 0.0,
+          "max": 0.0,
+          "min": 0.0
+        },
+        "memory_usage": {
+          "avg_percent": 36.7,
+          "max_percent": 36.7,
+          "avg_used_mb": 23971.234375,
+          "max_used_mb": 23971.234375
+        },
+        "sample_count": 1
+      }
+    },
+    "large_scale_components": {
+      "status": "success",
+      "result": {
+        "component_count": 10,
+        "execution_time": 0.011896133422851562,
+        "simulation_steps": 20,
+        "large_scale_successful": true
+      },
+      "performance": {
+        "duration_seconds": 1,
+        "cpu_usage": {
+          "avg": 0.0,
+          "max": 0.0,
+          "min": 0.0
+        },
+        "memory_usage": {
+          "avg_percent": 36.7,
+          "max_percent": 36.7,
+          "avg_used_mb": 23975.64453125,
+          "max_used_mb": 23975.64453125
+        },
+        "sample_count": 1
+      }
+    },
+    "intensive_disturbances": {
+      "status": "success",
+      "result": {
+        "disturbance_count": 6,
+        "execution_time": 0.04393315315246582,
+        "simulation_steps": 60,
+        "intensive_disturbances_successful": true
+      },
+      "performance": {
+        "duration_seconds": 1,
+        "cpu_usage": {
+          "avg": 0.0,
+          "max": 0.0,
+          "min": 0.0
+        },
+        "memory_usage": {
+          "avg_percent": 36.7,
+          "max_percent": 36.7,
+          "avg_used_mb": 23967.84375,
+          "max_used_mb": 23967.84375
+        },
+        "sample_count": 1
+      }
+    }
+  },
+  "concurrent_tests": {
+    "concurrent_simulations": 3,
+    "successful_runs": 3,
+    "failed_runs": 0,
+    "results": [
+      {
+        "status": "success",
+        "simulation_id": 0,
+        "execution_time": 0.0012404918670654297,
+        "simulation_steps": 15
+      },
+      {
+        "status": "success",
+        "simulation_id": 2,
+        "execution_time": 0.0012426376342773438,
+        "simulation_steps": 15
+      },
+      {
+        "status": "success",
+        "simulation_id": 1,
+        "execution_time": 0.0006303787231445312,
+        "simulation_steps": 15
+      }
+    ]
+  },
+  "memory_tests": {
+    "initial_memory_mb": 23968.234375,
+    "final_memory_mb": 23966.6953125,
+    "memory_increase_mb": -1.5390625,
+    "memory_leak_detected": false,
+    "test_cycles": 5
+  },
+  "stability_tests": {
+    "execution_time": 0.005192279815673828,
+    "simulation_steps": 100,
+    "performance": {
+      "duration_seconds": 1,
+      "cpu_usage": {
+        "avg": 0.0,
+        "max": 0.0,
+        "min": 0.0
+      },
+      "memory_usage": {
+        "avg_percent": 36.7,
+        "max_percent": 36.7,
+        "avg_used_mb": 23966.5859375,
+        "max_used_mb": 23966.5859375
+      },
+      "sample_count": 1
+    },
+    "stability_achieved": true
+  },
+  "overall_status": "passed"
+}
