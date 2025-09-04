@@ -1,0 +1,12 @@
+agents: {}
+components: {}
+simulation:
+  description: 基于自然语言描述生成的仿真配置
+  duration: 3600
+  name: 自动生成的仿真
+  time_step: 3600.0
+topology:
+  connections:
+  - from: 进行闭环控制分析
+    to: 策略分析
+    type: control

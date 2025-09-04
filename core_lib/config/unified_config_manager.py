@@ -75,6 +75,7 @@ class UnifiedConfigManager:
         ]
         
         self.universal_patterns = [
+            'universal_config',  # 支持带版本号的文件，如universal_config_1_2.yml
             'universal_config.yml',
             'universal_config.yaml'
         ]
@@ -175,8 +176,11 @@ class UnifiedConfigManager:
         
         # 检查通用配置文件（优先级最高）
         for pattern in self.universal_patterns:
-            if pattern in files_in_dir:
-                universal_file = dir_path / pattern
+            # 查找匹配的文件
+            matching_files = [f for f in files_in_dir if pattern in f]
+            if matching_files:
+                # 选择第一个匹配的文件
+                universal_file = dir_path / matching_files[0]
                 return ConfigInfo(
                     config_type=ConfigType.UNIVERSAL_CONFIG,
                     config_path=dir_path,

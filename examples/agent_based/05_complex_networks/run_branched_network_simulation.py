@@ -68,8 +68,38 @@ def run_branched_network_simulation():
     pid1 = PIDController(Kp=-0.5, Ki=-0.05, Kd=-0.1, setpoint=12.0, min_output=0.0, max_output=1.0)
     pid2 = PIDController(Kp=-0.4, Ki=-0.04, Kd=-0.1, setpoint=18.0, min_output=0.0, max_output=1.0)
 
-    lca1 = LocalControlAgent(agent_id="lca_g1", controller=pid1, message_bus=message_bus, observation_topic="state.res1.level", observation_key="water_level", action_topic="action.g1.opening", dt=simulation_config['dt'], command_topic="command.res1.setpoint")
-    lca2 = LocalControlAgent(agent_id="lca_g2", controller=pid2, message_bus=message_bus, observation_topic="state.res2.level", observation_key="water_level", action_topic="action.g2.opening", dt=simulation_config['dt'], command_topic="command.res2.setpoint")
+    lca1 = LocalControlAgent(
+        agent_id="lca_g1",
+        message_bus=message_bus,
+        dt=simulation_config['dt'],
+        target_component="g1",
+        control_type="gate_control",
+        data_sources={"primary_data": "state.res1.level"},
+        control_targets={"primary_target": "action.g1.opening"},
+        allocation_config={},
+        controller_config={},
+        controller=pid1,
+        observation_topic="state.res1.level",
+        observation_key="water_level",
+        action_topic="action.g1.opening",
+        command_topic="command.res1.setpoint"
+    )
+    lca2 = LocalControlAgent(
+        agent_id="lca_g2",
+        message_bus=message_bus,
+        dt=simulation_config['dt'],
+        target_component="g2",
+        control_type="gate_control",
+        data_sources={"primary_data": "state.res2.level"},
+        control_targets={"primary_target": "action.g2.opening"},
+        allocation_config={},
+        controller_config={},
+        controller=pid2,
+        observation_topic="state.res2.level",
+        observation_key="water_level",
+        action_topic="action.g2.opening",
+        command_topic="command.res2.setpoint"
+    )
 
     # This dispatcher is for monitoring; its rules won't trigger in this scenario
     dispatcher_rules = {

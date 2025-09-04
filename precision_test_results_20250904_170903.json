@@ -1,0 +1,40 @@
+{
+  "total_tests": 5,
+  "successful_tests": 0,
+  "failed_tests": 5,
+  "success_rate": 0.0,
+  "average_precision": 0.0,
+  "average_processing_time": 0.0,
+  "test_results": [
+    {
+      "test_name": "基础组件识别测试",
+      "input": "水库容量为1000万立方米，设计水位为150米，死水位为120米",
+      "error": "'ProcessingResult' object has no attribute 'get'",
+      "status": "failed"
+    },
+    {
+      "test_name": "复杂系统配置测试",
+      "input": "渠道长度5公里，底宽3米，边坡1:1.5，糙率0.025，设计流量50立方米每秒，连接上游水库和下游闸门",
+      "error": "'ProcessingResult' object has no attribute 'get'",
+      "status": "failed"
+    },
+    {
+      "test_name": "单位转换测试",
+      "input": "管道直径800毫米，长度2.5千米，流速1.2米每秒",
+      "error": "'ProcessingResult' object has no attribute 'get'",
+      "status": "failed"
+    },
+    {
+      "test_name": "连接关系推理测试",
+      "input": "泵站提升流量30立方米每秒，从下游渠道抽水到上游水库",
+      "error": "'ProcessingResult' object has no attribute 'get'",
+      "status": "failed"
+    },
+    {
+      "test_name": "错误修正测试",
+      "input": "水库容量1000万立方米，设计水位120米，死水位150米",
+      "error": "'ProcessingResult' object has no attribute 'get'",
+      "status": "failed"
+    }
+  ]
+}

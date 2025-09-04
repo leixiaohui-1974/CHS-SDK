@@ -1,0 +1,8 @@
+simulation:
+  duration: 3600
+  dt: 1
+  name: unified_scenario
+  solver: rk4
+components: []
+topology: []
+agents: {}

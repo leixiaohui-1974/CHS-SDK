@@ -385,6 +385,11 @@ class ConfigToLanguageConverter:
         
         if isinstance(components, list):
             for comp in components:
+                # 确保comp是字典类型
+                if not isinstance(comp, dict):
+                    self.logger.warning(f"跳过非字典类型的组件: {comp}")
+                    continue
+                    
                 comp_type = comp.get('class', comp.get('type', '未知'))
                 comp_name = comp.get('id', comp.get('name', '未命名'))
                 component_types[comp_type] = component_types.get(comp_type, 0) + 1
@@ -395,6 +400,11 @@ class ConfigToLanguageConverter:
                 
         elif isinstance(components, dict):
             for comp_name, comp_config in components.items():
+                # 确保comp_config是字典类型
+                if not isinstance(comp_config, dict):
+                    self.logger.warning(f"跳过非字典类型的组件配置: {comp_name} -> {comp_config}")
+                    continue
+                    
                 comp_type = comp_config.get('class', comp_config.get('type', '未知'))
                 component_types[comp_type] = component_types.get(comp_type, 0) + 1
                 
@@ -419,6 +429,11 @@ class ConfigToLanguageConverter:
                 desc += f"\n\n系统拓扑：包含{len(connections)}个连接关系\n"
                 desc += "具体连接关系：\n"
                 for i, conn in enumerate(connections, 1):
+                    # 确保conn是字典类型
+                    if not isinstance(conn, dict):
+                        self.logger.warning(f"跳过非字典类型的连接: {conn}")
+                        continue
+                        
                     # 支持多种连接格式
                     upstream = conn.get('upstream', conn.get('from', conn.get('source', '未知')))
                     downstream = conn.get('downstream', conn.get('to', conn.get('target', '未知')))
@@ -437,6 +452,11 @@ class ConfigToLanguageConverter:
                 
                 if isinstance(agents, list):
                     for i, agent in enumerate(agents, 1):
+                        # 确保agent是字典类型
+                        if not isinstance(agent, dict):
+                            self.logger.warning(f"跳过非字典类型的智能体: {agent}")
+                            continue
+                            
                         agent_id = agent.get('id', f'agent_{i}')
                         agent_class = agent.get('class', agent.get('type', '未知类型'))
                         agent_config = agent.get('config', {})
@@ -463,6 +483,11 @@ class ConfigToLanguageConverter:
                                 
                 elif isinstance(agents, dict):
                     for i, (agent_id, agent_config) in enumerate(agents.items(), 1):
+                        # 确保agent_config是字典类型
+                        if not isinstance(agent_config, dict):
+                            self.logger.warning(f"跳过非字典类型的智能体配置: {agent_id} -> {agent_config}")
+                            continue
+                            
                         agent_class = agent_config.get('class', agent_config.get('type', '未知类型'))
                         
                         # 获取中文描述
@@ -543,12 +568,14 @@ class ConfigToLanguageConverter:
                     
                 if isinstance(components, list):
                     for comp in components:
-                        comp_type = comp.get('class', comp.get('type', ''))
-                        component_types.add(comp_type)
+                        if isinstance(comp, dict):
+                            comp_type = comp.get('class', comp.get('type', ''))
+                            component_types.add(comp_type)
                 elif isinstance(components, dict):
                     for comp_config in components.values():
-                        comp_type = comp_config.get('class', comp_config.get('type', ''))
-                        component_types.add(comp_type)
+                        if isinstance(comp_config, dict):
+                            comp_type = comp_config.get('class', comp_config.get('type', ''))
+                            component_types.add(comp_type)
             
             # 根据组件类型生成输出描述
             for comp_type in component_types:
@@ -587,12 +614,14 @@ class ConfigToLanguageConverter:
                     
                 if isinstance(agents, list):
                     for agent in agents:
-                        agent_type = agent.get('class', agent.get('type', ''))
-                        agent_types.add(agent_type)
+                        if isinstance(agent, dict):
+                            agent_type = agent.get('class', agent.get('type', ''))
+                            agent_types.add(agent_type)
                 elif isinstance(agents, dict):
                     for agent_config in agents.values():
-                        agent_type = agent_config.get('class', agent_config.get('type', ''))
-                        agent_types.add(agent_type)
+                        if isinstance(agent_config, dict):
+                            agent_type = agent_config.get('class', agent_config.get('type', ''))
+                            agent_types.add(agent_type)
             
             desc += "控制策略分析：\n"
             for agent_type in agent_types:
@@ -646,6 +675,11 @@ class ConfigToLanguageConverter:
         if not output_config:
             return "默认输出配置"
         
+        # 确保output_config是字典类型
+        if not isinstance(output_config, dict):
+            self.logger.warning(f"输出配置不是字典类型: {type(output_config)}")
+            return "输出配置格式错误"
+        
         desc = ""
         
         output_format = output_config.get('format', '')
@@ -664,17 +698,25 @@ class ConfigToLanguageConverter:
     
     def _describe_visualization_config(self, viz_config: Dict[str, Any]) -> str:
         """描述可视化配置"""
-        if not viz_config or not viz_config.get('enabled'):
+        if not viz_config:
+            return "未启用可视化"
+        
+        # 确保viz_config是字典类型
+        if not isinstance(viz_config, dict):
+            self.logger.warning(f"可视化配置不是字典类型: {type(viz_config)}")
+            return "可视化配置格式错误"
+        
+        if not viz_config.get('enabled'):
             return "未启用可视化"
         
         desc = "启用了可视化功能"
         
         plots_config = viz_config.get('plots', {})
-        if plots_config and plots_config.get('enabled'):
+        if isinstance(plots_config, dict) and plots_config.get('enabled'):
             desc += "，包括图表绘制"
         
         real_time = viz_config.get('real_time', {})
-        if real_time and real_time.get('enabled'):
+        if isinstance(real_time, dict) and real_time.get('enabled'):
             desc += "，支持实时可视化"
         
         return desc
@@ -683,6 +725,11 @@ class ConfigToLanguageConverter:
         """描述分析配置"""
         if not analysis_config:
             return "无高级分析配置"
+        
+        # 确保analysis_config是字典类型
+        if not isinstance(analysis_config, dict):
+            self.logger.warning(f"分析配置不是字典类型: {type(analysis_config)}")
+            return "分析配置格式错误"
         
         desc = "包含以下分析功能："
         

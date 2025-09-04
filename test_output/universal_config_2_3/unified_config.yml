@@ -1,0 +1,20 @@
+simulation:
+  duration: 7200.0
+  dt: 60.0
+  name: examples\mission_example_2
+  solver: watershed_dispatch
+components: []
+topology: []
+agents: {}
+debug:
+  enabled: true
+  log_level: INFO
+performance_monitor:
+  enabled: true
+analysis:
+  control_performance_analysis: true
+  system_identification: true
+  system_response_analysis:
+    dynamic_response: true
+    steady_state_evaluation: true
+    parameter_sensitivity_analysis: true

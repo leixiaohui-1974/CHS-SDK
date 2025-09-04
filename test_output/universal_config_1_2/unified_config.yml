@@ -1,0 +1,19 @@
+simulation:
+  duration: 50.0
+  dt: 1.0
+  name: 通用配置文件
+  solver: euler
+components: []
+topology: []
+agents: {}
+debug:
+  enabled: true
+  log_level: INFO
+performance_monitor:
+  enabled: true
+analysis:
+  control_performance_analysis: true
+  system_identification: true
+  dynamic_response_characteristics: true
+  steady_state_performance_evaluation: true
+  parameter_sensitivity_analysis: true

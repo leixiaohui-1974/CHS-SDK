@@ -86,18 +86,73 @@ class LanguageToConfigConverter:
         
         # 中文到英文组件类型映射（包括英文类名的直接映射）
         self.component_type_reverse_map = {
+            # 基础水利设施
             '水库': 'Reservoir',
+            '蓄水池': 'Reservoir',
+            '水池': 'Reservoir',
+            '湖泊': 'Lake',
+            '池塘': 'Pond',
+            
+            # 控制设施
             '闸门': 'Gate',
+            '水闸': 'Gate',
+            '闸': 'Gate',
+            '调节闸': 'Gate',
+            '泄洪闸': 'Gate',
+            '进水闸': 'Gate',
+            '出水闸': 'Gate',
+            
+            # 泵站设施
             '水泵': 'Pump',
+            '泵': 'Pump',
             '泵站': 'PumpStation',
+            '抽水站': 'PumpStation',
+            '提升泵站': 'PumpStation',
+            
+            # 阀门设施
             '阀门': 'Valve',
+            '阀': 'Valve',
+            '调节阀': 'Valve',
+            '控制阀': 'Valve',
             '阀站': 'ValveStation',
+            
+            # 输水设施
             '管道': 'Pipe',
+            '管': 'Pipe',
+            '输水管': 'Pipe',
+            '压力管': 'Pipe',
             '渠道': 'Canal',
-            '河道': 'Channel',
+            '渠': 'Canal',
+            '输水渠': 'Canal',
+            '统一渠道': 'UnifiedCanal',
+            '河道': 'RiverChannel',
+            '河': 'RiverChannel',
+            '河流': 'RiverChannel',
+            '水道': 'RiverChannel',
+            
+            # 连接设施
             '汇流点': 'Junction',
+            '分流点': 'Junction',
+            '节点': 'Junction',
+            '连接点': 'Junction',
+            
+            # 监测设施
             '传感器': 'Sensor',
+            '水位计': 'Sensor',
+            '流量计': 'Sensor',
+            '压力计': 'Sensor',
+            '监测点': 'Sensor',
+            
+            # 发电设施
+            '水轮机': 'WaterTurbine',
+            '水电站': 'HydropowerStation',
+            '发电机组': 'HydropowerStation',
+            '机组': 'HydropowerStation',
+            
+            # 控制系统
             '受控系统': 'ControlledSystem',
+            '控制系统': 'ControlledSystem',
+            '被控对象': 'ControlledSystem',
             '水轮机': 'WaterTurbine',
             '水轮机组': 'TurbineStation',
             # 添加英文类名的直接映射
@@ -156,19 +211,119 @@ class LanguageToConfigConverter:
                 'initial_level': 50,   # 初始水位 (m)
                 'min_level': 10,       # 最低水位 (m)
                 'max_level': 100,      # 最高水位 (m)
-                'area': 10000          # 水面面积 (m²)
+                'area': 10000,         # 水面面积 (m²)
+                'inflow': 0,           # 初始入流 (m³/s)
+                'outflow': 0           # 初始出流 (m³/s)
+            },
+            'Lake': {
+                'capacity': 5000000,   # 湖泊容量 (m³)
+                'initial_level': 30,   # 初始水位 (m)
+                'min_level': 5,        # 最低水位 (m)
+                'max_level': 50,       # 最高水位 (m)
+                'area': 50000          # 水面面积 (m²)
+            },
+            'Pond': {
+                'capacity': 100000,    # 池塘容量 (m³)
+                'initial_level': 10,   # 初始水位 (m)
+                'min_level': 2,        # 最低水位 (m)
+                'max_level': 15,       # 最高水位 (m)
+                'area': 5000           # 水面面积 (m²)
             },
             'Gate': {
                 'max_flow': 1000,      # 最大流量 (m³/s)
                 'initial_opening': 0.5, # 初始开度
                 'min_opening': 0,      # 最小开度
-                'max_opening': 1       # 最大开度
+                'max_opening': 1,      # 最大开度
+                'width': 10,           # 闸门宽度 (m)
+                'height': 5,           # 闸门高度 (m)
+                'discharge_coeff': 0.6 # 流量系数
             },
             'Pump': {
                 'max_flow': 500,       # 最大流量 (m³/s)
                 'efficiency': 0.85,    # 效率
                 'power': 1000,         # 功率 (kW)
-                'initial_speed': 0     # 初始转速
+                'initial_speed': 0,    # 初始转速
+                'head': 50,            # 扬程 (m)
+                'response_time': 10    # 响应时间 (s)
+            },
+            'PumpStation': {
+                'pump_count': 3,       # 泵机数量
+                'max_flow': 1500,      # 总最大流量 (m³/s)
+                'efficiency': 0.85,    # 效率
+                'power': 3000,         # 总功率 (kW)
+                'head': 50             # 扬程 (m)
+            },
+            'Valve': {
+                'max_flow': 800,       # 最大流量 (m³/s)
+                'initial_opening': 0.5, # 初始开度
+                'min_opening': 0,      # 最小开度
+                'max_opening': 1,      # 最大开度
+                'cv': 100,             # 流量系数
+                'response_time': 5     # 响应时间 (s)
+            },
+            'ValveStation': {
+                'valve_count': 2,      # 阀门数量
+                'max_flow': 1600,      # 总最大流量 (m³/s)
+                'initial_opening': 0.5, # 初始开度
+                'cv': 200              # 流量系数
+            },
+            'Pipe': {
+                'length': 1000,        # 管道长度 (m)
+                'diameter': 2,         # 管道直径 (m)
+                'roughness': 0.001,    # 粗糙度 (m)
+                'max_flow': 1000,      # 最大流量 (m³/s)
+                'material': 'steel'    # 管道材质
+            },
+            'Canal': {
+                'length': 5000,        # 渠道长度 (m)
+                'bottom_width': 10,    # 底宽 (m)
+                'side_slope': 1.5,     # 边坡系数
+                'roughness': 0.025,    # 曼宁系数
+                'slope': 0.001,        # 坡度
+                'max_flow': 2000       # 最大流量 (m³/s)
+            },
+            'UnifiedCanal': {
+                'length': 5000,        # 渠道长度 (m)
+                'bottom_width': 10,    # 底宽 (m)
+                'side_slope': 1.5,     # 边坡系数
+                'roughness': 0.025,    # 曼宁系数
+                'slope': 0.001,        # 坡度
+                'max_flow': 2000       # 最大流量 (m³/s)
+            },
+            'RiverChannel': {
+                'length': 10000,       # 河道长度 (m)
+                'bottom_width': 50,    # 底宽 (m)
+                'side_slope': 2.0,     # 边坡系数
+                'roughness': 0.035,    # 曼宁系数
+                'slope': 0.0005,       # 坡度
+                'max_flow': 5000       # 最大流量 (m³/s)
+            },
+            'Junction': {
+                'max_flow': 3000,      # 最大流量 (m³/s)
+                'loss_coeff': 0.1,     # 损失系数
+                'elevation': 100       # 高程 (m)
+            },
+            'Sensor': {
+                'measurement_type': 'level',  # 测量类型
+                'accuracy': 0.01,      # 精度
+                'range_min': 0,        # 测量范围最小值
+                'range_max': 100,      # 测量范围最大值
+                'response_time': 1     # 响应时间 (s)
+            },
+            'WaterTurbine': {
+                'rated_power': 50000,  # 额定功率 (kW)
+                'efficiency': 0.9,     # 效率
+                'rated_head': 100,     # 额定水头 (m)
+                'rated_flow': 500,     # 额定流量 (m³/s)
+                'min_head': 50,        # 最小水头 (m)
+                'max_head': 150        # 最大水头 (m)
+            },
+            'HydropowerStation': {
+                'turbine_count': 4,    # 机组数量
+                'total_power': 200000, # 总装机容量 (kW)
+                'efficiency': 0.9,     # 效率
+                'rated_head': 100,     # 额定水头 (m)
+                'total_flow': 2000     # 总流量 (m³/s)
             },
             'ControlledSystem': {
                 'initial_state': [0, 0], # 初始状态
@@ -433,33 +588,137 @@ class LanguageToConfigConverter:
         """提取组件参数"""
         parameters = self.default_parameters.get(component_type, {}).copy()
         
-        # 提取数值参数
-        number_patterns = [
-            r'(\d+\.?\d*)\s*m³',
-            r'(\d+\.?\d*)\s*立方米',
-            r'(\d+\.?\d*)\s*m³/s',
-            r'(\d+\.?\d*)\s*立方米每秒',
-            r'(\d+\.?\d*)\s*m',
-            r'(\d+\.?\d*)\s*米',
-            r'(\d+\.?\d*)\s*kW',
-            r'(\d+\.?\d*)\s*千瓦'
-        ]
+        # 更精确的数值和单位提取模式
+        parameter_patterns = {
+            # 容量相关
+            'capacity': [
+                r'容量[：:]?\s*(\d+\.?\d*)\s*[万]?\s*m³',
+                r'库容[：:]?\s*(\d+\.?\d*)\s*[万]?\s*m³',
+                r'总容量[：:]?\s*(\d+\.?\d*)\s*[万]?\s*立方米',
+                r'(\d+\.?\d*)\s*[万]?\s*m³.*容量',
+                r'(\d+\.?\d*)\s*[万]?\s*立方米.*容量'
+            ],
+            # 水位相关
+            'initial_level': [
+                r'初始水位[：:]?\s*(\d+\.?\d*)\s*m',
+                r'水位[：:]?\s*(\d+\.?\d*)\s*m',
+                r'起始水位[：:]?\s*(\d+\.?\d*)\s*米',
+                r'(\d+\.?\d*)\s*m.*水位',
+                r'(\d+\.?\d*)\s*米.*水位'
+            ],
+            'max_level': [
+                r'最高水位[：:]?\s*(\d+\.?\d*)\s*m',
+                r'最大水位[：:]?\s*(\d+\.?\d*)\s*m',
+                r'汛限水位[：:]?\s*(\d+\.?\d*)\s*米'
+            ],
+            'min_level': [
+                r'最低水位[：:]?\s*(\d+\.?\d*)\s*m',
+                r'最小水位[：:]?\s*(\d+\.?\d*)\s*m',
+                r'死水位[：:]?\s*(\d+\.?\d*)\s*米'
+            ],
+            # 流量相关
+            'max_flow': [
+                r'最大流量[：:]?\s*(\d+\.?\d*)\s*m³/s',
+                r'额定流量[：:]?\s*(\d+\.?\d*)\s*m³/s',
+                r'设计流量[：:]?\s*(\d+\.?\d*)\s*立方米每秒',
+                r'(\d+\.?\d*)\s*m³/s.*流量',
+                r'(\d+\.?\d*)\s*立方米每秒.*流量'
+            ],
+            'initial_flow': [
+                r'初始流量[：:]?\s*(\d+\.?\d*)\s*m³/s',
+                r'起始流量[：:]?\s*(\d+\.?\d*)\s*立方米每秒'
+            ],
+            # 功率相关
+            'power': [
+                r'功率[：:]?\s*(\d+\.?\d*)\s*[k]?W',
+                r'额定功率[：:]?\s*(\d+\.?\d*)\s*[k]?W',
+                r'装机容量[：:]?\s*(\d+\.?\d*)\s*[k]?W',
+                r'(\d+\.?\d*)\s*[k]?W.*功率',
+                r'(\d+\.?\d*)\s*千瓦.*功率'
+            ],
+            # 开度相关
+            'initial_opening': [
+                r'初始开度[：:]?\s*(\d+\.?\d*)%?',
+                r'开度[：:]?\s*(\d+\.?\d*)%?',
+                r'起始开度[：:]?\s*(\d+\.?\d*)%?'
+            ],
+            # 尺寸相关
+            'length': [
+                r'长度[：:]?\s*(\d+\.?\d*)\s*[k]?m',
+                r'总长[：:]?\s*(\d+\.?\d*)\s*[k]?m',
+                r'(\d+\.?\d*)\s*[k]?m.*长',
+                r'(\d+\.?\d*)\s*[千]?米.*长'
+            ],
+            'width': [
+                r'宽度[：:]?\s*(\d+\.?\d*)\s*m',
+                r'底宽[：:]?\s*(\d+\.?\d*)\s*m',
+                r'(\d+\.?\d*)\s*m.*宽',
+                r'(\d+\.?\d*)\s*米.*宽'
+            ],
+            'height': [
+                r'高度[：:]?\s*(\d+\.?\d*)\s*m',
+                r'闸高[：:]?\s*(\d+\.?\d*)\s*m',
+                r'(\d+\.?\d*)\s*m.*高',
+                r'(\d+\.?\d*)\s*米.*高'
+            ],
+            'diameter': [
+                r'直径[：:]?\s*(\d+\.?\d*)\s*m',
+                r'管径[：:]?\s*(\d+\.?\d*)\s*m',
+                r'(\d+\.?\d*)\s*m.*径',
+                r'(\d+\.?\d*)\s*米.*径'
+            ],
+            # 效率相关
+            'efficiency': [
+                r'效率[：:]?\s*(\d+\.?\d*)%?',
+                r'机械效率[：:]?\s*(\d+\.?\d*)%?',
+                r'(\d+\.?\d*)%.*效率'
+            ],
+            # 扬程相关
+            'head': [
+                r'扬程[：:]?\s*(\d+\.?\d*)\s*m',
+                r'水头[：:]?\s*(\d+\.?\d*)\s*m',
+                r'设计水头[：:]?\s*(\d+\.?\d*)\s*米'
+            ],
+            # 坡度相关
+            'slope': [
+                r'坡度[：:]?\s*(\d+\.?\d*)',
+                r'底坡[：:]?\s*(\d+\.?\d*)',
+                r'纵坡[：:]?\s*(\d+\.?\d*)'
+            ],
+            # 粗糙度相关
+            'roughness': [
+                r'粗糙度[：:]?\s*(\d+\.?\d*)',
+                r'曼宁系数[：:]?\s*(\d+\.?\d*)',
+                r'糙率[：:]?\s*(\d+\.?\d*)'
+            ]
+        }
         
-        for pattern in number_patterns:
-            matches = re.findall(pattern, line)
-            if matches:
-                value = float(matches[0])
-                # 根据组件类型和单位推断参数
-                if component_type == 'Reservoir':
-                    if 'm³' in line or '立方米' in line:
-                        parameters['capacity'] = value
-                    elif 'm' in line or '米' in line:
-                        parameters['initial_level'] = value
-                elif component_type in ['Pump', 'Gate']:
-                    if 'm³/s' in line or '立方米每秒' in line:
-                        parameters['max_flow'] = value
-                    elif 'kW' in line or '千瓦' in line:
-                        parameters['power'] = value
+        # 遍历所有参数模式进行匹配
+        for param_name, patterns in parameter_patterns.items():
+            if param_name in parameters:  # 只处理该组件类型支持的参数
+                for pattern in patterns:
+                    match = re.search(pattern, line, re.IGNORECASE)
+                    if match:
+                        value = float(match.group(1))
+                        
+                        # 处理单位转换
+                        if '万' in match.group(0):
+                            value *= 10000
+                        elif 'k' in match.group(0).lower():
+                            value *= 1000
+                        elif '千' in match.group(0):
+                            value *= 1000
+                        elif '%' in match.group(0):
+                            value /= 100
+                        
+                        parameters[param_name] = value
+                        break
+        
+        # 特殊处理：根据组件类型调整参数
+        if component_type in ['Lake', 'Pond'] and 'capacity' not in line:
+            # 如果是湖泊或池塘但没有明确容量，根据面积估算
+            if 'area' in parameters:
+                parameters['capacity'] = parameters['area'] * parameters.get('initial_level', 10)
         
         return parameters
     
@@ -467,30 +726,88 @@ class LanguageToConfigConverter:
         """从统计信息生成组件"""
         components = []
         
-        # 查找组件统计信息
+        # 扩展的组件统计信息匹配模式
         stat_patterns = [
-            r'([水库闸门水泵泵站阀门管道渠道河道汇流点传感器受控系统水轮机])[：:]\s*(\d+)\s*个',
-            r'(\d+)\s*个\s*([水库闸门水泵泵站阀门管道渠道河道汇流点传感器受控系统水轮机])'
+            # 基本格式：组件类型：数量个
+            r'([水库蓄水池水池湖泊池塘闸门水闸调节闸泄洪闸水泵泵抽水站泵站阀门阀调节阀阀站管道管输水管渠道渠输水渠河道河河流水道汇流点分流点节点传感器水位计流量计监测点水轮机水电站发电机组机组受控系统控制系统])[：:]?\s*(\d+)\s*[个台座处套]?',
+            # 反向格式：数量个组件类型
+            r'(\d+)\s*[个台座处套]?\s*([水库蓄水池水池湖泊池塘闸门水闸调节闸泄洪闸水泵泵抽水站泵站阀门阀调节阀阀站管道管输水管渠道渠输水渠河道河河流水道汇流点分流点节点传感器水位计流量计监测点水轮机水电站发电机组机组受控系统控制系统])',
+            # 包含格式：包含/有数量个组件类型
+            r'[包含有设置配置]\s*(\d+)\s*[个台座处套]?\s*([水库蓄水池水池湖泊池塘闸门水闸调节闸泄洪闸水泵泵抽水站泵站阀门阀调节阀阀站管道管输水管渠道渠输水渠河道河河流水道汇流点分流点节点传感器水位计流量计监测点水轮机水电站发电机组机组受控系统控制系统])',
+            # 系统包含格式：系统包含组件类型数量个
+            r'系统[包含有设置配置].*?([水库蓄水池水池湖泊池塘闸门水闸调节闸泄洪闸水泵泵抽水站泵站阀门阀调节阀阀站管道管输水管渠道渠输水渠河道河河流水道汇流点分流点节点传感器水位计流量计监测点水轮机水电站发电机组机组受控系统控制系统]).*?(\d+)\s*[个台座处套]?',
+            # 列表格式：- 组件类型：数量个
+            r'-\s*([水库蓄水池水池湖泊池塘闸门水闸调节闸泄洪闸水泵泵抽水站泵站阀门阀调节阀阀站管道管输水管渠道渠输水渠河道河河流水道汇流点分流点节点传感器水位计流量计监测点水轮机水电站发电机组机组受控系统控制系统])[：:]?\s*(\d+)\s*[个台座处套]?'
         ]
+        
+        # 用于去重的集合
+        found_components = set()
         
         for pattern in stat_patterns:
             matches = re.findall(pattern, description)
             for match in matches:
                 if len(match) == 2:
+                    # 判断哪个是数量，哪个是类型
                     if match[0].isdigit():
                         count, chinese_type = int(match[0]), match[1]
-                    else:
+                    elif match[1].isdigit():
                         chinese_type, count = match[0], int(match[1])
+                    else:
+                        continue
+                    
+                    # 避免重复添加相同类型的组件
+                    component_key = f"{chinese_type}_{count}"
+                    if component_key in found_components:
+                        continue
+                    found_components.add(component_key)
                     
                     english_type = self.component_type_reverse_map.get(chinese_type)
                     if english_type:
                         for i in range(count):
+                            # 生成更有意义的组件名称
+                            if count == 1:
+                                component_name = chinese_type
+                            else:
+                                component_name = f"{chinese_type}{i+1}"
+                            
                             component = ComponentInfo(
-                                name=f"{chinese_type}{i+1}",
+                                name=component_name,
                                 type=english_type,
                                 parameters=self.default_parameters.get(english_type, {}).copy()
                             )
                             components.append(component)
+        
+        # 如果没有找到统计信息，尝试从描述中推断基本组件
+        if not components:
+            components = self._infer_basic_components(description)
+        
+        return components
+    
+    def _infer_basic_components(self, description: str) -> List[ComponentInfo]:
+        """从描述中推断基本组件"""
+        components = []
+        
+        # 基本推断规则
+        inference_rules = {
+            '水库': ['水库', '蓄水', '库容', '水位'],
+            '闸门': ['闸门', '水闸', '调节', '控制流量', '开度'],
+            '水泵': ['水泵', '抽水', '提升', '泵站'],
+            '管道': ['管道', '输水', '传输'],
+            '渠道': ['渠道', '明渠', '输水渠'],
+            '河道': ['河道', '河流', '天然河道'],
+            '传感器': ['传感器', '监测', '测量', '水位计', '流量计']
+        }
+        
+        for chinese_type, keywords in inference_rules.items():
+            if any(keyword in description for keyword in keywords):
+                english_type = self.component_type_reverse_map.get(chinese_type)
+                if english_type:
+                    component = ComponentInfo(
+                        name=chinese_type,
+                        type=english_type,
+                        parameters=self.default_parameters.get(english_type, {}).copy()
+                    )
+                    components.append(component)
         
         return components
     
@@ -664,43 +981,79 @@ class LanguageToConfigConverter:
         """提取连接信息"""
         connections = []
         
-        # 查找连接描述 - 支持更多格式
+        # 扩展的连接模式 - 支持中文组件名和更多表达方式
         connection_patterns = [
-            r'(\w+)\s*→\s*(\w+)',  # 箭头连接
-            r'(\w+)\s*->\s*(\w+)',  # 箭头连接
-            r'(\w+)\s*连接\s*(\w+)',
-            r'(\w+)\s*到\s*(\w+)',
-            r'从\s*(\w+)\s*到\s*(\w+)',
-            r'(\w+)\s*流向\s*(\w+)',
-            r'(\w+)\s*输出到\s*(\w+)',
-            r'(\w+)\s*接入\s*(\w+)',
-            r'(\w+)\s*与\s*(\w+)\s*相连'
+            # 基本箭头连接
+            r'([\w\u4e00-\u9fff]+)\s*(?:→|->|=>|⇒)\s*([\w\u4e00-\u9fff]+)',
+            # 基本连接表达
+            r'([\w\u4e00-\u9fff]+)\s*(?:连接到|连接至|连至|流向|流入|输出到|输送到|供水到|排水到)\s*([\w\u4e00-\u9fff]+)',
+            # 从...到...表达
+            r'从\s*([\w\u4e00-\u9fff]+)\s*(?:到|至|向|流向|输送到)\s*([\w\u4e00-\u9fff]+)',
+            # 通过...连接表达
+            r'([\w\u4e00-\u9fff]+)\s*通过\s*[\w\u4e00-\u9fff]*\s*(?:连接到|连至|流向)\s*([\w\u4e00-\u9fff]+)',
+            # 经过表达
+            r'([\w\u4e00-\u9fff]+)\s*经过\s*([\w\u4e00-\u9fff]+)',
+            # 上游下游表达
+            r'([\w\u4e00-\u9fff]+)\s*(?:的)?\s*(?:上游|下游)\s*(?:是|为|连接)\s*([\w\u4e00-\u9fff]+)',
+            # 进出口表达
+            r'([\w\u4e00-\u9fff]+)\s*(?:的)?\s*(?:出口|出水口|排水口)\s*(?:连接到|连至|流向)\s*([\w\u4e00-\u9fff]+)',
+            r'([\w\u4e00-\u9fff]+)\s*(?:的)?\s*(?:进口|入口|进水口)\s*(?:来自|连接)\s*([\w\u4e00-\u9fff]+)',
+            # 串联并联表达
+            r'([\w\u4e00-\u9fff]+)\s*(?:与|和)\s*([\w\u4e00-\u9fff]+)\s*(?:串联|顺序连接)',
+            r'([\w\u4e00-\u9fff]+)\s*(?:与|和)\s*([\w\u4e00-\u9fff]+)\s*(?:并联|并行连接)',
+            # 控制关系表达
+            r'([\w\u4e00-\u9fff]+)\s*(?:控制|调节|管理)\s*([\w\u4e00-\u9fff]+)',
+            # 监测关系表达
+            r'([\w\u4e00-\u9fff]+)\s*(?:监测|测量|检测)\s*([\w\u4e00-\u9fff]+)',
+            # 列表格式连接
+            r'-\s*([\w\u4e00-\u9fff]+)\s*(?:连接到|流向|输出到)\s*([\w\u4e00-\u9fff]+)',
+            # 简单连接表达
+            r'([\w\u4e00-\u9fff]+)\s*连接\s*([\w\u4e00-\u9fff]+)',
+            r'([\w\u4e00-\u9fff]+)\s*到\s*([\w\u4e00-\u9fff]+)',
+            r'([\w\u4e00-\u9fff]+)\s*接入\s*([\w\u4e00-\u9fff]+)',
+            r'([\w\u4e00-\u9fff]+)\s*与\s*([\w\u4e00-\u9fff]+)\s*相连'
         ]
+        
+        # 用于去重的集合
+        found_connections = set()
         
         # 首先查找具体的连接关系描述
         lines = description.split('\n')
         connection_found = False
+        
         for line in lines:
-            if '连接关系' in line or '拓扑' in line or '→' in line or '->' in line:
+            if any(keyword in line for keyword in ['连接关系', '拓扑', '→', '->', '连接', '流向', '输出']):
                 connection_found = True
                 for pattern in connection_patterns:
                     matches = re.findall(pattern, line)
                     for match in matches:
                         if len(match) == 2 and match[0] != match[1]:  # 避免自连接
-                            # 提取连接类型
-                            conn_type = 'flow'
-                            if '流量' in line:
-                                conn_type = 'flow'
-                            elif '信号' in line:
-                                conn_type = 'signal'
-                            elif '控制' in line:
+                            source, target = match[0].strip(), match[1].strip()
+                            
+                            # 过滤掉无效的连接（如单字符或纯数字）
+                            if len(source) < 2 or len(target) < 2 or source.isdigit() or target.isdigit():
+                                continue
+                            
+                            # 避免重复添加相同的连接
+                            connection_key = f"{source}->{target}"
+                            if connection_key in found_connections:
+                                continue
+                            found_connections.add(connection_key)
+                            
+                            # 根据模式和上下文确定连接类型
+                            conn_type = 'flow'  # 默认为流量连接
+                            if any(keyword in line for keyword in ['控制', '调节', '管理']):
                                 conn_type = 'control'
-                            elif '数据' in line:
+                            elif any(keyword in line for keyword in ['监测', '测量', '检测', '信号']):
+                                conn_type = 'signal'
+                            elif any(keyword in line for keyword in ['数据', '信息']):
                                 conn_type = 'data'
+                            elif any(keyword in line for keyword in ['流量', '水流', '流向', '输水']):
+                                conn_type = 'flow'
                             
                             connection = ConnectionInfo(
-                                from_component=match[0].strip(),
-                                to_component=match[1].strip(),
+                                from_component=source,
+                                to_component=target,
                                 connection_type=conn_type
                             )
                             connections.append(connection)
@@ -711,10 +1064,29 @@ class LanguageToConfigConverter:
                 matches = re.findall(pattern, description)
                 for match in matches:
                     if len(match) == 2 and match[0] != match[1]:
+                        source, target = match[0].strip(), match[1].strip()
+                        
+                        # 过滤掉无效的连接
+                        if len(source) < 2 or len(target) < 2 or source.isdigit() or target.isdigit():
+                            continue
+                        
+                        # 避免重复添加相同的连接
+                        connection_key = f"{source}->{target}"
+                        if connection_key in found_connections:
+                            continue
+                        found_connections.add(connection_key)
+                        
+                        # 根据模式确定连接类型
+                        conn_type = 'flow'
+                        if '控制' in pattern or '调节' in pattern or '管理' in pattern:
+                            conn_type = 'control'
+                        elif '监测' in pattern or '测量' in pattern or '检测' in pattern:
+                            conn_type = 'signal'
+                        
                         connection = ConnectionInfo(
-                            from_component=match[0].strip(),
-                            to_component=match[1].strip(),
-                            connection_type="flow"
+                            from_component=source,
+                            to_component=target,
+                            connection_type=conn_type
                         )
                         connections.append(connection)
         

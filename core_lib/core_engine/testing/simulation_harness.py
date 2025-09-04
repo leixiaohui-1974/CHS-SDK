@@ -163,7 +163,8 @@ class SimulationHarness:
         # Phase 3: Store history (optional, can be disabled for performance)
         step_history = {'time': self.t}
         for cid in self.sorted_components:
-            step_history[cid] = self.components[cid].get_state()
+            component_state = self.components[cid].get_state()
+            step_history[cid] = component_state if component_state is not None else {}
         for agent in self.agents:
             if hasattr(agent, 'get_state'):
                 # A bit of safety here in case agent doesn't have a state method
@@ -191,6 +192,13 @@ class SimulationHarness:
         
         print(f"MAS simulation completed at time {self.t:.2f}s")
         print(f"Generated {len(self.history)} steps of history data.")
+        
+        # 返回仿真结果
+        return {
+            'history': self.history,
+            'final_time': self.t,
+            'simulation_steps': len(self.history)
+        }
 
     def run_simulation(self):
         """运行简单仿真（非智能体模式）"""
@@ -269,11 +277,13 @@ class SimulationHarness:
                 for downstream_id in self.topology.get(component_id, []):
                     downstream_comp = self.components[downstream_id]
                     downstream_action = {}
-                    downstream_action['upstream_head'] = component.get_state().get('water_level', 0)
+                    component_state = component.get_state()
+                    downstream_action['upstream_head'] = component_state.get('water_level', 0) if component_state else 0
 
                     if self.topology.get(downstream_id):
                         dds_id = self.topology[downstream_id][0]
-                        downstream_action['downstream_head'] = self.components[dds_id].get_state().get('water_level', 0)
+                        dds_state = self.components[dds_id].get_state()
+                        downstream_action['downstream_head'] = dds_state.get('water_level', 0) if dds_state else 0
 
                     import copy
                     temp_downstream_comp = copy.deepcopy(downstream_comp)
@@ -286,10 +296,12 @@ class SimulationHarness:
             else:
                 if self.inverse_topology.get(component_id):
                     up_id = self.inverse_topology[component_id][0]
-                    action['upstream_head'] = self.components[up_id].get_state().get('water_level', 0)
+                    up_state = self.components[up_id].get_state()
+                    action['upstream_head'] = up_state.get('water_level', 0) if up_state else 0
                 if self.topology.get(component_id):
                     down_id = self.topology[component_id][0]
-                    action['downstream_head'] = self.components[down_id].get_state().get('water_level', 0)
+                    down_state = self.components[down_id].get_state()
+                    action['downstream_head'] = down_state.get('water_level', 0) if down_state else 0
 
             new_states[component_id] = component.step(action, dt)
             current_step_outflows[component_id] = new_states[component_id].get('outflow', 0)

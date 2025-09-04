@@ -1,0 +1,8 @@
+simulation:
+  duration: 100
+  dt: 10.0
+  name: universal_config_5
+  solver: runge_kutta
+components: []
+topology: []
+agents: {}

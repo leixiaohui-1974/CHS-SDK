@@ -1,0 +1,65 @@
+simulation:
+  duration: 7200
+  dt: 10
+  name: PID Control Comparison
+  solver: rk4
+components:
+- id: upstream_reservoir
+  type: Reservoir
+  params: {}
+- id: gate_1
+  type: Gate
+  params: {}
+- id: canal_1
+  type: Canal
+  params: {}
+- id: canal_2
+  type: Canal
+  params: {}
+- id: gate_2
+  type: Gate
+  params: {}
+- id: canal_3
+  type: Canal
+  params: {}
+topology:
+- from: upstream_reservoir
+  to: gate_1
+  type: flow
+- from: gate_1
+  to: canal_1
+  type: flow
+- from: canal_1
+  to: gate_2
+  type: flow
+- from: gate_2
+  to: canal_2
+  type: flow
+- from: canal_2
+  to: canal_3
+  type: flow
+agents:
+- id: gate1_local_controller
+  type: core_lib.local_agents.control.local_control_agent.LocalControlAgent
+  components:
+  - gate_1
+- id: gate2_local_controller
+  type: core_lib.local_agents.control.local_control_agent.LocalControlAgent
+  components:
+  - gate_2
+- id: gate1_distant_controller
+  type: core_lib.local_agents.control.local_control_agent.LocalControlAgent
+  components:
+  - gate_1
+- id: gate2_distant_controller
+  type: core_lib.local_agents.control.local_control_agent.LocalControlAgent
+  components:
+  - gate_2
+- id: gate1_mixed_controller
+  type: core_lib.local_agents.control.local_control_agent.LocalControlAgent
+  components:
+  - gate_1
+- id: gate2_mixed_controller
+  type: core_lib.local_agents.control.local_control_agent.LocalControlAgent
+  components:
+  - gate_2

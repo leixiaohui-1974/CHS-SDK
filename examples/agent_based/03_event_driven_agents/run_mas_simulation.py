@@ -77,12 +77,18 @@ def run_mas_simulation():
     # Local Control Agent for the Gate
     control_agent = LocalControlAgent(
         agent_id="control_agent_gate_1",
-        controller=pid_controller,
         message_bus=message_bus,
+        dt=harness.dt,
+        target_component="gate_1",
+        control_type="gate_control",
+        data_sources={"primary_data": RESERVOIR_STATE_TOPIC},
+        control_targets={"primary_target": GATE_ACTION_TOPIC},
+        allocation_config={},
+        controller_config={},
+        controller=pid_controller,
         observation_topic=RESERVOIR_STATE_TOPIC,
         observation_key='water_level',
-        action_topic=GATE_ACTION_TOPIC,
-        dt=harness.dt
+        action_topic=GATE_ACTION_TOPIC
     )
 
     # 5. --- Harness Final Setup ---

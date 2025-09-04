@@ -1,0 +1,5267 @@
+{
+  "测试概览": {
+    "总测试数": 97,
+    "配置到语言成功率": "98.97%",
+    "语言到配置成功率": "98.97%",
+    "往返转换成功率": "98.97%",
+    "测试时间": "2025-09-04 22:25:24"
+  },
+  "精度对比": {
+    "基础平均相似度": "0.5444",
+    "增强平均相似度": "0.5505",
+    "平均改进幅度": "0.0061",
+    "改进成功率": "8.33%",
+    "显著改进率": "0.00%"
+  },
+  "组件相似度对比": {
+    "基础相似度": {
+      "components": 0.4270833333333333,
+      "topology": 0.4270833333333333,
+      "simulation": 0.0,
+      "scenarios": 1.0,
+      "debug": 0.7604166666666666,
+      "logging": 1.0,
+      "agents": 0.6875,
+      "controllers": 1.0,
+      "disturbances": 1.0,
+      "analysis": 0.7708333333333334
+    },
+    "增强相似度": {
+      "components": 0.4270833333333333,
+      "topology": 0.4270833333333333,
+      "simulation": 0.0,
+      "scenarios": 1.0,
+      "debug": 0.8333333333333334,
+      "logging": 1.0,
+      "agents": 0.6979166666666666,
+      "controllers": 1.0,
+      "disturbances": 1.0,
+      "analysis": 0.84375
+    },
+    "改进幅度": {
+      "components": 0.0,
+      "topology": 0.0,
+      "simulation": 0.0,
+      "scenarios": 0.0,
+      "debug": 0.07291666666666674,
+      "logging": 0.0,
+      "agents": 0.01041666666666663,
+      "controllers": 0.0,
+      "disturbances": 0.0,
+      "analysis": 0.07291666666666663
+    }
+  },
+  "增强技术使用统计": {
+    "拓扑结构增强": 96,
+    "仿真参数增强": 96,
+    "组件参数增强": 96
+  },
+  "详细结果": [
+    {
+      "配置文件": "examples\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.7500000000000002,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.09999999999999998,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.132秒",
+        "语言到配置": "1.724秒",
+        "精度增强": "0.864秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\converted\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.25,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.025秒",
+        "语言到配置": "1.796秒",
+        "精度增强": "0.023秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\converted\\unified_config_fixed.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": false,
+      "基础相似度": 0.0,
+      "增强相似度": 0.0,
+      "改进分数": 0.0,
+      "基础详细相似度": {},
+      "增强详细相似度": {},
+      "应用的增强技术": [],
+      "增强指标": {},
+      "转换时间": {
+        "配置到语言": "0.000秒",
+        "语言到配置": "0.000秒",
+        "精度增强": "0.000秒"
+      },
+      "置信度": 0.0,
+      "错误信息": [
+        "配置到语言转换失败: 无法识别的配置类型: examples\\converted\\unified_config_fixed.yml"
+      ],
+      "警告信息": []
+    },
+    {
+      "配置文件": "examples\\mission_example_1\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.7800000000000001,
+      "增强相似度": 0.7800000000000001,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.080秒",
+        "语言到配置": "1.567秒",
+        "精度增强": "1.433秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\mission_example_1\\universal_config_1_2.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.7800000000000001,
+      "增强相似度": 0.7800000000000001,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.087秒",
+        "语言到配置": "1.484秒",
+        "精度增强": "0.015秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\mission_example_1\\universal_config_1_3.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.7800000000000001,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.07000000000000006,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.090秒",
+        "语言到配置": "1.692秒",
+        "精度增强": "1.024秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\mission_example_1\\universal_config_1_4.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.7800000000000001,
+      "增强相似度": 0.7800000000000001,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.089秒",
+        "语言到配置": "1.580秒",
+        "精度增强": "1.528秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\mission_example_1\\universal_config_1_5.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.7800000000000001,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.07000000000000006,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.101秒",
+        "语言到配置": "1.716秒",
+        "精度增强": "0.840秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\mission_example_2\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.375,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.123秒",
+        "语言到配置": "3.456秒",
+        "精度增强": "0.038秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\mission_example_2\\universal_config_2_1.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.7800000000000001,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.07000000000000006,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.122秒",
+        "语言到配置": "1.924秒",
+        "精度增强": "0.724秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\mission_example_2\\universal_config_2_2.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.7800000000000001,
+      "增强相似度": 0.7800000000000001,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.144秒",
+        "语言到配置": "1.463秒",
+        "精度增强": "1.461秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\mission_example_2\\universal_config_2_3.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.7800000000000001,
+      "增强相似度": 0.7800000000000001,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.149秒",
+        "语言到配置": "1.518秒",
+        "精度增强": "0.017秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\mission_example_3\\universal_config_3.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.7800000000000001,
+      "增强相似度": 0.7800000000000001,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.073秒",
+        "语言到配置": "1.638秒",
+        "精度增强": "1.563秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\mission_example_5\\universal_config_5.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.7800000000000001,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.07000000000000006,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.090秒",
+        "语言到配置": "2.018秒",
+        "精度增强": "0.813秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\mission_scenarios\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.8500000000000002,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.077秒",
+        "语言到配置": "0.901秒",
+        "精度增强": "0.689秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\watertank_refactored\\01_simple_simulation\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.4,
+      "增强相似度": 0.4,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.42857142857142855,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.007秒",
+        "语言到配置": "1.316秒",
+        "精度增强": "0.015秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\watertank_refactored\\01_simple_simulation\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.8500000000000002,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.014秒",
+        "语言到配置": "0.772秒",
+        "精度增强": "1.058秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\watertank_refactored\\02_parameter_identification\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.4,
+      "增强相似度": 0.4,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.42857142857142855,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.009秒",
+        "语言到配置": "1.529秒",
+        "精度增强": "0.016秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\watertank_refactored\\02_parameter_identification\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.8500000000000002,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.022秒",
+        "语言到配置": "0.729秒",
+        "精度增强": "0.687秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\watertank_refactored\\03_pid_control_inlet\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.3333333333333333,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.011秒",
+        "语言到配置": "2.298秒",
+        "精度增强": "0.020秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\watertank_refactored\\03_pid_control_inlet\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.8500000000000002,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.025秒",
+        "语言到配置": "1.849秒",
+        "精度增强": "0.706秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\watertank_refactored\\04_pid_control_outlet\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.2727272727272727,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.012秒",
+        "语言到配置": "2.566秒",
+        "精度增强": "0.021秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\watertank_refactored\\04_pid_control_outlet\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.8500000000000002,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.024秒",
+        "语言到配置": "0.751秒",
+        "精度增强": "0.751秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\watertank_refactored\\05_joint_control\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.3333333333333333,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.016秒",
+        "语言到配置": "2.863秒",
+        "精度增强": "0.023秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\watertank_refactored\\05_joint_control\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.8500000000000002,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.028秒",
+        "语言到配置": "0.786秒",
+        "精度增强": "0.823秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\watertank_refactored\\06_sensor_disturbance\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.21428571428571427,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.016秒",
+        "语言到配置": "3.108秒",
+        "精度增强": "0.023秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\watertank_refactored\\06_sensor_disturbance\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.8500000000000002,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.031秒",
+        "语言到配置": "0.798秒",
+        "精度增强": "0.674秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\watertank_refactored\\07_actuator_disturbance\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.3,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.016秒",
+        "语言到配置": "1.869秒",
+        "精度增强": "0.018秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\watertank_refactored\\07_actuator_disturbance\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.8500000000000002,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.033秒",
+        "语言到配置": "0.697秒",
+        "精度增强": "0.739秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\watertank\\01_simulation\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.4,
+      "增强相似度": 0.4,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.2727272727272727,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.006秒",
+        "语言到配置": "1.434秒",
+        "精度增强": "0.019秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\watertank\\01_simulation\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.2727272727272727,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.010秒",
+        "语言到配置": "2.183秒",
+        "精度增强": "0.020秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\notebooks\\07_centralized_setpoint_optimization\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.42857142857142855,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.020秒",
+        "语言到配置": "2.719秒",
+        "精度增强": "0.029秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\notebooks\\07_centralized_setpoint_optimization\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.8500000000000002,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.027秒",
+        "语言到配置": "0.790秒",
+        "精度增强": "0.730秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\notebooks\\10_canal_system\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.25,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.023秒",
+        "语言到配置": "2.575秒",
+        "精度增强": "0.033秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\notebooks\\10_canal_system\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.25,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.043秒",
+        "语言到配置": "3.047秒",
+        "精度增强": "0.030秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\notebooks\\11_control_and_agents\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.15789473684210525,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.032秒",
+        "语言到配置": "3.718秒",
+        "精度增强": "0.033秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\notebooks\\11_control_and_agents\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.15,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.060秒",
+        "语言到配置": "5.369秒",
+        "精度增强": "0.041秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\non_agent_based\\01_getting_started\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.4,
+      "增强相似度": 0.4,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.25,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.017秒",
+        "语言到配置": "1.347秒",
+        "精度增强": "0.018秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\non_agent_based\\01_getting_started\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.4,
+      "增强相似度": 0.4,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.25,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.019秒",
+        "语言到配置": "1.460秒",
+        "精度增强": "0.017秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\non_agent_based\\02_multi_component_systems\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.4,
+      "增强相似度": 0.4,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.15,
+        "connectivity_improvement": 0.6666666666666666
+      },
+      "转换时间": {
+        "配置到语言": "0.028秒",
+        "语言到配置": "2.274秒",
+        "精度增强": "0.032秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\non_agent_based\\02_multi_component_systems\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.4,
+      "增强相似度": 0.4,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.15,
+        "connectivity_improvement": 1.0
+      },
+      "转换时间": {
+        "配置到语言": "0.030秒",
+        "语言到配置": "2.201秒",
+        "精度增强": "0.038秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\non_agent_based\\07_pipe_and_valve\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.4,
+      "增强相似度": 0.4,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.016秒",
+        "语言到配置": "1.374秒",
+        "精度增强": "0.022秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\non_agent_based\\07_pipe_and_valve\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.4,
+      "增强相似度": 0.4,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.019秒",
+        "语言到配置": "1.383秒",
+        "精度增强": "0.015秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\non_agent_based\\08_non_agent_simulation\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.4,
+      "增强相似度": 0.4,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.21428571428571427,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.010秒",
+        "语言到配置": "2.109秒",
+        "精度增强": "0.022秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\non_agent_based\\08_non_agent_simulation\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.4,
+      "增强相似度": 0.4,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.17647058823529413,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.013秒",
+        "语言到配置": "1.975秒",
+        "精度增强": "0.020秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\mission_scenarios\\yinchuojiliao\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.125,
+        "connectivity_improvement": 2.1818181818181817
+      },
+      "转换时间": {
+        "配置到语言": "0.161秒",
+        "语言到配置": "5.820秒",
+        "精度增强": "0.104秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\mission_example_5\\01_turbine_gate_simulation\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.7800000000000001,
+      "增强相似度": 0.7800000000000001,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.075秒",
+        "语言到配置": "1.321秒",
+        "精度增强": "1.221秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\mission_example_5\\02_multi_unit_coordination\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.8500000000000002,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.092秒",
+        "语言到配置": "2.540秒",
+        "精度增强": "2.708秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\mission_example_5\\03_economic_dispatch\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.7800000000000001,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.07000000000000006,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.091秒",
+        "语言到配置": "1.259秒",
+        "精度增强": "0.731秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\mission_example_5\\04_gate_scheduling\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.7800000000000001,
+      "增强相似度": 0.7800000000000001,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.109秒",
+        "语言到配置": "1.475秒",
+        "精度增强": "1.325秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\mission_example_3\\01_enhanced_perception\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.8500000000000002,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.073秒",
+        "语言到配置": "0.838秒",
+        "精度增强": "0.704秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\mission_example_2\\01_local_control\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.8500000000000002,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.093秒",
+        "语言到配置": "0.820秒",
+        "精度增强": "0.717秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\mission_example_2\\02_hierarchical_control\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.7800000000000001,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.07000000000000006,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.114秒",
+        "语言到配置": "6.798秒",
+        "精度增强": "0.848秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\mission_example_2\\03_watershed_coordination\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.7800000000000001,
+      "增强相似度": 0.7800000000000001,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.128秒",
+        "语言到配置": "2.086秒",
+        "精度增强": "1.237秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\mission_example_1\\01_basic_simulation\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.7800000000000001,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.07000000000000006,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.063秒",
+        "语言到配置": "1.455秒",
+        "精度增强": "0.790秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\mission_example_1\\02_advanced_control\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.7800000000000001,
+      "增强相似度": 0.7800000000000001,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.085秒",
+        "语言到配置": "1.623秒",
+        "精度增强": "1.536秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\mission_example_1\\03_fault_tolerance\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.7800000000000001,
+      "增强相似度": 0.7800000000000001,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.089秒",
+        "语言到配置": "1.644秒",
+        "精度增强": "1.304秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\mission_example_1\\04_digital_twin_advanced\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.7800000000000001,
+      "增强相似度": 0.7800000000000001,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.099秒",
+        "语言到配置": "1.973秒",
+        "精度增强": "1.360秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\mission_example_1\\05_central_mpc_dispatcher\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.8500000000000002,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.099秒",
+        "语言到配置": "0.761秒",
+        "精度增强": "1.068秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\identification\\01_reservoir_storage_curve\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.8500000000000002,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.006秒",
+        "语言到配置": "0.801秒",
+        "精度增强": "0.831秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\identification\\01_reservoir_storage_curve\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.8500000000000002,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.021秒",
+        "语言到配置": "0.821秒",
+        "精度增强": "0.777秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\identification\\02_gate_discharge_coefficient\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.8500000000000002,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.007秒",
+        "语言到配置": "0.834秒",
+        "精度增强": "0.734秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\identification\\02_gate_discharge_coefficient\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.8500000000000002,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.022秒",
+        "语言到配置": "0.670秒",
+        "精度增强": "0.832秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\identification\\03_pipe_roughness\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.8500000000000002,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.006秒",
+        "语言到配置": "0.845秒",
+        "精度增强": "0.709秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\identification\\03_pipe_roughness\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.8500000000000002,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.022秒",
+        "语言到配置": "0.953秒",
+        "精度增强": "0.849秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\demo\\simplified_reservoir_control\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.15,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.015秒",
+        "语言到配置": "12.493秒",
+        "精度增强": "0.025秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\demo\\simplified_reservoir_control\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.25,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.024秒",
+        "语言到配置": "1.754秒",
+        "精度增强": "0.020秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\converted\\城市排水系统_unified\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.2727272727272727,
+        "connectivity_improvement": 0.3333333333333333
+      },
+      "转换时间": {
+        "配置到语言": "0.010秒",
+        "语言到配置": "3.058秒",
+        "精度增强": "0.037秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\converted\\城市排水系统_universal\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.2727272727272727,
+        "connectivity_improvement": 0.3333333333333333
+      },
+      "转换时间": {
+        "配置到语言": "0.012秒",
+        "语言到配置": "2.489秒",
+        "精度增强": "0.025秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\converted\\多组件水利系统_unified\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.8500000000000002,
+      "增强相似度": 0.8500000000000002,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.005秒",
+        "语言到配置": "0.868秒",
+        "精度增强": "0.796秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\converted\\多组件水利系统_universal\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.7800000000000001,
+      "增强相似度": 0.7800000000000001,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "增强详细相似度": {
+        "components": 1.0,
+        "topology": 1.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.75,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.011秒",
+        "语言到配置": "1.973秒",
+        "精度增强": "1.243秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\converted\\水库调度系统_unified\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.15,
+        "connectivity_improvement": 0.5
+      },
+      "转换时间": {
+        "配置到语言": "0.018秒",
+        "语言到配置": "2.915秒",
+        "精度增强": "0.037秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\converted\\水库调度系统_universal\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.32999999999999996,
+      "增强相似度": 0.32999999999999996,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.1875,
+        "connectivity_improvement": 0.5
+      },
+      "转换时间": {
+        "配置到语言": "0.021秒",
+        "语言到配置": "3.717秒",
+        "精度增强": "0.038秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\converted\\灌区配水系统_unified\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.4,
+      "增强相似度": 0.4,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.2,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.011秒",
+        "语言到配置": "2.893秒",
+        "精度增强": "0.028秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\converted\\灌区配水系统_universal\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.35,
+      "增强相似度": 0.35,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.2,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.012秒",
+        "语言到配置": "3.072秒",
+        "精度增强": "0.030秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\converted\\简单水库系统_unified\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.25,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.017秒",
+        "语言到配置": "1.892秒",
+        "精度增强": "0.023秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\converted\\简单水库系统_universal\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.32999999999999996,
+      "增强相似度": 0.32999999999999996,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 0.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 0.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.25,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.017秒",
+        "语言到配置": "4.037秒",
+        "精度增强": "0.022秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\canal_model\\canal_model_comparison\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.4,
+      "增强相似度": 0.4,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.14285714285714285,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.010秒",
+        "语言到配置": "2.485秒",
+        "精度增强": "0.029秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\canal_model\\canal_model_comparison\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.4,
+      "增强相似度": 0.4,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.125,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.011秒",
+        "语言到配置": "3.156秒",
+        "精度增强": "0.024秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\canal_model\\canal_mpc_pid_control\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.4,
+      "增强相似度": 0.4,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.1875,
+        "connectivity_improvement": 1.0
+      },
+      "转换时间": {
+        "配置到语言": "0.018秒",
+        "语言到配置": "3.269秒",
+        "精度增强": "0.049秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\canal_model\\canal_mpc_pid_control\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.1875,
+        "connectivity_improvement": 0.5
+      },
+      "转换时间": {
+        "配置到语言": "0.047秒",
+        "语言到配置": "5.878秒",
+        "精度增强": "0.055秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\canal_model\\canal_pid_control\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.4,
+      "增强相似度": 0.4,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.1,
+        "connectivity_improvement": 0.75
+      },
+      "转换时间": {
+        "配置到语言": "0.013秒",
+        "语言到配置": "3.788秒",
+        "精度增强": "0.036秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\canal_model\\canal_pid_control\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.4,
+      "增强相似度": 0.4,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.1875,
+        "connectivity_improvement": 0.75
+      },
+      "转换时间": {
+        "配置到语言": "0.014秒",
+        "语言到配置": "2.290秒",
+        "精度增强": "0.032秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\canal_model\\complex_fault_scenario_example\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.4,
+      "增强相似度": 0.4,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.1875,
+        "connectivity_improvement": 0.5714285714285714
+      },
+      "转换时间": {
+        "配置到语言": "0.025秒",
+        "语言到配置": "3.831秒",
+        "精度增强": "0.056秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\canal_model\\complex_fault_scenario_example\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.1875,
+        "connectivity_improvement": 0.5714285714285714
+      },
+      "转换时间": {
+        "配置到语言": "0.036秒",
+        "语言到配置": "4.775秒",
+        "精度增强": "0.046秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\canal_model\\hierarchical_distributed_control_example\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.4,
+      "增强相似度": 0.4,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.1875,
+        "connectivity_improvement": 0.5714285714285714
+      },
+      "转换时间": {
+        "配置到语言": "0.027秒",
+        "语言到配置": "3.510秒",
+        "精度增强": "0.043秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\canal_model\\hierarchical_distributed_control_example\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.1875,
+        "connectivity_improvement": 0.5714285714285714
+      },
+      "转换时间": {
+        "配置到语言": "0.041秒",
+        "语言到配置": "4.410秒",
+        "精度增强": "0.058秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\canal_model\\structured_control_example\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.4,
+      "增强相似度": 0.4,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.1875,
+        "connectivity_improvement": 0.75
+      },
+      "转换时间": {
+        "配置到语言": "0.014秒",
+        "语言到配置": "2.228秒",
+        "精度增强": "0.030秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\canal_model\\structured_control_example\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.1875,
+        "connectivity_improvement": 0.5
+      },
+      "转换时间": {
+        "配置到语言": "0.019秒",
+        "语言到配置": "3.349秒",
+        "精度增强": "0.033秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\agent_based\\03_event_driven_agents\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.25,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.030秒",
+        "语言到配置": "1.812秒",
+        "精度增强": "0.021秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\agent_based\\03_event_driven_agents\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.25,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.026秒",
+        "语言到配置": "1.893秒",
+        "精度增强": "0.019秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\agent_based\\06_centralized_emergency_override\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.4,
+      "增强相似度": 0.4,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.17647058823529413,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.010秒",
+        "语言到配置": "1.653秒",
+        "精度增强": "0.023秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\agent_based\\06_centralized_emergency_override\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.17647058823529413,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.016秒",
+        "语言到配置": "2.641秒",
+        "精度增强": "0.023秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\agent_based\\09_agent_based_distributed_control\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.4,
+      "增强相似度": 0.4,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.2,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.008秒",
+        "语言到配置": "1.586秒",
+        "精度增强": "0.022秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\agent_based\\09_agent_based_distributed_control\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.2,
+        "connectivity_improvement": 0.0
+      },
+      "转换时间": {
+        "配置到语言": "0.014秒",
+        "语言到配置": "2.285秒",
+        "精度增强": "0.024秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\agent_based\\12_pid_control_comparison\\unified_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.4,
+      "增强相似度": 0.4,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 1.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.1875,
+        "connectivity_improvement": 0.8
+      },
+      "转换时间": {
+        "配置到语言": "0.015秒",
+        "语言到配置": "3.136秒",
+        "精度增强": "0.037秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    },
+    {
+      "配置文件": "examples\\agent_based\\12_pid_control_comparison\\universal_config.yml",
+      "配置类型": "ConfigType.UNIFIED_SINGLE",
+      "往返转换成功": true,
+      "基础相似度": 0.30000000000000004,
+      "增强相似度": 0.30000000000000004,
+      "改进分数": 0.0,
+      "基础详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "增强详细相似度": {
+        "components": 0.0,
+        "topology": 0.0,
+        "simulation": 0.0,
+        "scenarios": 1.0,
+        "debug": 1.0,
+        "logging": 1.0,
+        "agents": 0.0,
+        "controllers": 1.0,
+        "disturbances": 1.0,
+        "analysis": 1.0
+      },
+      "应用的增强技术": [
+        "拓扑结构增强",
+        "仿真参数增强",
+        "组件参数增强"
+      ],
+      "增强指标": {
+        "structural_improvement": 0.0,
+        "parameter_enrichment": 0.1875,
+        "connectivity_improvement": 0.8
+      },
+      "转换时间": {
+        "配置到语言": "0.039秒",
+        "语言到配置": "5.215秒",
+        "精度增强": "0.050秒"
+      },
+      "置信度": 1.0,
+      "错误信息": [
+        "加载原始配置失败: 'unified'"
+      ],
+      "警告信息": [
+        "高级增强失败: list indices must be integers or slices, not str"
+      ]
+    }
+  ]
+}
