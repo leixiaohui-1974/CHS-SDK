@@ -1,0 +1,56 @@
+agents: {}
+components:
+  主水库:
+    area: 10000
+    capacity: 120.0
+    initial_level: 50
+    max_level: 100
+    min_level: 10
+    type: Reservoir
+  仿真名称:
+    area: 10000
+    capacity: 1000000
+    initial_level: 50
+    max_level: 100
+    min_level: 10
+    type: Reservoir
+  仿真描述:
+    area: 10000
+    capacity: 1000000
+    initial_level: 50
+    max_level: 100
+    min_level: 10
+    type: Reservoir
+  发电机组:
+    type: WaterTurbine
+  水位传感器:
+    type: Sensor
+  泄洪闸:
+    initial_opening: 0.5
+    max_flow: 1000.0
+    max_opening: 1
+    min_opening: 0
+    type: Gate
+  流量传感器:
+    type: Sensor
+control:
+  enabled: true
+  type: mpc
+optimization:
+  enabled: true
+  objective:
+    function: quadratic
+    type: minimize
+simulation:
+  description: 基于自然语言描述生成的仿真配置
+  duration: 86400
+  name: 水库调度控制系统
+  time_step: 60.0
+topology:
+  connections:
+  - from: 主水库
+    to: 泄洪闸
+    type: flow
+  - from: 主水库
+    to: 发电机组
+    type: flow

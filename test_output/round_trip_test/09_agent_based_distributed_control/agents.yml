@@ -1,0 +1,5 @@
+agents:
+- class: DigitalTwinAgent
+  id: reservoir_twin
+  state_topic: state/reservoir/target
+  target: target_reservoir

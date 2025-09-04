@@ -1,0 +1,92 @@
+simulation:
+  duration: 7200
+  dt: 0.5
+  name: 智能水利调度系统测试
+  solver: rk4
+components:
+- id: reservoir_upstream
+  type: Reservoir
+  params:
+    capacity: 10000
+    initial_water_level: 80
+- id: reservoir_middle
+  type: Reservoir
+  params:
+    capacity: 8000
+    initial_water_level: 60
+- id: reservoir_downstream
+  type: Reservoir
+  params:
+    capacity: 6000
+    initial_water_level: 40
+- id: pump_main
+  type: Pump
+  params:
+    power: 500
+    flow_rate: 50
+- id: pump_aux
+  type: Pump
+  params:
+    power: 300
+    flow_rate: 30
+- id: canal_main
+  type: Canal
+  params:
+    length: 15000
+    width: 10
+- id: canal_branch
+  type: Canal
+  params:
+    length: 8000
+    width: 6
+- id: gate_control
+  type: Valve
+  params:
+    max_flow: 100
+    control_type: fuzzy
+- id: junction_1
+  type: Junction
+  params: {}
+- id: junction_2
+  type: Junction
+  params: {}
+topology:
+- from: reservoir_upstream
+  to: pump_main
+  type: flow
+- from: pump_main
+  to: junction_1
+  type: flow
+- from: junction_1
+  to: reservoir_middle
+  type: flow
+- from: reservoir_middle
+  to: gate_control
+  type: flow
+- from: gate_control
+  to: canal_main
+  type: flow
+- from: canal_main
+  to: junction_2
+  type: flow
+- from: junction_2
+  to: reservoir_downstream
+  type: flow
+- from: reservoir_middle
+  to: pump_aux
+  type: flow
+- from: pump_aux
+  to: canal_branch
+  type: flow
+- from: canal_branch
+  to: junction_2
+  type: flow
+agents:
+- id: agent_pump_main
+  type: PIDController
+  controlled_objects:
+  - pump_main
+- id: agent_gate_control
+  type: FuzzyController
+  controlled_objects:
+  - gate_control

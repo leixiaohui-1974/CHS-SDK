@@ -1,0 +1,7 @@
+agents:
+- class: Agent
+  id: gate1_dd_controller
+  target: component_1
+- class: Agent
+  id: gate2_lu_controller
+  target: component_1

@@ -1,0 +1,10 @@
+connections:
+- from: 主水库
+  to: 调节闸门
+  type: flow
+- from: 调节闸门
+  to: 下游水库
+  type: flow
+- from: 智能水泵
+  to: 主水库
+  type: flow

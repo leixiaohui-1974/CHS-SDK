@@ -378,32 +378,8 @@ class ReportTemplateSystem:
 <section class="project-overview">
     <h2>🏗️ 项目概述</h2>
     <div class="overview-content">
-        <h3>水网建模背景</h3>
-        <p>本项目基于CHS-SDK（综合水文系统软件开发工具包）进行水利系统建模与仿真分析。CHS-SDK是一个专业的水利工程仿真平台，支持复杂水网系统的建模、仿真和优化分析。</p>
-        
-        <h3>建模方法</h3>
-        <ul>
-            <li><strong>节点-连接建模：</strong>采用图论方法，将水利系统抽象为节点（水库、泵站、闸门等）和连接（河道、管道等）</li>
-            <li><strong>多智能体系统：</strong>每个水利设施作为独立智能体，具备自主决策和协调能力</li>
-            <li><strong>物理约束建模：</strong>考虑水力学、水文学等物理约束条件</li>
-            <li><strong>控制策略集成：</strong>集成PID控制、模糊控制、强化学习等多种控制算法</li>
-        </ul>
-        
-        <h3>技术特点</h3>
-        <div class="tech-features">
-            <div class="feature-item">
-                <strong>🔄 实时仿真：</strong>支持实时和加速仿真模式
-            </div>
-            <div class="feature-item">
-                <strong>🤖 AI增强：</strong>集成大语言模型进行智能分析
-            </div>
-            <div class="feature-item">
-                <strong>📊 可视化：</strong>提供丰富的图表和3D可视化
-            </div>
-            <div class="feature-item">
-                <strong>🔧 模块化：</strong>组件化设计，易于扩展和定制
-            </div>
-        </div>
+        <h3>仿真情景</h3>
+        <p>{{ data.get('user_prompt', '本次仿真针对水利系统进行综合性能分析') }}</p>
     </div>
 </section>
 
@@ -1377,27 +1353,6 @@ def create_standard_report_config(title: str, author: str = "CHS-SDK") -> Report
     # 为每个section添加模板内容
     summary_content = """
     <div class="summary-overview">
-        <h3>项目概述</h3>
-        <div class="project-info">
-            <h4>水网建模背景</h4>
-            <p>本项目基于CHS-SDK水利系统仿真平台，采用先进的水网建模技术对复杂水利系统进行数字化建模和仿真分析。</p>
-            
-            <h4>建模方法</h4>
-            <ul>
-                <li>基于物理原理的水力学建模</li>
-                <li>多尺度时空耦合仿真</li>
-                <li>智能控制算法集成</li>
-                <li>实时数据驱动优化</li>
-            </ul>
-            
-            <h4>技术特点</h4>
-            <ul>
-                <li>高精度数值计算引擎</li>
-                <li>分布式并行计算架构</li>
-                <li>可视化分析界面</li>
-                <li>智能决策支持系统</li>
-            </ul>
-        </div>
         
         <h3>仿真情景</h3>
         <div class="scenario-info">
@@ -1568,23 +1523,15 @@ def create_standard_report_config(title: str, author: str = "CHS-SDK") -> Report
     # 水网概况描述
     water_network_overview_content = """
     <div class="water-network-overview">
-        <h3>系统架构</h3>
-        <div class="system-architecture">
-            <p>{{ data.water_network.architecture | default('多级水库联合调度系统，包含主控水库、调节水库和分配渠道网络') }}</p>
-        </div>
-        
-        <h3>组成要素</h3>
+        <h3>系统组成</h3>
         <div class="system-components">
+            {% if data.water_network and data.water_network.components %}
             <ul>
-                {% for component in data.water_network.components | default(['主控水库', '调节水库', '输水渠道', '分配闸门', '监测系统']) %}
+                {% for component in data.water_network.components %}
                 <li>{{ component }}</li>
                 {% endfor %}
             </ul>
-        </div>
-        
-        <h3>运行特征</h3>
-        <div class="operation-characteristics">
-            <p>{{ data.water_network.characteristics | default('系统采用分层控制策略，具备自动调节和人工干预双重模式') }}</p>
+            {% endif %}
         </div>
     </div>
     """
@@ -1592,31 +1539,21 @@ def create_standard_report_config(title: str, author: str = "CHS-SDK") -> Report
     # 建模成果
     modeling_achievements_content = """
     <div class="modeling-achievements">
-        <h3>建模过程</h3>
+        {% if data.modeling %}
+        <h3>建模结果</h3>
         <div class="modeling-process">
-            <p>{{ data.modeling.process | default('采用物理建模与数据驱动相结合的方法，建立了高精度的水力学模型') }}</p>
+            {% if data.modeling.process %}
+            <p>{{ data.modeling.process }}</p>
+            {% endif %}
         </div>
-        
-        <h3>技术方法</h3>
-        <div class="technical-methods">
-            <ul>
-                {% for method in data.modeling.methods | default(['CFD流体力学建模', 'MPC预测控制', '机器学习优化', '多目标决策']) %}
-                <li>{{ method }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        
-        <h3>模型验证</h3>
-        <div class="model-validation">
-            <p>模型精度: {{ data.modeling.accuracy | default('95.2%') }}</p>
-            <p>验证方法: {{ data.modeling.validation_method | default('历史数据回测与现场实验验证') }}</p>
-        </div>
+        {% endif %}
     </div>
     """
     
     # 情景设置
     scenario_settings_content = """
     <div class="scenario-settings">
+        {% if data.scenario and data.scenario.parameters %}
         <h3>仿真参数</h3>
         <div class="simulation-parameters">
             <table class="parameter-table">
@@ -1624,7 +1561,7 @@ def create_standard_report_config(title: str, author: str = "CHS-SDK") -> Report
                     <tr><th>参数名称</th><th>数值</th><th>单位</th><th>说明</th></tr>
                 </thead>
                 <tbody>
-                    {% for param in data.scenario.parameters | default([]) %}
+                    {% for param in data.scenario.parameters %}
                     <tr>
                         <td>{{ param.name }}</td>
                         <td>{{ param.value }}</td>
@@ -1635,16 +1572,7 @@ def create_standard_report_config(title: str, author: str = "CHS-SDK") -> Report
                 </tbody>
             </table>
         </div>
-        
-        <h3>边界条件</h3>
-        <div class="boundary-conditions">
-            <p>{{ data.scenario.boundary_conditions | default('入流边界：历史流量数据；出流边界：下游水位约束') }}</p>
-        </div>
-        
-        <h3>初始状态</h3>
-        <div class="initial-conditions">
-            <p>{{ data.scenario.initial_state | default('水库初始水位：正常蓄水位；闸门初始开度：50%') }}</p>
-        </div>
+        {% endif %}
     </div>
     """
     

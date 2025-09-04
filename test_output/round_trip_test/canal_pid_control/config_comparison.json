@@ -1,0 +1,599 @@
+{
+  "original_config": {
+    "components": {
+      "components": [
+        {
+          "id": "upstream_reservoir",
+          "class": "Reservoir",
+          "initial_state": {
+            "water_level": 10.0
+          },
+          "parameters": {
+            "area": 10000.0,
+            "inflow": 50.0
+          }
+        },
+        {
+          "id": "gate_1",
+          "class": "Gate",
+          "initial_state": {
+            "opening": 0.5
+          },
+          "parameters": {
+            "width": 5.0,
+            "discharge_coefficient": 0.8
+          }
+        },
+        {
+          "id": "canal_1",
+          "class": "UnifiedCanal",
+          "initial_state": {
+            "water_level": 5.0
+          },
+          "parameters": {
+            "model_type": "integral_delay",
+            "gain": 0.001,
+            "delay": 300
+          }
+        },
+        {
+          "id": "canal_2",
+          "class": "UnifiedCanal",
+          "initial_state": {
+            "water_level": 4.5
+          },
+          "parameters": {
+            "model_type": "integral_delay",
+            "gain": 0.001,
+            "delay": 600
+          }
+        },
+        {
+          "id": "gate_2",
+          "class": "Gate",
+          "initial_state": {
+            "opening": 0.5
+          },
+          "parameters": {
+            "width": 5.0,
+            "discharge_coefficient": 0.8
+          }
+        }
+      ]
+    },
+    "config": {
+      "simulation": {
+        "duration": 7200,
+        "dt": 10
+      }
+    },
+    "output_agents": {
+      "simulation_history": [
+        {
+          "time": 0,
+          "upstream_reservoir": {
+            "water_level": 9.980190911176937,
+            "outflow": 19.809088823063014,
+            "volume": 99801.90911176938,
+            "inflow": 0.0
+          },
+          "gate_1": {
+            "opening": 0.5,
+            "outflow": 19.769809880450698
+          },
+          "canal_1": {
+            "water_level": 5.197698098804507,
+            "inflow": 19.769809880450698,
+            "outflow": 0.0
+          },
+          "gate_2": {
+            "opening": 0.5,
+            "outflow": 7.399685587521789
+          },
+          "canal_2": {
+            "water_level": 4.573996855875218,
+            "inflow": 7.399685587521789,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 10,
+          "upstream_reservoir": {
+            "water_level": 9.960817474829325,
+            "outflow": 19.373436347612376,
+            "volume": 99608.17474829326,
+            "inflow": 0.0
+          },
+          "gate_1": {
+            "opening": 0.5,
+            "outflow": 19.334156527514402
+          },
+          "canal_1": {
+            "water_level": 5.391039664079651,
+            "inflow": 19.334156527514402,
+            "outflow": 0.0
+          },
+          "gate_2": {
+            "opening": 0.5,
+            "outflow": 8.00759137243428
+          },
+          "canal_2": {
+            "water_level": 4.654072769599561,
+            "inflow": 8.00759137243428,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 20,
+          "upstream_reservoir": {
+            "water_level": 9.941879783243822,
+            "outflow": 18.93769158550309,
+            "volume": 99418.79783243823,
+            "inflow": 0.0
+          },
+          "gate_1": {
+            "opening": 0.5,
+            "outflow": 18.89841084726449
+          },
+          "canal_1": {
+            "water_level": 5.580023772552296,
+            "inflow": 18.89841084726449,
+            "outflow": 0.0
+          },
+          "gate_2": {
+            "opening": 0.5,
+            "outflow": 8.524590002559103
+          },
+          "canal_2": {
+            "water_level": 4.739318669625153,
+            "inflow": 8.524590002559103,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 30,
+          "upstream_reservoir": {
+            "water_level": 9.923377933073663,
+            "outflow": 18.501850170160576,
+            "volume": 99233.77933073662,
+            "inflow": 0.0
+          },
+          "gate_1": {
+            "opening": 0.5,
+            "outflow": 18.462568470224205
+          },
+          "canal_1": {
+            "water_level": 5.764649457254538,
+            "inflow": 18.462568470224205,
+            "outflow": 0.0
+          },
+          "gate_2": {
+            "opening": 0.5,
+            "outflow": 8.97039353725098
+          },
+          "canal_2": {
+            "water_level": 4.829022604997663,
+            "inflow": 8.97039353725098,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 40,
+          "upstream_reservoir": {
+            "water_level": 9.905312025657143,
+            "outflow": 18.06590741652035,
+            "volume": 99053.12025657142,
+            "inflow": 0.0
+          },
+          "gate_1": {
+            "opening": 0.5,
+            "outflow": 18.02662470814313
+          },
+          "canal_1": {
+            "water_level": 5.944915704335969,
+            "inflow": 18.02662470814313,
+            "outflow": 0.0
+          },
+          "gate_2": {
+            "opening": 0.5,
+            "outflow": 9.358167044676552
+          },
+          "canal_2": {
+            "water_level": 4.922604275444428,
+            "inflow": 9.358167044676552,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 50,
+          "upstream_reservoir": {
+            "water_level": 9.887682167367942,
+            "outflow": 17.629858289200335,
+            "volume": 98876.82167367941,
+            "inflow": 0.0
+          },
+          "gate_1": {
+            "opening": 0.5,
+            "outflow": 17.590574522133984
+          },
+          "canal_1": {
+            "water_level": 6.120821449557309,
+            "inflow": 17.590574522133984,
+            "outflow": 0.0
+          },
+          "gate_2": {
+            "opening": 0.5,
+            "outflow": 9.697220417438128
+          },
+          "canal_2": {
+            "water_level": 5.019576479618809,
+            "inflow": 9.697220417438128,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 60,
+          "upstream_reservoir": {
+            "water_level": 9.870488470001355,
+            "outflow": 17.193697366586935,
+            "volume": 98704.88470001354,
+            "inflow": 0.0
+          },
+          "gate_1": {
+            "opening": 0.5,
+            "outflow": 17.154412486717487
+          },
+          "canal_1": {
+            "water_level": 6.292365574424484,
+            "inflow": 17.154412486717487,
+            "outflow": 0.0
+          },
+          "gate_2": {
+            "opening": 0.5,
+            "outflow": 9.994422852788917
+          },
+          "canal_2": {
+            "water_level": 5.119520708146698,
+            "inflow": 9.994422852788917,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 70,
+          "upstream_reservoir": {
+            "water_level": 9.853731051201168,
+            "outflow": 16.757418800187363,
+            "volume": 98537.31051201167,
+            "inflow": 0.0
+          },
+          "gate_1": {
+            "opening": 0.5,
+            "outflow": 16.718132749127044
+          },
+          "canal_1": {
+            "water_level": 6.459546901915755,
+            "inflow": 16.718132749127044,
+            "outflow": 0.0
+          },
+          "gate_2": {
+            "opening": 0.5,
+            "outflow": 10.255011247531403
+          },
+          "canal_2": {
+            "water_level": 5.2220708206220126,
+            "inflow": 10.255011247531403,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 80,
+          "upstream_reservoir": {
+            "water_level": 9.83741003493269,
+            "outflow": 16.321016268477866,
+            "volume": 98374.1003493269,
+            "inflow": 0.0
+          },
+          "gate_1": {
+            "opening": 0.5,
+            "outflow": 16.28172898310155
+          },
+          "canal_1": {
+            "water_level": 6.622364191746771,
+            "inflow": 16.28172898310155,
+            "outflow": 0.0
+          },
+          "gate_2": {
+            "opening": 0.5,
+            "outflow": 10.483082741535098
+          },
+          "canal_2": {
+            "water_level": 5.326901648037364,
+            "inflow": 10.483082741535098,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 90,
+          "upstream_reservoir": {
+            "water_level": 9.821525552008362,
+            "outflow": 15.88448292432684,
+            "volume": 98215.25552008362,
+            "inflow": 0.0
+          },
+          "gate_1": {
+            "opening": 0.5,
+            "outflow": 15.84519433624371
+          },
+          "canal_1": {
+            "water_level": 6.780816135109208,
+            "inflow": 15.84519433624371,
+            "outflow": 0.0
+          },
+          "gate_2": {
+            "opening": 0.5,
+            "outflow": 10.68191036029597
+          },
+          "canal_2": {
+            "water_level": 5.433720751640323,
+            "inflow": 10.68191036029597,
+            "outflow": 0.0
+          }
+        }
+      ]
+    },
+    "topology": {
+      "connections": [
+        {
+          "upstream": "upstream_reservoir",
+          "downstream": "gate_1"
+        },
+        {
+          "upstream": "gate_1",
+          "downstream": "canal_1"
+        },
+        {
+          "upstream": "canal_1",
+          "downstream": "gate_2"
+        },
+        {
+          "upstream": "gate_2",
+          "downstream": "canal_2"
+        }
+      ]
+    },
+    "unified_config": {
+      "components": [
+        {
+          "class": "Reservoir",
+          "id": "upstream_reservoir",
+          "initial_state": {
+            "water_level": 10.0
+          },
+          "parameters": {
+            "area": 10000.0,
+            "inflow": 50.0
+          }
+        },
+        {
+          "class": "Gate",
+          "id": "gate_1",
+          "initial_state": {
+            "opening": 0.5
+          },
+          "parameters": {
+            "discharge_coefficient": 0.8,
+            "width": 5.0
+          }
+        },
+        {
+          "class": "UnifiedCanal",
+          "id": "canal_1",
+          "initial_state": {
+            "water_level": 5.0
+          },
+          "parameters": {
+            "delay": 300,
+            "gain": 0.001,
+            "model_type": "integral_delay"
+          }
+        },
+        {
+          "class": "UnifiedCanal",
+          "id": "canal_2",
+          "initial_state": {
+            "water_level": 4.5
+          },
+          "parameters": {
+            "delay": 600,
+            "gain": 0.001,
+            "model_type": "integral_delay"
+          }
+        },
+        {
+          "class": "Gate",
+          "id": "gate_2",
+          "initial_state": {
+            "opening": 0.5
+          },
+          "parameters": {
+            "discharge_coefficient": 0.8,
+            "width": 5.0
+          }
+        }
+      ],
+      "metadata": {
+        "category": "canal_model",
+        "description": "统一配置文件，用于 canal_model/canal_pid_control 示例",
+        "name": "canal_pid_control - 统一配置",
+        "version": "1.0"
+      },
+      "simulation": {
+        "dt": 10,
+        "duration": 7200
+      }
+    },
+    "universal_config": {
+      "components": [
+        {
+          "class": "Reservoir",
+          "id": "upstream_reservoir",
+          "initial_state": {
+            "water_level": 10.0
+          },
+          "parameters": {
+            "area": 10000.0,
+            "inflow": 50.0
+          }
+        },
+        {
+          "class": "Gate",
+          "id": "gate_1",
+          "initial_state": {
+            "opening": 0.5
+          },
+          "parameters": {
+            "discharge_coefficient": 0.8,
+            "width": 5.0
+          }
+        },
+        {
+          "class": "UnifiedCanal",
+          "id": "canal_1",
+          "initial_state": {
+            "water_level": 5.0
+          },
+          "parameters": {
+            "delay": 300,
+            "gain": 0.001,
+            "model_type": "integral_delay"
+          }
+        },
+        {
+          "class": "UnifiedCanal",
+          "id": "canal_2",
+          "initial_state": {
+            "water_level": 4.5
+          },
+          "parameters": {
+            "delay": 600,
+            "gain": 0.001,
+            "model_type": "integral_delay"
+          }
+        },
+        {
+          "class": "Gate",
+          "id": "gate_2",
+          "initial_state": {
+            "opening": 0.5
+          },
+          "parameters": {
+            "discharge_coefficient": 0.8,
+            "width": 5.0
+          }
+        }
+      ],
+      "project": {
+        "category": "canal_model",
+        "description": "通用配置文件，用于 canal_model/canal_pid_control 示例",
+        "name": "canal_pid_control",
+        "version": "1.0"
+      },
+      "runtime": {
+        "logging_level": "INFO",
+        "mode": "simulation"
+      },
+      "simulation": {
+        "dt": 10,
+        "duration": 7200
+      }
+    }
+  },
+  "regenerated_config": {
+    "config.yml": {
+      "simulation": {
+        "duration": 7200,
+        "dt": 10.0,
+        "solver": {
+          "type": "rk4"
+        }
+      }
+    },
+    "components.yml": {
+      "components": [
+        {
+          "id": "upstream_reservoir",
+          "class": "Reservoir",
+          "capacity": 1000000,
+          "initial_level": 50,
+          "min_level": 10,
+          "max_level": 100,
+          "area": 10000
+        },
+        {
+          "id": "gate_1",
+          "class": "Gate",
+          "max_flow": 1000,
+          "initial_opening": 0.5,
+          "min_opening": 0,
+          "max_opening": 1
+        },
+        {
+          "id": "canal_1",
+          "class": "Canal"
+        },
+        {
+          "id": "canal_2",
+          "class": "Canal"
+        },
+        {
+          "id": "gate_2",
+          "class": "Gate",
+          "max_flow": 1000,
+          "initial_opening": 0.5,
+          "min_opening": 0,
+          "max_opening": 1
+        }
+      ]
+    },
+    "topology.yml": {
+      "connections": [
+        {
+          "from": "upstream_reservoir",
+          "to": "gate_1",
+          "type": "flow"
+        },
+        {
+          "from": "gate_1",
+          "to": "canal_1",
+          "type": "flow"
+        },
+        {
+          "from": "gate_2",
+          "to": "canal_2",
+          "type": "flow"
+        },
+        {
+          "from": "canal_1",
+          "to": "canal_2",
+          "type": "flow"
+        }
+      ]
+    },
+    "agents.yml": {
+      "agents": []
+    }
+  },
+  "comparison_result": {
+    "overall_score": 0.96875,
+    "components_score": 1.0,
+    "topology_score": 0.875,
+    "simulation_score": 1.0,
+    "agents_score": 1.0,
+    "issues": [
+      "缺失的连接: {('canal_1', 'gate_2')}"
+    ],
+    "improvements": [
+      "新增的连接: {('canal_1', 'canal_2')}"
+    ]
+  }
+}

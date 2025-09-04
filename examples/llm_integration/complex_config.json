@@ -1,0 +1,137 @@
+{
+  "system_info": {
+    "name": "分布式数字孪生水利系统",
+    "description": "包含上游水库、3个节制闸、2个明渠段、2个分水口和下游水库的复杂水利控制系统",
+    "simulation_period": "24小时",
+    "time_step": "10分钟"
+  },
+  "controlled_objects": [
+    {
+      "id": "upstream_reservoir",
+      "name": "上游水库",
+      "type": "reservoir",
+      "description": "系统上游主要调蓄水库，库容3000万立方米",
+      "parameters": {
+        "area": 1000000,
+        "initial_level": 15.0,
+        "initial_volume": 15000000,
+        "max_volume": 30000000,
+        "inflow": 100.0
+      }
+    },
+    {
+      "id": "downstream_reservoir",
+      "name": "下游水库",
+      "type": "reservoir",
+      "description": "系统下游调蓄水库，库容2500万立方米",
+      "parameters": {
+        "area": 1000000,
+        "initial_level": 12.0,
+        "initial_volume": 12000000,
+        "max_volume": 25000000,
+        "outflow": 80.0
+      }
+    },
+    {
+      "id": "channel_1",
+      "name": "主干渠段1",
+      "type": "canal",
+      "description": "连接上游水库与第一分水口的主要输水渠道",
+      "parameters": {
+        "length": 5000,
+        "width": 20,
+        "slope": 0.0005,
+        "manning_n": 0.025,
+        "initial_level": 8.0
+      }
+    },
+    {
+      "id": "channel_2",
+      "name": "主干渠段2",
+      "type": "canal",
+      "description": "连接两个分水口之间的输水渠道",
+      "parameters": {
+        "length": 4000,
+        "width": 18,
+        "slope": 0.0008,
+        "manning_n": 0.03,
+        "initial_level": 6.0
+      }
+    },
+    {
+      "id": "diversion_1",
+      "name": "分水口1",
+      "type": "pool",
+      "description": "第一个分水节点，用于农业灌溉取水",
+      "parameters": {
+        "design_flow": 15.0,
+        "current_outflow": 15.0,
+        "service_area": "农业灌区A"
+      }
+    },
+    {
+      "id": "diversion_2",
+      "name": "分水口2",
+      "type": "pool",
+      "description": "第二个分水节点，用于工业供水",
+      "parameters": {
+        "design_flow": 12.0,
+        "current_outflow": 12.0,
+        "service_area": "工业园区B"
+      }
+    }
+  ],
+  "control_objects": [
+    {
+      "id": "gate_1",
+      "name": "节制闸1",
+      "type": "gate",
+      "description": "上游水库出口三孔节制闸，控制主干渠进水",
+      "parameters": {
+        "width": 15.0,
+        "number_of_gates": 3,
+        "discharge_coefficient": 0.8,
+        "initial_opening": 0.5,
+        "actuator_delay": 2.0
+      }
+    },
+    {
+      "id": "gate_2",
+      "name": "节制闸2",
+      "type": "gate",
+      "description": "第一分水口下游单孔节制闸",
+      "parameters": {
+        "width": 8.0,
+        "number_of_gates": 1,
+        "discharge_coefficient": 0.75,
+        "initial_opening": 0.6,
+        "actuator_delay": 1.5
+      }
+    },
+    {
+      "id": "gate_3",
+      "name": "节制闸3",
+      "type": "gate",
+      "description": "第二分水口下游单孔节制闸",
+      "parameters": {
+        "width": 6.0,
+        "number_of_gates": 1,
+        "discharge_coefficient": 0.7,
+        "initial_opening": 0.7,
+        "actuator_delay": 1.8
+      }
+    }
+  ],
+  "monitoring_points": {
+    "water_level_sensors": [
+      {"component": "gate_1", "locations": ["upstream", "downstream"], "noise_std": 0.03},
+      {"component": "gate_2", "locations": ["upstream", "downstream"], "noise_std": 0.025},
+      {"component": "gate_3", "locations": ["upstream", "downstream"], "noise_std": 0.02}
+    ],
+    "flow_sensors": [
+      {"component": "gate_1", "measurement": "total_flow", "noise_std": 3.0},
+      {"component": "gate_2", "measurement": "flow", "noise_std": 2.0},
+      {"component": "gate_3", "measurement": "flow", "noise_std": 1.5}
+    ]
+  }
+}

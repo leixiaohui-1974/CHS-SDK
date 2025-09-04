@@ -1,0 +1,149 @@
+{
+  "original_config": {
+    "agents": {
+      "agents": []
+    },
+    "components": {
+      "components": [
+        {
+          "area": 10000,
+          "capacity": 1000000,
+          "class": "Reservoir",
+          "id": "仿真名称",
+          "initial_level": 50,
+          "max_level": 100,
+          "min_level": 10
+        },
+        {
+          "area": 10000,
+          "capacity": 5.0,
+          "class": "Reservoir",
+          "id": "水库1",
+          "initial_level": 50,
+          "max_level": 100,
+          "min_level": 10
+        },
+        {
+          "class": "Gate",
+          "id": "闸门1",
+          "initial_opening": 0.5,
+          "max_flow": 50.0,
+          "max_opening": 1,
+          "min_opening": 0
+        },
+        {
+          "class": "Sensor",
+          "id": "传感器1"
+        }
+      ]
+    },
+    "config": {
+      "simulation": {
+        "dt": 1.0,
+        "duration": 3600,
+        "solver": {
+          "type": "rk4"
+        }
+      }
+    },
+    "topology": {
+      "connections": [
+        {
+          "from": "水库1",
+          "to": "闸门1",
+          "type": "flow"
+        }
+      ]
+    }
+  },
+  "regenerated_config": {
+    "config.yml": {
+      "simulation": {
+        "duration": 3600,
+        "dt": 1.0,
+        "solver": {
+          "type": "rk4"
+        }
+      }
+    },
+    "components.yml": {
+      "components": [
+        {
+          "id": "配置路径",
+          "class": "Reservoir",
+          "capacity": 1000000,
+          "initial_level": 50,
+          "min_level": 10,
+          "max_level": 100,
+          "area": 10000
+        },
+        {
+          "id": "仿真名称",
+          "class": "Reservoir",
+          "capacity": 1000000,
+          "initial_level": 50,
+          "min_level": 10,
+          "max_level": 100,
+          "area": 10000
+        },
+        {
+          "id": "水库1",
+          "class": "Reservoir",
+          "capacity": 1000000,
+          "initial_level": 50,
+          "min_level": 10,
+          "max_level": 100,
+          "area": 10000
+        },
+        {
+          "id": "闸门1",
+          "class": "Gate",
+          "max_flow": 1000,
+          "initial_opening": 0.5,
+          "min_opening": 0,
+          "max_opening": 1
+        },
+        {
+          "id": "传感器1",
+          "class": "Sensor"
+        }
+      ]
+    },
+    "topology.yml": {
+      "connections": [
+        {
+          "from": "包含1个",
+          "to": "关系",
+          "type": "flow"
+        },
+        {
+          "from": "具体",
+          "to": "关系",
+          "type": "flow"
+        },
+        {
+          "from": "水库1",
+          "to": "闸门1",
+          "type": "flow"
+        }
+      ]
+    },
+    "agents.yml": {
+      "agents": []
+    }
+  },
+  "comparison_result": {
+    "overall_score": 0.8916666666666667,
+    "components_score": 0.9,
+    "topology_score": 0.6666666666666667,
+    "simulation_score": 1.0,
+    "agents_score": 1.0,
+    "issues": [
+      "组件数量不匹配: 原始4个, 重新生成5个",
+      "连接数量不匹配: 原始1个, 重新生成3个"
+    ],
+    "improvements": [
+      "新增的连接: {('包含1个', '关系'), ('具体', '关系')}"
+    ]
+  }
+}

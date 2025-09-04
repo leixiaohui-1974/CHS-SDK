@@ -1,0 +1,17 @@
+agents: {}
+components: {}
+control:
+  enabled: true
+  type: mpc
+optimization:
+  enabled: true
+  objective:
+    function: quadratic
+    type: minimize
+simulation:
+  description: 基于自然语言描述生成的仿真配置
+  duration: 7200
+  name: 复杂水利调度系统
+  time_step: 0.5
+topology:
+  connections: []

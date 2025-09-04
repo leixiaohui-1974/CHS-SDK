@@ -1,0 +1,312 @@
+{
+  "original_config": {
+    "agents": {
+      "upstream_observer": {
+        "type": "DigitalTwinAgent",
+        "parameters": {
+          "target_model": "upstream_reservoir",
+          "publish_topic": "state/upstream_reservoir"
+        }
+      },
+      "downstream_observer": {
+        "type": "DigitalTwinAgent",
+        "parameters": {
+          "target_model": "downstream_reservoir",
+          "publish_topic": "state/downstream_reservoir"
+        }
+      },
+      "pipe_observer": {
+        "type": "DigitalTwinAgent",
+        "parameters": {
+          "target_model": "true_pipe",
+          "publish_topic": "state/true_pipe"
+        }
+      },
+      "identification_agent": {
+        "type": "ParameterIdentificationAgent",
+        "parameters": {
+          "target_model": "twin_pipe",
+          "identification_interval": 100,
+          "identification_data_map": {
+            "upstream_levels": {
+              "topic": "state/upstream_reservoir/water_level",
+              "key": "water_level"
+            },
+            "downstream_levels": {
+              "topic": "state/downstream_reservoir/water_level",
+              "key": "water_level"
+            },
+            "observed_flows": {
+              "topic": "state/true_pipe/flow",
+              "key": "flow"
+            }
+          }
+        }
+      },
+      "model_updater": {
+        "type": "ModelUpdaterAgent",
+        "parameters": {
+          "target_model_name": "twin_pipe"
+        }
+      }
+    },
+    "components": {
+      "upstream_reservoir": {
+        "type": "Reservoir",
+        "parameters": {
+          "storage_curve": [
+            [
+              0,
+              150.0
+            ],
+            [
+              10000000,
+              160.0
+            ]
+          ]
+        },
+        "initial_state": {
+          "volume": 8000000
+        }
+      },
+      "downstream_reservoir": {
+        "type": "Reservoir",
+        "parameters": {
+          "storage_curve": [
+            [
+              0,
+              90.0
+            ],
+            [
+              10000000,
+              100.0
+            ]
+          ]
+        },
+        "initial_state": {
+          "volume": 1000000
+        }
+      },
+      "true_pipe": {
+        "type": "Pipe",
+        "parameters": {
+          "calculation_method": "manning",
+          "length": 1000.0,
+          "diameter": 1.0,
+          "manning_n": 0.012
+        },
+        "initial_state": {
+          "flow": 0
+        }
+      },
+      "twin_pipe": {
+        "type": "Pipe",
+        "parameters": {
+          "calculation_method": "manning",
+          "length": 1000.0,
+          "diameter": 1.0,
+          "manning_n": 0.018
+        },
+        "initial_state": {
+          "flow": 0
+        }
+      }
+    },
+    "config": {
+      "simulation": {
+        "duration": 20000,
+        "dt": 100
+      },
+      "output": [
+        {
+          "topic": "state/twin_pipe",
+          "file": "twin_pipe_log.csv"
+        },
+        {
+          "topic": "state/true_pipe",
+          "file": "true_pipe_log.csv"
+        },
+        {
+          "topic": "identified_parameters/twin_pipe",
+          "file": "identified_params_log.json"
+        }
+      ]
+    },
+    "output_agents": {
+      "simulation_history": [
+        {
+          "time": 0,
+          "logger_state_twin_pipe": {},
+          "logger_state_true_pipe": {},
+          "logger_identified_parameters_twin_pipe": {}
+        }
+      ]
+    },
+    "topology": {
+      "nodes": [
+        "upstream_reservoir",
+        "downstream_reservoir",
+        "true_pipe",
+        "twin_pipe"
+      ],
+      "links": [
+        {
+          "upstream": "upstream_reservoir",
+          "downstream": "true_pipe"
+        },
+        {
+          "upstream": "true_pipe",
+          "downstream": "downstream_reservoir"
+        }
+      ]
+    },
+    "unified_config": {
+      "metadata": {
+        "category": "identification",
+        "description": "统一配置文件，用于 identification/03_pipe_roughness 示例",
+        "name": "03_pipe_roughness - 统一配置",
+        "version": "1.0"
+      },
+      "output": [
+        {
+          "file": "twin_pipe_log.csv",
+          "topic": "state/twin_pipe"
+        },
+        {
+          "file": "true_pipe_log.csv",
+          "topic": "state/true_pipe"
+        },
+        {
+          "file": "identified_params_log.json",
+          "topic": "identified_parameters/twin_pipe"
+        }
+      ],
+      "simulation": {
+        "dt": 100,
+        "duration": 20000
+      }
+    },
+    "universal_config": {
+      "downstream_reservoir": {
+        "initial_state": {
+          "volume": 1000000
+        },
+        "parameters": {
+          "storage_curve": [
+            [
+              0,
+              90.0
+            ],
+            [
+              10000000,
+              100.0
+            ]
+          ]
+        },
+        "type": "Reservoir"
+      },
+      "output": [
+        {
+          "file": "twin_pipe_log.csv",
+          "topic": "state/twin_pipe"
+        },
+        {
+          "file": "true_pipe_log.csv",
+          "topic": "state/true_pipe"
+        },
+        {
+          "file": "identified_params_log.json",
+          "topic": "identified_parameters/twin_pipe"
+        }
+      ],
+      "project": {
+        "category": "identification",
+        "description": "通用配置文件，用于 identification/03_pipe_roughness 示例",
+        "name": "03_pipe_roughness",
+        "version": "1.0"
+      },
+      "runtime": {
+        "logging_level": "INFO",
+        "mode": "simulation"
+      },
+      "simulation": {
+        "dt": 100,
+        "duration": 20000
+      },
+      "true_pipe": {
+        "initial_state": {
+          "flow": 0
+        },
+        "parameters": {
+          "calculation_method": "manning",
+          "diameter": 1.0,
+          "length": 1000.0,
+          "manning_n": 0.012
+        },
+        "type": "Pipe"
+      },
+      "twin_pipe": {
+        "initial_state": {
+          "flow": 0
+        },
+        "parameters": {
+          "calculation_method": "manning",
+          "diameter": 1.0,
+          "length": 1000.0,
+          "manning_n": 0.018
+        },
+        "type": "Pipe"
+      },
+      "upstream_reservoir": {
+        "initial_state": {
+          "volume": 8000000
+        },
+        "parameters": {
+          "storage_curve": [
+            [
+              0,
+              150.0
+            ],
+            [
+              10000000,
+              160.0
+            ]
+          ]
+        },
+        "type": "Reservoir"
+      }
+    }
+  },
+  "regenerated_config": {
+    "config.yml": {
+      "simulation": {
+        "duration": 20000,
+        "dt": 100.0,
+        "solver": {
+          "type": "rk4"
+        }
+      }
+    },
+    "components.yml": {
+      "components": []
+    },
+    "topology.yml": {
+      "connections": []
+    },
+    "agents.yml": {
+      "agents": []
+    }
+  },
+  "comparison_result": {
+    "overall_score": 0.5,
+    "components_score": 0.0,
+    "topology_score": 1.0,
+    "simulation_score": 1.0,
+    "agents_score": 0.0,
+    "issues": [
+      "重新生成的配置中没有组件定义",
+      "智能体数量不匹配: 原始5个, 重新生成0个"
+    ],
+    "improvements": []
+  }
+}

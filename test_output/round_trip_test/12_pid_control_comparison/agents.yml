@@ -1,0 +1,19 @@
+agents:
+- class: Agent
+  id: gate1_local_controller
+  target: component_1
+- class: Agent
+  id: gate2_local_controller
+  target: component_1
+- class: Agent
+  id: gate1_distant_controller
+  target: component_1
+- class: Agent
+  id: gate2_distant_controller
+  target: component_1
+- class: Agent
+  id: gate1_mixed_controller
+  target: component_1
+- class: Agent
+  id: gate2_mixed_controller
+  target: component_1

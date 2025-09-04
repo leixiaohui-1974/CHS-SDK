@@ -1,0 +1,10 @@
+connections:
+- from: 包含1个
+  to: 关系
+  type: flow
+- from: 具体
+  to: 关系
+  type: flow
+- from: 水库1
+  to: 闸门1
+  type: flow

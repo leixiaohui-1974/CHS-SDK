@@ -1,0 +1,84 @@
+{
+  "original_config": {
+    "simulation": {
+      "name": "水箱PID出口控制",
+      "description": "重构后的水箱PID出口控制示例",
+      "duration": 300.0,
+      "time_step": 1.0
+    },
+    "components": {
+      "watertank": {
+        "type": "WaterTank",
+        "parameters": {
+          "capacity": 1000.0,
+          "initial_level": 80.0,
+          "cross_sectional_area": 100.0,
+          "target_level": 50.0,
+          "constant_inflow": 20.0
+        }
+      },
+      "outlet_valve": {
+        "type": "Valve",
+        "parameters": {
+          "max_flow_rate": 60.0,
+          "initial_opening": 0.3
+        }
+      }
+    },
+    "control": {
+      "enabled": true,
+      "type": "PID",
+      "target_variable": "water_level",
+      "control_variable": "outlet_flow",
+      "parameters": {
+        "kp": 1.5,
+        "ki": 0.05,
+        "kd": 0.8,
+        "setpoint": 50.0
+      }
+    },
+    "output": {
+      "format": "json",
+      "save_path": "outlet_pid_results.json",
+      "variables": [
+        "water_level",
+        "volume",
+        "outlet_flow",
+        "inflow",
+        "control_signal",
+        "error"
+      ]
+    }
+  },
+  "regenerated_config": {
+    "simulation": {
+      "name": "自动生成的仿真",
+      "description": "基于自然语言描述生成的仿真配置",
+      "duration": 3600,
+      "time_step": 1.0
+    },
+    "components": {
+      "outlet_valve": {
+        "type": "Valve"
+      }
+    },
+    "topology": {
+      "connections": []
+    },
+    "agents": {}
+  },
+  "comparison_result": {
+    "overall_score": 0.7083333333333334,
+    "components_score": 0.5,
+    "topology_score": 1.0,
+    "simulation_score": 0.3333333333333333,
+    "agents_score": 1.0,
+    "issues": [
+      "组件数量不匹配: 原始2个, 重新生成1个",
+      "缺失的组件类型: {'WaterTank'}",
+      "仿真参数不匹配: 原始300.0, 重新生成3600",
+      "仿真参数不匹配: 原始水箱PID出口控制, 重新生成自动生成的仿真"
+    ],
+    "improvements": []
+  }
+}

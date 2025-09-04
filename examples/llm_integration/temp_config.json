@@ -1,0 +1,384 @@
+{
+  "controlled_objects": [
+    {
+      "id": "main_reservoir",
+      "type": "reservoir",
+      "name": "主水库",
+      "description": "系统主要蓄水设施",
+      "capacity": 50000000,
+      "normal_level": 185.5,
+      "flood_level": 188.0,
+      "dead_level": 175.0,
+      "location": "上游",
+      "control_targets": {
+        "water_level": {
+          "target": 185.5,
+          "tolerance": 0.5,
+          "priority": "high"
+        },
+        "storage_volume": {
+          "target": 45000000,
+          "tolerance": 2000000,
+          "priority": "medium"
+        }
+      },
+      "disturbances": {
+        "inflow": {
+          "type": "random",
+          "mean": 120,
+          "std": 25,
+          "unit": "m³/s"
+        },
+        "rainfall": {
+          "type": "seasonal",
+          "amplitude": 15,
+          "period": 24,
+          "unit": "mm/h"
+        },
+        "evaporation": {
+          "type": "constant",
+          "value": 2.5,
+          "unit": "mm/h"
+        }
+      },
+      "constraints": {
+        "min_outflow": 20,
+        "max_outflow": 300,
+        "min_level": 175.0,
+        "max_level": 188.0
+      }
+    },
+    {
+      "id": "main_canal",
+      "type": "canal",
+      "name": "主输水渠道",
+      "description": "连接水库与下游的主要输水通道",
+      "length": 15000,
+      "design_flow": 80,
+      "max_flow": 120,
+      "location": "中游",
+      "control_targets": {
+        "flow_rate": {
+          "target": 80,
+          "tolerance": 5,
+          "priority": "high"
+        },
+        "water_level": {
+          "target": 3.2,
+          "tolerance": 0.2,
+          "priority": "medium"
+        }
+      },
+      "disturbances": {
+        "upstream_flow": {
+          "type": "controlled",
+          "source": "main_reservoir",
+          "unit": "m³/s"
+        },
+        "lateral_withdrawal": {
+          "type": "random",
+          "mean": 8,
+          "std": 3,
+          "unit": "m³/s"
+        },
+        "seepage_loss": {
+          "type": "constant",
+          "value": 2,
+          "unit": "m³/s"
+        }
+      },
+      "constraints": {
+        "min_flow": 10,
+        "max_flow": 120,
+        "min_velocity": 0.3,
+        "max_velocity": 2.5
+      }
+    },
+    {
+      "id": "upstream_river",
+      "type": "river",
+      "name": "上游河道",
+      "description": "天然河道，提供基础径流",
+      "length": 25000,
+      "catchment_area": 1200,
+      "location": "上游",
+      "control_targets": {
+        "ecological_flow": {
+          "target": 15,
+          "tolerance": 3,
+          "priority": "high"
+        },
+        "water_quality": {
+          "target": 85,
+          "tolerance": 10,
+          "priority": "medium"
+        }
+      },
+      "disturbances": {
+        "natural_runoff": {
+          "type": "seasonal",
+          "amplitude": 30,
+          "period": 24,
+          "mean": 45,
+          "unit": "m³/s"
+        },
+        "tributary_inflow": {
+          "type": "random",
+          "mean": 12,
+          "std": 5,
+          "unit": "m³/s"
+        },
+        "human_regulation": {
+          "type": "controlled",
+          "mean": 8,
+          "unit": "m³/s"
+        }
+      },
+      "constraints": {
+        "min_flow": 5,
+        "max_flow": 200,
+        "min_quality_index": 60,
+        "max_sediment": 2.0
+      }
+    },
+    {
+      "id": "regulation_pool",
+      "type": "pool",
+      "name": "调节池",
+      "description": "下游调节蓄水池",
+      "capacity": 500000,
+      "normal_level": 12.5,
+      "location": "下游",
+      "control_targets": {
+        "water_level": {
+          "target": 12.5,
+          "tolerance": 0.3,
+          "priority": "high"
+        },
+        "supply_reliability": {
+          "target": 95,
+          "tolerance": 3,
+          "priority": "high"
+        }
+      },
+      "disturbances": {
+        "inflow": {
+          "type": "controlled",
+          "source": "main_canal",
+          "unit": "m³/s"
+        },
+        "demand_flow": {
+          "type": "periodic",
+          "amplitude": 20,
+          "period": 12,
+          "mean": 35,
+          "unit": "m³/s"
+        },
+        "outflow": {
+          "type": "controlled",
+          "unit": "m³/s"
+        }
+      },
+      "constraints": {
+        "min_level": 10.0,
+        "max_level": 15.0,
+        "min_outflow": 5,
+        "max_outflow": 60
+      }
+    }
+  ],
+  "control_objects": [
+    {
+      "id": "main_gate",
+      "type": "gate",
+      "name": "主闸门",
+      "description": "水库出水口主控闸门",
+      "controlled_object": "main_reservoir",
+      "location": "水库出口",
+      "specifications": {
+        "max_opening": 100,
+        "min_opening": 0,
+        "response_time": 30,
+        "accuracy": 0.5
+      },
+      "control_parameters": {
+        "kp": 2.5,
+        "ki": 0.8,
+        "kd": 0.3,
+        "setpoint_tracking": true,
+        "disturbance_rejection": true
+      },
+      "constraints": {
+        "max_opening_rate": 5.0,
+        "min_opening_rate": -5.0,
+        "emergency_close_time": 60
+      }
+    },
+    {
+      "id": "pump_station_1",
+      "type": "pump",
+      "name": "1号泵站",
+      "description": "调节池供水泵站",
+      "controlled_object": "regulation_pool",
+      "location": "调节池",
+      "specifications": {
+        "rated_flow": 45,
+        "max_flow": 60,
+        "rated_head": 25,
+        "efficiency": 85,
+        "rated_power": 150
+      },
+      "control_parameters": {
+        "kp": 1.8,
+        "ki": 0.6,
+        "kd": 0.2,
+        "flow_control": true,
+        "speed_control": true
+      },
+      "constraints": {
+        "min_speed": 300,
+        "max_speed": 1500,
+        "max_power": 180,
+        "min_efficiency": 70
+      }
+    },
+    {
+      "id": "control_valve_1",
+      "type": "valve",
+      "name": "1号控制阀",
+      "description": "渠道流量控制阀",
+      "controlled_object": "main_canal",
+      "location": "渠道中段",
+      "specifications": {
+        "valve_type": "butterfly",
+        "diameter": 800,
+        "max_position": 90,
+        "cv_max": 1200,
+        "response_time": 15
+      },
+      "control_parameters": {
+        "kp": 3.0,
+        "ki": 1.2,
+        "kd": 0.4,
+        "position_control": true,
+        "flow_control": true
+      },
+      "constraints": {
+        "max_position_rate": 10.0,
+        "min_position_rate": -10.0,
+        "max_pressure_drop": 50,
+        "leakage_rate": 0.1
+      }
+    },
+    {
+      "id": "turbine_1",
+      "type": "turbine",
+      "name": "1号水轮机",
+      "description": "水力发电机组",
+      "controlled_object": "main_reservoir",
+      "location": "发电厂房",
+      "specifications": {
+        "rated_power": 50000,
+        "max_power": 55000,
+        "rated_head": 45,
+        "rated_flow": 125,
+        "efficiency": 92,
+        "runner_diameter": 3.5
+      },
+      "control_parameters": {
+        "kp": 1.5,
+        "ki": 0.4,
+        "kd": 0.1,
+        "power_control": true,
+        "speed_control": true,
+        "guide_vane_control": true
+      },
+      "constraints": {
+        "min_power": 5000,
+        "max_power": 55000,
+        "min_speed": 100,
+        "max_speed": 150,
+        "max_guide_vane_rate": 5.0
+      }
+    }
+  ],
+  "agents": [
+    {
+      "id": "reservoir_agent",
+      "name": "水库智能体",
+      "type": "water_level_control",
+      "controlled_objects": ["main_reservoir"],
+      "control_objects": ["main_gate"],
+      "objectives": [
+        "maintain_water_level",
+        "flood_control",
+        "water_supply_guarantee"
+      ],
+      "communication": {
+        "upstream": [],
+        "downstream": ["canal_agent"]
+      }
+    },
+    {
+      "id": "canal_agent",
+      "name": "渠道智能体",
+      "type": "flow_control",
+      "controlled_objects": ["main_canal"],
+      "control_objects": ["control_valve_1"],
+      "objectives": [
+        "maintain_flow_rate",
+        "water_level_stability",
+        "transport_efficiency"
+      ],
+      "communication": {
+        "upstream": ["reservoir_agent"],
+        "downstream": ["pool_agent"]
+      }
+    },
+    {
+      "id": "pool_agent",
+      "name": "调节池智能体",
+      "type": "supply_control",
+      "controlled_objects": ["regulation_pool"],
+      "control_objects": ["pump_station_1"],
+      "objectives": [
+        "supply_reliability",
+        "water_level_control",
+        "demand_satisfaction"
+      ],
+      "communication": {
+        "upstream": ["canal_agent"],
+        "downstream": []
+      }
+    },
+    {
+      "id": "power_agent",
+      "name": "发电智能体",
+      "type": "power_generation",
+      "controlled_objects": ["main_reservoir"],
+      "control_objects": ["turbine_1"],
+      "objectives": [
+        "power_generation",
+        "efficiency_optimization",
+        "grid_stability"
+      ],
+      "communication": {
+        "upstream": ["reservoir_agent"],
+        "downstream": []
+      }
+    }
+  ],
+  "system_constraints": {
+    "water_balance": true,
+    "flow_continuity": true,
+    "safety_limits": true,
+    "environmental_requirements": true
+  },
+  "simulation_parameters": {
+    "time_step": 600,
+    "duration": 86400,
+    "start_time": "2024-01-15T00:00:00",
+    "weather_conditions": "normal",
+    "demand_pattern": "typical"
+  }
+}

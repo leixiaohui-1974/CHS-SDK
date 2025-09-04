@@ -1,0 +1,1226 @@
+{
+  "original_config": {
+    "agents": {
+      "agents": [
+        {
+          "id": "disturbance_agent",
+          "class": "core_lib.data_access.csv_inflow_agent.CsvInflowAgent",
+          "config": {
+            "csv_file": "disturbance.csv",
+            "time_column": "time",
+            "data_column": "outflow_rate",
+            "inflow_topic": "disturbance_signal_topic",
+            "data_id": "disturbance_1"
+          }
+        },
+        {
+          "id": "pump_pid_controller_agent",
+          "class": "core_lib.local_agents.control.local_control_agent.LocalControlAgent",
+          "config": {
+            "observation_topic": "noisy_water_level_topic",
+            "observation_key": "water_level",
+            "action_topic": "control_signal_topic",
+            "dt": 1.0,
+            "controller": {
+              "class": "core_lib.local_agents.control.pid_controller.PIDController",
+              "config": {
+                "setpoint": 10.0,
+                "Kp": 1.2,
+                "Ki": 0.1,
+                "Kd": 0.05,
+                "min_output": 0.0,
+                "max_output": 5.0
+              }
+            }
+          }
+        },
+        {
+          "id": "inflow_aggregator_agent",
+          "class": "core_lib.local_agents.utility.signal_aggregator_agent.SignalAggregatorAgent",
+          "config": {
+            "input_configs": [
+              {
+                "topic": "control_signal_topic",
+                "key": "control_signal"
+              },
+              {
+                "topic": "disturbance_signal_topic",
+                "key": "inflow_rate"
+              }
+            ],
+            "output_topic": "aggregated_inflow_topic"
+          }
+        },
+        {
+          "id": "pio_agent",
+          "class": "core_lib.local_agents.io.physical_io_agent.PhysicalIOAgent",
+          "config": {
+            "actuators_config": {},
+            "sensors_config": {
+              "water_level_sensor_1": {
+                "obj_id": "reservoir_1",
+                "state_key": "water_level",
+                "topic": "noisy_water_level_topic",
+                "noise_std": 0.25
+              }
+            }
+          }
+        },
+        {
+          "id": "clean_sensor_logger",
+          "class": "core_lib.local_agents.perception.digital_twin_agent.DigitalTwinAgent",
+          "config": {
+            "simulated_object_id": "reservoir_1",
+            "state_topic": "true_water_level_topic",
+            "log_data": true
+          }
+        }
+      ]
+    },
+    "components": {
+      "components": [
+        {
+          "id": "reservoir_1",
+          "class": "core_lib.physical_objects.reservoir.Reservoir",
+          "inflow_topic": "aggregated_inflow_topic",
+          "name": "noisy_sensor_tank",
+          "initial_state": {
+            "water_level": 5.0
+          },
+          "parameters": {
+            "surface_area": 2.0
+          }
+        }
+      ]
+    },
+    "config": {
+      "simulation": {
+        "duration": 300,
+        "dt": 1.0
+      }
+    },
+    "output_agents": {
+      "simulation_history": [
+        {
+          "time": 0,
+          "reservoir_1": {
+            "water_level": 6.75,
+            "outflow": 0,
+            "volume": 13.5,
+            "inflow": 3.5
+          }
+        },
+        {
+          "time": 1.0,
+          "reservoir_1": {
+            "water_level": 10.684964649633582,
+            "outflow": 0,
+            "volume": 21.369929299267163,
+            "inflow": 7.869929299267163
+          }
+        },
+        {
+          "time": 2.0,
+          "reservoir_1": {
+            "water_level": 12.119929299267163,
+            "outflow": 0,
+            "volume": 24.239858598534326,
+            "inflow": 2.8699292992671634
+          }
+        },
+        {
+          "time": 3.0,
+          "reservoir_1": {
+            "water_level": 11.619929299267163,
+            "outflow": 0,
+            "volume": 23.239858598534326,
+            "inflow": -1.0
+          }
+        },
+        {
+          "time": 4.0,
+          "reservoir_1": {
+            "water_level": 11.119929299267163,
+            "outflow": 0,
+            "volume": 22.239858598534326,
+            "inflow": -1.0
+          }
+        },
+        {
+          "time": 5.0,
+          "reservoir_1": {
+            "water_level": 10.619929299267163,
+            "outflow": 0,
+            "volume": 21.239858598534326,
+            "inflow": -1.0
+          }
+        },
+        {
+          "time": 6.0,
+          "reservoir_1": {
+            "water_level": 10.119929299267163,
+            "outflow": 0,
+            "volume": 20.239858598534326,
+            "inflow": -1.0
+          }
+        },
+        {
+          "time": 7.0,
+          "reservoir_1": {
+            "water_level": 9.716687147183016,
+            "outflow": 0,
+            "volume": 19.433374294366033,
+            "inflow": -0.8064843041682946
+          }
+        },
+        {
+          "time": 8.0,
+          "reservoir_1": {
+            "water_level": 9.698299076535948,
+            "outflow": 0,
+            "volume": 19.396598153071896,
+            "inflow": -0.036776141294136644
+          }
+        },
+        {
+          "time": 9.0,
+          "reservoir_1": {
+            "water_level": 10.199041843657568,
+            "outflow": 0,
+            "volume": 20.398083687315136,
+            "inflow": 1.0014855342432407
+          }
+        },
+        {
+          "time": 10.0,
+          "reservoir_1": {
+            "water_level": 10.425466273563973,
+            "outflow": 0,
+            "volume": 20.850932547127947,
+            "inflow": 0.45284885981281037
+          }
+        },
+        {
+          "time": 11.0,
+          "reservoir_1": {
+            "water_level": 10.120629441448374,
+            "outflow": 0,
+            "volume": 20.241258882896748,
+            "inflow": -0.6096736642311982
+          }
+        },
+        {
+          "time": 12.0,
+          "reservoir_1": {
+            "water_level": 9.784371655033201,
+            "outflow": 0,
+            "volume": 19.568743310066402,
+            "inflow": -0.6725155728303469
+          }
+        },
+        {
+          "time": 13.0,
+          "reservoir_1": {
+            "water_level": 9.701379377932478,
+            "outflow": 0,
+            "volume": 19.402758755864955,
+            "inflow": -0.16598455420144742
+          }
+        },
+        {
+          "time": 14.0,
+          "reservoir_1": {
+            "water_level": 9.775890245476061,
+            "outflow": 0,
+            "volume": 19.551780490952122,
+            "inflow": 0.14902173508716576
+          }
+        },
+        {
+          "time": 15.0,
+          "reservoir_1": {
+            "water_level": 9.87652100541892,
+            "outflow": 0,
+            "volume": 19.75304201083784,
+            "inflow": 0.20126151988572005
+          }
+        },
+        {
+          "time": 16.0,
+          "reservoir_1": {
+            "water_level": 9.982951429109814,
+            "outflow": 0,
+            "volume": 19.96590285821963,
+            "inflow": 0.21286084738178623
+          }
+        },
+        {
+          "time": 17.0,
+          "reservoir_1": {
+            "water_level": 9.935185463214804,
+            "outflow": 0,
+            "volume": 19.870370926429608,
+            "inflow": -0.09553193179002106
+          }
+        },
+        {
+          "time": 18.0,
+          "reservoir_1": {
+            "water_level": 9.645001899005164,
+            "outflow": 0,
+            "volume": 19.29000379801033,
+            "inflow": -0.5803671284192793
+          }
+        },
+        {
+          "time": 19.0,
+          "reservoir_1": {
+            "water_level": 9.867145009408857,
+            "outflow": 0,
+            "volume": 19.734290018817713,
+            "inflow": 0.44428622080738434
+          }
+        },
+        {
+          "time": 20.0,
+          "reservoir_1": {
+            "water_level": 10.149266400642038,
+            "outflow": 0,
+            "volume": 20.298532801284075,
+            "inflow": 0.5642427824663618
+          }
+        },
+        {
+          "time": 21.0,
+          "reservoir_1": {
+            "water_level": 9.980599803681294,
+            "outflow": 0,
+            "volume": 19.961199607362587,
+            "inflow": -0.33733319392148803
+          }
+        },
+        {
+          "time": 22.0,
+          "reservoir_1": {
+            "water_level": 10.17313177763679,
+            "outflow": 0,
+            "volume": 20.34626355527358,
+            "inflow": 0.3850639479109913
+          }
+        },
+        {
+          "time": 23.0,
+          "reservoir_1": {
+            "water_level": 10.09430862938252,
+            "outflow": 0,
+            "volume": 20.18861725876504,
+            "inflow": -0.15764629650854312
+          }
+        },
+        {
+          "time": 24.0,
+          "reservoir_1": {
+            "water_level": 9.764687356337408,
+            "outflow": 0,
+            "volume": 19.529374712674816,
+            "inflow": -0.6592425460902236
+          }
+        },
+        {
+          "time": 25.0,
+          "reservoir_1": {
+            "water_level": 10.016506426877001,
+            "outflow": 0,
+            "volume": 20.033012853754002,
+            "inflow": 0.5036381410791875
+          }
+        },
+        {
+          "time": 26.0,
+          "reservoir_1": {
+            "water_level": 10.260103540514391,
+            "outflow": 0,
+            "volume": 20.520207081028783,
+            "inflow": 0.48719422727478
+          }
+        },
+        {
+          "time": 27.0,
+          "reservoir_1": {
+            "water_level": 9.922260310567076,
+            "outflow": 0,
+            "volume": 19.84452062113415,
+            "inflow": -0.675686459894631
+          }
+        },
+        {
+          "time": 28.0,
+          "reservoir_1": {
+            "water_level": 9.91566331918881,
+            "outflow": 0,
+            "volume": 19.83132663837762,
+            "inflow": -0.0131939827565285
+          }
+        },
+        {
+          "time": 29.0,
+          "reservoir_1": {
+            "water_level": 10.296162787308278,
+            "outflow": 0,
+            "volume": 20.592325574616556,
+            "inflow": 0.7609989362389341
+          }
+        },
+        {
+          "time": 30.0,
+          "reservoir_1": {
+            "water_level": 10.18325924680601,
+            "outflow": 0,
+            "volume": 20.36651849361202,
+            "inflow": -0.2258070810045374
+          }
+        },
+        {
+          "time": 31.0,
+          "reservoir_1": {
+            "water_level": 9.701161262767092,
+            "outflow": 0,
+            "volume": 19.402322525534185,
+            "inflow": -0.964195968077834
+          }
+        },
+        {
+          "time": 32.0,
+          "reservoir_1": {
+            "water_level": 9.527882147399952,
+            "outflow": 0,
+            "volume": 19.055764294799904,
+            "inflow": -0.34655823073428027
+          }
+        },
+        {
+          "time": 33.0,
+          "reservoir_1": {
+            "water_level": 9.860190300775711,
+            "outflow": 0,
+            "volume": 19.720380601551422,
+            "inflow": 0.6646163067515198
+          }
+        },
+        {
+          "time": 34.0,
+          "reservoir_1": {
+            "water_level": 10.491193325597706,
+            "outflow": 0,
+            "volume": 20.982386651195412,
+            "inflow": 1.2620060496439887
+          }
+        },
+        {
+          "time": 35.0,
+          "reservoir_1": {
+            "water_level": 10.598707065715718,
+            "outflow": 0,
+            "volume": 21.197414131431437,
+            "inflow": 0.21502748023602258
+          }
+        },
+        {
+          "time": 36.0,
+          "reservoir_1": {
+            "water_level": 10.098707065715718,
+            "outflow": 0,
+            "volume": 20.197414131431437,
+            "inflow": -1.0
+          }
+        },
+        {
+          "time": 37.0,
+          "reservoir_1": {
+            "water_level": 10.176213718214477,
+            "outflow": 0,
+            "volume": 20.352427436428954,
+            "inflow": 0.1550133049975182
+          }
+        },
+        {
+          "time": 38.0,
+          "reservoir_1": {
+            "water_level": 10.486267616422571,
+            "outflow": 0,
+            "volume": 20.972535232845143,
+            "inflow": 0.6201077964161885
+          }
+        },
+        {
+          "time": 39.0,
+          "reservoir_1": {
+            "water_level": 10.218814862131907,
+            "outflow": 0,
+            "volume": 20.437629724263815,
+            "inflow": -0.5349055085813297
+          }
+        },
+        {
+          "time": 40.0,
+          "reservoir_1": {
+            "water_level": 9.827650906099684,
+            "outflow": 0,
+            "volume": 19.65530181219937,
+            "inflow": -0.7823279120644445
+          }
+        },
+        {
+          "time": 41.0,
+          "reservoir_1": {
+            "water_level": 10.185537247641186,
+            "outflow": 0,
+            "volume": 20.37107449528237,
+            "inflow": 0.7157726830830012
+          }
+        },
+        {
+          "time": 42.0,
+          "reservoir_1": {
+            "water_level": 10.925205402445517,
+            "outflow": 0,
+            "volume": 21.850410804891034,
+            "inflow": 1.4793363096086638
+          }
+        },
+        {
+          "time": 43.0,
+          "reservoir_1": {
+            "water_level": 10.915823259676126,
+            "outflow": 0,
+            "volume": 21.83164651935225,
+            "inflow": -0.018764285538781955
+          }
+        },
+        {
+          "time": 44.0,
+          "reservoir_1": {
+            "water_level": 10.415823259676126,
+            "outflow": 0,
+            "volume": 20.83164651935225,
+            "inflow": -1.0
+          }
+        },
+        {
+          "time": 45.0,
+          "reservoir_1": {
+            "water_level": 9.915823259676126,
+            "outflow": 0,
+            "volume": 19.83164651935225,
+            "inflow": -1.0
+          }
+        },
+        {
+          "time": 46.0,
+          "reservoir_1": {
+            "water_level": 9.84201752521188,
+            "outflow": 0,
+            "volume": 19.68403505042376,
+            "inflow": -0.14761146892849364
+          }
+        },
+        {
+          "time": 47.0,
+          "reservoir_1": {
+            "water_level": 10.268144722659278,
+            "outflow": 0,
+            "volume": 20.536289445318555,
+            "inflow": 0.8522543948947969
+          }
+        },
+        {
+          "time": 48.0,
+          "reservoir_1": {
+            "water_level": 10.769138332299756,
+            "outflow": 0,
+            "volume": 21.53827666459951,
+            "inflow": 1.0019872192809562
+          }
+        },
+        {
+          "time": 49.0,
+          "reservoir_1": {
+            "water_level": 10.770199010028588,
+            "outflow": 0,
+            "volume": 21.540398020057175,
+            "inflow": 0.0021213554576655635
+          }
+        },
+        {
+          "time": 50.0,
+          "reservoir_1": {
+            "water_level": 9.397064041633831,
+            "outflow": 0,
+            "volume": 18.794128083267662,
+            "inflow": -2.7462699367895143
+          }
+        },
+        {
+          "time": 51.0,
+          "reservoir_1": {
+            "water_level": 8.878682876497233,
+            "outflow": 0,
+            "volume": 17.757365752994467,
+            "inflow": -1.0367623302731945
+          }
+        },
+        {
+          "time": 52.0,
+          "reservoir_1": {
+            "water_level": 9.316274678527575,
+            "outflow": 0,
+            "volume": 18.63254935705515,
+            "inflow": 0.8751836040606833
+          }
+        },
+        {
+          "time": 53.0,
+          "reservoir_1": {
+            "water_level": 10.056445306902278,
+            "outflow": 0,
+            "volume": 20.112890613804556,
+            "inflow": 1.480341256749404
+          }
+        },
+        {
+          "time": 54.0,
+          "reservoir_1": {
+            "water_level": 10.179848598191748,
+            "outflow": 0,
+            "volume": 20.359697196383497,
+            "inflow": 0.24680658257894017
+          }
+        },
+        {
+          "time": 55.0,
+          "reservoir_1": {
+            "water_level": 9.578499091078172,
+            "outflow": 0,
+            "volume": 19.156998182156343,
+            "inflow": -1.2026990142271536
+          }
+        },
+        {
+          "time": 56.0,
+          "reservoir_1": {
+            "water_level": 9.400679423241208,
+            "outflow": 0,
+            "volume": 18.801358846482415,
+            "inflow": -0.355639335673928
+          }
+        },
+        {
+          "time": 57.0,
+          "reservoir_1": {
+            "water_level": 9.519184626209416,
+            "outflow": 0,
+            "volume": 19.038369252418832,
+            "inflow": 0.2370104059364171
+          }
+        },
+        {
+          "time": 58.0,
+          "reservoir_1": {
+            "water_level": 9.429961585067332,
+            "outflow": 0,
+            "volume": 18.859923170134664,
+            "inflow": -0.17844608228416847
+          }
+        },
+        {
+          "time": 59.0,
+          "reservoir_1": {
+            "water_level": 9.514554816629197,
+            "outflow": 0,
+            "volume": 19.029109633258393,
+            "inflow": 0.16918646312372987
+          }
+        },
+        {
+          "time": 60.0,
+          "reservoir_1": {
+            "water_level": 9.462353067650657,
+            "outflow": 0,
+            "volume": 18.924706135301314,
+            "inflow": -0.10440349795708026
+          }
+        },
+        {
+          "time": 61.0,
+          "reservoir_1": {
+            "water_level": 9.454473213198025,
+            "outflow": 0,
+            "volume": 18.90894642639605,
+            "inflow": -0.01575970890526368
+          }
+        },
+        {
+          "time": 62.0,
+          "reservoir_1": {
+            "water_level": 9.802755039257056,
+            "outflow": 0,
+            "volume": 19.60551007851411,
+            "inflow": 0.6965636521180605
+          }
+        },
+        {
+          "time": 63.0,
+          "reservoir_1": {
+            "water_level": 9.98753669184353,
+            "outflow": 0,
+            "volume": 19.97507338368706,
+            "inflow": 0.3695633051729479
+          }
+        },
+        {
+          "time": 64.0,
+          "reservoir_1": {
+            "water_level": 9.902969994620891,
+            "outflow": 0,
+            "volume": 19.805939989241782,
+            "inflow": -0.16913339444527775
+          }
+        },
+        {
+          "time": 65.0,
+          "reservoir_1": {
+            "water_level": 9.596178327363807,
+            "outflow": 0,
+            "volume": 19.192356654727615,
+            "inflow": -0.6135833345141664
+          }
+        },
+        {
+          "time": 66.0,
+          "reservoir_1": {
+            "water_level": 9.667100534820218,
+            "outflow": 0,
+            "volume": 19.334201069640436,
+            "inflow": 0.14184441491282263
+          }
+        },
+        {
+          "time": 67.0,
+          "reservoir_1": {
+            "water_level": 10.260745732094799,
+            "outflow": 0,
+            "volume": 20.521491464189598,
+            "inflow": 1.1872903945491622
+          }
+        },
+        {
+          "time": 68.0,
+          "reservoir_1": {
+            "water_level": 10.404355723621979,
+            "outflow": 0,
+            "volume": 20.808711447243958,
+            "inflow": 0.2872199830543587
+          }
+        },
+        {
+          "time": 69.0,
+          "reservoir_1": {
+            "water_level": 9.774982007804457,
+            "outflow": 0,
+            "volume": 19.549964015608914,
+            "inflow": -1.2587474316350433
+          }
+        },
+        {
+          "time": 70.0,
+          "reservoir_1": {
+            "water_level": 9.513262812259544,
+            "outflow": 0,
+            "volume": 19.02652562451909,
+            "inflow": -0.5234383910898256
+          }
+        },
+        {
+          "time": 71.0,
+          "reservoir_1": {
+            "water_level": 10.003088268463928,
+            "outflow": 0,
+            "volume": 20.006176536927857,
+            "inflow": 0.9796509124087691
+          }
+        },
+        {
+          "time": 72.0,
+          "reservoir_1": {
+            "water_level": 10.153424166322681,
+            "outflow": 0,
+            "volume": 20.306848332645362,
+            "inflow": 0.30067179571750535
+          }
+        },
+        {
+          "time": 73.0,
+          "reservoir_1": {
+            "water_level": 9.667485825368201,
+            "outflow": 0,
+            "volume": 19.334971650736403,
+            "inflow": -0.9718766819089599
+          }
+        },
+        {
+          "time": 74.0,
+          "reservoir_1": {
+            "water_level": 9.697501915901148,
+            "outflow": 0,
+            "volume": 19.395003831802295,
+            "inflow": 0.06003218106589103
+          }
+        },
+        {
+          "time": 75.0,
+          "reservoir_1": {
+            "water_level": 10.110330456960357,
+            "outflow": 0,
+            "volume": 20.220660913920714,
+            "inflow": 0.8256570821184195
+          }
+        },
+        {
+          "time": 76.0,
+          "reservoir_1": {
+            "water_level": 10.202049395082712,
+            "outflow": 0,
+            "volume": 20.404098790165424,
+            "inflow": 0.18343787624470886
+          }
+        },
+        {
+          "time": 77.0,
+          "reservoir_1": {
+            "water_level": 10.126486553915752,
+            "outflow": 0,
+            "volume": 20.252973107831505,
+            "inflow": -0.1511256823339211
+          }
+        },
+        {
+          "time": 78.0,
+          "reservoir_1": {
+            "water_level": 10.097863643915964,
+            "outflow": 0,
+            "volume": 20.19572728783193,
+            "inflow": -0.05724581999957601
+          }
+        },
+        {
+          "time": 79.0,
+          "reservoir_1": {
+            "water_level": 9.9594047361363,
+            "outflow": 0,
+            "volume": 19.9188094722726,
+            "inflow": -0.2769178155593306
+          }
+        },
+        {
+          "time": 80.0,
+          "reservoir_1": {
+            "water_level": 9.562756919101393,
+            "outflow": 0,
+            "volume": 19.125513838202785,
+            "inflow": -0.7932956340698158
+          }
+        },
+        {
+          "time": 81.0,
+          "reservoir_1": {
+            "water_level": 9.765964232577375,
+            "outflow": 0,
+            "volume": 19.53192846515475,
+            "inflow": 0.40641462695196395
+          }
+        },
+        {
+          "time": 82.0,
+          "reservoir_1": {
+            "water_level": 10.020898845535685,
+            "outflow": 0,
+            "volume": 20.04179769107137,
+            "inflow": 0.509869225916622
+          }
+        },
+        {
+          "time": 83.0,
+          "reservoir_1": {
+            "water_level": 9.68281684916446,
+            "outflow": 0,
+            "volume": 19.36563369832892,
+            "inflow": -0.6761639927424492
+          }
+        },
+        {
+          "time": 84.0,
+          "reservoir_1": {
+            "water_level": 9.568883494535807,
+            "outflow": 0,
+            "volume": 19.137766989071615,
+            "inflow": -0.22786670925730657
+          }
+        },
+        {
+          "time": 85.0,
+          "reservoir_1": {
+            "water_level": 9.892142701242198,
+            "outflow": 0,
+            "volume": 19.784285402484397,
+            "inflow": 0.6465184134127833
+          }
+        },
+        {
+          "time": 86.0,
+          "reservoir_1": {
+            "water_level": 10.115694744967387,
+            "outflow": 0,
+            "volume": 20.231389489934774,
+            "inflow": 0.4471040874503782
+          }
+        },
+        {
+          "time": 87.0,
+          "reservoir_1": {
+            "water_level": 10.149572891874245,
+            "outflow": 0,
+            "volume": 20.29914578374849,
+            "inflow": 0.0677562938137164
+          }
+        },
+        {
+          "time": 88.0,
+          "reservoir_1": {
+            "water_level": 10.273775210415206,
+            "outflow": 0,
+            "volume": 20.54755042083041,
+            "inflow": 0.24840463708192217
+          }
+        },
+        {
+          "time": 89.0,
+          "reservoir_1": {
+            "water_level": 10.163266657524886,
+            "outflow": 0,
+            "volume": 20.326533315049772,
+            "inflow": -0.22101710578063827
+          }
+        },
+        {
+          "time": 90.0,
+          "reservoir_1": {
+            "water_level": 9.88925131757417,
+            "outflow": 0,
+            "volume": 19.77850263514834,
+            "inflow": -0.5480306799014338
+          }
+        },
+        {
+          "time": 91.0,
+          "reservoir_1": {
+            "water_level": 10.000432950085404,
+            "outflow": 0,
+            "volume": 20.00086590017081,
+            "inflow": 0.22236326502246828
+          }
+        },
+        {
+          "time": 92.0,
+          "reservoir_1": {
+            "water_level": 10.191613398195026,
+            "outflow": 0,
+            "volume": 20.38322679639005,
+            "inflow": 0.38236089621924396
+          }
+        },
+        {
+          "time": 93.0,
+          "reservoir_1": {
+            "water_level": 9.77520336993118,
+            "outflow": 0,
+            "volume": 19.55040673986236,
+            "inflow": -0.8328200565276904
+          }
+        },
+        {
+          "time": 94.0,
+          "reservoir_1": {
+            "water_level": 9.306984022582968,
+            "outflow": 0,
+            "volume": 18.613968045165937,
+            "inflow": -0.9364386946964229
+          }
+        },
+        {
+          "time": 95.0,
+          "reservoir_1": {
+            "water_level": 9.739080522751328,
+            "outflow": 0,
+            "volume": 19.478161045502656,
+            "inflow": 0.8641930003367186
+          }
+        },
+        {
+          "time": 96.0,
+          "reservoir_1": {
+            "water_level": 10.385751420013305,
+            "outflow": 0,
+            "volume": 20.77150284002661,
+            "inflow": 1.2933417945239554
+          }
+        },
+        {
+          "time": 97.0,
+          "reservoir_1": {
+            "water_level": 10.148444636496732,
+            "outflow": 0,
+            "volume": 20.296889272993464,
+            "inflow": -0.47461356703314606
+          }
+        },
+        {
+          "time": 98.0,
+          "reservoir_1": {
+            "water_level": 9.626976301590046,
+            "outflow": 0,
+            "volume": 19.253952603180092,
+            "inflow": -1.0429366698133729
+          }
+        },
+        {
+          "time": 99.0,
+          "reservoir_1": {
+            "water_level": 9.894051809045145,
+            "outflow": 0,
+            "volume": 19.78810361809029,
+            "inflow": 0.5341510149101969
+          }
+        }
+      ]
+    },
+    "topology": {
+      "connections": []
+    },
+    "unified_config": {
+      "simulation": {
+        "name": "水箱传感器干扰",
+        "description": "重构后的水箱传感器干扰示例",
+        "duration": 300.0,
+        "time_step": 1.0
+      },
+      "components": {
+        "watertank": {
+          "type": "WaterTank",
+          "parameters": {
+            "capacity": 1000.0,
+            "initial_level": 50.0,
+            "cross_sectional_area": 100.0,
+            "target_level": 70.0
+          }
+        },
+        "level_sensor": {
+          "type": "Sensor",
+          "parameters": {
+            "measurement_variable": "water_level",
+            "noise_type": "gaussian",
+            "noise_std": 2.0,
+            "bias": 0.5,
+            "drift_rate": 0.01
+          }
+        },
+        "inlet_valve": {
+          "type": "Valve",
+          "parameters": {
+            "max_flow_rate": 45.0,
+            "initial_opening": 0.5
+          }
+        }
+      },
+      "control": {
+        "enabled": true,
+        "type": "robust_PID",
+        "target_variable": "measured_water_level",
+        "control_variable": "inlet_flow",
+        "parameters": {
+          "kp": 1.5,
+          "ki": 0.06,
+          "kd": 0.4,
+          "setpoint": 70.0,
+          "filter_enabled": true,
+          "filter_cutoff": 0.1
+        }
+      },
+      "disturbances": {
+        "enabled": true,
+        "sensor_noise": {
+          "type": "white_noise",
+          "amplitude": 2.0
+        },
+        "sensor_bias": {
+          "value": 0.5,
+          "drift": 0.01
+        }
+      },
+      "output": {
+        "format": "json",
+        "save_path": "sensor_disturbance_results.json",
+        "variables": [
+          "water_level",
+          "measured_water_level",
+          "volume",
+          "inlet_flow",
+          "control_signal",
+          "error",
+          "noise"
+        ]
+      }
+    },
+    "universal_config": {
+      "metadata": {
+        "name": "水箱传感器干扰",
+        "description": "重构后的水箱传感器干扰示例",
+        "category": "watertank_refactored",
+        "version": "1.0"
+      },
+      "simulation": {
+        "time": {
+          "start": 0.0,
+          "end": 300.0,
+          "step": 1.0
+        },
+        "solver": {
+          "type": "euler",
+          "tolerance": "1e-6"
+        }
+      },
+      "system": {
+        "components": [
+          {
+            "name": "watertank",
+            "type": "WaterTank",
+            "config": {
+              "capacity": 1000.0,
+              "initial_level": 50.0,
+              "area": 100.0
+            }
+          },
+          {
+            "name": "level_sensor",
+            "type": "Sensor",
+            "config": {
+              "target": "watertank.water_level",
+              "noise_std": 2.0,
+              "bias": 0.5,
+              "drift_rate": 0.01
+            }
+          },
+          {
+            "name": "inlet_valve",
+            "type": "Valve",
+            "config": {
+              "max_flow": 45.0,
+              "initial_position": 0.5
+            }
+          }
+        ]
+      },
+      "control": {
+        "enabled": true,
+        "controllers": [
+          {
+            "name": "robust_controller",
+            "type": "robust_PID",
+            "input": "level_sensor.measurement",
+            "output": "inlet_valve.position",
+            "setpoint": 70.0,
+            "parameters": {
+              "kp": 1.5,
+              "ki": 0.06,
+              "kd": 0.4
+            },
+            "filtering": {
+              "enabled": true,
+              "type": "low_pass",
+              "cutoff_frequency": 0.1
+            }
+          }
+        ]
+      },
+      "disturbances": {
+        "enabled": true,
+        "sources": [
+          {
+            "name": "sensor_noise",
+            "type": "gaussian_noise",
+            "target": "level_sensor",
+            "parameters": {
+              "std_dev": 2.0
+            }
+          },
+          {
+            "name": "sensor_bias",
+            "type": "bias_drift",
+            "target": "level_sensor",
+            "parameters": {
+              "initial_bias": 0.5,
+              "drift_rate": 0.01
+            }
+          }
+        ]
+      },
+      "monitoring": {
+        "enabled": true,
+        "variables": [
+          "watertank.water_level",
+          "level_sensor.measurement",
+          "level_sensor.noise",
+          "level_sensor.bias",
+          "inlet_valve.flow_rate",
+          "robust_controller.output"
+        ]
+      },
+      "logging": {
+        "level": "DEBUG",
+        "output_file": "sensor_disturbance.log"
+      }
+    }
+  },
+  "regenerated_config": {
+    "config.yml": {
+      "simulation": {
+        "duration": 3600,
+        "dt": 1.0,
+        "solver": {
+          "type": "euler"
+        }
+      }
+    },
+    "components.yml": {
+      "components": []
+    },
+    "topology.yml": {
+      "connections": []
+    },
+    "agents.yml": {
+      "agents": []
+    }
+  },
+  "comparison_result": {
+    "overall_score": 0.375,
+    "components_score": 0.0,
+    "topology_score": 1.0,
+    "simulation_score": 0.5,
+    "agents_score": 0.0,
+    "issues": [
+      "重新生成的配置中没有组件定义",
+      "仿真参数不匹配: 原始300, 重新生成3600",
+      "智能体数量不匹配: 原始5个, 重新生成0个"
+    ],
+    "improvements": []
+  }
+}

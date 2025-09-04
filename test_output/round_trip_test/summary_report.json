@@ -1,0 +1,4054 @@
+{
+  "total_tests": 151,
+  "successful_tests": 128,
+  "failed_tests": 23,
+  "average_consistency_score": 0.6441307878319598,
+  "best_score": 1.0,
+  "worst_score": 0.125,
+  "common_issues": [
+    [
+      "原始配置中没有连接定义",
+      34
+    ],
+    [
+      "重新生成的配置中没有组件定义",
+      21
+    ],
+    [
+      "仿真参数不匹配: 原始1.0, 重新生成None",
+      10
+    ],
+    [
+      "重新生成的配置中没有连接定义",
+      9
+    ],
+    [
+      "连接数量不匹配: 原始1个, 重新生成3个",
+      8
+    ]
+  ],
+  "test_results": [
+    {
+      "config_path": "examples\\watertank\\01_simulation\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.5625,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 0.25,
+        "issues": [
+          "仿真参数不匹配: 原始100, 重新生成None",
+          "仿真参数不匹配: 原始1.0, 重新生成None",
+          "智能体数量不匹配: 原始0个, 重新生成1个"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 1,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\watertank_refactored\\02_parameter_identification",
+      "config_type": "traditional_multi",
+      "success": false,
+      "error": "could not determine a constructor for the tag 'tag:yaml.org,2002:python/object/apply:numpy._core.multiarray.scalar'\n  in \"examples\\watertank_refactored\\02_parameter_identification\\output.yml\", line 4, column 18",
+      "consistency": {
+        "overall_score": 0.0,
+        "issues": [
+          "could not determine a constructor for the tag 'tag:yaml.org,2002:python/object/apply:numpy._core.multiarray.scalar'\n  in \"examples\\watertank_refactored\\02_parameter_identification\\output.yml\", line 4, column 18"
+        ]
+      }
+    },
+    {
+      "config_path": "examples\\converted\\简单水库系统_traditional",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\简单水库系统_traditional\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\简单水库系统_traditional",
+      "consistency": {
+        "overall_score": 0.8916666666666667,
+        "components_score": 0.9,
+        "topology_score": 0.6666666666666667,
+        "simulation_score": 1.0,
+        "agents_score": 1.0,
+        "issues": [
+          "组件数量不匹配: 原始4个, 重新生成5个",
+          "连接数量不匹配: 原始1个, 重新生成3个"
+        ],
+        "improvements": [
+          "新增的连接: {('包含1个', '关系'), ('具体', '关系')}"
+        ]
+      },
+      "technical_details": {
+        "config_type": "传统多配置文件",
+        "files_count": 4,
+        "components_count": 4,
+        "simulation_duration": 3600,
+        "time_step": 1.0
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_2\\03_watershed_coordination",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\03_watershed_coordination\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\03_watershed_coordination",
+      "consistency": {
+        "overall_score": 0.25,
+        "components_score": 0.0,
+        "topology_score": 0.0,
+        "simulation_score": 1.0,
+        "agents_score": 0.0,
+        "issues": [
+          "重新生成的配置中没有组件定义",
+          "重新生成的配置中没有连接定义",
+          "智能体数量不匹配: 原始4个, 重新生成0个"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": 3600.0,
+        "time_step": 5.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\agent_based\\03_event_driven_agents\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.6875,
+        "components_score": 1.0,
+        "topology_score": 0.0,
+        "simulation_score": 1.0,
+        "agents_score": 0.75,
+        "issues": [
+          "原始配置中没有连接定义"
+        ],
+        "improvements": [
+          "重新生成的配置中添加了1个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 2,
+        "simulation_duration": 300,
+        "time_step": "N/A",
+        "has_control": false,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "examples\\watertank_refactored\\06_sensor_disturbance",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\06_sensor_disturbance\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\06_sensor_disturbance",
+      "consistency": {
+        "overall_score": 0.375,
+        "components_score": 0.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.5,
+        "agents_score": 0.0,
+        "issues": [
+          "重新生成的配置中没有组件定义",
+          "仿真参数不匹配: 原始300, 重新生成3600",
+          "智能体数量不匹配: 原始5个, 重新生成0个"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_5\\02_multi_unit_coordination\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "仿真参数不匹配: 原始Mission Example 5.2 - Multi-Unit Coordination, 重新生成自动生成的仿真"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": 300,
+        "time_step": 10.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_1\\01_basic_simulation",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\01_basic_simulation\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\01_basic_simulation",
+      "consistency": {
+        "overall_score": 0.125,
+        "components_score": 0.0,
+        "topology_score": 0.0,
+        "simulation_score": 0.5,
+        "agents_score": 0.0,
+        "issues": [
+          "重新生成的配置中没有组件定义",
+          "重新生成的配置中没有连接定义",
+          "仿真参数不匹配: 原始1000, 重新生成3600",
+          "智能体数量不匹配: 原始2个, 重新生成0个"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": 1000.0,
+        "time_step": 10.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_5\\03_economic_dispatch",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\03_economic_dispatch\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\03_economic_dispatch",
+      "consistency": {
+        "overall_score": 0.5,
+        "components_score": 0.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "重新生成的配置中没有组件定义",
+          "仿真参数不匹配: 原始Mission Example 5.3 - Economic Dispatch, 重新生成None"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": 1.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\agent_based\\03_event_driven_agents",
+      "config_type": "unknown",
+      "success": false,
+      "error": "'list' object has no attribute 'get'",
+      "consistency": {
+        "overall_score": 0.0,
+        "issues": [
+          "'list' object has no attribute 'get'"
+        ]
+      }
+    },
+    {
+      "config_path": "examples\\notebooks\\07_centralized_setpoint_optimization\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.7395833333333334,
+        "components_score": 0.625,
+        "topology_score": 1.0,
+        "simulation_score": 0.3333333333333333,
+        "agents_score": 1.0,
+        "issues": [
+          "组件数量不匹配: 原始4个, 重新生成3个",
+          "缺失的组件类型: {'CentralizedOptimizer'}",
+          "仿真参数不匹配: 原始200.0, 重新生成3600",
+          "仿真参数不匹配: 原始集中式设定点优化, 重新生成自动生成的仿真"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 4,
+        "simulation_duration": 200.0,
+        "time_step": 1.0,
+        "has_control": true,
+        "has_optimization": true
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_3\\01_enhanced_perception",
+      "config_type": "traditional_multi",
+      "success": false,
+      "error": "could not determine a constructor for the tag 'tag:yaml.org,2002:python/object/apply:numpy._core.multiarray.scalar'\n  in \"examples\\mission_example_3\\01_enhanced_perception\\output_agents.yml\", line 4, column 18",
+      "consistency": {
+        "overall_score": 0.0,
+        "issues": [
+          "could not determine a constructor for the tag 'tag:yaml.org,2002:python/object/apply:numpy._core.multiarray.scalar'\n  in \"examples\\mission_example_3\\01_enhanced_perception\\output_agents.yml\", line 4, column 18"
+        ]
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_1",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\mission_example_1\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\mission_example_1",
+      "consistency": {
+        "overall_score": 0.875,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.5,
+        "agents_score": 1.0,
+        "issues": [
+          "仿真参数不匹配: 原始100.0, 重新生成3600"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": 100.0,
+        "time_step": 1.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "test_output\\enhanced_rule_2\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.9583333333333334,
+        "components_score": 1.0,
+        "topology_score": 0.8333333333333334,
+        "simulation_score": 1.0,
+        "agents_score": 1.0,
+        "issues": [
+          "连接数量不匹配: 原始4个, 重新生成6个"
+        ],
+        "improvements": [
+          "新增的连接: {('具体', '关系'), ('包含4个', '关系')}"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 1,
+        "simulation_duration": 7200,
+        "time_step": 1.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_2\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.375,
+        "components_score": 1.0,
+        "topology_score": 0.0,
+        "simulation_score": 0.0,
+        "agents_score": 0.5,
+        "issues": [
+          "原始配置中没有连接定义",
+          "仿真参数不匹配: 原始Mission Example 2 - 现地闭环控制, 重新生成自动生成的仿真"
+        ],
+        "improvements": [
+          "重新生成的配置中添加了2个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 3,
+        "simulation_duration": 2000.0,
+        "time_step": 10.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\non_agent_based\\07_pipe_and_valve",
+      "config_type": "unknown",
+      "success": false,
+      "error": "'list' object has no attribute 'get'",
+      "consistency": {
+        "overall_score": 0.0,
+        "issues": [
+          "'list' object has no attribute 'get'"
+        ]
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_5\\01_turbine_gate_simulation\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "仿真参数不匹配: 原始Mission Example 5.1 - Turbine Gate Simulation, 重新生成自动生成的仿真"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": 10.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\agent_based\\09_agent_based_distributed_control\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.3125,
+        "components_score": 1.0,
+        "topology_score": 0.0,
+        "simulation_score": 0.0,
+        "agents_score": 0.25,
+        "issues": [
+          "原始配置中没有连接定义",
+          "仿真参数不匹配: 原始300, 重新生成None",
+          "仿真参数不匹配: 原始1.0, 重新生成None",
+          "智能体数量不匹配: 原始0个, 重新生成1个"
+        ],
+        "improvements": [
+          "重新生成的配置中添加了1个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 2,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\identification\\03_pipe_roughness",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\03_pipe_roughness\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\03_pipe_roughness",
+      "consistency": {
+        "overall_score": 0.5,
+        "components_score": 0.0,
+        "topology_score": 1.0,
+        "simulation_score": 1.0,
+        "agents_score": 0.0,
+        "issues": [
+          "重新生成的配置中没有组件定义",
+          "智能体数量不匹配: 原始5个, 重新生成0个"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "demo_output\\round_trip_config\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.9166666666666667,
+        "components_score": 1.0,
+        "topology_score": 0.6666666666666667,
+        "simulation_score": 1.0,
+        "agents_score": 1.0,
+        "issues": [
+          "连接数量不匹配: 原始1个, 重新生成3个"
+        ],
+        "improvements": [
+          "新增的连接: {('包含1个', '关系'), ('具体', '关系')}"
+        ]
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 10,
+        "simulation_duration": 7200,
+        "time_step": 0.5,
+        "has_control": true,
+        "has_optimization": true
+      }
+    },
+    {
+      "config_path": "examples\\notebooks\\10_canal_system\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.59375,
+        "components_score": 0.75,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 0.625,
+        "issues": [
+          "组件数量不匹配: 原始4个, 重新生成3个",
+          "缺失的组件类型: {'Lake'}",
+          "仿真参数不匹配: 原始300, 重新生成None",
+          "仿真参数不匹配: 原始1.0, 重新生成None"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 4,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": true,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_1\\03_fault_tolerance\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "仿真参数不匹配: 原始容错系统仿真, 重新生成自动生成的仿真"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": 2400.0,
+        "time_step": 2.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\identification\\02_gate_discharge_coefficient",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\02_gate_discharge_coefficient\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\02_gate_discharge_coefficient",
+      "consistency": {
+        "overall_score": 0.5,
+        "components_score": 0.0,
+        "topology_score": 1.0,
+        "simulation_score": 1.0,
+        "agents_score": 0.0,
+        "issues": [
+          "重新生成的配置中没有组件定义",
+          "智能体数量不匹配: 原始5个, 重新生成0个"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\watertank\\01_simulation",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\01_simulation\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\01_simulation",
+      "consistency": {
+        "overall_score": 0.875,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 1.0,
+        "agents_score": 0.5,
+        "issues": [],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 1,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_5\\04_gate_scheduling\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "仿真参数不匹配: 原始Mission Example 5.4 - Gate Scheduling, 重新生成自动生成的仿真"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": 1.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\agent_based\\03_event_driven_agents\\universal_config.yml",
+      "config_type": "unknown",
+      "success": false,
+      "error": "'list' object has no attribute 'get'",
+      "consistency": {
+        "overall_score": 0.0,
+        "issues": [
+          "'list' object has no attribute 'get'"
+        ]
+      }
+    },
+    {
+      "config_path": "examples\\converted\\灌区配水系统_universal\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.5,
+        "components_score": 1.0,
+        "topology_score": 0.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "原始配置中没有连接定义",
+          "仿真参数不匹配: 原始智能灌区配水系统, 重新生成自动生成的仿真"
+        ],
+        "improvements": [
+          "重新生成的配置中添加了1个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 4,
+        "simulation_duration": 604800,
+        "time_step": 300.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\distributed_digital_twin_simulation",
+      "config_type": "unknown",
+      "success": false,
+      "error": "'str' object has no attribute 'get'",
+      "consistency": {
+        "overall_score": 0.0,
+        "issues": [
+          "'str' object has no attribute 'get'"
+        ]
+      }
+    },
+    {
+      "config_path": "demo_output\\universal_config_config\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.7,
+        "components_score": 1.0,
+        "topology_score": 0.8,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "连接数量不匹配: 原始3个, 重新生成5个",
+          "仿真参数不匹配: 原始智能水库调度系统, 重新生成水库"
+        ],
+        "improvements": [
+          "新增的连接: {('包含3个', '关系'), ('具体', '关系')}"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 10,
+        "simulation_duration": 7200,
+        "time_step": 0.5,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\watertank_refactored\\07_actuator_disturbance",
+      "config_type": "traditional_multi",
+      "success": false,
+      "error": "could not determine a constructor for the tag 'tag:yaml.org,2002:python/object/apply:numpy._core.multiarray.scalar'\n  in \"examples\\watertank_refactored\\07_actuator_disturbance\\output.yml\", line 4, column 18",
+      "consistency": {
+        "overall_score": 0.0,
+        "issues": [
+          "could not determine a constructor for the tag 'tag:yaml.org,2002:python/object/apply:numpy._core.multiarray.scalar'\n  in \"examples\\watertank_refactored\\07_actuator_disturbance\\output.yml\", line 4, column 18"
+        ]
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_2\\01_local_control\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "仿真参数不匹配: 原始现地控制系统仿真, 重新生成自动生成的仿真"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": 1200.0,
+        "time_step": 2.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\non_agent_based\\01_getting_started",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\01_getting_started\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\01_getting_started",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 0.0,
+        "simulation_score": 1.0,
+        "agents_score": 1.0,
+        "issues": [
+          "原始配置中没有连接定义"
+        ],
+        "improvements": [
+          "重新生成的配置中添加了1个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 2,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\agent_based\\09_agent_based_distributed_control",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\09_agent_based_distributed_control\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\09_agent_based_distributed_control",
+      "consistency": {
+        "overall_score": 1.0,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 1.0,
+        "agents_score": 1.0,
+        "issues": [],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 2,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\canal_model\\hierarchical_distributed_control_example\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.625,
+        "components_score": 0.5,
+        "topology_score": 0.0,
+        "simulation_score": 1.0,
+        "agents_score": 1.0,
+        "issues": [
+          "缺失的组件类型: {'core_lib.physical_objects.gate.Gate', 'core_lib.physical_objects.disturbance_node.DisturbanceNode', 'core_lib.physical_objects.unified_canal.UnifiedCanal', 'core_lib.physical_objects.reservoir.Reservoir'}",
+          "原始配置中没有连接定义"
+        ],
+        "improvements": [
+          "新增的组件类型: {'Gate', 'DisturbanceNode', 'Reservoir', 'Canal'}",
+          "重新生成的配置中添加了4个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 8,
+        "simulation_duration": 10800,
+        "time_step": "N/A",
+        "has_control": false,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "examples\\watertank\\01_simulation\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 1.0,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 1.0,
+        "agents_score": 1.0,
+        "issues": [],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 1,
+        "simulation_duration": 100,
+        "time_step": "N/A",
+        "has_control": false,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "examples\\watertank_refactored\\05_joint_control",
+      "config_type": "traditional_multi",
+      "success": false,
+      "error": "could not determine a constructor for the tag 'tag:yaml.org,2002:python/object/apply:numpy._core.multiarray.scalar'\n  in \"examples\\watertank_refactored\\05_joint_control\\output.yml\", line 4, column 18",
+      "consistency": {
+        "overall_score": 0.0,
+        "issues": [
+          "could not determine a constructor for the tag 'tag:yaml.org,2002:python/object/apply:numpy._core.multiarray.scalar'\n  in \"examples\\watertank_refactored\\05_joint_control\\output.yml\", line 4, column 18"
+        ]
+      }
+    },
+    {
+      "config_path": "examples\\converted\\多组件水利系统_traditional",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\多组件水利系统_traditional\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\多组件水利系统_traditional",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "仿真参数不匹配: 原始7200, 重新生成3600",
+          "仿真参数不匹配: 原始0.5, 重新生成1.0"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "传统多配置文件",
+        "files_count": 4,
+        "components_count": 0,
+        "simulation_duration": 7200,
+        "time_step": 0.5
+      }
+    },
+    {
+      "config_path": "examples\\non_agent_based\\07_pipe_and_valve\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 1.0,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 1.0,
+        "agents_score": 1.0,
+        "issues": [],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 2,
+        "simulation_duration": 600,
+        "time_step": "N/A",
+        "has_control": true,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "examples\\canal_model\\canal_mpc_pid_control\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.28125,
+        "components_score": 0.875,
+        "topology_score": 0.0,
+        "simulation_score": 0.0,
+        "agents_score": 0.25,
+        "issues": [
+          "缺失的组件类型: {'core_lib.physical_objects.disturbance_node.DisturbanceNode'}",
+          "原始配置中没有连接定义",
+          "仿真参数不匹配: 原始7200, 重新生成None",
+          "仿真参数不匹配: 原始10, 重新生成None",
+          "智能体数量不匹配: 原始0个, 重新生成7个"
+        ],
+        "improvements": [
+          "新增的组件类型: {'DisturbanceNode'}",
+          "重新生成的配置中添加了2个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 7,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\converted\\灌区配水系统_unified\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.6666666666666666,
+        "components_score": 1.0,
+        "topology_score": 0.0,
+        "simulation_score": 0.6666666666666666,
+        "agents_score": 1.0,
+        "issues": [
+          "原始配置中没有连接定义",
+          "仿真参数不匹配: 原始智能灌区配水系统, 重新生成自动生成的仿真"
+        ],
+        "improvements": [
+          "重新生成的配置中添加了1个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 4,
+        "simulation_duration": 604800,
+        "time_step": 300.0,
+        "has_control": false,
+        "has_optimization": true
+      }
+    },
+    {
+      "config_path": "examples\\converted\\简单水库系统_universal\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.6416666666666667,
+        "components_score": 0.9,
+        "topology_score": 0.6666666666666667,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "组件数量不匹配: 原始4个, 重新生成5个",
+          "连接数量不匹配: 原始1个, 重新生成3个",
+          "仿真参数不匹配: 原始简单水库控制系统, 重新生成水库"
+        ],
+        "improvements": [
+          "新增的连接: {('包含1个', '关系'), ('具体', '关系')}"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 4,
+        "simulation_duration": 3600,
+        "time_step": 1.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "test_output\\round_trip_test\\unified_config\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 1.0,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 1.0,
+        "agents_score": 1.0,
+        "issues": [],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 4,
+        "simulation_duration": 604800,
+        "time_step": 300.0,
+        "has_control": false,
+        "has_optimization": true
+      }
+    },
+    {
+      "config_path": "examples\\converted\\多组件水利系统_unified\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.9166666666666666,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.6666666666666666,
+        "agents_score": 1.0,
+        "issues": [
+          "仿真参数不匹配: 原始复杂水利调度系统, 重新生成自动生成的仿真"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 0,
+        "simulation_duration": 7200,
+        "time_step": 0.5,
+        "has_control": true,
+        "has_optimization": true
+      }
+    },
+    {
+      "config_path": "examples\\identification\\01_reservoir_storage_curve",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\01_reservoir_storage_curve\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\01_reservoir_storage_curve",
+      "consistency": {
+        "overall_score": 0.5,
+        "components_score": 0.0,
+        "topology_score": 1.0,
+        "simulation_score": 1.0,
+        "agents_score": 0.0,
+        "issues": [
+          "重新生成的配置中没有组件定义",
+          "智能体数量不匹配: 原始5个, 重新生成0个"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\demo\\simplified_reservoir_control\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.625,
+        "components_score": 1.0,
+        "topology_score": 0.0,
+        "simulation_score": 1.0,
+        "agents_score": 0.5,
+        "issues": [
+          "原始配置中没有连接定义"
+        ],
+        "improvements": [
+          "重新生成的配置中添加了1个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 2,
+        "simulation_duration": 200,
+        "time_step": "N/A",
+        "has_control": false,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_3\\01_enhanced_perception\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "仿真参数不匹配: 原始Enhanced Perception Agent Demo, 重新生成自动生成的仿真"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": 1.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\watertank_refactored\\06_sensor_disturbance\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 0.6666666666666667,
+        "topology_score": 1.0,
+        "simulation_score": 0.3333333333333333,
+        "agents_score": 1.0,
+        "issues": [
+          "组件数量不匹配: 原始3个, 重新生成2个",
+          "缺失的组件类型: {'WaterTank'}",
+          "仿真参数不匹配: 原始300.0, 重新生成3600",
+          "仿真参数不匹配: 原始水箱传感器干扰, 重新生成自动生成的仿真"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 3,
+        "simulation_duration": 300.0,
+        "time_step": 1.0,
+        "has_control": true,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "test_output\\universal_config\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.6666666666666667,
+        "components_score": 1.0,
+        "topology_score": 0.6666666666666667,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "连接数量不匹配: 原始1个, 重新生成3个",
+          "仿真参数不匹配: 原始简单水库系统, 重新生成水库"
+        ],
+        "improvements": [
+          "新增的连接: {('包含1个', '关系'), ('具体', '关系')}"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 4,
+        "simulation_duration": 3600,
+        "time_step": 1.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\canal_model\\structured_control_example",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\structured_control_example\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\structured_control_example",
+      "consistency": {
+        "overall_score": 0.71875,
+        "components_score": 0.5,
+        "topology_score": 0.875,
+        "simulation_score": 1.0,
+        "agents_score": 0.5,
+        "issues": [
+          "缺失的组件类型: {'core_lib.physical_objects.gate.Gate', 'core_lib.physical_objects.unified_canal.UnifiedCanal', 'core_lib.physical_objects.reservoir.Reservoir'}",
+          "缺失的连接: {('canal_1', 'gate_2')}"
+        ],
+        "improvements": [
+          "新增的组件类型: {'Gate', 'Reservoir', 'Canal'}",
+          "新增的连接: {('canal_1', 'canal_2')}"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 5,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\notebooks\\10_canal_system",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\10_canal_system\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\10_canal_system",
+      "consistency": {
+        "overall_score": 0.5625,
+        "components_score": 0.0,
+        "topology_score": 1.0,
+        "simulation_score": 1.0,
+        "agents_score": 0.25,
+        "issues": [
+          "原始配置中没有组件定义",
+          "智能体数量不匹配: 原始0个, 重新生成4个"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 4,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": true,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\canal_model\\canal_model_comparison",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\canal_model_comparison\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\canal_model_comparison",
+      "consistency": {
+        "overall_score": 0.875,
+        "components_score": 1.0,
+        "topology_score": 0.5,
+        "simulation_score": 1.0,
+        "agents_score": 1.0,
+        "issues": [
+          "连接数量不匹配: 原始2个, 重新生成1个",
+          "缺失的连接: {('gate_1', 'downstream_reservoir')}"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 3,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\watertank_refactored\\03_pid_control_inlet",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\03_pid_control_inlet\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\03_pid_control_inlet",
+      "consistency": {
+        "overall_score": 0.375,
+        "components_score": 0.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.5,
+        "agents_score": 0.0,
+        "issues": [
+          "重新生成的配置中没有组件定义",
+          "仿真参数不匹配: 原始300, 重新生成3600",
+          "智能体数量不匹配: 原始6个, 重新生成0个"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\watertank_refactored\\01_simple_simulation\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\canal_model\\structured_control_example\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.1875,
+        "components_score": 0.5,
+        "topology_score": 0.0,
+        "simulation_score": 0.0,
+        "agents_score": 0.25,
+        "issues": [
+          "缺失的组件类型: {'core_lib.physical_objects.gate.Gate', 'core_lib.physical_objects.unified_canal.UnifiedCanal', 'core_lib.physical_objects.reservoir.Reservoir'}",
+          "原始配置中没有连接定义",
+          "仿真参数不匹配: 原始3600, 重新生成None",
+          "仿真参数不匹配: 原始10, 重新生成None",
+          "智能体数量不匹配: 原始0个, 重新生成2个"
+        ],
+        "improvements": [
+          "新增的组件类型: {'Gate', 'Reservoir', 'Canal'}",
+          "重新生成的配置中添加了4个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 5,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\watertank_refactored\\02_parameter_identification\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\non_agent_based\\08_non_agent_simulation\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.5,
+        "components_score": 1.0,
+        "topology_score": 0.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "原始配置中没有连接定义",
+          "仿真参数不匹配: 原始100, 重新生成None",
+          "仿真参数不匹配: 原始1.0, 重新生成None"
+        ],
+        "improvements": [
+          "重新生成的配置中添加了1个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 2,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\notebooks\\07_centralized_setpoint_optimization\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\watertank_refactored\\05_joint_control\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.7291666666666666,
+        "components_score": 0.5833333333333334,
+        "topology_score": 1.0,
+        "simulation_score": 0.3333333333333333,
+        "agents_score": 1.0,
+        "issues": [
+          "组件数量不匹配: 原始3个, 重新生成2个",
+          "缺失的组件类型: {'WaterTank'}",
+          "仿真参数不匹配: 原始400.0, 重新生成3600",
+          "仿真参数不匹配: 原始水箱联合控制, 重新生成自动生成的仿真"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 3,
+        "simulation_duration": 400.0,
+        "time_step": 1.0,
+        "has_control": true,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "examples\\canal_model\\complex_fault_scenario_example",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\complex_fault_scenario_example\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\complex_fault_scenario_example",
+      "consistency": {
+        "overall_score": 0.6071428571428571,
+        "components_score": 0.5,
+        "topology_score": 0.42857142857142855,
+        "simulation_score": 1.0,
+        "agents_score": 0.5,
+        "issues": [
+          "缺失的组件类型: {'core_lib.physical_objects.gate.Gate', 'core_lib.physical_objects.disturbance_node.DisturbanceNode', 'core_lib.physical_objects.unified_canal.UnifiedCanal', 'core_lib.physical_objects.reservoir.Reservoir'}",
+          "连接数量不匹配: 原始7个, 重新生成4个",
+          "缺失的连接: {('canal_1', 'turnout_2'), ('turnout_2', 'gate_2'), ('upstream_reservoir', 'turnout_1'), ('turnout_1', 'gate_1'), ('canal_2', 'terminal_user')}"
+        ],
+        "improvements": [
+          "新增的组件类型: {'Gate', 'DisturbanceNode', 'Reservoir', 'Canal'}",
+          "新增的连接: {('upstream_reservoir', 'gate_1'), ('canal_1', 'canal_2')}"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 8,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.5,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 0.0,
+        "issues": [
+          "智能体数量不匹配: 原始4个, 重新生成0个"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": true,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\canal_model\\hierarchical_distributed_control_example\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.1875,
+        "components_score": 0.5,
+        "topology_score": 0.0,
+        "simulation_score": 0.0,
+        "agents_score": 0.25,
+        "issues": [
+          "缺失的组件类型: {'core_lib.physical_objects.gate.Gate', 'core_lib.physical_objects.disturbance_node.DisturbanceNode', 'core_lib.physical_objects.unified_canal.UnifiedCanal', 'core_lib.physical_objects.reservoir.Reservoir'}",
+          "原始配置中没有连接定义",
+          "仿真参数不匹配: 原始10800, 重新生成None",
+          "仿真参数不匹配: 原始10, 重新生成None",
+          "智能体数量不匹配: 原始0个, 重新生成5个"
+        ],
+        "improvements": [
+          "新增的组件类型: {'Gate', 'DisturbanceNode', 'Reservoir', 'Canal'}",
+          "重新生成的配置中添加了4个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 8,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\identification\\02_gate_discharge_coefficient\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "仿真参数不匹配: 原始20000, 重新生成None",
+          "仿真参数不匹配: 原始100, 重新生成None"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\non_agent_based\\08_non_agent_simulation\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 0.0,
+        "simulation_score": 1.0,
+        "agents_score": 1.0,
+        "issues": [
+          "原始配置中没有连接定义"
+        ],
+        "improvements": [
+          "重新生成的配置中添加了1个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 2,
+        "simulation_duration": 100,
+        "time_step": "N/A",
+        "has_control": false,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_1\\02_advanced_control",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\02_advanced_control\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\02_advanced_control",
+      "consistency": {
+        "overall_score": 0.125,
+        "components_score": 0.0,
+        "topology_score": 0.0,
+        "simulation_score": 0.5,
+        "agents_score": 0.0,
+        "issues": [
+          "重新生成的配置中没有组件定义",
+          "重新生成的配置中没有连接定义",
+          "仿真参数不匹配: 原始1800, 重新生成3600",
+          "智能体数量不匹配: 原始4个, 重新生成0个"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": 1800.0,
+        "time_step": 5.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_1\\03_fault_tolerance",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\03_fault_tolerance\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\03_fault_tolerance",
+      "consistency": {
+        "overall_score": 0.125,
+        "components_score": 0.0,
+        "topology_score": 0.0,
+        "simulation_score": 0.5,
+        "agents_score": 0.0,
+        "issues": [
+          "重新生成的配置中没有组件定义",
+          "重新生成的配置中没有连接定义",
+          "仿真参数不匹配: 原始2400, 重新生成3600",
+          "智能体数量不匹配: 原始2个, 重新生成0个"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": 2400.0,
+        "time_step": 2.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\canal_model\\canal_mpc_pid_control",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\canal_mpc_pid_control\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\canal_mpc_pid_control",
+      "consistency": {
+        "overall_score": 0.6979166666666666,
+        "components_score": 0.875,
+        "topology_score": 0.25,
+        "simulation_score": 1.0,
+        "agents_score": 0.6666666666666666,
+        "issues": [
+          "缺失的组件类型: {'core_lib.physical_objects.disturbance_node.DisturbanceNode'}",
+          "连接数量不匹配: 原始6个, 重新生成2个",
+          "缺失的连接: {('upstream_reservoir', 'diversion_before_gate1'), ('gate_2', 'tail_user'), ('canal_1', 'diversion_before_gate2'), ('diversion_before_gate2', 'gate_2'), ('diversion_before_gate1', 'gate_1')}"
+        ],
+        "improvements": [
+          "新增的组件类型: {'DisturbanceNode'}",
+          "新增的连接: {('upstream_reservoir', 'gate_1')}"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 7,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\agent_based\\06_centralized_emergency_override\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.3125,
+        "components_score": 1.0,
+        "topology_score": 0.0,
+        "simulation_score": 0.0,
+        "agents_score": 0.25,
+        "issues": [
+          "原始配置中没有连接定义",
+          "仿真参数不匹配: 原始200, 重新生成None",
+          "仿真参数不匹配: 原始1.0, 重新生成None",
+          "智能体数量不匹配: 原始0个, 重新生成2个"
+        ],
+        "improvements": [
+          "重新生成的配置中添加了1个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 2,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\demo\\simplified_reservoir_control",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\simplified_reservoir_control\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\simplified_reservoir_control",
+      "consistency": {
+        "overall_score": 0.5625,
+        "components_score": 1.0,
+        "topology_score": 0.0,
+        "simulation_score": 1.0,
+        "agents_score": 0.25,
+        "issues": [
+          "原始配置中没有连接定义",
+          "智能体数量不匹配: 原始0个, 重新生成2个"
+        ],
+        "improvements": [
+          "重新生成的配置中添加了1个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 2,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": true,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "test_output\\round_trip_test\\universal_config\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 1.0,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 1.0,
+        "agents_score": 1.0,
+        "issues": [],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 2,
+        "simulation_duration": 200,
+        "time_step": 1.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\converted\\简单水库系统_unified\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.8083333333333333,
+        "components_score": 0.9,
+        "topology_score": 0.6666666666666667,
+        "simulation_score": 0.6666666666666666,
+        "agents_score": 1.0,
+        "issues": [
+          "组件数量不匹配: 原始4个, 重新生成5个",
+          "连接数量不匹配: 原始1个, 重新生成3个",
+          "仿真参数不匹配: 原始简单水库控制系统, 重新生成水库"
+        ],
+        "improvements": [
+          "新增的连接: {('包含1个', '关系'), ('具体', '关系')}"
+        ]
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 4,
+        "simulation_duration": 3600,
+        "time_step": 1.0,
+        "has_control": true,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "test_output\\enhanced_hybrid_1\\universal_config.yml",
+      "config_type": "unknown",
+      "success": false,
+      "error": "'list' object has no attribute 'get'",
+      "consistency": {
+        "overall_score": 0.0,
+        "issues": [
+          "'list' object has no attribute 'get'"
+        ]
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_2\\01_local_control",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\01_local_control\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\01_local_control",
+      "consistency": {
+        "overall_score": 0.125,
+        "components_score": 0.0,
+        "topology_score": 0.0,
+        "simulation_score": 0.5,
+        "agents_score": 0.0,
+        "issues": [
+          "重新生成的配置中没有组件定义",
+          "重新生成的配置中没有连接定义",
+          "仿真参数不匹配: 原始1200, 重新生成3600",
+          "智能体数量不匹配: 原始3个, 重新生成0个"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": 1200.0,
+        "time_step": 2.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\canal_model\\canal_mpc_pid_control\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.71875,
+        "components_score": 0.875,
+        "topology_score": 0.0,
+        "simulation_score": 1.0,
+        "agents_score": 1.0,
+        "issues": [
+          "缺失的组件类型: {'core_lib.physical_objects.disturbance_node.DisturbanceNode'}",
+          "原始配置中没有连接定义"
+        ],
+        "improvements": [
+          "新增的组件类型: {'DisturbanceNode'}",
+          "重新生成的配置中添加了2个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 7,
+        "simulation_duration": 7200,
+        "time_step": "N/A",
+        "has_control": false,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_1\\01_basic_simulation\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "仿真参数不匹配: 原始基础物理仿真, 重新生成自动生成的仿真"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": 1000.0,
+        "time_step": 10.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\converted\\水库调度系统_universal\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.671875,
+        "components_score": 0.9375,
+        "topology_score": 0.75,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "组件数量不匹配: 原始7个, 重新生成8个",
+          "连接数量不匹配: 原始2个, 重新生成4个",
+          "仿真参数不匹配: 原始水库调度控制系统, 重新生成水库"
+        ],
+        "improvements": [
+          "新增的连接: {('包含2个', '关系'), ('具体', '关系')}"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 7,
+        "simulation_duration": 86400,
+        "time_step": 60.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\watertank_refactored\\04_pid_control_outlet",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\04_pid_control_outlet\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\04_pid_control_outlet",
+      "consistency": {
+        "overall_score": 0.125,
+        "components_score": 0.0,
+        "topology_score": 0.0,
+        "simulation_score": 0.5,
+        "agents_score": 0.0,
+        "issues": [
+          "重新生成的配置中没有组件定义",
+          "重新生成的配置中没有连接定义",
+          "仿真参数不匹配: 原始300, 重新生成3600",
+          "智能体数量不匹配: 原始5个, 重新生成0个"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "test_output\\enhanced_rule_1\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.9166666666666667,
+        "components_score": 1.0,
+        "topology_score": 0.6666666666666667,
+        "simulation_score": 1.0,
+        "agents_score": 1.0,
+        "issues": [
+          "连接数量不匹配: 原始1个, 重新生成3个"
+        ],
+        "improvements": [
+          "新增的连接: {('包含1个', '关系'), ('具体', '关系')}"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 4,
+        "simulation_duration": 3600,
+        "time_step": 1.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "test_output\\enhanced_hybrid_3\\universal_config.yml",
+      "config_type": "unknown",
+      "success": false,
+      "error": "'list' object has no attribute 'get'",
+      "consistency": {
+        "overall_score": 0.0,
+        "issues": [
+          "'list' object has no attribute 'get'"
+        ]
+      }
+    },
+    {
+      "config_path": "demo_output\\unified_single_config\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.8666666666666667,
+        "components_score": 1.0,
+        "topology_score": 0.8,
+        "simulation_score": 0.6666666666666666,
+        "agents_score": 1.0,
+        "issues": [
+          "连接数量不匹配: 原始3个, 重新生成5个",
+          "仿真参数不匹配: 原始智能水库调度系统, 重新生成水库"
+        ],
+        "improvements": [
+          "新增的连接: {('包含3个', '关系'), ('具体', '关系')}"
+        ]
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 10,
+        "simulation_duration": 7200,
+        "time_step": 0.5,
+        "has_control": true,
+        "has_optimization": true
+      }
+    },
+    {
+      "config_path": "examples\\non_agent_based\\02_multi_component_systems",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\02_multi_component_systems\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\02_multi_component_systems",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 0.0,
+        "simulation_score": 1.0,
+        "agents_score": 1.0,
+        "issues": [
+          "原始配置中没有连接定义"
+        ],
+        "improvements": [
+          "重新生成的配置中添加了1个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 4,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\identification\\01_reservoir_storage_curve\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "仿真参数不匹配: 原始720000, 重新生成None",
+          "仿真参数不匹配: 原始3600, 重新生成None"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\notebooks\\11_control_and_agents\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.675,
+        "components_score": 1.0,
+        "topology_score": 0.0,
+        "simulation_score": 1.0,
+        "agents_score": 0.7,
+        "issues": [
+          "原始配置中没有连接定义"
+        ],
+        "improvements": [
+          "重新生成的配置中添加了1个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 3,
+        "simulation_duration": 200,
+        "time_step": "N/A",
+        "has_control": false,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_5\\02_multi_unit_coordination",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\02_multi_unit_coordination\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\02_multi_unit_coordination",
+      "consistency": {
+        "overall_score": 0.5,
+        "components_score": 0.0,
+        "topology_score": 1.0,
+        "simulation_score": 1.0,
+        "agents_score": 0.0,
+        "issues": [
+          "重新生成的配置中没有组件定义",
+          "智能体数量不匹配: 原始4个, 重新生成0个"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": 300,
+        "time_step": 10.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_2\\02_hierarchical_control",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\02_hierarchical_control\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\02_hierarchical_control",
+      "consistency": {
+        "overall_score": 0.125,
+        "components_score": 0.0,
+        "topology_score": 0.0,
+        "simulation_score": 0.5,
+        "agents_score": 0.0,
+        "issues": [
+          "重新生成的配置中没有组件定义",
+          "重新生成的配置中没有连接定义",
+          "仿真参数不匹配: 原始1800, 重新生成3600",
+          "智能体数量不匹配: 原始4个, 重新生成0个"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": 1800.0,
+        "time_step": 3.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\non_agent_based\\01_getting_started\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 0.0,
+        "simulation_score": 1.0,
+        "agents_score": 1.0,
+        "issues": [
+          "原始配置中没有连接定义"
+        ],
+        "improvements": [
+          "重新生成的配置中添加了1个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 2,
+        "simulation_duration": 300,
+        "time_step": "N/A",
+        "has_control": false,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "examples\\watertank_refactored\\03_pid_control_inlet\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.7083333333333334,
+        "components_score": 0.5,
+        "topology_score": 1.0,
+        "simulation_score": 0.3333333333333333,
+        "agents_score": 1.0,
+        "issues": [
+          "组件数量不匹配: 原始2个, 重新生成1个",
+          "缺失的组件类型: {'WaterTank'}",
+          "仿真参数不匹配: 原始300.0, 重新生成3600",
+          "仿真参数不匹配: 原始水箱PID入口控制, 重新生成自动生成的仿真"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 2,
+        "simulation_duration": 300.0,
+        "time_step": 1.0,
+        "has_control": true,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "examples\\converted\\水库调度系统_unified\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.8385416666666666,
+        "components_score": 0.9375,
+        "topology_score": 0.75,
+        "simulation_score": 0.6666666666666666,
+        "agents_score": 1.0,
+        "issues": [
+          "组件数量不匹配: 原始7个, 重新生成8个",
+          "连接数量不匹配: 原始2个, 重新生成4个",
+          "仿真参数不匹配: 原始水库调度控制系统, 重新生成水库"
+        ],
+        "improvements": [
+          "新增的连接: {('包含2个', '关系'), ('具体', '关系')}"
+        ]
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 7,
+        "simulation_duration": 86400,
+        "time_step": 60.0,
+        "has_control": true,
+        "has_optimization": true
+      }
+    },
+    {
+      "config_path": "test_output\\enhanced_llm_3\\universal_config.yml",
+      "config_type": "unknown",
+      "success": false,
+      "error": "'list' object has no attribute 'get'",
+      "consistency": {
+        "overall_score": 0.0,
+        "issues": [
+          "'list' object has no attribute 'get'"
+        ]
+      }
+    },
+    {
+      "config_path": "examples\\canal_model\\complex_fault_scenario_example\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.625,
+        "components_score": 0.5,
+        "topology_score": 0.0,
+        "simulation_score": 1.0,
+        "agents_score": 1.0,
+        "issues": [
+          "缺失的组件类型: {'core_lib.physical_objects.gate.Gate', 'core_lib.physical_objects.disturbance_node.DisturbanceNode', 'core_lib.physical_objects.unified_canal.UnifiedCanal', 'core_lib.physical_objects.reservoir.Reservoir'}",
+          "原始配置中没有连接定义"
+        ],
+        "improvements": [
+          "新增的组件类型: {'Gate', 'DisturbanceNode', 'Reservoir', 'Canal'}",
+          "重新生成的配置中添加了4个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 8,
+        "simulation_duration": 10800,
+        "time_step": "N/A",
+        "has_control": false,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "examples\\converted\\城市排水系统_unified\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.9166666666666666,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.6666666666666666,
+        "agents_score": 1.0,
+        "issues": [
+          "仿真参数不匹配: 原始城市智能排水防涝系统, 重新生成自动生成的仿真"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 4,
+        "simulation_duration": 21600,
+        "time_step": 30.0,
+        "has_control": true,
+        "has_optimization": true
+      }
+    },
+    {
+      "config_path": "examples\\converted\\多组件水利系统_universal\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "仿真参数不匹配: 原始复杂水利调度系统, 重新生成自动生成的仿真"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": 7200,
+        "time_step": 0.5,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\demo\\simplified_reservoir_control\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.375,
+        "components_score": 1.0,
+        "topology_score": 0.0,
+        "simulation_score": 0.0,
+        "agents_score": 0.5,
+        "issues": [
+          "原始配置中没有连接定义",
+          "仿真参数不匹配: 原始200, 重新生成None",
+          "仿真参数不匹配: 原始1.0, 重新生成None"
+        ],
+        "improvements": [
+          "重新生成的配置中添加了1个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 2,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": true,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\canal_model\\canal_model_comparison\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.5,
+        "components_score": 1.0,
+        "topology_score": 0.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "原始配置中没有连接定义",
+          "仿真参数不匹配: 原始10, 重新生成None"
+        ],
+        "improvements": [
+          "重新生成的配置中添加了1个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 3,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\watertank_refactored\\01_simple_simulation",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\01_simple_simulation\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\01_simple_simulation",
+      "consistency": {
+        "overall_score": 0.375,
+        "components_score": 0.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.5,
+        "agents_score": 0.0,
+        "issues": [
+          "重新生成的配置中没有组件定义",
+          "仿真参数不匹配: 原始200, 重新生成3600",
+          "智能体数量不匹配: 原始1个, 重新生成0个"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\non_agent_based\\02_multi_component_systems\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.5,
+        "components_score": 1.0,
+        "topology_score": 0.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "原始配置中没有连接定义",
+          "仿真参数不匹配: 原始500, 重新生成None",
+          "仿真参数不匹配: 原始1.0, 重新生成None"
+        ],
+        "improvements": [
+          "重新生成的配置中添加了1个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 4,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\non_agent_based\\02_multi_component_systems\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 0.0,
+        "simulation_score": 1.0,
+        "agents_score": 1.0,
+        "issues": [
+          "原始配置中没有连接定义"
+        ],
+        "improvements": [
+          "重新生成的配置中添加了1个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 4,
+        "simulation_duration": 500,
+        "time_step": "N/A",
+        "has_control": false,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_5\\04_gate_scheduling",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\04_gate_scheduling\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\04_gate_scheduling",
+      "consistency": {
+        "overall_score": 0.5,
+        "components_score": 0.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "重新生成的配置中没有组件定义",
+          "仿真参数不匹配: 原始Mission Example 5.4 - Gate Scheduling, 重新生成None"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": 1.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\canal_model\\complex_fault_scenario_example\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.1875,
+        "components_score": 0.5,
+        "topology_score": 0.0,
+        "simulation_score": 0.0,
+        "agents_score": 0.25,
+        "issues": [
+          "缺失的组件类型: {'core_lib.physical_objects.gate.Gate', 'core_lib.physical_objects.disturbance_node.DisturbanceNode', 'core_lib.physical_objects.unified_canal.UnifiedCanal', 'core_lib.physical_objects.reservoir.Reservoir'}",
+          "原始配置中没有连接定义",
+          "仿真参数不匹配: 原始10800, 重新生成None",
+          "仿真参数不匹配: 原始10, 重新生成None",
+          "智能体数量不匹配: 原始0个, 重新生成4个"
+        ],
+        "improvements": [
+          "新增的组件类型: {'Gate', 'DisturbanceNode', 'Reservoir', 'Canal'}",
+          "重新生成的配置中添加了4个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 8,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\agent_based\\12_pid_control_comparison\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.3125,
+        "components_score": 1.0,
+        "topology_score": 0.0,
+        "simulation_score": 0.0,
+        "agents_score": 0.25,
+        "issues": [
+          "原始配置中没有连接定义",
+          "仿真参数不匹配: 原始7200, 重新生成None",
+          "仿真参数不匹配: 原始10, 重新生成None",
+          "智能体数量不匹配: 原始0个, 重新生成6个"
+        ],
+        "improvements": [
+          "重新生成的配置中添加了5个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 6,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\canal_model\\canal_pid_control\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.5,
+        "components_score": 1.0,
+        "topology_score": 0.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "原始配置中没有连接定义",
+          "仿真参数不匹配: 原始7200, 重新生成None",
+          "仿真参数不匹配: 原始10, 重新生成None"
+        ],
+        "improvements": [
+          "重新生成的配置中添加了4个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 5,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\canal_model\\canal_pid_control\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 0.0,
+        "simulation_score": 1.0,
+        "agents_score": 1.0,
+        "issues": [
+          "原始配置中没有连接定义"
+        ],
+        "improvements": [
+          "重新生成的配置中添加了4个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 5,
+        "simulation_duration": 7200,
+        "time_step": "N/A",
+        "has_control": false,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_1\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "仿真参数不匹配: 原始Mission Example 1, 重新生成自动生成的仿真"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": 100.0,
+        "time_step": 1.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_5\\03_economic_dispatch\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "仿真参数不匹配: 原始Mission Example 5.3 - Economic Dispatch, 重新生成自动生成的仿真"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": 1.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "test_output\\enhanced_hybrid_2\\universal_config.yml",
+      "config_type": "unknown",
+      "success": false,
+      "error": "'list' object has no attribute 'get'",
+      "consistency": {
+        "overall_score": 0.0,
+        "issues": [
+          "'list' object has no attribute 'get'"
+        ]
+      }
+    },
+    {
+      "config_path": "examples\\canal_model\\structured_control_example\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.625,
+        "components_score": 0.5,
+        "topology_score": 0.0,
+        "simulation_score": 1.0,
+        "agents_score": 1.0,
+        "issues": [
+          "缺失的组件类型: {'core_lib.physical_objects.gate.Gate', 'core_lib.physical_objects.unified_canal.UnifiedCanal', 'core_lib.physical_objects.reservoir.Reservoir'}",
+          "原始配置中没有连接定义"
+        ],
+        "improvements": [
+          "新增的组件类型: {'Gate', 'Reservoir', 'Canal'}",
+          "重新生成的配置中添加了4个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 5,
+        "simulation_duration": 3600,
+        "time_step": "N/A",
+        "has_control": false,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "examples\\watertank_refactored\\03_pid_control_inlet\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\watertank_refactored\\05_joint_control\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "test_output\\enhanced_rule_3\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.9375,
+        "components_score": 1.0,
+        "topology_score": 0.75,
+        "simulation_score": 1.0,
+        "agents_score": 1.0,
+        "issues": [
+          "连接数量不匹配: 原始2个, 重新生成4个"
+        ],
+        "improvements": [
+          "新增的连接: {('包含2个', '关系'), ('具体', '关系')}"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 4,
+        "simulation_duration": 3600,
+        "time_step": 1.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_1\\04_digital_twin_advanced\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "仿真参数不匹配: 原始高级数字孪生仿真, 重新生成自动生成的仿真"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": 30.0,
+        "time_step": 1.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\watertank_refactored\\06_sensor_disturbance\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_1\\05_central_mpc_dispatcher\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "仿真参数不匹配: 原始中央MPC调度仿真, 重新生成自动生成的仿真"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": 36000.0,
+        "time_step": 3600.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\converted\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.8541666666666667,
+        "components_score": 1.0,
+        "topology_score": 0.6666666666666667,
+        "simulation_score": 1.0,
+        "agents_score": 0.75,
+        "issues": [
+          "连接数量不匹配: 原始1个, 重新生成3个"
+        ],
+        "improvements": [
+          "新增的连接: {('包含1个', '关系'), ('具体', '关系')}"
+        ]
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 2,
+        "simulation_duration": 200,
+        "time_step": "N/A",
+        "has_control": false,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "examples\\agent_based\\06_centralized_emergency_override",
+      "config_type": "traditional_multi",
+      "success": false,
+      "error": "could not determine a constructor for the tag 'tag:yaml.org,2002:python/object/apply:numpy._core.multiarray.scalar'\n  in \"examples\\agent_based\\06_centralized_emergency_override\\output.yml\", line 4, column 18",
+      "consistency": {
+        "overall_score": 0.0,
+        "issues": [
+          "could not determine a constructor for the tag 'tag:yaml.org,2002:python/object/apply:numpy._core.multiarray.scalar'\n  in \"examples\\agent_based\\06_centralized_emergency_override\\output.yml\", line 4, column 18"
+        ]
+      }
+    },
+    {
+      "config_path": "test_output\\enhanced_llm_1\\universal_config.yml",
+      "config_type": "unknown",
+      "success": false,
+      "error": "'list' object has no attribute 'get'",
+      "consistency": {
+        "overall_score": 0.0,
+        "issues": [
+          "'list' object has no attribute 'get'"
+        ]
+      }
+    },
+    {
+      "config_path": "examples\\converted\\城市排水系统_universal\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "仿真参数不匹配: 原始城市智能排水防涝系统, 重新生成自动生成的仿真"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 4,
+        "simulation_duration": 21600,
+        "time_step": 30.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "test_output\\complex_system\\universal_config.yml",
+      "config_type": "unknown",
+      "success": false,
+      "error": "'list' object has no attribute 'get'",
+      "consistency": {
+        "overall_score": 0.0,
+        "issues": [
+          "'list' object has no attribute 'get'"
+        ]
+      }
+    },
+    {
+      "config_path": "examples\\canal_model\\hierarchical_distributed_control_example",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\hierarchical_distributed_control_example\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\hierarchical_distributed_control_example",
+      "consistency": {
+        "overall_score": 0.6071428571428571,
+        "components_score": 0.5,
+        "topology_score": 0.42857142857142855,
+        "simulation_score": 1.0,
+        "agents_score": 0.5,
+        "issues": [
+          "缺失的组件类型: {'core_lib.physical_objects.gate.Gate', 'core_lib.physical_objects.disturbance_node.DisturbanceNode', 'core_lib.physical_objects.unified_canal.UnifiedCanal', 'core_lib.physical_objects.reservoir.Reservoir'}",
+          "连接数量不匹配: 原始7个, 重新生成4个",
+          "缺失的连接: {('canal_1', 'turnout_2'), ('turnout_2', 'gate_2'), ('upstream_reservoir', 'turnout_1'), ('turnout_1', 'gate_1'), ('canal_2', 'terminal_user')}"
+        ],
+        "improvements": [
+          "新增的组件类型: {'Gate', 'DisturbanceNode', 'Reservoir', 'Canal'}",
+          "新增的连接: {('upstream_reservoir', 'gate_1'), ('canal_1', 'canal_2')}"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 8,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\notebooks\\11_control_and_agents\\universal_config.yml",
+      "config_type": "unknown",
+      "success": false,
+      "error": "'bool' object has no attribute 'get'",
+      "consistency": {
+        "overall_score": 0.0,
+        "issues": [
+          "'bool' object has no attribute 'get'"
+        ]
+      }
+    },
+    {
+      "config_path": "examples\\agent_based\\12_pid_control_comparison\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 0.0,
+        "simulation_score": 1.0,
+        "agents_score": 1.0,
+        "issues": [
+          "原始配置中没有连接定义"
+        ],
+        "improvements": [
+          "重新生成的配置中添加了5个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 6,
+        "simulation_duration": 7200,
+        "time_step": "N/A",
+        "has_control": false,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "examples\\non_agent_based\\01_getting_started\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.5,
+        "components_score": 1.0,
+        "topology_score": 0.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "原始配置中没有连接定义",
+          "仿真参数不匹配: 原始300, 重新生成None",
+          "仿真参数不匹配: 原始1.0, 重新生成None"
+        ],
+        "improvements": [
+          "重新生成的配置中添加了1个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 2,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\non_agent_based\\08_non_agent_simulation",
+      "config_type": "traditional_multi",
+      "success": false,
+      "error": "could not determine a constructor for the tag 'tag:yaml.org,2002:python/object/apply:numpy._core.multiarray.scalar'\n  in \"examples\\non_agent_based\\08_non_agent_simulation\\output.yml\", line 4, column 18",
+      "consistency": {
+        "overall_score": 0.0,
+        "issues": [
+          "could not determine a constructor for the tag 'tag:yaml.org,2002:python/object/apply:numpy._core.multiarray.scalar'\n  in \"examples\\non_agent_based\\08_non_agent_simulation\\output.yml\", line 4, column 18"
+        ]
+      }
+    },
+    {
+      "config_path": "examples\\notebooks\\10_canal_system\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.875,
+        "components_score": 0.75,
+        "topology_score": 1.0,
+        "simulation_score": 1.0,
+        "agents_score": 0.75,
+        "issues": [
+          "组件数量不匹配: 原始4个, 重新生成3个",
+          "缺失的组件类型: {'Lake'}"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 4,
+        "simulation_duration": 300,
+        "time_step": "N/A",
+        "has_control": false,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "examples\\identification\\03_pipe_roughness\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "仿真参数不匹配: 原始20000, 重新生成None",
+          "仿真参数不匹配: 原始100, 重新生成None"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\watertank_refactored\\01_simple_simulation\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.5833333333333334,
+        "components_score": 0.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.3333333333333333,
+        "agents_score": 1.0,
+        "issues": [
+          "重新生成的配置中没有组件定义",
+          "仿真参数不匹配: 原始100.0, 重新生成3600",
+          "仿真参数不匹配: 原始水箱简单仿真, 重新生成自动生成的仿真"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 1,
+        "simulation_duration": 100.0,
+        "time_step": 1.0,
+        "has_control": true,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "examples\\identification\\03_pipe_roughness\\unified_config.yml",
+      "config_type": "unknown",
+      "success": false,
+      "error": "'list' object has no attribute 'get'",
+      "consistency": {
+        "overall_score": 0.0,
+        "issues": [
+          "'list' object has no attribute 'get'"
+        ]
+      }
+    },
+    {
+      "config_path": "examples\\identification\\02_gate_discharge_coefficient\\unified_config.yml",
+      "config_type": "unknown",
+      "success": false,
+      "error": "'list' object has no attribute 'get'",
+      "consistency": {
+        "overall_score": 0.0,
+        "issues": [
+          "'list' object has no attribute 'get'"
+        ]
+      }
+    },
+    {
+      "config_path": "test_output\\unified_config\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.8333333333333334,
+        "components_score": 1.0,
+        "topology_score": 0.6666666666666667,
+        "simulation_score": 0.6666666666666666,
+        "agents_score": 1.0,
+        "issues": [
+          "连接数量不匹配: 原始1个, 重新生成3个",
+          "仿真参数不匹配: 原始简单水库系统, 重新生成水库"
+        ],
+        "improvements": [
+          "新增的连接: {('包含1个', '关系'), ('具体', '关系')}"
+        ]
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 4,
+        "simulation_duration": 3600,
+        "time_step": 1.0,
+        "has_control": true,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_1\\04_digital_twin_advanced",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\04_digital_twin_advanced\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\04_digital_twin_advanced",
+      "consistency": {
+        "overall_score": 0.125,
+        "components_score": 0.0,
+        "topology_score": 0.0,
+        "simulation_score": 0.5,
+        "agents_score": 0.0,
+        "issues": [
+          "重新生成的配置中没有组件定义",
+          "重新生成的配置中没有连接定义",
+          "仿真参数不匹配: 原始30, 重新生成3600",
+          "智能体数量不匹配: 原始1个, 重新生成0个"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": 30.0,
+        "time_step": 1.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\canal_model\\canal_pid_control",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\canal_pid_control\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\canal_pid_control",
+      "consistency": {
+        "overall_score": 0.96875,
+        "components_score": 1.0,
+        "topology_score": 0.875,
+        "simulation_score": 1.0,
+        "agents_score": 1.0,
+        "issues": [
+          "缺失的连接: {('canal_1', 'gate_2')}"
+        ],
+        "improvements": [
+          "新增的连接: {('canal_1', 'canal_2')}"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 5,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\identification\\01_reservoir_storage_curve\\unified_config.yml",
+      "config_type": "unknown",
+      "success": false,
+      "error": "'list' object has no attribute 'get'",
+      "consistency": {
+        "overall_score": 0.0,
+        "issues": [
+          "'list' object has no attribute 'get'"
+        ]
+      }
+    },
+    {
+      "config_path": "test_output\\enhanced_llm_2\\universal_config.yml",
+      "config_type": "unknown",
+      "success": false,
+      "error": "'list' object has no attribute 'get'",
+      "consistency": {
+        "overall_score": 0.0,
+        "issues": [
+          "'list' object has no attribute 'get'"
+        ]
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_2\\02_hierarchical_control\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "仿真参数不匹配: 原始分层控制系统仿真, 重新生成自动生成的仿真"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": 1800.0,
+        "time_step": 3.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_2\\03_watershed_coordination\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "仿真参数不匹配: 原始流域协调控制系统仿真, 重新生成自动生成的仿真"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": 3600.0,
+        "time_step": 5.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_1\\05_central_mpc_dispatcher",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\05_central_mpc_dispatcher\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\05_central_mpc_dispatcher",
+      "consistency": {
+        "overall_score": 0.125,
+        "components_score": 0.0,
+        "topology_score": 0.0,
+        "simulation_score": 0.5,
+        "agents_score": 0.0,
+        "issues": [
+          "重新生成的配置中没有组件定义",
+          "重新生成的配置中没有连接定义",
+          "仿真参数不匹配: 原始10, 重新生成3600",
+          "智能体数量不匹配: 原始1个, 重新生成0个"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": 36000.0,
+        "time_step": 3600.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\notebooks\\11_control_and_agents",
+      "config_type": "unknown",
+      "success": false,
+      "error": "'bool' object has no attribute 'get'",
+      "consistency": {
+        "overall_score": 0.0,
+        "issues": [
+          "'bool' object has no attribute 'get'"
+        ]
+      }
+    },
+    {
+      "config_path": "examples\\watertank_refactored\\07_actuator_disturbance\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\mission_scenarios\\yinchuojiliao",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\yinchuojiliao\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\yinchuojiliao",
+      "consistency": {
+        "overall_score": 0.5120192307692308,
+        "components_score": 0.9615384615384616,
+        "topology_score": 0.46153846153846156,
+        "simulation_score": 0.5,
+        "agents_score": 0.125,
+        "issues": [
+          "组件数量不匹配: 原始13个, 重新生成12个",
+          "连接数量不匹配: 原始12个, 重新生成13个",
+          "缺失的连接: {('pipe_2', 'terminal_valve'), ('tunnel_2', 'guiliu_gate'), ('tunnel_3', 'connection_pool'), ('wendegen_reservoir', 'water_intake_gate'), ('taoriver_gate', 'tunnel_2'), ('tunnel_1', 'taoriver_gate'), ('pipe_1', 'online_valve'), ('online_valve', 'pipe_2'), ('connection_pool', 'pipe_1'), ('terminal_valve', 'terminal_pool'), ('water_intake_gate', 'tunnel_1'), ('guiliu_gate', 'tunnel_3')}",
+          "仿真参数不匹配: 原始168, 重新生成3600",
+          "智能体数量不匹配: 原始16个, 重新生成4个"
+        ],
+        "improvements": [
+          "新增的连接: {('pipe_1', 'pipe1_valve'), ('tunnel_2', 'pipe_1'), ('包含11个', '关系'), ('tunnel_1', 'tunnel1_gate'), ('inlet_gate', 'tunnel_1'), ('tunnel_3', 'pipe_2'), ('wendegen_reservoir', 'inlet_gate'), ('具体', '关系'), ('pipe1_valve', 'tunnel_3'), ('tunnel1_gate', 'connection_pool'), ('connection_pool', 'tunnel_2'), ('pipe_2', 'outlet_valve'), ('outlet_valve', 'terminal_pool')}"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 12,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\canal_model\\canal_model_comparison\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 0.0,
+        "simulation_score": 1.0,
+        "agents_score": 1.0,
+        "issues": [
+          "原始配置中没有连接定义"
+        ],
+        "improvements": [
+          "重新生成的配置中添加了1个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 3,
+        "simulation_duration": "N/A",
+        "time_step": 10,
+        "has_control": false,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "examples\\mission_scenarios\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.5,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 0.0,
+        "issues": [
+          "仿真参数不匹配: 原始168.0, 重新生成None",
+          "仿真参数不匹配: 原始1.0, 重新生成None",
+          "智能体数量不匹配: 原始4个, 重新生成0个"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_5\\01_turbine_gate_simulation",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\01_turbine_gate_simulation\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\01_turbine_gate_simulation",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 0.0,
+        "topology_score": 1.0,
+        "simulation_score": 1.0,
+        "agents_score": 1.0,
+        "issues": [
+          "重新生成的配置中没有组件定义"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": 10.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\notebooks\\07_centralized_setpoint_optimization",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\07_centralized_setpoint_optimization\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\07_centralized_setpoint_optimization",
+      "consistency": {
+        "overall_score": 0.875,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.5,
+        "agents_score": 1.0,
+        "issues": [
+          "仿真参数不匹配: 原始200.0, 重新生成3600"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\watertank_refactored\\07_actuator_disturbance\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.7083333333333334,
+        "components_score": 0.5,
+        "topology_score": 1.0,
+        "simulation_score": 0.3333333333333333,
+        "agents_score": 1.0,
+        "issues": [
+          "组件数量不匹配: 原始2个, 重新生成1个",
+          "缺失的组件类型: {'WaterTank'}",
+          "仿真参数不匹配: 原始300.0, 重新生成3600",
+          "仿真参数不匹配: 原始水箱执行器干扰, 重新生成自动生成的仿真"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 2,
+        "simulation_duration": 300.0,
+        "time_step": 1.0,
+        "has_control": true,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "examples\\agent_based\\06_centralized_emergency_override\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 0.0,
+        "simulation_score": 1.0,
+        "agents_score": 1.0,
+        "issues": [
+          "原始配置中没有连接定义"
+        ],
+        "improvements": [
+          "重新生成的配置中添加了1个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 2,
+        "simulation_duration": 200,
+        "time_step": "N/A",
+        "has_control": false,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "examples\\agent_based\\09_agent_based_distributed_control\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 0.0,
+        "simulation_score": 1.0,
+        "agents_score": 1.0,
+        "issues": [
+          "原始配置中没有连接定义"
+        ],
+        "improvements": [
+          "重新生成的配置中添加了1个连接"
+        ]
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 2,
+        "simulation_duration": 300,
+        "time_step": "N/A",
+        "has_control": false,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "examples\\watertank_refactored\\02_parameter_identification\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.5833333333333334,
+        "components_score": 0.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.3333333333333333,
+        "agents_score": 1.0,
+        "issues": [
+          "重新生成的配置中没有组件定义",
+          "仿真参数不匹配: 原始200.0, 重新生成3600",
+          "仿真参数不匹配: 原始水箱参数辨识, 重新生成自动生成的仿真"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 1,
+        "simulation_duration": 200.0,
+        "time_step": 1.0,
+        "has_control": true,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "examples\\mission_example_1\\02_advanced_control\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [
+          "仿真参数不匹配: 原始高级控制系统仿真, 重新生成自动生成的仿真"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": 1800.0,
+        "time_step": 5.0,
+        "debug_enabled": true,
+        "performance_enabled": true,
+        "visualization_enabled": true,
+        "analysis_enabled": true
+      }
+    },
+    {
+      "config_path": "examples\\agent_based\\12_pid_control_comparison",
+      "config_type": "traditional_multi",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\12_pid_control_comparison\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\12_pid_control_comparison",
+      "consistency": {
+        "overall_score": 0.825,
+        "components_score": 1.0,
+        "topology_score": 0.8,
+        "simulation_score": 1.0,
+        "agents_score": 0.5,
+        "issues": [
+          "缺失的连接: {('canal_2', 'gate_2'), ('gate_2', 'canal_3')}"
+        ],
+        "improvements": [
+          "新增的连接: {('canal_2', 'canal_3'), ('gate_2', 'canal_2')}"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 6,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\watertank_refactored\\04_pid_control_outlet\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.75,
+        "components_score": 1.0,
+        "topology_score": 1.0,
+        "simulation_score": 0.0,
+        "agents_score": 1.0,
+        "issues": [],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 0,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\mission_scenarios\\yinchuojiliao\\universal_config.yml",
+      "config_type": "universal_config",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\universal_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\universal_config",
+      "consistency": {
+        "overall_score": 0.6057692307692308,
+        "components_score": 1.0,
+        "topology_score": 0.9230769230769231,
+        "simulation_score": 0.0,
+        "agents_score": 0.5,
+        "issues": [
+          "连接数量不匹配: 原始11个, 重新生成13个",
+          "仿真参数不匹配: 原始168.0, 重新生成None",
+          "仿真参数不匹配: 原始1.0, 重新生成None"
+        ],
+        "improvements": [
+          "新增的连接: {('包含11个', '关系'), ('具体', '关系')}"
+        ]
+      },
+      "technical_details": {
+        "config_type": "通用配置文件",
+        "components_count": 12,
+        "simulation_duration": "N/A",
+        "time_step": "N/A",
+        "debug_enabled": false,
+        "performance_enabled": false,
+        "visualization_enabled": false,
+        "analysis_enabled": false
+      }
+    },
+    {
+      "config_path": "examples\\watertank_refactored\\04_pid_control_outlet\\unified_config.yml",
+      "config_type": "unified_single",
+      "success": true,
+      "natural_language_file": "test_output\\round_trip_test\\unified_config\\natural_language_description.md",
+      "regenerated_config_dir": "test_output\\round_trip_test\\unified_config",
+      "consistency": {
+        "overall_score": 0.7083333333333334,
+        "components_score": 0.5,
+        "topology_score": 1.0,
+        "simulation_score": 0.3333333333333333,
+        "agents_score": 1.0,
+        "issues": [
+          "组件数量不匹配: 原始2个, 重新生成1个",
+          "缺失的组件类型: {'WaterTank'}",
+          "仿真参数不匹配: 原始300.0, 重新生成3600",
+          "仿真参数不匹配: 原始水箱PID出口控制, 重新生成自动生成的仿真"
+        ],
+        "improvements": []
+      },
+      "technical_details": {
+        "config_type": "统一配置文件",
+        "components_count": 2,
+        "simulation_duration": 300.0,
+        "time_step": 1.0,
+        "has_control": true,
+        "has_optimization": false
+      }
+    },
+    {
+      "config_path": "examples\\non_agent_based\\07_pipe_and_valve\\universal_config.yml",
+      "config_type": "unknown",
+      "success": false,
+      "error": "'list' object has no attribute 'get'",
+      "consistency": {
+        "overall_score": 0.0,
+        "issues": [
+          "'list' object has no attribute 'get'"
+        ]
+      }
+    }
+  ]
+}

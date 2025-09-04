@@ -1,0 +1,755 @@
+[
+  {
+    "test_case": "简单水库系统",
+    "results": {
+      "llm": {
+        "success": true,
+        "confidence_score": 0.9,
+        "llm_contribution": 1.0,
+        "rule_contribution": 0.0,
+        "validation_errors": [],
+        "improvements": [
+          "LLM成功生成有效配置"
+        ],
+        "quality_metrics": {
+          "completeness": 1.0,
+          "accuracy": 0.6000000000000001,
+          "consistency": 1.0,
+          "overall": 0.8400000000000001
+        },
+        "execution_time": 2.1642045974731445,
+        "config_data": {
+          "simulation": {
+            "duration": 3600,
+            "dt": 1.0,
+            "name": "简单水库调度系统",
+            "solver": "rk4"
+          },
+          "components": [
+            {
+              "id": "reservoir1",
+              "type": "Reservoir",
+              "params": {
+                "capacity": 1000,
+                "initial_water_level": 50
+              }
+            },
+            {
+              "id": "gate1",
+              "type": "Gate",
+              "params": {}
+            },
+            {
+              "id": "channel1",
+              "type": "Channel",
+              "params": {
+                "length": 5000
+              }
+            }
+          ],
+          "topology": [
+            {
+              "from": "reservoir1",
+              "to": "gate1",
+              "type": "flow"
+            },
+            {
+              "from": "gate1",
+              "to": "channel1",
+              "type": "flow"
+            }
+          ]
+        }
+      },
+      "rule": {
+        "success": true,
+        "confidence_score": 0.3,
+        "llm_contribution": 0.0,
+        "rule_contribution": 1.0,
+        "validation_errors": [],
+        "improvements": [
+          "规则系统成功生成配置"
+        ],
+        "quality_metrics": {
+          "completeness": 1.0,
+          "accuracy": 0.0,
+          "consistency": 0.0,
+          "overall": 0.4
+        },
+        "execution_time": 0.02199578285217285,
+        "config_data": {
+          "simulation": {
+            "name": "自动生成的仿真",
+            "description": "基于自然语言描述生成的仿真配置",
+            "version": "1.5",
+            "time": {
+              "start_time": 0,
+              "end_time": 3600,
+              "time_step": 1.0
+            },
+            "solver": {
+              "type": "rk4",
+              "tolerance": 1e-06
+            }
+          },
+          "components": {
+            "水库1": {
+              "type": "Reservoir",
+              "capacity": 50.0,
+              "initial_level": 50,
+              "min_level": 10,
+              "max_level": 100,
+              "area": 10000
+            },
+            "闸门1": {
+              "type": "Gate",
+              "max_flow": 1000,
+              "initial_opening": 0.5,
+              "min_opening": 0,
+              "max_opening": 1
+            },
+            "河道1": {
+              "type": "Channel"
+            },
+            "连接关系": {
+              "type": "Reservoir",
+              "capacity": 1000000,
+              "initial_level": 50,
+              "min_level": 10,
+              "max_level": 100,
+              "area": 10000
+            }
+          },
+          "topology": {
+            "connections": [
+              {
+                "from": "水库1",
+                "to": "闸门1",
+                "type": "flow"
+              }
+            ]
+          },
+          "agents": {},
+          "debug": {
+            "enabled": true,
+            "log_level": "INFO",
+            "log_file": "simulation.log"
+          },
+          "performance": {
+            "enabled": true,
+            "time_tracking": true,
+            "memory_monitoring": true
+          },
+          "visualization": {
+            "enabled": true,
+            "plots": {
+              "enabled": true,
+              "save_format": "png"
+            }
+          }
+        }
+      },
+      "hybrid": {
+        "success": true,
+        "confidence_score": 0.95,
+        "llm_contribution": 0.8,
+        "rule_contribution": 0.2,
+        "validation_errors": [],
+        "improvements": [
+          "LLM成功生成有效配置"
+        ],
+        "quality_metrics": {
+          "completeness": 1.0,
+          "accuracy": 0.6000000000000001,
+          "consistency": 1.0,
+          "overall": 0.8400000000000001
+        },
+        "execution_time": 2.5615320205688477,
+        "config_data": {
+          "simulation": {
+            "duration": 3600,
+            "dt": 1.0,
+            "name": "简单水库调度系统",
+            "solver": "rk4"
+          },
+          "components": [
+            {
+              "id": "reservoir1",
+              "type": "Reservoir",
+              "params": {
+                "capacity": 1000,
+                "initial_water_level": 50
+              }
+            },
+            {
+              "id": "gate1",
+              "type": "Gate",
+              "params": {}
+            },
+            {
+              "id": "channel1",
+              "type": "Channel",
+              "params": {
+                "length": 5000
+              }
+            }
+          ],
+          "topology": [
+            {
+              "from": "reservoir1",
+              "to": "gate1",
+              "type": "flow"
+            },
+            {
+              "from": "gate1",
+              "to": "channel1",
+              "type": "flow"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "test_case": "多组件复杂系统",
+    "results": {
+      "llm": {
+        "success": true,
+        "confidence_score": 0.9,
+        "llm_contribution": 1.0,
+        "rule_contribution": 0.0,
+        "validation_errors": [],
+        "improvements": [
+          "LLM成功生成有效配置"
+        ],
+        "quality_metrics": {
+          "completeness": 1.0,
+          "accuracy": 1.0,
+          "consistency": 1.0,
+          "overall": 1.0
+        },
+        "execution_time": 4.743220329284668,
+        "config_data": {
+          "simulation": {
+            "duration": 7200,
+            "dt": 0.5,
+            "name": "complex_water_scheduling_system",
+            "solver": "rk4"
+          },
+          "components": [
+            {
+              "id": "reservoir_A",
+              "type": "Reservoir",
+              "params": {
+                "capacity": 5000
+              }
+            },
+            {
+              "id": "reservoir_B",
+              "type": "Reservoir",
+              "params": {
+                "capacity": 3000
+              }
+            },
+            {
+              "id": "pump_station_1",
+              "type": "PumpStation",
+              "params": {
+                "power": 100
+              }
+            },
+            {
+              "id": "pump_station_2",
+              "type": "PumpStation",
+              "params": {
+                "power": 150
+              }
+            },
+            {
+              "id": "pump_station_3",
+              "type": "PumpStation",
+              "params": {
+                "power": 200
+              }
+            },
+            {
+              "id": "canal_1",
+              "type": "Canal",
+              "params": {
+                "length": 10000
+              }
+            },
+            {
+              "id": "junction_1",
+              "type": "Junction"
+            },
+            {
+              "id": "junction_2",
+              "type": "Junction"
+            }
+          ],
+          "topology": [
+            {
+              "from": "reservoir_A",
+              "to": "pump_station_1",
+              "type": "flow"
+            },
+            {
+              "from": "pump_station_1",
+              "to": "junction_1",
+              "type": "flow"
+            },
+            {
+              "from": "reservoir_B",
+              "to": "pump_station_2",
+              "type": "flow"
+            },
+            {
+              "from": "pump_station_2",
+              "to": "junction_1",
+              "type": "flow"
+            },
+            {
+              "from": "junction_1",
+              "to": "pump_station_3",
+              "type": "flow"
+            },
+            {
+              "from": "pump_station_3",
+              "to": "canal_1",
+              "type": "flow"
+            },
+            {
+              "from": "canal_1",
+              "to": "junction_2",
+              "type": "flow"
+            }
+          ]
+        }
+      },
+      "rule": {
+        "success": true,
+        "confidence_score": 0.3,
+        "llm_contribution": 0.0,
+        "rule_contribution": 1.0,
+        "validation_errors": [],
+        "improvements": [
+          "规则系统成功生成配置"
+        ],
+        "quality_metrics": {
+          "completeness": 1.0,
+          "accuracy": 0.0,
+          "consistency": 0.0,
+          "overall": 0.4
+        },
+        "execution_time": 0.007842779159545898,
+        "config_data": {
+          "simulation": {
+            "name": "自动生成的仿真",
+            "description": "基于自然语言描述生成的仿真配置",
+            "version": "1.5",
+            "time": {
+              "start_time": 0,
+              "end_time": 7200,
+              "time_step": 1.0
+            },
+            "solver": {
+              "type": "rk4",
+              "tolerance": 1e-06
+            }
+          },
+          "components": {
+            "连接关系": {
+              "type": "Reservoir",
+              "capacity": 1000000,
+              "initial_level": 50,
+              "min_level": 10,
+              "max_level": 100,
+              "area": 10000
+            }
+          },
+          "topology": {
+            "connections": [
+              {
+                "from": "水库A",
+                "to": "泵站1",
+                "type": "flow"
+              },
+              {
+                "from": "水库B",
+                "to": "泵站2",
+                "type": "flow"
+              },
+              {
+                "from": "汇流点1",
+                "to": "泵站3",
+                "type": "flow"
+              },
+              {
+                "from": "渠道",
+                "to": "汇流点2",
+                "type": "flow"
+              }
+            ]
+          },
+          "agents": {},
+          "debug": {
+            "enabled": true,
+            "log_level": "INFO",
+            "log_file": "simulation.log"
+          },
+          "performance": {
+            "enabled": true,
+            "time_tracking": true,
+            "memory_monitoring": true
+          },
+          "visualization": {
+            "enabled": true,
+            "plots": {
+              "enabled": true,
+              "save_format": "png"
+            }
+          }
+        }
+      },
+      "hybrid": {
+        "success": true,
+        "confidence_score": 0.95,
+        "llm_contribution": 0.8,
+        "rule_contribution": 0.2,
+        "validation_errors": [],
+        "improvements": [
+          "LLM成功生成有效配置",
+          "规则系统修正了组件类型: PumpStation -> Pump",
+          "规则系统修正了组件类型: PumpStation -> Pump",
+          "规则系统修正了组件类型: PumpStation -> Pump"
+        ],
+        "quality_metrics": {
+          "completeness": 1.0,
+          "accuracy": 1.0,
+          "consistency": 1.0,
+          "overall": 1.0
+        },
+        "execution_time": 5.72916316986084,
+        "config_data": {
+          "simulation": {
+            "duration": 7200,
+            "dt": 0.5,
+            "name": "ComplexWaterControlSystem",
+            "solver": "rk4"
+          },
+          "components": [
+            {
+              "id": "reservoir_A",
+              "type": "Reservoir",
+              "params": {
+                "capacity": 5000
+              }
+            },
+            {
+              "id": "reservoir_B",
+              "type": "Reservoir",
+              "params": {
+                "capacity": 3000
+              }
+            },
+            {
+              "id": "pump_station_1",
+              "type": "Pump",
+              "params": {
+                "power": 100
+              }
+            },
+            {
+              "id": "pump_station_2",
+              "type": "Pump",
+              "params": {
+                "power": 150
+              }
+            },
+            {
+              "id": "pump_station_3",
+              "type": "Pump",
+              "params": {
+                "power": 200
+              }
+            },
+            {
+              "id": "canal_1",
+              "type": "Canal",
+              "params": {
+                "length": 10000
+              }
+            },
+            {
+              "id": "junction_1",
+              "type": "Junction"
+            },
+            {
+              "id": "junction_2",
+              "type": "Junction"
+            }
+          ],
+          "topology": [
+            {
+              "from": "reservoir_A",
+              "to": "pump_station_1",
+              "type": "flow"
+            },
+            {
+              "from": "pump_station_1",
+              "to": "junction_1",
+              "type": "flow"
+            },
+            {
+              "from": "reservoir_B",
+              "to": "pump_station_2",
+              "type": "flow"
+            },
+            {
+              "from": "pump_station_2",
+              "to": "junction_1",
+              "type": "flow"
+            },
+            {
+              "from": "junction_1",
+              "to": "pump_station_3",
+              "type": "flow"
+            },
+            {
+              "from": "pump_station_3",
+              "to": "canal_1",
+              "type": "flow"
+            },
+            {
+              "from": "canal_1",
+              "to": "junction_2",
+              "type": "flow"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "test_case": "英文类名系统",
+    "results": {
+      "llm": {
+        "success": true,
+        "confidence_score": 0.9,
+        "llm_contribution": 1.0,
+        "rule_contribution": 0.0,
+        "validation_errors": [],
+        "improvements": [
+          "LLM成功生成有效配置"
+        ],
+        "quality_metrics": {
+          "completeness": 1.0,
+          "accuracy": 0.8,
+          "consistency": 1.0,
+          "overall": 0.9200000000000002
+        },
+        "execution_time": 2.4762444496154785,
+        "config_data": {
+          "simulation": {
+            "duration": 1800,
+            "dt": 2.0,
+            "name": "System Simulation",
+            "solver": "rk4"
+          },
+          "components": [
+            {
+              "id": "reservoir1",
+              "type": "Reservoir",
+              "params": {}
+            },
+            {
+              "id": "pump1",
+              "type": "Pump",
+              "params": {}
+            },
+            {
+              "id": "channel1",
+              "type": "Channel",
+              "params": {}
+            },
+            {
+              "id": "junction1",
+              "type": "Junction",
+              "params": {}
+            }
+          ],
+          "topology": [
+            {
+              "from": "reservoir1",
+              "to": "pump1",
+              "type": "flow"
+            },
+            {
+              "from": "pump1",
+              "to": "channel1",
+              "type": "flow"
+            },
+            {
+              "from": "channel1",
+              "to": "junction1",
+              "type": "flow"
+            }
+          ]
+        }
+      },
+      "rule": {
+        "success": true,
+        "confidence_score": 0.3,
+        "llm_contribution": 0.0,
+        "rule_contribution": 1.0,
+        "validation_errors": [],
+        "improvements": [
+          "规则系统成功生成配置"
+        ],
+        "quality_metrics": {
+          "completeness": 1.0,
+          "accuracy": 0.0,
+          "consistency": 0.0,
+          "overall": 0.4
+        },
+        "execution_time": 0.008170127868652344,
+        "config_data": {
+          "simulation": {
+            "name": "自动生成的仿真",
+            "description": "基于自然语言描述生成的仿真配置",
+            "version": "1.5",
+            "time": {
+              "start_time": 0,
+              "end_time": 3600,
+              "time_step": 1.0
+            },
+            "solver": {
+              "type": "rk4",
+              "tolerance": 1e-06
+            }
+          },
+          "components": {
+            "reservoir1": {
+              "type": "Reservoir",
+              "capacity": 1000000,
+              "initial_level": 50,
+              "min_level": 10,
+              "max_level": 100,
+              "area": 10000
+            },
+            "pump1": {
+              "type": "Pump",
+              "max_flow": 500,
+              "efficiency": 0.85,
+              "power": 1000,
+              "initial_speed": 0
+            },
+            "channel1": {
+              "type": "Channel"
+            },
+            "junction1": {
+              "type": "Junction"
+            }
+          },
+          "topology": {
+            "connections": [
+              {
+                "from": "reservoir1",
+                "to": "pump1",
+                "type": "flow"
+              },
+              {
+                "from": "channel1",
+                "to": "junction1",
+                "type": "flow"
+              }
+            ]
+          },
+          "agents": {},
+          "debug": {
+            "enabled": true,
+            "log_level": "INFO",
+            "log_file": "simulation.log"
+          },
+          "performance": {
+            "enabled": true,
+            "time_tracking": true,
+            "memory_monitoring": true
+          },
+          "visualization": {
+            "enabled": true,
+            "plots": {
+              "enabled": true,
+              "save_format": "png"
+            }
+          }
+        }
+      },
+      "hybrid": {
+        "success": true,
+        "confidence_score": 0.95,
+        "llm_contribution": 0.8,
+        "rule_contribution": 0.2,
+        "validation_errors": [],
+        "improvements": [
+          "LLM成功生成有效配置"
+        ],
+        "quality_metrics": {
+          "completeness": 1.0,
+          "accuracy": 0.8,
+          "consistency": 1.0,
+          "overall": 0.9200000000000002
+        },
+        "execution_time": 2.4996514320373535,
+        "config_data": {
+          "simulation": {
+            "duration": 1800,
+            "dt": 2.0,
+            "name": "system_simulation",
+            "solver": "rk4"
+          },
+          "components": [
+            {
+              "id": "reservoir1",
+              "type": "Reservoir",
+              "params": {}
+            },
+            {
+              "id": "pump1",
+              "type": "Pump",
+              "params": {}
+            },
+            {
+              "id": "channel1",
+              "type": "Channel",
+              "params": {}
+            },
+            {
+              "id": "junction1",
+              "type": "Junction",
+              "params": {}
+            }
+          ],
+          "topology": [
+            {
+              "from": "reservoir1",
+              "to": "pump1",
+              "type": "flow"
+            },
+            {
+              "from": "pump1",
+              "to": "channel1",
+              "type": "flow"
+            },
+            {
+              "from": "channel1",
+              "to": "junction1",
+              "type": "flow"
+            }
+          ]
+        }
+      }
+    }
+  }
+]

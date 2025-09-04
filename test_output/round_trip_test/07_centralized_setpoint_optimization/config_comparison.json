@@ -1,0 +1,357 @@
+{
+  "original_config": {
+    "config": {
+      "simulation": {
+        "duration": 200.0,
+        "dt": 1.0,
+        "solver": "euler"
+      },
+      "components": {
+        "system_1": {
+          "class": "ControlledSystem",
+          "initial_state": {
+            "value": 20.0
+          },
+          "parameters": {
+            "time_constant": 10.0,
+            "gain": 1.5
+          }
+        },
+        "system_2": {
+          "class": "ControlledSystem",
+          "initial_state": {
+            "value": 15.0
+          },
+          "parameters": {
+            "time_constant": 8.0,
+            "gain": 1.2
+          }
+        },
+        "system_3": {
+          "class": "ControlledSystem",
+          "initial_state": {
+            "value": 25.0
+          },
+          "parameters": {
+            "time_constant": 12.0,
+            "gain": 1.8
+          }
+        }
+      },
+      "control": {
+        "centralized_optimizer": {
+          "type": "CentralizedOptimizer",
+          "systems": [
+            "system_1",
+            "system_2",
+            "system_3"
+          ],
+          "optimization_method": "quadratic_programming",
+          "objective_function": "minimize_tracking_error",
+          "constraints": [
+            {
+              "type": "output_bounds",
+              "min_value": 0.0,
+              "max_value": 100.0
+            },
+            {
+              "type": "rate_limits",
+              "max_rate": 5.0
+            }
+          ]
+        },
+        "setpoint_strategy": {
+          "type": "DynamicSetpoint",
+          "target_values": [
+            30.0,
+            25.0,
+            35.0
+          ],
+          "transition_time": 50.0,
+          "optimization_interval": 10.0
+        }
+      },
+      "optimization": {
+        "objective": {
+          "weights": {
+            "tracking_error": 1.0,
+            "control_effort": 0.1,
+            "smoothness": 0.05
+          }
+        },
+        "constraints": {
+          "system_limits": {
+            "min_output": 0.0,
+            "max_output": 100.0
+          },
+          "control_limits": {
+            "max_change_rate": 5.0,
+            "settling_time": 20.0
+          }
+        }
+      },
+      "output": {
+        "variables": [
+          "system_1.output",
+          "system_2.output",
+          "system_3.output",
+          "centralized_optimizer.setpoint_1",
+          "centralized_optimizer.setpoint_2",
+          "centralized_optimizer.setpoint_3",
+          "centralized_optimizer.cost_function"
+        ],
+        "save_to_file": true,
+        "plot": true
+      }
+    },
+    "unified_config": {
+      "simulation": {
+        "name": "集中式设定点优化",
+        "description": "集中式设定点优化示例",
+        "duration": 200.0,
+        "time_step": 1.0
+      },
+      "components": {
+        "system_1": {
+          "type": "ControlledSystem",
+          "parameters": {
+            "initial_state": 20.0,
+            "time_constant": 10.0,
+            "gain": 1.5
+          }
+        },
+        "system_2": {
+          "type": "ControlledSystem",
+          "parameters": {
+            "initial_state": 15.0,
+            "time_constant": 8.0,
+            "gain": 1.2
+          }
+        },
+        "system_3": {
+          "type": "ControlledSystem",
+          "parameters": {
+            "initial_state": 25.0,
+            "time_constant": 12.0,
+            "gain": 1.8
+          }
+        },
+        "optimizer": {
+          "type": "CentralizedOptimizer",
+          "parameters": {
+            "algorithm": "gradient_descent",
+            "learning_rate": 0.01,
+            "convergence_threshold": 0.001
+          }
+        }
+      },
+      "control": {
+        "enabled": true,
+        "type": "centralized_optimization",
+        "optimization_interval": 20.0,
+        "parameters": {
+          "objective_function": "minimize_total_error",
+          "constraints": [
+            "system_stability",
+            "actuator_limits"
+          ],
+          "weights": {
+            "system_1": 1.0,
+            "system_2": 1.2,
+            "system_3": 0.8
+          }
+        }
+      },
+      "optimization": {
+        "enabled": true,
+        "target_variables": [
+          "system_1.setpoint",
+          "system_2.setpoint",
+          "system_3.setpoint"
+        ],
+        "objective": {
+          "type": "weighted_sum",
+          "components": [
+            {
+              "name": "tracking_error",
+              "weight": 1.0
+            },
+            {
+              "name": "control_effort",
+              "weight": 0.1
+            },
+            {
+              "name": "system_interaction",
+              "weight": 0.05
+            }
+          ]
+        }
+      },
+      "output": {
+        "format": "json",
+        "save_path": "centralized_optimization_results.json",
+        "variables": [
+          "system_1.state",
+          "system_1.setpoint",
+          "system_2.state",
+          "system_2.setpoint",
+          "system_3.state",
+          "system_3.setpoint",
+          "total_cost",
+          "optimization_status"
+        ]
+      }
+    },
+    "universal_config": {
+      "metadata": {
+        "name": "集中式设定点优化",
+        "description": "集中式设定点优化示例",
+        "category": "notebooks",
+        "version": "1.0"
+      },
+      "simulation": {
+        "time": {
+          "start": 0.0,
+          "end": 200.0,
+          "step": 1.0
+        },
+        "solver": {
+          "type": "runge_kutta",
+          "tolerance": "1e-6"
+        }
+      },
+      "system": {
+        "components": [
+          {
+            "name": "system_1",
+            "type": "ControlledSystem",
+            "config": {
+              "initial_state": 20.0,
+              "time_constant": 10.0,
+              "gain": 1.5,
+              "target": 30.0
+            }
+          },
+          {
+            "name": "system_2",
+            "type": "ControlledSystem",
+            "config": {
+              "initial_state": 15.0,
+              "time_constant": 8.0,
+              "gain": 1.2,
+              "target": 25.0
+            }
+          },
+          {
+            "name": "system_3",
+            "type": "ControlledSystem",
+            "config": {
+              "initial_state": 25.0,
+              "time_constant": 12.0,
+              "gain": 1.8,
+              "target": 35.0
+            }
+          },
+          {
+            "name": "central_optimizer",
+            "type": "CentralizedOptimizer",
+            "config": {
+              "algorithm": "gradient_descent",
+              "learning_rate": 0.01,
+              "convergence_threshold": 0.001
+            }
+          }
+        ]
+      },
+      "control": {
+        "enabled": true,
+        "strategy": "centralized_optimization",
+        "optimization": {
+          "interval": 20.0,
+          "algorithm": "multi_objective",
+          "objectives": [
+            {
+              "name": "tracking_performance",
+              "weight": 1.0,
+              "type": "minimize_error"
+            },
+            {
+              "name": "control_effort",
+              "weight": 0.1,
+              "type": "minimize_energy"
+            },
+            {
+              "name": "system_coupling",
+              "weight": 0.05,
+              "type": "minimize_interaction"
+            }
+          ],
+          "constraints": [
+            {
+              "type": "stability_margin",
+              "value": 0.1
+            },
+            {
+              "type": "actuator_saturation",
+              "limits": [
+                -10.0,
+                10.0
+              ]
+            }
+          ]
+        }
+      },
+      "monitoring": {
+        "enabled": true,
+        "variables": [
+          "system_1.state",
+          "system_1.setpoint",
+          "system_1.error",
+          "system_2.state",
+          "system_2.setpoint",
+          "system_2.error",
+          "system_3.state",
+          "system_3.setpoint",
+          "system_3.error",
+          "central_optimizer.cost",
+          "central_optimizer.convergence"
+        ]
+      },
+      "logging": {
+        "level": "INFO",
+        "output_file": "centralized_optimization.log"
+      }
+    }
+  },
+  "regenerated_config": {
+    "config.yml": {
+      "simulation": {
+        "duration": 3600,
+        "dt": 1.0,
+        "solver": {
+          "type": "rk4"
+        }
+      }
+    },
+    "components.yml": {
+      "components": []
+    },
+    "topology.yml": {
+      "connections": []
+    },
+    "agents.yml": {
+      "agents": []
+    }
+  },
+  "comparison_result": {
+    "overall_score": 0.875,
+    "components_score": 1.0,
+    "topology_score": 1.0,
+    "simulation_score": 0.5,
+    "agents_score": 1.0,
+    "issues": [
+      "仿真参数不匹配: 原始200.0, 重新生成3600"
+    ],
+    "improvements": []
+  }
+}

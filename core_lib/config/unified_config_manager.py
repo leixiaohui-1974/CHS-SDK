@@ -316,7 +316,23 @@ class UnifiedConfigManager:
         
         try:
             with open(universal_file, 'r', encoding='utf-8') as f:
-                return yaml.safe_load(f)
+                config_data = yaml.safe_load(f)
+            
+            # 尝试加载同目录下的agents.yml文件
+            agents_file = universal_file.parent / 'agents.yml'
+            if agents_file.exists():
+                try:
+                    with open(agents_file, 'r', encoding='utf-8') as f:
+                        agents_data = yaml.safe_load(f)
+                    if agents_data:
+                        # 将智能体配置合并到主配置中
+                        if 'agents' not in config_data:
+                            config_data['agents'] = agents_data.get('agents', [])
+                        self.logger.info(f"已加载智能体配置文件: {agents_file}")
+                except Exception as e:
+                    self.logger.warning(f"加载智能体配置文件失败 {agents_file}: {e}")
+            
+            return config_data
         except Exception as e:
             self.logger.error(f"加载通用配置文件失败 {universal_file}: {e}")
             raise

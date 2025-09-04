@@ -1,0 +1,53 @@
+agents: {}
+components:
+  水库1:
+    area: 10000
+    capacity: 50.0
+    initial_level: 50
+    max_level: 100
+    min_level: 10
+    type: Reservoir
+  河道1:
+    type: Channel
+  连接关系:
+    area: 10000
+    capacity: 1000000
+    initial_level: 50
+    max_level: 100
+    min_level: 10
+    type: Reservoir
+  闸门1:
+    initial_opening: 0.5
+    max_flow: 1000
+    max_opening: 1
+    min_opening: 0
+    type: Gate
+debug:
+  enabled: true
+  log_file: simulation.log
+  log_level: INFO
+performance:
+  enabled: true
+  memory_monitoring: true
+  time_tracking: true
+simulation:
+  description: 基于自然语言描述生成的仿真配置
+  name: 自动生成的仿真
+  solver:
+    tolerance: 1.0e-06
+    type: rk4
+  time:
+    end_time: 3600
+    start_time: 0
+    time_step: 1.0
+  version: '1.5'
+topology:
+  connections:
+  - from: 水库1
+    to: 闸门1
+    type: flow
+visualization:
+  enabled: true
+  plots:
+    enabled: true
+    save_format: png

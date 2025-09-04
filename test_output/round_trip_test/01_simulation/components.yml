@@ -1,0 +1,8 @@
+components:
+- area: 10000
+  capacity: 1000000
+  class: Reservoir
+  id: tank1
+  initial_level: 50
+  max_level: 100
+  min_level: 10

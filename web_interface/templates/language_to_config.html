@@ -1,0 +1,699 @@
+{% extends "base.html" %}
+
+{% block title %}自然语言转配置文件 - CHS-SDK配置文件转换器{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h2">
+                <i class="fas fa-comments me-2 text-success"></i>
+                自然语言转配置文件
+            </h1>
+            <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>返回首页
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- 左侧：输入区域 -->
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-edit me-2"></i>
+                    系统描述输入
+                </h5>
+            </div>
+            <div class="card-body">
+                <form id="convertForm">
+                    <!-- 系统描述输入 -->
+                    <div class="mb-3">
+                        <label for="systemDescription" class="form-label">
+                            <i class="fas fa-file-alt me-2"></i>
+                            系统描述 <span class="text-danger">*</span>
+                        </label>
+                        <textarea class="form-control" id="systemDescription" name="description" rows="8" 
+                                  placeholder="请用中文描述您要建模的系统，例如：\n\n我需要建模一个包含三个控制系统的仿真环境。每个控制系统都有初始状态参数，包括位置、速度等。系统运行时间为100秒，时间步长为0.1秒。需要一个集中式优化器来协调这些系统，使用梯度下降算法进行优化..." 
+                                  required></textarea>
+                        <div class="form-text">
+                            <i class="fas fa-info-circle me-1"></i>
+                            请详细描述系统的组件、参数、控制策略、仿真设置等信息
+                        </div>
+                    </div>
+                    
+                    <!-- 配置类型选择 -->
+                    <div class="mb-3">
+                        <label for="targetConfigType" class="form-label">
+                            <i class="fas fa-cog me-2"></i>
+                            目标配置类型 <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select" id="targetConfigType" name="target_type" required>
+                            <option value="">请选择配置类型</option>
+                            <option value="traditional">传统多文件配置</option>
+                            <option value="unified">统一配置文件</option>
+                            <option value="universal">通用配置文件</option>
+                            <option value="hardcoded">硬编码配置</option>
+                        </select>
+                        <div class="form-text">
+                            <i class="fas fa-question-circle me-1"></i>
+                            选择要生成的配置文件类型
+                        </div>
+                    </div>
+                    
+                    <!-- 转换策略选择 -->
+                    <div class="mb-3">
+                        <label for="conversionStrategy" class="form-label">
+                            <i class="fas fa-brain me-2"></i>
+                            转换策略 <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select" id="conversionStrategy" name="strategy" required>
+                            <option value="hybrid">混合策略 (推荐)</option>
+                            <option value="llm">大模型优先</option>
+                            <option value="rule">规则系统</option>
+                        </select>
+                        <div class="form-text">
+                            <i class="fas fa-info-circle me-1"></i>
+                            混合策略结合了大模型的智能理解和规则系统的精确性
+                        </div>
+                    </div>
+                    
+                    <!-- 高级选项 -->
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="includeComments" name="include_comments" checked>
+                            <label class="form-check-label" for="includeComments">
+                                包含详细注释
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="validateConfig" name="validate_config" checked>
+                            <label class="form-check-label" for="validateConfig">
+                                验证配置文件格式
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="includeExamples" name="include_examples">
+                            <label class="form-check-label" for="includeExamples">
+                                包含使用示例
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- 提交按钮 -->
+                    <button type="submit" class="btn btn-success w-100" id="generateBtn">
+                        <i class="fas fa-magic me-2"></i>
+                        生成配置文件
+                    </button>
+                </form>
+                
+                <!-- 示例描述 -->
+                <div class="mt-4">
+                    <h6 class="text-muted mb-2">
+                        <i class="fas fa-lightbulb me-2"></i>
+                        示例描述
+                    </h6>
+                    <div class="accordion" id="exampleAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#example1">
+                                    控制系统优化示例
+                                </button>
+                            </h2>
+                            <div id="example1" class="accordion-collapse collapse" data-bs-parent="#exampleAccordion">
+                                <div class="accordion-body small">
+                                    <button class="btn btn-sm btn-outline-primary mb-2" onclick="loadExample(1)">
+                                        <i class="fas fa-copy me-1"></i>使用此示例
+                                    </button>
+                                    <p>我需要建模一个包含三个控制系统的仿真环境。每个控制系统都有初始状态参数，包括位置、速度等。系统运行时间为100秒，时间步长为0.1秒。需要一个集中式优化器来协调这些系统，使用梯度下降算法进行优化，学习率为0.01。还需要一个动态设定点策略来调整目标值。</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#example2">
+                                    多智能体系统示例
+                                </button>
+                            </h2>
+                            <div id="example2" class="accordion-collapse collapse" data-bs-parent="#exampleAccordion">
+                                <div class="accordion-body small">
+                                    <button class="btn btn-sm btn-outline-primary mb-2" onclick="loadExample(2)">
+                                        <i class="fas fa-copy me-1"></i>使用此示例
+                                    </button>
+                                    <p>创建一个多智能体协作系统，包含5个智能体，每个智能体都有自己的决策策略。系统需要支持智能体间的通信和协调。仿真时间为200秒，需要记录智能体的位置、状态和决策历史。启用调试模式和可视化功能。</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#example3">
+                                    复杂网络仿真示例
+                                </button>
+                            </h2>
+                            <div id="example3" class="accordion-collapse collapse" data-bs-parent="#exampleAccordion">
+                                <div class="accordion-body small">
+                                    <button class="btn btn-sm btn-outline-primary mb-2" onclick="loadExample(3)">
+                                        <i class="fas fa-copy me-1"></i>使用此示例
+                                    </button>
+                                    <p>建模一个复杂的网络系统，包含多个节点和连接。每个节点都有不同的处理能力和状态。网络中有数据流动和负载均衡机制。需要监控网络性能指标，包括延迟、吞吐量和可靠性。启用性能监控和实时可视化。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 右侧：生成结果区域 -->
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-file-code me-2"></i>
+                    生成的配置文件
+                </h5>
+                <div id="resultActions" style="display: none;">
+                    <button class="btn btn-sm btn-light me-2" onclick="copyAllConfigs()">
+                        <i class="fas fa-copy me-1"></i>复制全部
+                    </button>
+                    <button class="btn btn-sm btn-light" onclick="downloadAllConfigs()">
+                        <i class="fas fa-download me-1"></i>下载全部
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- 初始状态 -->
+                <div id="initialState" class="text-center text-muted">
+                    <i class="fas fa-edit fa-3x mb-3"></i>
+                    <p>请输入系统描述开始生成配置文件</p>
+                </div>
+                
+                <!-- 加载状态 -->
+                <div id="loadingState" class="text-center" style="display: none;">
+                    <div class="spinner-border text-success mb-3" role="status">
+                        <span class="visually-hidden">生成中...</span>
+                    </div>
+                    <p class="text-muted">正在分析描述并生成配置文件...</p>
+                    <div class="progress mb-3">
+                        <div id="progressBar" class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                    </div>
+                    <div id="progressText" class="small text-muted">解析自然语言描述...</div>
+                </div>
+                
+                <!-- 结果显示 -->
+                <div id="resultState" style="display: none;">
+                    <!-- 生成信息 -->
+                    <div id="generationInfo" class="mb-3">
+                        <h6 class="text-muted mb-2">
+                            <i class="fas fa-info-circle me-2"></i>
+                            生成信息
+                        </h6>
+                        <div id="generationDetails" class="small bg-light p-2 rounded"></div>
+                    </div>
+                    
+                    <!-- 配置文件标签页 -->
+                    <div id="configTabs">
+                        <ul class="nav nav-tabs" id="configTabList" role="tablist"></ul>
+                        <div class="tab-content" id="configTabContent"></div>
+                    </div>
+                    
+                    <!-- 验证结果 -->
+                    <div id="validationResult" class="mt-3" style="display: none;">
+                        <h6 class="text-muted mb-2">
+                            <i class="fas fa-check-circle me-2"></i>
+                            验证结果
+                        </h6>
+                        <div id="validationDetails"></div>
+                    </div>
+                </div>
+                
+                <!-- 错误状态 -->
+                <div id="errorState" class="text-center text-danger" style="display: none;">
+                    <i class="fas fa-exclamation-triangle fa-3x mb-3"></i>
+                    <h5>生成失败</h5>
+                    <p id="errorMessage"></p>
+                    <button class="btn btn-outline-danger" onclick="resetForm()">
+                        <i class="fas fa-redo me-2"></i>重新开始
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 配置类型说明 -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-question-circle me-2"></i>
+                    配置类型说明
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 col-lg-3 mb-3">
+                        <div class="border rounded p-3 h-100">
+                            <h6 class="text-primary">
+                                <i class="fas fa-folder me-2"></i>
+                                传统多文件
+                            </h6>
+                            <p class="small mb-2">将配置分散在多个YAML文件中，便于模块化管理。</p>
+                            <ul class="small list-unstyled">
+                                <li>• config.yml - 基础配置</li>
+                                <li>• components.yml - 组件定义</li>
+                                <li>• topology.yml - 拓扑结构</li>
+                                <li>• agents.yml - 智能体配置</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-3 mb-3">
+                        <div class="border rounded p-3 h-100">
+                            <h6 class="text-success">
+                                <i class="fas fa-file me-2"></i>
+                                统一配置
+                            </h6>
+                            <p class="small mb-2">将所有配置集中在一个YAML文件中，结构清晰。</p>
+                            <ul class="small list-unstyled">
+                                <li>• 单文件管理</li>
+                                <li>• 结构化组织</li>
+                                <li>• 易于版本控制</li>
+                                <li>• 减少文件依赖</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-3 mb-3">
+                        <div class="border rounded p-3 h-100">
+                            <h6 class="text-warning">
+                                <i class="fas fa-star me-2"></i>
+                                通用配置
+                            </h6>
+                            <p class="small mb-2">增强版配置文件，支持调试、监控、可视化等高级功能。</p>
+                            <ul class="small list-unstyled">
+                                <li>• 调试支持</li>
+                                <li>• 性能监控</li>
+                                <li>• 实时可视化</li>
+                                <li>• 日志管理</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-3 mb-3">
+                        <div class="border rounded p-3 h-100">
+                            <h6 class="text-info">
+                                <i class="fas fa-code me-2"></i>
+                                硬编码
+                            </h6>
+                            <p class="small mb-2">使用Python代码直接定义配置，提供最大的灵活性。</p>
+                            <ul class="small list-unstyled">
+                                <li>• 程序化控制</li>
+                                <li>• 动态配置</li>
+                                <li>• 复杂逻辑支持</li>
+                                <li>• 高级定制</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let generationResult = null;
+    
+    // 页面初始化
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeForm();
+    });
+    
+    // 初始化表单
+    function initializeForm() {
+        const form = document.getElementById('convertForm');
+        form.addEventListener('submit', handleFormSubmit);
+    }
+    
+    // 处理表单提交
+    async function handleFormSubmit(e) {
+        e.preventDefault();
+        
+        const description = document.getElementById('systemDescription').value.trim();
+        const targetType = document.getElementById('targetConfigType').value;
+        const strategy = document.getElementById('conversionStrategy').value;
+        
+        if (!description) {
+            showMessage('请输入系统描述', 'warning');
+            return;
+        }
+        
+        if (!targetType) {
+            showMessage('请选择目标配置类型', 'warning');
+            return;
+        }
+        
+        if (!strategy) {
+            showMessage('请选择转换策略', 'warning');
+            return;
+        }
+        
+        showLoadingState();
+        
+        try {
+            // 使用增强版转换器API
+            const requestData = {
+                description: description,
+                config_type: targetType,
+                strategy: strategy,
+                include_comments: document.getElementById('includeComments').checked,
+                validate_config: document.getElementById('validateConfig').checked,
+                include_examples: document.getElementById('includeExamples').checked
+            };
+            
+            const response = await fetch('/api/convert-language-enhanced', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                generationResult = result;
+                showResult(result);
+            } else {
+                showError(result.error || '生成失败，请检查输入描述');
+            }
+        } catch (error) {
+            console.error('生成错误:', error);
+            showError('网络错误，请稍后重试');
+        }
+    }
+    
+    // 显示加载状态
+    function showLoadingState() {
+        document.getElementById('initialState').style.display = 'none';
+        document.getElementById('resultState').style.display = 'none';
+        document.getElementById('errorState').style.display = 'none';
+        document.getElementById('loadingState').style.display = 'block';
+        
+        // 模拟进度条和状态文本
+        const progressSteps = [
+            { progress: 20, text: '解析自然语言描述...' },
+            { progress: 40, text: '提取系统组件信息...' },
+            { progress: 60, text: '生成配置文件结构...' },
+            { progress: 80, text: '验证配置文件格式...' },
+            { progress: 100, text: '完成配置文件生成...' }
+        ];
+        
+        let stepIndex = 0;
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        
+        const interval = setInterval(() => {
+            if (stepIndex < progressSteps.length) {
+                const step = progressSteps[stepIndex];
+                progressBar.style.width = step.progress + '%';
+                progressText.textContent = step.text;
+                stepIndex++;
+            } else {
+                clearInterval(interval);
+            }
+        }, 800);
+    }
+    
+    // 显示结果
+    function showResult(data) {
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('resultState').style.display = 'block';
+        document.getElementById('resultActions').style.display = 'block';
+        
+        // 显示生成信息
+        const generationDetails = document.getElementById('generationDetails');
+        const conversionInfo = data.conversion_info || {};
+        
+        let detailsHtml = `
+            <strong>文件数量:</strong> ${data.files ? Object.keys(data.files).length : 1}<br>
+            <strong>生成时间:</strong> ${new Date().toLocaleString()}<br>
+        `;
+        
+        // 显示转换策略信息
+        if (conversionInfo.strategy) {
+            detailsHtml += `<strong>转换策略:</strong> ${conversionInfo.strategy}<br>`;
+        }
+        
+        if (conversionInfo.confidence_score !== undefined) {
+            detailsHtml += `<strong>置信度:</strong> ${(conversionInfo.confidence_score * 100).toFixed(1)}%<br>`;
+        }
+        
+        if (conversionInfo.llm_contribution !== undefined) {
+            detailsHtml += `<strong>大模型贡献:</strong> ${(conversionInfo.llm_contribution * 100).toFixed(1)}%<br>`;
+        }
+        
+        if (conversionInfo.rule_contribution !== undefined) {
+            detailsHtml += `<strong>规则贡献:</strong> ${(conversionInfo.rule_contribution * 100).toFixed(1)}%<br>`;
+        }
+        
+        // 显示质量指标
+        if (conversionInfo.quality_metrics) {
+            const metrics = conversionInfo.quality_metrics;
+            detailsHtml += `<br><strong>质量评估:</strong><br>`;
+            detailsHtml += `&nbsp;&nbsp;完整性: ${(metrics.completeness * 100).toFixed(1)}%<br>`;
+            detailsHtml += `&nbsp;&nbsp;准确性: ${(metrics.accuracy * 100).toFixed(1)}%<br>`;
+            detailsHtml += `&nbsp;&nbsp;一致性: ${(metrics.consistency * 100).toFixed(1)}%<br>`;
+            detailsHtml += `&nbsp;&nbsp;总体: ${(metrics.overall * 100).toFixed(1)}%<br>`;
+        }
+        
+        // 显示改进建议
+        if (conversionInfo.improvements && conversionInfo.improvements.length > 0) {
+            detailsHtml += `<br><strong>改进:</strong><br>`;
+            conversionInfo.improvements.forEach(improvement => {
+                detailsHtml += `&nbsp;&nbsp;• ${improvement}<br>`;
+            });
+        }
+        
+        // 显示验证错误
+        if (conversionInfo.validation_errors && conversionInfo.validation_errors.length > 0) {
+            detailsHtml += `<br><strong>验证问题:</strong><br>`;
+            conversionInfo.validation_errors.forEach(error => {
+                detailsHtml += `&nbsp;&nbsp;⚠ ${error}<br>`;
+            });
+        }
+        
+        generationDetails.innerHTML = detailsHtml;
+        
+        // 创建配置文件标签页
+        createConfigTabs(data.files || { 'config': data.content });
+        
+        // 显示验证结果
+        if (data.validation) {
+            showValidationResult(data.validation);
+        }
+    }
+    
+    // 创建配置文件标签页
+    function createConfigTabs(files) {
+        const tabList = document.getElementById('configTabList');
+        const tabContent = document.getElementById('configTabContent');
+        
+        tabList.innerHTML = '';
+        tabContent.innerHTML = '';
+        
+        let isFirst = true;
+        
+        Object.entries(files).forEach(([filename, content]) => {
+            const tabId = 'tab-' + filename.replace(/[^a-zA-Z0-9]/g, '-');
+            
+            // 创建标签
+            const tabItem = document.createElement('li');
+            tabItem.className = 'nav-item';
+            tabItem.innerHTML = `
+                <button class="nav-link ${isFirst ? 'active' : ''}" id="${tabId}-tab" data-bs-toggle="tab" 
+                        data-bs-target="#${tabId}" type="button" role="tab">
+                    <i class="fas fa-file me-2"></i>${filename}
+                </button>
+            `;
+            tabList.appendChild(tabItem);
+            
+            // 创建内容
+            const tabPane = document.createElement('div');
+            tabPane.className = `tab-pane fade ${isFirst ? 'show active' : ''}`;
+            tabPane.id = tabId;
+            tabPane.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center mt-3 mb-2">
+                    <h6 class="mb-0">${filename}</h6>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary me-2" onclick="copyConfig('${filename}')">
+                            <i class="fas fa-copy me-1"></i>复制
+                        </button>
+                        <button class="btn btn-sm btn-outline-success" onclick="downloadConfig('${filename}')">
+                            <i class="fas fa-download me-1"></i>下载
+                        </button>
+                    </div>
+                </div>
+                <pre><code class="language-yaml">${escapeHtml(content)}</code></pre>
+            `;
+            tabContent.appendChild(tabPane);
+            
+            isFirst = false;
+        });
+        
+        // 高亮代码
+        if (typeof Prism !== 'undefined') {
+            Prism.highlightAll();
+        }
+    }
+    
+    // 显示验证结果
+    function showValidationResult(validation) {
+        const validationResult = document.getElementById('validationResult');
+        const validationDetails = document.getElementById('validationDetails');
+        
+        validationResult.style.display = 'block';
+        
+        if (validation.valid) {
+            validationDetails.innerHTML = `
+                <div class="alert alert-success mb-0">
+                    <i class="fas fa-check-circle me-2"></i>
+                    配置文件验证通过
+                </div>
+            `;
+        } else {
+            validationDetails.innerHTML = `
+                <div class="alert alert-warning mb-0">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    验证发现问题：${validation.errors.join(', ')}
+                </div>
+            `;
+        }
+    }
+    
+    // 显示错误
+    function showError(message) {
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('errorState').style.display = 'block';
+        document.getElementById('errorMessage').textContent = message;
+    }
+    
+    // 重置表单
+    function resetForm() {
+        generationResult = null;
+        document.getElementById('systemDescription').value = '';
+        document.getElementById('targetConfigType').value = '';
+        document.getElementById('initialState').style.display = 'block';
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('resultState').style.display = 'none';
+        document.getElementById('errorState').style.display = 'none';
+        document.getElementById('resultActions').style.display = 'none';
+    }
+    
+    // 复制单个配置文件
+    function copyConfig(filename) {
+        if (!generationResult || !generationResult.files) return;
+        
+        const content = generationResult.files[filename];
+        navigator.clipboard.writeText(content).then(() => {
+            showMessage(`${filename} 已复制到剪贴板`, 'success');
+        });
+    }
+    
+    // 下载单个配置文件
+    function downloadConfig(filename) {
+        if (!generationResult || !generationResult.files) return;
+        
+        const content = generationResult.files[filename];
+        const blob = new Blob([content], { type: 'text/yaml' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+    
+    // 复制所有配置文件
+    function copyAllConfigs() {
+        if (!generationResult) return;
+        
+        let allContent = '';
+        if (generationResult.files) {
+            Object.entries(generationResult.files).forEach(([filename, content]) => {
+                allContent += `# ${filename}\n${content}\n\n`;
+            });
+        } else {
+            allContent = generationResult.content;
+        }
+        
+        navigator.clipboard.writeText(allContent).then(() => {
+            showMessage('所有配置文件已复制到剪贴板', 'success');
+        });
+    }
+    
+    // 下载所有配置文件
+    function downloadAllConfigs() {
+        if (!generationResult) return;
+        
+        if (generationResult.files && Object.keys(generationResult.files).length > 1) {
+            // 多文件打包下载
+            const zip = new JSZip();
+            Object.entries(generationResult.files).forEach(([filename, content]) => {
+                zip.file(filename, content);
+            });
+            
+            zip.generateAsync({ type: 'blob' }).then(function(content) {
+                const url = URL.createObjectURL(content);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'chs_sdk_config.zip';
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+        } else {
+            // 单文件下载
+            const content = generationResult.content || Object.values(generationResult.files)[0];
+            const blob = new Blob([content], { type: 'text/yaml' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'config.yml';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    }
+    
+    // 加载示例
+    function loadExample(exampleId) {
+        const examples = {
+            1: '我需要建模一个包含三个控制系统的仿真环境。每个控制系统都有初始状态参数，包括位置、速度等。系统运行时间为100秒，时间步长为0.1秒。需要一个集中式优化器来协调这些系统，使用梯度下降算法进行优化，学习率为0.01。还需要一个动态设定点策略来调整目标值。',
+            2: '创建一个多智能体协作系统，包含5个智能体，每个智能体都有自己的决策策略。系统需要支持智能体间的通信和协调。仿真时间为200秒，需要记录智能体的位置、状态和决策历史。启用调试模式和可视化功能。',
+            3: '建模一个复杂的网络系统，包含多个节点和连接。每个节点都有不同的处理能力和状态。网络中有数据流动和负载均衡机制。需要监控网络性能指标，包括延迟、吞吐量和可靠性。启用性能监控和实时可视化。'
+        };
+        
+        if (examples[exampleId]) {
+            document.getElementById('systemDescription').value = examples[exampleId];
+            showMessage('示例已加载', 'success');
+        }
+    }
+    
+    // HTML转义
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+</script>
+
+<!-- 引入JSZip用于多文件打包下载 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+{% endblock %}

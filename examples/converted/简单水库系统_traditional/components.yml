@@ -1,0 +1,23 @@
+components:
+- area: 10000
+  capacity: 1000000
+  class: Reservoir
+  id: 仿真名称
+  initial_level: 50
+  max_level: 100
+  min_level: 10
+- area: 10000
+  capacity: 5.0
+  class: Reservoir
+  id: 水库1
+  initial_level: 50
+  max_level: 100
+  min_level: 10
+- class: Gate
+  id: 闸门1
+  initial_opening: 0.5
+  max_flow: 50.0
+  max_opening: 1
+  min_opening: 0
+- class: Sensor
+  id: 传感器1

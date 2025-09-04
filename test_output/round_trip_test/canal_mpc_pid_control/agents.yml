@@ -1,0 +1,25 @@
+agents:
+- class: Agent
+  id: central_mpc_agent
+  target: component_1
+- class: Agent
+  id: gate_1_flow_pid_agent
+  target: component_1
+- class: Agent
+  id: gate_2_flow_pid_agent
+  target: component_1
+- class: DigitalTwinAgent
+  id: canal_1_perception_agent
+  state_topic: canal_1_state
+  target: canal_1
+- class: DigitalTwinAgent
+  id: gate_1_perception_agent
+  state_topic: gate_1_state
+  target: gate_1
+- class: DigitalTwinAgent
+  id: gate_2_perception_agent
+  state_topic: gate_2_state
+  target: gate_2
+- class: Agent
+  id: disturbance_scenario_agent
+  target: component_1

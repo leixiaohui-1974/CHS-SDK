@@ -1,0 +1,37 @@
+agents: {}
+components:
+  仿真名称:
+    area: 10000
+    capacity: 1000000
+    initial_level: 50
+    max_level: 100
+    min_level: 10
+    type: Reservoir
+  传感器1:
+    type: Sensor
+  水库1:
+    area: 10000
+    capacity: 5.0
+    initial_level: 50
+    max_level: 100
+    min_level: 10
+    type: Reservoir
+  闸门1:
+    initial_opening: 0.5
+    max_flow: 50.0
+    max_opening: 1
+    min_opening: 0
+    type: Gate
+control:
+  enabled: true
+  type: pid
+simulation:
+  description: 基于自然语言描述生成的仿真配置
+  duration: 3600
+  name: 简单水库控制系统
+  time_step: 1.0
+topology:
+  connections:
+  - from: 水库1
+    to: 闸门1
+    type: flow

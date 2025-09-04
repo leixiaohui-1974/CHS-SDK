@@ -1,0 +1,44 @@
+agents: {}
+components:
+  排水管网:
+    type: Pipe
+  泵站群:
+    efficiency: 0.85
+    initial_speed: 0
+    max_flow: 5000.0
+    power: 1000
+    type: Pump
+  监测系统:
+    type: Sensor
+  闸门系统:
+    initial_opening: 0.5
+    max_flow: 1000
+    max_opening: 1
+    min_opening: 0
+    type: Gate
+debug:
+  enabled: true
+  log_file: simulation.log
+  log_level: INFO
+performance:
+  enabled: true
+  memory_monitoring: true
+  time_tracking: true
+simulation:
+  description: 基于自然语言描述生成的仿真配置
+  name: 城市智能排水防涝系统
+  solver:
+    tolerance: 1.0e-06
+    type: rk4
+  time:
+    end_time: 21600
+    start_time: 0
+    time_step: 30.0
+  version: '1.5'
+topology:
+  connections: []
+visualization:
+  enabled: true
+  plots:
+    enabled: true
+    save_format: png

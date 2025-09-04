@@ -1,0 +1,14 @@
+components:
+- area: 10000
+  capacity: 1000000
+  class: Reservoir
+  id: main_reservoir
+  initial_level: 50
+  max_level: 100
+  min_level: 10
+- class: Gate
+  id: flood_gate
+  initial_opening: 0.5
+  max_flow: 1000
+  max_opening: 1
+  min_opening: 0

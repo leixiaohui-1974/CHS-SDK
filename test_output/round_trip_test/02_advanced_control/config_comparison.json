@@ -1,0 +1,1008 @@
+{
+  "original_config": {
+    "agents": {
+      "agents": [
+        {
+          "id": "upstream_controller",
+          "class": "core_lib.local_agents.control.local_control_agent.LocalControlAgent",
+          "dt": 10.0,
+          "target_component": "gate1",
+          "control_type": "pid",
+          "data_sources": {
+            "observation_topic": "canal1/water_level",
+            "observation_key": "water_level"
+          },
+          "control_targets": {
+            "action_topic": "gate1/opening_command"
+          },
+          "allocation_config": {
+            "method": "direct"
+          },
+          "controller_config": {
+            "class": "core_lib.local_agents.control.pid_controller.PIDController",
+            "Kp": 0.6,
+            "Ki": 0.15,
+            "Kd": 0.08,
+            "setpoint": 2.2,
+            "min_output": 0.0,
+            "max_output": 1.0
+          }
+        },
+        {
+          "id": "downstream_controller",
+          "class": "core_lib.local_agents.control.local_control_agent.LocalControlAgent",
+          "dt": 10.0,
+          "target_component": "gate2",
+          "control_type": "pid",
+          "data_sources": {
+            "observation_topic": "canal2/water_level",
+            "observation_key": "water_level"
+          },
+          "control_targets": {
+            "action_topic": "gate2/opening_command"
+          },
+          "allocation_config": {
+            "method": "direct"
+          },
+          "controller_config": {
+            "class": "core_lib.local_agents.control.pid_controller.PIDController",
+            "Kp": 0.4,
+            "Ki": 0.1,
+            "Kd": 0.06,
+            "setpoint": 1.8,
+            "min_output": 0.0,
+            "max_output": 1.0
+          }
+        },
+        {
+          "id": "sensor_canal1",
+          "class": "core_lib.local_agents.io.physical_io_agent.PhysicalIOAgent",
+          "agent_id": "canal1_sensor",
+          "sensors_config": {
+            "canal1_water_level": {
+              "obj_id": "canal1",
+              "target_attr": "water_level",
+              "state_key": "water_level",
+              "topic": "canal1/water_level",
+              "noise_params": {
+                "std_dev": 0.015,
+                "sampling_rate": 0.5
+              }
+            }
+          },
+          "actuators_config": {}
+        },
+        {
+          "id": "sensor_canal2",
+          "class": "core_lib.local_agents.io.physical_io_agent.PhysicalIOAgent",
+          "agent_id": "canal2_sensor",
+          "sensors_config": {
+            "canal2_water_level": {
+              "obj_id": "canal2",
+              "target_attr": "water_level",
+              "state_key": "water_level",
+              "topic": "canal2/water_level",
+              "noise_params": {
+                "std_dev": 0.012,
+                "sampling_rate": 0.5
+              }
+            }
+          },
+          "actuators_config": {}
+        }
+      ]
+    },
+    "components": {
+      "components": [
+        {
+          "id": "canal1",
+          "class": "UnifiedCanal",
+          "initial_state": {
+            "water_level": 2.0,
+            "flow_rate": 10.0
+          },
+          "parameters": {
+            "bottom_width": 20.0,
+            "length": 1000.0,
+            "slope": 0.001,
+            "side_slope_z": 2.0,
+            "manning_n": 0.025
+          }
+        },
+        {
+          "id": "canal2",
+          "class": "UnifiedCanal",
+          "initial_state": {
+            "water_level": 1.8,
+            "flow_rate": 8.0
+          },
+          "parameters": {
+            "bottom_width": 15.0,
+            "length": 800.0,
+            "slope": 0.0015,
+            "side_slope_z": 1.5,
+            "manning_n": 0.03
+          }
+        },
+        {
+          "id": "gate1",
+          "class": "Gate",
+          "initial_state": {
+            "opening": 0.3
+          },
+          "parameters": {
+            "discharge_coefficient": 0.8,
+            "width": 10.0,
+            "max_opening": 3.0
+          }
+        },
+        {
+          "id": "gate2",
+          "class": "Gate",
+          "initial_state": {
+            "opening": 0.25
+          },
+          "parameters": {
+            "discharge_coefficient": 0.75,
+            "width": 8.0,
+            "max_opening": 2.5
+          }
+        }
+      ]
+    },
+    "config": {
+      "simulation": {
+        "duration": 1800,
+        "dt": 5.0
+      }
+    },
+    "output_agents": {
+      "simulation_history": [
+        {
+          "time": 0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "canal2": {
+            "water_level": 1.8,
+            "flow_rate": 8.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "gate2": {
+            "opening": 0.25,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 5.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "canal2": {
+            "water_level": 1.8,
+            "flow_rate": 8.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "gate2": {
+            "opening": 0.25,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 10.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "canal2": {
+            "water_level": 1.8,
+            "flow_rate": 8.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "gate2": {
+            "opening": 0.25,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 15.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "canal2": {
+            "water_level": 1.8,
+            "flow_rate": 8.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "gate2": {
+            "opening": 0.25,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 20.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "canal2": {
+            "water_level": 1.8,
+            "flow_rate": 8.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "gate2": {
+            "opening": 0.25,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 25.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "canal2": {
+            "water_level": 1.8,
+            "flow_rate": 8.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "gate2": {
+            "opening": 0.25,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 30.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "canal2": {
+            "water_level": 1.8,
+            "flow_rate": 8.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "gate2": {
+            "opening": 0.25,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 35.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "canal2": {
+            "water_level": 1.8,
+            "flow_rate": 8.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "gate2": {
+            "opening": 0.25,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 40.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "canal2": {
+            "water_level": 1.8,
+            "flow_rate": 8.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "gate2": {
+            "opening": 0.25,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 45.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "canal2": {
+            "water_level": 1.8,
+            "flow_rate": 8.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "gate2": {
+            "opening": 0.25,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 50.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "canal2": {
+            "water_level": 1.8,
+            "flow_rate": 8.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "gate2": {
+            "opening": 0.25,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 55.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "canal2": {
+            "water_level": 1.8,
+            "flow_rate": 8.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "gate2": {
+            "opening": 0.25,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 60.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "canal2": {
+            "water_level": 1.8,
+            "flow_rate": 8.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "gate2": {
+            "opening": 0.25,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 65.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "canal2": {
+            "water_level": 1.8,
+            "flow_rate": 8.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "gate2": {
+            "opening": 0.25,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 70.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "canal2": {
+            "water_level": 1.8,
+            "flow_rate": 8.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "gate2": {
+            "opening": 0.25,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 75.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "canal2": {
+            "water_level": 1.8,
+            "flow_rate": 8.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "gate2": {
+            "opening": 0.25,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 80.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "canal2": {
+            "water_level": 1.8,
+            "flow_rate": 8.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "gate2": {
+            "opening": 0.25,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 85.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "canal2": {
+            "water_level": 1.8,
+            "flow_rate": 8.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "gate2": {
+            "opening": 0.25,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 90.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "canal2": {
+            "water_level": 1.8,
+            "flow_rate": 8.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "gate2": {
+            "opening": 0.25,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 95.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "canal2": {
+            "water_level": 1.8,
+            "flow_rate": 8.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "gate2": {
+            "opening": 0.25,
+            "outflow": 0
+          }
+        }
+      ]
+    },
+    "topology": {
+      "topology": {
+        "connections": [
+          {
+            "from": "canal1",
+            "to": "gate1",
+            "type": "flow"
+          },
+          {
+            "from": "gate1",
+            "to": "canal2",
+            "type": "flow"
+          },
+          {
+            "from": "canal2",
+            "to": "gate2",
+            "type": "flow"
+          }
+        ]
+      }
+    },
+    "universal_config": {
+      "simulation": {
+        "name": "高级控制系统仿真",
+        "description": "Example 1 - 高级控制系统，演示PID控制、模糊控制和自适应控制",
+        "version": "1.0.0",
+        "time": {
+          "end_time": 1800.0,
+          "time_step": 5.0,
+          "output_interval": 25.0
+        },
+        "solver": {
+          "method": "runge_kutta",
+          "tolerance": "1e-8",
+          "max_iterations": 2000
+        },
+        "parallel": {
+          "enabled": true,
+          "num_processes": 2
+        }
+      },
+      "debug": {
+        "enabled": true,
+        "log_level": "DEBUG",
+        "log_file": "logs/advanced_control/debug.log",
+        "session_id": "advanced_control_session",
+        "data_collection": {
+          "enabled": true,
+          "interval": 25.0,
+          "variables": [
+            "upstream_canal_water_level",
+            "downstream_canal_water_level",
+            "control_gate_opening",
+            "inflow_rate",
+            "outflow_rate",
+            "pid_output",
+            "control_error",
+            "setpoint",
+            "fuzzy_output",
+            "adaptive_gain"
+          ]
+        },
+        "dashboard": {
+          "web_dashboard": true,
+          "port": 8082,
+          "auto_open": false
+        },
+        "console": {
+          "real_time_display": true,
+          "update_interval": 5.0
+        }
+      },
+      "performance": {
+        "enabled": true,
+        "timing": {
+          "enabled": true,
+          "detailed_profiling": true
+        },
+        "memory": {
+          "enabled": true,
+          "threshold_mb": 1500
+        },
+        "cpu": {
+          "enabled": true,
+          "threshold_percent": 85
+        }
+      },
+      "visualization": {
+        "enabled": true,
+        "plots": {
+          "enabled": true,
+          "save_plots": true,
+          "plot_directory": "plots/advanced_control/",
+          "format": "png",
+          "dpi": 300,
+          "charts": [
+            {
+              "name": "控制系统响应",
+              "type": "time_series",
+              "variables": [
+                "setpoint",
+                "upstream_canal_water_level",
+                "control_error"
+              ],
+              "title": "Control System Response",
+              "xlabel": "Time (s)",
+              "ylabel": "Water Level (m)"
+            },
+            {
+              "name": "控制器输出",
+              "type": "time_series",
+              "variables": [
+                "pid_output",
+                "fuzzy_output",
+                "control_gate_opening"
+              ],
+              "title": "Controller Outputs",
+              "xlabel": "Time (s)",
+              "ylabel": "Control Signal"
+            },
+            {
+              "name": "自适应参数",
+              "type": "time_series",
+              "variables": [
+                "adaptive_gain"
+              ],
+              "title": "Adaptive Control Parameters",
+              "xlabel": "Time (s)",
+              "ylabel": "Gain Value"
+            },
+            {
+              "name": "控制性能分析",
+              "type": "control_performance",
+              "variables": [
+                "control_error",
+                "setpoint",
+                "upstream_canal_water_level"
+              ],
+              "title": "Control Performance Analysis"
+            }
+          ]
+        },
+        "dashboard": {
+          "enabled": true,
+          "update_interval": 2.0,
+          "port": 8083
+        }
+      },
+      "output": {
+        "enabled": true,
+        "output_directory": "results/advanced_control/",
+        "save_history": true,
+        "history_file": "simulation_history.json",
+        "format": {
+          "csv": true,
+          "json": true,
+          "hdf5": true
+        },
+        "compression": {
+          "enabled": true,
+          "method": "gzip"
+        },
+        "validation": {
+          "enabled": true,
+          "expected_results": {
+            "settling_time": 300.0,
+            "overshoot": 0.1,
+            "steady_state_error": 0.02
+          },
+          "tolerance": 0.05
+        }
+      },
+      "analysis": {
+        "enabled": true,
+        "control_performance": {
+          "enabled": true,
+          "metrics": [
+            "settling_time",
+            "overshoot",
+            "steady_state_error",
+            "rise_time",
+            "peak_time"
+          ],
+          "reference_signal": "setpoint",
+          "output_signal": "upstream_canal_water_level"
+        },
+        "statistical": {
+          "enabled": true,
+          "generate_summary": true,
+          "correlation_analysis": true
+        },
+        "system_identification": {
+          "enabled": true,
+          "method": "arx",
+          "order": [
+            3,
+            3,
+            2
+          ],
+          "input_signals": [
+            "control_gate_opening"
+          ],
+          "output_signals": [
+            "upstream_canal_water_level"
+          ]
+        },
+        "frequency_analysis": {
+          "enabled": true,
+          "fft_analysis": true,
+          "bode_plot": true
+        }
+      },
+      "logging": {
+        "enabled": true,
+        "level": "DEBUG",
+        "file": {
+          "enabled": true,
+          "filename": "logs/advanced_control/simulation.log",
+          "max_size_mb": 20,
+          "backup_count": 10
+        },
+        "console": {
+          "enabled": true,
+          "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        },
+        "structured": {
+          "enabled": true,
+          "format": "json"
+        },
+        "control_log": {
+          "enabled": true,
+          "filename": "logs/advanced_control/control.log",
+          "variables": [
+            "pid_output",
+            "control_error",
+            "setpoint"
+          ]
+        }
+      },
+      "error_handling": {
+        "enabled": true,
+        "categories": {
+          "critical": [
+            "control_instability",
+            "actuator_failure",
+            "sensor_failure"
+          ],
+          "warning": [
+            "control_saturation",
+            "slow_response",
+            "oscillation"
+          ],
+          "info": [
+            "setpoint_change",
+            "parameter_update",
+            "mode_switch"
+          ]
+        },
+        "recovery": {
+          "auto_retry": true,
+          "max_retries": 5,
+          "retry_delay": 2.0,
+          "fallback_controller": "manual"
+        },
+        "notifications": {
+          "enabled": true,
+          "email": [
+            "control_engineer@example.com"
+          ],
+          "webhook": "http://localhost:9000/alerts"
+        }
+      },
+      "cache": {
+        "enabled": true,
+        "memory": {
+          "enabled": true,
+          "max_size_mb": 200
+        },
+        "disk": {
+          "enabled": true,
+          "directory": "cache/advanced_control/",
+          "max_size_gb": 2
+        }
+      },
+      "network": {
+        "enabled": false,
+        "distributed": {
+          "enabled": false,
+          "master_host": "localhost",
+          "master_port": 9001
+        },
+        "communication": {
+          "protocol": "tcp",
+          "timeout": 30,
+          "buffer_size": 16384
+        }
+      },
+      "security": {
+        "enabled": false,
+        "access_control": {
+          "enabled": false,
+          "allowed_hosts": [
+            "localhost"
+          ]
+        },
+        "encryption": {
+          "enabled": false,
+          "algorithm": "AES-256"
+        }
+      },
+      "extensions": {
+        "enabled": true,
+        "plugins": {
+          "enabled": true,
+          "directory": "plugins/control/",
+          "modules": [
+            "fuzzy_controller",
+            "adaptive_controller"
+          ]
+        },
+        "custom": {
+          "enabled": true,
+          "modules": [
+            "advanced_pid",
+            "model_predictive_control"
+          ]
+        }
+      },
+      "environment": {
+        "name": "development",
+        "variables": {
+          "SIMULATION_ENV": "advanced_control",
+          "LOG_LEVEL": "DEBUG",
+          "CONTROL_MODE": "advanced"
+        },
+        "custom_vars": {
+          "pid_kp": 2.0,
+          "pid_ki": 0.5,
+          "pid_kd": 0.1,
+          "fuzzy_rules": 25,
+          "membership_functions": 5,
+          "adaptation_rate": 0.01,
+          "forgetting_factor": 0.95,
+          "canal_length": 1000.0,
+          "gate_max_opening": 1.0,
+          "water_density": 1000.0,
+          "control_frequency": 0.2
+        }
+      }
+    }
+  },
+  "regenerated_config": {
+    "config.yml": {
+      "simulation": {
+        "duration": 3600,
+        "dt": 5.0,
+        "solver": {
+          "type": "rk4"
+        }
+      }
+    },
+    "components.yml": {
+      "components": []
+    },
+    "topology.yml": {
+      "connections": []
+    },
+    "agents.yml": {
+      "agents": []
+    }
+  },
+  "comparison_result": {
+    "overall_score": 0.125,
+    "components_score": 0.0,
+    "topology_score": 0.0,
+    "simulation_score": 0.5,
+    "agents_score": 0.0,
+    "issues": [
+      "重新生成的配置中没有组件定义",
+      "重新生成的配置中没有连接定义",
+      "仿真参数不匹配: 原始1800, 重新生成3600",
+      "智能体数量不匹配: 原始4个, 重新生成0个"
+    ],
+    "improvements": []
+  }
+}

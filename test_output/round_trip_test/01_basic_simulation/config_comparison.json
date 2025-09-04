@@ -1,0 +1,524 @@
+{
+  "original_config": {
+    "agents": {
+      "agents": [
+        {
+          "id": "gate_controller",
+          "class": "core_lib.local_agents.control.local_control_agent.LocalControlAgent",
+          "dt": 10.0,
+          "target_component": "gate1",
+          "control_type": "pid",
+          "data_sources": {
+            "observation_topic": "water_level_topic",
+            "observation_key": "water_level"
+          },
+          "control_targets": {
+            "action_topic": "gate1/opening_command"
+          },
+          "allocation_config": {
+            "method": "direct"
+          },
+          "controller_config": {
+            "class": "PIDController",
+            "Kp": 0.5,
+            "Ki": 0.1,
+            "Kd": 0.05,
+            "setpoint": 2.5,
+            "min_output": 0.0,
+            "max_output": 1.0
+          }
+        },
+        {
+          "id": "water_level_sensor",
+          "class": "core_lib.local_agents.io.physical_io_agent.PhysicalIOAgent",
+          "sensors_config": {
+            "canal_sensor": {
+              "obj_id": "canal1",
+              "state_key": "water_level",
+              "topic": "water_level_topic",
+              "noise_std": 0.02
+            }
+          },
+          "actuators_config": {}
+        }
+      ]
+    },
+    "components": {
+      "components": [
+        {
+          "id": "canal1",
+          "class": "UnifiedCanal",
+          "initial_state": {
+            "water_level": 2.0,
+            "flow_rate": 10.0
+          },
+          "parameters": {
+            "bottom_width": 20.0,
+            "length": 1000.0,
+            "slope": 0.001,
+            "side_slope_z": 2.0,
+            "manning_n": 0.025
+          }
+        },
+        {
+          "id": "gate1",
+          "class": "Gate",
+          "initial_state": {
+            "opening": 0.2
+          },
+          "parameters": {
+            "discharge_coefficient": 0.8,
+            "width": 10.0,
+            "max_opening": 3.0
+          }
+        }
+      ]
+    },
+    "config": {
+      "simulation": {
+        "duration": 1000,
+        "dt": 10.0
+      }
+    },
+    "output_agents": {
+      "simulation_history": [
+        {
+          "time": 0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.2,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 10.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.2,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 20.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.2,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 30.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.2,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 40.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.2,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 50.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.2,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 60.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.2,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 70.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.2,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 80.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.2,
+            "outflow": 0
+          }
+        },
+        {
+          "time": 90.0,
+          "canal1": {
+            "water_level": 2.0,
+            "flow_rate": 10.0,
+            "inflow": 0,
+            "outflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.2,
+            "outflow": 0
+          }
+        }
+      ]
+    },
+    "topology": {
+      "topology": {
+        "connections": [
+          {
+            "from": "canal1",
+            "to": "gate1",
+            "type": "flow"
+          }
+        ]
+      }
+    },
+    "universal_config": {
+      "simulation": {
+        "name": "基础物理仿真",
+        "description": "Example 1 - 基础物理仿真，演示水位控制和流量管理",
+        "version": "1.0.0",
+        "time": {
+          "end_time": 1000.0,
+          "time_step": 10.0,
+          "output_interval": 50.0
+        },
+        "solver": {
+          "method": "euler",
+          "tolerance": "1e-6",
+          "max_iterations": 1000
+        },
+        "parallel": {
+          "enabled": false,
+          "num_processes": 1
+        }
+      },
+      "debug": {
+        "enabled": true,
+        "log_level": "INFO",
+        "log_file": "logs/basic_simulation/debug.log",
+        "session_id": "basic_sim_session",
+        "data_collection": {
+          "enabled": true,
+          "interval": 50.0,
+          "variables": [
+            "upstream_canal_water_level",
+            "downstream_canal_water_level",
+            "control_gate_opening",
+            "inflow_rate",
+            "outflow_rate"
+          ]
+        },
+        "dashboard": {
+          "web_dashboard": true,
+          "port": 8080,
+          "auto_open": false
+        },
+        "console": {
+          "real_time_display": true,
+          "update_interval": 10.0
+        }
+      },
+      "performance": {
+        "enabled": true,
+        "timing": {
+          "enabled": true,
+          "detailed_profiling": true
+        },
+        "memory": {
+          "enabled": true,
+          "threshold_mb": 1000
+        },
+        "cpu": {
+          "enabled": true,
+          "threshold_percent": 80
+        }
+      },
+      "visualization": {
+        "enabled": true,
+        "plots": {
+          "enabled": true,
+          "save_plots": true,
+          "plot_directory": "plots/basic_simulation/",
+          "format": "png",
+          "dpi": 300,
+          "charts": [
+            {
+              "name": "水位时间序列",
+              "type": "time_series",
+              "variables": [
+                "upstream_canal_water_level",
+                "downstream_canal_water_level"
+              ],
+              "title": "Canal Water Levels Over Time",
+              "xlabel": "Time (s)",
+              "ylabel": "Water Level (m)"
+            },
+            {
+              "name": "流量控制",
+              "type": "time_series",
+              "variables": [
+                "inflow_rate",
+                "outflow_rate"
+              ],
+              "title": "Flow Rates Over Time",
+              "xlabel": "Time (s)",
+              "ylabel": "Flow Rate (m³/s)"
+            },
+            {
+              "name": "闸门开度",
+              "type": "time_series",
+              "variables": [
+                "control_gate_opening"
+              ],
+              "title": "Gate Opening Over Time",
+              "xlabel": "Time (s)",
+              "ylabel": "Opening (%)"
+            }
+          ]
+        },
+        "dashboard": {
+          "enabled": true,
+          "update_interval": 5.0,
+          "port": 8081
+        }
+      },
+      "output": {
+        "enabled": true,
+        "output_directory": "results/basic_simulation/",
+        "save_history": true,
+        "history_file": "simulation_history.json",
+        "format": {
+          "csv": true,
+          "json": true,
+          "hdf5": false
+        },
+        "compression": {
+          "enabled": false,
+          "method": "gzip"
+        },
+        "validation": {
+          "enabled": false,
+          "expected_results": {},
+          "tolerance": 0.01
+        }
+      },
+      "analysis": {
+        "enabled": true,
+        "control_performance": {
+          "enabled": true,
+          "metrics": [
+            "settling_time",
+            "overshoot",
+            "steady_state_error"
+          ]
+        },
+        "statistical": {
+          "enabled": true,
+          "generate_summary": true
+        },
+        "system_identification": {
+          "enabled": false,
+          "method": "arx",
+          "order": [
+            2,
+            2,
+            1
+          ]
+        }
+      },
+      "logging": {
+        "enabled": true,
+        "level": "INFO",
+        "file": {
+          "enabled": true,
+          "filename": "logs/basic_simulation/simulation.log",
+          "max_size_mb": 10,
+          "backup_count": 5
+        },
+        "console": {
+          "enabled": true,
+          "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        },
+        "structured": {
+          "enabled": false,
+          "format": "json"
+        }
+      },
+      "error_handling": {
+        "enabled": true,
+        "categories": {
+          "critical": [
+            "simulation_divergence",
+            "memory_overflow"
+          ],
+          "warning": [
+            "slow_convergence",
+            "high_cpu_usage"
+          ],
+          "info": [
+            "checkpoint_saved",
+            "iteration_completed"
+          ]
+        },
+        "recovery": {
+          "auto_retry": true,
+          "max_retries": 3,
+          "retry_delay": 1.0
+        },
+        "notifications": {
+          "enabled": false,
+          "email": [],
+          "webhook": ""
+        }
+      },
+      "cache": {
+        "enabled": true,
+        "memory": {
+          "enabled": true,
+          "max_size_mb": 100
+        },
+        "disk": {
+          "enabled": false,
+          "directory": "cache/basic_simulation/",
+          "max_size_gb": 1
+        }
+      },
+      "network": {
+        "enabled": false,
+        "distributed": {
+          "enabled": false,
+          "master_host": "localhost",
+          "master_port": 9000
+        },
+        "communication": {
+          "protocol": "tcp",
+          "timeout": 30,
+          "buffer_size": 8192
+        }
+      },
+      "security": {
+        "enabled": false,
+        "access_control": {
+          "enabled": false,
+          "allowed_hosts": [
+            "localhost"
+          ]
+        },
+        "encryption": {
+          "enabled": false,
+          "algorithm": "AES-256"
+        }
+      },
+      "extensions": {
+        "enabled": false,
+        "plugins": {
+          "enabled": false,
+          "directory": "plugins/"
+        },
+        "custom": {
+          "enabled": false,
+          "modules": []
+        }
+      },
+      "environment": {
+        "name": "development",
+        "variables": {
+          "SIMULATION_ENV": "basic_simulation",
+          "LOG_LEVEL": "INFO"
+        },
+        "custom_vars": {
+          "canal_length": 1000.0,
+          "gate_max_opening": 1.0,
+          "water_density": 1000.0
+        }
+      }
+    }
+  },
+  "regenerated_config": {
+    "config.yml": {
+      "simulation": {
+        "duration": 3600,
+        "dt": 10.0,
+        "solver": {
+          "type": "euler"
+        }
+      }
+    },
+    "components.yml": {
+      "components": []
+    },
+    "topology.yml": {
+      "connections": []
+    },
+    "agents.yml": {
+      "agents": []
+    }
+  },
+  "comparison_result": {
+    "overall_score": 0.125,
+    "components_score": 0.0,
+    "topology_score": 0.0,
+    "simulation_score": 0.5,
+    "agents_score": 0.0,
+    "issues": [
+      "重新生成的配置中没有组件定义",
+      "重新生成的配置中没有连接定义",
+      "仿真参数不匹配: 原始1000, 重新生成3600",
+      "智能体数量不匹配: 原始2个, 重新生成0个"
+    ],
+    "improvements": []
+  }
+}

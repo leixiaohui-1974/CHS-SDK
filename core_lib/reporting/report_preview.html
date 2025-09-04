@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>水利系统分类报告预览</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .chart-container {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fafafa;
+            text-align: center;
+        }
+        .chart-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .chart-placeholder {
+            padding: 40px;
+            background-color: #e9ecef;
+            border: 2px dashed #adb5bd;
+            border-radius: 5px;
+            color: #6c757d;
+            font-style: italic;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        .status {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>水利系统分类报告预览</h1>
+        
+        <div class="status">
+            <h3>✅ 功能实现状态</h3>
+            <ul>
+                <li>✅ 配置文件到自然语言转换</li>
+                <li>✅ 被控对象和控制对象分类管理</li>
+                <li>✅ 时间序列图表生成</li>
+                <li>✅ 控制分析表格</li>
+                <li>✅ 6维度叠加分析图表</li>
+                <li>✅ 图表与数据表组合显示</li>
+                <li>✅ 增强可视化功能集成</li>
+            </ul>
+        </div>
+        
+        <h2>报告生成结果</h2>
+        <p>报告已成功生成，包含以下新增功能：</p>
+        
+        <h3>1. 扰动-响应-控制综合叠加分析</h3>
+        <div class="chart-container">
+            <div class="chart-placeholder">
+                6维度叠加分析图表已生成<br>
+                包含：扰动分析、状态监测、控制目标、控制指令、流量状态、容量状态
+            </div>
+        </div>
+        
+        <h3>2. 图表与数据表组合分析</h3>
+        <div class="chart-container">
+            <div class="chart-placeholder">
+                图表与数据表组合分析已生成<br>
+                包含：扰动-响应关系图、控制效果分析图、系统性能热力图及详细数据表
+            </div>
+        </div>
+        
+        <h3>3. 报告统计信息</h3>
+        <table>
+            <tr>
+                <th>项目</th>
+                <th>数值</th>
+                <th>说明</th>
+            </tr>
+            <tr>
+                <td>报告总长度</td>
+                <td>6,374,064 字符</td>
+                <td>包含完整的图表和数据</td>
+            </tr>
+            <tr>
+                <td>被控对象</td>
+                <td>18 个分析点</td>
+                <td>河道、水库、调节池等</td>
+            </tr>
+            <tr>
+                <td>控制对象</td>
+                <td>16 个分析点</td>
+                <td>闸门、泵站、水电站等</td>
+            </tr>
+            <tr>
+                <td>图表数量</td>
+                <td>15+ 张</td>
+                <td>包括叠加图表和组合图表</td>
+            </tr>
+        </table>
+        
+        <h3>4. 技术特点</h3>
+        <ul>
+            <li><strong>智能分类</strong>：自动区分被控对象和控制对象</li>
+            <li><strong>多维分析</strong>：6个关键维度的综合分析</li>
+            <li><strong>叠加显示</strong>：多对象数据叠加对比</li>
+            <li><strong>图表组合</strong>：图表与数据表联合展示</li>
+            <li><strong>中文支持</strong>：完整的中文字体和标签支持</li>
+        </ul>
+        
+        <div class="status">
+            <h3>📊 查看完整报告</h3>
+            <p>完整的分类报告已生成在：<code>classified_report_demo.md</code></p>
+            <p>包含详细的时间序列分析、控制策略分析和系统性能评估。</p>
+        </div>
+    </div>
+</body>
+</html>

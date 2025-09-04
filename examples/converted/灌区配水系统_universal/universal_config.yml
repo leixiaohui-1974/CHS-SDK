@@ -1,0 +1,40 @@
+agents: {}
+components:
+  分水闸群:
+    initial_opening: 0.5
+    max_flow: 1000
+    max_opening: 1
+    min_opening: 0
+    type: Gate
+  总干渠:
+    type: Canal
+  提水泵站:
+    type: PumpStation
+  监测网络:
+    type: Sensor
+debug:
+  enabled: true
+  log_file: simulation.log
+  log_level: INFO
+performance:
+  enabled: true
+  memory_monitoring: true
+  time_tracking: true
+simulation:
+  description: 基于自然语言描述生成的仿真配置
+  name: 智能灌区配水系统
+  solver:
+    tolerance: 1.0e-06
+    type: adams
+  time:
+    end_time: 604800
+    start_time: 0
+    time_step: 300.0
+  version: '1.5'
+topology:
+  connections: []
+visualization:
+  enabled: true
+  plots:
+    enabled: true
+    save_format: png

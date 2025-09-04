@@ -1,0 +1,33 @@
+agents: {}
+analysis:
+  statistical_analysis:
+    enabled: true
+  system_identification:
+    enabled: true
+components: {}
+debug:
+  enabled: true
+  log_file: simulation.log
+  log_level: INFO
+performance:
+  enabled: true
+  memory_monitoring: true
+  time_tracking: true
+simulation:
+  description: 基于自然语言描述生成的仿真配置
+  name: 复杂水利调度系统
+  solver:
+    tolerance: 1.0e-06
+    type: rk4
+  time:
+    end_time: 7200
+    start_time: 0
+    time_step: 0.5
+  version: '1.5'
+topology:
+  connections: []
+visualization:
+  enabled: true
+  plots:
+    enabled: true
+    save_format: png

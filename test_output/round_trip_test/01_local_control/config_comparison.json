@@ -1,0 +1,1491 @@
+{
+  "original_config": {
+    "agents": {
+      "agents": [
+        {
+          "id": "local_controller",
+          "class": "core_lib.local_agents.control.local_control_agent.LocalControlAgent",
+          "dt": 10.0,
+          "target_component": "gate1",
+          "control_type": "pid",
+          "data_sources": {
+            "observation_topic": "reservoir1/water_level",
+            "observation_key": "water_level"
+          },
+          "control_targets": {
+            "action_topic": "gate1/opening_command"
+          },
+          "allocation_config": {
+            "method": "direct"
+          },
+          "controller_config": {
+            "class": "PIDController",
+            "Kp": 0.8,
+            "Ki": 0.2,
+            "Kd": 0.1,
+            "setpoint": 15.0,
+            "min_output": 0.0,
+            "max_output": 1.0
+          }
+        },
+        {
+          "id": "level_sensor",
+          "class": "core_lib.local_agents.io.physical_io_agent.PhysicalIOAgent",
+          "sensors_config": {
+            "reservoir1_water_level": {
+              "obj_id": "reservoir1",
+              "target_attr": "water_level",
+              "state_key": "water_level",
+              "topic": "reservoir1/water_level",
+              "noise_params": {
+                "std_dev": 0.05,
+                "sampling_rate": 0.5
+              }
+            }
+          },
+          "actuators_config": {}
+        },
+        {
+          "id": "flow_sensor",
+          "class": "core_lib.local_agents.io.physical_io_agent.PhysicalIOAgent",
+          "sensors_config": {
+            "downstream_canal_flow_rate": {
+              "obj_id": "downstream_canal",
+              "target_attr": "flow_rate",
+              "state_key": "flow_rate",
+              "topic": "downstream_canal/flow_rate",
+              "noise_params": {
+                "std_dev": 0.02,
+                "sampling_rate": 1.0
+              }
+            }
+          },
+          "actuators_config": {}
+        }
+      ]
+    },
+    "components": {
+      "components": [
+        {
+          "id": "reservoir1",
+          "class": "Reservoir",
+          "initial_state": {
+            "water_level": 15.0,
+            "volume": 150000.0
+          },
+          "parameters": {
+            "surface_area": 10000.0,
+            "max_capacity": 200000.0,
+            "min_level": 5.0,
+            "max_level": 25.0
+          }
+        },
+        {
+          "id": "gate1",
+          "class": "Gate",
+          "initial_state": {
+            "opening": 0.3
+          },
+          "parameters": {
+            "discharge_coefficient": 0.8,
+            "width": 8.0,
+            "max_opening": 2.5
+          }
+        },
+        {
+          "id": "downstream_canal",
+          "class": "UnifiedCanal",
+          "initial_state": {
+            "water_level": 1.5,
+            "flow_rate": 5.0
+          },
+          "parameters": {
+            "bottom_width": 15.0,
+            "length": 500.0,
+            "slope": 0.002,
+            "side_slope_z": 1.5,
+            "manning_n": 0.03
+          }
+        }
+      ]
+    },
+    "config": {
+      "simulation": {
+        "duration": 1200,
+        "dt": 2.0
+      }
+    },
+    "output_agents": {
+      "simulation_history": [
+        {
+          "time": 0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 2.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 4.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 6.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 8.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 10.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 12.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 14.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 16.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 18.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 20.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 22.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 24.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 26.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 28.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 30.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 32.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 34.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 36.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 38.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 40.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 42.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 44.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 46.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 48.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 50.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 52.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 54.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 56.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 58.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 60.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 62.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 64.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 66.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 68.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 70.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 72.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 74.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 76.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 78.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 80.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 82.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 84.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 86.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 88.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 90.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 92.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 94.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 96.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        },
+        {
+          "time": 98.0,
+          "reservoir1": {
+            "water_level": 15.0,
+            "volume": 150000.0,
+            "outflow": 0,
+            "inflow": 0.0
+          },
+          "gate1": {
+            "opening": 0.3,
+            "outflow": 0
+          },
+          "downstream_canal": {
+            "water_level": 1.5,
+            "flow_rate": 5.0,
+            "inflow": 0,
+            "outflow": 0.0
+          }
+        }
+      ]
+    },
+    "topology": {
+      "topology": {
+        "connections": [
+          {
+            "from": "reservoir1",
+            "to": "gate1",
+            "type": "flow"
+          },
+          {
+            "from": "gate1",
+            "to": "downstream_canal",
+            "type": "flow"
+          }
+        ]
+      }
+    },
+    "universal_config": {
+      "simulation": {
+        "name": "现地控制系统仿真",
+        "description": "Example 2.1 - 现地控制系统基础演示",
+        "version": "1.0.0",
+        "time": {
+          "end_time": 1200.0,
+          "time_step": 2.0,
+          "output_interval": 10.0
+        },
+        "solver": {
+          "method": "local_control",
+          "tolerance": "1e-5",
+          "max_iterations": 100
+        },
+        "parallel": {
+          "enabled": false,
+          "num_processes": 1
+        }
+      },
+      "debug": {
+        "enabled": true,
+        "log_level": "INFO",
+        "log_file": "logs/local_control_01/debug.log",
+        "session_id": "local_control_01_session",
+        "data_collection": {
+          "enabled": true,
+          "interval": 10.0,
+          "variables": [
+            "water_level",
+            "gate_opening",
+            "pid_error",
+            "pid_output",
+            "setpoint",
+            "control_signal",
+            "system_response",
+            "disturbance_input"
+          ]
+        },
+        "dashboard": {
+          "web_dashboard": true,
+          "port": 8200,
+          "auto_open": false
+        },
+        "console": {
+          "real_time_display": true,
+          "update_interval": 10.0,
+          "show_detailed_logs": true,
+          "show_control_performance": true
+        }
+      },
+      "performance": {
+        "enabled": true,
+        "timing": {
+          "enabled": true,
+          "detailed_profiling": true,
+          "control_loop_timing": true
+        },
+        "memory": {
+          "enabled": true,
+          "threshold_mb": 500
+        },
+        "cpu": {
+          "enabled": true,
+          "threshold_percent": 70
+        }
+      },
+      "visualization": {
+        "enabled": true,
+        "plots": {
+          "enabled": true,
+          "save_plots": true,
+          "plot_directory": "plots/local_control_01/",
+          "format": "png",
+          "dpi": 300,
+          "charts": [
+            {
+              "name": "控制系统响应",
+              "type": "time_series",
+              "variables": [
+                "water_level",
+                "setpoint"
+              ],
+              "title": "Control System Response",
+              "xlabel": "Time (seconds)",
+              "ylabel": "Water Level (m)"
+            },
+            {
+              "name": "PID控制器输出",
+              "type": "time_series",
+              "variables": [
+                "pid_output",
+                "gate_opening"
+              ],
+              "title": "PID Controller Output",
+              "xlabel": "Time (seconds)",
+              "ylabel": "Control Signal"
+            },
+            {
+              "name": "控制误差",
+              "type": "time_series",
+              "variables": [
+                "pid_error"
+              ],
+              "title": "Control Error",
+              "xlabel": "Time (seconds)",
+              "ylabel": "Error (m)"
+            },
+            {
+              "name": "系统响应分析",
+              "type": "time_series",
+              "variables": [
+                "system_response"
+              ],
+              "title": "System Response Analysis",
+              "xlabel": "Time (seconds)",
+              "ylabel": "Response Magnitude"
+            },
+            {
+              "name": "扰动输入",
+              "type": "time_series",
+              "variables": [
+                "disturbance_input"
+              ],
+              "title": "Disturbance Input",
+              "xlabel": "Time (seconds)",
+              "ylabel": "Disturbance Level"
+            }
+          ]
+        },
+        "dashboard": {
+          "enabled": true,
+          "update_interval": 10.0,
+          "port": 8201
+        }
+      },
+      "output": {
+        "enabled": true,
+        "output_directory": "results/local_control_01/",
+        "save_history": true,
+        "history_file": "simulation_history.json",
+        "format": {
+          "csv": true,
+          "json": true,
+          "hdf5": false,
+          "matlab": true
+        },
+        "compression": {
+          "enabled": false
+        },
+        "validation": {
+          "enabled": true,
+          "expected_results": {
+            "steady_state_error": 0.1,
+            "settling_time": 300,
+            "overshoot": 0.2
+          },
+          "performance_metrics": [
+            "final_error",
+            "settling_time",
+            "overshoot",
+            "control_effort"
+          ],
+          "description": "现地控制系统应能稳定控制水位到设定值"
+        }
+      },
+      "analysis": {
+        "enabled": true,
+        "control_performance": {
+          "enabled": true,
+          "metrics": [
+            "ise",
+            "iae",
+            "itae",
+            "settling_time",
+            "overshoot",
+            "steady_state_error"
+          ],
+          "reference_tracking": true,
+          "disturbance_rejection": true
+        },
+        "statistical": {
+          "enabled": true,
+          "generate_summary": true,
+          "variance_analysis": true,
+          "correlation_analysis": true
+        },
+        "system_identification": {
+          "enabled": true,
+          "method": "subspace",
+          "state_space_model": true,
+          "input_signals": [
+            "gate_opening"
+          ],
+          "output_signals": [
+            "water_level"
+          ]
+        },
+        "pid_analysis": {
+          "enabled": true,
+          "tuning_analysis": true,
+          "stability_analysis": true,
+          "robustness_analysis": true,
+          "parameter_sensitivity": true
+        },
+        "closed_loop_analysis": {
+          "enabled": true,
+          "stability_margins": true,
+          "frequency_response": true,
+          "step_response": true,
+          "impulse_response": true
+        }
+      },
+      "logging": {
+        "enabled": true,
+        "level": "INFO",
+        "file": {
+          "enabled": true,
+          "filename": "logs/local_control_01/simulation.log",
+          "max_size_mb": 20,
+          "backup_count": 10
+        },
+        "console": {
+          "enabled": true,
+          "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        },
+        "structured": {
+          "enabled": true,
+          "format": "json"
+        },
+        "pid_log": {
+          "enabled": true,
+          "filename": "logs/local_control_01/pid.log",
+          "variables": [
+            "pid_error",
+            "pid_output",
+            "setpoint"
+          ]
+        },
+        "control_loop_log": {
+          "enabled": true,
+          "filename": "logs/local_control_01/control_loop.log",
+          "loop_timing": true,
+          "performance_metrics": true,
+          "stability_indicators": true
+        }
+      },
+      "error_handling": {
+        "enabled": true,
+        "categories": {
+          "critical": [
+            "controller_failure",
+            "actuator_failure",
+            "sensor_failure"
+          ],
+          "warning": [
+            "setpoint_deviation",
+            "performance_degradation",
+            "oscillation"
+          ],
+          "info": [
+            "normal_operation",
+            "setpoint_change",
+            "tuning_update"
+          ]
+        },
+        "recovery": {
+          "auto_retry": true,
+          "max_retries": 3,
+          "retry_delay": 60.0,
+          "fallback_controller": "manual_mode"
+        },
+        "notifications": {
+          "enabled": true,
+          "email": [
+            "control_engineer@example.com",
+            "operator@example.com"
+          ],
+          "webhook": "http://localhost:9000/control_alerts"
+        }
+      },
+      "cache": {
+        "enabled": true,
+        "memory": {
+          "enabled": true,
+          "max_size_mb": 100
+        },
+        "disk": {
+          "enabled": false
+        }
+      },
+      "network": {
+        "enabled": false
+      },
+      "security": {
+        "enabled": true,
+        "access_control": {
+          "enabled": true,
+          "allowed_hosts": [
+            "localhost",
+            "control-station"
+          ]
+        },
+        "encryption": {
+          "enabled": false
+        },
+        "monitoring": {
+          "enabled": true,
+          "intrusion_detection": false,
+          "safety_protocols": true
+        }
+      },
+      "extensions": {
+        "enabled": true,
+        "plugins": {
+          "enabled": true,
+          "directory": "plugins/local_control/",
+          "modules": [
+            "advanced_pid",
+            "adaptive_control",
+            "fault_detection"
+          ]
+        },
+        "custom": {
+          "enabled": true,
+          "modules": [
+            "control_optimization",
+            "performance_monitoring",
+            "auto_tuning"
+          ]
+        }
+      },
+      "environment": {
+        "name": "development",
+        "variables": {
+          "SIMULATION_ENV": "local_control_01",
+          "LOG_LEVEL": "INFO",
+          "CONTROL_MODE": "local"
+        },
+        "custom_vars": {
+          "description": "现地控制系统基础演示",
+          "duration": 1200,
+          "time_step": 2.0,
+          "control_type": "pid",
+          "setpoint": 5.0,
+          "control_period": 2.0,
+          "pid_kp": 1.0,
+          "pid_ki": 0.1,
+          "pid_kd": 0.05,
+          "pid_min_output": 0.0,
+          "pid_max_output": 10.0,
+          "response_time": 60.0,
+          "settling_time_target": 300.0,
+          "steady_state_error_limit": 0.1,
+          "overshoot_limit": 0.2,
+          "sensor_accuracy": 0.01,
+          "sensor_noise_std": 0.005,
+          "actuator_accuracy": 0.02,
+          "actuator_delay": 1.0,
+          "performance_targets": {
+            "settling_time": 300,
+            "overshoot": 0.1,
+            "steady_state_error": 0.05,
+            "control_effort": 5.0
+          }
+        }
+      }
+    }
+  },
+  "regenerated_config": {
+    "config.yml": {
+      "simulation": {
+        "duration": 3600,
+        "dt": 2.0,
+        "solver": {
+          "type": "rk4"
+        }
+      }
+    },
+    "components.yml": {
+      "components": []
+    },
+    "topology.yml": {
+      "connections": []
+    },
+    "agents.yml": {
+      "agents": []
+    }
+  },
+  "comparison_result": {
+    "overall_score": 0.125,
+    "components_score": 0.0,
+    "topology_score": 0.0,
+    "simulation_score": 0.5,
+    "agents_score": 0.0,
+    "issues": [
+      "重新生成的配置中没有组件定义",
+      "重新生成的配置中没有连接定义",
+      "仿真参数不匹配: 原始1200, 重新生成3600",
+      "智能体数量不匹配: 原始3个, 重新生成0个"
+    ],
+    "improvements": []
+  }
+}

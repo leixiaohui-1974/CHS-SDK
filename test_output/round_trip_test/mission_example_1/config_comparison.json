@@ -1,0 +1,2363 @@
+{
+  "original_config": {
+    "config": {
+      "simulation": {
+        "duration": 100.0,
+        "time_step": 1.0,
+        "output_interval": 5.0,
+        "description": "演示纯物理组件（渠道和闸门）动态行为的示例"
+      },
+      "debug": {
+        "log_level": "INFO",
+        "log_file": "logs/mission_example_1.log",
+        "enable_performance_monitoring": true,
+        "enable_data_collection": true,
+        "data_collection_interval": 5.0,
+        "session_id": "mission_example_1"
+      },
+      "canal": {
+        "name": "canal_1",
+        "initial_state": {
+          "water_level": 2.0,
+          "flow_rate": 10.0,
+          "volume": 20000.0,
+          "inflow": 10.0,
+          "outflow": 10.0
+        },
+        "parameters": {
+          "model_type": "integral_delay",
+          "length": 1000.0,
+          "bottom_width": 20.0,
+          "side_slope_z": 1.0,
+          "manning_coefficient": 0.025,
+          "gain": 0.001,
+          "delay": 300
+        }
+      },
+      "gate": {
+        "name": "gate_1",
+        "initial_state": {
+          "opening": 0.5,
+          "flow_rate": 0.0
+        },
+        "parameters": {
+          "max_opening": 1.0,
+          "discharge_coefficient": 0.6,
+          "width": 10.0,
+          "max_rate_of_change": 0.1
+        }
+      },
+      "scenario": {
+        "inflow_changes": [
+          {
+            "time": 50.0,
+            "new_inflow": 15.0
+          }
+        ],
+        "gate_operations": [
+          {
+            "time": 30.0,
+            "new_opening": 0.8
+          },
+          {
+            "time": 70.0,
+            "new_opening": 0.3
+          }
+        ]
+      },
+      "output": {
+        "save_results": true,
+        "output_directory": "results/",
+        "plot_results": true,
+        "save_plots": true,
+        "variables_to_plot": [
+          "canal_water_level",
+          "gate_outflow",
+          "inflow_rate"
+        ],
+        "validation": {
+          "enable": true,
+          "check_water_level_response": true,
+          "check_outflow_response": true
+        }
+      }
+    },
+    "config_1_2": {
+      "simulation": {
+        "duration": 50,
+        "time_step": 1.0,
+        "description": "PhysicalIOAgent 传感器感知和执行器物理动作演示"
+      },
+      "communication": {
+        "state_topic": "state/canal/level",
+        "action_topic": "action/gate/opening"
+      },
+      "components": {
+        "upstream_canal": {
+          "type": "UnifiedCanal",
+          "model_type": "integral",
+          "initial_state": {
+            "volume": 100000,
+            "outflow": 0
+          },
+          "parameters": {
+            "bottom_width": 20.0,
+            "length": 1000.0,
+            "slope": 0.001,
+            "side_slope_z": 2.0,
+            "manning_n": 0.025
+          }
+        },
+        "control_gate": {
+          "type": "Gate",
+          "initial_state": {
+            "opening": 0.2
+          },
+          "parameters": {
+            "discharge_coefficient": 0.8,
+            "width": 10.0,
+            "max_opening": 3.0,
+            "max_rate_of_change": 0.05
+          }
+        }
+      },
+      "agents": {
+        "physical_io_agent": {
+          "type": "PhysicalIOAgent",
+          "agent_id": "io_agent_1",
+          "sensors_config": {
+            "canal_level_sensor": {
+              "obj_name": "upstream_canal",
+              "state_key": "water_level",
+              "topic": "state/canal/level",
+              "noise_std": 0.02
+            }
+          },
+          "actuators_config": {
+            "gate_actuator": {
+              "obj_name": "control_gate",
+              "target_attr": "target_opening",
+              "topic": "action/gate/opening",
+              "control_key": "target_opening"
+            }
+          }
+        }
+      },
+      "control_sequence": [
+        {
+          "time": 5.0,
+          "action": {
+            "type": "send_command",
+            "topic": "action/gate/opening",
+            "data": {
+              "target_opening": 0.5
+            }
+          }
+        }
+      ],
+      "analysis": {
+        "enable_validation": true,
+        "expected_final_opening": 0.5,
+        "tolerance": "1e-9",
+        "check_sensor_noise": true
+      },
+      "output": {
+        "print_interval": 1,
+        "sleep_duration": 0.05,
+        "show_detailed_logs": true
+      }
+    },
+    "config_1_3": {
+      "simulation": {
+        "description": "LocalControlAgent 现地PID智能体本地反馈控制闭环演示",
+        "control_cycle": 1.0
+      },
+      "communication": {
+        "observation_topic": "state/canal/level",
+        "action_topic": "action/gate/opening"
+      },
+      "controller": {
+        "type": "PIDController",
+        "parameters": {
+          "Kp": -0.5,
+          "Ki": -0.1,
+          "Kd": 0.0,
+          "setpoint": 10.0,
+          "min_output": 0.0,
+          "max_output": 2.0
+        }
+      },
+      "agent": {
+        "type": "LocalControlAgent",
+        "agent_id": "gate_control_agent_1",
+        "observation_key": "water_level",
+        "dt": 1.0
+      },
+      "test_scenarios": [
+        {
+          "name": "场景1: 水位高于设定点",
+          "description": "需要开大闸门增加泄流",
+          "water_level": 10.5,
+          "expected_action": "positive",
+          "expected_calculation": {
+            "error": -0.5,
+            "action": 0.25
+          }
+        },
+        {
+          "name": "场景2: 水位低于设定点",
+          "description": "需要关小闸门减少泄流",
+          "water_level": 9.8,
+          "expected_action": "clamped_to_min",
+          "expected_calculation": {
+            "error": 0.2,
+            "action": -0.1
+          }
+        },
+        {
+          "name": "场景3: 水位等于设定点",
+          "description": "误差为0，积分项生效",
+          "water_level": 10.0,
+          "expected_action": "integral_effect",
+          "expected_calculation": {
+            "error": 0.0,
+            "note": "P项和D项为0，只有I项起作用"
+          }
+        }
+      ],
+      "output": {
+        "show_detailed_logs": true,
+        "wait_time": 0.1,
+        "enable_validation": true
+      }
+    },
+    "config_1_4": {
+      "simulation": {
+        "duration": 30,
+        "description": "DigitalTwinAgent 数据平滑处理演示",
+        "true_water_level": 10.0,
+        "noise_std": 0.5
+      },
+      "communication": {
+        "smoothed_state_topic": "state/canal/level/smoothed"
+      },
+      "components": {
+        "upstream_canal": {
+          "type": "UnifiedCanal",
+          "model_type": "integral",
+          "initial_state": {
+            "water_level": 10.0
+          },
+          "parameters": {
+            "bottom_width": 20.0,
+            "length": 1000.0,
+            "slope": 0.001,
+            "side_slope_z": 2.0,
+            "manning_n": 0.025,
+            "surface_area": 20000,
+            "outlet_coefficient": 5.0
+          }
+        }
+      },
+      "agent": {
+        "type": "DigitalTwinAgent",
+        "agent_id": "twin_agent_1",
+        "simulated_object": "upstream_canal",
+        "state_topic": "state/canal/level/smoothed",
+        "smoothing_config": {
+          "water_level": 0.3
+        }
+      },
+      "data_generation": {
+        "noise_injection": true,
+        "noise_type": "gaussian",
+        "noise_parameters": {
+          "mean": 0.0,
+          "std": 0.5
+        }
+      },
+      "analysis": {
+        "enable_validation": true,
+        "variance_comparison": true,
+        "expected_result": "smoothed_variance < raw_variance",
+        "metrics": [
+          "raw_data_variance",
+          "smoothed_data_variance",
+          "variance_reduction_ratio"
+        ]
+      },
+      "output": {
+        "show_detailed_logs": true,
+        "print_format": {
+          "step_width": 2,
+          "level_precision": 3
+        },
+        "show_summary": true
+      }
+    },
+    "config_1_5": {
+      "simulation": {
+        "description": "CentralMPCAgent 根据预测信息输出高层调度指令演示",
+        "time_step": 3600
+      },
+      "communication": {
+        "state_topics": {
+          "upstream": "state/canal_upstream/level",
+          "downstream": "state/canal_downstream/level"
+        },
+        "forecast_topic": "forecast/inflow",
+        "command_topics": {
+          "upstream": "command/gate_upstream/setpoint",
+          "downstream": "command/gate_downstream/setpoint"
+        }
+      },
+      "agent": {
+        "type": "CentralMPCAgent",
+        "agent_id": "central_dispatcher_1",
+        "config": {
+          "prediction_horizon": 10,
+          "dt": 3600,
+          "q_weight": 1.0,
+          "r_weight": 0.5,
+          "state_keys": [
+            "upstream",
+            "downstream"
+          ],
+          "normal_setpoints": [
+            10.0,
+            8.0
+          ],
+          "emergency_setpoint": 8.5,
+          "flood_thresholds": [
+            12.0,
+            10.0
+          ],
+          "canal_surface_areas": [
+            1500000,
+            1500000
+          ],
+          "outflow_coefficient": 1000
+        }
+      },
+      "test_scenarios": {
+        "initial_state": {
+          "upstream_level": 10.1,
+          "downstream_level": 8.0
+        },
+        "forecast": {
+          "type": "flood_warning",
+          "description": "未来持续大流量入流",
+          "inflow_values": 50.0,
+          "duration": 10
+        }
+      },
+      "analysis": {
+        "enable_validation": true,
+        "expected_behavior": {
+          "setpoint_reduction": true,
+          "reasonable_range": {
+            "min": 5.0,
+            "max": 12.0
+          }
+        },
+        "validation_criteria": [
+          "new_setpoint < normal_setpoint",
+          "new_setpoint > min_reasonable_value"
+        ]
+      },
+      "dependencies": {
+        "required_packages": [
+          "scipy"
+        ],
+        "error_message": "本示例需要 'scipy' 库。请运行: pip install scipy"
+      },
+      "output": {
+        "show_detailed_logs": true,
+        "show_mpc_calculations": true,
+        "wait_time": 0.1
+      }
+    },
+    "universal_config": {
+      "simulation": {
+        "name": "Mission Example 1",
+        "description": "演示纯物理组件（渠道和闸门）动态行为的示例",
+        "version": "1.0.0",
+        "author": "CHS-SDK Team",
+        "created_date": "2024-01-22",
+        "time": {
+          "start_time": 0.0,
+          "end_time": 100.0,
+          "time_step": 1.0,
+          "units": "seconds",
+          "output_interval": 5.0
+        },
+        "solver": {
+          "type": "runge_kutta",
+          "order": 4,
+          "tolerance": "1e-6",
+          "max_iterations": 1000,
+          "adaptive_step": false
+        },
+        "parallel": {
+          "enabled": false,
+          "num_processes": 1,
+          "chunk_size": 50,
+          "backend": "sequential"
+        }
+      },
+      "debug": {
+        "enabled": true,
+        "session_id": "mission_example_1",
+        "log_level": "INFO",
+        "log_file": "logs/mission_example_1.log",
+        "debug_mode": "development",
+        "data_collection": {
+          "enabled": true,
+          "interval": 5.0,
+          "variables": [
+            "canal_water_level",
+            "gate_outflow",
+            "inflow_rate"
+          ],
+          "save_to_file": true,
+          "file_path": "debug_data.json",
+          "max_file_size": "50MB",
+          "rotation": true
+        },
+        "dashboard": {
+          "enabled": false,
+          "theme": "dark",
+          "web_dashboard": {
+            "enabled": false,
+            "port": 8080,
+            "host": "localhost",
+            "auto_open_browser": false,
+            "refresh_rate": 1.0
+          },
+          "console_dashboard": {
+            "enabled": false,
+            "update_interval": 3.0,
+            "display_format": "table"
+          }
+        }
+      },
+      "performance": {
+        "enabled": true,
+        "track_timing": true,
+        "track_memory": true,
+        "track_cpu": false,
+        "track_io": false,
+        "track_network": false,
+        "metrics": {
+          "enabled": true,
+          "collection_interval": 5.0,
+          "save_to_file": true,
+          "metrics_file": "performance_metrics.json",
+          "buffer_size": 100,
+          "compression": false
+        },
+        "analysis": {
+          "enabled": true,
+          "generate_report": true,
+          "report_format": "html",
+          "auto_analysis": true,
+          "threshold_alerts": false
+        },
+        "optimization": {
+          "auto_tune": false,
+          "cache_enabled": true,
+          "memory_limit": "512MB",
+          "cpu_limit": 70,
+          "gc_optimization": true
+        },
+        "thresholds": {
+          "max_execution_time": 10.0,
+          "max_memory_usage": 256,
+          "max_cpu_usage": 80
+        }
+      },
+      "visualization": {
+        "enabled": true,
+        "theme": "modern",
+        "color_scheme": "auto",
+        "real_time": {
+          "enabled": false,
+          "update_interval": 1.0,
+          "max_points": 500,
+          "auto_scale": true,
+          "smooth_animation": true
+        },
+        "plots": {
+          "enabled": true,
+          "save_plots": true,
+          "output_directory": "plots/",
+          "format": [
+            "png",
+            "svg"
+          ],
+          "dpi": 300,
+          "style": "seaborn",
+          "figsize": [
+            12,
+            8
+          ],
+          "font_size": 12,
+          "grid": true,
+          "legend": true,
+          "charts": [
+            {
+              "type": "time_series",
+              "title": "水位和流量时间序列",
+              "variables": [
+                "canal_water_level",
+                "gate_outflow",
+                "inflow_rate"
+              ],
+              "filename": "time_series",
+              "subplot_layout": [
+                3,
+                1
+              ]
+            },
+            {
+              "type": "control_performance",
+              "title": "闸门控制性能",
+              "variables": [
+                "gate_opening",
+                "gate_outflow"
+              ],
+              "filename": "gate_control",
+              "include_error": false
+            },
+            {
+              "type": "dashboard",
+              "title": "系统仪表板",
+              "filename": "dashboard",
+              "layout": "grid"
+            }
+          ]
+        }
+      },
+      "output": {
+        "enabled": true,
+        "save_history": true,
+        "history_file": "simulation_history.json",
+        "output_directory": "results/",
+        "formats": {
+          "json": true,
+          "csv": true,
+          "hdf5": false,
+          "pickle": false,
+          "parquet": false,
+          "excel": false
+        },
+        "content": {
+          "all_variables": false,
+          "selected_variables": [
+            "canal_water_level",
+            "gate_outflow",
+            "inflow_rate"
+          ],
+          "metadata": true,
+          "timestamps": true,
+          "system_info": true,
+          "configuration": true
+        },
+        "history": {
+          "enabled": true,
+          "save_format": [
+            "json",
+            "csv"
+          ],
+          "filename_prefix": "mission_1_results"
+        },
+        "validation": {
+          "enabled": true,
+          "expected_results": {
+            "water_level_response": true,
+            "outflow_response": true
+          },
+          "tolerance": 0.05
+        }
+      },
+      "analysis": {
+        "enabled": true,
+        "auto_analysis": true,
+        "analysis_interval": 10.0,
+        "control_performance": {
+          "enabled": true,
+          "calculate_metrics": true,
+          "stability_analysis": true,
+          "frequency_analysis": false,
+          "settling_time": true,
+          "overshoot": true,
+          "steady_state_error": true
+        },
+        "statistical": {
+          "enabled": true,
+          "descriptive_stats": true,
+          "correlation_analysis": true,
+          "trend_analysis": true,
+          "outlier_detection": false,
+          "distribution_analysis": false
+        },
+        "reporting": {
+          "enabled": true,
+          "auto_report": true,
+          "report_format": "markdown",
+          "report_file": "mission_1_analysis.md",
+          "include_plots": true,
+          "detailed_analysis": true
+        }
+      },
+      "logging": {
+        "enabled": true,
+        "log_directory": "logs/",
+        "levels": {
+          "root": "INFO",
+          "simulation": "INFO",
+          "agents": "INFO",
+          "components": "DEBUG",
+          "performance": "INFO",
+          "error": "ERROR"
+        },
+        "handlers": {
+          "console": {
+            "enabled": true,
+            "level": "INFO",
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            "colored": true
+          },
+          "file": {
+            "enabled": true,
+            "level": "DEBUG",
+            "filename": "mission_1_simulation.log",
+            "max_size": "10MB",
+            "backup_count": 5,
+            "encoding": "utf-8"
+          },
+          "error_file": {
+            "enabled": true,
+            "level": "ERROR",
+            "filename": "mission_1_errors.log",
+            "max_size": "5MB",
+            "backup_count": 3
+          }
+        }
+      },
+      "error_handling": {
+        "enabled": true,
+        "error_policy": "strict",
+        "exception_handling": {
+          "continue_on_error": false,
+          "log_exceptions": true,
+          "exception_file": "mission_1_exceptions.log",
+          "stack_trace": true,
+          "exception_details": true
+        },
+        "recovery": {
+          "enabled": false,
+          "max_retries": 2,
+          "retry_delay": 1.0,
+          "exponential_backoff": true,
+          "recovery_strategies": []
+        },
+        "classification": {
+          "enabled": true,
+          "critical_errors": [
+            "ComponentFailure",
+            "SolverDivergence"
+          ],
+          "recoverable_errors": [
+            "TemporaryNetworkError"
+          ],
+          "ignored_errors": [
+            "MinorWarning"
+          ]
+        }
+      },
+      "environment": {
+        "current": "development",
+        "auto_detect": true,
+        "development": {
+          "debug": true,
+          "verbose_logging": true,
+          "auto_reload": false,
+          "hot_reload": false,
+          "profiling": true
+        },
+        "variables": {
+          "custom_vars": {
+            "SIMULATION_MODE": "canal_gate_simulation",
+            "LOG_LEVEL": "INFO"
+          },
+          "override_config": false
+        },
+        "resources": {
+          "memory_limit": "512MB",
+          "cpu_limit": "auto",
+          "disk_limit": "auto"
+        }
+      },
+      "scenario": {
+        "inflow_changes": [
+          {
+            "time": 50.0,
+            "new_inflow": 15.0
+          }
+        ],
+        "gate_operations": [
+          {
+            "time": 30.0,
+            "new_opening": 0.8
+          },
+          {
+            "time": 70.0,
+            "new_opening": 0.3
+          }
+        ]
+      },
+      "canal": {
+        "name": "canal_1",
+        "initial_state": {
+          "water_level": 2.0,
+          "flow_rate": 10.0,
+          "volume": 20000.0,
+          "inflow": 10.0,
+          "outflow": 10.0
+        },
+        "parameters": {
+          "model_type": "integral_delay",
+          "length": 1000.0,
+          "bottom_width": 20.0,
+          "side_slope_z": 1.0,
+          "manning_coefficient": 0.025,
+          "gain": 0.001,
+          "delay": 300
+        }
+      },
+      "gate": {
+        "name": "gate_1",
+        "initial_state": {
+          "opening": 0.5,
+          "flow_rate": 0.0
+        },
+        "parameters": {
+          "max_opening": 1.0,
+          "discharge_coefficient": 0.6,
+          "width": 10.0,
+          "max_rate_of_change": 0.1
+        }
+      }
+    },
+    "universal_config_1_2": {
+      "simulation": {
+        "name": "物理IO智能体仿真",
+        "description": "Example 1.2 - PhysicalIOAgent 传感器感知和执行器物理动作演示",
+        "version": "1.0.0",
+        "time": {
+          "end_time": 50.0,
+          "time_step": 1.0,
+          "output_interval": 1.0
+        },
+        "solver": {
+          "method": "euler",
+          "tolerance": "1e-6",
+          "max_iterations": 1000
+        },
+        "parallel": {
+          "enabled": false,
+          "num_processes": 1
+        }
+      },
+      "debug": {
+        "enabled": true,
+        "log_level": "INFO",
+        "log_file": "logs/physical_io/debug.log",
+        "session_id": "physical_io_session",
+        "data_collection": {
+          "enabled": true,
+          "interval": 1.0,
+          "variables": [
+            "canal_water_level",
+            "gate_opening",
+            "target_opening",
+            "sensor_noise",
+            "actuator_response",
+            "control_command",
+            "system_state",
+            "io_latency",
+            "sensor_accuracy",
+            "actuator_precision"
+          ]
+        },
+        "dashboard": {
+          "web_dashboard": true,
+          "port": 8090,
+          "auto_open": false
+        },
+        "console": {
+          "real_time_display": true,
+          "update_interval": 1.0,
+          "show_detailed_logs": true
+        }
+      },
+      "performance": {
+        "enabled": true,
+        "timing": {
+          "enabled": true,
+          "detailed_profiling": true,
+          "io_timing": true
+        },
+        "memory": {
+          "enabled": true,
+          "threshold_mb": 800
+        },
+        "cpu": {
+          "enabled": true,
+          "threshold_percent": 70
+        }
+      },
+      "visualization": {
+        "enabled": true,
+        "plots": {
+          "enabled": true,
+          "save_plots": true,
+          "plot_directory": "plots/physical_io/",
+          "format": "png",
+          "dpi": 300,
+          "charts": [
+            {
+              "name": "传感器数据",
+              "type": "time_series",
+              "variables": [
+                "canal_water_level",
+                "sensor_noise"
+              ],
+              "title": "Sensor Data and Noise",
+              "xlabel": "Time (s)",
+              "ylabel": "Water Level (m)"
+            },
+            {
+              "name": "执行器响应",
+              "type": "time_series",
+              "variables": [
+                "gate_opening",
+                "target_opening"
+              ],
+              "title": "Actuator Response",
+              "xlabel": "Time (s)",
+              "ylabel": "Gate Opening (m)"
+            },
+            {
+              "name": "控制命令",
+              "type": "time_series",
+              "variables": [
+                "control_command"
+              ],
+              "title": "Control Commands",
+              "xlabel": "Time (s)",
+              "ylabel": "Command Value"
+            },
+            {
+              "name": "IO性能",
+              "type": "time_series",
+              "variables": [
+                "io_latency",
+                "sensor_accuracy",
+                "actuator_precision"
+              ],
+              "title": "IO Performance Metrics",
+              "xlabel": "Time (s)",
+              "ylabel": "Performance"
+            },
+            {
+              "name": "系统状态",
+              "type": "time_series",
+              "variables": [
+                "system_state"
+              ],
+              "title": "System State Overview",
+              "xlabel": "Time (s)",
+              "ylabel": "State"
+            }
+          ]
+        },
+        "dashboard": {
+          "enabled": true,
+          "update_interval": 1.0,
+          "port": 8091
+        }
+      },
+      "output": {
+        "enabled": true,
+        "output_directory": "results/physical_io/",
+        "save_history": true,
+        "history_file": "simulation_history.json",
+        "format": {
+          "csv": true,
+          "json": true,
+          "hdf5": false
+        },
+        "compression": {
+          "enabled": false
+        },
+        "validation": {
+          "enabled": true,
+          "expected_results": {
+            "final_opening": 0.5,
+            "sensor_noise_check": true,
+            "actuator_response": true
+          },
+          "tolerance": "1e-9"
+        }
+      },
+      "analysis": {
+        "enabled": true,
+        "control_performance": {
+          "enabled": true,
+          "metrics": [
+            "response_time",
+            "steady_state_error",
+            "overshoot"
+          ],
+          "reference_tracking": true
+        },
+        "statistical": {
+          "enabled": true,
+          "generate_summary": true,
+          "noise_analysis": true
+        },
+        "system_identification": {
+          "enabled": true,
+          "method": "least_squares",
+          "input_signals": [
+            "target_opening"
+          ],
+          "output_signals": [
+            "gate_opening"
+          ]
+        },
+        "io_analysis": {
+          "enabled": true,
+          "sensor_performance": true,
+          "actuator_performance": true,
+          "latency_analysis": true,
+          "noise_characterization": true
+        },
+        "hil_analysis": {
+          "enabled": true,
+          "real_time_performance": true,
+          "timing_analysis": true
+        }
+      },
+      "logging": {
+        "enabled": true,
+        "level": "INFO",
+        "file": {
+          "enabled": true,
+          "filename": "logs/physical_io/simulation.log",
+          "max_size_mb": 20,
+          "backup_count": 10
+        },
+        "console": {
+          "enabled": true,
+          "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        },
+        "structured": {
+          "enabled": true,
+          "format": "json"
+        },
+        "io_log": {
+          "enabled": true,
+          "filename": "logs/physical_io/io.log",
+          "variables": [
+            "sensor_data",
+            "actuator_commands",
+            "io_latency"
+          ]
+        },
+        "hardware_log": {
+          "enabled": true,
+          "filename": "logs/physical_io/hardware.log",
+          "sensor_events": true,
+          "actuator_events": true
+        }
+      },
+      "error_handling": {
+        "enabled": true,
+        "categories": {
+          "critical": [
+            "sensor_failure",
+            "actuator_failure",
+            "communication_loss"
+          ],
+          "warning": [
+            "sensor_noise_high",
+            "actuator_lag",
+            "command_delay"
+          ],
+          "info": [
+            "sensor_reading",
+            "actuator_command",
+            "io_operation"
+          ]
+        },
+        "recovery": {
+          "auto_retry": true,
+          "max_retries": 3,
+          "retry_delay": 0.1,
+          "fallback_mode": "safe_state"
+        },
+        "notifications": {
+          "enabled": true,
+          "email": [
+            "io_engineer@example.com"
+          ],
+          "webhook": "http://localhost:9000/io_alerts"
+        }
+      },
+      "cache": {
+        "enabled": true,
+        "memory": {
+          "enabled": true,
+          "max_size_mb": 100
+        },
+        "disk": {
+          "enabled": false
+        }
+      },
+      "network": {
+        "enabled": true,
+        "distributed": {
+          "enabled": false
+        },
+        "communication": {
+          "protocol": "mqtt",
+          "timeout": 5,
+          "buffer_size": 4096,
+          "topics": {
+            "state": "state/canal/level",
+            "action": "action/gate/opening",
+            "sensor_data": "sensor/canal/level",
+            "actuator_command": "actuator/gate/opening"
+          }
+        }
+      },
+      "security": {
+        "enabled": false,
+        "access_control": {
+          "enabled": false
+        },
+        "encryption": {
+          "enabled": false
+        }
+      },
+      "extensions": {
+        "enabled": true,
+        "plugins": {
+          "enabled": true,
+          "directory": "plugins/io/",
+          "modules": [
+            "sensor_calibration",
+            "actuator_tuning",
+            "noise_filter"
+          ]
+        },
+        "custom": {
+          "enabled": true,
+          "modules": [
+            "hardware_interface",
+            "real_time_io",
+            "safety_monitor"
+          ]
+        }
+      },
+      "environment": {
+        "name": "development",
+        "variables": {
+          "SIMULATION_ENV": "physical_io",
+          "LOG_LEVEL": "INFO",
+          "REAL_TIME_MODE": "enabled"
+        },
+        "custom_vars": {
+          "duration": 50,
+          "time_step": 1.0,
+          "description": "PhysicalIOAgent 传感器感知和执行器物理动作演示",
+          "state_topic": "state/canal/level",
+          "action_topic": "action/gate/opening",
+          "canal_initial_volume": 100000,
+          "canal_initial_outflow": 0,
+          "canal_bottom_width": 20.0,
+          "canal_length": 1000.0,
+          "canal_slope": 0.001,
+          "canal_side_slope_z": 2.0,
+          "canal_manning_n": 0.025,
+          "gate_initial_opening": 0.2,
+          "gate_discharge_coefficient": 0.8,
+          "gate_width": 10.0,
+          "gate_max_opening": 3.0,
+          "gate_max_rate_of_change": 0.05,
+          "sensor_obj_name": "upstream_canal",
+          "sensor_state_key": "water_level",
+          "sensor_topic": "state/canal/level",
+          "sensor_noise_std": 0.02,
+          "actuator_obj_name": "control_gate",
+          "actuator_target_attr": "target_opening",
+          "actuator_topic": "action/gate/opening",
+          "actuator_control_key": "target_opening",
+          "control_time": 5.0,
+          "control_target_opening": 0.5,
+          "enable_validation": true,
+          "expected_final_opening": 0.5,
+          "validation_tolerance": "1e-9",
+          "check_sensor_noise": true,
+          "print_interval": 1,
+          "sleep_duration": 0.05,
+          "show_detailed_logs": true,
+          "agent_type": "PhysicalIOAgent",
+          "agent_id": "io_agent_1",
+          "real_time_factor": 1.0,
+          "simulation_speed": "normal",
+          "hardware_interface": "simulated"
+        }
+      }
+    },
+    "universal_config_1_3": {
+      "simulation": {
+        "name": "现地PID控制仿真",
+        "description": "Example 1.3 - LocalControlAgent 现地PID智能体本地反馈控制闭环演示",
+        "version": "1.0.0",
+        "time": {
+          "end_time": 100.0,
+          "time_step": 1.0,
+          "output_interval": 1.0,
+          "control_cycle": 1.0
+        },
+        "solver": {
+          "method": "euler",
+          "tolerance": "1e-6",
+          "max_iterations": 1000
+        },
+        "parallel": {
+          "enabled": false,
+          "num_processes": 1
+        }
+      },
+      "debug": {
+        "enabled": true,
+        "log_level": "INFO",
+        "log_file": "logs/local_pid_control/debug.log",
+        "session_id": "local_pid_control_session",
+        "data_collection": {
+          "enabled": true,
+          "interval": 1.0,
+          "variables": [
+            "water_level",
+            "setpoint",
+            "control_error",
+            "pid_output",
+            "gate_opening",
+            "proportional_term",
+            "integral_term",
+            "derivative_term",
+            "control_action",
+            "system_response"
+          ]
+        },
+        "dashboard": {
+          "web_dashboard": true,
+          "port": 8092,
+          "auto_open": false
+        },
+        "console": {
+          "real_time_display": true,
+          "update_interval": 1.0,
+          "show_detailed_logs": true
+        }
+      },
+      "performance": {
+        "enabled": true,
+        "timing": {
+          "enabled": true,
+          "detailed_profiling": true,
+          "control_timing": true
+        },
+        "memory": {
+          "enabled": true,
+          "threshold_mb": 600
+        },
+        "cpu": {
+          "enabled": true,
+          "threshold_percent": 60
+        }
+      },
+      "visualization": {
+        "enabled": true,
+        "plots": {
+          "enabled": true,
+          "save_plots": true,
+          "plot_directory": "plots/local_pid_control/",
+          "format": "png",
+          "dpi": 300,
+          "charts": [
+            {
+              "name": "PID控制响应",
+              "type": "time_series",
+              "variables": [
+                "water_level",
+                "setpoint"
+              ],
+              "title": "PID Control Response",
+              "xlabel": "Time (s)",
+              "ylabel": "Water Level (m)"
+            },
+            {
+              "name": "控制误差",
+              "type": "time_series",
+              "variables": [
+                "control_error"
+              ],
+              "title": "Control Error",
+              "xlabel": "Time (s)",
+              "ylabel": "Error (m)"
+            },
+            {
+              "name": "PID分量",
+              "type": "time_series",
+              "variables": [
+                "proportional_term",
+                "integral_term",
+                "derivative_term"
+              ],
+              "title": "PID Components",
+              "xlabel": "Time (s)",
+              "ylabel": "Control Component"
+            },
+            {
+              "name": "控制输出",
+              "type": "time_series",
+              "variables": [
+                "pid_output",
+                "gate_opening"
+              ],
+              "title": "Control Output",
+              "xlabel": "Time (s)",
+              "ylabel": "Gate Opening (m)"
+            },
+            {
+              "name": "系统响应分析",
+              "type": "time_series",
+              "variables": [
+                "system_response"
+              ],
+              "title": "System Response Analysis",
+              "xlabel": "Time (s)",
+              "ylabel": "Response"
+            },
+            {
+              "name": "控制性能指标",
+              "type": "statistical",
+              "variables": [
+                "control_error",
+                "pid_output"
+              ],
+              "title": "Control Performance Metrics"
+            }
+          ]
+        },
+        "dashboard": {
+          "enabled": true,
+          "update_interval": 1.0,
+          "port": 8093
+        }
+      },
+      "output": {
+        "enabled": true,
+        "output_directory": "results/local_pid_control/",
+        "save_history": true,
+        "history_file": "simulation_history.json",
+        "format": {
+          "csv": true,
+          "json": true,
+          "matlab": true
+        },
+        "compression": {
+          "enabled": false
+        },
+        "validation": {
+          "enabled": true,
+          "expected_results": {
+            "steady_state_error": 0.1,
+            "settling_time": 20.0,
+            "overshoot": 0.2
+          },
+          "tolerance": 0.05
+        }
+      },
+      "analysis": {
+        "enabled": true,
+        "control_performance": {
+          "enabled": true,
+          "metrics": [
+            "ise",
+            "iae",
+            "itae",
+            "settling_time",
+            "overshoot",
+            "rise_time"
+          ],
+          "reference_tracking": true,
+          "disturbance_rejection": true
+        },
+        "statistical": {
+          "enabled": true,
+          "generate_summary": true,
+          "variance_analysis": true
+        },
+        "system_identification": {
+          "enabled": true,
+          "method": "least_squares",
+          "input_signals": [
+            "gate_opening"
+          ],
+          "output_signals": [
+            "water_level"
+          ]
+        },
+        "pid_analysis": {
+          "enabled": true,
+          "tuning_analysis": true,
+          "stability_analysis": true,
+          "robustness_analysis": true,
+          "parameter_sensitivity": true
+        },
+        "frequency_domain": {
+          "enabled": true,
+          "bode_plot": true,
+          "nyquist_plot": true,
+          "root_locus": true
+        }
+      },
+      "logging": {
+        "enabled": true,
+        "level": "INFO",
+        "file": {
+          "enabled": true,
+          "filename": "logs/local_pid_control/simulation.log",
+          "max_size_mb": 25,
+          "backup_count": 12
+        },
+        "console": {
+          "enabled": true,
+          "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        },
+        "structured": {
+          "enabled": true,
+          "format": "json"
+        },
+        "pid_log": {
+          "enabled": true,
+          "filename": "logs/local_pid_control/pid.log",
+          "variables": [
+            "control_error",
+            "pid_output",
+            "tuning_parameters"
+          ]
+        },
+        "control_log": {
+          "enabled": true,
+          "filename": "logs/local_pid_control/control.log",
+          "setpoint_changes": true,
+          "parameter_changes": true
+        }
+      },
+      "error_handling": {
+        "enabled": true,
+        "categories": {
+          "critical": [
+            "controller_failure",
+            "actuator_saturation",
+            "system_instability"
+          ],
+          "warning": [
+            "large_error",
+            "oscillation",
+            "slow_response"
+          ],
+          "info": [
+            "setpoint_change",
+            "parameter_update",
+            "control_action"
+          ]
+        },
+        "recovery": {
+          "auto_retry": true,
+          "max_retries": 3,
+          "retry_delay": 1.0,
+          "fallback_controller": "manual"
+        },
+        "notifications": {
+          "enabled": true,
+          "email": [
+            "control_engineer@example.com"
+          ],
+          "webhook": "http://localhost:9000/pid_alerts"
+        }
+      },
+      "cache": {
+        "enabled": true,
+        "memory": {
+          "enabled": true,
+          "max_size_mb": 150
+        },
+        "disk": {
+          "enabled": false
+        }
+      },
+      "network": {
+        "enabled": true,
+        "distributed": {
+          "enabled": false
+        },
+        "communication": {
+          "protocol": "mqtt",
+          "timeout": 10,
+          "buffer_size": 8192,
+          "topics": {
+            "observation": "state/canal/level",
+            "action": "action/gate/opening",
+            "setpoint": "setpoint/water/level",
+            "control_status": "status/control/pid"
+          }
+        }
+      },
+      "security": {
+        "enabled": false,
+        "access_control": {
+          "enabled": false
+        },
+        "encryption": {
+          "enabled": false
+        }
+      },
+      "extensions": {
+        "enabled": true,
+        "plugins": {
+          "enabled": true,
+          "directory": "plugins/control/",
+          "modules": [
+            "pid_tuner",
+            "adaptive_control",
+            "fuzzy_control"
+          ]
+        },
+        "custom": {
+          "enabled": true,
+          "modules": [
+            "advanced_pid",
+            "cascade_control",
+            "feedforward_control"
+          ]
+        }
+      },
+      "environment": {
+        "name": "development",
+        "variables": {
+          "SIMULATION_ENV": "local_pid_control",
+          "LOG_LEVEL": "INFO",
+          "CONTROL_MODE": "automatic"
+        },
+        "custom_vars": {
+          "description": "LocalControlAgent 现地PID智能体本地反馈控制闭环演示",
+          "control_cycle": 1.0,
+          "observation_topic": "state/canal/level",
+          "action_topic": "action/gate/opening",
+          "controller_type": "PIDController",
+          "kp": -0.5,
+          "ki": -0.1,
+          "kd": 0.0,
+          "setpoint": 10.0,
+          "min_output": 0.0,
+          "max_output": 2.0,
+          "agent_type": "LocalControlAgent",
+          "agent_id": "gate_control_agent_1",
+          "observation_key": "water_level",
+          "dt": 1.0,
+          "scenario_1_name": "场景1: 水位高于设定点",
+          "scenario_1_description": "需要开大闸门增加泄流",
+          "scenario_1_water_level": 10.5,
+          "scenario_1_expected_action": "positive",
+          "scenario_1_error": -0.5,
+          "scenario_1_action": 0.25,
+          "scenario_2_name": "场景2: 水位低于设定点",
+          "scenario_2_description": "需要关小闸门减少泄流",
+          "scenario_2_water_level": 9.8,
+          "scenario_2_expected_action": "clamped_to_min",
+          "scenario_2_error": 0.2,
+          "scenario_2_action": -0.1,
+          "scenario_3_name": "场景3: 水位等于设定点",
+          "scenario_3_description": "误差为0，积分项生效",
+          "scenario_3_water_level": 10.0,
+          "scenario_3_expected_action": "integral_effect",
+          "scenario_3_error": 0.0,
+          "scenario_3_note": "P项和D项为0，只有I项起作用",
+          "show_detailed_logs": true,
+          "wait_time": 0.1,
+          "enable_validation": true,
+          "anti_windup": true,
+          "derivative_filter": true,
+          "setpoint_filter": true,
+          "plant_delay": 2.0,
+          "plant_time_constant": 10.0,
+          "disturbance_amplitude": 0.1,
+          "noise_level": 0.01
+        }
+      }
+    },
+    "universal_config_1_4": {
+      "simulation": {
+        "name": "数字孪生高级功能仿真",
+        "description": "Example 1.4 - DigitalTwinAgent 数据平滑处理演示",
+        "version": "1.0.0",
+        "time": {
+          "end_time": 30.0,
+          "time_step": 1.0,
+          "output_interval": 1.0
+        },
+        "solver": {
+          "method": "euler",
+          "tolerance": "1e-6",
+          "max_iterations": 1000
+        },
+        "parallel": {
+          "enabled": true,
+          "num_processes": 2
+        }
+      },
+      "debug": {
+        "enabled": true,
+        "log_level": "INFO",
+        "log_file": "logs/digital_twin_config_1_4/debug.log",
+        "session_id": "digital_twin_config_1_4_session",
+        "data_collection": {
+          "enabled": true,
+          "interval": 1.0,
+          "variables": [
+            "true_water_level",
+            "noisy_water_level",
+            "smoothed_water_level",
+            "raw_data_variance",
+            "smoothed_data_variance",
+            "variance_reduction_ratio",
+            "smoothing_alpha",
+            "noise_injection",
+            "data_quality_score",
+            "twin_accuracy"
+          ]
+        },
+        "dashboard": {
+          "web_dashboard": true,
+          "port": 8094,
+          "auto_open": false
+        },
+        "console": {
+          "real_time_display": true,
+          "update_interval": 1.0,
+          "show_detailed_logs": true
+        }
+      },
+      "performance": {
+        "enabled": true,
+        "timing": {
+          "enabled": true,
+          "detailed_profiling": true,
+          "digital_twin_timing": true
+        },
+        "memory": {
+          "enabled": true,
+          "threshold_mb": 1000
+        },
+        "cpu": {
+          "enabled": true,
+          "threshold_percent": 70
+        }
+      },
+      "visualization": {
+        "enabled": true,
+        "plots": {
+          "enabled": true,
+          "save_plots": true,
+          "plot_directory": "plots/digital_twin_config_1_4/",
+          "format": "png",
+          "dpi": 300,
+          "charts": [
+            {
+              "name": "数据平滑效果对比",
+              "type": "time_series",
+              "variables": [
+                "true_water_level",
+                "noisy_water_level",
+                "smoothed_water_level"
+              ],
+              "title": "Data Smoothing Effect Comparison",
+              "xlabel": "Time Steps",
+              "ylabel": "Water Level (m)"
+            },
+            {
+              "name": "方差分析",
+              "type": "time_series",
+              "variables": [
+                "raw_data_variance",
+                "smoothed_data_variance"
+              ],
+              "title": "Variance Analysis",
+              "xlabel": "Time Steps",
+              "ylabel": "Variance"
+            },
+            {
+              "name": "方差降低比率",
+              "type": "time_series",
+              "variables": [
+                "variance_reduction_ratio"
+              ],
+              "title": "Variance Reduction Ratio",
+              "xlabel": "Time Steps",
+              "ylabel": "Reduction Ratio"
+            },
+            {
+              "name": "平滑参数分析",
+              "type": "time_series",
+              "variables": [
+                "smoothing_alpha"
+              ],
+              "title": "Smoothing Parameter Analysis",
+              "xlabel": "Time Steps",
+              "ylabel": "Alpha Value"
+            },
+            {
+              "name": "数据质量评估",
+              "type": "time_series",
+              "variables": [
+                "data_quality_score",
+                "twin_accuracy"
+              ],
+              "title": "Data Quality Assessment",
+              "xlabel": "Time Steps",
+              "ylabel": "Quality Score"
+            },
+            {
+              "name": "噪声注入效果",
+              "type": "histogram",
+              "variables": [
+                "noise_injection"
+              ],
+              "title": "Noise Injection Effect"
+            }
+          ]
+        },
+        "dashboard": {
+          "enabled": true,
+          "update_interval": 1.0,
+          "port": 8095
+        }
+      },
+      "output": {
+        "enabled": true,
+        "output_directory": "results/digital_twin_config_1_4/",
+        "save_history": true,
+        "history_file": "simulation_history.json",
+        "format": {
+          "csv": true,
+          "json": true,
+          "hdf5": true
+        },
+        "compression": {
+          "enabled": true,
+          "method": "gzip"
+        },
+        "validation": {
+          "enabled": true,
+          "expected_results": {
+            "variance_reduction": true,
+            "smoothing_effectiveness": 0.7,
+            "data_quality": 0.8
+          },
+          "tolerance": 0.1
+        }
+      },
+      "analysis": {
+        "enabled": true,
+        "control_performance": {
+          "enabled": false
+        },
+        "statistical": {
+          "enabled": true,
+          "generate_summary": true,
+          "variance_analysis": true,
+          "correlation_analysis": true
+        },
+        "system_identification": {
+          "enabled": true,
+          "method": "kalman",
+          "state_space_model": true,
+          "input_signals": [
+            "noisy_water_level"
+          ],
+          "output_signals": [
+            "smoothed_water_level"
+          ]
+        },
+        "digital_twin_analysis": {
+          "enabled": true,
+          "data_quality_assessment": true,
+          "model_validation": true,
+          "smoothing_performance": true,
+          "noise_characterization": true
+        },
+        "signal_processing": {
+          "enabled": true,
+          "filtering_analysis": true,
+          "frequency_analysis": true,
+          "noise_analysis": true
+        }
+      },
+      "logging": {
+        "enabled": true,
+        "level": "INFO",
+        "file": {
+          "enabled": true,
+          "filename": "logs/digital_twin_config_1_4/simulation.log",
+          "max_size_mb": 30,
+          "backup_count": 15
+        },
+        "console": {
+          "enabled": true,
+          "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        },
+        "structured": {
+          "enabled": true,
+          "format": "json"
+        },
+        "digital_twin_log": {
+          "enabled": true,
+          "filename": "logs/digital_twin_config_1_4/digital_twin.log",
+          "variables": [
+            "smoothed_water_level",
+            "data_quality_score",
+            "variance_reduction_ratio"
+          ]
+        },
+        "data_processing_log": {
+          "enabled": true,
+          "filename": "logs/digital_twin_config_1_4/data_processing.log",
+          "smoothing_events": true,
+          "quality_events": true
+        }
+      },
+      "error_handling": {
+        "enabled": true,
+        "categories": {
+          "critical": [
+            "data_corruption",
+            "model_failure",
+            "smoothing_failure"
+          ],
+          "warning": [
+            "high_noise_level",
+            "poor_data_quality",
+            "model_drift"
+          ],
+          "info": [
+            "data_processed",
+            "smoothing_applied",
+            "quality_updated"
+          ]
+        },
+        "recovery": {
+          "auto_retry": true,
+          "max_retries": 5,
+          "retry_delay": 1.0,
+          "fallback_smoother": "moving_average"
+        },
+        "notifications": {
+          "enabled": true,
+          "email": [
+            "data_scientist@example.com"
+          ],
+          "webhook": "http://localhost:9000/dt_alerts"
+        }
+      },
+      "cache": {
+        "enabled": true,
+        "memory": {
+          "enabled": true,
+          "max_size_mb": 250
+        },
+        "disk": {
+          "enabled": true,
+          "directory": "cache/digital_twin_config_1_4/",
+          "max_size_gb": 2
+        }
+      },
+      "network": {
+        "enabled": true,
+        "distributed": {
+          "enabled": false
+        },
+        "communication": {
+          "protocol": "mqtt",
+          "timeout": 20,
+          "buffer_size": 12288,
+          "topics": {
+            "smoothed_state": "state/canal/level/smoothed",
+            "raw_data": "data/canal/level/raw",
+            "quality_metrics": "metrics/data/quality"
+          }
+        }
+      },
+      "security": {
+        "enabled": false,
+        "access_control": {
+          "enabled": false
+        },
+        "encryption": {
+          "enabled": false
+        }
+      },
+      "extensions": {
+        "enabled": true,
+        "plugins": {
+          "enabled": true,
+          "directory": "plugins/digital_twin/",
+          "modules": [
+            "advanced_smoothing",
+            "adaptive_filtering",
+            "quality_assessment"
+          ]
+        },
+        "custom": {
+          "enabled": true,
+          "modules": [
+            "ml_smoothing",
+            "predictive_filtering",
+            "anomaly_detection"
+          ]
+        }
+      },
+      "environment": {
+        "name": "development",
+        "variables": {
+          "SIMULATION_ENV": "digital_twin_config_1_4",
+          "LOG_LEVEL": "INFO",
+          "DATA_QUALITY_CHECK": "enabled"
+        },
+        "custom_vars": {
+          "duration": 30,
+          "description": "DigitalTwinAgent 数据平滑处理演示",
+          "true_water_level": 10.0,
+          "noise_std": 0.5,
+          "smoothed_state_topic": "state/canal/level/smoothed",
+          "canal_type": "UnifiedCanal",
+          "canal_model_type": "integral",
+          "canal_initial_water_level": 10.0,
+          "canal_bottom_width": 20.0,
+          "canal_length": 1000.0,
+          "canal_slope": 0.001,
+          "canal_side_slope_z": 2.0,
+          "canal_manning_n": 0.025,
+          "canal_surface_area": 20000,
+          "canal_outlet_coefficient": 5.0,
+          "agent_type": "DigitalTwinAgent",
+          "agent_id": "twin_agent_1",
+          "simulated_object": "upstream_canal",
+          "state_topic": "state/canal/level/smoothed",
+          "smoothing_water_level_alpha": 0.3,
+          "noise_injection": true,
+          "noise_type": "gaussian",
+          "noise_mean": 0.0,
+          "noise_std_param": 0.5,
+          "enable_validation": true,
+          "variance_comparison": true,
+          "expected_result": "smoothed_variance < raw_variance",
+          "metrics_raw_data_variance": true,
+          "metrics_smoothed_data_variance": true,
+          "metrics_variance_reduction_ratio": true,
+          "show_detailed_logs": true,
+          "step_width": 2,
+          "level_precision": 3,
+          "show_summary": true,
+          "twin_update_frequency": 1.0,
+          "model_fidelity": "high",
+          "synchronization_mode": "real_time",
+          "filter_type": "ema",
+          "filter_window_size": 5,
+          "adaptive_filtering": true,
+          "quality_threshold": 0.8,
+          "accuracy_threshold": 0.9,
+          "reliability_threshold": 0.95
+        }
+      }
+    },
+    "universal_config_1_5": {
+      "simulation": {
+        "name": "中心MPC调度智能体仿真",
+        "description": "Example 1.5 - CentralMPCAgent 根据预测信息输出高层调度指令演示",
+        "version": "1.0.0",
+        "time": {
+          "end_time": 36000.0,
+          "time_step": 3600.0,
+          "output_interval": 3600.0
+        },
+        "solver": {
+          "method": "mpc",
+          "tolerance": "1e-4",
+          "max_iterations": 500
+        },
+        "parallel": {
+          "enabled": true,
+          "num_processes": 4
+        }
+      },
+      "debug": {
+        "enabled": true,
+        "log_level": "INFO",
+        "log_file": "logs/central_mpc_config_1_5/debug.log",
+        "session_id": "central_mpc_config_1_5_session",
+        "data_collection": {
+          "enabled": true,
+          "interval": 3600.0,
+          "variables": [
+            "upstream_level",
+            "downstream_level",
+            "upstream_setpoint",
+            "downstream_setpoint",
+            "inflow_forecast",
+            "mpc_cost",
+            "prediction_horizon",
+            "optimization_status",
+            "constraint_violations",
+            "flood_risk_level"
+          ]
+        },
+        "dashboard": {
+          "web_dashboard": true,
+          "port": 8096,
+          "auto_open": false
+        },
+        "console": {
+          "real_time_display": true,
+          "update_interval": 3600.0,
+          "show_detailed_logs": true,
+          "show_mpc_calculations": true
+        }
+      },
+      "performance": {
+        "enabled": true,
+        "timing": {
+          "enabled": true,
+          "detailed_profiling": true,
+          "mpc_timing": true,
+          "optimization_timing": true
+        },
+        "memory": {
+          "enabled": true,
+          "threshold_mb": 1500
+        },
+        "cpu": {
+          "enabled": true,
+          "threshold_percent": 80
+        }
+      },
+      "visualization": {
+        "enabled": true,
+        "plots": {
+          "enabled": true,
+          "save_plots": true,
+          "plot_directory": "plots/central_mpc_config_1_5/",
+          "format": "png",
+          "dpi": 300,
+          "charts": [
+            {
+              "name": "水位控制轨迹",
+              "type": "time_series",
+              "variables": [
+                "upstream_level",
+                "downstream_level"
+              ],
+              "title": "Water Level Control Trajectory",
+              "xlabel": "Time (hours)",
+              "ylabel": "Water Level (m)"
+            },
+            {
+              "name": "MPC设定值调度",
+              "type": "time_series",
+              "variables": [
+                "upstream_setpoint",
+                "downstream_setpoint"
+              ],
+              "title": "MPC Setpoint Dispatch",
+              "xlabel": "Time (hours)",
+              "ylabel": "Setpoint (m)"
+            },
+            {
+              "name": "流量预测与风险",
+              "type": "time_series",
+              "variables": [
+                "inflow_forecast",
+                "flood_risk_level"
+              ],
+              "title": "Inflow Forecast and Flood Risk",
+              "xlabel": "Time (hours)",
+              "ylabel": "Flow/Risk Level"
+            },
+            {
+              "name": "MPC优化性能",
+              "type": "time_series",
+              "variables": [
+                "mpc_cost",
+                "optimization_status"
+              ],
+              "title": "MPC Optimization Performance",
+              "xlabel": "Time (hours)",
+              "ylabel": "Cost/Status"
+            },
+            {
+              "name": "约束违反监控",
+              "type": "time_series",
+              "variables": [
+                "constraint_violations"
+              ],
+              "title": "Constraint Violation Monitoring",
+              "xlabel": "Time (hours)",
+              "ylabel": "Violations"
+            },
+            {
+              "name": "预测时域分析",
+              "type": "time_series",
+              "variables": [
+                "prediction_horizon"
+              ],
+              "title": "Prediction Horizon Analysis",
+              "xlabel": "Time (hours)",
+              "ylabel": "Horizon Steps"
+            }
+          ]
+        },
+        "dashboard": {
+          "enabled": true,
+          "update_interval": 3600.0,
+          "port": 8097
+        }
+      },
+      "output": {
+        "enabled": true,
+        "output_directory": "results/central_mpc_config_1_5/",
+        "save_history": true,
+        "history_file": "simulation_history.json",
+        "format": {
+          "csv": true,
+          "json": true,
+          "hdf5": true,
+          "matlab": true
+        },
+        "compression": {
+          "enabled": true,
+          "method": "gzip"
+        },
+        "validation": {
+          "enabled": true,
+          "expected_results": {
+            "setpoint_reduction": true,
+            "reasonable_range_check": true,
+            "constraint_satisfaction": 0.95
+          },
+          "tolerance": 0.05
+        }
+      },
+      "analysis": {
+        "enabled": true,
+        "control_performance": {
+          "enabled": true,
+          "metrics": [
+            "ise",
+            "iae",
+            "itae",
+            "settling_time",
+            "overshoot"
+          ],
+          "reference_tracking": true,
+          "disturbance_rejection": true
+        },
+        "statistical": {
+          "enabled": true,
+          "generate_summary": true,
+          "variance_analysis": true,
+          "correlation_analysis": true
+        },
+        "system_identification": {
+          "enabled": true,
+          "method": "subspace",
+          "state_space_model": true,
+          "input_signals": [
+            "upstream_setpoint",
+            "downstream_setpoint"
+          ],
+          "output_signals": [
+            "upstream_level",
+            "downstream_level"
+          ]
+        },
+        "mpc_analysis": {
+          "enabled": true,
+          "optimization_performance": true,
+          "constraint_analysis": true,
+          "robustness_analysis": true,
+          "sensitivity_analysis": true
+        },
+        "flood_risk_analysis": {
+          "enabled": true,
+          "risk_assessment": true,
+          "threshold_analysis": true,
+          "emergency_response": true
+        }
+      },
+      "logging": {
+        "enabled": true,
+        "level": "INFO",
+        "file": {
+          "enabled": true,
+          "filename": "logs/central_mpc_config_1_5/simulation.log",
+          "max_size_mb": 40,
+          "backup_count": 20
+        },
+        "console": {
+          "enabled": true,
+          "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        },
+        "structured": {
+          "enabled": true,
+          "format": "json"
+        },
+        "mpc_log": {
+          "enabled": true,
+          "filename": "logs/central_mpc_config_1_5/mpc.log",
+          "variables": [
+            "mpc_cost",
+            "optimization_status",
+            "constraint_violations"
+          ]
+        },
+        "dispatch_log": {
+          "enabled": true,
+          "filename": "logs/central_mpc_config_1_5/dispatch.log",
+          "decisions": true,
+          "setpoint_changes": true,
+          "emergency_actions": true
+        }
+      },
+      "error_handling": {
+        "enabled": true,
+        "categories": {
+          "critical": [
+            "optimization_failure",
+            "infeasible_problem",
+            "system_instability"
+          ],
+          "warning": [
+            "constraint_violation",
+            "suboptimal_solution",
+            "forecast_uncertainty"
+          ],
+          "info": [
+            "setpoint_updated",
+            "optimization_completed",
+            "forecast_received"
+          ]
+        },
+        "recovery": {
+          "auto_retry": true,
+          "max_retries": 3,
+          "retry_delay": 60.0,
+          "fallback_controller": "emergency_mode"
+        },
+        "notifications": {
+          "enabled": true,
+          "email": [
+            "control_engineer@example.com",
+            "flood_manager@example.com"
+          ],
+          "webhook": "http://localhost:9000/mpc_alerts"
+        }
+      },
+      "cache": {
+        "enabled": true,
+        "memory": {
+          "enabled": true,
+          "max_size_mb": 400
+        },
+        "disk": {
+          "enabled": true,
+          "directory": "cache/central_mpc_config_1_5/",
+          "max_size_gb": 4
+        }
+      },
+      "network": {
+        "enabled": true,
+        "distributed": {
+          "enabled": true,
+          "master_host": "localhost",
+          "master_port": 9005
+        },
+        "communication": {
+          "protocol": "tcp",
+          "timeout": 120,
+          "buffer_size": 32768,
+          "topics": {
+            "state_upstream": "state/canal_upstream/level",
+            "state_downstream": "state/canal_downstream/level",
+            "forecast": "forecast/inflow",
+            "command_upstream": "command/gate_upstream/setpoint",
+            "command_downstream": "command/gate_downstream/setpoint"
+          }
+        }
+      },
+      "security": {
+        "enabled": true,
+        "access_control": {
+          "enabled": true,
+          "allowed_hosts": [
+            "localhost",
+            "control-server",
+            "flood-center"
+          ]
+        },
+        "encryption": {
+          "enabled": true,
+          "algorithm": "AES-256"
+        },
+        "monitoring": {
+          "enabled": true,
+          "intrusion_detection": true,
+          "emergency_protocols": true
+        }
+      },
+      "extensions": {
+        "enabled": true,
+        "plugins": {
+          "enabled": true,
+          "directory": "plugins/mpc/",
+          "modules": [
+            "advanced_mpc",
+            "robust_mpc",
+            "stochastic_mpc",
+            "flood_mpc"
+          ]
+        },
+        "custom": {
+          "enabled": true,
+          "modules": [
+            "emergency_dispatch",
+            "flood_prediction",
+            "risk_assessment"
+          ]
+        }
+      },
+      "environment": {
+        "name": "development",
+        "variables": {
+          "SIMULATION_ENV": "central_mpc_config_1_5",
+          "LOG_LEVEL": "INFO",
+          "MPC_SOLVER": "scipy"
+        },
+        "custom_vars": {
+          "description": "CentralMPCAgent 根据预测信息输出高层调度指令演示",
+          "time_step": 3600,
+          "state_topic_upstream": "state/canal_upstream/level",
+          "state_topic_downstream": "state/canal_downstream/level",
+          "forecast_topic": "forecast/inflow",
+          "command_topic_upstream": "command/gate_upstream/setpoint",
+          "command_topic_downstream": "command/gate_downstream/setpoint",
+          "agent_type": "CentralMPCAgent",
+          "agent_id": "central_dispatcher_1",
+          "prediction_horizon": 10,
+          "dt": 3600,
+          "q_weight": 1.0,
+          "r_weight": 0.5,
+          "state_keys": [
+            "upstream",
+            "downstream"
+          ],
+          "normal_setpoint_upstream": 10.0,
+          "normal_setpoint_downstream": 8.0,
+          "emergency_setpoint": 8.5,
+          "flood_threshold_upstream": 12.0,
+          "flood_threshold_downstream": 10.0,
+          "canal_surface_area_upstream": 1500000,
+          "canal_surface_area_downstream": 1500000,
+          "outflow_coefficient": 1000,
+          "initial_upstream_level": 10.1,
+          "initial_downstream_level": 8.0,
+          "forecast_type": "flood_warning",
+          "forecast_description": "未来持续大流量入流",
+          "inflow_values": 50.0,
+          "forecast_duration": 10,
+          "enable_validation": true,
+          "expected_setpoint_reduction": true,
+          "reasonable_range_min": 5.0,
+          "reasonable_range_max": 12.0,
+          "validation_criteria_1": "new_setpoint < normal_setpoint",
+          "validation_criteria_2": "new_setpoint > min_reasonable_value",
+          "required_package_scipy": "scipy",
+          "error_message": "本示例需要 'scipy' 库。请运行: pip install scipy",
+          "show_detailed_logs": true,
+          "show_mpc_calculations": true,
+          "wait_time": 0.1,
+          "control_horizon": 3,
+          "terminal_cost_weight": 10.0,
+          "slack_variable_weight": 1000.0,
+          "min_water_level": 5.0,
+          "max_water_level": 15.0,
+          "max_setpoint_change": 2.0,
+          "flood_warning_threshold": 11.0,
+          "emergency_response_threshold": 13.0,
+          "buffer_capacity": 2.0,
+          "response_time": 1800,
+          "communication_delay": 60,
+          "sensor_accuracy": 0.05
+        }
+      }
+    }
+  },
+  "regenerated_config": {
+    "config.yml": {
+      "simulation": {
+        "duration": 3600,
+        "dt": 1.0,
+        "solver": {
+          "type": "rk4"
+        }
+      }
+    },
+    "components.yml": {
+      "components": []
+    },
+    "topology.yml": {
+      "connections": []
+    },
+    "agents.yml": {
+      "agents": []
+    }
+  },
+  "comparison_result": {
+    "overall_score": 0.875,
+    "components_score": 1.0,
+    "topology_score": 1.0,
+    "simulation_score": 0.5,
+    "agents_score": 1.0,
+    "issues": [
+      "仿真参数不匹配: 原始100.0, 重新生成3600"
+    ],
+    "improvements": []
+  }
+}

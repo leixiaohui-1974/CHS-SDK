@@ -1,0 +1,4 @@
+agents:
+- class: Agent
+  id: inflow_driver
+  target: component_1

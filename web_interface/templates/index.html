@@ -1,0 +1,327 @@
+{% extends "base.html" %}
+
+{% block title %}CHS-SDK配置文件转换器 - 首页{% endblock %}
+
+{% block content %}
+<!-- 欢迎横幅 -->
+<div class="jumbotron bg-light p-5 rounded-3 mb-5">
+    <div class="container-fluid py-5">
+        <h1 class="display-5 fw-bold text-primary">
+            <i class="fas fa-exchange-alt me-3"></i>
+            CHS-SDK配置文件转换器
+        </h1>
+        <p class="col-md-8 fs-4">智能化的配置文件与自然语言双向转换工具，支持所有CHS-SDK配置文件类型</p>
+        <div class="mt-4">
+            <a class="btn btn-primary btn-lg me-3" href="{{ url_for('config_to_language') }}" role="button">
+                <i class="fas fa-file-code me-2"></i>配置文件转自然语言
+            </a>
+            <a class="btn btn-outline-primary btn-lg" href="{{ url_for('language_to_config') }}" role="button">
+                <i class="fas fa-comments me-2"></i>自然语言转配置文件
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- 功能特性 -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="text-center mb-4">
+            <i class="fas fa-star me-2"></i>
+            主要功能
+        </h2>
+    </div>
+    
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card feature-card h-100 text-center">
+            <div class="card-body">
+                <div class="mb-3">
+                    <i class="fas fa-file-code fa-3x text-primary"></i>
+                </div>
+                <h5 class="card-title">配置文件解析</h5>
+                <p class="card-text">自动识别和解析传统多文件、统一配置、通用配置和硬编码四种配置类型</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card feature-card h-100 text-center">
+            <div class="card-body">
+                <div class="mb-3">
+                    <i class="fas fa-language fa-3x text-success"></i>
+                </div>
+                <h5 class="card-title">自然语言生成</h5>
+                <p class="card-text">将复杂的配置文件转换为易懂的中文描述，包括建模、情景、查询和分析</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card feature-card h-100 text-center">
+            <div class="card-body">
+                <div class="mb-3">
+                    <i class="fas fa-magic fa-3x text-warning"></i>
+                </div>
+                <h5 class="card-title">智能配置生成</h5>
+                <p class="card-text">从自然语言描述自动生成标准的CHS-SDK配置文件</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card feature-card h-100 text-center">
+            <div class="card-body">
+                <div class="mb-3">
+                    <i class="fas fa-check-circle fa-3x text-info"></i>
+                </div>
+                <h5 class="card-title">配置验证</h5>
+                <p class="card-text">自动验证生成的配置文件格式和内容的正确性</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 支持的配置类型 -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="text-center mb-4">
+            <i class="fas fa-cogs me-2"></i>
+            支持的配置类型
+        </h2>
+    </div>
+    
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-primary text-white">
+                <h6 class="mb-0">
+                    <i class="fas fa-folder me-2"></i>
+                    传统多文件
+                </h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-file me-2 text-muted"></i>config.yml</li>
+                    <li><i class="fas fa-file me-2 text-muted"></i>components.yml</li>
+                    <li><i class="fas fa-file me-2 text-muted"></i>topology.yml</li>
+                    <li><i class="fas fa-file me-2 text-muted"></i>agents.yml</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-success text-white">
+                <h6 class="mb-0">
+                    <i class="fas fa-file me-2"></i>
+                    统一配置
+                </h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-file me-2 text-muted"></i>unified_config.yml</li>
+                    <li><i class="fas fa-check me-2 text-success"></i>单文件配置</li>
+                    <li><i class="fas fa-check me-2 text-success"></i>结构化组织</li>
+                    <li><i class="fas fa-check me-2 text-success"></i>易于管理</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-warning text-white">
+                <h6 class="mb-0">
+                    <i class="fas fa-star me-2"></i>
+                    通用配置
+                </h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-file me-2 text-muted"></i>universal_config.yml</li>
+                    <li><i class="fas fa-check me-2 text-warning"></i>增强功能</li>
+                    <li><i class="fas fa-check me-2 text-warning"></i>调试支持</li>
+                    <li><i class="fas fa-check me-2 text-warning"></i>可视化配置</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-info text-white">
+                <h6 class="mb-0">
+                    <i class="fas fa-code me-2"></i>
+                    硬编码
+                </h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-file me-2 text-muted"></i>Python脚本</li>
+                    <li><i class="fas fa-check me-2 text-info"></i>灵活定制</li>
+                    <li><i class="fas fa-check me-2 text-info"></i>程序化控制</li>
+                    <li><i class="fas fa-check me-2 text-info"></i>高级功能</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 使用流程 -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="text-center mb-4">
+            <i class="fas fa-route me-2"></i>
+            使用流程
+        </h2>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-arrow-right me-2"></i>
+                    配置文件 → 自然语言
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px; font-size: 14px;">1</div>
+                    <span>上传配置文件（支持多文件）</span>
+                </div>
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px; font-size: 14px;">2</div>
+                    <span>系统自动识别配置类型</span>
+                </div>
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px; font-size: 14px;">3</div>
+                    <span>解析配置内容和结构</span>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px; font-size: 14px;">4</div>
+                    <span>生成中文自然语言描述</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-arrow-left me-2"></i>
+                    自然语言 → 配置文件
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px; font-size: 14px;">1</div>
+                    <span>输入中文系统描述</span>
+                </div>
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px; font-size: 14px;">2</div>
+                    <span>选择目标配置文件类型</span>
+                </div>
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px; font-size: 14px;">3</div>
+                    <span>智能解析和参数提取</span>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px; font-size: 14px;">4</div>
+                    <span>生成标准配置文件</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 快速开始 -->
+<div class="row">
+    <div class="col-12">
+        <div class="card bg-light">
+            <div class="card-body text-center">
+                <h3 class="card-title">
+                    <i class="fas fa-rocket me-2"></i>
+                    快速开始
+                </h3>
+                <p class="card-text mb-4">选择一个功能开始体验CHS-SDK配置文件转换器</p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                    <a href="{{ url_for('config_to_language') }}" class="btn btn-primary btn-lg me-md-2">
+                        <i class="fas fa-upload me-2"></i>
+                        上传配置文件
+                    </a>
+                    <a href="{{ url_for('language_to_config') }}" class="btn btn-success btn-lg">
+                        <i class="fas fa-edit me-2"></i>
+                        输入系统描述
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // 页面加载完成后的初始化
+    document.addEventListener('DOMContentLoaded', function() {
+        // 添加卡片悬停效果
+        const featureCards = document.querySelectorAll('.feature-card');
+        featureCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.boxShadow = '';
+            });
+        });
+        
+        // 添加按钮点击效果
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                // 创建涟漪效果
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('ripple');
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+    });
+</script>
+
+<style>
+    .ripple {
+        position: absolute;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.6);
+        transform: scale(0);
+        animation: ripple-animation 0.6s linear;
+        pointer-events: none;
+    }
+    
+    @keyframes ripple-animation {
+        to {
+            transform: scale(4);
+            opacity: 0;
+        }
+    }
+    
+    .btn {
+        position: relative;
+        overflow: hidden;
+    }
+</style>
+{% endblock %}

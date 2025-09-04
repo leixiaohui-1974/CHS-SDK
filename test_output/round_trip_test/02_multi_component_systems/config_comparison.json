@@ -1,0 +1,599 @@
+{
+  "original_config": {
+    "components": {
+      "components": {
+        "reservoir_1": {
+          "type": "Reservoir",
+          "initial_state": {
+            "water_level": 15.0,
+            "volume": 15000000
+          },
+          "parameters": {
+            "surface_area": 1000000,
+            "storage_curve": [
+              [
+                0,
+                0
+              ],
+              [
+                30000000,
+                30
+              ]
+            ]
+          }
+        },
+        "gate_1": {
+          "type": "Gate",
+          "initial_state": {
+            "opening": 0.25
+          },
+          "parameters": {
+            "discharge_coefficient": 0.8,
+            "width": 12
+          }
+        },
+        "channel_1": {
+          "type": "RiverChannel",
+          "initial_state": {
+            "volume": 500000
+          },
+          "parameters": {
+            "k": 0.0001
+          }
+        },
+        "gate_2": {
+          "type": "Gate",
+          "initial_state": {
+            "opening": 0.5
+          },
+          "parameters": {
+            "discharge_coefficient": 0.7,
+            "width": 10
+          }
+        }
+      },
+      "controllers": {
+        "res_level_ctrl": {
+          "type": "PIDController",
+          "parameters": {
+            "Kp": -0.2,
+            "Ki": -0.01,
+            "Kd": -0.05,
+            "setpoint": 18.0,
+            "min_output": 0.0,
+            "max_output": 1.0
+          },
+          "controlled_component": "gate_1",
+          "observed_component": "reservoir_1",
+          "observation_key": "water_level",
+          "description": "Controls reservoir water level by adjusting Gate 1"
+        },
+        "chan_vol_ctrl": {
+          "type": "PIDController",
+          "parameters": {
+            "Kp": -1e-05,
+            "Ki": -1e-07,
+            "Kd": -1e-06,
+            "setpoint": 400000,
+            "min_output": 0.0,
+            "max_output": 1.0
+          },
+          "controlled_component": "gate_2",
+          "observed_component": "channel_1",
+          "observation_key": "volume",
+          "description": "Controls channel volume by adjusting Gate 2"
+        }
+      },
+      "connections": [
+        {
+          "from": "reservoir_1",
+          "to": "gate_1"
+        },
+        {
+          "from": "gate_1",
+          "to": "channel_1"
+        },
+        {
+          "from": "channel_1",
+          "to": "gate_2"
+        }
+      ]
+    },
+    "config": {
+      "simulation": {
+        "duration": 500,
+        "dt": 1.0
+      },
+      "components": {
+        "reservoir_1": {
+          "type": "Reservoir",
+          "initial_state": {
+            "water_level": 15.0,
+            "volume": 15000000
+          },
+          "parameters": {
+            "surface_area": 1000000,
+            "storage_curve": [
+              [
+                0,
+                0
+              ],
+              [
+                30000000,
+                30
+              ]
+            ]
+          }
+        },
+        "gate_1": {
+          "type": "Gate",
+          "initial_state": {
+            "opening": 0.25
+          },
+          "parameters": {
+            "discharge_coefficient": 0.8,
+            "width": 12
+          }
+        },
+        "channel_1": {
+          "type": "RiverChannel",
+          "initial_state": {
+            "volume": 500000
+          },
+          "parameters": {
+            "k": 0.0001
+          }
+        },
+        "gate_2": {
+          "type": "Gate",
+          "initial_state": {
+            "opening": 0.5
+          },
+          "parameters": {
+            "discharge_coefficient": 0.7,
+            "width": 10
+          }
+        }
+      },
+      "controllers": {
+        "res_level_ctrl": {
+          "type": "PIDController",
+          "parameters": {
+            "Kp": -0.2,
+            "Ki": -0.01,
+            "Kd": -0.05,
+            "setpoint": 18.0,
+            "min_output": 0.0,
+            "max_output": 1.0
+          },
+          "controlled_component": "gate_1",
+          "observed_component": "reservoir_1",
+          "observation_key": "water_level",
+          "description": "Controls reservoir water level by adjusting Gate 1"
+        },
+        "chan_vol_ctrl": {
+          "type": "PIDController",
+          "parameters": {
+            "Kp": -1e-05,
+            "Ki": -1e-07,
+            "Kd": -1e-06,
+            "setpoint": 400000,
+            "min_output": 0.0,
+            "max_output": 1.0
+          },
+          "controlled_component": "gate_2",
+          "observed_component": "channel_1",
+          "observation_key": "volume",
+          "description": "Controls channel volume by adjusting Gate 2"
+        }
+      },
+      "connections": [
+        {
+          "from": "reservoir_1",
+          "to": "gate_1"
+        },
+        {
+          "from": "gate_1",
+          "to": "channel_1"
+        },
+        {
+          "from": "channel_1",
+          "to": "gate_2"
+        }
+      ],
+      "analysis": {
+        "performance_metrics": {
+          "reservoir_control": {
+            "steady_state_error_threshold": 0.5,
+            "stability_threshold": 0.1
+          },
+          "channel_control": {
+            "steady_state_error_threshold": 50000,
+            "stability_threshold": 10000
+          }
+        },
+        "visualization": {
+          "enabled": true,
+          "output_file": "02_multi_component_results.png",
+          "plots": [
+            {
+              "type": "reservoir_level",
+              "title": "Reservoir Water Level Control"
+            },
+            {
+              "type": "channel_volume",
+              "title": "Channel Volume Control"
+            },
+            {
+              "type": "gate1_opening",
+              "title": "Gate 1 Opening (Reservoir Control)"
+            },
+            {
+              "type": "gate2_opening",
+              "title": "Gate 2 Opening (Channel Control)"
+            }
+          ]
+        }
+      }
+    },
+    "unified_config": {
+      "analysis": {
+        "performance_metrics": {
+          "channel_control": {
+            "stability_threshold": 10000,
+            "steady_state_error_threshold": 50000
+          },
+          "reservoir_control": {
+            "stability_threshold": 0.1,
+            "steady_state_error_threshold": 0.5
+          }
+        },
+        "visualization": {
+          "enabled": true,
+          "output_file": "02_multi_component_results.png",
+          "plots": [
+            {
+              "title": "Reservoir Water Level Control",
+              "type": "reservoir_level"
+            },
+            {
+              "title": "Channel Volume Control",
+              "type": "channel_volume"
+            },
+            {
+              "title": "Gate 1 Opening (Reservoir Control)",
+              "type": "gate1_opening"
+            },
+            {
+              "title": "Gate 2 Opening (Channel Control)",
+              "type": "gate2_opening"
+            }
+          ]
+        }
+      },
+      "components": {
+        "channel_1": {
+          "initial_state": {
+            "volume": 500000
+          },
+          "parameters": {
+            "k": 0.0001
+          },
+          "type": "RiverChannel"
+        },
+        "gate_1": {
+          "initial_state": {
+            "opening": 0.25
+          },
+          "parameters": {
+            "discharge_coefficient": 0.8,
+            "width": 12
+          },
+          "type": "Gate"
+        },
+        "gate_2": {
+          "initial_state": {
+            "opening": 0.5
+          },
+          "parameters": {
+            "discharge_coefficient": 0.7,
+            "width": 10
+          },
+          "type": "Gate"
+        },
+        "reservoir_1": {
+          "initial_state": {
+            "volume": 15000000,
+            "water_level": 15.0
+          },
+          "parameters": {
+            "storage_curve": [
+              [
+                0,
+                0
+              ],
+              [
+                30000000,
+                30
+              ]
+            ],
+            "surface_area": 1000000
+          },
+          "type": "Reservoir"
+        }
+      },
+      "connections": [
+        {
+          "from": "reservoir_1",
+          "to": "gate_1"
+        },
+        {
+          "from": "gate_1",
+          "to": "channel_1"
+        },
+        {
+          "from": "channel_1",
+          "to": "gate_2"
+        }
+      ],
+      "controllers": {
+        "chan_vol_ctrl": {
+          "controlled_component": "gate_2",
+          "description": "Controls channel volume by adjusting Gate 2",
+          "observation_key": "volume",
+          "observed_component": "channel_1",
+          "parameters": {
+            "Kd": -1e-06,
+            "Ki": -1e-07,
+            "Kp": -1e-05,
+            "max_output": 1.0,
+            "min_output": 0.0,
+            "setpoint": 400000
+          },
+          "type": "PIDController"
+        },
+        "res_level_ctrl": {
+          "controlled_component": "gate_1",
+          "description": "Controls reservoir water level by adjusting Gate 1",
+          "observation_key": "water_level",
+          "observed_component": "reservoir_1",
+          "parameters": {
+            "Kd": -0.05,
+            "Ki": -0.01,
+            "Kp": -0.2,
+            "max_output": 1.0,
+            "min_output": 0.0,
+            "setpoint": 18.0
+          },
+          "type": "PIDController"
+        }
+      },
+      "metadata": {
+        "category": "non_agent_based",
+        "description": "统一配置文件，用于 non_agent_based/02_multi_component_systems 示例",
+        "name": "02_multi_component_systems - 统一配置",
+        "version": "1.0"
+      },
+      "simulation": {
+        "dt": 1.0,
+        "duration": 500
+      }
+    },
+    "universal_config": {
+      "analysis": {
+        "performance_metrics": {
+          "channel_control": {
+            "stability_threshold": 10000,
+            "steady_state_error_threshold": 50000
+          },
+          "reservoir_control": {
+            "stability_threshold": 0.1,
+            "steady_state_error_threshold": 0.5
+          }
+        },
+        "visualization": {
+          "enabled": true,
+          "output_file": "02_multi_component_results.png",
+          "plots": [
+            {
+              "title": "Reservoir Water Level Control",
+              "type": "reservoir_level"
+            },
+            {
+              "title": "Channel Volume Control",
+              "type": "channel_volume"
+            },
+            {
+              "title": "Gate 1 Opening (Reservoir Control)",
+              "type": "gate1_opening"
+            },
+            {
+              "title": "Gate 2 Opening (Channel Control)",
+              "type": "gate2_opening"
+            }
+          ]
+        }
+      },
+      "components": {
+        "channel_1": {
+          "initial_state": {
+            "volume": 500000
+          },
+          "parameters": {
+            "k": 0.0001
+          },
+          "type": "RiverChannel"
+        },
+        "gate_1": {
+          "initial_state": {
+            "opening": 0.25
+          },
+          "parameters": {
+            "discharge_coefficient": 0.8,
+            "width": 12
+          },
+          "type": "Gate"
+        },
+        "gate_2": {
+          "initial_state": {
+            "opening": 0.5
+          },
+          "parameters": {
+            "discharge_coefficient": 0.7,
+            "width": 10
+          },
+          "type": "Gate"
+        },
+        "reservoir_1": {
+          "initial_state": {
+            "volume": 15000000,
+            "water_level": 15.0
+          },
+          "parameters": {
+            "storage_curve": [
+              [
+                0,
+                0
+              ],
+              [
+                30000000,
+                30
+              ]
+            ],
+            "surface_area": 1000000
+          },
+          "type": "Reservoir"
+        }
+      },
+      "connections": [
+        {
+          "from": "reservoir_1",
+          "to": "gate_1"
+        },
+        {
+          "from": "gate_1",
+          "to": "channel_1"
+        },
+        {
+          "from": "channel_1",
+          "to": "gate_2"
+        }
+      ],
+      "controllers": {
+        "chan_vol_ctrl": {
+          "controlled_component": "gate_2",
+          "description": "Controls channel volume by adjusting Gate 2",
+          "observation_key": "volume",
+          "observed_component": "channel_1",
+          "parameters": {
+            "Kd": -1e-06,
+            "Ki": -1e-07,
+            "Kp": -1e-05,
+            "max_output": 1.0,
+            "min_output": 0.0,
+            "setpoint": 400000
+          },
+          "type": "PIDController"
+        },
+        "res_level_ctrl": {
+          "controlled_component": "gate_1",
+          "description": "Controls reservoir water level by adjusting Gate 1",
+          "observation_key": "water_level",
+          "observed_component": "reservoir_1",
+          "parameters": {
+            "Kd": -0.05,
+            "Ki": -0.01,
+            "Kp": -0.2,
+            "max_output": 1.0,
+            "min_output": 0.0,
+            "setpoint": 18.0
+          },
+          "type": "PIDController"
+        }
+      },
+      "project": {
+        "category": "non_agent_based",
+        "description": "通用配置文件，用于 non_agent_based/02_multi_component_systems 示例",
+        "name": "02_multi_component_systems",
+        "version": "1.0"
+      },
+      "runtime": {
+        "logging_level": "INFO",
+        "mode": "simulation"
+      },
+      "simulation": {
+        "dt": 1.0,
+        "duration": 500
+      }
+    }
+  },
+  "regenerated_config": {
+    "config.yml": {
+      "simulation": {
+        "duration": 500,
+        "dt": 1.0,
+        "solver": {
+          "type": "rk4"
+        }
+      }
+    },
+    "components.yml": {
+      "components": [
+        {
+          "id": "channel_1",
+          "class": "Channel"
+        },
+        {
+          "id": "gate_1",
+          "class": "Gate",
+          "max_flow": 1000,
+          "initial_opening": 0.5,
+          "min_opening": 0,
+          "max_opening": 1
+        },
+        {
+          "id": "gate_2",
+          "class": "Gate",
+          "max_flow": 1000,
+          "initial_opening": 0.5,
+          "min_opening": 0,
+          "max_opening": 1
+        },
+        {
+          "id": "reservoir_1",
+          "class": "Reservoir",
+          "capacity": 1000000,
+          "initial_level": 50,
+          "min_level": 10,
+          "max_level": 100,
+          "area": 10000
+        }
+      ]
+    },
+    "topology.yml": {
+      "connections": [
+        {
+          "from": "reservoir_1",
+          "to": "gate_1",
+          "type": "flow"
+        }
+      ]
+    },
+    "agents.yml": {
+      "agents": []
+    }
+  },
+  "comparison_result": {
+    "overall_score": 0.75,
+    "components_score": 1.0,
+    "topology_score": 0.0,
+    "simulation_score": 1.0,
+    "agents_score": 1.0,
+    "issues": [
+      "原始配置中没有连接定义"
+    ],
+    "improvements": [
+      "重新生成的配置中添加了1个连接"
+    ]
+  }
+}

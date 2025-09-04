@@ -1,0 +1,3382 @@
+{
+  "original_config": {
+    "agents": {
+      "agents": [
+        {
+          "id": "inflow_disturbance_agent",
+          "class": "core_lib.data_access.csv_inflow_agent.CsvInflowAgent",
+          "config": {
+            "csv_file": "inflow_disturbance.csv",
+            "time_column": "time",
+            "data_column": "inflow_rate",
+            "inflow_topic": "inflow_disturbance_topic",
+            "data_id": "inflow_disturbance_1"
+          }
+        },
+        {
+          "id": "reservoir_perception_agent",
+          "class": "core_lib.local_agents.perception.digital_twin_agent.DigitalTwinAgent",
+          "config": {
+            "simulated_object_id": "reservoir_1",
+            "state_topic": "water_level_topic",
+            "log_data": true
+          }
+        },
+        {
+          "id": "valve_pid_control_agent",
+          "class": "core_lib.local_agents.control.local_control_agent.LocalControlAgent",
+          "config": {
+            "observation_topic": "water_level_topic",
+            "observation_key": "water_level",
+            "action_topic": "valve_command_topic",
+            "dt": 1.0,
+            "controller": {
+              "class": "core_lib.local_agents.control.pid_controller.PIDController",
+              "config": {
+                "setpoint": 25.0,
+                "Kp": -2.0,
+                "Ki": -0.1,
+                "Kd": -0.05,
+                "min_output": 0.0,
+                "max_output": 100.0
+              }
+            }
+          }
+        },
+        {
+          "id": "inflow_logger",
+          "class": "core_lib.local_agents.utility.topic_logger_agent.TopicLoggerAgent",
+          "config": {
+            "topic_to_log": "inflow_disturbance_topic"
+          }
+        },
+        {
+          "id": "valve_logger",
+          "class": "core_lib.local_agents.utility.topic_logger_agent.TopicLoggerAgent",
+          "config": {
+            "topic_to_log": "valve_command_topic"
+          }
+        }
+      ]
+    },
+    "components": {
+      "components": [
+        {
+          "id": "reservoir_1",
+          "class": "core_lib.physical_objects.reservoir.Reservoir",
+          "name": "valve_controlled_tank",
+          "inflow_topic": "inflow_disturbance_topic",
+          "initial_state": {
+            "water_level": 16.0
+          },
+          "parameters": {
+            "surface_area": 1.8
+          }
+        },
+        {
+          "id": "valve_1",
+          "class": "core_lib.physical_objects.valve.Valve",
+          "name": "outlet_valve",
+          "action_topic": "valve_command_topic",
+          "initial_state": {
+            "opening": 50.0
+          },
+          "parameters": {
+            "discharge_coefficient": 0.7,
+            "diameter": 4.0
+          }
+        }
+      ]
+    },
+    "config": {
+      "simulation": {
+        "duration": 300,
+        "dt": 1.0
+      },
+      "output": [
+        {
+          "topic": "water_level_topic/water_level",
+          "file": "simulation_log.csv"
+        },
+        {
+          "topic": "valve_command_topic",
+          "file": "valve_commands.csv"
+        },
+        {
+          "topic": "inflow_disturbance_topic",
+          "file": "inflow_disturbance.csv"
+        }
+      ]
+    },
+    "output_agents": {
+      "simulation_history": [
+        {
+          "time": 0,
+          "reservoir_1": {
+            "water_level": 16.27777777777778,
+            "outflow": 0.0,
+            "volume": 29.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 16.0
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 1.0,
+          "reservoir_1": {
+            "water_level": 16.555555555555557,
+            "outflow": 0.0,
+            "volume": 29.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 16.27777777777778
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 2.0,
+          "reservoir_1": {
+            "water_level": 16.833333333333332,
+            "outflow": 0.0,
+            "volume": 30.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 16.555555555555557
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 3.0,
+          "reservoir_1": {
+            "water_level": 17.11111111111111,
+            "outflow": 0.0,
+            "volume": 30.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 16.833333333333332
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 4.0,
+          "reservoir_1": {
+            "water_level": 17.38888888888889,
+            "outflow": 0.0,
+            "volume": 31.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 17.11111111111111
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 5.0,
+          "reservoir_1": {
+            "water_level": 17.666666666666668,
+            "outflow": 0.0,
+            "volume": 31.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 17.38888888888889
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 6.0,
+          "reservoir_1": {
+            "water_level": 17.944444444444443,
+            "outflow": 0.0,
+            "volume": 32.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 17.666666666666668
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 7.0,
+          "reservoir_1": {
+            "water_level": 18.22222222222222,
+            "outflow": 0.0,
+            "volume": 32.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 17.944444444444443
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 8.0,
+          "reservoir_1": {
+            "water_level": 18.499999999999996,
+            "outflow": 0.0,
+            "volume": 33.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 18.22222222222222
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 9.0,
+          "reservoir_1": {
+            "water_level": 18.777777777777775,
+            "outflow": 0.0,
+            "volume": 33.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 18.499999999999996
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 10.0,
+          "reservoir_1": {
+            "water_level": 19.055555555555554,
+            "outflow": 0.0,
+            "volume": 34.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 18.777777777777775
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 11.0,
+          "reservoir_1": {
+            "water_level": 19.333333333333332,
+            "outflow": 0.0,
+            "volume": 34.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 19.055555555555554
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 12.0,
+          "reservoir_1": {
+            "water_level": 19.611111111111107,
+            "outflow": 0.0,
+            "volume": 35.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 19.333333333333332
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 13.0,
+          "reservoir_1": {
+            "water_level": 19.888888888888886,
+            "outflow": 0.0,
+            "volume": 35.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 19.611111111111107
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 14.0,
+          "reservoir_1": {
+            "water_level": 20.166666666666664,
+            "outflow": 0.0,
+            "volume": 36.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 19.888888888888886
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 15.0,
+          "reservoir_1": {
+            "water_level": 20.444444444444443,
+            "outflow": 0.0,
+            "volume": 36.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 20.166666666666664
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 16.0,
+          "reservoir_1": {
+            "water_level": 20.72222222222222,
+            "outflow": 0.0,
+            "volume": 37.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 20.444444444444443
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 17.0,
+          "reservoir_1": {
+            "water_level": 21.0,
+            "outflow": 0.0,
+            "volume": 37.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 20.72222222222222
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 18.0,
+          "reservoir_1": {
+            "water_level": 21.277777777777775,
+            "outflow": 0.0,
+            "volume": 38.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 21.0
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 19.0,
+          "reservoir_1": {
+            "water_level": 21.555555555555554,
+            "outflow": 0.0,
+            "volume": 38.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 21.277777777777775
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 20.0,
+          "reservoir_1": {
+            "water_level": 21.833333333333332,
+            "outflow": 0.0,
+            "volume": 39.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 21.555555555555554
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 21.0,
+          "reservoir_1": {
+            "water_level": 22.111111111111107,
+            "outflow": 0.0,
+            "volume": 39.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 21.833333333333332
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 22.0,
+          "reservoir_1": {
+            "water_level": 22.388888888888886,
+            "outflow": 0.0,
+            "volume": 40.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 22.111111111111107
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 23.0,
+          "reservoir_1": {
+            "water_level": 22.666666666666664,
+            "outflow": 0.0,
+            "volume": 40.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 22.388888888888886
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 24.0,
+          "reservoir_1": {
+            "water_level": 22.944444444444443,
+            "outflow": 0.0,
+            "volume": 41.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 22.666666666666664
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 25.0,
+          "reservoir_1": {
+            "water_level": 23.22222222222222,
+            "outflow": 0.0,
+            "volume": 41.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 22.944444444444443
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 26.0,
+          "reservoir_1": {
+            "water_level": 23.5,
+            "outflow": 0.0,
+            "volume": 42.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 23.22222222222222
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 27.0,
+          "reservoir_1": {
+            "water_level": 23.777777777777775,
+            "outflow": 0.0,
+            "volume": 42.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 23.5
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 28.0,
+          "reservoir_1": {
+            "water_level": 24.055555555555554,
+            "outflow": 0.0,
+            "volume": 43.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 23.777777777777775
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 29.0,
+          "reservoir_1": {
+            "water_level": 24.33333333333333,
+            "outflow": 0.0,
+            "volume": 43.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 24.055555555555554
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 30.0,
+          "reservoir_1": {
+            "water_level": 24.611111111111107,
+            "outflow": 0.0,
+            "volume": 44.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 24.33333333333333
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 31.0,
+          "reservoir_1": {
+            "water_level": 24.888888888888886,
+            "outflow": 0.0,
+            "volume": 44.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 24.611111111111107
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 32.0,
+          "reservoir_1": {
+            "water_level": 25.166666666666664,
+            "outflow": 0.0,
+            "volume": 45.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 24.888888888888886
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 33.0,
+          "reservoir_1": {
+            "water_level": 25.444444444444443,
+            "outflow": 0.0,
+            "volume": 45.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 25.166666666666664
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 34.0,
+          "reservoir_1": {
+            "water_level": 25.72222222222222,
+            "outflow": 0.0,
+            "volume": 46.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 25.444444444444443
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 35.0,
+          "reservoir_1": {
+            "water_level": 26.0,
+            "outflow": 0.0,
+            "volume": 46.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 25.72222222222222
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 36.0,
+          "reservoir_1": {
+            "water_level": 26.277777777777775,
+            "outflow": 0.0,
+            "volume": 47.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 26.0
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 37.0,
+          "reservoir_1": {
+            "water_level": 26.555555555555554,
+            "outflow": 0.0,
+            "volume": 47.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 26.277777777777775
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 38.0,
+          "reservoir_1": {
+            "water_level": 26.83333333333333,
+            "outflow": 0.0,
+            "volume": 48.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 26.555555555555554
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 39.0,
+          "reservoir_1": {
+            "water_level": 27.111111111111107,
+            "outflow": 0.0,
+            "volume": 48.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 26.83333333333333
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 40.0,
+          "reservoir_1": {
+            "water_level": 27.388888888888886,
+            "outflow": 0.0,
+            "volume": 49.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 27.111111111111107
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 41.0,
+          "reservoir_1": {
+            "water_level": 27.666666666666664,
+            "outflow": 0.0,
+            "volume": 49.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 27.388888888888886
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 42.0,
+          "reservoir_1": {
+            "water_level": 27.944444444444443,
+            "outflow": 0.0,
+            "volume": 50.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 27.666666666666664
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 43.0,
+          "reservoir_1": {
+            "water_level": 28.22222222222222,
+            "outflow": 0.0,
+            "volume": 50.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 27.944444444444443
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 44.0,
+          "reservoir_1": {
+            "water_level": 28.5,
+            "outflow": 0.0,
+            "volume": 51.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 28.22222222222222
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 45.0,
+          "reservoir_1": {
+            "water_level": 28.777777777777775,
+            "outflow": 0.0,
+            "volume": 51.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 28.5
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 46.0,
+          "reservoir_1": {
+            "water_level": 29.055555555555554,
+            "outflow": 0.0,
+            "volume": 52.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 28.777777777777775
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 47.0,
+          "reservoir_1": {
+            "water_level": 29.33333333333333,
+            "outflow": 0.0,
+            "volume": 52.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 29.055555555555554
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 48.0,
+          "reservoir_1": {
+            "water_level": 29.611111111111107,
+            "outflow": 0.0,
+            "volume": 53.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 29.33333333333333
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 49.0,
+          "reservoir_1": {
+            "water_level": 29.888888888888886,
+            "outflow": 0.0,
+            "volume": 53.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 29.611111111111107
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 50.0,
+          "reservoir_1": {
+            "water_level": 30.166666666666664,
+            "outflow": 0.0,
+            "volume": 54.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 29.888888888888886
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 51.0,
+          "reservoir_1": {
+            "water_level": 30.444444444444443,
+            "outflow": 0.0,
+            "volume": 54.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 30.166666666666664
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 52.0,
+          "reservoir_1": {
+            "water_level": 30.72222222222222,
+            "outflow": 0.0,
+            "volume": 55.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 30.444444444444443
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 53.0,
+          "reservoir_1": {
+            "water_level": 31.0,
+            "outflow": 0.0,
+            "volume": 55.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 30.72222222222222
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 54.0,
+          "reservoir_1": {
+            "water_level": 31.277777777777775,
+            "outflow": 0.0,
+            "volume": 56.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 31.0
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 55.0,
+          "reservoir_1": {
+            "water_level": 31.555555555555554,
+            "outflow": 0.0,
+            "volume": 56.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 31.277777777777775
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 56.0,
+          "reservoir_1": {
+            "water_level": 31.83333333333333,
+            "outflow": 0.0,
+            "volume": 57.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 31.555555555555554
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 57.0,
+          "reservoir_1": {
+            "water_level": 32.11111111111111,
+            "outflow": 0.0,
+            "volume": 57.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 31.83333333333333
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 58.0,
+          "reservoir_1": {
+            "water_level": 32.388888888888886,
+            "outflow": 0.0,
+            "volume": 58.3,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 32.11111111111111
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 59.0,
+          "reservoir_1": {
+            "water_level": 32.666666666666664,
+            "outflow": 0.0,
+            "volume": 58.8,
+            "inflow": 0.5
+          },
+          "valve_1": {
+            "opening": 0.0,
+            "outflow": 0.0,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.5
+          },
+          "valve_logger": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 32.388888888888886
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.0,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.5
+          }
+        },
+        {
+          "time": 60.0,
+          "reservoir_1": {
+            "water_level": 32.7227701030226,
+            "outflow": 0.6990138145593251,
+            "volume": 58.90098618544067,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 0.3138888888888737,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 0.3138888888888737,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 32.666666666666664
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 0.3138888888888737,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 61.0,
+          "reservoir_1": {
+            "water_level": 32.77887353937852,
+            "outflow": 0.6990138145593251,
+            "volume": 59.00197237088135,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 1.181678711196313,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 1.181678711196313,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 32.7227701030226
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 1.181678711196313,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 62.0,
+          "reservoir_1": {
+            "water_level": 32.834976975734456,
+            "outflow": 0.6990138145593251,
+            "volume": 59.10295855632202,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 2.0661625942104256,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 2.0661625942104256,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 32.77887353937852
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 2.0661625942104256,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 63.0,
+          "reservoir_1": {
+            "water_level": 32.89108041209039,
+            "outflow": 0.6990138145593251,
+            "volume": 59.2039447417627,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 2.956256820860145,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 2.956256820860145,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 32.834976975734456
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 2.956256820860145,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 64.0,
+          "reservoir_1": {
+            "water_level": 32.947183848446315,
+            "outflow": 0.6990138145593251,
+            "volume": 59.30493092720337,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 3.8519613911454558,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 3.8519613911454558,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 32.89108041209039
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 3.8519613911454558,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 65.0,
+          "reservoir_1": {
+            "water_level": 33.00328728480225,
+            "outflow": 0.6990138145593251,
+            "volume": 59.40591711264405,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 4.753276305066345,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 4.753276305066345,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 32.947183848446315
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 4.753276305066345,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 66.0,
+          "reservoir_1": {
+            "water_level": 33.05939072115818,
+            "outflow": 0.6990138145593251,
+            "volume": 59.50690329808472,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 5.660201562622844,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 5.660201562622844,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 33.00328728480225
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 5.660201562622844,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 67.0,
+          "reservoir_1": {
+            "water_level": 33.11549415751411,
+            "outflow": 0.6990138145593251,
+            "volume": 59.6078894835254,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 6.572737163814934,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 6.572737163814934,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 33.05939072115818
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 6.572737163814934,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 68.0,
+          "reservoir_1": {
+            "water_level": 33.17159759387004,
+            "outflow": 0.6990138145593251,
+            "volume": 59.70887566896607,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 7.490883108642603,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 7.490883108642603,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 33.11549415751411
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 7.490883108642603,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 69.0,
+          "reservoir_1": {
+            "water_level": 33.22770103022597,
+            "outflow": 0.6990138145593251,
+            "volume": 59.80986185440675,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 8.414639397105878,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 8.414639397105878,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 33.17159759387004
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 8.414639397105878,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 70.0,
+          "reservoir_1": {
+            "water_level": 33.2838044665819,
+            "outflow": 0.6990138145593251,
+            "volume": 59.91084803984742,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 9.34400602920475,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 9.34400602920475,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 33.22770103022597
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 9.34400602920475,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 71.0,
+          "reservoir_1": {
+            "water_level": 33.33990790293783,
+            "outflow": 0.6990138145593251,
+            "volume": 60.0118342252881,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 10.278983004939198,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 10.278983004939198,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 33.2838044665819
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 10.278983004939198,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 72.0,
+          "reservoir_1": {
+            "water_level": 33.396011339293764,
+            "outflow": 0.6990138145593251,
+            "volume": 60.11282041072877,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 11.219570324309254,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 11.219570324309254,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 33.33990790293783
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 11.219570324309254,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 73.0,
+          "reservoir_1": {
+            "water_level": 33.45211477564969,
+            "outflow": 0.6990138145593251,
+            "volume": 60.21380659616945,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 12.165767987314902,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 12.165767987314902,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 33.396011339293764
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 12.165767987314902,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 74.0,
+          "reservoir_1": {
+            "water_level": 33.50821821200562,
+            "outflow": 0.6990138145593251,
+            "volume": 60.31479278161012,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 13.117575993956132,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 13.117575993956132,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 33.45211477564969
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 13.117575993956132,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 75.0,
+          "reservoir_1": {
+            "water_level": 33.564321648361556,
+            "outflow": 0.6990138145593251,
+            "volume": 60.4157789670508,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 14.074994344232968,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 14.074994344232968,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 33.50821821200562
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 14.074994344232968,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 76.0,
+          "reservoir_1": {
+            "water_level": 33.62042508471748,
+            "outflow": 0.6990138145593251,
+            "volume": 60.51676515249147,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 15.038023038145395,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 15.038023038145395,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 33.564321648361556
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 15.038023038145395,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 77.0,
+          "reservoir_1": {
+            "water_level": 33.676528521073415,
+            "outflow": 0.6990138145593251,
+            "volume": 60.61775133793215,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 16.006662075693406,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 16.006662075693406,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 33.62042508471748
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 16.006662075693406,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 78.0,
+          "reservoir_1": {
+            "water_level": 33.73263195742935,
+            "outflow": 0.6990138145593251,
+            "volume": 60.71873752337282,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 16.980911456877017,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 16.980911456877017,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 33.676528521073415
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 16.980911456877017,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 79.0,
+          "reservoir_1": {
+            "water_level": 33.788735393785274,
+            "outflow": 0.6990138145593251,
+            "volume": 60.8197237088135,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 17.960771181696227,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 17.960771181696227,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 33.73263195742935
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 17.960771181696227,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 80.0,
+          "reservoir_1": {
+            "water_level": 33.844838830141214,
+            "outflow": 0.6990138145593251,
+            "volume": 60.92070989425417,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 18.94624125015101,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 18.94624125015101,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 33.788735393785274
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 18.94624125015101,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 81.0,
+          "reservoir_1": {
+            "water_level": 33.90094226649714,
+            "outflow": 0.6990138145593251,
+            "volume": 61.02169607969485,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 19.93732166224142,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 19.93732166224142,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 33.844838830141214
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 19.93732166224142,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 82.0,
+          "reservoir_1": {
+            "water_level": 33.957045702853065,
+            "outflow": 0.6990138145593251,
+            "volume": 61.12268226513552,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 20.934012417967395,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 20.934012417967395,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 33.90094226649714
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 20.934012417967395,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 83.0,
+          "reservoir_1": {
+            "water_level": 34.013149139209006,
+            "outflow": 0.6990138145593251,
+            "volume": 61.2236684505762,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 21.93631351732896,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 21.93631351732896,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 33.957045702853065
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 21.93631351732896,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 84.0,
+          "reservoir_1": {
+            "water_level": 34.06925257556493,
+            "outflow": 0.6990138145593251,
+            "volume": 61.324654636016874,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 22.944224960326146,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 22.944224960326146,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 34.013149139209006
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 22.944224960326146,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 85.0,
+          "reservoir_1": {
+            "water_level": 34.12535601192086,
+            "outflow": 0.6990138145593251,
+            "volume": 61.42564082145755,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 23.957746746958897,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 23.957746746958897,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 34.06925257556493
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 23.957746746958897,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 86.0,
+          "reservoir_1": {
+            "water_level": 34.1814594482768,
+            "outflow": 0.6990138145593251,
+            "volume": 61.526627006898224,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 24.976878877227243,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 24.976878877227243,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 34.12535601192086
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 24.976878877227243,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 87.0,
+          "reservoir_1": {
+            "water_level": 34.23756288463272,
+            "outflow": 0.6990138145593251,
+            "volume": 61.6276131923389,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 26.001621351131206,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 26.001621351131206,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 34.1814594482768
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 26.001621351131206,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 88.0,
+          "reservoir_1": {
+            "water_level": 34.29366632098865,
+            "outflow": 0.6990138145593251,
+            "volume": 61.728599377779574,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 27.03197416867074,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 27.03197416867074,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 34.23756288463272
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 27.03197416867074,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 89.0,
+          "reservoir_1": {
+            "water_level": 34.34976975734459,
+            "outflow": 0.6990138145593251,
+            "volume": 61.82958556322025,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 28.06793732984586,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 28.06793732984586,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 34.29366632098865
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 28.06793732984586,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 90.0,
+          "reservoir_1": {
+            "water_level": 34.405873193700515,
+            "outflow": 0.6990138145593251,
+            "volume": 61.930571748660924,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 29.10951083465661,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 29.10951083465661,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 34.34976975734459
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 29.10951083465661,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 91.0,
+          "reservoir_1": {
+            "water_level": 34.46197663005644,
+            "outflow": 0.6990138145593251,
+            "volume": 62.0315579341016,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 30.15669468310292,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 30.15669468310292,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 34.405873193700515
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 30.15669468310292,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 92.0,
+          "reservoir_1": {
+            "water_level": 34.51808006641238,
+            "outflow": 0.6990138145593251,
+            "volume": 62.132544119542274,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 31.209488875184825,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 31.209488875184825,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 34.46197663005644
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 31.209488875184825,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 93.0,
+          "reservoir_1": {
+            "water_level": 34.57418350276831,
+            "outflow": 0.6990138145593251,
+            "volume": 62.23353030498295,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 32.267893410902346,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 32.267893410902346,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 34.51808006641238
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 32.267893410902346,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 94.0,
+          "reservoir_1": {
+            "water_level": 34.63028693912423,
+            "outflow": 0.6990138145593251,
+            "volume": 62.334516490423624,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 33.331908290255434,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 33.331908290255434,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 34.57418350276831
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 33.331908290255434,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 95.0,
+          "reservoir_1": {
+            "water_level": 34.68639037548017,
+            "outflow": 0.6990138145593251,
+            "volume": 62.4355026758643,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 34.40153351324412,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 34.40153351324412,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 34.63028693912423
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 34.40153351324412,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 96.0,
+          "reservoir_1": {
+            "water_level": 34.7424938118361,
+            "outflow": 0.6990138145593251,
+            "volume": 62.536488861304974,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 35.47676907986842,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 35.47676907986842,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 34.68639037548017
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 35.47676907986842,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 97.0,
+          "reservoir_1": {
+            "water_level": 34.798597248192024,
+            "outflow": 0.6990138145593251,
+            "volume": 62.63747504674565,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 36.557614990128286,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 36.557614990128286,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 34.7424938118361
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 36.557614990128286,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 98.0,
+          "reservoir_1": {
+            "water_level": 34.854700684547964,
+            "outflow": 0.6990138145593251,
+            "volume": 62.738461232186324,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 37.64407124402375,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 37.64407124402375,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 34.798597248192024
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 37.64407124402375,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        },
+        {
+          "time": 99.0,
+          "reservoir_1": {
+            "water_level": 34.91080412090389,
+            "outflow": 0.6990138145593251,
+            "volume": 62.839447417627,
+            "inflow": 0.8
+          },
+          "valve_1": {
+            "opening": 38.736137841554836,
+            "outflow": 0.6990138145593251,
+            "discharge_coefficient": 0.7
+          },
+          "inflow_logger": {
+            "inflow_rate": 0.8
+          },
+          "valve_logger": {
+            "control_signal": 38.736137841554836,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_water_level_topic_water_level": {
+            "value": 34.854700684547964
+          },
+          "logger_valve_command_topic": {
+            "control_signal": 38.736137841554836,
+            "agent_id": "valve_pid_control_agent"
+          },
+          "logger_inflow_disturbance_topic": {
+            "inflow_rate": 0.8
+          }
+        }
+      ]
+    },
+    "topology": {
+      "connections": [
+        {
+          "upstream": "reservoir_1",
+          "downstream": "valve_1"
+        }
+      ]
+    },
+    "unified_config": {
+      "simulation": {
+        "name": "水箱PID出口控制",
+        "description": "重构后的水箱PID出口控制示例",
+        "duration": 300.0,
+        "time_step": 1.0
+      },
+      "components": {
+        "watertank": {
+          "type": "WaterTank",
+          "parameters": {
+            "capacity": 1000.0,
+            "initial_level": 80.0,
+            "cross_sectional_area": 100.0,
+            "target_level": 50.0,
+            "constant_inflow": 20.0
+          }
+        },
+        "outlet_valve": {
+          "type": "Valve",
+          "parameters": {
+            "max_flow_rate": 60.0,
+            "initial_opening": 0.3
+          }
+        }
+      },
+      "control": {
+        "enabled": true,
+        "type": "PID",
+        "target_variable": "water_level",
+        "control_variable": "outlet_flow",
+        "parameters": {
+          "kp": 1.5,
+          "ki": 0.05,
+          "kd": 0.8,
+          "setpoint": 50.0
+        }
+      },
+      "output": {
+        "format": "json",
+        "save_path": "outlet_pid_results.json",
+        "variables": [
+          "water_level",
+          "volume",
+          "outlet_flow",
+          "inflow",
+          "control_signal",
+          "error"
+        ]
+      }
+    },
+    "universal_config": {
+      "metadata": {
+        "name": "水箱PID出口控制",
+        "description": "重构后的水箱PID出口控制示例",
+        "category": "watertank_refactored",
+        "version": "1.0"
+      },
+      "simulation": {
+        "time": {
+          "start": 0.0,
+          "end": 300.0,
+          "step": 1.0
+        },
+        "solver": {
+          "type": "euler",
+          "tolerance": "1e-6"
+        }
+      },
+      "system": {
+        "components": [
+          {
+            "name": "watertank",
+            "type": "WaterTank",
+            "config": {
+              "capacity": 1000.0,
+              "initial_level": 80.0,
+              "area": 100.0,
+              "inflow_rate": 20.0
+            }
+          },
+          {
+            "name": "outlet_valve",
+            "type": "Valve",
+            "config": {
+              "max_flow": 60.0,
+              "initial_position": 0.3
+            }
+          }
+        ]
+      },
+      "control": {
+        "enabled": true,
+        "controllers": [
+          {
+            "name": "outlet_controller",
+            "type": "PID",
+            "input": "watertank.water_level",
+            "output": "outlet_valve.position",
+            "setpoint": 50.0,
+            "parameters": {
+              "kp": 1.5,
+              "ki": 0.05,
+              "kd": 0.8
+            }
+          }
+        ]
+      },
+      "monitoring": {
+        "enabled": true,
+        "variables": [
+          "watertank.water_level",
+          "watertank.volume",
+          "outlet_valve.flow_rate",
+          "watertank.inflow_rate",
+          "outlet_controller.error",
+          "outlet_controller.output"
+        ]
+      },
+      "logging": {
+        "level": "INFO",
+        "output_file": "outlet_pid_control.log"
+      }
+    }
+  },
+  "regenerated_config": {
+    "config.yml": {
+      "simulation": {
+        "duration": 3600,
+        "dt": 1.0,
+        "solver": {
+          "type": "euler"
+        }
+      }
+    },
+    "components.yml": {
+      "components": []
+    },
+    "topology.yml": {
+      "connections": []
+    },
+    "agents.yml": {
+      "agents": []
+    }
+  },
+  "comparison_result": {
+    "overall_score": 0.125,
+    "components_score": 0.0,
+    "topology_score": 0.0,
+    "simulation_score": 0.5,
+    "agents_score": 0.0,
+    "issues": [
+      "重新生成的配置中没有组件定义",
+      "重新生成的配置中没有连接定义",
+      "仿真参数不匹配: 原始300, 重新生成3600",
+      "智能体数量不匹配: 原始5个, 重新生成0个"
+    ],
+    "improvements": []
+  }
+}

@@ -1,0 +1,4 @@
+connections:
+- from: reservoir_1
+  to: gate_1
+  type: flow

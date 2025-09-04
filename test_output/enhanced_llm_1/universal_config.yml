@@ -1,0 +1,25 @@
+simulation:
+  duration: 3600
+  dt: 1.0
+  name: 简单水库调度系统
+  solver: rk4
+components:
+- id: reservoir1
+  type: Reservoir
+  params:
+    capacity: 1000
+    initial_water_level: 50
+- id: gate1
+  type: Gate
+  params: {}
+- id: channel1
+  type: Channel
+  params:
+    length: 5000
+topology:
+- from: reservoir1
+  to: gate1
+  type: flow
+- from: gate1
+  to: channel1
+  type: flow

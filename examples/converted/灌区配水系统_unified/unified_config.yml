@@ -1,0 +1,26 @@
+agents: {}
+components:
+  分水闸群:
+    initial_opening: 0.5
+    max_flow: 1000
+    max_opening: 1
+    min_opening: 0
+    type: Gate
+  总干渠:
+    type: Canal
+  提水泵站:
+    type: PumpStation
+  监测网络:
+    type: Sensor
+optimization:
+  enabled: true
+  objective:
+    function: quadratic
+    type: minimize
+simulation:
+  description: 基于自然语言描述生成的仿真配置
+  duration: 604800
+  name: 智能灌区配水系统
+  time_step: 300.0
+topology:
+  connections: []

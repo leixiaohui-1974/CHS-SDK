@@ -1,0 +1,4 @@
+connections:
+- from: 水库1
+  to: 闸门1
+  type: flow

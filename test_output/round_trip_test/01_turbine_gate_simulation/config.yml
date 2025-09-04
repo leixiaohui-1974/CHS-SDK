@@ -1,0 +1,5 @@
+simulation:
+  dt: 10.0
+  duration: 100
+  solver:
+    type: rk4
