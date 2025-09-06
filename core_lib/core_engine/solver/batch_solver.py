@@ -17,9 +17,9 @@ from enum import Enum
 
 from sqlalchemy.orm import Session
 from core_lib.models.api_models import SimulationRequest, SimulationResult
-from core_lib.core_engine.solver.simulation_solver import SimulationSolver
-from api.database.database import get_db
-from api.database import models
+from core_lib.core_engine.solver.simulation_engine import SimulationSolver
+from core_lib.database.database import get_db
+from core_lib.database.models import BatchSimulation, BatchSimulationTask, SimulationResult as SimulationResultModel
 
 # 配置日志
 logger = logging.getLogger(__name__)
@@ -420,8 +420,8 @@ class BatchSimulationEngine:
             db = next(get_db())
             
             # 更新批量任务状态
-            batch_task = db.query(models.BatchSimulation).filter(
-                models.BatchSimulation.id == batch_id
+            batch_task = db.query(BatchSimulation).filter(
+                BatchSimulation.id == batch_id
             ).first()
             
             if batch_task:
@@ -453,8 +453,8 @@ class BatchSimulationEngine:
             db = next(get_db())
             
             # 更新任务状态
-            db_task = db.query(models.BatchSimulationTask).filter(
-                models.BatchSimulationTask.id == task.task_id
+            db_task = db.query(BatchSimulationTask).filter(
+                BatchSimulationTask.id == task.task_id
             ).first()
             
             if db_task:
@@ -487,7 +487,7 @@ class BatchSimulationEngine:
             db = next(get_db())
             
             # 保存仿真结果
-            result_record = models.SimulationResult(
+            result_record = SimulationResultModel(
                 id=str(uuid.uuid4()),
                 user_id=task.result.user_id if hasattr(task.result, 'user_id') else None,
                 simulation_id=task.result.simulation_id if hasattr(task.result, 'simulation_id') else None,
@@ -498,8 +498,8 @@ class BatchSimulationEngine:
             db.add(result_record)
             
             # 更新任务结果ID
-            db_task = db.query(models.BatchSimulationTask).filter(
-                models.BatchSimulationTask.id == task.task_id
+            db_task = db.query(BatchSimulationTask).filter(
+                BatchSimulationTask.id == task.task_id
             ).first()
             
             if db_task:
@@ -523,8 +523,8 @@ class BatchSimulationEngine:
             db = next(get_db())
             
             # 更新批量任务
-            batch_task = db.query(models.BatchSimulation).filter(
-                models.BatchSimulation.id == batch_job.batch_id
+            batch_task = db.query(BatchSimulation).filter(
+                BatchSimulation.id == batch_job.batch_id
             ).first()
             
             if batch_task:

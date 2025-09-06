@@ -20,8 +20,8 @@ from jinja2 import Template, Environment, FileSystemLoader
 from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_
 
-from api.database.database import get_db
-from api.database import models
+from core_lib.database.database import get_db
+from core_lib.database.models import SimulationTemplate as SimulationTemplateModel
 from core_lib.core_engine.solver.simulation_engine import SimulationEngine
 from core_lib.utils.validation import ParameterValidator
 
@@ -304,8 +304,8 @@ class TemplateManager:
             
             # 从数据库加载
             db = next(get_db())
-            template_record = db.query(models.SimulationTemplate).filter(
-                models.SimulationTemplate.id == template_id
+            template_record = db.query(SimulationTemplateModel).filter(
+                SimulationTemplateModel.id == template_id
             ).first()
             
             if template_record:
@@ -424,8 +424,8 @@ class TemplateManager:
             
             # 从数据库删除
             db = next(get_db())
-            db.query(models.SimulationTemplate).filter(
-                models.SimulationTemplate.id == template_id
+            db.query(SimulationTemplateModel).filter(
+                SimulationTemplateModel.id == template_id
             ).delete()
             db.commit()
             db.close()
@@ -468,30 +468,30 @@ class TemplateManager:
         """
         try:
             db = next(get_db())
-            query = db.query(models.SimulationTemplate)
+            query = db.query(SimulationTemplateModel)
             
             # 应用过滤条件
             if template_type:
-                query = query.filter(models.SimulationTemplate.type == template_type.value)
+                query = query.filter(SimulationTemplateModel.type == template_type.value)
             if category:
-                query = query.filter(models.SimulationTemplate.category == category.value)
+                query = query.filter(SimulationTemplateModel.category == category.value)
             if status:
-                query = query.filter(models.SimulationTemplate.status == status.value)
+                query = query.filter(SimulationTemplateModel.status == status.value)
             if author:
-                query = query.filter(models.SimulationTemplate.author == author)
+                query = query.filter(SimulationTemplateModel.author == author)
             if is_public is not None:
-                query = query.filter(models.SimulationTemplate.is_public == is_public)
+                query = query.filter(SimulationTemplateModel.is_public == is_public)
             if search_query:
                 search_filter = or_(
-                    models.SimulationTemplate.name.contains(search_query),
-                    models.SimulationTemplate.description.contains(search_query)
+                    SimulationTemplateModel.name.contains(search_query),
+                    SimulationTemplateModel.description.contains(search_query)
                 )
                 query = query.filter(search_filter)
             
             # 标签过滤
             if tags:
                 for tag in tags:
-                    query = query.filter(models.SimulationTemplate.tags.contains(tag))
+                    query = query.filter(SimulationTemplateModel.tags.contains(tag))
             
             # 分页
             templates = query.offset(offset).limit(limit).all()
@@ -778,35 +778,35 @@ class TemplateManager:
             db = next(get_db())
             
             # 总数统计
-            total_templates = db.query(models.SimulationTemplate).count()
+            total_templates = db.query(SimulationTemplateModel).count()
             
             # 按类型统计
             type_stats = {}
             for template_type in TemplateType:
-                count = db.query(models.SimulationTemplate).filter(
-                    models.SimulationTemplate.type == template_type.value
+                count = db.query(SimulationTemplateModel).filter(
+                    SimulationTemplateModel.type == template_type.value
                 ).count()
                 type_stats[template_type.value] = count
             
             # 按分类统计
             category_stats = {}
             for category in TemplateCategory:
-                count = db.query(models.SimulationTemplate).filter(
-                    models.SimulationTemplate.category == category.value
+                count = db.query(SimulationTemplateModel).filter(
+                    SimulationTemplateModel.category == category.value
                 ).count()
                 category_stats[category.value] = count
             
             # 按状态统计
             status_stats = {}
             for status in TemplateStatus:
-                count = db.query(models.SimulationTemplate).filter(
-                    models.SimulationTemplate.status == status.value
+                count = db.query(SimulationTemplateModel).filter(
+                    SimulationTemplateModel.status == status.value
                 ).count()
                 status_stats[status.value] = count
             
             # 最受欢迎的模板
-            popular_templates = db.query(models.SimulationTemplate).order_by(
-                models.SimulationTemplate.usage_count.desc()
+            popular_templates = db.query(SimulationTemplateModel).order_by(
+                SimulationTemplateModel.usage_count.desc()
             ).limit(10).all()
             
             popular_list = []
@@ -851,7 +851,7 @@ class TemplateManager:
         try:
             db = next(get_db())
             
-            template_record = models.SimulationTemplate(
+            template_record = SimulationTemplateModel(
                 id=template.metadata.id,
                 name=template.metadata.name,
                 description=template.metadata.description,
@@ -882,8 +882,8 @@ class TemplateManager:
         try:
             db = next(get_db())
             
-            db.query(models.SimulationTemplate).filter(
-                models.SimulationTemplate.id == template.metadata.id
+            db.query(SimulationTemplateModel).filter(
+                SimulationTemplateModel.id == template.metadata.id
             ).update({
                 "name": template.metadata.name,
                 "description": template.metadata.description,
@@ -1053,8 +1053,8 @@ class TemplateManager:
         try:
             db = next(get_db())
             
-            template_record = db.query(models.SimulationTemplate).filter(
-                models.SimulationTemplate.id == template_id
+            template_record = db.query(SimulationTemplateModel).filter(
+                SimulationTemplateModel.id == template_id
             ).first()
             
             if template_record:

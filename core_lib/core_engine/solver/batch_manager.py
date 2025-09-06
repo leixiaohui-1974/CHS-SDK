@@ -17,8 +17,8 @@ from enum import Enum
 from sqlalchemy.orm import Session
 from core_lib.models.api_models import SimulationRequest, BatchSimulationRequest
 from core_lib.core_engine.solver.batch_solver import BatchSimulationEngine, TaskStatus
-from api.database.database import get_db
-from api.database import models
+from core_lib.database.database import get_db
+from core_lib.database.models import BatchSimulation, BatchSimulationTask, BatchTemplate, SimulationResult
 
 # 配置日志
 logger = logging.getLogger(__name__)
@@ -180,16 +180,16 @@ class BatchSimulationManager:
             # 从数据库获取任务信息
             db = next(get_db())
             
-            batch_record = db.query(models.BatchSimulation).filter(
-                models.BatchSimulation.id == batch_id
+            batch_record = db.query(BatchSimulation).filter(
+                BatchSimulation.id == batch_id
             ).first()
             
             if not batch_record:
                 raise ValueError(f"批量任务 {batch_id} 不存在")
             
             # 获取任务列表
-            tasks = db.query(models.BatchSimulationTask).filter(
-                models.BatchSimulationTask.batch_id == batch_id
+            tasks = db.query(BatchSimulationTask).filter(
+                BatchSimulationTask.batch_id == batch_id
             ).all()
             
             db.close()
@@ -262,20 +262,20 @@ class BatchSimulationManager:
             db = next(get_db())
             
             # 获取批量任务信息
-            batch_record = db.query(models.BatchSimulation).filter(
-                models.BatchSimulation.id == batch_id
+            batch_record = db.query(BatchSimulation).filter(
+                BatchSimulation.id == batch_id
             ).first()
             
             if not batch_record:
                 raise ValueError(f"批量任务 {batch_id} 不存在")
             
             # 获取任务结果
-            query = db.query(models.BatchSimulationTask).filter(
-                models.BatchSimulationTask.batch_id == batch_id
+            query = db.query(BatchSimulationTask).filter(
+                BatchSimulationTask.batch_id == batch_id
             )
             
             if not include_failed:
-                query = query.filter(models.BatchSimulationTask.status == "completed")
+                query = query.filter(BatchSimulationTask.status == "completed")
             
             tasks = query.all()
             
@@ -283,8 +283,8 @@ class BatchSimulationManager:
             results = []
             for task in tasks:
                 if task.result_id:
-                    result_record = db.query(models.SimulationResult).filter(
-                        models.SimulationResult.id == task.result_id
+                    result_record = db.query(SimulationResult).filter(
+                        SimulationResult.id == task.result_id
                     ).first()
                     
                     if result_record:
@@ -351,8 +351,8 @@ class BatchSimulationManager:
             # 更新数据库状态
             db = next(get_db())
             
-            batch_record = db.query(models.BatchSimulation).filter(
-                models.BatchSimulation.id == batch_id
+            batch_record = db.query(BatchSimulation).filter(
+                BatchSimulation.id == batch_id
             ).first()
             
             if batch_record:
@@ -413,7 +413,7 @@ class BatchSimulationManager:
             # 保存到数据库
             db = next(get_db())
             
-            template_record = models.BatchTemplate(
+            template_record = BatchTemplate(
                 id=template_id,
                 name=name,
                 description=description,
@@ -459,16 +459,16 @@ class BatchSimulationManager:
         try:
             db = next(get_db())
             
-            query = db.query(models.BatchTemplate)
+            query = db.query(BatchTemplate)
             
             # 权限过滤
             if include_public:
                 query = query.filter(
-                    (models.BatchTemplate.created_by == user_id) |
-                    (models.BatchTemplate.is_public == True)
+                    (BatchTemplate.created_by == user_id) |
+                    (BatchTemplate.is_public == True)
                 )
             else:
-                query = query.filter(models.BatchTemplate.created_by == user_id)
+                query = query.filter(BatchTemplate.created_by == user_id)
             
             templates = query.all()
             db.close()
@@ -567,8 +567,8 @@ class BatchSimulationManager:
             db = next(get_db())
             
             for batch_id in self.pending_queue:
-                batch_record = db.query(models.BatchSimulation).filter(
-                    models.BatchSimulation.id == batch_id
+                batch_record = db.query(BatchSimulation).filter(
+                    BatchSimulation.id == batch_id
                 ).first()
                 
                 if batch_record:
@@ -647,8 +647,8 @@ class BatchSimulationManager:
             # 从数据库获取任务信息
             db = next(get_db())
             
-            batch_record = db.query(models.BatchSimulation).filter(
-                models.BatchSimulation.id == batch_id
+            batch_record = db.query(BatchSimulation).filter(
+                BatchSimulation.id == batch_id
             ).first()
             
             if not batch_record:
@@ -685,7 +685,7 @@ class BatchSimulationManager:
     async def _execute_batch_with_monitoring(
         self,
         batch_id: str,
-        batch_record: models.BatchSimulation,
+        batch_record: BatchSimulation,
         simulation_requests: List[SimulationRequest]
     ):
         """
@@ -763,7 +763,7 @@ class BatchSimulationManager:
         """创建批量任务数据库记录"""
         db = next(get_db())
         
-        batch_record = models.BatchSimulation(
+        batch_record = BatchSimulation(
             id=batch_id,
             name=request.name,
             description=request.description,
@@ -784,7 +784,7 @@ class BatchSimulationManager:
         
         # 创建子任务记录
         for i, sim_request in enumerate(request.simulations):
-            task_record = models.BatchSimulationTask(
+            task_record = BatchSimulationTask(
                 id=str(uuid.uuid4()),
                 batch_id=batch_id,
                 task_index=i,
@@ -819,7 +819,7 @@ class BatchSimulationManager:
         """加载现有模板"""
         try:
             db = next(get_db())
-            templates = db.query(models.BatchTemplate).all()
+            templates = db.query(BatchTemplate).all()
             
             for template in templates:
                 self.templates[template.id] = BatchTemplate(
@@ -846,8 +846,8 @@ class BatchSimulationManager:
             db = next(get_db())
             
             # 查找状态为pending的批量任务
-            pending_batches = db.query(models.BatchSimulation).filter(
-                models.BatchSimulation.status == TaskStatus.PENDING.value
+            pending_batches = db.query(BatchSimulation).filter(
+                BatchSimulation.status == TaskStatus.PENDING.value
             ).all()
             
             for batch in pending_batches:

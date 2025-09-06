@@ -107,3 +107,34 @@ class SimulationRequest(BaseModel):
                     raise ValueError(f"Agent validation failed: Agent '{agent_config.id}' targets non-existent component '{target}'.")
 
         return values
+
+# --- Additional Models for Core Library ---
+
+class SimulationResult(BaseModel):
+    """仿真结果模型"""
+    simulation_id: str = Field(..., description="仿真ID")
+    user_id: Optional[str] = Field(None, description="用户ID")
+    outputs: Dict[str, Any] = Field(default_factory=dict, description="仿真输出结果")
+    parameters: Dict[str, Any] = Field(default_factory=dict, description="仿真参数")
+    metadata: Dict[str, Any] = Field(default_factory=dict, description="元数据")
+    execution_time: float = Field(0.0, description="执行时间（秒）")
+    created_at: Optional[str] = Field(None, description="创建时间")
+    
+    def dict(self):
+        """转换为字典"""
+        return super().dict()
+
+class BatchSimulationRequest(BaseModel):
+    """批量仿真请求模型"""
+    name: str = Field(..., description="批量任务名称")
+    description: Optional[str] = Field(None, description="任务描述")
+    simulations: List[SimulationRequest] = Field(..., description="仿真请求列表")
+    parallel_count: int = Field(4, description="并行执行数量")
+    timeout_minutes: int = Field(60, description="超时时间（分钟）")
+    auto_retry: bool = Field(True, description="是否自动重试")
+    retry_count: int = Field(3, description="重试次数")
+    notification_webhook: Optional[str] = Field(None, description="通知webhook")
+    
+    def dict(self):
+        """转换为字典"""
+        return super().dict()

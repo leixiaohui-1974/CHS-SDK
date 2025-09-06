@@ -20,8 +20,8 @@ from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
 
 from sqlalchemy.orm import Session
-from api.database.database import get_db
-from api.database import models
+from core_lib.database.database import get_db
+from core_lib.database.models import SimulationResult, ResultComparison
 
 # 配置日志
 logger = logging.getLogger(__name__)
@@ -847,8 +847,8 @@ class ResultComparator:
             result_data = []
             
             for result_id in result_ids:
-                result_record = db.query(models.SimulationResult).filter(
-                    models.SimulationResult.id == result_id
+                result_record = db.query(SimulationResult).filter(
+                    SimulationResult.id == result_id
                 ).first()
                 
                 if result_record:
@@ -955,7 +955,7 @@ class ResultComparator:
         try:
             db = next(get_db())
             
-            comparison_record = models.ResultComparison(
+            comparison_record = ResultComparison(
                 id=comparison_result.comparison_id,
                 user_id=user_id,
                 comparison_type=comparison_result.comparison_type.value,

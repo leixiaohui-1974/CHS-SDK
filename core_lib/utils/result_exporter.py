@@ -31,8 +31,8 @@ from reportlab.lib.units import inch
 from reportlab.lib import colors
 
 from sqlalchemy.orm import Session
-from api.database.database import get_db
-from api.database import models
+from core_lib.database.database import get_db
+from core_lib.database.models import SimulationResult, ExportRecord
 
 # 配置日志
 logger = logging.getLogger(__name__)
@@ -1034,8 +1034,8 @@ class ResultExporter:
             results_data = []
             
             for result_id in result_ids:
-                result_record = db.query(models.SimulationResult).filter(
-                    models.SimulationResult.id == result_id
+                result_record = db.query(SimulationResult).filter(
+                    SimulationResult.id == result_id
                 ).first()
                 
                 if result_record:
@@ -1201,7 +1201,7 @@ class ResultExporter:
         try:
             db = next(get_db())
             
-            export_record = models.ExportRecord(
+            export_record = ExportRecord(
                 id=export_result.export_id,
                 user_id=user_id,
                 result_ids=json.dumps(result_ids),
