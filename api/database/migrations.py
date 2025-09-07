@@ -9,7 +9,7 @@ import logging
 from pathlib import Path
 from typing import Optional, List
 
-from database.database import engine, Base
+from api.database.database import engine, Base
 from config import settings
 
 logger = logging.getLogger(__name__)

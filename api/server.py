@@ -16,17 +16,17 @@ from pathlib import Path
 from typing import List, Dict, Any
 
 # 导入路由模块
-from routes.simulation import router as simulation_router
-from routes.websocket import router as websocket_router, cleanup_websocket_resources
-from routes.auth import router as auth_router
-from routes.monitoring import router as monitoring_router, set_performance_middleware
-from routes.analysis import router as analysis_router
-from routes.scenario import router as scenario_router
-from routes.validator import router as validator_router
+from api.routes.simulation import router as simulation_router
+from api.routes.websocket import router as websocket_router, cleanup_websocket_resources
+from api.routes.auth import router as auth_router
+from api.routes.monitoring import router as monitoring_router, set_performance_middleware
+from api.routes.analysis import router as analysis_router
+from api.routes.scenario import router as scenario_router
+from api.routes.validator import router as validator_router
 from api.routes.configurator import router as configurator_router
 from api.routes.runner import router as runner_router
-from routes.monitor import router as monitor_router
-from routes.aliyun import router as aliyun_router
+from api.routes.monitor import router as monitor_router
+from api.routes.aliyun import router as aliyun_router
 from startup.monitor_startup import lifespan
 
 # 导入性能和缓存模块
@@ -197,7 +197,7 @@ async def shutdown_event():
         logger.info("WebSocket resources cleaned up")
         
         # Clean up simulation resources
-        from routes.simulation import cleanup_simulation_resources
+        from api.routes.simulation import cleanup_simulation_resources
         await cleanup_simulation_resources()
         logger.info("Simulation resources cleaned up")
         

@@ -13,7 +13,28 @@ class LocalControlAgent(Agent):
     This agent wraps a control algorithm and handles the communication needed for
     it to operate within the MAS. It subscribes to sensor data, publishes actions,
     and can optionally be guided by high-level commands.
+
+    New Features:
+    - enable_control_logging(): Enables debug logging of control states
     """
+
+    def enable_control_logging(self, enabled: bool, state_topic: str, interval: int = 5):
+        """
+        Enables periodic logging of control system state
+
+        Args:
+            enabled: Enable/disable logging功能
+            state_topic: Topic for publishing debug state
+            interval: Logging interval in seconds
+        """
+        self.debug_enabled = enabled
+        self.state_topic = state_topic
+        self.log_interval = interval
+
+        if enabled:
+            # 初始化状态发布定时器
+            self._last_log_time = 0
+            print(f"Control logging enabled @ {interval}s intervals to {state_topic}")
 
     def __init__(self, agent_id: str, message_bus: MessageBus, dt: float,
                  target_component: str, control_type: str, data_sources: dict,

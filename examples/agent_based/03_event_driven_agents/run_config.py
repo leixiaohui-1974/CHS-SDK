@@ -81,13 +81,12 @@ def create_agents(config, components, message_bus):
         if agent_type == 'DigitalTwinAgent':
             simulated_object_name = agent_config['simulated_object']
             simulated_object = components[simulated_object_name]
-            state_topic = agent_config['message_bus']['state_topic']
             
             agent = DigitalTwinAgent(
                 agent_id=agent_id,
                 simulated_object=simulated_object,
                 message_bus=message_bus,
-                state_topic=state_topic
+                state_topic=topics['digital_twin_state']
             )
             agents.append(agent)
             
@@ -107,17 +106,33 @@ def create_agents(config, components, message_bus):
             else:
                 raise ValueError(f"Unknown controller type: {controller_config['type']}")
             
-            # Create control agent
-            mb_config = agent_config['message_bus']
+            # 增强控制逻辑：增加积分抗饱和和微分滤波
+            controller.integral_windup_limit = params.get('windup_limit', 0.5)
+            controller.filter_time_constant = params.get('filter_constant', 0.1)
+            
+            # 使用统一配置的topics
             agent = LocalControlAgent(
                 agent_id=agent_id,
-                controller=controller,
                 message_bus=message_bus,
-                observation_topic=mb_config['observation_topic'],
-                observation_key=mb_config['observation_key'],
-                action_topic=mb_config['action_topic'],
-                dt=config['simulation']['dt']
+                dt=config['simulation']['dt'],
+                target_component='gate_1',
+                control_type='water_level_control',
+                data_sources={'primary_data': topics['sensor_data']},
+                control_targets={'gate_opening': topics['control_actions']},
+                allocation_config={'method': 'proportional'},
+                controller_config=controller_config,
+                controller=controller,
+                observation_topic=topics['sensor_data'],
+                observation_key='water_level',
+                action_topic=topics['gate_action']
             )
+            
+            if config['debug']['enabled']:
+                agent.enable_control_logging(
+                    enabled=True,
+                    state_topic=topics['digital_twin_state'],
+                    interval=config['debug']['log_interval']
+                )
             agents.append(agent)
             
         else:

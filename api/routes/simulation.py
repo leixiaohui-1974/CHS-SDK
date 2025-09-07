@@ -12,11 +12,11 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 from core_lib.models.api_models import SimulationRequest
-from database.database import get_db
-from database.crud import SimulationSessionCRUD, ComponentConfigCRUD, SimulationResultCRUD, SimulationEventCRUD
-from database.models import UserDB
-from auth import get_current_active_user
-from models.simulation_models import (
+from api.database.database import get_db
+from api.database.crud import SimulationSessionCRUD, ComponentConfigCRUD, SimulationResultCRUD, SimulationEventCRUD
+from api.database.models import UserDB
+from api.auth import get_current_active_user
+from api.models.simulation_models import (
     SimulationSession,
     CreateSimulationRequest,
     SimulationResponse,
@@ -29,8 +29,8 @@ from models.simulation_models import (
     SimulationSnapshot,
     ControlAction
 )
-from websocket.connection_manager import connection_manager
-from core.simulation_engine import SimulationEngine, SimulationEngineConfig
+from api.websocket.connection_manager import connection_manager
+from api.core.simulation_engine import SimulationEngine, SimulationEngineConfig
 
 # 配置日志
 logger = logging.getLogger(__name__)

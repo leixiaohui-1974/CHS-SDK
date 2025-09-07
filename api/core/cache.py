@@ -16,7 +16,7 @@ import redis.asyncio as redis
 from redis.asyncio import Redis
 from cachetools import TTLCache, LRUCache
 
-from .config import settings
+from api.config import settings
 
 logger = logging.getLogger(__name__)
 

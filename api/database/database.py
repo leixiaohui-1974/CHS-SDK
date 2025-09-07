@@ -7,7 +7,7 @@ import logging
 from contextlib import contextmanager
 import time
 
-from config import settings
+from api.config import settings
 
 # Configure logging
 logger = logging.getLogger(__name__)

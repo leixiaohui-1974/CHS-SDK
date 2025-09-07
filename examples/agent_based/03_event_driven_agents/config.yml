@@ -9,6 +9,9 @@ simulation:
 # Communication topics for message bus
 communication:
   topics:
+    digital_twin_state: 'dt_state'
+    sensor_data: 'sensor_readings'
+    control_actions: 'control_cmds'
     reservoir_state: "state.reservoir.level"
     gate_action: "action.gate.opening"
 
@@ -22,6 +25,7 @@ components:
       surface_area: 1500000 # m² (1.5e6)
       storage_curve:
         - [0, 0]
+        - [21000000, 14.0]
         - [30000000, 20]      # [30e6, 20]
 
   gate_1:
@@ -52,9 +56,9 @@ agents:
     controller:
       type: PIDController
       parameters:
-        Kp: -0.5
-        Ki: -0.01
-        Kd: -0.1
+        Kp: 0.5
+        Ki: 0.01
+        Kd: 0.1
         setpoint: 12.0        # Target water level (m)
         min_output: 0.0
         max_output: 1.0       # Same as gate max_opening
@@ -67,6 +71,10 @@ agents:
 connections:
   - from: "reservoir_1"
     to: "gate_1"
+
+debug:
+  enabled: true
+  log_interval: 5
 
 # Analysis and output settings
 analysis:
