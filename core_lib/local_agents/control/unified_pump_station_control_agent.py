@@ -140,18 +140,14 @@ class UnifiedPumpStationControlAgent(UnifiedLocalControlAgent):
         control_signals = {}
         pump_commands = control_result.get('pump_commands', {})
         
-        if not pump_commands:
-            print(f"[{self.agent_id}] WARNING: No pump commands generated for demand {self.current_demand} m³/s")
-            return None
-        
-        for pump_idx, command in pump_commands.items():
-            if pump_idx < len(self.pump_station.pumps):
-                pump = self.pump_station.pumps[pump_idx]
-                topic = f"{self.control_topic_prefix}.{pump.name}"
-                # 直接发送控制命令值，publish_action会包装为消息格式
-                control_signals[topic] = int(command)
-            else:
-                print(f"[{self.agent_id}] ERROR: Pump index {pump_idx} out of range (max: {len(self.pump_station.pumps)-1})")
+        # 为所有泵发送控制信号（包括停止信号）
+        for pump_idx in range(len(self.pump_station.pumps)):
+            pump = self.pump_station.pumps[pump_idx]
+            topic = f"{self.control_topic_prefix}.{pump.name}"
+            
+            # 如果泵在命令中，发送启动信号；否则发送停止信号
+            command = pump_commands.get(pump_idx, 0)
+            control_signals[topic] = int(command)
         
         print(f"[{self.agent_id}] Generated {len(control_signals)} control signals for demand {self.current_demand} m³/s")
         return control_signals

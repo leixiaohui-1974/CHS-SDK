@@ -46,19 +46,20 @@ class OptimalControlStrategy(PumpControlStrategy):
                     combination[j] = 1.0
                     total_max_flow += pumps_info[j]['max_flow']
             
-            # 计算流量误差
-            flow_error = abs(total_max_flow - demand)
-            
-            # 优先选择流量误差小的组合
-            if flow_error <= best_flow_error:
-                efficiency = self._calculate_combination_efficiency(combination, demand, pumps_info)
+            # 只考虑能够满足需求的组合
+            if total_max_flow >= demand:
+                # 计算流量误差
+                flow_error = abs(total_max_flow - demand)
                 
-                # 如果流量误差相同，选择效率更高的
-                if flow_error < best_flow_error or (flow_error == best_flow_error and efficiency > best_efficiency):
-                    best_efficiency = efficiency
-                    best_combination = combination
-                    best_flow_error = flow_error
+                # 优先选择流量误差小的组合
+                if flow_error <= best_flow_error:
+                    efficiency = self._calculate_combination_efficiency(combination, demand, pumps_info)
                     
+                    # 如果流量误差相同，选择效率更高的
+                    if flow_error < best_flow_error or (flow_error == best_flow_error and efficiency > best_efficiency):
+                        best_efficiency = efficiency
+                        best_combination = combination
+                        best_flow_error = flow_error
         return {
             'strategy': 'optimal',
             'pump_commands': best_combination,

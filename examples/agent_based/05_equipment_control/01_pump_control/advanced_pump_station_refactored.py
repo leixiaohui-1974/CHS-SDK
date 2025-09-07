@@ -206,10 +206,10 @@ def run_advanced_simulation():
             if 'advanced_pump_station' in step_data:
                 pump_state = step_data['advanced_pump_station']
                 
-                # 计算总流量和功率
-                total_flow = sum(pump.get('outflow', 0) for pump in pump_state.get('pumps', []))
-                total_power = sum(pump.get('power_draw_kw', 0) for pump in pump_state.get('pumps', []))
-                running_pumps = sum(1 for pump in pump_state.get('pumps', []) if pump.get('status', 0) == 1)
+                # 从 PumpStation 状态直接获取聚合数据
+                total_flow = pump_state.get('total_outflow', 0.0)
+                total_power = pump_state.get('total_power_draw_kw', 0.0)
+                running_pumps = pump_state.get('active_pumps', 0)
                 
                 # 记录数据到分析器
                 analyzer.record_data(current_time, {
