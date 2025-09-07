@@ -109,6 +109,50 @@ def run_mas_simulation():
     # The data is in harness.history.
     print(f"Final reservoir water level: {harness.history[-1]['reservoir_1']['water_level']:.2f} m")
 
+    # --- Evaluate Control Performance ---
+    print("\n--- Control Performance Evaluation ---")
+    
+    # Extract water level data from history
+    target_level = 12.0  # Target water level from PID controller
+    water_levels = []
+    
+    for step in harness.history:
+        if 'reservoir_1' in step and 'water_level' in step['reservoir_1']:
+            water_levels.append(step['reservoir_1']['water_level'])
+    
+    # Calculate evaluation metrics
+    # 1. Final Control Error (FCE)
+    final_error = abs(water_levels[-1] - target_level)
+    
+    # 2. Mean Absolute Error (MAE)
+    absolute_errors = [abs(level - target_level) for level in water_levels]
+    mae = sum(absolute_errors) / len(absolute_errors) if absolute_errors else 0
+    
+    # 3. Root Mean Square Error (RMSE)
+    squared_errors = [(level - target_level) ** 2 for level in water_levels]
+    rmse = (sum(squared_errors) / len(squared_errors)) ** 0.5 if squared_errors else 0
+    
+    # 4. Overshoot
+    overshoots = [level - target_level for level in water_levels if level > target_level]
+    max_overshoot = max(overshoots) if overshoots else 0
+    percent_overshoot = (max_overshoot / target_level) * 100 if target_level > 0 else 0
+    
+    # Print evaluation results
+    print(f"Target water level: {target_level:.2f} m")
+    print(f"1. Final Control Error (FCE): {final_error:.4f} m")
+    print(f"2. Mean Absolute Error (MAE): {mae:.4f} m")
+    print(f"3. Root Mean Square Error (RMSE): {rmse:.4f} m")
+    print(f"4. Max Overshoot: {max_overshoot:.4f} m ({percent_overshoot:.2f}%)")
+    
+    # Additional stability analysis
+    # Check if system is stable (water level within 0.1m of target for last 10% of simulation)
+    stable_threshold = 0.1  # m
+    stability_check_window = int(len(water_levels) * 0.1)
+    if stability_check_window > 0:
+        recent_errors = [abs(level - target_level) for level in water_levels[-stability_check_window:]]
+        is_stable = all(error <= stable_threshold for error in recent_errors)
+        print(f"Stability: {'Stable' if is_stable else 'Not Stable'} (within {stable_threshold}m for last {stability_check_window} steps)")
+
 
 if __name__ == "__main__":
     run_mas_simulation()

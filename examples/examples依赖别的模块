@@ -1,0 +1,147 @@
+D:\工作文件\core_lib和example\venv\Scripts\python.exe D:\工作文件\克山\CHS-SDK\analyze_examples_dependencies.py
+=== Examples依赖关系分析 ===
+
+分析的文件数量: 153
+core_lib模块数量: 55
+
+=== 标准库依赖 ===
+  sys: 122 次
+  os: 116 次
+  time: 33 次
+  json: 24 次
+  math: 13 次
+  random: 7 次
+  collections: 3 次
+  abc: 1 次
+  csv: 1 次
+
+=== 第三方库依赖 ===
+  pathlib: 98 次
+  numpy: 42 次
+  matplotlib.pyplot: 34 次
+  traceback: 33 次
+  yaml: 26 次
+  logging: 24 次
+  pandas: 24 次
+  typing: 22 次
+  datetime: 21 次
+  subprocess: 20 次
+
+=== core_lib模块分类 ===
+
+physical_objects:
+  core_lib.physical_objects.gate: 23 次
+  core_lib.physical_objects.physical: 1 次
+  core_lib.physical_objects.pipe: 4 次
+  core_lib.physical_objects.pump: 2 次
+  core_lib.physical_objects.reservoir: 29 次
+  core_lib.physical_objects.river_channel: 4 次
+  core_lib.physical_objects.unified_canal: 5 次
+  core_lib.physical_objects.valve: 3 次
+  core_lib.physical_objects.water_turbine: 2 次
+
+local_agents:
+  core_lib.local_agents: 1 次
+  core_lib.local_agents.control.adaptive_pid_controller: 1 次
+  core_lib.local_agents.control.local_control_agent: 12 次
+  core_lib.local_agents.control.pid_controller: 17 次
+  core_lib.local_agents.control.pump_control_agent: 3 次
+  core_lib.local_agents.control.smart_pid_controller: 1 次
+  core_lib.local_agents.io.physical_io_agent: 1 次
+  core_lib.local_agents.perception.digital_twin_agent: 16 次
+
+central_coordination:
+  core_lib.central_coordination.collaboration.message_bus: 21 次
+  core_lib.central_coordination.dispatch.central_dispatcher: 6 次
+
+core_engine:
+  core_lib.core_engine.mas_runner: 1 次
+  core_lib.core_engine.simulation: 1 次
+  core_lib.core_engine.testing.common_agents: 1 次
+  core_lib.core_engine.testing.enhanced_simulation_harness: 5 次
+  core_lib.core_engine.testing.simulation_builder: 9 次
+  core_lib.core_engine.testing.simulation_harness: 21 次
+
+core_interfaces:
+  core_lib.core.interfaces: 9 次
+
+io:
+  core_lib.central_agents.enhanced_perception_agent: 1 次
+  core_lib.identification.identification_agent: 3 次
+  core_lib.identification.model_updater_agent: 3 次
+  core_lib.io.object_factory: 2 次
+  core_lib.io.yaml_loader: 17 次
+  core_lib.io.yaml_writer: 3 次
+  core_lib.knowledge.recommendation_engine: 1 次
+  core_lib.mission.scenario_agent: 1 次
+  core_lib.utils.visualization: 2 次
+
+config:
+  core_lib.config.enhanced_yaml_loader: 1 次
+  core_lib.config.unified_config_manager: 3 次
+  core_lib.nlp.config_to_language_converter: 1 次
+  core_lib.nlp.language_to_config_converter: 1 次
+
+disturbances:
+  core_lib.disturbances.disturbance_framework: 12 次
+  core_lib.disturbances.rainfall_agent: 2 次
+
+other:
+  core_lib.central_agents: 1 次
+  core_lib.central_agents.base: 1 次
+  core_lib.central_agents.central_mpc_agent: 1 次
+  core_lib.data_access.csv_inflow_agent: 1 次
+  core_lib.debug.debug_collector: 1 次
+  core_lib.debug.log_manager: 1 次
+  core_lib.hydro_nodes: 1 次
+  core_lib.hydro_nodes.reservoir: 1 次
+  core_lib.knowledge.auto_learning: 2 次
+  core_lib.knowledge.knowledge_base: 1 次
+  core_lib.knowledge.knowledge_indexer: 1 次
+  core_lib.knowledge.semantic_search: 1 次
+  core_lib.utils.logger: 1 次
+  core_lib.utils.logging: 1 次
+
+=== 最常用的core_lib模块 (Top 15) ===
+  core_lib.physical_objects.reservoir: 29 次
+  core_lib.physical_objects.gate: 23 次
+  core_lib.core_engine.testing.simulation_harness: 21 次
+  core_lib.central_coordination.collaboration.message_bus: 21 次
+  core_lib.io.yaml_loader: 17 次
+  core_lib.local_agents.control.pid_controller: 17 次
+  core_lib.local_agents.perception.digital_twin_agent: 16 次
+  core_lib.disturbances.disturbance_framework: 12 次
+  core_lib.local_agents.control.local_control_agent: 12 次
+  core_lib.core_engine.testing.simulation_builder: 9 次
+  core_lib.core.interfaces: 9 次
+  core_lib.central_coordination.dispatch.central_dispatcher: 6 次
+  core_lib.physical_objects.unified_canal: 5 次
+  core_lib.core_engine.testing.enhanced_simulation_harness: 5 次
+  core_lib.physical_objects.river_channel: 4 次
+
+=== 项目分解建议 ===
+基于依赖分析，建议将项目分解为以下模块：
+
+1. 核心模块 (core_lib):
+   - physical_objects: 物理对象（水库、闸门、管道等）
+   - local_agents: 本地智能体（控制、感知等）
+   - central_coordination: 中央协调（消息总线等）
+   - core_engine: 核心引擎（仿真框架等）
+   - core.interfaces: 核心接口
+
+2. 配置和IO模块:
+   - io: 输入输出处理
+   - config: 配置管理
+
+3. 扩展模块:
+   - disturbances: 扰动处理
+
+4. 外部依赖:
+   - 标准库: sys, os, json, csv, time, random, abc, math, collections
+   - 第三方库: yaml, matplotlib, numpy, pandas, scipy
+
+5. Examples模块:
+   - examples: 示例代码和测试用例
+   - 可以独立打包，依赖core_lib
+
+进程已结束，退出代码为 0

@@ -1,10 +1,21 @@
-# ... existing code ...
-# from core_lib.data_processing.cleaner import Cleaner  # Cleaner class not available
+"""
+Enhanced Gate Control Agent that specializes LocalControlAgent for gate control.
+
+This agent provides advanced gate control capabilities including:
+- PID control with real-time parameter identification
+- Multi-gate flow allocation
+- Data cleaning and preprocessing
+- Real-time parameter estimation using RLS
+"""
+from core_lib.local_agents.control.local_control_agent import LocalControlAgent
+from core_lib.local_agents.control.pid_controller import PIDController
 from core_lib.identification.rls_estimator import RLSEstimator
+from core_lib.central_coordination.collaboration.message_bus import MessageBus, Message
 import pandas as pd
 from scipy.interpolate import griddata
+from typing import Optional, Dict, Any
 
-class GateControlAgent(BaseControlAgent):
+class GateControlAgent(LocalControlAgent):
     """
     A control agent for operating a gate structure based on PID control.
     This enhanced version includes capabilities for data cleaning, real-time parameter identification,

@@ -1,7 +1,17 @@
 """
 A Local Control Agent that encapsulates a control algorithm and communicates
 via a message bus.
+
+This is the base class for all local control agents. It provides:
+- Standard message handling interfaces
+- Basic control loop logic (observation → control computation → action publishing)
+- Generic message bus communication mechanism
+- Support for both single-action and multi-action control signal publishing
+
+Specialized control agents (like GateControlAgent, ValveControlAgent) should inherit
+from this class and add device-specific logic.
 """
+from abc import abstractmethod
 from core_lib.core.interfaces import Agent, Controller, State
 from core_lib.central_coordination.collaboration.message_bus import MessageBus, Message
 from typing import Optional
@@ -10,9 +20,13 @@ class LocalControlAgent(Agent):
     """
     A Control Agent that operates at a local level (e.g., controlling one gate).
 
-    This agent wraps a control algorithm and handles the communication needed for
-    it to operate within the MAS. It subscribes to sensor data, publishes actions,
-    and can optionally be guided by high-level commands.
+    This is the base class for all local control agents. It provides:
+    - Standard message handling interfaces (handle_feedback_message, handle_command_message, handle_observation)
+    - Basic control loop logic (observation → control computation → action publishing)
+    - Generic message bus communication mechanism
+    - Support for both single-action and multi-action control signal publishing
+
+    Specialized control agents should inherit from this class and add device-specific logic.
 
     New Features:
     - enable_control_logging(): Enables debug logging of control states
@@ -118,26 +132,67 @@ class LocalControlAgent(Agent):
     def handle_observation(self, message: Message):
         """
         Callback executed when a new observation message is received.
+        
+        This method can be overridden by specialized control agents to add
+        device-specific preprocessing or validation.
         """
+        # Allow subclasses to preprocess the observation
+        processed_message = self.preprocess_observation(message)
+        
         observation_for_controller = None
         # If observation_key is None, the controller wants the full state dictionary.
         if self.observation_key is None:
-            observation_for_controller = message
+            observation_for_controller = processed_message
         else:
             # Otherwise, extract the specific variable.
-            process_variable = message.get(self.observation_key)
+            process_variable = processed_message.get(self.observation_key)
             if process_variable is None:
-                print(f"[{self.agent_id}] Warning: Key '{self.observation_key}' not found in observation message: {message}")
+                print(f"[{self.agent_id}] Warning: Key '{self.observation_key}' not found in observation message: {processed_message}")
                 return
             # And wrap it in the expected format for simple controllers.
             observation_for_controller = {'process_variable': process_variable}
 
         if observation_for_controller is not None:
-            # Compute the control action using the encapsulated controller
-            control_signal = self.controller.compute_control_action(observation_for_controller, self.dt)
-            print(f"[{self.agent_id}] Observation: {observation_for_controller}, Control Signal: {control_signal:.4f}")
-            # Publish the computed action to the action topic(s)
-            self.publish_action(control_signal)
+            # Allow subclasses to customize control computation
+            control_signal = self.compute_control_action(observation_for_controller)
+            if control_signal is not None:
+                print(f"[{self.agent_id}] Observation: {observation_for_controller}, Control Signal: {control_signal:.4f}")
+                # Publish the computed action to the action topic(s)
+                self.publish_action(control_signal)
+
+    def preprocess_observation(self, message: Message) -> Message:
+        """
+        Preprocess observation message before control computation.
+        
+        Override this method in specialized control agents to add device-specific
+        preprocessing, data cleaning, or validation.
+        
+        Args:
+            message: Raw observation message
+            
+        Returns:
+            Processed observation message
+        """
+        return message
+
+    def compute_control_action(self, observation: dict) -> float:
+        """
+        Compute control action based on observation.
+        
+        Override this method in specialized control agents to implement
+        device-specific control logic.
+        
+        Args:
+            observation: Processed observation data
+            
+        Returns:
+            Control signal value
+        """
+        if self.controller is None:
+            print(f"[{self.agent_id}] Warning: No controller available")
+            return 0.0
+        
+        return self.controller.compute_control_action(observation, self.dt)
 
     def publish_action(self, control_signal: any):
         """

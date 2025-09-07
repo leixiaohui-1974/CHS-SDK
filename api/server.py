@@ -16,17 +16,17 @@ from pathlib import Path
 from typing import List, Dict, Any
 
 # 导入路由模块
-from api.routes.simulation import router as simulation_router
-from api.routes.websocket import router as websocket_router, cleanup_websocket_resources
-from api.routes.auth import router as auth_router
-from api.routes.monitoring import router as monitoring_router, set_performance_middleware
-from api.routes.analysis import router as analysis_router
-from api.routes.scenario import router as scenario_router
-from api.routes.validator import router as validator_router
-from api.routes.configurator import router as configurator_router
-from api.routes.runner import router as runner_router
-from api.routes.monitor import router as monitor_router
-from api.routes.aliyun import router as aliyun_router
+from routes.simulation import router as simulation_router
+from routes.websocket import router as websocket_router, cleanup_websocket_resources
+from routes.auth import router as auth_router
+from routes.monitoring import router as monitoring_router, set_performance_middleware
+from routes.analysis import router as analysis_router
+from routes.scenario import router as scenario_router
+from routes.validator import router as validator_router
+from routes.configurator import router as configurator_router
+from routes.runner import router as runner_router
+from routes.monitor import router as monitor_router
+from routes.aliyun import router as aliyun_router
 from startup.monitor_startup import lifespan
 
 # 导入性能和缓存模块
@@ -155,59 +155,3 @@ if __name__ == "__main__":
         reload=True,
         log_level="info"
     )
-
-
-
-
-# Startup and shutdown events
-@app.on_event("startup")
-async def startup_event():
-    """
-    Application startup event
-    """
-    logger.info("CHS-SDK API server starting")
-    
-    try:
-        # 初始化缓存管理器
-        await cache_manager.initialize()
-        logger.info("Cache manager initialized")
-        
-        # 启动缓存清理任务
-        asyncio.create_task(start_cache_cleanup_task())
-        logger.info("Cache cleanup task started")
-        
-        logger.info("CHS-SDK API server starting up...")
-        logger.info(f"API documentation available at: {settings.docs_url}")
-        logger.info(f"Server running in {'development' if settings.is_development() else 'production'} mode")
-        
-    except Exception as e:
-        logger.error(f"Failed to initialize application: {e}")
-        raise
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    """
-    Application shutdown event
-    """
-    logger.info("CHS-SDK API server shutting down...")
-    
-    try:
-        # Clean up WebSocket resources
-        await cleanup_websocket_resources()
-        logger.info("WebSocket resources cleaned up")
-        
-        # Clean up simulation resources
-        from api.routes.simulation import cleanup_simulation_resources
-        await cleanup_simulation_resources()
-        logger.info("Simulation resources cleaned up")
-        
-        # Close Redis connection if exists
-        if cache_manager.redis_client:
-            await cache_manager.redis_client.close()
-            logger.info("Redis connection closed")
-        
-        logger.info("CHS-SDK API server shutdown complete")
-        
-    except Exception as e:
-        logger.error(f"Error during shutdown: {e}")
-        raise
