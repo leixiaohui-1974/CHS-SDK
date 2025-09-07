@@ -28,7 +28,9 @@ def run_mas_simulation():
     print("--- Setting up Tutorial 3: Event-Driven Agents Simulation ---")
 
     # 1. --- Simulation Harness and Message Bus Setup ---
-    simulation_config = {'duration': 300, 'dt': 1.0}
+    # 调整仿真时长为600秒（10分钟）以给系统足够时间达到稳定状态
+    # 使用较小的时间步长0.5秒提高控制精度
+    simulation_config = {'duration': 600, 'dt': 0.5}
     harness = SimulationHarness(config=simulation_config)
     message_bus = harness.message_bus
 
@@ -43,7 +45,7 @@ def run_mas_simulation():
         parameters={'surface_area': 1.5e6, 'storage_curve': [[0, 0], [30e6, 20]]}
     )
     gate_params = {
-        'max_rate_of_change': 0.1,
+        'max_rate_of_change': 0.5,  # 增加闸门最大变化速率，提高控制响应速度
         'discharge_coefficient': 0.6,
         'width': 10,
         'max_opening': 1.0
@@ -67,8 +69,11 @@ def run_mas_simulation():
     )
 
     # PID Controller (the "brain" of the control agent)
+    # 进一步优化PID参数以改善控制效果
+    # 大幅增加Kp值以提供更强的比例控制作用，增加Ki值以加速消除稳态误差
+    # 根据系统特性，我们需要非常强的控制作用来快速降低水位
     pid_controller = PIDController(
-        Kp=-0.5, Ki=-0.01, Kd=-0.1,
+        Kp=10.0, Ki=1.0, Kd=0.0,  # 大幅增加比例和积分增益，暂时禁用微分作用
         setpoint=12.0,
         min_output=0.0,
         max_output=gate_params['max_opening']
@@ -90,8 +95,18 @@ def run_mas_simulation():
         observation_key='water_level',
         action_topic=GATE_ACTION_TOPIC
     )
+    
+    # 启用控制日志记录，帮助观察控制效果
+    control_agent.enable_control_logging(enabled=True, state_topic="control.state.debug", interval=5)
 
     # 5. --- Harness Final Setup ---
+    print(f"\n--- Simulation Configuration Summary ---")
+    print(f"- Reservoir initial level: {reservoir._state['water_level']:.2f} m")
+    print(f"- Target water level: {pid_controller.setpoint:.2f} m")
+    print(f"- Gate initial opening: {gate._state['opening']:.2f}")
+    print(f"- Simulation duration: {simulation_config['duration']} s")
+    print(f"- Time step: {simulation_config['dt']} s")
+    print(f"---------------------------------------")
     harness.add_component("reservoir_1", reservoir)
     harness.add_component("gate_1", gate)
     harness.add_agent(twin_agent)
@@ -112,13 +127,16 @@ def run_mas_simulation():
     # --- Evaluate Control Performance ---
     print("\n--- Control Performance Evaluation ---")
     
-    # Extract water level data from history
+    # Extract water level and gate opening data from history
     target_level = 12.0  # Target water level from PID controller
     water_levels = []
+    gate_openings = []
     
     for step in harness.history:
         if 'reservoir_1' in step and 'water_level' in step['reservoir_1']:
             water_levels.append(step['reservoir_1']['water_level'])
+        if 'gate_1' in step and 'opening' in step['gate_1']:
+            gate_openings.append(step['gate_1']['opening'])
     
     # Calculate evaluation metrics
     # 1. Final Control Error (FCE)
@@ -137,17 +155,62 @@ def run_mas_simulation():
     max_overshoot = max(overshoots) if overshoots else 0
     percent_overshoot = (max_overshoot / target_level) * 100 if target_level > 0 else 0
     
+    # 5. Stability analysis
+    # Check if system is stable (water level within 0.1m of target for last 10% of simulation)
+    stable_threshold = 0.1  # m
+    stability_check_window = int(len(water_levels) * 0.1)
+    
+    # 6. Settling time - time to reach within 5% of target and stay there
+    settling_time = None
+    settling_threshold = 0.05 * target_level  # 5% of target
+    consecutive_stable_steps = 0
+    required_consecutive_steps = 10  # Need 10 consecutive steps within threshold to consider settled
+    
+    for i, level in enumerate(water_levels):
+        if abs(level - target_level) <= settling_threshold:
+            consecutive_stable_steps += 1
+        else:
+            consecutive_stable_steps = 0
+        
+        if consecutive_stable_steps == required_consecutive_steps:
+            settling_time = (i - required_consecutive_steps + 1) * simulation_config['dt']
+            break
+    
+    # 7. Control signal statistics
+    if gate_openings:
+        avg_opening = sum(gate_openings) / len(gate_openings)
+        max_opening = max(gate_openings)
+        min_opening = min(gate_openings)
+        # Calculate control signal changes (absolute differences between consecutive steps)
+        if len(gate_openings) > 1:
+            control_changes = [abs(gate_openings[i] - gate_openings[i-1]) for i in range(1, len(gate_openings))]
+            avg_change = sum(control_changes) / len(control_changes) if control_changes else 0
+        else:
+            avg_change = 0
+    else:
+        avg_opening = max_opening = min_opening = avg_change = 0
+    
     # Print evaluation results
     print(f"Target water level: {target_level:.2f} m")
     print(f"1. Final Control Error (FCE): {final_error:.4f} m")
     print(f"2. Mean Absolute Error (MAE): {mae:.4f} m")
     print(f"3. Root Mean Square Error (RMSE): {rmse:.4f} m")
     print(f"4. Max Overshoot: {max_overshoot:.4f} m ({percent_overshoot:.2f}%)")
+    print(f"5. Settling Time: {settling_time:.1f} s" if settling_time is not None else "5. System did not settle within simulation time")
+    print(f"6. Gate Opening Stats - Avg: {avg_opening:.3f}, Max: {max_opening:.3f}, Min: {min_opening:.3f}, Avg Change: {avg_change:.4f}")
     
-    # Additional stability analysis
-    # Check if system is stable (water level within 0.1m of target for last 10% of simulation)
-    stable_threshold = 0.1  # m
-    stability_check_window = int(len(water_levels) * 0.1)
+    # Advanced stability analysis
+    # Calculate variance of water levels in the second half of the simulation
+    if len(water_levels) > 1:
+        second_half_levels = water_levels[len(water_levels)//2:]
+        level_variance = sum((l - target_level)**2 for l in second_half_levels) / len(second_half_levels)
+        print(f"7. Level Variance (second half): {level_variance:.6f}")
+        
+        # Determine if system is stable in the last 10% of simulation
+        if stability_check_window > 0:
+            last_10_percent = water_levels[-stability_check_window:]
+            is_stable = all(abs(l - target_level) <= stable_threshold for l in last_10_percent)
+            print(f"8. System Stable in Last 10%: {is_stable}")
     if stability_check_window > 0:
         recent_errors = [abs(level - target_level) for level in water_levels[-stability_check_window:]]
         is_stable = all(error <= stable_threshold for error in recent_errors)
