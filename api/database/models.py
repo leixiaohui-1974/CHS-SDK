@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, Text, Boolean, ForeignKey, JSON, Enum
+from sqlalchemy import Column, Integer, String, Float, DateTime, Text, Boolean, ForeignKey, JSON, Enum as SQLEnum
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy.sql import func
 from datetime import datetime
@@ -6,19 +6,54 @@ from typing import Optional, Dict, Any
 import enum
 import uuid
 
-from database.database import Base
-from models.simulation_models import SimulationStatus, ComponentType
+from api.database.database import Base
+from enum import Enum
+
+__all__ = [
+    "SimulationStatus",
+    "ComponentType",
+    "SimulationSessionDB",
+    "ComponentConfigDB",
+    "SimulationResultDB",
+    "SimulationEventDB",
+    "UserDB",
+    "SessionTokenDB",
+    "SimulationSnapshotDB"
+]
+
+class SimulationStatus(str, Enum):
+    CREATED = "created"
+    IDLE = "idle"
+    INITIALIZING = "initializing"
+    RUNNING = "running"
+    PAUSED = "paused"
+    STOPPING = "stopping"
+    STOPPED = "stopped"
+    COMPLETED = "completed"
+    ERROR = "error"
+    CRASHED = "crashed"
+
+class ComponentType(str, Enum):
+    RESERVOIR = "reservoir"
+    GATE = "gate"
+    PIPE = "pipe"
+    CANAL = "canal"
+    PUMP = "pump"
+    VALVE = "valve"
+    JUNCTION = "junction"
+    SENSOR = "sensor"
 
 class SimulationSessionDB(Base):
     """
     Database model for simulation sessions
     """
     __tablename__ = "simulation_sessions"
+    __table_args__ = {'extend_existing': True}
     
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
     name = Column(String(255), nullable=False)
     description = Column(Text, nullable=True)
-    status = Column(Enum(SimulationStatus), default=SimulationStatus.CREATED, nullable=False)
+    status = Column(SQLEnum(SimulationStatus), default=SimulationStatus.CREATED, nullable=False)
     
     # Configuration
     config = Column(JSON, nullable=True)  # Store simulation configuration as JSON
@@ -51,13 +86,14 @@ class ComponentConfigDB(Base):
     Database model for component configurations
     """
     __tablename__ = "component_configs"
+    __table_args__ = {'extend_existing': True}
     
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
     session_id = Column(String, ForeignKey("simulation_sessions.id"), nullable=False)
     
     # Component information
     component_id = Column(String, nullable=False)  # Unique within session
-    component_type = Column(Enum(ComponentType), nullable=False)
+    component_type = Column(SQLEnum(ComponentType), nullable=False)
     name = Column(String(255), nullable=False)
     
     # Configuration data
@@ -79,6 +115,7 @@ class SimulationResultDB(Base):
     Database model for simulation results
     """
     __tablename__ = "simulation_results"
+    __table_args__ = {'extend_existing': True}
     
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
     session_id = Column(String, ForeignKey("simulation_sessions.id"), nullable=False)
@@ -89,7 +126,7 @@ class SimulationResultDB(Base):
     
     # Component data
     component_id = Column(String, nullable=False)  # Component that generated this result
-    component_type = Column(Enum(ComponentType), nullable=False)
+    component_type = Column(SQLEnum(ComponentType), nullable=False)
     
     # Result data
     data = Column(JSON, nullable=False)  # Component state and output data
@@ -109,6 +146,7 @@ class SimulationEventDB(Base):
     Database model for simulation events and logs
     """
     __tablename__ = "simulation_events"
+    __table_args__ = {'extend_existing': True}
     
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
     session_id = Column(String, ForeignKey("simulation_sessions.id"), nullable=False)
@@ -141,6 +179,7 @@ class UserDB(Base):
     Database model for users
     """
     __tablename__ = "users"
+    __table_args__ = {'extend_existing': True}
     
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
     username = Column(String(100), unique=True, nullable=False)
@@ -172,6 +211,7 @@ class SessionTokenDB(Base):
     Database model for session tokens
     """
     __tablename__ = "session_tokens"
+    __table_args__ = {'extend_existing': True}
     
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
     user_id = Column(String, ForeignKey("users.id"), nullable=False)
@@ -203,6 +243,7 @@ class SimulationSnapshotDB(Base):
     Database model for simulation snapshots
     """
     __tablename__ = "simulation_snapshots"
+    __table_args__ = {'extend_existing': True}
     
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
     session_id = Column(String, ForeignKey("simulation_sessions.id"), nullable=False)

@@ -269,8 +269,12 @@ class SimulationHarness:
                 total_inflow += current_step_outflows.get(upstream_id, 0)
 
             # 只有在组件没有受到入流扰动影响时才设置自动计算的入流
+            # 并且避免重复设置相同的值
             if component_id not in disturbed_components:
-                component.set_inflow(total_inflow)
+                if hasattr(component, '_inflow') and component._inflow != total_inflow:
+                    component.set_inflow(total_inflow)
+                elif not hasattr(component, '_inflow'):
+                    component.set_inflow(total_inflow)
 
             if hasattr(component, 'is_stateful') and component.is_stateful:
                 total_outflow = 0

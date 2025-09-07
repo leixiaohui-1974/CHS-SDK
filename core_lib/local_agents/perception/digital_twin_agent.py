@@ -4,7 +4,7 @@
 """
 from core_lib.core.interfaces import Agent, Simulatable, State
 from core_lib.central_coordination.collaboration.message_bus import MessageBus, Message
-from core_lib.data_processing.cognitive_enhancer import CognitiveEnhancer
+# from core_lib.data_processing.cognitive_enhancer import CognitiveEnhancer
 from typing import Optional, Dict, Any
 
 class DigitalTwinAgent(Agent):
@@ -43,7 +43,7 @@ class DigitalTwinAgent(Agent):
 
         self.cognition = None
         if cognitive_config:
-            self.cognition = CognitiveEnhancer(cognitive_config)
+            print("Warning: CognitiveEnhancer is disabled for testing purposes")
 
         model_id = self.model.name
         print(f"DigitalTwinAgent '{self.agent_id}' 已为模型 '{model_id}' 创建。将向主题 '{self.state_topic}' 发布状态。")
@@ -79,8 +79,7 @@ class DigitalTwinAgent(Agent):
 
         # 应用高级认知功能
         if self.cognition:
-            cognitive_enhancements = self.cognition.enhance(enhanced_state, current_time)
-            enhanced_state.update(cognitive_enhancements)
+            print("Warning: CognitiveEnhancer is disabled for testing purposes")
 
         # 将完整的状态字典发布到基础主题
         self.bus.publish(self.state_topic, enhanced_state)

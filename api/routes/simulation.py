@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
+# 直接从core_lib.models.api_models导入SimulationRequest
 from core_lib.models.api_models import SimulationRequest
 from api.database.database import get_db
 from api.database.crud import SimulationSessionCRUD, ComponentConfigCRUD, SimulationResultCRUD, SimulationEventCRUD

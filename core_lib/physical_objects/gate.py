@@ -68,16 +68,24 @@ class Gate(PhysicalObjectInterface):
 
     def handle_action_message(self, message: Message):
         """处理总线传入的动作消息的回调函数。"""
+        # 处理控制信号
+        if 'control_signal' in message:
+            new_target = message.get('control_signal')
+            if new_target is not None:
+                self.target_opening = float(new_target)
+                print(f"闸门 '{self.name}' 收到控制信号: {new_target:.4f}")
         # 处理直接的开度指令
-        if self.action_key in message:
+        elif self.action_key in message:
             new_target = message.get(self.action_key)
             if new_target is not None:
                 self.target_opening = float(new_target)
+                print(f"闸门 '{self.name}' 收到开度指令: {new_target:.4f}")
         # 处理目标出流量指令
         elif 'gate_target_outflow' in message:
             target_flow = message.get('gate_target_outflow')
             if target_flow is not None:
                 self.target_opening = self._calculate_opening_for_flow(float(target_flow))
+                print(f"闸门 '{self.name}' 收到流量指令: {target_flow:.4f}, 计算开度: {self.target_opening:.4f}")
 
     def step(self, action: Dict[str, Any], dt: float) -> State:
         """更新闸门在单个时间步内的状态。"""

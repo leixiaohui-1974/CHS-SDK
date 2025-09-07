@@ -4,7 +4,7 @@ from typing import List, Optional, Dict, Any, Union
 from datetime import datetime, timedelta
 import logging
 
-from .models import (
+from api.models import (
     SimulationSessionDB,
     ComponentConfigDB,
     SimulationResultDB,
@@ -13,7 +13,7 @@ from .models import (
     SessionTokenDB,
     SimulationSnapshotDB
 )
-from models.simulation_models import SimulationStatus, ComponentType
+from api.database.models import SimulationStatus, ComponentType
 
 logger = logging.getLogger(__name__)
 

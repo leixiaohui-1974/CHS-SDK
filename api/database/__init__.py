@@ -1,6 +1,6 @@
-from .models import *
-from .database import engine, SessionLocal, get_db
-from .crud import *
+from api.database.database import engine, SessionLocal, get_db
+from api.database.crud import *
+
 
 __all__ = [
     "engine",

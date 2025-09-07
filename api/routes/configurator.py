@@ -495,10 +495,10 @@ async def get_current_config(session_id: str):
     }
 
 @router.post("/validate")
-async def validate_config(config_content: str = Field(..., description="YAML配置内容")):
+async def validate_config(request: ConfigUpdateRequest):
     """验证配置文件"""
     try:
-        validation_results = await configurator_agent.validate_config(config_content)
+        validation_results = await configurator_agent.validate_config(request.config_content)
         return {
             "success": True,
             "validation_results": validation_results

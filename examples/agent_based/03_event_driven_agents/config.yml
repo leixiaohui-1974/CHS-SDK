@@ -3,8 +3,8 @@
 # are fully decoupled and communicate only via a MessageBus
 
 simulation:
-  duration: 300  # seconds
-  dt: 1.0       # time step
+  duration: 7200  # seconds - 2小时仿真时间
+  dt: 10.0       # time step - 10秒时间步长
 
 # Communication topics for message bus
 communication:
@@ -19,23 +19,23 @@ components:
   reservoir_1:
     type: Reservoir
     initial_state:
-      volume: 21000000      # m³ (21e6)
+      volume: 11000000      # m³ - 与库容曲线匹配
       water_level: 14.0     # m
     parameters:
       surface_area: 1500000 # m² (1.5e6)
       storage_curve:
         - [0, 0]
-        - [21000000, 14.0]
-        - [30000000, 20]      # [30e6, 20]
+        - [11000000, 14.0]
+        - [20000000, 20]
 
   gate_1:
     type: Gate
     initial_state:
       opening: 0.1          # Initial opening (0-1)
     parameters:
-      max_rate_of_change: 0.1
-      discharge_coefficient: 0.6
-      width: 10             # m
+      max_rate_of_change: 0.5  # 增加变化速率
+      discharge_coefficient: 0.9  # 增加流量系数
+      width: 50             # m - 大幅增加闸门宽度
       max_opening: 1.0
     message_bus:
       enabled: true
@@ -54,14 +54,16 @@ agents:
     type: LocalControlAgent
     agent_id: "control_agent_gate_1"
     controller:
-      type: PIDController
+      type: SmartPIDController
       parameters:
-        Kp: 0.5
-        Ki: 0.01
-        Kd: 0.1
+        Kp: 1.5              # 适中的比例增益
+        Ki: 0.02             # 较小的积分增益，避免积分饱和
+        Kd: 0.1              # 较小的微分增益
         setpoint: 12.0        # Target water level (m)
         min_output: 0.0
         max_output: 1.0       # Same as gate max_opening
+        windup_limit: 0.01    # 积分抗饱和限制
+        filter_constant: 0.5  # 微分滤波时间常数
     message_bus:
       observation_topic: "state.reservoir.level"
       observation_key: "water_level"

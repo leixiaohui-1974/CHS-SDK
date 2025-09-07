@@ -1,6 +1,14 @@
-from .api_models import *
-from .websocket_models import *
-from .simulation_models import *
+from api.models.websocket_models import *
+from api.models.simulation_models import *
+from api.database.models import (
+    SimulationSessionDB,
+    ComponentConfigDB,
+    SimulationResultDB,
+    SimulationEventDB,
+    UserDB,
+    SessionTokenDB,
+    SimulationSnapshotDB
+)
 
 __all__ = [
     # API模型
@@ -27,5 +35,15 @@ __all__ = [
     "CanalData",
     "SimulationMetrics",
     "PerformanceData",
-    "ErrorData"
+    "ErrorData",
+    
+    # 数据库模型
+    "SimulationSessionDB",
+    "ComponentConfigDB",
+    "SimulationResultDB",
+    "SimulationEventDB",
+    "UserDB",
+    "SessionTokenDB",
+    "SimulationSnapshotDB",
+    "ComponentType"
 ]

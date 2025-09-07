@@ -1,12 +1,14 @@
 import os
 from http import HTTPStatus
 import dashscope
+import warnings
 from .llm_config import TONGYI_API_KEY
 
-if not TONGYI_API_KEY:
-    raise ValueError("通义千问API密钥未设置。")
-
-dashscope.api_key = TONGYI_API_KEY
+# 设置API密钥（如果可用）
+if TONGYI_API_KEY:
+    dashscope.api_key = TONGYI_API_KEY
+else:
+    warnings.warn("通义千问API密钥未设置。LLM相关功能将无法使用。")
 
 def call_tongyi_qianwen_api(prompt: str, system_prompt: str = None, model: str = 'qwen-turbo') -> str:
     """调用通义千问大模型的API。"""

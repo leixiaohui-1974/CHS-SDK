@@ -135,7 +135,7 @@ class LocalControlAgent(Agent):
         if observation_for_controller is not None:
             # Compute the control action using the encapsulated controller
             control_signal = self.controller.compute_control_action(observation_for_controller, self.dt)
-            print(f"[{self.agent_id}] Observation: {observation_for_controller}, Control Signal: {control_signal}")
+            print(f"[{self.agent_id}] Observation: {observation_for_controller}, Control Signal: {control_signal:.4f}")
             # Publish the computed action to the action topic(s)
             self.publish_action(control_signal)
 

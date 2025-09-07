@@ -27,8 +27,8 @@ from enum import Enum
 import traceback
 import re
 
-# 导入现有的配置检查工具
-from core_lib.config_validator import ConfigValidator
+# 导入配置验证工具
+from core_lib.nlp.comprehensive_config_validator import ComprehensiveConfigValidator as ConfigValidator
 from core_lib.models.universal_config import UniversalConfig
 
 logger = logging.getLogger(__name__)

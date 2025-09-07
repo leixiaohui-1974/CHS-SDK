@@ -20,6 +20,8 @@ sys.path.insert(0, project_root)
 from core_lib.physical_objects.reservoir import Reservoir
 from core_lib.physical_objects.gate import Gate
 from core_lib.local_agents.control.pid_controller import PIDController
+from core_lib.local_agents.control.adaptive_pid_controller import AdaptivePIDController
+from core_lib.local_agents.control.smart_pid_controller import SmartPIDController
 from core_lib.local_agents.control.local_control_agent import LocalControlAgent
 from core_lib.local_agents.perception.digital_twin_agent import DigitalTwinAgent
 from core_lib.core_engine.testing.simulation_harness import SimulationHarness
@@ -86,7 +88,7 @@ def create_agents(config, components, message_bus):
                 agent_id=agent_id,
                 simulated_object=simulated_object,
                 message_bus=message_bus,
-                state_topic=topics['digital_twin_state']
+                state_topic=topics['reservoir_state']  # 使用正确的主题
             )
             agents.append(agent)
             
@@ -103,12 +105,34 @@ def create_agents(config, components, message_bus):
                     min_output=params['min_output'],
                     max_output=params['max_output']
                 )
+            elif controller_config['type'] == 'AdaptivePIDController':
+                params = controller_config['parameters']
+                controller = AdaptivePIDController(
+                    Kp=params['Kp'],
+                    Ki=params['Ki'],
+                    Kd=params['Kd'],
+                    setpoint=params['setpoint'],
+                    min_output=params['min_output'],
+                    max_output=params['max_output']
+                )
+            elif controller_config['type'] == 'SmartPIDController':
+                params = controller_config['parameters']
+                controller = SmartPIDController(
+                    Kp=params['Kp'],
+                    Ki=params['Ki'],
+                    Kd=params['Kd'],
+                    setpoint=params['setpoint'],
+                    min_output=params['min_output'],
+                    max_output=params['max_output']
+                )
             else:
                 raise ValueError(f"Unknown controller type: {controller_config['type']}")
             
             # 增强控制逻辑：增加积分抗饱和和微分滤波
-            controller.integral_windup_limit = params.get('windup_limit', 0.5)
-            controller.filter_time_constant = params.get('filter_constant', 0.1)
+            if hasattr(controller, 'integral_windup_limit'):
+                controller.integral_windup_limit = params.get('windup_limit', 0.5)
+            if hasattr(controller, 'filter_time_constant'):
+                controller.filter_time_constant = params.get('filter_constant', 0.1)
             
             # 使用统一配置的topics
             agent = LocalControlAgent(
@@ -117,12 +141,12 @@ def create_agents(config, components, message_bus):
                 dt=config['simulation']['dt'],
                 target_component='gate_1',
                 control_type='water_level_control',
-                data_sources={'primary_data': topics['sensor_data']},
+                data_sources={'primary_data': topics['reservoir_state']},
                 control_targets={'gate_opening': topics['control_actions']},
                 allocation_config={'method': 'proportional'},
                 controller_config=controller_config,
                 controller=controller,
-                observation_topic=topics['sensor_data'],
+                observation_topic=topics['reservoir_state'],
                 observation_key='water_level',
                 action_topic=topics['gate_action']
             )
@@ -239,7 +263,7 @@ def run_simulation(config):
     
     # Create simulation harness
     simulation_config = {
-        'duration': config['simulation']['duration'],
+        'end_time': config['simulation']['duration'],  # 使用end_time而不是duration
         'dt': config['simulation']['dt']
     }
     harness = SimulationHarness(config=simulation_config)
