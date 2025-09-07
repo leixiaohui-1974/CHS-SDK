@@ -88,8 +88,8 @@ class PIDController(Controller):
         # 对于水库水位控制：
         # - 当水位高于目标时(error < 0)：应增加闸门开度（正值）
         # - 当水位低于目标时(error > 0)：应减小闸门开度（负值）
-        # 标准PID公式已能正确处理这个关系，无需额外的符号反转
-        raw_output = p_term + i_term + d_term
+        # 需要反转符号，因为标准PID公式的符号与我们的控制逻辑相反
+        raw_output = -(p_term + i_term + d_term)
 
         # 限制控制信号在合理范围内
         if raw_output > self.max_output:

@@ -25,21 +25,24 @@ class SimulationBuilder:
     providing a cleaner API for simulation creation.
     """
     
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, config: Dict[str, Any]):
         """
         Initialize the simulation builder.
         
         Args:
-            config: Simulation configuration dictionary. If None, uses default values.
+            config: Simulation configuration dictionary. Must include 'end_time'.
         """
+        # end_time is required - no default value
+        if 'end_time' not in config:
+            raise ValueError("'end_time' is required in simulation configuration")
+        
         default_config = {
             'start_time': 0,
-            'end_time': 100,
             'dt': 1.0
         }
         
-        if config:
-            default_config.update(config)
+        # Update with provided config
+        default_config.update(config)
             
         self.config = default_config
         self.harness = SimulationHarness(self.config)

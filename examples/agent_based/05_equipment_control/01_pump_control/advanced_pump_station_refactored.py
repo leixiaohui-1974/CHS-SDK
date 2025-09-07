@@ -63,13 +63,13 @@ def create_advanced_pump_system():
         parameters={'surface_area': 2.5e6}
     )
     
-    # 创建多台水泵 - 不同规格，使用现有 Pump 类
+    # 创建多台水泵 - 合理规格，避免过度设计
     pumps = []
     pump_specs = [
-        {'max_flow_rate': 15.0, 'max_head': 25.0, 'power_consumption_kw': 75, 'efficiency': 0.85},
-        {'max_flow_rate': 12.0, 'max_head': 30.0, 'power_consumption_kw': 80, 'efficiency': 0.82},
-        {'max_flow_rate': 18.0, 'max_head': 20.0, 'power_consumption_kw': 70, 'efficiency': 0.88},
-        {'max_flow_rate': 10.0, 'max_head': 35.0, 'power_consumption_kw': 85, 'efficiency': 0.80}
+        {'max_flow_rate': 8.0, 'max_head': 25.0, 'power_consumption_kw': 40, 'efficiency': 0.85},  # 小泵
+        {'max_flow_rate': 12.0, 'max_head': 30.0, 'power_consumption_kw': 60, 'efficiency': 0.82},  # 中泵
+        {'max_flow_rate': 15.0, 'max_head': 20.0, 'power_consumption_kw': 50, 'efficiency': 0.88}, # 大泵
+        {'max_flow_rate': 6.0, 'max_head': 35.0, 'power_consumption_kw': 35, 'efficiency': 0.80}   # 小泵
     ]
     
     for i, specs in enumerate(pump_specs):
@@ -168,14 +168,39 @@ def run_advanced_simulation():
     print("Running simulation...")
     harness.run_mas_simulation()
     
+    # 验证控制效果
+    print("\n=== Control Effectiveness Validation ===")
+    if hasattr(pump_control_agent, 'validate_control_effectiveness'):
+        is_effective = pump_control_agent.validate_control_effectiveness()
+        if not is_effective:
+            print("❌ Control system validation FAILED - Significant control errors detected")
+        else:
+            print("✅ Control system validation PASSED")
+    
     # 分析结果 - 使用 core_lib 中的分析器
     print("\n=== Performance Analysis using core_lib Analyzers ===")
     
     # 从仿真历史中提取数据
     history = harness.history
     if history:
+        # 创建需求时间表用于分析
+        demand_schedule = {
+            50: 5.0,    # 5 m³/s at t=50s
+            150: 15.0,  # 15 m³/s at t=150s
+            300: 25.0,  # 25 m³/s at t=300s
+            400: 10.0,  # 10 m³/s at t=400s
+            500: 20.0   # 20 m³/s at t=500s
+        }
+        
         for i, step_data in enumerate(history):
             current_time = i * harness.dt
+            
+            # 根据时间表获取当前需求
+            current_demand = 0.0
+            for time_point in sorted(demand_schedule.keys(), reverse=True):
+                if current_time >= time_point:
+                    current_demand = demand_schedule[time_point]
+                    break
             
             # 从泵站状态提取数据
             if 'advanced_pump_station' in step_data:
@@ -188,11 +213,11 @@ def run_advanced_simulation():
                 
                 # 记录数据到分析器
                 analyzer.record_data(current_time, {
-                    'demand': 10.0,  # 简化需求数据
+                    'demand': current_demand,
                     'total_flow': total_flow,
                     'running_pumps': running_pumps,
                     'total_power': total_power,
-                    'efficiency': 0.8  # 简化效率数据
+                    'efficiency': 0.8 if total_power > 0 else 0.0
                 })
     
     # 执行综合分析

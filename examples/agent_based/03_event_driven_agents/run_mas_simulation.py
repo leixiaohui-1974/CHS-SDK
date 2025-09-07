@@ -16,7 +16,7 @@ sys.path.insert(0, project_root)
 from core_lib.physical_objects.reservoir import Reservoir
 from core_lib.physical_objects.gate import Gate
 from core_lib.local_agents.control.pid_controller import PIDController
-from core_lib.local_agents.control.local_control_agent import LocalControlAgent
+from core_lib.local_agents.control.unified_gate_control_agent import UnifiedGateControlAgent
 from core_lib.local_agents.perception.digital_twin_agent import DigitalTwinAgent
 from core_lib.core_engine.testing.simulation_harness import SimulationHarness
 from core_lib.central_coordination.collaboration.message_bus import MessageBus
@@ -28,9 +28,9 @@ def run_mas_simulation():
     print("--- Setting up Tutorial 3: Event-Driven Agents Simulation ---")
 
     # 1. --- Simulation Harness and Message Bus Setup ---
-    # 调整仿真时长为600秒（10分钟）以给系统足够时间达到稳定状态
+    # 调整仿真时长为60000秒以给系统足够时间达到稳定状态
     # 使用较小的时间步长0.5秒提高控制精度
-    simulation_config = {'duration': 600, 'dt': 0.5}
+    simulation_config = {'end_time': 60000, 'dt': 0.5}  # 使用end_time而不是duration
     harness = SimulationHarness(config=simulation_config)
     message_bus = harness.message_bus
 
@@ -69,31 +69,27 @@ def run_mas_simulation():
     )
 
     # PID Controller (the "brain" of the control agent)
-    # 进一步优化PID参数以改善控制效果
-    # 大幅增加Kp值以提供更强的比例控制作用，增加Ki值以加速消除稳态误差
-    # 根据系统特性，我们需要非常强的控制作用来快速降低水位
+    # 对于水库水位控制，PID输出应该直接对应闸门开度
+    # 当水位高于目标时，需要增加闸门开度来排水
+    # 当水位低于目标时，需要减少闸门开度来蓄水
     pid_controller = PIDController(
-        Kp=10.0, Ki=1.0, Kd=0.0,  # 大幅增加比例和积分增益，暂时禁用微分作用
+        Kp=5.0, Ki=0.5, Kd=0.0,  # 调整参数，避免过大的输出
         setpoint=12.0,
-        min_output=0.0,
+        min_output=0.0,  # 闸门开度不能为负
         max_output=gate_params['max_opening']
     )
 
-    # Local Control Agent for the Gate
-    control_agent = LocalControlAgent(
+    # Unified Gate Control Agent for the Gate
+    control_agent = UnifiedGateControlAgent(
         agent_id="control_agent_gate_1",
-        message_bus=message_bus,
-        dt=harness.dt,
-        target_component="gate_1",
-        control_type="gate_control",
-        data_sources={"primary_data": RESERVOIR_STATE_TOPIC},
-        control_targets={"primary_target": GATE_ACTION_TOPIC},
-        allocation_config={},
-        controller_config={},
         controller=pid_controller,
+        message_bus=message_bus,
         observation_topic=RESERVOIR_STATE_TOPIC,
         observation_key='water_level',
-        action_topic=GATE_ACTION_TOPIC
+        action_topic=GATE_ACTION_TOPIC,
+        dt=harness.dt,
+        target_component="gate_1",
+        control_type="gate_control"
     )
     
     # 启用控制日志记录，帮助观察控制效果
@@ -104,7 +100,7 @@ def run_mas_simulation():
     print(f"- Reservoir initial level: {reservoir._state['water_level']:.2f} m")
     print(f"- Target water level: {pid_controller.setpoint:.2f} m")
     print(f"- Gate initial opening: {gate._state['opening']:.2f}")
-    print(f"- Simulation duration: {simulation_config['duration']} s")
+    print(f"- Simulation duration: {simulation_config['end_time']} s")
     print(f"- Time step: {simulation_config['dt']} s")
     print(f"---------------------------------------")
     harness.add_component("reservoir_1", reservoir)

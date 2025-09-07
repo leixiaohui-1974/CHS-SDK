@@ -22,7 +22,7 @@ from core_lib.physical_objects.gate import Gate
 from core_lib.local_agents.control.pid_controller import PIDController
 from core_lib.local_agents.control.adaptive_pid_controller import AdaptivePIDController
 from core_lib.local_agents.control.smart_pid_controller import SmartPIDController
-from core_lib.local_agents.control.unified_local_control_agent import UnifiedLocalControlAgent, ControlStrategy
+from core_lib.local_agents.control.unified_gate_control_agent import UnifiedGateControlAgent
 from core_lib.local_agents.perception.digital_twin_agent import DigitalTwinAgent
 from core_lib.core_engine.testing.simulation_harness import SimulationHarness
 from core_lib.central_coordination.collaboration.message_bus import MessageBus
@@ -92,7 +92,7 @@ def create_agents(config, components, message_bus):
             )
             agents.append(agent)
             
-        elif agent_type == 'UnifiedLocalControlAgent':
+        elif agent_type == 'UnifiedGateControlAgent':
             # Create controller
             controller_config = agent_config['controller']
             if controller_config['type'] == 'PIDController':
@@ -135,20 +135,16 @@ def create_agents(config, components, message_bus):
                 controller.filter_time_constant = params.get('filter_constant', 0.1)
             
             # 使用统一配置的topics
-            agent = UnifiedLocalControlAgent(
+            agent = UnifiedGateControlAgent(
                 agent_id=agent_id,
+                controller=controller,
                 message_bus=message_bus,
-                dt=config['simulation']['dt'],
-                control_strategy=ControlStrategy.CONTINUOUS,
                 observation_topic=topics['reservoir_state'],
                 observation_key='water_level',
                 action_topic=topics['gate_action'],
-                controller=controller,
-                controller_config=controller_config,
-                device_config={
-                    'target_component': 'gate_1',
-                    'control_type': 'water_level_control'
-                }
+                dt=config['simulation']['dt'],
+                target_component='gate_1',
+                control_type='water_level_control'
             )
             
             if config['debug']['enabled']:

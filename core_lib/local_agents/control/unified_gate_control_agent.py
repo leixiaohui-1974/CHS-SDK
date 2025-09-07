@@ -133,8 +133,8 @@ class UnifiedGateControlAgent(UnifiedLocalControlAgent):
     
     def compute_multi_actuator_control_action(self, message: Message) -> Optional[Dict[str, Any]]:
         """计算多执行器控制动作"""
-        # 获取过程变量
-        process_variable = message.get('process_variable')
+        # 获取过程变量 - 优先使用water_level，如果没有则使用process_variable
+        process_variable = message.get('water_level') or message.get('process_variable')
         if process_variable is None:
             return None
         
@@ -146,8 +146,10 @@ class UnifiedGateControlAgent(UnifiedLocalControlAgent):
         if self.controller:
             observation_for_controller = {'process_variable': process_variable}
             base_control_signal = self.controller.compute_control_action(observation_for_controller, self.dt)
+            print(f"[{self.agent_id}] PID input: {observation_for_controller}, output: {base_control_signal:.4f}")
         else:
             base_control_signal = 0.0
+            print(f"[{self.agent_id}] No controller available, using 0.0")
         
         # 应用多闸门流量分配
         if self.allocation_table is not None:

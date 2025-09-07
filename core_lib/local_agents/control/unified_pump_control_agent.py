@@ -70,7 +70,7 @@ class UnifiedPumpControlAgent(UnifiedLocalControlAgent):
     def _initialize_device_specific(self, **kwargs):
         """泵站特定初始化"""
         # 泵站配置
-        self.max_pumps = kwargs.get('max_pumps', len(self.pumps))
+        self.max_pumps = kwargs.get('max_pumps', len(self.pumps) if hasattr(self, 'pumps') else 0)
         self.min_pumps = kwargs.get('min_pumps', 0)
         self.pump_startup_delay = kwargs.get('pump_startup_delay', 0)
         

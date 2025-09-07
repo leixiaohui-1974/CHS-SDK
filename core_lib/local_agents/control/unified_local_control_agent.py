@@ -30,6 +30,24 @@ class UnifiedLocalControlAgent(Agent):
     4. 可扩展的架构
     """
     
+    def enable_control_logging(self, enabled: bool, state_topic: str, interval: int = 5):
+        """
+        启用控制状态日志记录
+        
+        Args:
+            enabled: 启用/禁用日志功能
+            state_topic: 发布调试状态的主题
+            interval: 日志记录间隔（秒）
+        """
+        self.debug_enabled = enabled
+        self.state_topic = state_topic
+        self.log_interval = interval
+        
+        if enabled:
+            # 初始化状态发布定时器
+            self._last_log_time = 0
+            print(f"Control logging enabled @ {interval}s intervals to {state_topic}")
+    
     def __init__(self,
                  agent_id: str,
                  message_bus: MessageBus,
@@ -195,13 +213,16 @@ class UnifiedLocalControlAgent(Agent):
         """发布控制动作"""
         if isinstance(control_signal, dict):
             # 多执行器模式
+            print(f"[{self.agent_id}] Multi-actuator control: {len(control_signal)} signals")
             for topic, signal_value in control_signal.items():
                 if topic and signal_value is not None:
                     action_message = {'control_signal': signal_value, 'agent_id': self.agent_id}
+                    print(f"[{self.agent_id}] Publishing to {topic}: {signal_value:.4f}")
                     self.bus.publish(topic, action_message)
         else:
             # 单执行器模式
             action_message = {'control_signal': control_signal, 'agent_id': self.agent_id}
+            print(f"[{self.agent_id}] Publishing single signal: {control_signal:.4f}")
             self.bus.publish(self.action_topic, action_message)
     
     def run(self, current_time: float):

@@ -26,7 +26,12 @@ class SimulationHarness:
     def __init__(self, config: Dict[str, Any]):
         self.config = config
         self.start_time = config.get('start_time', 0)
-        self.end_time = config.get('end_time', 100)
+        
+        # end_time is required - no default value
+        if 'end_time' not in config:
+            raise ValueError("'end_time' is required in simulation configuration")
+        self.end_time = config['end_time']
+        
         self.dt = config.get('dt', 1.0)
         self.t = self.start_time
 

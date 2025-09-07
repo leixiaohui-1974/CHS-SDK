@@ -1,0 +1,16 @@
+agent_based/
+├── 01_fundamentals/                    # 基础概念和入门
+│   ├── event_driven_agents/            # 原 03_event_driven_agents
+│   └── hierarchical_control/           # 原 04_hierarchical_control
+├── 02_advanced_topologies/             # 复杂拓扑和网络
+│   ├── complex_networks/               # 原 05_complex_networks
+│   └── distributed_control/             # 原 09_agent_based_distributed_control
+├── 03_control_strategies/               # 控制策略和算法
+│   ├── pid_comparison/                 # 原 12_pid_control_comparison
+│   └── emergency_override/              # 原 06_centralized_emergency_override
+├── 04_disturbance_handling/             # 扰动处理
+│   └── disturbance_simulation/          # 原 06_handling_disturbances
+├── 05_equipment_control/                # 设备控制
+│   ├── pump_station/                    # 原 08_pump_station_control
+│   └── hydropower_plant/                # 原 09_hydropower_plant
+└── pump_control_system/                 # 独立的泵站控制系统（已存在）

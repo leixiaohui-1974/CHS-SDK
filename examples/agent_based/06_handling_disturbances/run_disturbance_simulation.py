@@ -16,7 +16,7 @@ sys.path.insert(0, project_root)
 from core_lib.physical_objects.reservoir import Reservoir
 from core_lib.physical_objects.gate import Gate
 from core_lib.local_agents.control.pid_controller import PIDController
-from core_lib.local_agents.control.local_control_agent import LocalControlAgent
+from core_lib.local_agents.control.unified_gate_control_agent import UnifiedGateControlAgent
 from core_lib.local_agents.perception.digital_twin_agent import DigitalTwinAgent
 from core_lib.central_coordination.dispatch.central_dispatcher import CentralDispatcherAgent
 from core_lib.core_engine.testing.simulation_harness import SimulationHarness
@@ -75,21 +75,17 @@ def setup_control_system(harness, inflow_topic=None):
         min_output=0.0,
         max_output=gate_params['max_opening']
     )
-    lca = LocalControlAgent(
+    lca = UnifiedGateControlAgent(
         agent_id="lca_gate_1",
-        message_bus=message_bus,
-        dt=simulation_dt,
-        target_component="gate_1",
-        control_type="gate_control",
-        data_sources={"primary_data": RESERVOIR_STATE_TOPIC},
-        control_targets={"primary_target": GATE_ACTION_TOPIC},
-        allocation_config={},
-        controller_config={},
         controller=pid,
+        message_bus=message_bus,
         observation_topic=RESERVOIR_STATE_TOPIC,
         observation_key='water_level',
         action_topic=GATE_ACTION_TOPIC,
-        command_topic=GATE_COMMAND_TOPIC
+        dt=simulation_dt,
+        command_topic=GATE_COMMAND_TOPIC,
+        target_component="gate_1",
+        control_type="gate_control"
     )
 
     dispatcher_rules = {
@@ -136,7 +132,7 @@ def run_disturbance_simulation():
     """
     print("\n--- Setting up Tutorial 5: Handling Disturbances Simulation ---")
 
-    simulation_config = {'duration': 800, 'dt': 1.0}
+    simulation_config = {'end_time': 8000, 'dt': 1.0}
     harness = SimulationHarness(config=simulation_config)
 
     RAINFALL_TOPIC = "disturbance.rainfall.inflow"
