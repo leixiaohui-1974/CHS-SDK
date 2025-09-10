@@ -68,8 +68,12 @@ class PumpEfficiencyModel:
         head_ratio = head / self.max_head
         speed_ratio = speed / self.max_speed
         
+        print(f"[EfficiencyModel] Flow={flow}, Head={head}, Speed={speed}")
+        print(f"[EfficiencyModel] Ratios: flow={flow_ratio:.3f}, head={head_ratio:.3f}, speed={speed_ratio:.3f}")
+        
         # 效率计算（基于实际水泵特性）
         if flow_ratio < 0.1 or flow_ratio > 1.0:
+            print(f"[EfficiencyModel] Flow ratio {flow_ratio:.3f} out of range [0.1, 1.0], returning 0")
             return 0.0
             
         # 流量效率特性
@@ -199,12 +203,20 @@ class EfficiencyOptimizationAgent(Agent):
         self.current_demand = 0.0
         self.optimization_history = []
         
+        # 订阅需求主题
+        self.bus.subscribe(self.demand_topic, self.handle_demand_message)
+        
+    def handle_demand_message(self, message):
+        """处理需求消息"""
+        self.current_demand = message.get('value', self.current_demand)
+        print(f"[EfficiencyAgent] Received demand: {self.current_demand}")
+        
     def run(self, current_time: float):
         """运行效率优化"""
-        # 获取当前需求
-        messages = self.bus.get_messages(self.demand_topic)
-        if messages:
-            self.current_demand = messages[-1].get('value', self.current_demand)
+        # 使用当前需求（通过订阅更新）
+        if self.current_demand <= 0:
+            print(f"[EfficiencyAgent] Warning: No demand received, current_demand={self.current_demand}")
+            return
             
         # 计算目标扬程（简化计算）
         target_head = 20.0  # 固定扬程
@@ -218,6 +230,8 @@ class EfficiencyOptimizationAgent(Agent):
         # 计算效率
         efficiency = self.variable_speed_controller.get_efficiency_at_speed(optimal_speed)
         
+        print(f"[EfficiencyAgent] Demand={self.current_demand}, Speed={optimal_speed}, Efficiency={efficiency}")
+        
         # 记录优化历史
         self.optimization_history.append({
             'time': current_time,
@@ -229,9 +243,11 @@ class EfficiencyOptimizationAgent(Agent):
             )
         })
         
-        # 发布控制命令
-        control_topic = "action.pump.speed"
-        self.bus.publish(control_topic, {'speed': optimal_speed})
+        # 发布控制命令 - 适配当前的 Pump 接口
+        # 基于效率决定是否启动泵（简化处理）
+        control_signal = 1 if efficiency > 0.5 else 0
+        control_topic = "action.pump.efficiency_pump"
+        self.bus.publish(control_topic, {'control_signal': control_signal})
 
 class VariableDemandAgent(Agent):
     """变化需求代理"""
@@ -250,6 +266,7 @@ class VariableDemandAgent(Agent):
         else:
             demand = self.base_demand
             
+        print(f"[DemandAgent] Publishing demand: {demand} at time {current_time}")
         self.bus.publish(self.demand_topic, {'value': demand})
         
     def _optimization_test_pattern(self, time: float) -> float:
@@ -287,10 +304,11 @@ class EfficiencyAnalyzer:
         """记录仿真步骤"""
         self.history['time'].append(time)
         self.history['demand'].append(demand)
-        self.history['actual_flow'].append(pump_state.get('outflow', 0))
-        self.history['speed'].append(pump_state.get('speed', 0))
+        self.history['actual_flow'].append(pump_state.get('total_outflow', 0))
+        # 使用优化数据中的转速，因为当前 Pump 类不直接支持转速
+        self.history['speed'].append(optimization_data.get('optimal_speed', 0))
         self.history['efficiency'].append(pump_state.get('efficiency', 0))
-        self.history['power'].append(pump_state.get('power_draw_kw', 0))
+        self.history['power'].append(pump_state.get('total_power_draw_kw', 0))
         self.history['optimal_efficiency'].append(optimization_data.get('efficiency', 0))
         
         # 计算效率损失
@@ -422,11 +440,10 @@ def create_efficiency_optimization_system():
     # 创建水泵
     pump = Pump(
         name="efficiency_pump",
-        initial_state={'outflow': 0, 'speed': 0, 'power_draw_kw': 0},
+        initial_state={'outflow': 0, 'power_draw_kw': 0, 'status': 0, 'efficiency': 0.0},
         parameters=pump_params,
         message_bus=message_bus,
-        action_topic=CONTROL_TOPIC,
-        action_key='speed'
+        action_topic=CONTROL_TOPIC
     )
     
     # 创建泵站
@@ -495,10 +512,8 @@ def run_efficiency_optimization_simulation():
         demand_agent.run(current_time)
         efficiency_agent.run(current_time)
         
-        # 获取当前需求
-        messages = message_bus.get_messages(demand_topic)
-        if messages:
-            current_demand = messages[-1].get('value', current_demand)
+        # 需求通过代理的订阅机制自动更新，这里使用效率代理的当前需求
+        current_demand = efficiency_agent.current_demand
             
         # 步进物理模型
         harness._step_physical_models(harness.dt)
@@ -510,9 +525,10 @@ def run_efficiency_optimization_simulation():
         
         # 打印状态（每50步）
         if i % 50 == 0:
+            optimization_data = efficiency_agent.optimization_history[-1] if efficiency_agent.optimization_history else {}
             print(f"Time {current_time:.0f}s: Demand={current_demand:.1f} m³/s, "
                   f"Flow={pump_state.get('total_outflow', 0):.1f} m³/s, "
-                  f"Speed={pump_state.get('speed', 0):.0f} rpm, "
+                  f"Speed={optimization_data.get('optimal_speed', 0):.0f} rpm, "
                   f"Efficiency={pump_state.get('efficiency', 0):.3f}, "
                   f"Power={pump_state.get('total_power_draw_kw', 0):.1f} kW")
     

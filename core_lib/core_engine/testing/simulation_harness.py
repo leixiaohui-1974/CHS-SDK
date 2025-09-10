@@ -29,7 +29,11 @@ class SimulationHarness:
         
         # end_time is required - no default value
         if 'end_time' not in config:
-            raise ValueError("'end_time' is required in simulation configuration")
+            if 'duration' in config:
+                # 支持 duration 作为 end_time 的备选参数
+                config['end_time'] = config['duration']
+            else:
+                raise ValueError("'end_time' is required in simulation configuration")
         self.end_time = config['end_time']
         
         self.dt = config.get('dt', 1.0)

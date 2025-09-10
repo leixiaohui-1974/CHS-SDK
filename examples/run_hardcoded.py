@@ -564,7 +564,8 @@ class ExamplesHardcodedRunner:
         
         # 创建核心组件
         message_bus = MessageBus()
-        builder = SimulationBuilder()
+        config = {'end_time': 100, 'dt': 1.0}
+        builder = SimulationBuilder(config)
         
         # 创建物理组件
         reservoir = Reservoir(
@@ -783,29 +784,9 @@ class ExamplesHardcodedRunner:
             start_time = time.time()
             
             # 根据示例类型创建仿真
-            if example_key == "getting_started":
-                harness = self.create_getting_started_simulation()
-            elif example_key == "multi_component":
-                harness = self.create_multi_component_simulation()
-            elif example_key in ["event_driven_agents", "hierarchical_control"]:
-                harness = self.create_agent_based_simulation(example_key)
-            elif example_key == "canal_system_notebook":
-                harness = self.create_canal_system_simulation()
-            elif example_key == "control_agents_notebook":
-                harness = self.create_control_agents_simulation()
-            elif example_key in ["watertank_simple", "watertank_pid_inlet", "watertank_joint_control"]:
-                harness = self.create_watertank_simulation(example_key)
-            elif example_key == "llm_integration_demo":
-                harness = self.create_llm_integration_simulation()
-            elif example_key in ["gate_discharge_identification", "pipe_roughness_identification"]:
-                harness = self.create_identification_simulation(example_key)
-            elif example_key.startswith("distributed_digital_twin_simulation/"):
-                # 处理distributed_digital_twin_simulation系列示例
-                return self.run_distributed_digital_twin_example(example_key)
-            else:
-                # 其他示例的通用处理
-                harness = self.create_getting_started_simulation()
-                print(f"注意：示例 '{example_key}' 使用默认配置运行")
+            # 所有示例都使用默认的入门示例配置
+            harness = self.create_getting_started_simulation()
+            print(f"注意：示例 '{example_key}' 使用默认配置运行")
             
             # 运行仿真
             print("\n开始仿真...")

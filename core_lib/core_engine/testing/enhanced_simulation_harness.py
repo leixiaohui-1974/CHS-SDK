@@ -73,6 +73,9 @@ class EnhancedSimulationHarness:
     def __init__(self, config: Dict[str, Any]):
         self.config = config
         self.start_time = config.get('start_time', 0)
+        # 支持 duration 作为 end_time 的备选参数
+        if 'end_time' not in config and 'duration' in config:
+            config['end_time'] = config['duration']
         self.end_time = config.get('end_time', 100)
         self.dt = config.get('dt', 1.0)
         self.t = self.start_time

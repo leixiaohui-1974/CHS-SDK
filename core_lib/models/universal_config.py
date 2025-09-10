@@ -36,13 +36,13 @@ class UniversalConfig(BaseModel):
         # 检查必要的仿真参数
         if 'time_step' not in v:
             raise ValueError("simulation配置缺少time_step字段")
-        if 'duration' not in v:
-            raise ValueError("simulation配置缺少duration字段")
+        if 'end_time' not in v:
+            raise ValueError("simulation配置缺少end_time字段")
         # 验证时间步长和时长必须为正数
         if v['time_step'] <= 0:
             raise ValueError("time_step必须大于0")
-        if v['duration'] <= 0:
-            raise ValueError("duration必须大于0")
+        if v['end_time'] <= 0:
+            raise ValueError("end_time必须大于0")
         return v
     
     # 验证组件配置

@@ -80,7 +80,7 @@ class EnhancedSimulationBuilder(SimulationBuilder):
         if time_config:
             self.config['time'] = {
                 'start_time': time_config.get('start_time', 0.0),
-                'end_time': time_config.get('end_time', 100.0),
+                'end_time': time_config.get('end_time', time_config.get('duration', 100.0)),
                 'time_step': time_config.get('time_step', 0.1),
                 'output_interval': time_config.get('output_interval', 1.0)
             }

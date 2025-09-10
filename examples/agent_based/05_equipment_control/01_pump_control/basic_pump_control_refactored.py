@@ -142,8 +142,8 @@ def create_control_system(message_bus: MessageBus, demand_topic: str,
         dt=dt,
         # 泵站特定配置
         max_pumps=1,  # 单泵系统
-        min_pumps=0,
-        control_strategy='demand_based'
+        min_pumps=0
+        # 注意：control_strategy 由父类自动设置为 DISCRETE，不需要手动指定
     )
     
     print("Control system created successfully using core_lib components!")
