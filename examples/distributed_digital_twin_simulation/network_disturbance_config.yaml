@@ -1,0 +1,78 @@
+# 网络扰动测试配置文件
+# 用于配置各种网络扰动参数的默认值
+
+# 测试环境配置
+test_environment:
+  agent_count: 4          # 测试代理数量
+  message_count: 50       # 发送消息数量
+  message_interval: 0.2   # 消息间隔(秒)
+
+# 网络延迟扰动配置
+network_delay:
+  enabled: true
+  base_delay: 200         # 基础延迟(ms)
+  jitter: 100            # 延迟抖动(ms)
+  packet_loss: 0.1       # 丢包率(0-1)
+  delay_mode: "fixed"    # 延迟模式: fixed, gradual, random
+  affected_topics:       # 受影响的主题
+    - "test/communication"
+  affected_agents:       # 受影响的代理
+    - "Agent1"
+    - "Agent2"
+
+# 数据包丢失扰动配置
+packet_loss:
+  enabled: false
+  loss_rate: 0.3              # 基础丢包率(0-1)
+  burst_probability: 0.1      # 突发丢包概率(0-1)
+  burst_duration: 1.0         # 突发持续时间(秒)
+  recovery_time: 2.0          # 恢复时间(秒)
+  affected_topics:
+    - "test/packet_loss"
+  affected_agents:
+    - "Agent1"
+    - "Agent2"
+
+# 组合扰动配置
+combined_disturbance:
+  enabled: false
+  intensity: 1.0              # 扰动强度倍数
+  duration: 8.0               # 扰动持续时间(秒)
+  delay_start_offset: 0.0     # 延迟扰动开始偏移(秒)
+  loss_start_offset: 2.0      # 丢包扰动开始偏移(秒)
+
+# 预设配置场景
+presets:
+  light_disturbance:
+    network_delay:
+      base_delay: 50
+      jitter: 25
+      packet_loss: 0.05
+    packet_loss:
+      loss_rate: 0.1
+      burst_probability: 0.05
+  
+  moderate_disturbance:
+    network_delay:
+      base_delay: 200
+      jitter: 100
+      packet_loss: 0.1
+    packet_loss:
+      loss_rate: 0.3
+      burst_probability: 0.1
+  
+  heavy_disturbance:
+    network_delay:
+      base_delay: 500
+      jitter: 250
+      packet_loss: 0.2
+    packet_loss:
+      loss_rate: 0.5
+      burst_probability: 0.2
+
+# 分析配置
+analysis:
+  enable_real_time_monitoring: true
+  statistics_interval: 1.0    # 统计更新间隔(秒)
+  max_history_points: 1000    # 最大历史数据点数
+  export_results: true        # 是否导出结果

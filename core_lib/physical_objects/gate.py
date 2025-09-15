@@ -89,6 +89,8 @@ class Gate(PhysicalObjectInterface):
 
     def step(self, action: Dict[str, Any], dt: float) -> State:
         """更新闸门在单个时间步内的状态。"""
+        if not isinstance(action, dict):
+            raise TypeError(f"Gate.step(action, dt) 需要 dict，收到 {type(action).__name__}")
         if 'control_signal' in action and action['control_signal'] is not None:
             self.target_opening = action['control_signal']
         max_roc = self._params.get('max_rate_of_change', 0.05) # 最大变化速率

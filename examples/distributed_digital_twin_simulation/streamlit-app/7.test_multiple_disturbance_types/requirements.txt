@@ -1,0 +1,9 @@
+# Streamlit应用依赖包
+streamlit>=1.25.0
+pandas>=1.3.0
+numpy>=1.20.0
+plotly>=5.0.0
+pyyaml>=6.0
+
+# 可选：如果需要更好的性能
+scipy>=1.7.0

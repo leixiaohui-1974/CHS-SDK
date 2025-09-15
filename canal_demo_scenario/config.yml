@@ -1,0 +1,45 @@
+# 渠道控制系统仿真配置
+simulation:
+  name: "Canal Control System Demo"
+  description: "渠道控制系统演示 - 包含上游水库、渠道、闸门和下游水库"
+  version: "1.0.0"
+  
+  # 时间配置
+  time_config:
+    start_time: 0.0
+    end_time: 3600.0  # 1小时仿真
+    time_step: 10.0   # 10秒时间步长
+    real_time_factor: 1.0
+  
+  # 求解器配置
+  solver_config:
+    type: "runge_kutta_4"
+    tolerance: 1e-6
+    max_step_size: 10.0
+    min_step_size: 0.1
+  
+  # 并行配置
+  parallel_config:
+    enable: false
+    num_threads: 1
+    load_balancing: "static"
+
+# 输出配置
+output:
+  - topic: "simulation/water_levels"
+    file: "water_levels.csv"
+  - topic: "simulation/flow_rates"
+    file: "flow_rates.csv"
+  - topic: "simulation/gate_openings"
+    file: "gate_openings.csv"
+  - topic: "control/gate1/commands"
+    file: "gate1_control.csv"
+  - topic: "control/gate2/commands"
+    file: "gate2_control.csv"
+
+# 监测配置
+monitoring:
+  enable: true
+  log_interval: 60  # 每分钟记录一次
+  data_logging: true
+  performance_tracking: true

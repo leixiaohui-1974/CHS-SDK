@@ -7,12 +7,18 @@ simulation:
   description: "完全分布式、高保真的数字孪生与优化控制仿真案例"
   version: "1.0.0"
   
-  # 时间配置
-  time_config:
-    start_time: 0.0           # 仿真开始时间 (秒)
-    end_time: 86400.0         # 仿真结束时间 (24小时)
-    time_step: 60.0           # 基础时间步长 (1分钟)
-    real_time_factor: 1.0     # 实时倍数
+  # 时间配置黄去掉配置
+#  time_config:
+#    start_time: 0.0           # 仿真开始时间 (秒)
+#    end_time: 86400.0         # 仿真结束时间 (24小时)
+#    time_step: 60.0           # 基础时间步长 (1分钟)
+#    real_time_factor: 1.0     # 实时倍数
+
+  start_time: 0.0           # 仿真开始时间 (秒)
+  end_time: 86400.0         # 仿真结束时间 (24小时)
+  time_step: 60.0           # 基础时间步长 (1分钟)
+  real_time_factor: 1.0     # 实时倍数
+  dt: 10           # 黄新增
   
   # 求解器配置
   solver_config:
@@ -198,14 +204,14 @@ actuator_disturbance:
 flow_allocation:
   # 3孔闸门分配策略 (Gate_1)
   three_gate_strategy:
-    file_path: "gate_flow_allocation_3gates.csv"
+    file_path: "input/gate_flow_allocation_3gates.csv"
     allocation_method: "sequential_priority"  # 顺序优先分配
     priority_order: [1, 2, 3]  # 闸孔优先级
     balancing_threshold: 0.1   # 平衡阈值
   
   # 单孔闸门分配策略 (Gate_2, Gate_3)
   single_gate_strategy:
-    file_path: "gate_flow_allocation_1gate.csv"
+    file_path: "input/gate_flow_allocation_1gate.csv"
     allocation_method: "direct_control"  # 直接控制
     safety_margin: 0.05       # 安全裕度
 

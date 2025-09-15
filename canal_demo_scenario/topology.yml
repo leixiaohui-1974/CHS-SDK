@@ -1,0 +1,65 @@
+# 渠道控制系统拓扑连接配置
+connections:
+  # 上游水库到渠道1
+  - upstream: "Upstream_Reservoir"
+    downstream: "Canal_1"
+    connection_type: "water_flow"
+    flow_capacity: 100.0  # 最大流量100m³/s
+
+  # 渠道1到闸门1
+  - upstream: "Canal_1"
+    downstream: "Gate_1"
+    connection_type: "water_flow"
+    flow_capacity: 80.0   # 最大流量80m³/s
+
+  # 闸门1到渠道2
+  - upstream: "Gate_1"
+    downstream: "Canal_2"
+    connection_type: "water_flow"
+    flow_capacity: 60.0   # 最大流量60m³/s
+
+  # 渠道2到闸门2
+  - upstream: "Canal_2"
+    downstream: "Gate_2"
+    connection_type: "water_flow"
+    flow_capacity: 40.0   # 最大流量40m³/s
+
+  # 闸门2到下游水库
+  - upstream: "Gate_2"
+    downstream: "Downstream_Reservoir"
+    connection_type: "water_flow"
+    flow_capacity: 30.0   # 最大流量30m³/s
+
+  # 渠道1到分水口1（农业灌溉）
+  - upstream: "Canal_1"
+    downstream: "Diversion_1"
+    connection_type: "water_flow"
+    flow_capacity: 20.0   # 最大流量20m³/s
+
+  # 渠道2到分水口2（工业用水）
+  - upstream: "Canal_2"
+    downstream: "Diversion_2"
+    connection_type: "water_flow"
+    flow_capacity: 15.0   # 最大流量15m³/s
+
+  # 控制信号连接
+  - upstream: "Gate_1_Controller"
+    downstream: "Gate_1"
+    connection_type: "control_signal"
+    signal_type: "opening_command"
+
+  - upstream: "Gate_2_Controller"
+    downstream: "Gate_2"
+    connection_type: "control_signal"
+    signal_type: "opening_command"
+
+  # 传感器信号连接
+  - upstream: "Canal_1"
+    downstream: "Gate_1_Controller"
+    connection_type: "sensor_signal"
+    signal_type: "water_level"
+
+  - upstream: "Canal_2"
+    downstream: "Gate_2_Controller"
+    connection_type: "sensor_signal"
+    signal_type: "water_level"

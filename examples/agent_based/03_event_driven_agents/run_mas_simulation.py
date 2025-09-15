@@ -30,7 +30,7 @@ def run_mas_simulation():
     # 1. --- Simulation Harness and Message Bus Setup ---
     # 调整仿真时长为60000秒以给系统足够时间达到稳定状态
     # 使用较小的时间步长0.5秒提高控制精度
-    simulation_config = {'end_time': 60000, 'dt': 0.5}  # 使用end_time而不是duration
+    simulation_config = {'end_time': 60000, 'dt': 0.5,"start_time":0}  # 使用end_time而不是duration
     harness = SimulationHarness(config=simulation_config)
     message_bus = harness.message_bus
 

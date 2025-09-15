@@ -1,0 +1,77 @@
+# 单孔闸门流量分配策略表 (Gate_2 和 Gate_3)
+# 列说明：
+# target_flow: 目标流量 (m³/s)
+# gate_opening: 闸门开度 (0-1)
+# flow_coefficient: 流量系数
+# allocation_strategy: 分配策略描述
+# control_mode: 控制模式
+
+target_flow,gate_opening,flow_coefficient,allocation_strategy,control_mode
+0.0,0.0,0.0,gate_closed,manual
+2.0,0.05,0.6,very_low_flow,automatic
+4.0,0.1,0.65,very_low_flow,automatic
+6.0,0.15,0.68,low_flow,automatic
+8.0,0.2,0.7,low_flow,automatic
+10.0,0.25,0.72,low_medium_flow,automatic
+12.0,0.3,0.74,low_medium_flow,automatic
+14.0,0.35,0.75,medium_flow,automatic
+16.0,0.4,0.76,medium_flow,automatic
+18.0,0.45,0.77,medium_high_flow,automatic
+20.0,0.5,0.78,medium_high_flow,automatic
+22.0,0.55,0.78,high_flow,automatic
+24.0,0.6,0.79,high_flow,automatic
+26.0,0.65,0.79,high_flow,automatic
+28.0,0.7,0.8,very_high_flow,automatic
+30.0,0.75,0.8,very_high_flow,automatic
+32.0,0.8,0.8,very_high_flow,automatic
+34.0,0.85,0.8,maximum_flow,automatic
+36.0,0.9,0.8,maximum_flow,automatic
+38.0,0.95,0.8,maximum_flow,automatic
+40.0,1.0,0.8,full_open,automatic
+42.0,1.0,0.8,overflow_condition,emergency
+44.0,1.0,0.8,overflow_condition,emergency
+46.0,1.0,0.8,overflow_condition,emergency
+48.0,1.0,0.8,overflow_condition,emergency
+50.0,1.0,0.8,maximum_capacity,emergency
+52.0,1.0,0.8,over_capacity,emergency
+54.0,1.0,0.8,over_capacity,emergency
+56.0,1.0,0.8,over_capacity,emergency
+58.0,1.0,0.8,over_capacity,emergency
+60.0,1.0,0.8,critical_overflow,emergency
+65.0,1.0,0.8,critical_overflow,emergency
+70.0,1.0,0.8,critical_overflow,emergency
+75.0,1.0,0.8,critical_overflow,emergency
+80.0,1.0,0.8,critical_overflow,emergency
+85.0,1.0,0.8,critical_overflow,emergency
+90.0,1.0,0.8,critical_overflow,emergency
+95.0,1.0,0.8,critical_overflow,emergency
+100.0,1.0,0.8,absolute_maximum,emergency
+
+# Gate_2 专用配置（中等容量闸门）
+# target_flow,gate_opening,flow_coefficient,allocation_strategy,control_mode
+# 适用于Gate_2的流量范围：0-150 m³/s
+
+# Gate_3 专用配置（较小容量闸门）
+# target_flow,gate_opening,flow_coefficient,allocation_strategy,control_mode
+# 适用于Gate_3的流量范围：0-100 m³/s
+
+# 控制模式说明：
+# manual: 手动控制模式
+# automatic: 自动控制模式
+# emergency: 紧急控制模式
+
+# 分配策略说明：
+# gate_closed: 闸门关闭
+# very_low_flow: 极低流量（0-5 m³/s）
+# low_flow: 低流量（5-10 m³/s）
+# low_medium_flow: 中低流量（10-15 m³/s）
+# medium_flow: 中等流量（15-20 m³/s）
+# medium_high_flow: 中高流量（20-25 m³/s）
+# high_flow: 高流量（25-35 m³/s）
+# very_high_flow: 极高流量（35-40 m³/s）
+# maximum_flow: 最大流量（40+ m³/s）
+# full_open: 闸门全开
+# overflow_condition: 溢流状态
+# over_capacity: 超容量状态
+# critical_overflow: 临界溢流
+# absolute_maximum: 绝对最大容量

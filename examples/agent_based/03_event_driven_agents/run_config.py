@@ -39,7 +39,7 @@ def create_components(config, message_bus):
     
     for name, comp_config in config['components'].items():
         comp_type = comp_config['type']
-        initial_state = comp_config.get('initial_state', {})
+        initial_state = comp_config['initial_state']
         parameters = comp_config.get('parameters', {})
         
         if comp_type == 'Reservoir':
@@ -260,7 +260,8 @@ def run_simulation(config):
     # Create simulation harness
     simulation_config = {
         'end_time': config['simulation']['duration'],  # 使用end_time而不是duration
-        'dt': config['simulation']['dt']
+        'dt': config['simulation']['dt'],
+        'start_time': config['simulation']['start_time']
     }
     harness = SimulationHarness(config=simulation_config)
     message_bus = harness.message_bus

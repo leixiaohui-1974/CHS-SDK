@@ -5,6 +5,11 @@
 simulation:
   duration: 60000   # seconds - 10分钟仿真时间 (与run_mas_simulation.py一致)
   dt: 0.5         # time step - 0.5秒时间步长 (与run_mas_simulation.py一致)
+  start_time: 0.0           # 仿真开始时间 (秒)
+  time_step: 60.0           # 基础时间步长 (1分钟)
+  real_time_factor: 1.0     # 实时倍数
+
+
 
 # Communication topics for message bus
 communication:

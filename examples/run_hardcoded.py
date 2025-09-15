@@ -564,9 +564,9 @@ class ExamplesHardcodedRunner:
         
         # 创建核心组件
         message_bus = MessageBus()
-        config = {'end_time': 100, 'dt': 1.0}
-        builder = SimulationBuilder(config)
-        
+        # config = {'end_time': 100, 'dt': 1.0}
+        # builder = SimulationBuilder(config)
+        #
         # 创建物理组件
         reservoir = Reservoir(
             name="main_reservoir",
@@ -582,9 +582,9 @@ class ExamplesHardcodedRunner:
             message_bus=message_bus
         )
         
-        # 注册组件到harness
-        builder.harness.add_component("main_reservoir", reservoir)
-        builder.harness.add_component("outlet_gate", gate)
+        # # 注册组件到harness
+        # builder.harness.add_component("main_reservoir", reservoir)
+        # builder.harness.add_component("outlet_gate", gate)
         
         # 创建仿真环境
         sim_config = {
@@ -787,9 +787,11 @@ class ExamplesHardcodedRunner:
             # 所有示例都使用默认的入门示例配置
             harness = self.create_getting_started_simulation()
             print(f"注意：示例 '{example_key}' 使用默认配置运行")
-            
+
             # 运行仿真
             print("\n开始仿真...")
+            # 缺少build方法，黄加
+            harness.build()
             results = harness.run_simulation()
             
             # 性能统计

@@ -25,18 +25,9 @@ class SimulationHarness:
 
     def __init__(self, config: Dict[str, Any]):
         self.config = config
-        self.start_time = config.get('start_time', 0)
-        
-        # end_time is required - no default value
-        if 'end_time' not in config:
-            if 'duration' in config:
-                # 支持 duration 作为 end_time 的备选参数
-                config['end_time'] = config['duration']
-            else:
-                raise ValueError("'end_time' is required in simulation configuration")
+        self.start_time = config["start_time"]
         self.end_time = config['end_time']
-        
-        self.dt = config.get('dt', 1.0)
+        self.dt = config['dt']
         self.t = self.start_time
 
         self.history = []
@@ -275,7 +266,7 @@ class SimulationHarness:
 
             total_inflow = 0
             for upstream_id in self.inverse_topology.get(component_id, []):
-                total_inflow += current_step_outflows.get(upstream_id, 0)
+                total_inflow += current_step_outflows.get(upstream_id, 0)  # 遍历上游，如果没有上游，入流就设置为0，导致入流边界不起效果
 
             # 只有在组件没有受到入流扰动影响时才设置自动计算的入流
             # 并且避免重复设置相同的值
@@ -287,7 +278,7 @@ class SimulationHarness:
 
             if hasattr(component, 'is_stateful') and component.is_stateful:
                 total_outflow = 0
-                for downstream_id in self.topology.get(component_id, []):
+                for downstream_id in self.topology.get(component_id, []):  # 遍历下游
                     downstream_comp = self.components[downstream_id]
                     downstream_action = {}
                     component_state = component.get_state()
@@ -302,9 +293,9 @@ class SimulationHarness:
                     temp_downstream_comp = copy.deepcopy(downstream_comp)
 
                     temp_next_state = temp_downstream_comp.step(downstream_action, dt)
-                    total_outflow += temp_next_state.get('outflow', 0)
+                    total_outflow += temp_next_state.get('outflow', 0)  # 计算下游的出流
 
-                action['outflow'] = total_outflow
+                action['outflow'] = total_outflow  # 计算当前步骤的出流
 
             else:
                 if self.inverse_topology.get(component_id):

@@ -302,7 +302,7 @@ agents:
         optimization_results: "agent.central_mpc.gate1_optimization"
       # 流量分配策略配置
       allocation_config:
-        allocation_table_path: "gate_flow_allocation_3gates.csv"
+        allocation_table_path: "input/gate_flow_allocation_3gates.csv"
         gate_count: 3
         allocation_method: "proportional_distribution"
         constraints:
@@ -348,7 +348,7 @@ agents:
         optimization_results: "agent.central_mpc.gate2_optimization"
       # 单孔闸门分配策略
       allocation_config:
-        allocation_table_path: "gate_flow_allocation_1gate.csv"
+        allocation_table_path: "input/gate_flow_allocation_1gate.csv"
         gate_count: 1
         allocation_method: "direct_control"
         constraints:
@@ -382,7 +382,7 @@ agents:
         target_level: "agent.central_mpc.gate3_target_level"
         optimization_results: "agent.central_mpc.gate3_optimization"
       allocation_config:
-        allocation_table_path: "gate_flow_allocation_1gate.csv"
+        allocation_table_path: "input/gate_flow_allocation_1gate.csv"
         gate_count: 1
         allocation_method: "direct_control"
         constraints:
