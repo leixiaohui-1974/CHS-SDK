@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Refactored Example: Hierarchical Control System using SimulationBuilder.
+Refactored Example: Hierarchical Control System using YamlSimulationLoader.
 
-This script demonstrates how to use SimulationBuilder to simplify the setup
+This script demonstrates how to use YamlSimulationLoader to simplify the setup
 of a two-level hierarchical control system.
 """
 
@@ -15,7 +15,7 @@ import numpy as np
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 sys.path.insert(0, project_root)
 
-from core_lib.core_engine.testing.simulation_builder import SimulationBuilder
+from core_lib.core_engine.testing.simulation_builder import HardcodedYamlSimulationLoader
 from core_lib.local_agents.control.pid_controller import PIDController
 from core_lib.local_agents.control.unified_gate_control_agent import UnifiedGateControlAgent
 from core_lib.local_agents.perception.digital_twin_agent import DigitalTwinAgent
@@ -23,14 +23,14 @@ from core_lib.central_coordination.dispatch.central_dispatcher import CentralDis
 
 def create_hierarchical_control_system():
     """
-    Creates a hierarchical control system using SimulationBuilder.
+    Creates a hierarchical control system using YamlSimulationLoader.
     
     Returns:
-        SimulationBuilder: Configured simulation builder
+        YamlSimulationLoader: Configured simulation builder
     """
     # Initialize builder with simulation configuration
     config = {'end_time': 5000, 'dt': 1.0}  # 使用1秒时间步长
-    builder = SimulationBuilder(config)
+    builder = YamlSimulationLoader(config)
     
     # Communication topics
     RESERVOIR_STATE_TOPIC = "state.reservoir.level"

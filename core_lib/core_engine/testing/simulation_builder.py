@@ -17,7 +17,7 @@ from core_lib.physical_objects.pump import Pump, PumpStation
 from core_lib.physical_objects.water_turbine import WaterTurbine
 from core_lib.core.interfaces import Agent
 
-class SimulationBuilder:
+class HardcodedSimulationBuilder:
     """
     A builder class that simplifies the creation of common simulation patterns.
     
@@ -267,7 +267,7 @@ class SimulationBuilder:
             print(f"{component_id}: {state}")
 
 
-def create_simple_reservoir_gate_system(config: Optional[Dict[str, Any]] = None) -> SimulationBuilder:
+def create_simple_reservoir_gate_system(config: Optional[Dict[str, Any]] = None) -> HardcodedSimulationBuilder:
     """
     Create a simple reservoir-gate system - a common pattern in examples.
     
@@ -277,7 +277,7 @@ def create_simple_reservoir_gate_system(config: Optional[Dict[str, Any]] = None)
     Returns:
         Configured SimulationBuilder with reservoir and gate
     """
-    builder = SimulationBuilder(config)
+    builder = HardcodedSimulationBuilder(config)
     
     # Add components
     builder.add_reservoir("reservoir_1", water_level=10.0)
@@ -289,7 +289,7 @@ def create_simple_reservoir_gate_system(config: Optional[Dict[str, Any]] = None)
     return builder
 
 
-def create_hydropower_system(config: Optional[Dict[str, Any]] = None) -> SimulationBuilder:
+def create_hydropower_system(config: Optional[Dict[str, Any]] = None) -> HardcodedSimulationBuilder:
     """
     Create a hydropower system - upstream reservoir, turbine, downstream reservoir.
     
@@ -299,7 +299,7 @@ def create_hydropower_system(config: Optional[Dict[str, Any]] = None) -> Simulat
     Returns:
         Configured SimulationBuilder with hydropower components
     """
-    builder = SimulationBuilder(config)
+    builder = HardcodedSimulationBuilder(config)
     
     # Add components
     builder.add_reservoir("source_res", water_level=100.0, surface_area=1e5)
@@ -315,7 +315,7 @@ def create_hydropower_system(config: Optional[Dict[str, Any]] = None) -> Simulat
     return builder
 
 
-def create_pump_station_system(config: Optional[Dict[str, Any]] = None) -> SimulationBuilder:
+def create_pump_station_system(config: Optional[Dict[str, Any]] = None) -> HardcodedSimulationBuilder:
     """
     Create a pump station system - source reservoir, pump station, downstream reservoir.
     
@@ -325,7 +325,7 @@ def create_pump_station_system(config: Optional[Dict[str, Any]] = None) -> Simul
     Returns:
         Configured SimulationBuilder with pump station components
     """
-    builder = SimulationBuilder(config)
+    builder = HardcodedSimulationBuilder(config)
     
     # Add components
     builder.add_reservoir("source_res", water_level=10.0)

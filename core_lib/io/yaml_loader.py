@@ -28,7 +28,7 @@ class BaseYamlLoader:
             logging.error(f"Error parsing YAML file {file_path}: {e}")
             return None
 
-class SimulationBuilder(BaseYamlLoader):
+class YamlSimulationLoader(BaseYamlLoader):
     """
     Reads a directory of YAML files to configure and instantiate a simulation.
     """
@@ -47,7 +47,7 @@ class SimulationBuilder(BaseYamlLoader):
         self.message_bus = None
         self.component_instances = {}
         self.object_factory = None
-        logging.info(f"SimulationBuilder initialized for scenario: {self.scenario_path.name}")
+        logging.info(f"YamlSimulationLoader initialized for scenario: {self.scenario_path.name}")
 
     def load(self) -> SimulationHarness:
         """

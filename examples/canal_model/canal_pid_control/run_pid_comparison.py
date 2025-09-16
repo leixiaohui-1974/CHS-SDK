@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 project_root = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(project_root))
 
-from core_lib.io.yaml_loader import SimulationBuilder
+from core_lib.io.yaml_loader import YamlSimulationLoader
 
 def run_and_log_scenario(scenario_name, config_path, results_dir):
     """
@@ -18,7 +18,7 @@ def run_and_log_scenario(scenario_name, config_path, results_dir):
 
     try:
         # Load and run the simulation
-        loader = SimulationBuilder(scenario_path=config_path)
+        loader = YamlSimulationLoader(scenario_path=config_path)
         harness = loader.load()
         harness.run()
 

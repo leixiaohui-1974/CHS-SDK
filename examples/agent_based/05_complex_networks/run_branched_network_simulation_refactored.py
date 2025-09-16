@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Refactored Example: Complex Branched Network using SimulationBuilder.
+Refactored Example: Complex Branched Network using YamlSimulationLoader.
 
-This script demonstrates how to use SimulationBuilder to simplify the setup
+This script demonstrates how to use YamlSimulationLoader to simplify the setup
 of a complex, branched network topology.
 """
 
@@ -15,7 +15,7 @@ import numpy as np
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 sys.path.insert(0, project_root)
 
-from core_lib.core_engine.testing.simulation_builder import SimulationBuilder
+from core_lib.core_engine.testing.simulation_builder import HardcodedYamlSimulationLoader
 from core_lib.physical_objects.river_channel import RiverChannel
 from core_lib.local_agents.perception.digital_twin_agent import DigitalTwinAgent
 from core_lib.local_agents.control.pid_controller import PIDController
@@ -147,14 +147,14 @@ def analyze_and_visualize_results(builder, config):
 
 def create_branched_network_system():
     """
-    Creates a complex branched network system using SimulationBuilder.
+    Creates a complex branched network system using YamlSimulationLoader.
     
     Returns:
-        SimulationBuilder: Configured simulation builder
+        YamlSimulationLoader: Configured simulation builder
     """
     # Initialize builder with simulation configuration
     config = {'end_time': 10000, 'dt': 1.0}
-    builder = SimulationBuilder(config)
+    builder = YamlSimulationLoader(config)
     
     print("Initializing physical components...")
     

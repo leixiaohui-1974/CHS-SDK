@@ -34,7 +34,7 @@ project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 try:
-    from core_lib.io.yaml_loader import SimulationBuilder
+    from core_lib.io.yaml_loader import YamlSimulationLoader
     from core_lib.io.yaml_writer import save_history_to_yaml
 except ImportError as e:
     print(f"Error: Unable to import CHS-SDK module: {e}")
@@ -108,7 +108,7 @@ def run_universal_config_from_file(config_path, debug_mode=False, performance_mo
     else:
         # 标准多文件格式
         scenario_dir = config_path.parent
-        loader = SimulationBuilder(scenario_path=str(scenario_dir))
+        loader = YamlSimulationLoader(scenario_path=str(scenario_dir))
         harness = loader.load()
         
         logging.info("Starting simulation run...")

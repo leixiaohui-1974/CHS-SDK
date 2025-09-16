@@ -33,7 +33,7 @@ project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 try:
-    from core_lib.io.yaml_loader import SimulationBuilder
+    from core_lib.io.yaml_loader import YamlSimulationLoader
     from core_lib.io.yaml_writer import save_history_to_yaml
 except ImportError as e:
     print(f"错误：无法导入CHS-SDK模块: {e}")
@@ -103,7 +103,7 @@ def run_unified_scenario_from_config(config_path, show_progress=True, show_summa
     else:
         # 标准多文件格式
         scenario_dir = config_path.parent
-        loader = SimulationBuilder(scenario_path=str(scenario_dir))
+        loader = YamlSimulationLoader(scenario_path=str(scenario_dir))
         harness = loader.load()
         
         logging.info("开始仿真运行...")

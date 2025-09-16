@@ -27,7 +27,7 @@ from datetime import datetime
 project_root = Path(__file__).resolve().parent
 sys.path.insert(0, str(project_root))
 
-from core_lib.io.yaml_loader import SimulationBuilder
+from core_lib.io.yaml_loader import YamlSimulationLoader
 from core_lib.io.yaml_writer import save_history_to_yaml
 
 # 设置中文字体支持
@@ -58,7 +58,7 @@ class CanalDemo:
         
         try:
             # 初始化仿真构建器
-            loader = SimulationBuilder(
+            loader = YamlSimulationLoader(
                 scenario_path=str(self.scenario_path), 
                 agents_file=self.agents_file
             )

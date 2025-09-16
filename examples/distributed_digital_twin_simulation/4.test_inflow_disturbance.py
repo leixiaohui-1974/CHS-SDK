@@ -11,7 +11,7 @@ import os
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 sys.path.insert(0, project_root)
 
-from core_lib.io.yaml_loader import SimulationBuilder
+from core_lib.io.yaml_loader import YamlSimulationLoader
 from dynamic_disturbance_manager import DynamicDisturbanceManager
 from core_lib.central_coordination.collaboration.message_bus import MessageBus
 import time
@@ -20,7 +20,7 @@ def inflow_disturbance():
     print("=== 测试入流扰动对物理计算核心的影响 ===")
     
     # 构建仿真
-    builder = SimulationBuilder('.')
+    builder = YamlSimulationLoader('.')
     harness = builder.load()
     
     # 获取上游水库

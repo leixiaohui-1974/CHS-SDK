@@ -12,7 +12,7 @@ from typing import Dict, Any, Optional, List
 from dataclasses import dataclass
 
 from core_lib.core_engine.testing.simulation_harness import SimulationHarness
-from core_lib.io.yaml_loader import SimulationBuilder
+from core_lib.io.yaml_loader import YamlSimulationLoader
 from core_lib.central_coordination.collaboration.message_bus import MessageBus
 
 logger = logging.getLogger(__name__)
@@ -52,7 +52,7 @@ class SimulationEngine:
         # 核心组件
         self.harness: Optional[SimulationHarness] = None
         self.message_bus: Optional[MessageBus] = None
-        self.builder: Optional[SimulationBuilder] = None
+        self.builder: Optional[YamlSimulationLoader] = None
         
         # 异步控制
         self._stop_event = asyncio.Event()
@@ -126,8 +126,8 @@ class SimulationEngine:
         if not scenario_path.exists():
             raise FileNotFoundError(f"Scenario path not found: {scenario_path}")
         
-        # 使用 SimulationBuilder 加载场景
-        self.builder = SimulationBuilder(str(scenario_path))
+        # 使用 YamlSimulationLoader 加载场景
+        self.builder = YamlSimulationLoader(str(scenario_path))
         self.harness, self.message_bus = self.builder.load()
         
         # 更新配置

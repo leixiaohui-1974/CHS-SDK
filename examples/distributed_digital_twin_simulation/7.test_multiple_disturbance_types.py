@@ -18,7 +18,7 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from core_lib.io.yaml_loader import SimulationBuilder
+from core_lib.io.yaml_loader import YamlSimulationLoader
 from core_lib.disturbances.disturbance_framework import (
     DisturbanceConfig, DisturbanceType, InflowDisturbance, SensorNoiseDisturbance, create_disturbance
 )
@@ -35,7 +35,7 @@ def load_simulation_harness():
     scenario_path = os.path.dirname(__file__)
     
     try:
-        builder = SimulationBuilder(scenario_path=scenario_path)
+        builder = YamlSimulationLoader(scenario_path=scenario_path)
         harness = builder.load()
         return harness
     except Exception as e:

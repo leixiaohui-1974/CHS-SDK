@@ -15,7 +15,7 @@ from pathlib import Path
 project_root = Path(__file__).resolve().parent
 sys.path.insert(0, str(project_root))
 
-from core_lib.io.yaml_loader import SimulationBuilder
+from core_lib.io.yaml_loader import YamlSimulationLoader
 from core_lib.io.yaml_writer import save_history_to_yaml
 
 # Configure logging
@@ -39,7 +39,7 @@ def main():
 
     # Initialize the loader with the path and the specified agents file
     logging.info(f"Loading scenario from: {scenario_path} using agents file: {args.agents}")
-    loader = SimulationBuilder(scenario_path=str(scenario_path), agents_file=args.agents)
+    loader = YamlSimulationLoader(scenario_path=str(scenario_path), agents_file=args.agents)
 
     # Load the simulation harness
     harness = loader.load()

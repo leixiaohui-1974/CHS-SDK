@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 增强的YAML配置加载器
-扩展SimulationBuilder类以支持通用配置文件的所有功能
+扩展YamlSimulationLoader类以支持通用配置文件的所有功能
 """
 
 import os
@@ -17,13 +17,13 @@ from typing import Dict, Any, Optional, List
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from core_lib.io.yaml_loader import SimulationBuilder
+from core_lib.io.yaml_loader import YamlSimulationLoader
 
 
-class EnhancedSimulationBuilder(SimulationBuilder):
+class EnhancedYamlSimulationLoader(YamlSimulationLoader):
     """
     增强的仿真构建器
-    扩展基础SimulationBuilder以支持通用配置文件的所有功能
+    扩展基础YamlSimulationLoader以支持通用配置文件的所有功能
     """
     
     def __init__(self, scenario_path=None, agents_file='agents.yml'):
@@ -569,9 +569,9 @@ def load_universal_config(config_file, scenario_path=None):
         scenario_path: 场景目录路径（可选）
         
     Returns:
-        EnhancedSimulationBuilder实例
+        EnhancedYamlSimulationLoader实例
     """
-    builder = EnhancedSimulationBuilder(scenario_path)
+    builder = EnhancedYamlSimulationLoader(scenario_path)
     builder.load_enhanced_config(config_file)
     return builder
 

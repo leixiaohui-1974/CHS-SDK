@@ -11,7 +11,7 @@ from pathlib import Path
 project_root = Path(__file__).resolve().parent
 sys.path.append(str(project_root))
 
-from core_lib.io.yaml_loader import SimulationBuilder
+from core_lib.io.yaml_loader import YamlSimulationLoader
 
 def test_output_config():
     """
@@ -29,8 +29,8 @@ def test_output_config():
     print(f"加载示例：{scenario_path}")
     
     try:
-        # 创建SimulationBuilder
-        builder = SimulationBuilder(str(scenario_path))
+        # 创建YamlSimulationLoader
+        builder = YamlSimulationLoader(str(scenario_path))
         
         # 加载仿真
         print("正在加载仿真...")

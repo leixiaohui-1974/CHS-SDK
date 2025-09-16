@@ -35,7 +35,7 @@ sys.path.insert(0, str(project_root))
 try:
     from core_lib.core_engine.testing.simulation_harness import SimulationHarness
     from core_lib.central_coordination.collaboration.message_bus import MessageBus
-    from core_lib.core_engine.testing.simulation_builder import SimulationBuilder
+    from core_lib.core_engine.testing.simulation_builder import HardcodedSimulationBuilder
     from core_lib.central_agents import *
     from core_lib.hydro_nodes import *
     from core_lib.local_agents import *

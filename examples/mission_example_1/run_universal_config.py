@@ -6,7 +6,7 @@ Mission Example 1 - 使用通用配置文件运行仿真
 
 这个脚本展示了：
 1. 如何加载通用配置文件
-2. 如何使用增强的SimulationBuilder
+2. 如何使用增强的YamlSimulationLoader
 3. 如何运行带有调试、性能监控、可视化等功能的仿真
 4. 如何与原有的组件配置文件集成
 """
@@ -20,7 +20,7 @@ project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 from core_lib.config.enhanced_yaml_loader import load_universal_config
-from core_lib.io.yaml_loader import SimulationBuilder
+from core_lib.io.yaml_loader import YamlSimulationLoader
 import logging
 
 def main():

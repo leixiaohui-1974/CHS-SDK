@@ -33,7 +33,7 @@ project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 try:
-    from core_lib.io.yaml_loader import SimulationBuilder
+    from core_lib.io.yaml_loader import YamlSimulationLoader
     from core_lib.io.yaml_writer import save_history_to_yaml
 except ImportError as e:
     print(f"错误：无法导入CHS-SDK模块: {e}")
@@ -50,7 +50,7 @@ def run_scenario_from_config(scenario_path, agents_file="agents.yml"):
         raise ValueError(f"场景路径不是有效目录: {scenario_path}")
     
     logging.info(f"加载场景: {scenario_path.name}")
-    loader = SimulationBuilder(scenario_path=str(scenario_path), agents_file=agents_file)
+    loader = YamlSimulationLoader(scenario_path=str(scenario_path), agents_file=agents_file)
     harness = loader.load()
     
     logging.info("开始仿真运行...")

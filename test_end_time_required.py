@@ -11,7 +11,7 @@ project_root = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(0, project_root)
 
 from core_lib.core_engine.testing.simulation_harness import SimulationHarness
-from core_lib.core_engine.testing.simulation_builder import SimulationBuilder
+from core_lib.core_engine.testing.simulation_builder import HardcodedSimulationBuilder
 
 def test_simulation_harness_without_end_time():
     """Test that SimulationHarness raises error when end_time is missing"""
@@ -37,7 +37,7 @@ def test_simulation_builder_without_end_time():
     print("Testing SimulationBuilder without end_time...")
     try:
         config = {'dt': 1.0}  # Missing end_time
-        builder = SimulationBuilder(config=config)
+        builder = HardcodedSimulationBuilder(config=config)
         print("❌ ERROR: Should have raised ValueError!")
         return False
     except ValueError as e:
@@ -68,7 +68,7 @@ def test_simulation_builder_with_end_time():
     print("Testing SimulationBuilder with end_time...")
     try:
         config = {'end_time': 1000, 'dt': 1.0}
-        builder = SimulationBuilder(config=config)
+        builder = HardcodedSimulationBuilder(config=config)
         print("✅ PASS: SimulationBuilder works with end_time")
         return True
     except Exception as e:

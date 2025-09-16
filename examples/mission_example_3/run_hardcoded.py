@@ -21,7 +21,7 @@ project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 try:
-    from core_lib.core_engine.testing.simulation_builder import SimulationBuilder
+    from core_lib.core_engine.testing.simulation_builder import HardcodedYamlSimulationLoader
     from core_lib.core_engine.mas_runner import MASRunner
     from core_lib.central_agents.enhanced_perception_agent import EnhancedPerceptionAgent
     from core_lib.physical_objects.reservoir import Reservoir
@@ -139,7 +139,7 @@ def run_simulation():
         }
         
         # 创建仿真构建器
-        builder = SimulationBuilder()
+        builder = YamlSimulationLoader()
         
         # 设置仿真参数
         builder.set_time_parameters(
