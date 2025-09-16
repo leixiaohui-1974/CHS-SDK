@@ -4,7 +4,7 @@ Pydantic models for the agents used in the hydraulic simulation.
 These models define the expected structure and types for the 'params'
 section of each agent's configuration in the API request.
 """
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 from typing import Optional, Tuple, Union, Any, Dict, List
 
 # --- Controller Models ---
@@ -46,9 +46,16 @@ class CSVInflowAgentParams(BaseModel):
     target_component: Optional[str] = Field(None, description="Optional name of the target component for context.")
 
 
-# A Union of all possible agent parameter models.
+# 所有可能的智能体参数模型的联合类型
 AnyAgentParams = Union[
     GateControlAgentParams,
     ReservoirPerceptionAgentParams,
     CSVInflowAgentParams,
 ]
+
+# 智能体类型映射，用于验证
+AGENT_TYPE_MAPPING = {
+    'GateControlAgent': GateControlAgentParams,
+    'ReservoirPerceptionAgent': ReservoirPerceptionAgentParams,
+    'CSVInflowAgent': CSVInflowAgentParams,
+}

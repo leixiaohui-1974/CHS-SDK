@@ -1,0 +1,266 @@
+# 新架构配置示例
+# 展示如何使用统一Agent替代原有的70+个Agent类
+
+simulation_config:
+  start_time: 0.0
+  end_time: 3600.0
+  time_step: 1.0
+  simulation_engine: "enhanced"
+
+# 全局配置
+global_event_bus:
+  type: "SimpleEventBus"
+  max_topics: 1000
+
+global_logger:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+# Agent配置列表
+agents:
+  # 数据源Agent - 替代多个CSV相关Agent
+  - agent_id: "historical_inflow_data"
+    agent_type: "UnifiedDataSourceAgent"
+    enabled: true
+    debug: false
+    source_type: "csv"
+    connection_config:
+      csv_file_path: "data/historical_inflow.csv"
+      time_column: "time"
+      data_columns: ["inflow"]
+      loop_data: true
+    publish_topic: "data.inflow.historical"
+    publish_interval: 1.0
+
+  - agent_id: "observed_inflow_data"
+    agent_type: "UnifiedDataSourceAgent"
+    enabled: true
+    source_type: "csv"
+    connection_config:
+      csv_file_path: "data/observed_inflow.csv"
+      time_column: "time"
+      data_columns: ["inflow"]
+    publish_topic: "data.inflow.observed"
+    publish_interval: 1.0
+
+  - agent_id: "rainfall_data"
+    agent_type: "UnifiedDataSourceAgent"
+    enabled: true
+    source_type: "csv"
+    connection_config:
+      csv_file_path: "data/rainfall_data.csv"
+      time_column: "time"
+      data_columns: ["rainfall"]
+    publish_topic: "data.rainfall"
+    publish_interval: 1.0
+
+  # 本地控制Agent - 替代多个设备特定控制Agent
+  - agent_id: "gate_controller_1"
+    agent_type: "UnifiedLocalControlAgent"
+    enabled: true
+    debug: true
+    device_type: "gate"
+    control_strategy: "pid"
+    target_component: "gate_1"
+    topics:
+      observation_topic: "sensor.gate_1.state"
+      action_topic: "control.gate_1.action"
+      command_topic: "command.gate_1"
+    observation_key: "water_level"
+    controller_config:
+      kp: 1.0
+      ki: 0.1
+      kd: 0.05
+      setpoint: 2.5
+      output_limits: [0.0, 1.0]
+    device_config:
+      min_opening: 0.0
+      max_opening: 1.0
+      opening_rate: 0.1
+      closing_rate: 0.1
+
+  - agent_id: "pump_controller_1"
+    agent_type: "UnifiedLocalControlAgent"
+    enabled: true
+    device_type: "pump"
+    control_strategy: "pid"
+    target_component: "pump_station_1"
+    topics:
+      observation_topic: "sensor.pump_1.state"
+      action_topic: "control.pump_1.action"
+      command_topic: "command.pump_1"
+    observation_key: "flow_rate"
+    controller_config:
+      kp: 2.0
+      ki: 0.2
+      kd: 0.1
+      setpoint: 10.0
+      output_limits: [0.0, 100.0]
+    device_config:
+      min_speed: 0.0
+      max_speed: 100.0
+      acceleration: 10.0
+
+  - agent_id: "valve_controller_1"
+    agent_type: "UnifiedLocalControlAgent"
+    enabled: true
+    device_type: "valve"
+    control_strategy: "rule_based"
+    target_component: "valve_1"
+    topics:
+      observation_topic: "sensor.valve_1.state"
+      action_topic: "control.valve_1.action"
+    observation_key: "pressure"
+    device_config:
+      valve_type: "linear"
+      cv: 1.0
+      min_position: 0.0
+      max_position: 100.0
+
+  # 中央协调Agent - 替代多个协调相关Agent
+  - agent_id: "central_coordinator"
+    agent_type: "CentralCoordinatorAgent"
+    enabled: true
+    managed_agents: 
+      - "gate_controller_1"
+      - "pump_controller_1"
+      - "valve_controller_1"
+    coordination_interval: 5.0
+    task_queue_size: 100
+    load_balancing: true
+    health_check_interval: 10.0
+
+  # 中央控制Agent - 专注控制优化
+  - agent_id: "central_control"
+    agent_type: "CentralControlAgent"
+    enabled: true
+    managed_agents:
+      - "gate_controller_1" 
+      - "pump_controller_1"
+    coordination_interval: 10.0
+    optimization_method: "mpc"
+    objectives:
+      energy_efficiency: 0.3
+      tracking_error: 0.7
+    constraints:
+      flow_balance:
+        type: "equality"
+        bounds: [0.0, 0.0]
+        variables: ["gate_controller_1", "pump_controller_1"]
+      capacity_limit:
+        type: "inequality"
+        bounds: [0.0, 100.0]
+        variables: ["pump_controller_1"]
+    prediction_horizon: 10
+    control_horizon: 5
+
+  # 扰动Agent - 替代多个扰动相关Agent
+  - agent_id: "rainfall_disturbance"
+    agent_type: "UnifiedDisturbanceAgent"
+    enabled: true
+    disturbance_type: "rainfall"
+    parameters:
+      base_intensity: 0.0
+      peak_intensity: 15.0
+      storm_duration: 1800.0
+      storm_frequency: 0.1
+      seasonal_factor: 1.0
+    start_time: 0.0
+    end_time: 3600.0
+    target_components: ["reservoir_1", "channel_1"]
+    publish_topic: "disturbance.rainfall"
+    publish_interval: 60.0
+
+  - agent_id: "water_demand_disturbance"
+    agent_type: "UnifiedDisturbanceAgent"
+    enabled: true
+    disturbance_type: "water_use"
+    parameters:
+      base_demand: 5.0
+      peak_factor: 2.0
+      daily_pattern: true
+      weekly_pattern: false
+      seasonal_variation: 0.2
+      noise_factor: 0.1
+    start_time: 0.0
+    target_components: ["demand_node_1"]
+    publish_topic: "disturbance.demand"
+    publish_interval: 60.0
+
+  - agent_id: "sinusoidal_disturbance"
+    agent_type: "UnifiedDisturbanceAgent"
+    enabled: false
+    disturbance_type: "sinusoidal"
+    parameters:
+      amplitude: 2.0
+      frequency: 0.01
+      phase: 0.0
+      offset: 5.0
+    start_time: 300.0
+    end_time: 2700.0
+    publish_topic: "disturbance.sine"
+    publish_interval: 10.0
+
+  # 参数识别Agent - 替代识别相关Agent
+  - agent_id: "system_identification"
+    agent_type: "UnifiedIdentificationAgent"
+    enabled: true
+    identification_method: "offline"
+    optimization_algorithm: "least_squares"
+    target_parameters: ["manning_n", "discharge_coeff", "roughness"]
+    parameter_bounds:
+      manning_n: [0.01, 0.1]
+      discharge_coeff: [0.5, 1.0]
+      roughness: [0.001, 0.01]
+    initial_parameters:
+      manning_n: 0.03
+      discharge_coeff: 0.8
+      roughness: 0.005
+    data_source: "observed_inflow_data"
+    validation_split: 0.2
+    optimization_config:
+      max_iterations: 1000
+      tolerance: 1e-6
+      learning_rate: 0.01
+
+  - agent_id: "online_identification"
+    agent_type: "UnifiedIdentificationAgent"
+    enabled: false
+    identification_method: "online"
+    optimization_algorithm: "gradient_descent"
+    target_parameters: ["flow_coefficient"]
+    parameter_bounds:
+      flow_coefficient: [0.1, 2.0]
+    initial_parameters:
+      flow_coefficient: 1.0
+    window_size: 50
+    online_update_interval: 30.0
+    optimization_config:
+      learning_rate: 0.05
+      max_iterations: 100
+
+# 向后兼容配置示例（使用适配器）
+backward_compatibility_agents:
+  # 这些配置展示如何使用适配器保持向后兼容
+  - agent_id: "legacy_csv_reader"
+    agent_type: "CsvReaderAgent"  # 使用适配器
+    enabled: false
+    csv_file_path: "data/legacy_data.csv"
+    time_column: "time"
+    data_column: "value"
+
+  - agent_id: "legacy_gate_control"
+    agent_type: "GateControlAgent"  # 使用适配器
+    enabled: false
+    observation_topic: "sensor.gate.state"
+    action_topic: "control.gate.action"
+    controller_config:
+      kp: 1.0
+      ki: 0.1
+      kd: 0.05
+
+  - agent_id: "legacy_rainfall"
+    agent_type: "RainfallAgent"  # 使用适配器
+    enabled: false
+    base_intensity: 0.0
+    peak_intensity: 10.0

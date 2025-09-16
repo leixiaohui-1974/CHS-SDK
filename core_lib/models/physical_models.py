@@ -40,6 +40,13 @@ class ReservoirParameters(BaseModel):
         if not all(volumes[i] < volumes[i+1] for i in range(len(volumes) - 1)):
             raise ValueError("Volumes in storage_curve must be strictly increasing.")
         return v
+    
+    @validator('surface_area', 'area')
+    def validate_area_positive(cls, v):
+        """验证面积必须为正数"""
+        if v is not None and v <= 0:
+            raise ValueError('面积必须大于0')
+        return v
 
 class ReservoirModel(BasePhysicalObjectModel):
     """Pydantic model for a Reservoir component."""
@@ -60,6 +67,27 @@ class GateParameters(BaseModel):
     width: float = Field(2.0, description="Width of the gate in meters.")
     max_rate_of_change: Optional[float] = Field(0.05, description="Maximum rate of change of the gate opening per second.")
     max_opening: float = Field(1.0, description="Maximum physical opening of the gate.")
+    
+    @validator('discharge_coefficient')
+    def validate_discharge_coefficient(cls, v):
+        """验证泄流系数范围"""
+        if v <= 0 or v > 1:
+            raise ValueError('泄流系数必须在(0, 1]范围内')
+        return v
+    
+    @validator('width', 'max_opening')
+    def validate_positive_values(cls, v):
+        """验证必须为正数"""
+        if v <= 0:
+            raise ValueError('宽度和最大开度必须大于0')
+        return v
+    
+    @validator('max_rate_of_change')
+    def validate_max_rate_of_change(cls, v):
+        """验证变化率非负"""
+        if v is not None and v < 0:
+            raise ValueError('最大变化率不能为负数')
+        return v
 
 class GateModel(BasePhysicalObjectModel):
     """Pydantic model for a Gate component."""
@@ -81,6 +109,20 @@ class PipeParameters(BaseModel):
     manning_coefficient: float = Field(0.013, description="Manning's roughness coefficient.")
     upstream_invert: float = Field(..., description="Invert elevation at the upstream end.")
     downstream_invert: float = Field(..., description="Invert elevation at the downstream end.")
+    
+    @validator('length', 'diameter')
+    def validate_positive_dimensions(cls, v):
+        """验证长度和直径必须为正数"""
+        if v <= 0:
+            raise ValueError('管道长度和直径必须大于0')
+        return v
+    
+    @validator('manning_coefficient')
+    def validate_manning_coefficient(cls, v):
+        """验证曼宁系数范围"""
+        if v <= 0 or v > 1:
+            raise ValueError('曼宁系数必须在(0, 1]范围内')
+        return v
 
 class PipeModel(BasePhysicalObjectModel):
     """Pydantic model for a Pipe component."""
