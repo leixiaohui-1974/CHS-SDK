@@ -21,7 +21,7 @@ agent:
   agent_id: "central_dispatcher_1"
   config:
     prediction_horizon: 10  # time steps
-    dt: 3600  # Time step in seconds (1 hour)
+    time_step: 3600  # Time step in seconds (1 hour)
     q_weight: 1.0  # Penalty on deviation from target setpoint
     r_weight: 0.5  # Penalty on setpoint changes
     state_keys: ["upstream", "downstream"]
@@ -41,7 +41,7 @@ test_scenarios:
     type: "flood_warning"
     description: "未来持续大流量入流"
     inflow_values: 50.0  # m³/s for all horizon steps
-    duration: 10  # horizon steps
+    forecast_duration: 10  # horizon steps
 
 # Analysis and Validation
 analysis:

@@ -355,7 +355,7 @@ environment:
   # 自定义变量
   custom_vars:
     # 仿真参数
-    duration: 50              # 仿真持续时间 (秒)
+    end_time: 50              # 仿真持续时间 (秒)
     time_step: 1.0            # 时间步长 (秒)
     description: "PhysicalIOAgent 传感器感知和执行器物理动作演示"
     

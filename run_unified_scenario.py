@@ -46,8 +46,9 @@ from core_lib.disturbances.water_use_agent import WaterUseAgent
 # from core_lib.disturbances.inflow_forecaster_agent import InflowForecasterAgent  # Module not found
 from core_lib.core_engine.testing.simulation_harness import SimulationHarness
 from core_lib.central_coordination.collaboration.message_bus import MessageBus
-from core_lib.debug.log_manager import get_log_manager, setup_logging
-from core_lib.debug.debug_collector import collect_debug_data, DataType
+# Debug modules removed for release
+# from core_lib.debug.log_manager import get_log_manager, setup_logging
+# from core_lib.debug.debug_collector import collect_debug_data, DataType
 
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -396,17 +397,18 @@ def run_simulation_from_config(config_path: str, show_progress: bool = True,
         
         # 获取仿真参数
         sim_config = config.get('simulation', {})
-        duration = sim_config.get('duration', 3600)
+        end_time = sim_config.get('end_time', 3600)
         time_step = sim_config.get('time_step', 60)
+        start_time = sim_config.get('start_time', 0)
         description = sim_config.get('description', '未命名仿真')
         
         if show_progress:
             print(f"📋 仿真描述: {description}")
-            print(f"⏱️  仿真时长: {duration}秒 (时间步长: {time_step}秒)")
+            print(f"⏱️  仿真时长: {end_time}秒 (时间步长: {time_step}秒)")
         
         # 设置基础设施
         message_bus = MessageBus()
-        harness = SimulationHarness(config={'duration': duration, 'dt': time_step})
+        harness = SimulationHarness(config={'start_time': start_time, 'end_time': end_time, 'time_step': time_step})
         
         # 创建组件
         if show_progress:

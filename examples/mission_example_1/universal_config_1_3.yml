@@ -383,7 +383,7 @@ environment:
     agent_type: "LocalControlAgent"
     agent_id: "gate_control_agent_1"
     observation_key: "water_level"  # 期望从消息中获取的键
-    dt: 1.0                       # 控制周期 (秒)
+    time_step: 1.0                       # 控制周期 (秒)
     
     # 测试场景参数
     # 场景1: 水位高于设定点

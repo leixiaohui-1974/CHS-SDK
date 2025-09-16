@@ -363,7 +363,7 @@ environment:
   # 自定义变量
   custom_vars:
     # 仿真参数
-    duration: 30                  # 仿真步数
+    end_time: 30                  # 仿真步数
     description: "DigitalTwinAgent 数据平滑处理演示"
     true_water_level: 10.0        # 真实水位 (m)
     noise_std: 0.5                # 噪声标准差

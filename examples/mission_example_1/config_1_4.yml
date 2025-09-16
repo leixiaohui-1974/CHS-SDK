@@ -2,7 +2,7 @@
 # 数字孪生智能体（高级功能）配置
 
 simulation:
-  duration: 30  # steps
+  end_time: 30  # steps
   description: "DigitalTwinAgent 数据平滑处理演示"
   true_water_level: 10.0  # m
   noise_std: 0.5  # Standard deviation of noise

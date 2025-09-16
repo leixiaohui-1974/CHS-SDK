@@ -4,7 +4,7 @@ agents:
     class: core_lib.central_agents.central_mpc_agent.CentralMPCAgent
     agent_id: central_dispatcher_1
     prediction_horizon: 10  # time steps
-    dt: 3600  # Time step in seconds (1 hour)
+    time_step: 3600  # Time step in seconds (1 hour)
     q_weight: 1.0  # Penalty on deviation from target setpoint
     r_weight: 0.5  # Penalty on setpoint changes
     state_keys: ["upstream", "downstream"]

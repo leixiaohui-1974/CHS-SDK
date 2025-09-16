@@ -2,7 +2,7 @@
 agents:
   - id: main_controller
     class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
-    dt: 10.0
+    time_step: 10.0
     target_component: main_gate
     control_type: pid
     data_sources:
@@ -23,7 +23,7 @@ agents:
 
   - id: backup_controller
     class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
-    dt: 10.0
+    time_step: 10.0
     target_component: backup_gate
     control_type: pid
     data_sources:

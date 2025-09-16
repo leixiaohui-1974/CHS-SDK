@@ -2,7 +2,7 @@
 agents:
   - id: gate_controller
     class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
-    dt: 10.0
+    time_step: 10.0
     target_component: gate1
     control_type: pid
     data_sources:

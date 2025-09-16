@@ -2,7 +2,7 @@
 # 传感器与执行器仿真智能体配置
 
 simulation:
-  duration: 50  # seconds
+  end_time: 50  # seconds
   time_step: 1.0  # seconds
   description: "PhysicalIOAgent 传感器感知和执行器物理动作演示"
 

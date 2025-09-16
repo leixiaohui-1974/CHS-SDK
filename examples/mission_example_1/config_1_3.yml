@@ -26,7 +26,7 @@ agent:
   type: "LocalControlAgent"
   agent_id: "gate_control_agent_1"
   observation_key: "water_level"  # 期望从消息中获取的键
-  dt: 1.0  # 控制周期
+  time_step: 1.0  # 控制周期
 
 # Test Scenarios
 test_scenarios:

@@ -19,7 +19,7 @@ simulation:
 test_scenarios:
   forecast:
     description: Continuous high inflow forecast
-    duration: 10
+    forecast_duration: 10
     inflow_values: 50.0
     type: flood_warning
   initial_state:

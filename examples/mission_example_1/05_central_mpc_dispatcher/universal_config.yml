@@ -379,7 +379,7 @@ environment:
   # 自定义变量
   custom_vars:
     # 仿真参数
-    duration: 10              # 仿真步数
+    end_time: 10              # 仿真步数
     time_step: 3600           # 时间步长 (秒)
     description: "CentralMPCAgent high-level dispatch command demonstration"
     

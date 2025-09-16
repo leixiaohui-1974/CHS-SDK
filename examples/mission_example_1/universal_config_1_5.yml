@@ -400,7 +400,7 @@ environment:
     
     # MPC配置参数
     prediction_horizon: 10        # 预测时域 (时间步)
-    dt: 3600                      # 时间步长 (秒，1小时)
+    time_step: 3600                      # 时间步长 (秒，1小时)
     q_weight: 1.0                 # 偏离目标设定点的惩罚
     r_weight: 0.5                 # 设定点变化的惩罚
     state_keys: ["upstream", "downstream"]

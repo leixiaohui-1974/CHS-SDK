@@ -24,8 +24,10 @@ runtime:
   logging_level: INFO
   mode: simulation
 simulation:
-  dt: 100
-  duration: 20000
+  time_step: 100
+  end_time: 20000
+  start_time: 0.0
+  real_time_factor: 1.0
 true_pipe:
   initial_state:
     flow: 0

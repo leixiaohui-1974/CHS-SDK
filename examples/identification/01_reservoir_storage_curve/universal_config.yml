@@ -14,8 +14,10 @@ runtime:
   logging_level: INFO
   mode: simulation
 simulation:
-  dt: 3600
-  duration: 720000
+  time_step: 3600
+  end_time: 720000
+  start_time: 0.0
+  real_time_factor: 1.0
 true_reservoir:
   initial_state:
     volume: 1500000
