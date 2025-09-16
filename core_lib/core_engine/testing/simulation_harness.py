@@ -47,6 +47,14 @@ class SimulationHarness:
         
         # 扰动管理器
         self.disturbance_manager = DisturbanceManager()
+        
+        # 常量定义，避免魔数
+        self.DEFAULT_OBSERVATION_VALUE = 0.0  # 默认观测值
+        self.DEFAULT_INFLOW_VALUE = 0.0       # 默认入流值
+        self.DEFAULT_WATER_LEVEL = 0.0        # 默认水位
+        self.DEFAULT_OUTFLOW_VALUE = 0.0      # 默认出流值
+        self.DEFAULT_TIME_VALUE = 0.0         # 默认时间值
+        self.FIRST_COMPONENT_INDEX = 0        # 第一个组件索引
 
         print("SimulationHarness created.")
 
@@ -216,7 +224,7 @@ class SimulationHarness:
                 try:
                     # 获取观测值
                     observed_component = self.components[spec.observed_id]
-                    observation = observed_component.get_state().get(spec.observation_key, 0)
+                    observation = observed_component.get_state().get(spec.observation_key, self.DEFAULT_OBSERVATION_VALUE)
                     
                     # 计算控制动作
                     action = spec.controller.compute_control_action({'process_variable': observation}, self.time_step)
@@ -264,9 +272,9 @@ class SimulationHarness:
             component = self.components[component_id]
             action = {'control_signal': controller_actions.get(component_id)}
 
-            total_inflow = 0
+            total_inflow = self.DEFAULT_INFLOW_VALUE
             for upstream_id in self.inverse_topology.get(component_id, []):
-                total_inflow += current_step_outflows.get(upstream_id, 0)  # 遍历上游，如果没有上游，入流就设置为0，导致入流边界不起效果
+                total_inflow += current_step_outflows.get(upstream_id, self.DEFAULT_INFLOW_VALUE)  # 遍历上游，如果没有上游，入流就设置为默认值，导致入流边界不起效果
 
             # 只有在组件没有受到入流扰动影响时才设置自动计算的入流
             # 并且避免重复设置相同的值
@@ -277,38 +285,38 @@ class SimulationHarness:
                     component.set_inflow(total_inflow)
 
             if hasattr(component, 'is_stateful') and component.is_stateful:
-                total_outflow = 0
+                total_outflow = self.DEFAULT_OUTFLOW_VALUE
                 for downstream_id in self.topology.get(component_id, []):  # 遍历下游
                     downstream_comp = self.components[downstream_id]
                     downstream_action = {}
                     component_state = component.get_state()
-                    downstream_action['upstream_head'] = component_state.get('water_level', 0) if component_state else 0
+                    downstream_action['upstream_head'] = component_state.get('water_level', self.DEFAULT_WATER_LEVEL) if component_state else self.DEFAULT_WATER_LEVEL
 
                     if self.topology.get(downstream_id):
-                        dds_id = self.topology[downstream_id][0]
+                        dds_id = self.topology[downstream_id][self.FIRST_COMPONENT_INDEX]
                         dds_state = self.components[dds_id].get_state()
-                        downstream_action['downstream_head'] = dds_state.get('water_level', 0) if dds_state else 0
+                        downstream_action['downstream_head'] = dds_state.get('water_level', self.DEFAULT_WATER_LEVEL) if dds_state else self.DEFAULT_WATER_LEVEL
 
                     import copy
                     temp_downstream_comp = copy.deepcopy(downstream_comp)
 
                     temp_next_state = temp_downstream_comp.step(downstream_action, time_step)
-                    total_outflow += temp_next_state.get('outflow', 0)  # 计算下游的出流
+                    total_outflow += temp_next_state.get('outflow', self.DEFAULT_OUTFLOW_VALUE)  # 计算下游的出流
 
                 action['outflow'] = total_outflow  # 计算当前步骤的出流
 
             else:
                 if self.inverse_topology.get(component_id):
-                    up_id = self.inverse_topology[component_id][0]
+                    up_id = self.inverse_topology[component_id][self.FIRST_COMPONENT_INDEX]
                     up_state = self.components[up_id].get_state()
-                    action['upstream_head'] = up_state.get('water_level', 0) if up_state else 0
+                    action['upstream_head'] = up_state.get('water_level', self.DEFAULT_WATER_LEVEL) if up_state else self.DEFAULT_WATER_LEVEL
                 if self.topology.get(component_id):
-                    down_id = self.topology[component_id][0]
+                    down_id = self.topology[component_id][self.FIRST_COMPONENT_INDEX]
                     down_state = self.components[down_id].get_state()
-                    action['downstream_head'] = down_state.get('water_level', 0) if down_state else 0
+                    action['downstream_head'] = down_state.get('water_level', self.DEFAULT_WATER_LEVEL) if down_state else self.DEFAULT_WATER_LEVEL
 
             new_states[component_id] = component.step(action, time_step)
-            current_step_outflows[component_id] = new_states[component_id].get('outflow', 0)
+            current_step_outflows[component_id] = new_states[component_id].get('outflow', self.DEFAULT_OUTFLOW_VALUE)
 
         for component_id, state in new_states.items():
             self.components[component_id].set_state(state)
@@ -353,7 +361,7 @@ class SimulationHarness:
                 message_history = logger_agent.get_message_history()
                 
                 for entry in message_history:
-                    time_val = entry.get('time', 0)
+                    time_val = entry.get('time', self.DEFAULT_TIME_VALUE)
                     message = entry.get('message', {})
                     
                     # Create a row with time and all message data

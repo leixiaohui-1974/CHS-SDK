@@ -409,9 +409,9 @@ class UnifiedConfigManager:
                 if 'simulation' in config:
                     sim = config['simulation']
                     if 'end_time' not in sim:
-                        errors.append("config.yml缺少simulation.duration参数")
-                    if 'dt' not in sim:
-                        errors.append("config.yml缺少simulation.dt参数")
+                        errors.append("config.yml缺少simulation.end_time参数")
+                    if 'time_step' not in sim:
+                        errors.append("config.yml缺少simulation.time_step参数")
         
         return errors
     
