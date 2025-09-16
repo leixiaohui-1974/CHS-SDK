@@ -1,4 +1,5 @@
-# Global simulation settings for fault tolerance
 simulation:
-  duration: 2400  # seconds (40 minutes)
-  dt: 2.0         # time step in seconds
+  end_time: 2400
+  real_time_factor: 1.0
+  start_time: 0.0
+  time_step: 2.0

@@ -1,4 +1,5 @@
-# Global simulation settings for hierarchical control
 simulation:
-  duration: 1800  # seconds (30 minutes)
-  dt: 3.0         # time step in seconds
+  end_time: 1800
+  real_time_factor: 1.0
+  start_time: 0.0
+  time_step: 3.0

@@ -1,5 +1,7 @@
 simulation:
-  dt: 0.5
-  duration: 7200
+  end_time: 7200
+  real_time_factor: 1.0
   solver:
     type: rk4
+  start_time: 0.0
+  time_step: 0.5

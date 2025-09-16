@@ -1,5 +1,5 @@
-# Simulation Configuration
 simulation:
+  end_time: 3600
+  real_time_factor: 1.0
   start_time: 0
-  end_time: 3600 # 1 hour
-  time_step: 10 # seconds
+  time_step: 10

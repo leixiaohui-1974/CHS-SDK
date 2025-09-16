@@ -1,9 +1,9 @@
-# Simulation Configuration
 metadata:
-  run_with: run_scenario.py
-  example_type: yaml_config
   description: Centralized emergency override control example
-
+  example_type: yaml_config
+  run_with: run_scenario.py
 simulation:
-  duration: 200  # Simulation total time in seconds
-  dt: 1.0        # Simulation time step in seconds
+  end_time: 200
+  real_time_factor: 1.0
+  start_time: 0.0
+  time_step: 1.0

@@ -1,4 +1,5 @@
-# Simulation Configuration
 simulation:
-  duration: 100  # Simulation total time in seconds
-  dt: 1.0        # Simulation time step in seconds
+  end_time: 100
+  real_time_factor: 1.0
+  start_time: 0.0
+  time_step: 1.0

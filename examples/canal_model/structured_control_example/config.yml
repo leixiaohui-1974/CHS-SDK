@@ -1,4 +1,5 @@
-# Simulation Configuration for the Structured Control Agent Example
 simulation:
-  duration: 3600 # 1 hour
-  dt: 10 # seconds
+  end_time: 3600
+  real_time_factor: 1.0
+  start_time: 0.0
+  time_step: 10
