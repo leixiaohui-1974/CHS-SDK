@@ -21,7 +21,7 @@ class PumpNode(HydroNode):
         self.head_increase = fixed_head_increase
         self.is_on = True # Pump can be turned on or off
 
-    def get_equations(self, dt: float, theta: float) -> list:
+    def get_equations(self, time_step: float, theta: float) -> list:
         """
         Returns the linearized equations for the pump.
         """

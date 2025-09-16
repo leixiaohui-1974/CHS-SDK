@@ -15,7 +15,7 @@ class RainfallAgent(Agent):
     """
 
     def __init__(self, agent_id: str, message_bus: MessageBus, topic: str,
-                 start_time: float, duration: float, inflow_rate: float, **kwargs):
+                 start_time: float, end_time: float, inflow_rate: float, **kwargs):
         """
         Initializes the RainfallAgent.
 
@@ -24,16 +24,15 @@ class RainfallAgent(Agent):
             message_bus: The system's message bus.
             topic: The topic to publish the disturbance to.
             start_time: The simulation time to start the rainfall.
-            duration: The duration of the rainfall event in seconds.
+            end_time: The simulation time to end the rainfall.
             inflow_rate: The constant inflow rate during the event (m^3/s).
         """
         super().__init__(agent_id)
         self.bus = message_bus
         self.topic = topic
         self.start_time = start_time
-        self.duration = duration
+        self.end_time = end_time
         self.inflow_rate = inflow_rate
-        self.end_time = self.start_time + self.duration
         self.is_active = False
 
         if not self.topic:

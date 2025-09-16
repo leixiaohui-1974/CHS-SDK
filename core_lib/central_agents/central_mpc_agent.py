@@ -24,7 +24,7 @@ class CentralMPCAgent(Agent):
 
         # --- Extract MPC parameters from config ---
         self.horizon = self._config["prediction_horizon"]
-        self.dt = self._config["dt"]
+        self.time_step= self._config["dt"]
         self.q_weight = self._config["q_weight"]
         self.r_weight = self._config["r_weight"]
         self.state_keys = self._config["state_keys"]

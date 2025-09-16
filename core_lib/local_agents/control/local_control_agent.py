@@ -50,7 +50,7 @@ class LocalControlAgent(Agent):
             self._last_log_time = 0
             print(f"Control logging enabled @ {interval}s intervals to {state_topic}")
 
-    def __init__(self, agent_id: str, message_bus: MessageBus, dt: float,
+    def __init__(self, agent_id: str, message_bus: MessageBus, time_step: float,
                  target_component: str, control_type: str, data_sources: dict,
                  control_targets: dict, allocation_config: dict, controller_config: dict,
                  controller: Optional[Controller] = None, 
@@ -79,7 +79,7 @@ class LocalControlAgent(Agent):
         """
         super().__init__(agent_id)
         self.bus = message_bus
-        self.dt = dt
+        self.time_step= dt
         self.target_component = target_component
         self.control_type = control_type
         self.data_sources = data_sources

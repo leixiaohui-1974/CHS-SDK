@@ -12,11 +12,11 @@ class MPCController(Controller):
     A MIMO (Multiple-Input Multiple-Output) Model Predictive Controller.
     """
 
-    def __init__(self, dt: float, horizon: int, model_config: dict, objective_config: dict, control_config: dict, **kwargs):
+    def __init__(self, time_step: float, horizon: int, model_config: dict, objective_config: dict, control_config: dict, **kwargs):
         """
         Initializes the MIMO MPC controller.
         """
-        self.dt = dt
+        self.time_step= dt
         self.horizon = horizon
         self.model_config = model_config
         self.objective_config = objective_config
@@ -45,8 +45,8 @@ class MPCController(Controller):
             cost += r_weight * (q_in**2 + q_out**2)
         return cost
 
-    def compute_control_action(self, observation: State, dt: float) -> Any:
-        self.dt = dt
+    def compute_control_action(self, observation: State, time_step: float) -> Any:
+        self.time_step= dt
         current_level = observation.get("process_variable")
         if current_level is None:
             raise ValueError("Observation must contain 'process_variable'.")

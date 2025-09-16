@@ -8,7 +8,7 @@ class BaseControlAgent(Agent):
     It follows an event-driven pattern where logic is triggered by messages.
     """
 
-    def __init__(self, agent_id: str, message_bus: MessageBus, dt: int):
+    def __init__(self, agent_id: str, message_bus: MessageBus, time_step: int):
         """
         Initializes the BaseControlAgent.
 
@@ -19,7 +19,7 @@ class BaseControlAgent(Agent):
         """
         super().__init__(agent_id)
         self.message_bus = message_bus
-        self.dt = dt
+        self.time_step= dt
         self._subscribed_topics = []
 
     @abstractmethod

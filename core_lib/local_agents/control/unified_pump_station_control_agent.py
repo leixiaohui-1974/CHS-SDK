@@ -32,7 +32,7 @@ class UnifiedPumpStationControlAgent(UnifiedLocalControlAgent):
                  demand_topic: str,
                  control_topic_prefix: str,
                  control_strategy_type: ControlStrategyType = ControlStrategyType.OPTIMAL,
-                 dt: float = 1.0,
+                 time_step: float = 1.0,
                  **kwargs):
         """
         初始化统一泵站控制代理
@@ -57,7 +57,7 @@ class UnifiedPumpStationControlAgent(UnifiedLocalControlAgent):
         super().__init__(
             agent_id=agent_id,
             message_bus=message_bus,
-            dt=dt,
+            time_step=dt,
             control_strategy=ControlStrategyEnum.MULTI_ACTUATOR,
             observation_topic=demand_topic,
             observation_key='value',

@@ -30,7 +30,7 @@ class ValveNode(HydroNode):
         """Sets the valve opening (as a fraction from 0.0 to 1.0)."""
         self.opening = np.clip(opening, 0.0, 1.0)
 
-    def get_equations(self, dt: float, theta: float) -> list:
+    def get_equations(self, time_step: float, theta: float) -> list:
         """
         Returns the linearized equations for the valve.
         """

@@ -79,7 +79,7 @@ class Pipe(PhysicalObjectInterface):
         head_loss = friction_factor * (length / diameter) * (flow**2) / (2 * g * area**2)
         return head_loss
 
-    def step(self, action: Dict[str, Any], dt: float) -> State:
+    def step(self, action: Dict[str, Any], time_step: float) -> State:
         """
         Calculates the pipe's state. It can operate in two modes:
         1. If upstream and downstream heads are provided, it calculates the resulting flow.

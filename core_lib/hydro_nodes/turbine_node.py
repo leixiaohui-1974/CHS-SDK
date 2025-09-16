@@ -24,7 +24,7 @@ class TurbineNode(HydroNode):
         self.discharge_coeff = discharge_coeff
         self.is_on = True
 
-    def get_equations(self, dt: float, theta: float) -> list:
+    def get_equations(self, time_step: float, theta: float) -> list:
         """
         Returns the linearized equations for the turbine.
         """

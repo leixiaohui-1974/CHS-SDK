@@ -87,7 +87,7 @@ class Lake(PhysicalObjectInterface):
         if 'storage_curve' in parameters:
             self._validate_and_prepare_storage_curve()
 
-    def step(self, action: Dict[str, Any], dt: float) -> State:
+    def step(self, action: Dict[str, Any], time_step: float) -> State:
         """Advances the lake simulation for one time step."""
         inflow = self._inflow
         current_volume = self._state['volume']
@@ -121,7 +121,7 @@ class Lake(PhysicalObjectInterface):
         inflows = data['inflows']
         outflows = data['outflows']
         observed_levels = data['levels']
-        dt = 3600  # Assume hourly data for now
+        time_step= 3600  # Assume hourly data for now
 
         def _simulation_error(level_params: np.ndarray) -> float:
             candidate_curve = np.column_stack((self._volumes, level_params))

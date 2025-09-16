@@ -51,7 +51,7 @@ class UnifiedLocalControlAgent(Agent):
     def __init__(self,
                  agent_id: str,
                  message_bus: MessageBus,
-                 dt: float,
+                 time_step: float,
                  control_strategy: ControlStrategy,
                  # 基础配置
                  observation_topic: Optional[str] = None,
@@ -88,7 +88,7 @@ class UnifiedLocalControlAgent(Agent):
         
         # 基础属性
         self.bus = message_bus
-        self.dt = dt
+        self.time_step= dt
         self.control_strategy = control_strategy
         
         # 主题配置

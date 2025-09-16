@@ -12,8 +12,8 @@ class NetworkSolver:
     components in the network and solves it simultaneously for each time step.
     """
 
-    def __init__(self, dt: float, theta: float = 0.6):
-        self.dt = dt
+    def __init__(self, time_step: float, theta: float = 0.6):
+        self.time_step= dt
         self.theta = theta
         self.components = []
         self.reaches = []

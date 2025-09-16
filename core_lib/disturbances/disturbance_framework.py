@@ -51,7 +51,7 @@ class BaseDisturbance(abc.ABC):
         self.logger = logging.getLogger(f"{__name__}.{self.__class__.__name__}")
     
     @abc.abstractmethod
-    def apply(self, component: Any, current_time: float, dt: float) -> Dict[str, Any]:
+    def apply(self, component: Any, current_time: float, time_step: float) -> Dict[str, Any]:
         """应用扰动
         
         Args:
@@ -89,7 +89,7 @@ class InflowDisturbance(BaseDisturbance):
         self.original_inflow = None
         self.disturbance_inflow = config.parameters.get('target_inflow', 0)
     
-    def apply(self, component: Any, current_time: float, dt: float) -> Dict[str, Any]:
+    def apply(self, component: Any, current_time: float, time_step: float) -> Dict[str, Any]:
         """应用入流扰动"""
         if hasattr(component, 'set_inflow'):
             # 保存原始入流（仅在第一次应用时）
@@ -128,7 +128,7 @@ class SensorNoiseDisturbance(BaseDisturbance):
         self.noise_std = config.parameters.get('noise_std', 0.1)
         self.affected_sensors = config.parameters.get('affected_sensors', ['water_level'])
     
-    def apply(self, component: Any, current_time: float, dt: float) -> Dict[str, Any]:
+    def apply(self, component: Any, current_time: float, time_step: float) -> Dict[str, Any]:
         """应用传感器噪声"""
         import random
         
@@ -181,7 +181,7 @@ class ActuatorFailureDisturbance(BaseDisturbance):
         self.original_efficiency = 1.0
         self.failure_start_time = None
         
-    def apply(self, component: Any, current_time: float, dt: float) -> Dict[str, Any]:
+    def apply(self, component: Any, current_time: float, time_step: float) -> Dict[str, Any]:
         """应用执行器故障扰动"""
         if self.failure_start_time is None:
             self.failure_start_time = current_time
@@ -196,7 +196,7 @@ class ActuatorFailureDisturbance(BaseDisturbance):
         else:
             return {}
     
-    def _apply_delay_failure(self, component: Any, current_time: float, dt: float) -> Dict[str, Any]:
+    def _apply_delay_failure(self, component: Any, current_time: float, time_step: float) -> Dict[str, Any]:
         """应用延迟故障：控制信号延迟生效"""
         effect = {
             'failure_type': 'delay',
@@ -226,7 +226,7 @@ class ActuatorFailureDisturbance(BaseDisturbance):
         self.is_active = True
         return effect
     
-    def _apply_partial_failure(self, component: Any, current_time: float, dt: float) -> Dict[str, Any]:
+    def _apply_partial_failure(self, component: Any, current_time: float, time_step: float) -> Dict[str, Any]:
         """应用部分故障：执行器效率下降"""
         effect = {
             'failure_type': 'partial',
@@ -252,7 +252,7 @@ class ActuatorFailureDisturbance(BaseDisturbance):
         self.is_active = True
         return effect
     
-    def _apply_complete_failure(self, component: Any, current_time: float, dt: float) -> Dict[str, Any]:
+    def _apply_complete_failure(self, component: Any, current_time: float, time_step: float) -> Dict[str, Any]:
         """应用完全故障：执行器无响应"""
         effect = {
             'failure_type': 'complete',
@@ -323,7 +323,7 @@ class DisturbanceManager:
             del self.disturbances[disturbance_id]
             self.logger.info(f"移除扰动: {disturbance_id}")
     
-    def update(self, current_time: float, dt: float, components: Dict[str, Any]) -> Dict[str, Any]:
+    def update(self, current_time: float, time_step: float, components: Dict[str, Any]) -> Dict[str, Any]:
         """更新扰动状态
         
         Args:

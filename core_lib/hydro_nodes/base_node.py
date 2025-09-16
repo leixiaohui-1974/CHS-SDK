@@ -25,7 +25,7 @@ class HydroNode(ABC):
         self.downstream_obj = down_obj
 
     @abstractmethod
-    def get_equations(self, dt: float, theta: float) -> list:
+    def get_equations(self, time_step: float, theta: float) -> list:
         """
         Returns the linearized hydraulic equations for this node.
 

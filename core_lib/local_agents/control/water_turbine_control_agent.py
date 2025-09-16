@@ -22,7 +22,7 @@ class WaterTurbineControlAgent(LocalControlAgent):
                  observation_topic: str,
                  observation_key: str,
                  action_topic: str,
-                 dt: float,
+                 time_step: float,
                  command_topic: Optional[str] = None,
                  feedback_topic: Optional[str] = None):
         """
@@ -46,7 +46,7 @@ class WaterTurbineControlAgent(LocalControlAgent):
             observation_topic=observation_topic,
             observation_key=observation_key,
             action_topic=action_topic,
-            dt=dt,
+            time_step=dt,
             command_topic=command_topic,
             feedback_topic=feedback_topic
         )

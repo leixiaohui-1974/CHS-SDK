@@ -23,7 +23,7 @@ class JunctionNode(HydroNode):
         """Adds a connection that flows OUT of the junction."""
         self.out_connections.append((obj, idx))
 
-    def get_equations(self, dt: float, theta: float) -> list:
+    def get_equations(self, time_step: float, theta: float) -> list:
         """
         Returns the linearized equations for the junction.
         """

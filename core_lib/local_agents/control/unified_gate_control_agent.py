@@ -33,7 +33,7 @@ class UnifiedGateControlAgent(UnifiedLocalControlAgent):
                  observation_topic: str,
                  observation_key: str,
                  action_topic: str,
-                 dt: float,
+                 time_step: float,
                  command_topic: Optional[str] = None,
                  feedback_topic: Optional[str] = None,
                  **kwargs):
@@ -56,7 +56,7 @@ class UnifiedGateControlAgent(UnifiedLocalControlAgent):
         super().__init__(
             agent_id=agent_id,
             message_bus=message_bus,
-            dt=dt,
+            time_step=dt,
             control_strategy=ControlStrategy.MULTI_ACTUATOR,
             observation_topic=observation_topic,
             observation_key=observation_key,

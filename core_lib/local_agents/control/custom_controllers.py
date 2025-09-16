@@ -15,7 +15,7 @@ class HydropowerController(Controller):
         self.power_target_mw = 0
         self.grid_limit_mw = float('inf')
 
-    def compute_control_action(self, observation: Dict[str, Any], dt: float) -> Dict[str, Any]:
+    def compute_control_action(self, observation: Dict[str, Any], time_step: float) -> Dict[str, Any]:
         # Update head from the latest observation from the reservoir if available
         self.head = observation.get('water_level', self.head)
 
@@ -57,7 +57,7 @@ class DirectGateController(Controller):
     def __init__(self, setpoint=1.0, **kwargs):
         self.setpoint = setpoint
 
-    def compute_control_action(self, obs, dt):
+    def compute_control_action(self, obs, time_step):
         return {'opening': self.setpoint}
 
     def update_setpoint(self, msg):
@@ -92,7 +92,7 @@ class JointPIDController(Controller):
         self.valve_topic = messaging_params['valve_command_topic']
         print(f"JointPIDController created. Pump topic: '{self.pump_topic}', Valve topic: '{self.valve_topic}'.")
 
-    def compute_control_action(self, observation: State, dt: float) -> Dict[str, float]:
+    def compute_control_action(self, observation: State, time_step: float) -> Dict[str, float]:
         """
         Computes the net flow demand and splits it into pump and valve actions.
 
@@ -103,7 +103,7 @@ class JointPIDController(Controller):
         Returns:
             A dictionary where keys are topic names and values are the control signals.
         """
-        net_flow_demand = self.pid_controller.compute_control_action(observation, dt)
+        net_flow_demand = self.pid_controller.compute_control_action(observation, time_step)
 
         pump_inflow = 0.0
         valve_outflow = 0.0

@@ -60,7 +60,7 @@ class AdaptivePIDController(Controller):
         
         print(f"AdaptivePIDController created with base Kp={Kp}, Ki={Ki}, Kd={Kd}, Setpoint={setpoint}")
 
-    def _adaptive_gain_adjustment(self, error: float, dt: float):
+    def _adaptive_gain_adjustment(self, error: float, time_step: float):
         """
         根据误差历史自适应调整增益。
         """
@@ -86,7 +86,7 @@ class AdaptivePIDController(Controller):
                 self.Kp = self.base_Kp
                 self.Ki = self.base_Ki
 
-    def compute_control_action(self, observation: State, dt: float) -> float:
+    def compute_control_action(self, observation: State, time_step: float) -> float:
         """
         计算自适应PID控制动作。
         """

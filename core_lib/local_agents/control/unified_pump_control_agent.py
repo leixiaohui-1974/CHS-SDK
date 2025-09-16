@@ -30,7 +30,7 @@ class UnifiedPumpControlAgent(UnifiedLocalControlAgent):
                  pump_station: PumpStation,
                  demand_topic: str,
                  control_topic_prefix: str,
-                 dt: float = 1.0,
+                 time_step: float = 1.0,
                  **kwargs):
         """
         初始化统一泵控制代理
@@ -48,7 +48,7 @@ class UnifiedPumpControlAgent(UnifiedLocalControlAgent):
         super().__init__(
             agent_id=agent_id,
             message_bus=message_bus,
-            dt=dt,
+            time_step=dt,
             control_strategy=ControlStrategy.DISCRETE,
             observation_topic=demand_topic,  # 需求作为观测
             observation_key='value',  # 需求值

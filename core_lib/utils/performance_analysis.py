@@ -74,17 +74,17 @@ class PerformanceAnalyzer:
     提供全面的性能分析功能。
     """
     
-    def __init__(self, dt: float = 1.0):
+    def __init__(self, time_step: float = 1.0):
         """
         初始化性能分析器
         
         Args:
             dt: 采样时间间隔
         """
-        self.dt = dt
+        self.time_step= dt
         self.results = {}
         
-        logger.info(f"性能分析器初始化完成 (dt={dt})")
+        logger.info(f"性能分析器初始化完成 (time_step={dt})")
     
     def calculate_control_metrics(self, 
                                 setpoint: Union[float, np.ndarray],
@@ -631,7 +631,7 @@ class PerformanceAnalyzer:
 
 def quick_analysis(data: np.ndarray, 
                   setpoint: Optional[Union[float, np.ndarray]] = None,
-                  dt: float = 1.0) -> Dict[str, Any]:
+                  time_step: float = 1.0) -> Dict[str, Any]:
     """
     快速性能分析
     
@@ -665,7 +665,7 @@ def quick_analysis(data: np.ndarray,
 
 def compare_performance(data1: np.ndarray, data2: np.ndarray,
                        labels: List[str] = ['Method 1', 'Method 2'],
-                       dt: float = 1.0) -> Dict[str, Any]:
+                       time_step: float = 1.0) -> Dict[str, Any]:
     """
     比较两种方法的性能
     

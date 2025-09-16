@@ -48,7 +48,7 @@ class RainfallRunoff(PhysicalObjectInterface):
         if isinstance(intensity, (int, float)):
             self.rainfall_intensity = intensity  # m/s
 
-    def step(self, action: Dict[str, Any], dt: float) -> State:
+    def step(self, action: Dict[str, Any], time_step: float) -> State:
         """
         Calculates the runoff for a single time step.
 

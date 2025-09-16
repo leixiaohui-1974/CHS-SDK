@@ -46,7 +46,7 @@ class WaterTurbine(PhysicalObjectInterface):
         if self.action_key in message:
             self.target_outflow = message[self.action_key]
 
-    def step(self, action: dict, dt: float) -> State:
+    def step(self, action: dict, time_step: float) -> State:
         """
         Calculates the turbine's outflow and power generation for one time step.
         """

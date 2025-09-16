@@ -19,7 +19,7 @@ class RiverChannel(PhysicalObjectInterface):
         self._state.setdefault('outflow', 0)
         print(f"RiverChannel '{self.name}' created with initial state {self._state}.")
 
-    def step(self, action: Any, dt: float) -> State:
+    def step(self, action: Any, time_step: float) -> State:
         """
         Simulates the river channel's change over a single time step.
         """

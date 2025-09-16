@@ -32,7 +32,7 @@ class GateNode(HydroNode):
         self.opening = np.clip(opening, 0.0, 1.0)
         self.flow_area = self.width * self.opening
 
-    def get_equations(self, dt: float, theta: float) -> list:
+    def get_equations(self, time_step: float, theta: float) -> list:
         """
         Returns the linearized equations for the gate.
         """

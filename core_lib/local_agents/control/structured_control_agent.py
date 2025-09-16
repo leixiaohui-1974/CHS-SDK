@@ -10,7 +10,7 @@ class StructuredControlAgent(BaseControlAgent):
     """
 
     def __init__(self, agent_id, message_bus, controlled_element_id: str,
-                 control_mode: str, controller_config: dict, dt: int, **kwargs):
+                 control_mode: str, controller_config: dict, time_step: int, **kwargs):
         """
         Initializes the StructuredControlAgent.
 
@@ -100,7 +100,7 @@ class StructuredControlAgent(BaseControlAgent):
 
         if process_variable is not None:
             observation_for_pid = {'process_variable': process_variable}
-            control_action = self.controller.compute_control_action(observation_for_pid, dt=self.dt)
+            control_action = self.controller.compute_control_action(observation_for_pid, time_step=self.dt)
             payload = {'value': control_action}
             self.message_bus.publish(self.action_topic, payload)
         else:

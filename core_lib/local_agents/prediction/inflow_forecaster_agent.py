@@ -33,11 +33,11 @@ class InflowForecasterAgent(Agent):
         self.bus = message_bus
         self.forecast_topic = config["forecast_topic"]
         self.start_time = config["disturbance_start_time"]
-        self.duration = config["disturbance_duration"]
+        self.disturbance_end_time = config["disturbance_end_time"]
         self.inflow_rate = config["disturbance_inflow_rate"]
         self.horizon = config["prediction_horizon"]
-        self.dt = config["dt"]
-        self.end_time = self.start_time + self.duration
+        self.time_step= config["dt"]
+        self.end_time = self.disturbance_end_time
 
         print(f"InflowForecasterAgent '{self.agent_id}' created. Will publish perfect forecasts to '{self.forecast_topic}'.")
 

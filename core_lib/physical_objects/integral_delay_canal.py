@@ -17,7 +17,7 @@ class IntegralDelayCanal(PhysicalObjectInterface):
     and the wave travel time (time delay).
 
     The water level `y` at the downstream end of the canal is modeled as:
-    dy/dt = K * u(t - tau)
+    dy/time_step= K * u(t - tau)
 
     where:
     - y is the water level.
@@ -47,7 +47,7 @@ class IntegralDelayCanal(PhysicalObjectInterface):
         self.inflow_history = None
         self.history_size = 0
 
-    def step(self, action: any, dt: float) -> State:
+    def step(self, action: any, time_step: float) -> State:
         """
         Advances the canal simulation for one time step.
         """

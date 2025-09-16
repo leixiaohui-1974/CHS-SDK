@@ -44,7 +44,7 @@ class PIDController(Controller):
         print(f"PIDController created with Kp={Kp}, Ki={Ki}, Kd={Kd}, Setpoint={setpoint}, "
               f"OutputRange=[{min_output}, {max_output}].")
 
-    def compute_control_action(self, observation: State, dt: float) -> float:
+    def compute_control_action(self, observation: State, time_step: float) -> float:
         """
         Computes the PID control action with enhanced anti-windup and filtering.
 

@@ -143,7 +143,7 @@ class PerformanceOptimizedDisturbanceManager:
             if comp_id in needed_components
         }
     
-    def update(self, current_time: float, dt: float, components: Dict[str, Any]) -> Dict[str, Any]:
+    def update(self, current_time: float, time_step: float, components: Dict[str, Any]) -> Dict[str, Any]:
         """性能优化的扰动更新方法"""
         start_time = time.perf_counter()
         

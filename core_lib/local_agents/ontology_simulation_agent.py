@@ -51,7 +51,7 @@ class OntologySimulationAgent(Agent):
         # --- 1. 执行器仿真 ---
         # 模拟闸门开度的变化，考虑最大速度限制
         error = self.target_gate_opening - self.gate_opening
-        delta = min(abs(error), self.max_gate_speed * 1) # dt=1s
+        delta = min(abs(error), self.max_gate_speed * 1) # time_step=1s
         if error > 0:
             self.gate_opening += delta
         else:

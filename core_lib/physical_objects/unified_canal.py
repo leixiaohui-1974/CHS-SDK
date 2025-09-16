@@ -61,7 +61,7 @@ class UnifiedCanal(PhysicalObjectInterface):
         self.inflow_history = None
         self.history_size = 0
 
-    def step(self, action: any, dt: float) -> State:
+    def step(self, action: any, time_step: float) -> State:
         if dt <= 0:
             return self.get_state()
 
@@ -80,13 +80,13 @@ class UnifiedCanal(PhysicalObjectInterface):
 
         return self.get_state()
 
-    def _initialize_history(self, dt):
+    def _initialize_history(self, time_step):
         if self.inflow_history is None:
             self.history_size = int(self.delay / dt) + 2 if self.delay else 2
             initial_inflow = self._state.get('inflow', 0.0)
             self.inflow_history = deque([initial_inflow] * self.history_size, maxlen=self.history_size)
 
-    def _step_integral(self, dt: float):
+    def _step_integral(self, time_step: float):
         inflow = self._inflow
         self._state['inflow'] = inflow
 
@@ -96,7 +96,7 @@ class UnifiedCanal(PhysicalObjectInterface):
         self._state['water_level'] += (inflow - self._state['outflow']) / self.surface_area * dt
         self._state['water_level'] = max(0, self._state['water_level'])
 
-    def _step_integral_delay(self, dt: float):
+    def _step_integral_delay(self, time_step: float):
         self._initialize_history(dt)
         inflow = self._inflow
         self._state['inflow'] = inflow
@@ -106,7 +106,7 @@ class UnifiedCanal(PhysicalObjectInterface):
         self._state['water_level'] += self.gain * (inflow - delayed_inflow) * dt
         self._state['water_level'] = max(0, self._state['water_level'])
 
-    def _step_integral_delay_zero(self, dt: float):
+    def _step_integral_delay_zero(self, time_step: float):
         self._initialize_history(dt)
         inflow = self._inflow
         self._state['inflow'] = inflow
@@ -118,7 +118,7 @@ class UnifiedCanal(PhysicalObjectInterface):
         self._state['water_level'] += self.gain * (inflow - self._state['outflow']) * dt
         self._state['water_level'] = max(0, self._state['water_level'])
 
-    def _step_linear_reservoir(self, dt: float):
+    def _step_linear_reservoir(self, time_step: float):
         inflow = self._inflow
         self._state['inflow'] = inflow
         outflow_old = self._state['outflow']
@@ -149,7 +149,7 @@ class UnifiedCanal(PhysicalObjectInterface):
             return 0
         return (self.manning_n**2 * Q * abs(Q)) / (A**2 * R**(4/3))
 
-    def get_equations(self, dt: float, theta: float = 0.6):
+    def get_equations(self, time_step: float, theta: float = 0.6):
         """
         Generates the linearized Saint-Venant equations for each segment of the reach.
         This method is only applicable when model_type is 'st_venant'.

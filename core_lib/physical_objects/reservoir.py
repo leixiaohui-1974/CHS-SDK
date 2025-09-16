@@ -164,7 +164,7 @@ class Reservoir(PhysicalObjectInterface):
         if isinstance(inflow_value, (int, float)):
             self.data_inflow += inflow_value
 
-    def step(self, action: Dict[str, Any], dt: float) -> State:
+    def step(self, action: Dict[str, Any], time_step: float) -> State:
         """模拟水库在单个时间步内的状态变化。"""
 
         physical_inflow = self._inflow
@@ -237,7 +237,7 @@ class Reservoir(PhysicalObjectInterface):
 
         # 假设dt是恒定的，从数据点数量推断（例如，一天的数据）。
         # 理想情况下，这个值应该由数据提供。这里我们假设步长是每小时。
-        dt = 3600 # 秒
+        time_step= 3600 # 秒
 
         def _simulation_error(level_params: np.ndarray) -> float:
             """优化器的目标函数。"""

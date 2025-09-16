@@ -112,7 +112,7 @@ class Valve(PhysicalObjectInterface, Identifiable):
             self.target_opening = max(0.0, min(100.0, new_target))
             print(f"[{self.name}] Updated target_opening to: {self.target_opening}")
 
-    def step(self, action: Dict[str, Any], dt: float) -> State:
+    def step(self, action: Dict[str, Any], time_step: float) -> State:
         """
         Updates the valve's state over a single time step.
         """
@@ -162,7 +162,7 @@ class ValveStation(PhysicalObjectInterface):
         self._state.setdefault('valve_count', len(self.valves))
         print(f"ValveStation '{self.name}' created with {len(self.valves)} valves.")
 
-    def step(self, action: Dict[str, Any], dt: float) -> State:
+    def step(self, action: Dict[str, Any], time_step: float) -> State:
         """
         Steps each valve in the station and aggregates their states.
         The `action` dict (containing upstream/downstream heads) is passed to each valve.
@@ -171,7 +171,7 @@ class ValveStation(PhysicalObjectInterface):
 
         for valve in self.valves:
             # Individual valve control signals are received via their own message bus subscriptions.
-            valve_state = valve.step(action, dt)
+            valve_state = valve.step(action, time_step)
             total_outflow += valve_state.get('outflow', 0)
 
         self._state['total_outflow'] = total_outflow

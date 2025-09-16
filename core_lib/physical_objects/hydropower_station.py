@@ -30,7 +30,7 @@ p    control signals to them via the message bus.
 
         print(f"HydropowerStation '{self.name}' created with {len(self.turbines)} turbines and {len(self.gates)} gates.")
 
-    def step(self, action: Dict[str, Any], dt: float) -> State:
+    def step(self, action: Dict[str, Any], time_step: float) -> State:
         """
         Steps each component (turbine and gate) in the station and aggregates their states.
 
@@ -50,14 +50,14 @@ p    control signals to them via the message bus.
             # In a networked simulation, the harness would set each component's inflow.
             # Here we pass the station's total inflow to each for now.
             turbine.set_inflow(self._inflow)
-            turbine_state = turbine.step(action, dt)
+            turbine_state = turbine.step(action, time_step)
             total_turbine_outflow += turbine_state.get('outflow', 0.0)
             total_power += turbine_state.get('power', 0.0)
 
         total_spillway_outflow = 0.0
         for gate in self.gates:
             gate.set_inflow(self._inflow) # Also inform gate of available inflow
-            gate_state = gate.step(action, dt)
+            gate_state = gate.step(action, time_step)
             total_spillway_outflow += gate_state.get('outflow', 0.0)
 
         # Update aggregated state

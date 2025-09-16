@@ -53,7 +53,7 @@ class SmartPIDController(Controller):
         
         print(f"SmartPIDController created with Kp={Kp}, Ki={Ki}, Kd={Kd}, Setpoint={setpoint}")
 
-    def _adaptive_gain_adjustment(self, error: float, dt: float):
+    def _adaptive_gain_adjustment(self, error: float, time_step: float):
         """
         根据误差历史自适应调整增益。
         """
@@ -90,7 +90,7 @@ class SmartPIDController(Controller):
         else:
             return (self.min_output + self.max_output) / 2  # 中等开度
 
-    def _pid_control(self, error: float, dt: float) -> float:
+    def _pid_control(self, error: float, time_step: float) -> float:
         """
         标准PID控制。
         """
@@ -127,7 +127,7 @@ class SmartPIDController(Controller):
         
         return control_signal
 
-    def compute_control_action(self, observation: State, dt: float) -> float:
+    def compute_control_action(self, observation: State, time_step: float) -> float:
         """
         计算智能控制动作。
         """

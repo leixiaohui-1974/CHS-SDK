@@ -15,7 +15,7 @@ class WaterUseAgent(Agent):
     """
 
     def __init__(self, agent_id: str, message_bus: MessageBus, topic: str,
-                 start_time: float, duration: float, demand_rate: float, **kwargs):
+                 start_time: float, end_time: float, demand_rate: float, **kwargs):
         """
         Initializes the WaterUseAgent.
 
@@ -24,7 +24,7 @@ class WaterUseAgent(Agent):
             message_bus: The system's message bus.
             topic: The topic to publish the disturbance to.
             start_time: The simulation time to start the water use.
-            duration: The duration of the water use event in seconds.
+            end_time: The simulation time to end the water use.
             demand_rate: The water demand rate (m^3/s). This will be
                          published as a negative inflow.
         """
@@ -32,10 +32,9 @@ class WaterUseAgent(Agent):
         self.bus = message_bus
         self.topic = topic
         self.start_time = start_time
-        self.duration = duration
+        self.end_time = end_time
         # Demand is modeled as a negative inflow
         self.inflow_rate = -abs(demand_rate)
-        self.end_time = self.start_time + self.duration
         self.is_active = False
 
         if not self.topic:

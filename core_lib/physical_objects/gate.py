@@ -87,10 +87,10 @@ class Gate(PhysicalObjectInterface):
                 self.target_opening = self._calculate_opening_for_flow(float(target_flow))
                 print(f"闸门 '{self.name}' 收到流量指令: {target_flow:.4f}, 计算开度: {self.target_opening:.4f}")
 
-    def step(self, action: Dict[str, Any], dt: float) -> State:
+    def step(self, action: Dict[str, Any], time_step: float) -> State:
         """更新闸门在单个时间步内的状态。"""
         if not isinstance(action, dict):
-            raise TypeError(f"Gate.step(action, dt) 需要 dict，收到 {type(action).__name__}")
+            raise TypeError(f"Gate.step(action, time_step) 需要 dict，收到 {type(action).__name__}")
         if 'control_signal' in action and action['control_signal'] is not None:
             self.target_opening = action['control_signal']
         max_roc = self._params.get('max_rate_of_change', 0.05) # 最大变化速率

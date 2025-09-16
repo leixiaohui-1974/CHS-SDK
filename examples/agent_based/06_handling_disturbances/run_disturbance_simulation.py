@@ -146,7 +146,7 @@ def run_disturbance_simulation():
         message_bus=harness.message_bus,
         topic=RAINFALL_TOPIC,
         start_time=300,
-        duration=200,
+        end_time=500,  # 300 + 200 duration
         inflow_rate=150
     )
     harness.add_agent(rainfall_agent)

@@ -50,9 +50,9 @@ class SimulationBuilder:
         初始化仿真构建器
         
         Args:
-            simulation_params: 仿真参数字典，包含duration、dt等
+            simulation_params: 仿真参数字典，包含end_time、time_step等
         """
-        self.simulation_params = simulation_params or {'duration': 100, 'dt': 1.0}
+        self.simulation_params = simulation_params or {'end_time': 100, 'time_step': 1.0, 'start_time': 0}
         
         # 核心组件
         self.message_bus = MessageBus()
@@ -283,7 +283,7 @@ class SimulationBuilder:
             kp=kp, ki=ki, kd=kd,
             control_variable=control_variable,
             measurement_topic=measurement_topic,
-            dt=self.simulation_params.get('dt', 1.0),
+            time_step=self.simulation_params.get('dt', 1.0),
             **kwargs
         )
         
@@ -492,20 +492,20 @@ class PresetSimulations:
     
     @staticmethod
     def single_reservoir_control(reservoir_setpoint: float = 12.0,
-                               simulation_duration: float = 100,
-                               dt: float = 1.0) -> SimulationBuilder:
+                               simulation_end_time: float = 100,
+                               time_step: float = 1.0) -> SimulationBuilder:
         """
         单水库控制仿真
         
         Args:
             reservoir_setpoint: 水库水位设定值
-            simulation_duration: 仿真时长
+            simulation_end_time: 仿真结束时间
             dt: 时间步长
             
         Returns:
             SimulationBuilder: 配置好的仿真构建器
         """
-        builder = SimulationBuilder({'duration': simulation_duration, 'dt': dt})
+        builder = SimulationBuilder({'end_time': simulation_end_time, 'time_step': time_step, 'start_time': 0})
         
         builder.add_reservoir('reservoir', water_level=10.0) \
                .add_gate('gate', opening=0.5) \
@@ -520,15 +520,15 @@ class PresetSimulations:
     @staticmethod
     def cascade_reservoirs(num_reservoirs: int = 3,
                           setpoints: Optional[List[float]] = None,
-                          simulation_duration: float = 200,
-                          dt: float = 1.0) -> SimulationBuilder:
+                          simulation_end_time: float = 200,
+                          time_step: float = 1.0) -> SimulationBuilder:
         """
         梯级水库仿真
         
         Args:
             num_reservoirs: 水库数量
             setpoints: 各水库设定值列表
-            simulation_duration: 仿真时长
+            simulation_end_time: 仿真结束时间
             dt: 时间步长
             
         Returns:
@@ -540,7 +540,7 @@ class PresetSimulations:
         if len(setpoints) != num_reservoirs:
             raise ValueError("设定值数量必须与水库数量一致")
         
-        builder = SimulationBuilder({'duration': simulation_duration, 'dt': dt})
+        builder = SimulationBuilder({'end_time': simulation_end_time, 'time_step': time_step, 'start_time': 0})
         
         # 创建水库和闸门
         connections = []
@@ -575,20 +575,20 @@ class PresetSimulations:
     
     @staticmethod
     def pump_station_control(target_flow: float = 50.0,
-                           simulation_duration: float = 150,
-                           dt: float = 1.0) -> SimulationBuilder:
+                           simulation_end_time: float = 150,
+                           time_step: float = 1.0) -> SimulationBuilder:
         """
         泵站控制仿真
         
         Args:
             target_flow: 目标流量
-            simulation_duration: 仿真时长
+            simulation_end_time: 仿真结束时间
             dt: 时间步长
             
         Returns:
             SimulationBuilder: 配置好的仿真构建器
         """
-        builder = SimulationBuilder({'duration': simulation_duration, 'dt': dt})
+        builder = SimulationBuilder({'end_time': simulation_end_time, 'time_step': time_step, 'start_time': 0})
         
         builder.add_reservoir('source_reservoir', water_level=15.0) \
                .add_pump('pump_station', max_power=2000) \

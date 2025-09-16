@@ -100,7 +100,7 @@ class Pump(PhysicalObjectInterface):
             self.target_status = new_target
             print(f"Pump '{self.name}' received control signal: {new_target}")
 
-    def step(self, action: Dict[str, Any], dt: float) -> State:
+    def step(self, action: Dict[str, Any], time_step: float) -> State:
         """
         物理步进 - 只处理物理状态更新
         """
@@ -159,7 +159,7 @@ class PumpStation(PhysicalObjectInterface):
         self._state.setdefault('total_power_draw_kw', 0.0)
         print(f"PumpStation '{self.name}' created with {len(self.pumps)} pumps.")
 
-    def step(self, action: Dict[str, Any], dt: float) -> State:
+    def step(self, action: Dict[str, Any], time_step: float) -> State:
         """
         Steps each pump in the station and aggregates their states.
         The `action` dict (containing upstream/downstream heads) is passed to each pump.
@@ -171,7 +171,7 @@ class PumpStation(PhysicalObjectInterface):
         for pump in self.pumps:
             # Individual pump control signals are received via their own message bus subscriptions,
             # so they are not included in the station-level action.
-            pump_state = pump.step(action, dt)
+            pump_state = pump.step(action, time_step)
             total_outflow += pump_state.get('outflow', 0)
             total_power += pump_state.get('power_draw_kw', 0)
             if pump_state.get('status', 0) == 1:

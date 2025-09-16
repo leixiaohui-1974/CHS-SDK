@@ -36,7 +36,7 @@ class DisturbanceNode(PhysicalObjectInterface):
             if new_value is not None:
                 self._state['outflow'] = float(new_value)
 
-    def step(self, action: any, dt: float) -> State:
+    def step(self, action: any, time_step: float) -> State:
         """
         Updates the node's state. The primary control is via the message bus,
         but this can also handle direct actions if needed.
