@@ -2,7 +2,7 @@
 Agent for updating model parameters online.
 """
 from core_lib.core.interfaces import Agent
-from core_lib.central_coordination.collaboration.message_bus import MessageBus, Message
+from core_lib.central_coordination.communication.message_bus import MessageBus, Message
 from typing import Dict
 
 class ModelUpdaterAgent(Agent):

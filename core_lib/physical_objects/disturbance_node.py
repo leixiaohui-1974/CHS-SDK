@@ -2,7 +2,7 @@
 A component that represents a point of water withdrawal or external inflow.
 """
 from core_lib.core.interfaces import PhysicalObjectInterface, State, Parameters
-from core_lib.central_coordination.collaboration.message_bus import MessageBus, Message
+from core_lib.central_coordination.communication.message_bus import MessageBus, Message
 from typing import Optional
 import numpy as np
 

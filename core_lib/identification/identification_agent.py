@@ -2,8 +2,9 @@
 一个负责协调参数辨识过程的智能体。
 """
 from core_lib.core.interfaces import Agent, Identifiable
-from core_lib.central_coordination.collaboration.message_bus import MessageBus, Message
-from typing import Dict, Any, List
+from core_lib.central_coordination.communication.message_bus import MessageBus, Message
+from typing import Dict, Any, List, Optional
+import logging
 
 class ParameterIdentificationAgent(Agent):
     """
@@ -28,24 +29,37 @@ class ParameterIdentificationAgent(Agent):
         super().__init__(agent_id)
         self.target_model = target_model
         self.bus = message_bus
+        self.logger = logging.getLogger(f"{self.__class__.__name__}.{agent_id}")
 
-        # 配置
+        # 配置验证
+        if "identification_data_map" not in kwargs:
+            raise ValueError("identification_data_map is required")
+        
         self.id_interval = kwargs.get("identification_interval", 100)
         self.data_map = kwargs["identification_data_map"]
+        
+        # 验证数据映射格式
+        for model_key, data_config in self.data_map.items():
+            if not isinstance(data_config, dict):
+                raise ValueError(f"data_config for {model_key} must be a dictionary")
+            if 'topic' not in data_config or 'key' not in data_config:
+                raise ValueError(f"data_config for {model_key} must contain 'topic' and 'key'")
 
         # 内部状态
         self.data_history: Dict[str, List[float]] = {key: [] for key in self.data_map.keys()}
         self.new_data_count = 0
 
-
         # 订阅所有必需的数据主题
         for model_key, data_config in self.data_map.items():
             topic = data_config['topic']
             data_key = data_config['key']
-            # The lambda captures the necessary arguments for the handler
-            callback = lambda msg, m_key=model_key, d_key=data_key: self.handle_data_message(msg, m_key, d_key)
+            # 使用闭包正确捕获变量
+            def make_callback(m_key, d_key):
+                return lambda msg: self.handle_data_message(msg, m_key, d_key)
+            
+            callback = make_callback(model_key, data_key)
             self.bus.subscribe(topic, callback)
-            print(f"[{self.agent_id}] Subscribed to topic '{topic}' for model key '{model_key}' using data key '{data_key}'.")
+            self.logger.info(f"Subscribed to topic '{topic}' for model key '{model_key}' using data key '{data_key}'")
 
     def handle_data_message(self, message: Message, model_key: str, data_key: str):
         """用于存储传入数据的回调函数。"""

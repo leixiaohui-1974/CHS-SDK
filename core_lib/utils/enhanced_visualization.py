@@ -9,6 +9,10 @@
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import seaborn as sns
+from matplotlib.figure import Figure
+from matplotlib.artist import Artist
+from matplotlib.animation import FuncAnimation
+from typing import List as ArtistList
 import pandas as pd
 import numpy as np
 from pathlib import Path
@@ -56,13 +60,13 @@ class EnhancedSimulationPlotter:
         设置绘图样式
         """
         # 设置样式
-        style = self.style_config.get('style', 'seaborn-v0_8')
+        style = self.style_config.get('style', 'default')
         try:
-            plt.style.use(style)
-        except OSError:
+            if style != 'default':
+                plt.style.use(style)
+        except (OSError, ValueError) as e:
             # 如果样式不存在，使用默认样式
-            plt.style.use('default')
-            logging.warning(f"Style '{style}' not found, using default")
+            logging.warning(f"Style '{style}' not available, using default: {e}")
         
         # 设置DPI
         dpi = self.style_config.get('dpi', 300)
@@ -74,7 +78,7 @@ class EnhancedSimulationPlotter:
         plt.rcParams['figure.figsize'] = figsize
     
     def plot_time_series(self, data: Dict[str, List], title: str = "时间序列图", 
-                        save_path: Optional[str] = None, **kwargs) -> plt.Figure:
+                        save_path: Optional[str] = None, **kwargs) -> Figure:
         """
         绘制时间序列图
         
@@ -121,7 +125,7 @@ class EnhancedSimulationPlotter:
         return fig
     
     def plot_control_performance(self, data: Dict[str, List], title: str = "控制性能图", 
-                               save_path: Optional[str] = None, **kwargs) -> plt.Figure:
+                               save_path: Optional[str] = None, **kwargs) -> Figure:
         """
         绘制控制性能图
         
@@ -183,7 +187,7 @@ class EnhancedSimulationPlotter:
         return fig
     
     def create_dashboard(self, data: Dict[str, Any], title: str = "系统仪表板", 
-                        save_path: Optional[str] = None, **kwargs) -> plt.Figure:
+                        save_path: Optional[str] = None, **kwargs) -> Figure:
         """
         创建系统仪表板
         
@@ -322,7 +326,7 @@ class EnhancedSimulationPlotter:
         ax.grid(True, alpha=0.3, axis='x')
     
     def plot_performance_metrics(self, metrics: Dict[str, List], title: str = "性能分析", 
-                               save_path: Optional[str] = None, **kwargs) -> plt.Figure:
+                               save_path: Optional[str] = None, **kwargs) -> Figure:
         """
         绘制性能分析图
         
@@ -384,7 +388,7 @@ class EnhancedSimulationPlotter:
     
     def plot_comparison(self, datasets: Dict[str, Dict[str, List]], 
                        title: str = "对比分析", save_path: Optional[str] = None, 
-                       **kwargs) -> plt.Figure:
+                       **kwargs) -> Figure:
         """
         绘制多数据集对比图
         
@@ -431,7 +435,7 @@ class EnhancedSimulationPlotter:
     
     def plot_3d_surface(self, x_data: List, y_data: List, z_data: List, 
                        title: str = "3D表面图", save_path: Optional[str] = None, 
-                       **kwargs) -> plt.Figure:
+                       **kwargs) -> Figure:
         """
         绘制3D表面图
         
@@ -471,7 +475,7 @@ class EnhancedSimulationPlotter:
         
         return fig
     
-    def _save_figure(self, fig: plt.Figure, save_path: str):
+    def _save_figure(self, fig: Figure, save_path: str):
         """
         保存图形
         
@@ -499,7 +503,7 @@ class EnhancedSimulationPlotter:
     
     def create_animation(self, data_frames: List[Dict[str, Any]], 
                         title: str = "动画", save_path: Optional[str] = None, 
-                        **kwargs):
+                        **kwargs) -> Optional[FuncAnimation]:
         """
         创建动画（需要额外的依赖）
         
@@ -508,22 +512,26 @@ class EnhancedSimulationPlotter:
             title: 动画标题
             save_path: 保存路径
             **kwargs: 额外的参数
+            
+        Returns:
+            Optional[FuncAnimation]: 动画对象，如果失败则返回None
         """
         try:
-            from matplotlib.animation import FuncAnimation
-            
             fig, ax = plt.subplots(figsize=kwargs.get('figsize', (10, 8)))
             
-            def animate(frame_idx):
+            def animate(frame_idx: int) -> ArtistList:
                 ax.clear()
                 frame_data = data_frames[frame_idx]
                 
                 # 这里需要根据具体的数据结构来绘制
                 # 简化实现
+                artists = []
                 if 'x' in frame_data and 'y' in frame_data:
-                    ax.plot(frame_data['x'], frame_data['y'])
+                    line, = ax.plot(frame_data['x'], frame_data['y'])
+                    artists.append(line)
                 
                 ax.set_title(f"{title} - 帧 {frame_idx + 1}")
+                return artists
             
             anim = FuncAnimation(fig, animate, frames=len(data_frames), 
                                interval=kwargs.get('interval', 200), 

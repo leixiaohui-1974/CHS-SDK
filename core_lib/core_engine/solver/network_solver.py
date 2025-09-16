@@ -29,14 +29,17 @@ class NetworkSolver:
         """Adds a reach or a node to the network."""
         self.components.append(component)
         # Check if component is a UnifiedCanal with st_venant model
-        if hasattr(component, 'model_type') and component.model_type == 'st_venant' and 'UnifiedCanal' in str(type(component)):
+        if isinstance(component, UnifiedCanal) and getattr(component, 'model_type', None) == 'st_venant':
             self.reaches.append(component)
-        elif hasattr(component, '__class__') and 'HydroNode' in str(type(component).__bases__):
+        elif isinstance(component, HydroNode):
             self.nodes.append(component)
         else:
             # We can either raise an error or just ignore other types
             # For now, let's be strict.
-            raise TypeError(f"NetworkSolver only supports 'st_venant' UnifiedCanal and HydroNode components, not {type(component)}")
+            raise TypeError(
+                "NetworkSolver only supports 'st_venant' UnifiedCanal and HydroNode components, "
+                f"not {type(component)}"
+            )
 
     def add_boundary_condition(self, component, var: str, point_idx: int, value_func):
         """

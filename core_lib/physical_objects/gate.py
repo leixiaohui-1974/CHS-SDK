@@ -6,7 +6,9 @@ from typing import Dict, Any, Optional
 import numpy as np
 from scipy.optimize import minimize
 from core_lib.core.interfaces import PhysicalObjectInterface, State, Parameters
-from core_lib.central_coordination.collaboration.message_bus import MessageBus, Message
+from core_lib.central_coordination.communication.message_bus import MessageBus, Message
+from core_lib.config.parameter_manager import get_parameter_manager
+from core_lib.config.constants import PhysicalConstants, HydraulicConstants
 
 class Gate(PhysicalObjectInterface):
     """
@@ -19,18 +21,21 @@ class Gate(PhysicalObjectInterface):
                  action_key: str = 'opening'):
         super().__init__(name, initial_state, parameters)
         
-        # 物理常量定义
-        self.GRAVITY_ACCELERATION = 9.81      # 重力加速度 (m/s²)
-        self.SQRT_FACTOR = 2                  # 孔口公式中的根号系数
+        # 获取参数管理器
+        self.param_manager = get_parameter_manager()
         
-        # 默认参数定义
-        self.DEFAULT_DISCHARGE_COEFFICIENT = 0.6  # 默认流量系数
+        # 物理常量定义（从常量类获取）
+        self.GRAVITY_ACCELERATION = PhysicalConstants.GRAVITY_ACCELERATION
+        self.SQRT_FACTOR = HydraulicConstants.SQRT_FACTOR
+        
+        # 默认参数定义（从参数管理器获取）
+        self.DEFAULT_DISCHARGE_COEFFICIENT = self.param_manager.get_parameter('valve_parameters', 'default_discharge_coefficient', 0.6)
         self.DEFAULT_WIDTH = 2.0              # 默认闸门宽度 (m)
         self.DEFAULT_MAX_OPENING = 1.0        # 默认最大开度 (m)
         
-        # 状态常量定义
-        self.DEFAULT_OPENING = 0              # 默认开度
-        self.DEFAULT_OUTFLOW = 0              # 默认出流量
+        # 状态常量定义（从参数管理器获取）
+        self.DEFAULT_OPENING = HydraulicConstants.MIN_OPENING
+        self.DEFAULT_OUTFLOW = self.param_manager.get_parameter('physical_objects', 'default_outflow', 0.0)
         self.DEFAULT_HEAD_DIFF = 1            # 默认水头差
         
         self._state.setdefault('outflow', self.DEFAULT_OUTFLOW)

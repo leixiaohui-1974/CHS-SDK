@@ -4,7 +4,7 @@ Simulation model for a Valve.
 import math
 import numpy as np
 from core_lib.core.interfaces import PhysicalObjectInterface, State, Parameters, Identifiable
-from core_lib.central_coordination.collaboration.message_bus import MessageBus, Message
+from core_lib.central_coordination.communication.message_bus import MessageBus, Message
 from core_lib.config.parameter_manager import get_parameter_manager
 from core_lib.config.constants import PhysicalConstants, MathematicalConstants, HydraulicConstants
 from typing import Dict, Any, Optional
@@ -76,7 +76,7 @@ class Valve(PhysicalObjectInterface, Identifiable):
         flow = effective_C_d * area * (self.SQRT_FACTOR * self.GRAVITY_ACCELERATION * head_diff)**self.POWER_EXPONENT
         return flow
 
-    def identify_parameters(self, data: Dict[str, np.ndarray]):
+    def identify_parameters(self, data: Dict[str, np.ndarray], method: str = 'offline') -> Parameters:
         """
         Identifies the `discharge_coefficient` parameter.
 
@@ -86,6 +86,10 @@ class Valve(PhysicalObjectInterface, Identifiable):
                   - 'upstream_levels': Upstream water levels.
                   - 'downstream_levels': Downstream water levels.
                   - 'observed_flows': Corresponding observed valve flows.
+            method: Identification method ('offline' or 'online').
+
+        Returns:
+            Parameters: The updated parameters dictionary.
         """
         print(f"[{self.name}] Starting parameter identification for 'discharge_coefficient'.")
         # Extract data from the dictionary
@@ -96,7 +100,7 @@ class Valve(PhysicalObjectInterface, Identifiable):
 
         if any(d is None for d in [openings, up_levels, down_levels, obs_flows]):
             print(f"[{self.name}] ERROR: Missing data for identification.")
-            return
+            return self.get_parameters()
 
         # Valve equation: flow = C_d * (opening/100) * A * sqrt(2*g*H)
         # So, C_d = flow / [(opening/100) * A * sqrt(2*g*H)]
@@ -111,7 +115,7 @@ class Valve(PhysicalObjectInterface, Identifiable):
 
         if not np.any(valid_indices):
             print(f"[{self.name}] No valid data points for identification (head difference and opening must be positive).")
-            return
+            return self.get_parameters()
 
         denominator = (openings[valid_indices] / 100.0) * area * np.sqrt(2 * self.GRAVITY_ACCELERATION * head_diff[valid_indices])
 
@@ -127,6 +131,8 @@ class Valve(PhysicalObjectInterface, Identifiable):
             print(f"[{self.name}] Identification complete. New discharge_coefficient: {new_coeff:.4f}")
         else:
             print(f"[{self.name}] Identification skipped, no valid data points resulted in a valid coefficient.")
+
+        return self.get_parameters()
 
 
     def handle_action_message(self, message: Message):

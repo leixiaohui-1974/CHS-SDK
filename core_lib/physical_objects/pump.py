@@ -8,7 +8,7 @@ Simulation model for a Pump.
 4. 提供完整的物理特性计算
 """
 from core_lib.core.interfaces import PhysicalObjectInterface, State, Parameters
-from core_lib.central_coordination.collaboration.message_bus import MessageBus, Message
+from core_lib.central_coordination.communication.message_bus import MessageBus, Message
 from core_lib.config.parameter_manager import get_parameter_manager
 from core_lib.config.constants import PhysicalConstants, StatusConstants
 from typing import Dict, Any, Optional

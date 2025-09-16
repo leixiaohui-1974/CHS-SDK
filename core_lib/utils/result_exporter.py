@@ -66,7 +66,7 @@ class ExportOptions:
     include_metadata: bool = True
     include_parameters: bool = True
     include_charts: bool = False
-    chart_types: List[ChartType] = None
+    chart_types: Optional[List[ChartType]] = None  # 修复类型注解
     custom_template: Optional[str] = None
     compression: bool = False
     password_protection: bool = False
@@ -359,6 +359,92 @@ class ResultExporter:
         wb.save(file_path)
         
         return file_path
+    
+    def _create_summary_sheet(self, ws, results_data: List[Dict[str, Any]]):
+        """创建摘要工作表"""
+        ws.title = "Summary"
+        
+        # 添加标题
+        ws['A1'] = "仿真结果摘要"
+        ws['A1'].font = Font(size=16, bold=True)
+        
+        # 添加统计信息
+        ws['A3'] = "总结果数量"
+        ws['B3'] = len(results_data)
+        
+        ws['A4'] = "生成时间"
+        ws['B4'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
+    def _create_data_sheet(self, ws, results_data: List[Dict[str, Any]], options: ExportOptions):
+        """创建数据工作表"""
+        ws.title = "Data"
+        
+        if not results_data:
+            return
+        
+        # 创建表头
+        headers = ["Result ID", "Name", "Created At"]
+        row = 1
+        
+        # 添加输出列
+        sample_result = results_data[0]
+        outputs = sample_result.get("outputs", {})
+        for key in outputs.keys():
+            headers.append(f"Output_{key}")
+        
+        # 添加参数列
+        if options.include_parameters:
+            parameters = sample_result.get("parameters", {})
+            for key in parameters.keys():
+                headers.append(f"Param_{key}")
+        
+        # 写入表头
+        for col, header in enumerate(headers, 1):
+            ws.cell(row=row, column=col, value=header).font = Font(bold=True)
+        
+        # 写入数据
+        for result in results_data:
+            row += 1
+            col = 1
+            
+            # 基本信息
+            ws.cell(row=row, column=col, value=result["id"])
+            col += 1
+            ws.cell(row=row, column=col, value=result.get("name", ""))
+            col += 1
+            ws.cell(row=row, column=col, value=str(result.get("created_at", "")))
+            col += 1
+            
+            # 输出数据
+            outputs = result.get("outputs", {})
+            for key in sample_result.get("outputs", {}).keys():
+                value = outputs.get(key, "")
+                if isinstance(value, list):
+                    value = str(value)  # 转换列表为字符串
+                ws.cell(row=row, column=col, value=value)
+                col += 1
+            
+            # 参数数据
+            if options.include_parameters:
+                parameters = result.get("parameters", {})
+                for key in sample_result.get("parameters", {}).keys():
+                    value = parameters.get(key, "")
+                    ws.cell(row=row, column=col, value=value)
+                    col += 1
+    
+    def _create_parameters_sheet(self, ws, results_data: List[Dict[str, Any]]):
+        """创建参数工作表"""
+        ws.title = "Parameters"
+        # 简化实现
+        ws['A1'] = "参数详情"
+        ws['A1'].font = Font(size=14, bold=True)
+    
+    def _create_charts_sheet(self, ws, results_data: List[Dict[str, Any]], chart_types: List):
+        """创建图表工作表"""
+        ws.title = "Charts"
+        # 简化实现
+        ws['A1'] = "图表分析"
+        ws['A1'].font = Font(size=14, bold=True)
     
     async def _export_pdf(
         self,

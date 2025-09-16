@@ -1,5 +1,5 @@
 from core_lib.core.interfaces import PhysicalObjectInterface, State
-from core_lib.central_coordination.collaboration.message_bus import MessageBus, Message
+from core_lib.central_coordination.communication.message_bus import MessageBus, Message
 from typing import Optional, Dict, Any
 
 class WaterTurbine(PhysicalObjectInterface):
