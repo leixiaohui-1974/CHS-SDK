@@ -9,6 +9,7 @@ import json
 import logging
 import numpy as np
 import pandas as pd
+import uuid
 from datetime import datetime
 from typing import List, Dict, Any, Optional, Tuple, Union
 from dataclasses import dataclass
@@ -245,7 +246,7 @@ class ResultComparator:
         self,
         result_data: List[SimulationResultData],
         target_variables: List[str],
-        time_variable: str = "time"
+        time_variable: str = "time_step"
     ) -> Dict[str, Any]:
         """
         趋势对比分析
@@ -253,7 +254,7 @@ class ResultComparator:
         Args:
             result_data: 仿真结果数据列表
             target_variables: 目标变量列表
-            time_variable: 时间变量名
+            time_variable: 时间步变量名
         
         Returns:
             Dict[str, Any]: 趋势对比结果
@@ -274,7 +275,7 @@ class ResultComparator:
                             time_series_data.append({
                                 "result_id": result.result_id,
                                 "name": result.name,
-                                "time": time_values,
+                                "time_step": time_values,
                                 "values": variable_values
                             })
                 
@@ -285,7 +286,7 @@ class ResultComparator:
                 trend_analysis = []
                 
                 for ts_data in time_series_data:
-                    time_vals = np.array(ts_data["time"])
+                    time_vals = np.array(ts_data["time_step"])
                     variable_vals = np.array(ts_data["values"])
                     
                     # 线性趋势
@@ -633,10 +634,18 @@ class ResultComparator:
                     count = 0
                     
                     for metric, metric_data in performance_results.items():
+                        # 获取当前结果的指标值
+                        if metric == "execution_time":
+                            current_value = result.execution_time
+                        elif metric in result.metadata:
+                            current_value = result.metadata[metric]
+                        else:
+                            continue
+                        
                         if metric in ["execution_time", "memory_usage", "cpu_usage"]:  # 越小越好的指标
-                            normalized_score = 1 - (result.execution_time - metric_data["min"]) / (metric_data["max"] - metric_data["min"]) if metric_data["max"] != metric_data["min"] else 1
+                            normalized_score = 1 - (current_value - metric_data["min"]) / (metric_data["max"] - metric_data["min"]) if metric_data["max"] != metric_data["min"] else 1
                         else:  # 越大越好的指标
-                            normalized_score = (result.execution_time - metric_data["min"]) / (metric_data["max"] - metric_data["min"]) if metric_data["max"] != metric_data["min"] else 1
+                            normalized_score = (current_value - metric_data["min"]) / (metric_data["max"] - metric_data["min"]) if metric_data["max"] != metric_data["min"] else 1
                         
                         score += normalized_score
                         count += 1

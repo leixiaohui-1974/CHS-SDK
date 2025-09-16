@@ -1,0 +1,29 @@
+# 泵配置示例
+# 展示如何正确配置泵参数，避免硬编码
+
+# 泵基本参数（必需）
+name: "main_pump"
+class: "Pump"
+
+# 初始状态
+initial_state:
+  outflow: 0.0
+  power_draw_kw: 0.0
+  efficiency: 0.0
+  status: 0  # 0=关闭, 1=开启
+
+# 物理参数（必需 - 必须由用户提供）
+parameters:
+  # 基本性能参数（必需）
+  max_flow_rate: 15.0      # 最大流量 (m³/s)
+  max_head: 25.0           # 最大扬程 (m)
+  
+  # 效率特性参数（可选，有默认值）
+  min_flow_ratio: 0.15     # 最小有效流量比率
+  optimal_flow_ratio: 0.75 # 最优效率流量比率
+  min_efficiency: 0.4      # 最小效率
+  max_efficiency_loss: 0.25 # 最大效率损失
+
+# 控制接口（可选）
+message_bus: true
+action_topic: "pump.control"

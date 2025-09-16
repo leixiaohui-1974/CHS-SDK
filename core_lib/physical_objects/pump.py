@@ -9,6 +9,8 @@ Simulation model for a Pump.
 """
 from core_lib.core.interfaces import PhysicalObjectInterface, State, Parameters
 from core_lib.central_coordination.collaboration.message_bus import MessageBus, Message
+from core_lib.config.parameter_manager import get_parameter_manager
+from core_lib.config.constants import PhysicalConstants, StatusConstants
 from typing import Dict, Any, Optional
 
 class Pump(PhysicalObjectInterface):
@@ -26,27 +28,28 @@ class Pump(PhysicalObjectInterface):
                  message_bus: Optional[MessageBus] = None, action_topic: Optional[str] = None):
         super().__init__(name, initial_state, parameters)
         
-        # 物理常量定义
-        self.GRAVITY_ACCELERATION = 9.81      # 重力加速度 (m/s²)
-        self.WATER_DENSITY = 1000            # 水密度 (kg/m³)
-        self.POWER_CONVERSION = 1000         # 功率转换系数 (W to kW)
+        # 获取参数管理器
+        self.param_manager = get_parameter_manager()
         
-        # 默认参数定义
-        self.DEFAULT_MAX_FLOW_RATE = 10.0    # 默认最大流量 (m³/s)
-        self.DEFAULT_MAX_HEAD = 20.0         # 默认最大扬程 (m)
+        # 物理常量定义（从常量类获取）
+        self.GRAVITY_ACCELERATION = PhysicalConstants.GRAVITY_ACCELERATION
+        self.WATER_DENSITY = PhysicalConstants.WATER_DENSITY
+        self.POWER_CONVERSION = self.param_manager.get_unit_conversion('W_TO_KW')
         
-        # 状态常量定义
-        self.STATUS_OFF = 0                  # 泵关闭状态
-        self.STATUS_ON = 1                   # 泵开启状态
-        self.DEFAULT_OUTFLOW = 0.0           # 默认出流量
-        self.DEFAULT_POWER_DRAW = 0.0        # 默认功率消耗
-        self.DEFAULT_EFFICIENCY = 0.0        # 默认效率
+        # 状态枚举常量（从常量类获取）
+        self.STATUS_OFF = StatusConstants.STATUS_OFF
+        self.STATUS_ON = StatusConstants.STATUS_ON
         
-        # 效率计算常量
-        self.MIN_FLOW_RATIO = 0.1            # 最小流量比率
-        self.OPTIMAL_FLOW_RATIO = 0.7        # 最优流量比率
-        self.MIN_EFFICIENCY = 0.3            # 最小效率
-        self.MAX_EFFICIENCY_LOSS = 0.3       # 最大效率损失
+        # 默认值常量（从参数管理器获取）
+        self.DEFAULT_OUTFLOW = self.param_manager.get_parameter('physical_objects', 'default_outflow', 0.0)
+        self.DEFAULT_POWER_DRAW = 0.0
+        self.DEFAULT_EFFICIENCY = 0.0
+        
+        # 效率特性常量（从参数管理器获取）
+        self.DEFAULT_MIN_FLOW_RATIO = self.param_manager.get_parameter('pump_parameters', 'min_flow_ratio', 0.1)
+        self.DEFAULT_OPTIMAL_FLOW_RATIO = self.param_manager.get_parameter('pump_parameters', 'optimal_flow_ratio', 0.7)
+        self.DEFAULT_MIN_EFFICIENCY = self.param_manager.get_parameter('pump_parameters', 'min_efficiency', 0.3)
+        self.DEFAULT_MAX_EFFICIENCY_LOSS = self.param_manager.get_parameter('pump_parameters', 'max_efficiency_loss', 0.3)
         
         # 物理状态
         self._state.setdefault('outflow', self.DEFAULT_OUTFLOW)
@@ -70,8 +73,14 @@ class Pump(PhysicalObjectInterface):
         if self._state.get('status', self.STATUS_OFF) == self.STATUS_OFF:
             return self.DEFAULT_OUTFLOW
 
-        max_flow_rate = self._params.get('max_flow_rate', self.DEFAULT_MAX_FLOW_RATE)
-        max_head = self._params.get('max_head', self.DEFAULT_MAX_HEAD)
+        # 从参数获取泵的物理特性（必须由用户提供）
+        max_flow_rate = self._params.get('max_flow_rate')
+        max_head = self._params.get('max_head')
+        
+        if max_flow_rate is None:
+            raise ValueError(f"泵 '{self.name}' 缺少必需参数 'max_flow_rate'")
+        if max_head is None:
+            raise ValueError(f"泵 '{self.name}' 缺少必需参数 'max_head'")
         
         # 计算实际扬程（泵从上游抽水到下游）
         actual_head = downstream_level - upstream_level
@@ -104,16 +113,25 @@ class Pump(PhysicalObjectInterface):
         if flow <= 0:
             return self.DEFAULT_EFFICIENCY
             
-        max_flow_rate = self._params.get('max_flow_rate', self.DEFAULT_MAX_FLOW_RATE)
+        # 从参数获取效率特性（可配置，有默认值）
+        max_flow_rate = self._params.get('max_flow_rate')
+        min_flow_ratio = self._params.get('min_flow_ratio', self.DEFAULT_MIN_FLOW_RATIO)
+        optimal_flow_ratio = self._params.get('optimal_flow_ratio', self.DEFAULT_OPTIMAL_FLOW_RATIO)
+        min_efficiency = self._params.get('min_efficiency', self.DEFAULT_MIN_EFFICIENCY)
+        max_efficiency_loss = self._params.get('max_efficiency_loss', self.DEFAULT_MAX_EFFICIENCY_LOSS)
+        
+        if max_flow_rate is None:
+            raise ValueError(f"泵 '{self.name}' 缺少必需参数 'max_flow_rate'")
+            
         flow_ratio = flow / max_flow_rate
         
-        # 效率特性曲线（基于实际水泵特性）
-        if flow_ratio < self.MIN_FLOW_RATIO:
+        # 效率特性曲线（基于配置的泵特性）
+        if flow_ratio < min_flow_ratio:
             return self.DEFAULT_EFFICIENCY
-        elif flow_ratio <= self.OPTIMAL_FLOW_RATIO:
-            return self.MIN_EFFICIENCY + (1.0 - self.MIN_EFFICIENCY) * (flow_ratio / self.OPTIMAL_FLOW_RATIO)
+        elif flow_ratio <= optimal_flow_ratio:
+            return min_efficiency + (1.0 - min_efficiency) * (flow_ratio / optimal_flow_ratio)
         else:
-            return 1.0 - self.MAX_EFFICIENCY_LOSS * ((flow_ratio - self.OPTIMAL_FLOW_RATIO) / (1.0 - self.OPTIMAL_FLOW_RATIO))
+            return 1.0 - max_efficiency_loss * ((flow_ratio - optimal_flow_ratio) / (1.0 - optimal_flow_ratio))
 
     def handle_action_message(self, message: Message):
         """处理控制消息 - 只更新目标状态，不包含控制逻辑"""
@@ -132,8 +150,12 @@ class Pump(PhysicalObjectInterface):
             print(f"Pump '{self.name}' status changed to: {self.target_status}")
 
         # 计算物理量（需要上下游水位信息）
-        upstream_level = action.get('upstream_level', 25.0)  # 默认上游水位
-        downstream_level = action.get('downstream_level', 8.0)  # 默认下游水位
+        # 从参数管理器获取默认水位，如果action中没有提供
+        default_upstream_level = self.param_manager.get_parameter('business_scenarios', 'pump_station.upstream_level', 25.0)
+        default_downstream_level = self.param_manager.get_parameter('business_scenarios', 'pump_station.downstream_level', 8.0)
+        
+        upstream_level = action.get('upstream_level', default_upstream_level)
+        downstream_level = action.get('downstream_level', default_downstream_level)
         
         # 计算流量
         flow = self._calculate_flow(upstream_level, downstream_level)
@@ -141,10 +163,14 @@ class Pump(PhysicalObjectInterface):
         
         # 计算功率 - 使用改进的功率计算
         if self._state.get('status', 0) == 1 and flow > 0:
+            # 从参数管理器获取默认功率和效率
+            default_rated_power = self.param_manager.get_parameter('business_scenarios', 'pump_station.rated_power', 50.0)
+            default_efficiency = self.param_manager.get_parameter('business_scenarios', 'pump_station.efficiency', 0.8)
+            
             # 使用参数中的额定功率作为基础
-            rated_power = self._params.get('power_consumption_kw', 50.0)
+            rated_power = self._params.get('power_consumption_kw', default_rated_power)
             # 功率与流量成正比，但考虑效率
-            efficiency = self._params.get('efficiency', 0.8)
+            efficiency = self._params.get('efficiency', default_efficiency)
             power = rated_power * efficiency
         else:
             power = 0.0

@@ -1,0 +1,100 @@
+# CHS-SDK 参数配置示例
+# 这个文件展示了如何正确配置CHS-SDK中的各种参数，避免硬编码魔数
+
+# 仿真参数
+simulation:
+  time_step: 1.0                    # 仿真时间步长 (秒)
+  print_interval: 10                # 打印间隔 (步数)
+  simulation_duration: 3600.0       # 仿真持续时间 (秒)
+  convergence_tolerance: 1e-6       # 收敛容差
+
+# 物理对象默认参数
+physical_objects:
+  default_diameter: 0.5             # 默认直径 (米)
+  default_surface_area: 10000.0     # 默认表面积 (平方米)
+  default_water_level: 0.0          # 默认水位 (米)
+  default_inflow: 0.0               # 默认入流量 (立方米/秒)
+  default_outflow: 0.0              # 默认出流量 (立方米/秒)
+
+# 泵参数
+pump_parameters:
+  default_efficiency: 0.8           # 默认效率
+  default_power: 50.0               # 默认功率 (kW)
+  min_flow_ratio: 0.1               # 最小流量比率
+  optimal_flow_ratio: 0.7           # 最优流量比率
+  min_efficiency: 0.3               # 最小效率
+  max_efficiency_loss: 0.3          # 最大效率损失
+
+# 阀门参数
+valve_parameters:
+  default_discharge_coefficient: 0.6  # 默认流量系数
+  min_opening: 0.0                   # 最小开度
+  max_opening: 1.0                   # 最大开度
+  full_opening_percent: 100.0        # 全开开度 (%)
+
+# 渠道参数
+canal_parameters:
+  default_outlet_coefficient: 5.0   # 默认出口系数
+  default_gain: 0.001               # 默认增益
+  default_delay: 300.0              # 默认延迟 (秒)
+  default_zero_time_constant: 50.0  # 默认零点时间常数 (秒)
+  default_storage_constant: 1200.0  # 默认存储常数 (秒)
+  default_level_storage_ratio: 0.005 # 默认水位存储比
+  default_initial_depth: 5.0        # 默认初始水深 (米)
+  default_initial_flow: 10.0        # 默认初始流量 (立方米/秒)
+
+# 传感器参数
+sensor_parameters:
+  default_noise_level: 0.01         # 默认噪声水平
+  default_accuracy: 0.001           # 默认精度
+
+# 控制参数
+control_parameters:
+  default_pid_kp: 1.0               # 默认PID比例系数
+  default_pid_ki: 0.1               # 默认PID积分系数
+  default_pid_kd: 0.01              # 默认PID微分系数
+  default_control_deadband: 0.01    # 默认控制死区
+
+# 扰动参数
+disturbance_parameters:
+  default_intensity: 0.1            # 默认扰动强度
+  default_duration: 60.0            # 默认扰动持续时间 (秒)
+
+# 业务特定参数示例
+business_scenarios:
+  # 泵站场景
+  pump_station:
+    upstream_level: 25.0            # 上游水位 (米)
+    downstream_level: 8.0           # 下游水位 (米)
+    rated_power: 50.0               # 额定功率 (kW)
+    efficiency: 0.8                 # 效率
+    
+  # 渠道场景
+  canal_system:
+    channel_surface_area: 8500      # 渠道表面积 (平方米)
+    max_gate_speed: 0.08            # 最大闸门速度 (%/秒)
+    gate_flow_coefficient: 25       # 闸门流量系数
+    
+  # 水轮机场景
+  turbine_system:
+    rated_power: 1000.0             # 额定功率 (kW)
+    rated_head: 100.0               # 额定水头 (米)
+    rated_flow: 10.0                # 额定流量 (立方米/秒)
+    efficiency: 0.90                # 效率
+    grid_frequency: 50.0            # 电网频率 (Hz)
+    frequency_tolerance: 0.1        # 频率容差 (Hz)
+
+# 系统限制参数
+system_limits:
+  min_positive_value: 1e-12         # 最小正值
+  max_iterations: 1000              # 最大迭代次数
+  convergence_tolerance: 1e-6       # 收敛容差
+  min_water_level: 0.0              # 最小水位 (米)
+  max_water_level: 1000.0           # 最大水位 (米)
+  min_flow_rate: 0.0                # 最小流量 (立方米/秒)
+  max_flow_rate: 10000.0            # 最大流量 (立方米/秒)
+  min_time_step: 0.001              # 最小时间步长 (秒)
+  max_time_step: 3600.0             # 最大时间步长 (秒)
+  max_simulation_time: 31536000.0   # 最大仿真时间 (秒，一年)
+  max_history_size: 10000           # 最大历史记录大小
+  max_cache_size: 1000              # 最大缓存大小

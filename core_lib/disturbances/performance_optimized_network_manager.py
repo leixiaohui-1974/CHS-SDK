@@ -112,12 +112,12 @@ class PerformanceOptimizedNetworkDisturbanceManager:
         logger.info(f"创建数据包丢失扰动: {disturbance_id}")
         return disturbance
     
-    def activate_disturbance(self, disturbance_id: str, start_time: float, duration: float):
+    def activate_disturbance(self, disturbance_id: str, start_time: float, end_time: float):
         """激活网络扰动"""
         with self._lock:
             if disturbance_id in self.active_disturbances:
                 disturbance = self.active_disturbances[disturbance_id]
-                disturbance.activate(start_time, duration)
+                disturbance.activate(start_time, end_time)
                 logger.info(f"激活网络扰动: {disturbance_id}")
             else:
                 logger.warning(f"扰动 {disturbance_id} 不存在，无法激活")

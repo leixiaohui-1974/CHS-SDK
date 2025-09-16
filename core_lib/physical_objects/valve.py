@@ -5,6 +5,8 @@ import math
 import numpy as np
 from core_lib.core.interfaces import PhysicalObjectInterface, State, Parameters, Identifiable
 from core_lib.central_coordination.collaboration.message_bus import MessageBus, Message
+from core_lib.config.parameter_manager import get_parameter_manager
+from core_lib.config.constants import PhysicalConstants, MathematicalConstants, HydraulicConstants
 from typing import Dict, Any, Optional
 
 class Valve(PhysicalObjectInterface, Identifiable):
@@ -15,12 +17,37 @@ class Valve(PhysicalObjectInterface, Identifiable):
     def __init__(self, name: str, initial_state: State, parameters: Parameters,
                  message_bus: Optional[MessageBus] = None, action_topic: Optional[str] = None):
         super().__init__(name, initial_state, parameters)
-        self._state.setdefault('outflow', 0)
-        self._params.setdefault('discharge_coefficient', 0.6)
-        self._params.setdefault('diameter', 0.5)
+        
+        # 获取参数管理器
+        self.param_manager = get_parameter_manager()
+        
+        # 物理常量定义（从常量类获取）
+        self.GRAVITY_ACCELERATION = PhysicalConstants.GRAVITY_ACCELERATION
+        self.PI = MathematicalConstants.PI
+        self.PERCENT_CONVERSION = self.param_manager.get_unit_conversion('DECIMAL_TO_PERCENT')
+        self.DIAMETER_FACTOR = HydraulicConstants.DIAMETER_FACTOR
+        self.SQRT_FACTOR = HydraulicConstants.SQRT_FACTOR
+        self.POWER_EXPONENT = HydraulicConstants.POWER_EXPONENT
+        
+        # 默认参数值（从参数管理器获取）
+        self.DEFAULT_DISCHARGE_COEFFICIENT = self.param_manager.get_parameter('valve_parameters', 'default_discharge_coefficient', 0.6)
+        self.DEFAULT_DIAMETER = self.param_manager.get_parameter('physical_objects', 'default_diameter', 0.5)
+        self.DEFAULT_OPENING = HydraulicConstants.MIN_OPENING
+        self.DEFAULT_OUTFLOW = self.param_manager.get_parameter('physical_objects', 'default_outflow', 0.0)
+        self.DEFAULT_FULL_OPENING = HydraulicConstants.FULL_OPENING_PERCENT
+        
+        # 验证关键参数
+        if 'discharge_coefficient' not in self._params:
+            print(f"警告: 阀门 '{self.name}' 建议配置 'discharge_coefficient' 参数")
+        if 'diameter' not in self._params:
+            print(f"警告: 阀门 '{self.name}' 建议配置 'diameter' 参数")
+            
+        self._state.setdefault('outflow', self.DEFAULT_OUTFLOW)
+        self._params.setdefault('discharge_coefficient', self.DEFAULT_DISCHARGE_COEFFICIENT)
+        self._params.setdefault('diameter', self.DEFAULT_DIAMETER)
         self.bus = message_bus
         self.action_topic = action_topic
-        self.target_opening = self._state.get('opening', 100.0)
+        self.target_opening = self._state.get('opening', self.DEFAULT_FULL_OPENING)
 
         if self.bus and self.action_topic:
             self.bus.subscribe(self.action_topic, self.handle_action_message)
@@ -32,17 +59,6 @@ class Valve(PhysicalObjectInterface, Identifiable):
         """
         Calculates the flow through the valve using a modified orifice equation.
         """
-        # 物理常量定义（在方法中定义，但应该移到__init__中）
-        if not hasattr(self, 'GRAVITY_ACCELERATION'):
-            self.GRAVITY_ACCELERATION = 9.81      # 重力加速度 (m/s²)
-            self.PI = math.pi                     # 圆周率
-            self.PERCENT_CONVERSION = 100.0       # 百分比转换
-            self.DIAMETER_FACTOR = 2              # 直径系数
-            self.SQRT_FACTOR = 2                  # 平方根系数
-            self.POWER_EXPONENT = 0.5             # 指数
-            self.DEFAULT_OPENING = 0              # 默认开度
-            self.DEFAULT_FLOW = 0                 # 默认流量
-        
         C_d = self._params['discharge_coefficient']
         diameter = self._params['diameter']
 
@@ -55,7 +71,7 @@ class Valve(PhysicalObjectInterface, Identifiable):
         head_diff = upstream_level - downstream_level
 
         if head_diff <= 0:
-            return self.DEFAULT_FLOW
+            return self.DEFAULT_OUTFLOW
 
         flow = effective_C_d * area * (self.SQRT_FACTOR * self.GRAVITY_ACCELERATION * head_diff)**self.POWER_EXPONENT
         return flow
@@ -97,7 +113,7 @@ class Valve(PhysicalObjectInterface, Identifiable):
             print(f"[{self.name}] No valid data points for identification (head difference and opening must be positive).")
             return
 
-        denominator = (openings[valid_indices] / 100.0) * area * np.sqrt(2 * g * head_diff[valid_indices])
+        denominator = (openings[valid_indices] / 100.0) * area * np.sqrt(2 * self.GRAVITY_ACCELERATION * head_diff[valid_indices])
 
         # Avoid division by zero in the denominator
         valid_denominator = denominator > 1e-6
@@ -118,7 +134,9 @@ class Valve(PhysicalObjectInterface, Identifiable):
         new_target = message.get('control_signal')
         print(f"[{self.name}] Received action message: {message}")
         if isinstance(new_target, (int, float)):
-            self.target_opening = max(0.0, min(100.0, new_target))
+            min_opening = HydraulicConstants.MIN_OPENING * self.PERCENT_CONVERSION
+            max_opening = HydraulicConstants.MAX_OPENING * self.PERCENT_CONVERSION
+            self.target_opening = max(min_opening, min(max_opening, new_target))
             print(f"[{self.name}] Updated target_opening to: {self.target_opening}")
 
     def step(self, action: Dict[str, Any], time_step: float) -> State:
@@ -128,7 +146,9 @@ class Valve(PhysicalObjectInterface, Identifiable):
         control_signal = action.get('control_signal')
         if control_signal is not None:
              if isinstance(control_signal, (int, float)):
-                self.target_opening = max(0.0, min(100.0, control_signal))
+                min_opening = HydraulicConstants.MIN_OPENING * self.PERCENT_CONVERSION
+                max_opening = HydraulicConstants.MAX_OPENING * self.PERCENT_CONVERSION
+                self.target_opening = max(min_opening, min(max_opening, control_signal))
 
         self._state['opening'] = self.target_opening
         print(f"[{self.name}] Step: target_opening={self.target_opening}, _state['opening']={self._state['opening']}")

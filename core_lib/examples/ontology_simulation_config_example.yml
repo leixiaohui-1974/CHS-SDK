@@ -1,0 +1,45 @@
+# 本体仿真智能体配置示例
+# 展示如何正确配置参数，避免硬编码
+
+# 初始状态（必需 - 必须由用户提供）
+initial_state:
+  upstream_level: 5.2        # 初始上游水位 (m)
+  downstream_level: 4.3      # 初始下游水位 (m)
+  inflow: 12.5              # 初始入流量 (m³/s)
+  gate_opening: 0.3         # 初始闸门开度 (0-1)
+
+# 物理系统参数（必需 - 必须由用户提供）
+physical_system:
+  channel_surface_area: 8500  # 渠道表面积 (m²)
+
+# 闸门参数（必需 - 必须由用户提供）
+gate_parameters:
+  max_speed: 0.08           # 最大开度变化速度 (%/秒)
+  flow_coefficient: 25      # 流量系数
+
+# 仿真配置（可选）
+simulation:
+  step: 30.0               # 仿真步长 (秒)
+  time_step: 1.0           # 时间步长 (秒)
+  print_interval: 5        # 打印间隔
+
+# 扰动配置（可选）
+disturbances:
+  enabled: true
+  start_step: 60           # 扰动开始步数
+  end_step: 120            # 扰动结束步数
+  inflow_value: 8.0        # 扰动入流量 (m³/s)
+  downstream_outflow: 10.0 # 下游固定出流量 (m³/s)
+
+# 传感器配置（可选）
+sensors:
+  noise_level: 0.005       # 传感器噪声水平
+  inflow_noise_range: 0.08 # 入流噪声范围
+
+# 控制主题（可选）
+control_topic: "gate_control_command"
+
+# 其他配置文件
+components_file: "components.yml"
+topology_file: "topology.yml"
+monitoring_config: {}
