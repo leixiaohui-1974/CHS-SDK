@@ -260,7 +260,7 @@ def run_simulation(config):
     # Create simulation harness
     simulation_config = {
         'end_time': config['simulation']['end_time'],  # 使用end_time而不是duration
-        'dt': config['simulation']['dt'],
+        'time_step': config['simulation']['time_step'],
         'start_time': config['simulation']['start_time']
     }
     harness = SimulationHarness(config=simulation_config)

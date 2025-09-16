@@ -79,9 +79,9 @@ class EnhancedSimulationBuilder(SimulationBuilder):
         time_config = sim_config.get('time', {})
         if time_config:
             self.config['time'] = {
-                'start_time': time_config.get('start_time', 0.0),
-                'end_time': time_config.get('end_time', time_config.get('duration', 100.0)),
-                'time_step': time_config.get('time_step', 0.1),
+                'start_time': time_config['start_time'],
+                'end_time': time_config['end_time'],
+                'time_step': time_config['time_step'],
                 'output_interval': time_config.get('output_interval', 1.0)
             }
             

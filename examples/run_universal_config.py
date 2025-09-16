@@ -89,7 +89,7 @@ def run_universal_config_from_file(config_path, debug_mode=False, performance_mo
                 # 获取仿真参数
                 sim_config = config.get('simulation', {})
                 duration = sim_config.get('end_time', sim_config.get('duration', 100))
-                time_step = sim_config.get('time_step', sim_config.get('dt', 1.0))
+                time_step = sim_config.get('time_step', sim_config['time_step'])
                 
                 # 创建简化的仿真
                 harness = SimulationHarness({'duration': duration, 'dt': time_step})

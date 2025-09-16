@@ -408,7 +408,7 @@ class UnifiedConfigManager:
                 # 检查仿真参数
                 if 'simulation' in config:
                     sim = config['simulation']
-                    if 'duration' not in sim:
+                    if 'end_time' not in sim:
                         errors.append("config.yml缺少simulation.duration参数")
                     if 'dt' not in sim:
                         errors.append("config.yml缺少simulation.dt参数")

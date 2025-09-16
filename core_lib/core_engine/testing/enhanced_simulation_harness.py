@@ -72,12 +72,10 @@ class EnhancedSimulationHarness:
 
     def __init__(self, config: Dict[str, Any]):
         self.config = config
-        self.start_time = config.get('start_time', 0)
+        self.start_time = config['start_time']
         # 支持 duration 作为 end_time 的备选参数
-        if 'end_time' not in config and 'duration' in config:
-            config['end_time'] = config['duration']
-        self.end_time = config.get('end_time', 100)
-        self.dt = config.get('dt', 1.0)
+        self.end_time = config['end_time']
+        self.time_step = config.get('time_step', 1.0)
         self.t = self.start_time
 
         self.history = []
@@ -208,7 +206,7 @@ class EnhancedSimulationHarness:
     def add_dynamic_disturbance(self, disturbance_config: Dict[str, Any]):
         """添加动态扰动（传感器、执行器等）"""
         disturbance_id = disturbance_config.get('disturbance_id', 'unknown')
-        start_time = disturbance_config.get('start_time', 0.0)
+        start_time = disturbance_config['start_time']
         duration = disturbance_config.get('duration', 10.0)
         self.dynamic_disturbance_manager.register_disturbance(disturbance_id, disturbance_config, start_time, duration)
         print(f"动态扰动 {disturbance_config['disturbance_id']} 已添加")
@@ -367,7 +365,7 @@ class EnhancedSimulationHarness:
                 print(f"控制器 {controller_spec.controller} 执行错误: {e}")
         
         # Phase 3: 步进物理模型
-        self._step_physical_models(self.dt, controller_actions)
+        self._step_physical_models(self.time_step, controller_actions)
         
         # Phase 4: 智能体执行动作
         for agent in self.agents:
@@ -387,12 +385,12 @@ class EnhancedSimulationHarness:
         self.history.append(step_history)
         
         # 更新时间
-        self.t += self.dt
+        self.t += self.time_step
 
     def _update_all_disturbances(self):
         """更新所有类型的扰动"""
         # 更新物理扰动
-        disturbance_effects = self.disturbance_manager.update(self.t, self.dt, self.components)
+        disturbance_effects = self.disturbance_manager.update(self.t, self.time_step, self.components)
         
         # 更新动态扰动
         self.dynamic_disturbance_manager.update(self.t, self.agents)
@@ -403,7 +401,7 @@ class EnhancedSimulationHarness:
 
     def run_mas_simulation(self):
         """运行多智能体系统仿真"""
-        print(f"开始多智能体仿真，时间范围: {self.start_time} 到 {self.end_time}，步长: {self.dt}")
+        print(f"开始多智能体仿真，时间范围: {self.start_time} 到 {self.end_time}，步长: {self.time_step}")
         
         while self.t < self.end_time and self.is_running:
             # 检查是否暂停
@@ -419,7 +417,7 @@ class EnhancedSimulationHarness:
 
     def run_simulation(self):
         """运行简单仿真（非智能体模式）"""
-        print(f"开始简单仿真，时间范围: {self.start_time} 到 {self.end_time}，步长: {self.dt}")
+        print(f"开始简单仿真，时间范围: {self.start_time} 到 {self.end_time}，步长: {self.time_step}")
         
         while self.t < self.end_time and self.is_running:
             # 检查是否暂停
@@ -439,14 +437,14 @@ class EnhancedSimulationHarness:
                     observation = observed_component.get_state().get(spec.observation_key, 0)
                     
                     # 计算控制动作
-                    action = spec.controller.compute_control_action({'process_variable': observation}, self.dt)
+                    action = spec.controller.compute_control_action({'process_variable': observation}, self.time_step)
                     controller_actions[spec.controlled_id] = action
                     
                 except Exception as e:
                     print(f"控制器 {controller_id} 错误: {e}")
             
             # Phase 3: 步进物理模型
-            self._step_physical_models(self.dt, controller_actions)
+            self._step_physical_models(self.time_step, controller_actions)
             
             # Phase 4: 记录历史
             step_history = {'time': self.t}
@@ -459,18 +457,18 @@ class EnhancedSimulationHarness:
             self.history.append(step_history)
             
             # 更新时间
-            self.t += self.dt
+            self.t += self.time_step
         
         print(f"简单仿真完成，结束时间: {self.t:.2f}s")
         print(f"生成了 {len(self.history)} 步历史数据")
 
-    def _step_physical_models(self, dt: float, controller_actions: Dict[str, Any] = None):
+    def _step_physical_models(self, time_step: float, controller_actions: Dict[str, Any] = None):
         """步进物理模型"""
         if controller_actions is None:
             controller_actions = {}
 
         # 更新物理扰动状态
-        disturbance_effects = self.disturbance_manager.update(self.t, dt, self.components)
+        disturbance_effects = self.disturbance_manager.update(self.t, time_step, self.components)
         
         new_states = {}
         current_step_outflows = {}
@@ -509,7 +507,7 @@ class EnhancedSimulationHarness:
                         action_with_inflow = control_action.copy()
                         if total_inflow > 0:
                             action_with_inflow['inflow'] = total_inflow
-                        component.step(action_with_inflow, dt)
+                        component.step(action_with_inflow, time_step)
                     else:
                         # 对于其他组件，使用原来的调用方式
                         component.step(dt, total_inflow, **control_action)

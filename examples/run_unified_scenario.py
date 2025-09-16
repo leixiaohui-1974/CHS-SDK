@@ -84,7 +84,7 @@ def run_unified_scenario_from_config(config_path, show_progress=True, show_summa
                 # 获取仿真参数
                 sim_config = config.get('simulation', {})
                 duration = sim_config.get('end_time', sim_config.get('duration', 100))
-                time_step = sim_config.get('time_step', sim_config.get('dt', 1.0))
+                time_step = sim_config.get('time_step', sim_config['time_step'])
                 
                 # 创建简化的仿真
                 harness = SimulationHarness({'duration': duration, 'dt': time_step})

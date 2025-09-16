@@ -24,7 +24,7 @@ try:
     from core_lib.core_engine.testing.simulation_builder import SimulationBuilder
     from core_lib.core_engine.mas_runner import MASRunner
     from core_lib.central_agents.enhanced_perception_agent import EnhancedPerceptionAgent
-    from core_lib.hydro_nodes.reservoir import Reservoir
+    from core_lib.physical_objects.reservoir import Reservoir
     from core_lib.utils.logger import setup_logger
     from core_lib.utils.visualization import plot_simulation_results
 except ImportError as e:

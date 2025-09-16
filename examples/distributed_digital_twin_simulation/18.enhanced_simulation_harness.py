@@ -42,7 +42,7 @@ class EnhancedSimulationHarness:
         self.config = config
         self.start_time = config.get('start_time', 0)
         self.end_time = config.get('end_time', 100)
-        self.dt = config.get('dt', 1.0)
+        self.dt = config['time_step']
         self.t = self.start_time
 
         self.history = []

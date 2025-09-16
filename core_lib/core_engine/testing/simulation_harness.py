@@ -27,7 +27,7 @@ class SimulationHarness:
         self.config = config
         self.start_time = config["start_time"]
         self.end_time = config['end_time']
-        self.dt = config['dt']
+        self.time_step = config['time_step']
         self.t = self.start_time
 
         self.history = []
@@ -158,7 +158,7 @@ class SimulationHarness:
             agent.run(self.t)
 
         # Phase 2: Step physical models
-        self._step_physical_models(self.dt)
+        self._step_physical_models(self.time_step)
 
         # Phase 3: Store history (optional, can be disabled for performance)
         step_history = {'time': self.t}
@@ -175,11 +175,11 @@ class SimulationHarness:
         self.history.append(step_history)
 
         # Update time
-        self.t += self.dt
+        self.t += self.time_step
 
     def run_mas_simulation(self):
         """运行多智能体系统仿真"""
-        print(f"Starting MAS simulation from {self.start_time} to {self.end_time} with dt={self.dt}")
+        print(f"Starting MAS simulation from {self.start_time} to {self.end_time} with time_step={self.time_step}")
         
         while self.t < self.end_time and self.is_running:
             # 检查是否暂停
@@ -202,7 +202,7 @@ class SimulationHarness:
 
     def run_simulation(self):
         """运行简单仿真（非智能体模式）"""
-        print(f"Starting simple simulation from {self.start_time} to {self.end_time} with dt={self.dt}")
+        print(f"Starting simple simulation from {self.start_time} to {self.end_time} with time_step={self.time_step}")
         
         while self.t < self.end_time and self.is_running:
             # 检查是否暂停
@@ -219,14 +219,14 @@ class SimulationHarness:
                     observation = observed_component.get_state().get(spec.observation_key, 0)
                     
                     # 计算控制动作
-                    action = spec.controller.compute_control_action({'process_variable': observation}, self.dt)
+                    action = spec.controller.compute_control_action({'process_variable': observation}, self.time_step)
                     controller_actions[spec.controlled_id] = action
                     
                 except Exception as e:
                     print(f"Error in controller {controller_id}: {e}")
             
             # Phase 2: 步进物理模型
-            self._step_physical_models(self.dt, controller_actions)
+            self._step_physical_models(self.time_step, controller_actions)
             
             # Phase 3: 记录历史
             step_history = {'time': self.t}
@@ -235,17 +235,17 @@ class SimulationHarness:
             self.history.append(step_history)
             
             # 更新时间
-            self.t += self.dt
+            self.t += self.time_step
         
         print(f"Simple simulation completed at time {self.t:.2f}s")
         print(f"Generated {len(self.history)} steps of history data.")
 
-    def _step_physical_models(self, dt: float, controller_actions: Dict[str, Any] = None):
+    def _step_physical_models(self, time_step: float, controller_actions: Dict[str, Any] = None):
         if controller_actions is None:
             controller_actions = {}
 
         # 更新扰动状态
-        disturbance_effects = self.disturbance_manager.update(self.t, dt, self.components)
+        disturbance_effects = self.disturbance_manager.update(self.t, time_step, self.components)
         
         new_states = {}
         current_step_outflows = {}
@@ -292,7 +292,7 @@ class SimulationHarness:
                     import copy
                     temp_downstream_comp = copy.deepcopy(downstream_comp)
 
-                    temp_next_state = temp_downstream_comp.step(downstream_action, dt)
+                    temp_next_state = temp_downstream_comp.step(downstream_action, time_step)
                     total_outflow += temp_next_state.get('outflow', 0)  # 计算下游的出流
 
                 action['outflow'] = total_outflow  # 计算当前步骤的出流
@@ -307,7 +307,7 @@ class SimulationHarness:
                     down_state = self.components[down_id].get_state()
                     action['downstream_head'] = down_state.get('water_level', 0) if down_state else 0
 
-            new_states[component_id] = component.step(action, dt)
+            new_states[component_id] = component.step(action, time_step)
             current_step_outflows[component_id] = new_states[component_id].get('outflow', 0)
 
         for component_id, state in new_states.items():
