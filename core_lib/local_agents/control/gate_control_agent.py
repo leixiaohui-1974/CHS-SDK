@@ -78,7 +78,7 @@ class GateControlAgent(UnifiedLocalControlAgent):
     def _initialize_device_specific(self, **kwargs):
         """闸门特定初始化"""
         # 参数识别配置
-        identification_config = kwargs.get('identification_config', {})
+        identification_config = kwargs.get('identification_config') or {}
         if identification_config.get('enable_identification', False):
             forgetting_factor = identification_config.get('forgetting_factor', 0.98)
             self.identifier = RLSEstimator(forgetting_factor=forgetting_factor)

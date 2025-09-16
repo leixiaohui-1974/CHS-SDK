@@ -18,12 +18,27 @@ class Gate(PhysicalObjectInterface):
                  message_bus: Optional[MessageBus] = None, action_topic: Optional[str] = None,
                  action_key: str = 'opening'):
         super().__init__(name, initial_state, parameters)
-        self._state.setdefault('outflow', 0)
+        
+        # 物理常量定义
+        self.GRAVITY_ACCELERATION = 9.81      # 重力加速度 (m/s²)
+        self.SQRT_FACTOR = 2                  # 孔口公式中的根号系数
+        
+        # 默认参数定义
+        self.DEFAULT_DISCHARGE_COEFFICIENT = 0.6  # 默认流量系数
+        self.DEFAULT_WIDTH = 2.0              # 默认闸门宽度 (m)
+        self.DEFAULT_MAX_OPENING = 1.0        # 默认最大开度 (m)
+        
+        # 状态常量定义
+        self.DEFAULT_OPENING = 0              # 默认开度
+        self.DEFAULT_OUTFLOW = 0              # 默认出流量
+        self.DEFAULT_HEAD_DIFF = 1            # 默认水头差
+        
+        self._state.setdefault('outflow', self.DEFAULT_OUTFLOW)
         self.bus = message_bus
         self.action_topic = action_topic
         self.action_key = action_key
-        self.target_opening = self._state.get('opening', 0)
-        self.last_head_diff = 1 # 存储上一次的水头差，用于反向计算
+        self.target_opening = self._state.get('opening', self.DEFAULT_OPENING)
+        self.last_head_diff = self.DEFAULT_HEAD_DIFF  # 存储上一次的水头差，用于反向计算
 
         if self.bus and self.action_topic:
             self.bus.subscribe(self.action_topic, self.handle_action_message)
@@ -37,15 +52,14 @@ class Gate(PhysicalObjectInterface):
         Q = C * A * sqrt(2 * g * h)
         """
         if C is None:
-            C = self._params.get('discharge_coefficient', 0.6)
-        width = self._params.get('width', 2.0)
-        g = 9.81
+            C = self._params.get('discharge_coefficient', self.DEFAULT_DISCHARGE_COEFFICIENT)
+        width = self._params.get('width', self.DEFAULT_WIDTH)
         area = opening * width
         head = upstream_level - downstream_level
         self.last_head_diff = head
         if head <= 0:
-            return 0
-        return C * area * math.sqrt(2 * g * head)
+            return self.DEFAULT_OUTFLOW
+        return C * area * math.sqrt(self.SQRT_FACTOR * self.GRAVITY_ACCELERATION * head)
 
     def calculate_outflow(self, upstream_level: float, opening: float, downstream_level: float = 0, C: Optional[float] = None) -> float:
         """
@@ -56,14 +70,13 @@ class Gate(PhysicalObjectInterface):
 
     def _calculate_opening_for_flow(self, target_flow: float) -> float:
         """孔口公式的反向计算，用于根据目标流量计算所需的闸门开度。"""
-        C = self._params.get('discharge_coefficient', 0.6)
-        width = self._params.get('width', 2.0)
-        g = 9.81
+        C = self._params.get('discharge_coefficient', self.DEFAULT_DISCHARGE_COEFFICIENT)
+        width = self._params.get('width', self.DEFAULT_WIDTH)
         if self.last_head_diff <= 0:
-            return 0 # 没有水头差则无法实现流动
-        denominator = C * width * math.sqrt(2 * g * self.last_head_diff)
+            return self.DEFAULT_OPENING  # 没有水头差则无法实现流动
+        denominator = C * width * math.sqrt(self.SQRT_FACTOR * self.GRAVITY_ACCELERATION * self.last_head_diff)
         if denominator == 0:
-            return self._params.get('max_opening', 1.0) # 无法计算，如果需要流量则全开
+            return self._params.get('max_opening', self.DEFAULT_MAX_OPENING)  # 无法计算，如果需要流量则全开
         return target_flow / denominator
 
     def handle_action_message(self, message: Message):

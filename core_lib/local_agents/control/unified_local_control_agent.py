@@ -39,14 +39,18 @@ class UnifiedLocalControlAgent(Agent):
             state_topic: 发布调试状态的主题
             interval: 日志记录间隔（秒）
         """
+        # 日志常量定义
+        self.DEFAULT_LOG_INTERVAL = 5         # 默认日志间隔 (秒)
+        self.INITIAL_LOG_TIME = 0             # 初始日志时间
+        
         self.debug_enabled = enabled
         self.state_topic = state_topic
-        self.log_interval = interval
+        self.log_interval = interval if interval is not None else self.DEFAULT_LOG_INTERVAL
         
         if enabled:
             # 初始化状态发布定时器
-            self._last_log_time = 0
-            print(f"Control logging enabled @ {interval}s intervals to {state_topic}")
+            self._last_log_time = self.INITIAL_LOG_TIME
+            print(f"Control logging enabled @ {self.log_interval}s intervals to {state_topic}")
     
     def __init__(self,
                  agent_id: str,

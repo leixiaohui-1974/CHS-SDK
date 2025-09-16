@@ -10,9 +10,16 @@ class HydropowerController(Controller):
     the flow for each turbine.
     """
     def __init__(self, head_m: float, num_turbines: int = 6, **kwargs):
+        # 物理常量定义
+        self.DEFAULT_EFFICIENCY = 0.9         # 默认效率
+        self.WATER_DENSITY = 1000            # 水密度 (kg/m³)
+        self.GRAVITY_ACCELERATION = 9.81     # 重力加速度 (m/s²)
+        self.MW_TO_W_CONVERSION = 1e6        # MW到W的转换系数
+        self.DEFAULT_POWER_TARGET = 0        # 默认功率目标
+        
         self.head = head_m
         self.num_turbines = num_turbines
-        self.power_target_mw = 0
+        self.power_target_mw = self.DEFAULT_POWER_TARGET
         self.grid_limit_mw = float('inf')
 
     def compute_control_action(self, observation: Dict[str, Any], time_step: float) -> Dict[str, Any]:
@@ -28,8 +35,9 @@ class HydropowerController(Controller):
         # This is a highly simplified physical model to convert power to flow.
         # A real controller would use a pre-computed lookup table.
         # Power (W) = eff * rho * g * Q * H
-        eff, rho, g = 0.9, 1000, 9.81
-        required_flow_per_turbine = (target_per_turbine * 1e6) / (eff * rho * g * self.head) if self.head > 0 else 0
+        required_flow_per_turbine = (target_per_turbine * self.MW_TO_W_CONVERSION) / (
+            self.DEFAULT_EFFICIENCY * self.WATER_DENSITY * self.GRAVITY_ACCELERATION * self.head
+        ) if self.head > 0 else 0
 
         # The LocalControlAgent will dispatch these actions to the correct topics
         actions = {}
@@ -55,7 +63,10 @@ class DirectGateController(Controller):
     A simple controller that directly sets the gate opening based on its setpoint.
     """
     def __init__(self, setpoint=1.0, **kwargs):
-        self.setpoint = setpoint
+        # 控制常量定义
+        self.DEFAULT_SETPOINT = 1.0           # 默认设定值
+        
+        self.setpoint = setpoint if setpoint is not None else self.DEFAULT_SETPOINT
 
     def compute_control_action(self, obs, time_step):
         return {'opening': self.setpoint}

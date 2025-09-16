@@ -26,16 +26,38 @@ class Pump(PhysicalObjectInterface):
                  message_bus: Optional[MessageBus] = None, action_topic: Optional[str] = None):
         super().__init__(name, initial_state, parameters)
         
+        # 物理常量定义
+        self.GRAVITY_ACCELERATION = 9.81      # 重力加速度 (m/s²)
+        self.WATER_DENSITY = 1000            # 水密度 (kg/m³)
+        self.POWER_CONVERSION = 1000         # 功率转换系数 (W to kW)
+        
+        # 默认参数定义
+        self.DEFAULT_MAX_FLOW_RATE = 10.0    # 默认最大流量 (m³/s)
+        self.DEFAULT_MAX_HEAD = 20.0         # 默认最大扬程 (m)
+        
+        # 状态常量定义
+        self.STATUS_OFF = 0                  # 泵关闭状态
+        self.STATUS_ON = 1                   # 泵开启状态
+        self.DEFAULT_OUTFLOW = 0.0           # 默认出流量
+        self.DEFAULT_POWER_DRAW = 0.0        # 默认功率消耗
+        self.DEFAULT_EFFICIENCY = 0.0        # 默认效率
+        
+        # 效率计算常量
+        self.MIN_FLOW_RATIO = 0.1            # 最小流量比率
+        self.OPTIMAL_FLOW_RATIO = 0.7        # 最优流量比率
+        self.MIN_EFFICIENCY = 0.3            # 最小效率
+        self.MAX_EFFICIENCY_LOSS = 0.3       # 最大效率损失
+        
         # 物理状态
-        self._state.setdefault('outflow', 0.0)
-        self._state.setdefault('power_draw_kw', 0.0)
-        self._state.setdefault('efficiency', 0.0)
-        self._state.setdefault('status', 0)  # 0=停止, 1=运行
+        self._state.setdefault('outflow', self.DEFAULT_OUTFLOW)
+        self._state.setdefault('power_draw_kw', self.DEFAULT_POWER_DRAW)
+        self._state.setdefault('efficiency', self.DEFAULT_EFFICIENCY)
+        self._state.setdefault('status', self.STATUS_OFF)
         
         # 控制接口
         self.bus = message_bus
         self.action_topic = action_topic
-        self.target_status = self._state.get('status', 0)
+        self.target_status = self._state.get('status', self.STATUS_OFF)
 
         if self.bus and self.action_topic:
             self.bus.subscribe(self.action_topic, self.handle_action_message)
@@ -45,18 +67,18 @@ class Pump(PhysicalObjectInterface):
 
     def _calculate_flow(self, upstream_level: float, downstream_level: float) -> float:
         """计算水泵流量 - 纯物理计算"""
-        if self._state.get('status', 0) == 0:
-            return 0.0
+        if self._state.get('status', self.STATUS_OFF) == self.STATUS_OFF:
+            return self.DEFAULT_OUTFLOW
 
-        max_flow_rate = self._params.get('max_flow_rate', 10.0)
-        max_head = self._params.get('max_head', 20.0)
+        max_flow_rate = self._params.get('max_flow_rate', self.DEFAULT_MAX_FLOW_RATE)
+        max_head = self._params.get('max_head', self.DEFAULT_MAX_HEAD)
         
         # 计算实际扬程（泵从上游抽水到下游）
         actual_head = downstream_level - upstream_level
         
         # 检查扬程限制（负扬程表示抽水，正扬程表示排水）
         if abs(actual_head) > max_head:
-            return 0.0
+            return self.DEFAULT_OUTFLOW
         
         # 对于抽水工况，流量基本不受扬程影响
         # 直接返回最大流量
@@ -65,33 +87,33 @@ class Pump(PhysicalObjectInterface):
     def _calculate_power(self, flow: float, head: float) -> float:
         """计算功率消耗 - 纯物理计算"""
         if flow <= 0:
-            return 0.0
+            return self.DEFAULT_POWER_DRAW
             
         # 基本功率计算
-        basic_power = (flow * head * 9.81 * 1000) / 1000  # kW
+        basic_power = (flow * head * self.GRAVITY_ACCELERATION * self.WATER_DENSITY) / self.POWER_CONVERSION  # kW
         
         # 考虑效率
         efficiency = self._calculate_efficiency(flow, head)
         if efficiency > 0:
             return basic_power / efficiency
         else:
-            return 0.0
+            return self.DEFAULT_POWER_DRAW
 
     def _calculate_efficiency(self, flow: float, head: float) -> float:
         """计算效率 - 纯物理计算"""
         if flow <= 0:
-            return 0.0
+            return self.DEFAULT_EFFICIENCY
             
-        max_flow_rate = self._params.get('max_flow_rate', 10.0)
+        max_flow_rate = self._params.get('max_flow_rate', self.DEFAULT_MAX_FLOW_RATE)
         flow_ratio = flow / max_flow_rate
         
         # 效率特性曲线（基于实际水泵特性）
-        if flow_ratio < 0.1:
-            return 0.0
-        elif flow_ratio <= 0.7:
-            return 0.3 + 0.7 * (flow_ratio / 0.7)
+        if flow_ratio < self.MIN_FLOW_RATIO:
+            return self.DEFAULT_EFFICIENCY
+        elif flow_ratio <= self.OPTIMAL_FLOW_RATIO:
+            return self.MIN_EFFICIENCY + (1.0 - self.MIN_EFFICIENCY) * (flow_ratio / self.OPTIMAL_FLOW_RATIO)
         else:
-            return 1.0 - 0.3 * ((flow_ratio - 0.7) / 0.3)
+            return 1.0 - self.MAX_EFFICIENCY_LOSS * ((flow_ratio - self.OPTIMAL_FLOW_RATIO) / (1.0 - self.OPTIMAL_FLOW_RATIO))
 
     def handle_action_message(self, message: Message):
         """处理控制消息 - 只更新目标状态，不包含控制逻辑"""

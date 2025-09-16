@@ -18,6 +18,15 @@ class Pipe(PhysicalObjectInterface):
         self._state.setdefault('outflow', 0)
         self._state.setdefault('head_loss', 0)
 
+        # 物理常量定义
+        self.GRAVITY_ACCELERATION = 9.81      # 重力加速度 (m/s²)
+        self.PI = math.pi                     # 圆周率
+        self.QUARTER = 0.25                   # 1/4
+        self.MANNING_EXPONENT_2_3 = 2/3       # Manning公式指数 2/3
+        self.MANNING_EXPONENT_1_2 = 0.5       # Manning公式指数 1/2
+        self.DARCY_EXPONENT = 2               # Darcy-Weisbach公式指数
+        self.HYDRAULIC_RADIUS_FACTOR = 4      # 满管圆形管道水力半径系数
+
         self.method = self._params.get('calculation_method', 'darcy_weisbach')
         if self.method not in ['darcy_weisbach', 'manning']:
             raise ValueError(f"未知的计算方法: {self.method}")
@@ -29,15 +38,14 @@ class Pipe(PhysicalObjectInterface):
         if head_difference <= 0:
             return 0
 
-        g = 9.81
         friction_factor = f if f is not None else self._params['friction_factor']
         length = self._params['length']
         diameter = self._params['diameter']
-        area = (math.pi / 4) * (diameter ** 2)
+        area = (self.PI * self.QUARTER) * (diameter ** self.DARCY_EXPONENT)
 
         # Q = A * sqrt(2 * g * h_L * D / (f * L))
         if friction_factor * length == 0: return 0
-        flow = area * math.sqrt(2 * g * head_difference * diameter / (friction_factor * length))
+        flow = area * math.sqrt(self.DARCY_EXPONENT * self.GRAVITY_ACCELERATION * head_difference * diameter / (friction_factor * length))
         return flow
 
     def _calculate_flow_manning(self, head_difference: float, n: Optional[float] = None) -> float:
@@ -53,12 +61,12 @@ class Pipe(PhysicalObjectInterface):
 
         diameter = self._params['diameter']
 
-        area = (math.pi / 4) * (diameter ** 2)
-        hydraulic_radius = diameter / 4 # 满管圆形管道的水力半径
+        area = (self.PI * self.QUARTER) * (diameter ** self.DARCY_EXPONENT)
+        hydraulic_radius = diameter / self.HYDRAULIC_RADIUS_FACTOR  # 满管圆形管道的水力半径
         slope = head_difference / length
 
         # Q = (1.0/n) * A * R_h^(2/3) * S^(1/2) --- 国际单位制
-        flow = (1.0 / manning_n) * area * (hydraulic_radius ** (2/3)) * math.sqrt(slope)
+        flow = (1.0 / manning_n) * area * (hydraulic_radius ** self.MANNING_EXPONENT_2_3) * (slope ** self.MANNING_EXPONENT_1_2)
         return flow
 
     def _calculate_head_loss_darcy_weisbach(self, flow: float) -> float:
@@ -66,17 +74,16 @@ class Pipe(PhysicalObjectInterface):
         if flow <= 0:
             return 0
 
-        g = 9.81
         friction_factor = self._params['friction_factor']
         length = self._params['length']
         diameter = self._params['diameter']
-        area = (math.pi / 4) * (diameter ** 2)
+        area = (self.PI * self.QUARTER) * (diameter ** self.DARCY_EXPONENT)
 
         if diameter == 0 or area == 0:
             return float('inf')
 
         # h_L = f * (L/D) * (v^2 / (2*g)) = f * (L/D) * (Q^2 / (A^2 * 2*g))
-        head_loss = friction_factor * (length / diameter) * (flow**2) / (2 * g * area**2)
+        head_loss = friction_factor * (length / diameter) * (flow**self.DARCY_EXPONENT) / (self.DARCY_EXPONENT * self.GRAVITY_ACCELERATION * area**self.DARCY_EXPONENT)
         return head_loss
 
     def step(self, action: Dict[str, Any], time_step: float) -> State:

@@ -32,22 +32,32 @@ class Valve(PhysicalObjectInterface, Identifiable):
         """
         Calculates the flow through the valve using a modified orifice equation.
         """
+        # 物理常量定义（在方法中定义，但应该移到__init__中）
+        if not hasattr(self, 'GRAVITY_ACCELERATION'):
+            self.GRAVITY_ACCELERATION = 9.81      # 重力加速度 (m/s²)
+            self.PI = math.pi                     # 圆周率
+            self.PERCENT_CONVERSION = 100.0       # 百分比转换
+            self.DIAMETER_FACTOR = 2              # 直径系数
+            self.SQRT_FACTOR = 2                  # 平方根系数
+            self.POWER_EXPONENT = 0.5             # 指数
+            self.DEFAULT_OPENING = 0              # 默认开度
+            self.DEFAULT_FLOW = 0                 # 默认流量
+        
         C_d = self._params['discharge_coefficient']
         diameter = self._params['diameter']
-        g = 9.81
 
-        opening_percent = self._state.get('opening', 0)
+        opening_percent = self._state.get('opening', self.DEFAULT_OPENING)
         # The discharge coefficient is now the parameter to be identified.
         # It's scaled by the opening.
-        effective_C_d = C_d * (opening_percent / 100.0)
+        effective_C_d = C_d * (opening_percent / self.PERCENT_CONVERSION)
 
-        area = math.pi * (diameter / 2)**2
+        area = self.PI * (diameter / self.DIAMETER_FACTOR)**self.DIAMETER_FACTOR
         head_diff = upstream_level - downstream_level
 
         if head_diff <= 0:
-            return 0
+            return self.DEFAULT_FLOW
 
-        flow = effective_C_d * area * (2 * g * head_diff)**0.5
+        flow = effective_C_d * area * (self.SQRT_FACTOR * self.GRAVITY_ACCELERATION * head_diff)**self.POWER_EXPONENT
         return flow
 
     def identify_parameters(self, data: Dict[str, np.ndarray]):
@@ -76,8 +86,7 @@ class Valve(PhysicalObjectInterface, Identifiable):
         # So, C_d = flow / [(opening/100) * A * sqrt(2*g*H)]
         # We can calculate an estimated C_d for each data point and average them.
 
-        g = 9.81
-        area = math.pi * (self._params['diameter'] / 2)**2
+        area = self.PI * (self._params['diameter'] / self.DIAMETER_FACTOR)**self.DIAMETER_FACTOR
 
         # Vectorized calculation to find C_d for each time step
         head_diff = up_levels - down_levels
