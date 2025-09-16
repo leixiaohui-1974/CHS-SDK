@@ -29,3 +29,4 @@ simulation:
   end_time: 3600
   start_time: 0
   time_step: 10
+  real_time_factor: 1.0

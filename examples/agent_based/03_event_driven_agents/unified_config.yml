@@ -62,8 +62,10 @@ metadata:
   name: 03_event_driven_agents - 统一配置
   version: '1.0'
 simulation:
-  dt: 1.0
-  duration: 300
+  time_step: 1.0
+  end_time: 300
+  start_time: 0.0
+  real_time_factor: 1.0
 visualization:
   enabled: true
   plots:

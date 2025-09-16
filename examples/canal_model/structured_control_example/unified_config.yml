@@ -42,5 +42,7 @@ metadata:
   name: structured_control_example - 统一配置
   version: '1.0'
 simulation:
-  dt: 10
-  duration: 3600
+  time_step: 10
+  end_time: 3600
+  start_time: 0.0
+  real_time_factor: 1.0

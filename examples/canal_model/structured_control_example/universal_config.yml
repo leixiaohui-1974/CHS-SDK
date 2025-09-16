@@ -45,5 +45,7 @@ runtime:
   logging_level: INFO
   mode: simulation
 simulation:
-  dt: 10
-  duration: 3600
+  time_step: 10
+  end_time: 3600
+  start_time: 0.0
+  real_time_factor: 1.0

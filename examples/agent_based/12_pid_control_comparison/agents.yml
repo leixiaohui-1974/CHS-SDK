@@ -4,7 +4,7 @@ agents:
   - id: gate1_local_controller
     class: core_lib.local_agents.control.unified_local_control_agent.UnifiedLocalControlAgent
     config:
-      dt: 10
+      time_step: 10
       target_component: gate_1
       control_type: pid
       data_sources:
@@ -26,7 +26,7 @@ agents:
   - id: gate2_local_controller
     class: core_lib.local_agents.control.unified_local_control_agent.UnifiedLocalControlAgent
     config:
-      dt: 10
+      time_step: 10
       target_component: gate_2
       control_type: pid
       data_sources:
@@ -49,7 +49,7 @@ agents:
   - id: gate1_distant_controller
     class: core_lib.local_agents.control.unified_local_control_agent.UnifiedLocalControlAgent
     config:
-      dt: 10
+      time_step: 10
       target_component: gate_1
       control_type: pid
       data_sources:
@@ -71,7 +71,7 @@ agents:
   - id: gate2_distant_controller
     class: core_lib.local_agents.control.unified_local_control_agent.UnifiedLocalControlAgent
     config:
-      dt: 10
+      time_step: 10
       target_component: gate_2
       control_type: pid
       data_sources:
@@ -94,7 +94,7 @@ agents:
   - id: gate1_mixed_controller
     class: core_lib.local_agents.control.unified_local_control_agent.UnifiedLocalControlAgent
     config:
-      dt: 10
+      time_step: 10
       target_component: gate_1
       control_type: pid
       data_sources:
@@ -116,7 +116,7 @@ agents:
   - id: gate2_mixed_controller
     class: core_lib.local_agents.control.unified_local_control_agent.UnifiedLocalControlAgent
     config:
-      dt: 10
+      time_step: 10
       target_component: gate_2
       control_type: pid
       data_sources:

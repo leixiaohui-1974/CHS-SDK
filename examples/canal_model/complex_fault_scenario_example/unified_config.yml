@@ -63,5 +63,7 @@ metadata:
   name: complex_fault_scenario_example - 统一配置
   version: '1.0'
 simulation:
-  dt: 10
-  duration: 10800
+  time_step: 10
+  end_time: 10800
+  start_time: 0.0
+  real_time_factor: 1.0

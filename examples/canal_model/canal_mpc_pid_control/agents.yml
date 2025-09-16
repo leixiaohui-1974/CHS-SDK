@@ -4,7 +4,7 @@ agents:
   - id: central_mpc_agent
     class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
     config:
-      dt: 10
+      time_step: 10
       target_component: canal_1
       control_type: mpc
       data_sources:
@@ -18,7 +18,7 @@ agents:
         class: core_lib.local_agents.control.mpc_controller.MPCController
         config:
           horizon: 10
-          dt: 10
+          time_step: 10
           model_config:
             canal_area: 20000
           objective_config:
@@ -38,7 +38,7 @@ agents:
   - id: gate_1_flow_pid_agent
     class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
     config:
-      dt: 10
+      time_step: 10
       target_component: gate_1
       control_type: pid
       data_sources:
@@ -62,7 +62,7 @@ agents:
   - id: gate_2_flow_pid_agent
     class: core_lib.local_agents.control.local_control_agent.LocalControlAgent
     config:
-      dt: 10
+      time_step: 10
       target_component: gate_2
       control_type: pid
       data_sources:

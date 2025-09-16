@@ -58,7 +58,7 @@ agents:
         canal_2: 'control/canal_2/setpoint'
       state_keys: ["canal_1", "canal_2"]
       prediction_horizon: 10
-      dt: 60
+      time_step: 60
       q_weight: 1.0
       r_weight: 0.1
       # NOTE: This is a temporary fix. The agent calculates gate openings,
