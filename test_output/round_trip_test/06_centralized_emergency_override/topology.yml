@@ -1,4 +1,0 @@
-connections:
-- from: main_reservoir
-  to: flood_gate
-  type: flow

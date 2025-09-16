@@ -1,7 +1,0 @@
-agents:
-- class: PIDControllerAgent
-  id: pid_controller
-  target: component_1
-- class: Agent
-  id: inflow_disturbance
-  target: component_1

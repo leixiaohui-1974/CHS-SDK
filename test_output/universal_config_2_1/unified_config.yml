@@ -1,8 +1,0 @@
-simulation:
-  duration: 2000.0
-  dt: 10.0
-  name: universal_config_2_1
-  solver: pid
-components: []
-topology: []
-agents: {}

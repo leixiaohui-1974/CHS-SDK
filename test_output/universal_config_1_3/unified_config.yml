@@ -1,8 +1,0 @@
-simulation:
-  duration: 100.0
-  dt: 1.0
-  name: universal_config_1_3
-  solver: euler
-components: []
-topology: []
-agents: {}

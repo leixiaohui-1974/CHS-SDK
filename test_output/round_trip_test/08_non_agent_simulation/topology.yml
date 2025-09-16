@@ -1,4 +1,0 @@
-connections:
-- from: source_reservoir
-  to: control_gate
-  type: flow

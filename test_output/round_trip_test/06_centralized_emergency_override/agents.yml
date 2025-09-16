@@ -1,9 +1,0 @@
-agents:
-- class: DigitalTwinAgent
-  id: reservoir_twin
-  state_topic: state/reservoir/main
-  target: main_reservoir
-- class: Agent
-  id: central_dispatcher
-  subscribed_topic: state/reservoir/main
-  target: component_1

@@ -1,9 +1,0 @@
-agents: {}
-components: {}
-simulation:
-  description: 基于自然语言描述生成的仿真配置
-  duration: 1
-  name: 自动生成的仿真
-  time_step: 1.0
-topology:
-  connections: []

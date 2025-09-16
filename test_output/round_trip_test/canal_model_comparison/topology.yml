@@ -1,4 +1,0 @@
-connections:
-- from: upstream_reservoir
-  to: gate_1
-  type: flow
