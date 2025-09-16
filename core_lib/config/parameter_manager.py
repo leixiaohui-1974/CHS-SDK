@@ -374,12 +374,41 @@ class ParameterManager:
                                 param_name, min_val, max_val
                             )
             
+            # 特别验证时间步长
+            self._validate_time_step()
+            
             logger.info("配置验证通过")
             return True
             
         except Exception as e:
             logger.error(f"配置验证失败: {e}")
             return False
+    
+    def _validate_time_step(self):
+        """验证时间步长参数"""
+        if 'simulation' in self.config:
+            time_step = self.config['simulation'].get('time_step')
+            if time_step is not None:
+                min_step = SystemLimits.MIN_TIME_STEP
+                max_step = SystemLimits.MAX_TIME_STEP
+                
+                if not isinstance(time_step, (int, float)):
+                    raise ValueError(f"时间步长必须是数值类型，当前类型: {type(time_step)}")
+                
+                if time_step <= 0:
+                    raise ValueError(f"时间步长必须大于0，当前值: {time_step}")
+                
+                if time_step < min_step:
+                    logger.warning(f"时间步长 {time_step} 小于推荐最小值 {min_step}")
+                
+                if time_step > max_step:
+                    raise ValueError(f"时间步长 {time_step} 超过最大值 {max_step}")
+                
+                # 检查时间步长精度
+                if time_step < 0.001:
+                    logger.warning(f"时间步长 {time_step} 过小，可能影响计算精度")
+                
+                logger.info(f"时间步长验证通过: {time_step} 秒")
     
     def save_config(self, output_file: str):
         """

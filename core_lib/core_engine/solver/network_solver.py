@@ -13,7 +13,7 @@ class NetworkSolver:
     """
 
     def __init__(self, time_step: float, theta: float = 0.6):
-        self.time_step= dt
+        self.time_step = time_step
         self.theta = theta
         self.components = []
         self.reaches = []
@@ -78,7 +78,7 @@ class NetworkSolver:
 
         # --- Equations from Reaches ---
         for reach in self.reaches:
-            reach_eqs = reach.get_equations(self.dt, self.theta)
+            reach_eqs = reach.get_equations(self.time_step, self.theta)
             for i, (Ai, Bi, Ci) in enumerate(reach_eqs):
                 h_i_idx = self.var_map[(reach, 'H', i)]
                 q_i_idx = self.var_map[(reach, 'Q', i)]
@@ -97,7 +97,7 @@ class NetworkSolver:
 
         # --- Equations from Nodes ---
         for node in self.nodes:
-            node_eqs = node.get_equations(self.dt, self.theta)
+            node_eqs = node.get_equations(self.time_step, self.theta)
             for eq in node_eqs:
                 rhs = eq.pop('RHS')
                 for (obj, var, idx), coeff in eq.items():
@@ -158,7 +158,7 @@ class NetworkSolver:
         """Runs the full simulation for a given number of steps."""
         print("\n--- Starting Hydrodynamic Simulation ---")
         for i in range(num_steps):
-            current_time = i * self.dt
+            current_time = i * self.time_step
             print(f"\n--- Time Step {i+1}/{num_steps} (t={current_time:.1f}s) ---")
             self.step(current_time)
         print("\n--- Simulation Finished ---")

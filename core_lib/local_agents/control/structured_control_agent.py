@@ -10,7 +10,7 @@ class StructuredControlAgent(BaseControlAgent):
     """
 
     def __init__(self, agent_id, message_bus, controlled_element_id: str,
-                 control_mode: str, controller_config: dict, time_step: int, **kwargs):
+                 control_mode: str, controller_config: dict, time_step: float, **kwargs):
         """
         Initializes the StructuredControlAgent.
 
@@ -19,7 +19,7 @@ class StructuredControlAgent(BaseControlAgent):
             controller_config (dict): Can contain a `setpoint_topic` for dynamic updates.
             ...
         """
-        super().__init__(agent_id, message_bus, dt)
+        super().__init__(agent_id, message_bus, time_step)
         self.controlled_element_id = controlled_element_id
         self.control_mode = control_mode.lower()
         self.logger = logging.getLogger(self.__class__.__name__)
@@ -100,7 +100,7 @@ class StructuredControlAgent(BaseControlAgent):
 
         if process_variable is not None:
             observation_for_pid = {'process_variable': process_variable}
-            control_action = self.controller.compute_control_action(observation_for_pid, time_step=self.dt)
+            control_action = self.controller.compute_control_action(observation_for_pid, time_step=self.time_step)
             payload = {'value': control_action}
             self.message_bus.publish(self.action_topic, payload)
         else:

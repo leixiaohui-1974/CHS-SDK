@@ -164,7 +164,7 @@ class DefaultConfigParameters:
     """默认配置参数类 - 包含所有可配置参数的默认值"""
     
     # 仿真参数
-    DEFAULT_TIME_STEP = 1.0  # 秒
+    DEFAULT_TIME_STEP = 0.1  # 秒
     DEFAULT_PRINT_INTERVAL = 10  # 步数
     DEFAULT_SIMULATION_DURATION = 3600.0  # 秒
     DEFAULT_CONVERGENCE_TOLERANCE = 1e-6

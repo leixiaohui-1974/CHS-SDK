@@ -45,8 +45,12 @@ class CentralAnomalyDetectionAgent(Agent):
 
         print(f"CentralAnomalyDetectionAgent '{self.agent_id}' initialized. Monitoring {len(self.topics_to_monitor)} topics.")
 
-    def handle_message(self, message: Message, topic: str):
+    def handle_message(self, message: Message):
         """Callback to store the latest message from a monitored topic."""
+        # 从消息中获取topic信息，如果没有，则需要从调用上下文获取
+        # 这里需要修改消息总线的实现来传递topic信息
+        # 暂时使用一个简化的实现
+        topic = message.get('topic', 'unknown')
         self.latest_data[topic] = message
 
     def run(self, current_time: float):

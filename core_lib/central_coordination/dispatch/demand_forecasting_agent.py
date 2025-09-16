@@ -65,7 +65,7 @@ class DemandForecastingAgent(Agent):
         """
         The main execution logic. Periodically generates and publishes a new forecast.
         """
-        if int(current_time) > 0 and int(current_time) % self.forecast_interval == 0:
+        if current_time > 0 and current_time % self.forecast_interval < 1e-6:
             self.generate_forecast(current_time)
 
     def generate_forecast(self, current_time: float):

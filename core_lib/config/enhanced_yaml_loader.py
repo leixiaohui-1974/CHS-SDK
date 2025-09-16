@@ -78,11 +78,29 @@ class EnhancedYamlSimulationLoader(YamlSimulationLoader):
         # 时间配置
         time_config = sim_config.get('time', {})
         if time_config:
+            # 获取时间单位
+            time_units = time_config.get('units', 'seconds').lower()
+            
+            # 时间单位转换系数
+            unit_conversion = {
+                'seconds': 1.0,
+                's': 1.0,
+                'minutes': 60.0,
+                'min': 60.0,
+                'hours': 3600.0,
+                'h': 3600.0,
+                'days': 86400.0,
+                'd': 86400.0
+            }
+            
+            conversion_factor = unit_conversion.get(time_units, 1.0)
+            
             self.config['time'] = {
-                'start_time': time_config['start_time'],
-                'end_time': time_config['end_time'],
-                'time_step': time_config['time_step'],
-                'output_interval': time_config.get('output_interval', 1.0)
+                'start_time': time_config['start_time'] * conversion_factor,
+                'end_time': time_config['end_time'] * conversion_factor,
+                'time_step': time_config['time_step'] * conversion_factor,
+                'output_interval': time_config.get('output_interval', 1.0) * conversion_factor,
+                'units': 'seconds'  # 统一转换为秒
             }
             
         # 求解器配置

@@ -136,7 +136,7 @@ class Controller(ABC):
 
         Args:
             observation: The current state or observation of the system to be controlled.
-            dt: The time step duration in seconds.
+            time_step: The time step duration in seconds.
 
         Returns:
             The computed control action to be sent to the actuator.
@@ -190,11 +190,22 @@ class PhysicalObjectInterface(Simulatable, Identifiable, ABC):
         """
         Default implementation for parameter identification.
         Can be overridden by subclasses for specific models.
+        
+        Args:
+            data: The dataset to use for identification (e.g., time series of inputs and outputs).
+            method: The identification method ('offline', 'online').
+            
+        Returns:
+            A dictionary of the newly identified parameters.
+            
+        Raises:
+            NotImplementedError: If parameter identification is required but not implemented.
         """
-        # A basic implementation might just return the current parameters
-        # or raise a NotImplementedError if identification is required but not implemented.
-        print(f"Parameter identification for {self.name} is not implemented. Returning current parameters.")
-        return self.get_parameters()
+        # 如果子类没有实现参数识别，应该抛出异常而不是返回当前参数
+        raise NotImplementedError(
+            f"Parameter identification for {self.name} is not implemented. "
+            f"Subclasses must override this method to provide parameter identification functionality."
+        )
 
     @property
     def is_stateful(self) -> bool:

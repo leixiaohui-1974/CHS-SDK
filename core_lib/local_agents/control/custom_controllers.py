@@ -68,7 +68,7 @@ class DirectGateController(Controller):
         
         self.setpoint = setpoint if setpoint is not None else self.DEFAULT_SETPOINT
 
-    def compute_control_action(self, obs, time_step):
+    def compute_control_action(self, obs: Dict[str, Any], time_step: float) -> Dict[str, float]:
         return {'opening': self.setpoint}
 
     def update_setpoint(self, msg):
@@ -109,7 +109,7 @@ class JointPIDController(Controller):
 
         Args:
             observation: The current state, must contain the key 'process_variable'.
-            dt: The time step duration in seconds.
+            time_step: The time step duration in seconds.
 
         Returns:
             A dictionary where keys are topic names and values are the control signals.

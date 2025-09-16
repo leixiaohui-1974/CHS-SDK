@@ -54,7 +54,7 @@ class EnhancedMessageBus(MessageBus):
         }
         self._start_delivery_thread()
         
-    def _start_delivery_thread(self):
+    def _start_delivery_thread(self) -> None:
         """启动消息传递线程"""
         if self.message_delivery_thread is None or not self.message_delivery_thread.is_alive():
             self.stop_delivery_thread = False
@@ -65,7 +65,7 @@ class EnhancedMessageBus(MessageBus):
             self.message_delivery_thread.start()
             logger.info("消息传递线程已启动")
     
-    def _message_delivery_worker(self):
+    def _message_delivery_worker(self) -> None:
         """消息传递工作线程"""
         while not self.stop_delivery_thread:
             try:
@@ -76,22 +76,24 @@ class EnhancedMessageBus(MessageBus):
                 messages_to_deliver = []
                 temp_messages = []
                 
-                # 取出所有消息检查
-                while not self.delayed_messages.empty():
-                    try:
-                        delivery_time, delayed_msg = self.delayed_messages.get_nowait()
-                        if delivery_time <= current_time:
-                            messages_to_deliver.append(delayed_msg)
-                        else:
-                            temp_messages.append((delivery_time, delayed_msg))
-                    except queue.Empty:
-                        break
+                # 使用锁保护队列操作
+                with self.delivery_thread_lock:
+                    # 取出所有消息检查
+                    while not self.delayed_messages.empty():
+                        try:
+                            delivery_time, delayed_msg = self.delayed_messages.get_nowait()
+                            if delivery_time <= current_time:
+                                messages_to_deliver.append(delayed_msg)
+                            else:
+                                temp_messages.append((delivery_time, delayed_msg))
+                        except queue.Empty:
+                            break
+                    
+                    # 将未到期的消息放回队列
+                    for delivery_time, delayed_msg in temp_messages:
+                        self.delayed_messages.put((delivery_time, delayed_msg))
                 
-                # 将未到期的消息放回队列
-                for delivery_time, delayed_msg in temp_messages:
-                    self.delayed_messages.put((delivery_time, delayed_msg))
-                
-                # 传递到期的消息
+                # 传递到期的消息（在锁外执行，避免长时间持有锁）
                 for delayed_msg in messages_to_deliver:
                     self._deliver_delayed_message(delayed_msg)
                 
@@ -102,7 +104,7 @@ class EnhancedMessageBus(MessageBus):
                 logger.error(f"消息传递线程错误: {e}")
                 time.sleep(0.01)
     
-    def _deliver_delayed_message(self, delayed_msg: DelayedMessage):
+    def _deliver_delayed_message(self, delayed_msg: DelayedMessage) -> None:
         """传递延迟消息"""
         try:
             # 添加延迟信息到消息中
@@ -123,7 +125,7 @@ class EnhancedMessageBus(MessageBus):
         except Exception as e:
             logger.error(f"传递延迟消息失败: {e}")
     
-    def publish(self, topic: str, message: Message):
+    def publish(self, topic: str, message: Message) -> None:
         """发布消息，支持网络延迟扰动"""
         self.message_stats['total_published'] += 1
         current_time = time.time()
@@ -164,16 +166,22 @@ class EnhancedMessageBus(MessageBus):
         if not self.network_disturbance.enabled:
             return False
         
-        # 检查主题是否受影响
+        # 检查主题是否受影响 - 使用精确匹配或前缀匹配
         if self.network_disturbance.affected_topics:
-            topic_affected = any(affected_topic in topic for affected_topic in self.network_disturbance.affected_topics)
+            topic_affected = any(
+                affected_topic == topic or topic.startswith(affected_topic + '.') 
+                for affected_topic in self.network_disturbance.affected_topics
+            )
             if not topic_affected:
                 return False
         
         # 检查代理是否受影响（通过消息中的发送者信息）
         if self.network_disturbance.affected_agents:
             sender = message.get('sender', '')
-            agent_affected = any(affected_agent in sender for affected_agent in self.network_disturbance.affected_agents)
+            agent_affected = any(
+                affected_agent == sender or sender.startswith(affected_agent + '_')
+                for affected_agent in self.network_disturbance.affected_agents
+            )
             if not agent_affected:
                 return False
         
@@ -200,7 +208,7 @@ class EnhancedMessageBus(MessageBus):
                                  jitter_range: float = 0.05,
                                  packet_loss_rate: float = 0.01,
                                  affected_topics: Optional[List[str]] = None,
-                                 affected_agents: Optional[List[str]] = None):
+                                 affected_agents: Optional[List[str]] = None) -> None:
         """启用网络扰动"""
         self.network_disturbance.enabled = True
         self.network_disturbance.base_delay = base_delay
@@ -219,7 +227,7 @@ class EnhancedMessageBus(MessageBus):
         
         logger.info(f"网络扰动已启用: 基础延迟={base_delay}s, 抖动范围={jitter_range}s, 丢包率={packet_loss_rate}")
     
-    def disable_network_disturbance(self):
+    def disable_network_disturbance(self) -> None:
         """禁用网络扰动"""
         self.network_disturbance.enabled = False
         logger.info("网络扰动已禁用")
@@ -237,16 +245,17 @@ class EnhancedMessageBus(MessageBus):
             'stats': self.message_stats.copy()
         }
     
-    def clear_delayed_messages(self):
+    def clear_delayed_messages(self) -> None:
         """清空延迟消息队列"""
-        while not self.delayed_messages.empty():
-            try:
-                self.delayed_messages.get_nowait()
-            except queue.Empty:
-                break
+        with self.delivery_thread_lock:
+            while not self.delayed_messages.empty():
+                try:
+                    self.delayed_messages.get_nowait()
+                except queue.Empty:
+                    break
         logger.info("延迟消息队列已清空")
     
-    def shutdown(self):
+    def shutdown(self) -> None:
         """关闭消息总线"""
         self.stop_delivery_thread = True
         if self.message_delivery_thread and self.message_delivery_thread.is_alive():
