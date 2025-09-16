@@ -411,10 +411,11 @@ class SimulationBuilder:
             SimulationHarness: 仿真测试框架
         """
         # 创建仿真测试框架
-        self.harness = SimulationHarness(
-            end_time=self.simulation_params.get('duration', 100),
-            dt=self.simulation_params.get('dt', 1.0)
-        )
+        self.harness = SimulationHarness({
+            'start_time': self.simulation_params.get('start_time', 0),
+            'end_time': self.simulation_params.get('end_time', 100),
+            'time_step': self.simulation_params.get('time_step', 1.0)
+        })
         
         # 添加所有组件
         for component in self.components.values():

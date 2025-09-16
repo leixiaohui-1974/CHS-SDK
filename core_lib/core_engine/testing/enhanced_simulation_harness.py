@@ -73,7 +73,7 @@ class EnhancedSimulationHarness:
     def __init__(self, config: Dict[str, Any]):
         self.config = config
         self.start_time = config['start_time']
-        # 支持 duration 作为 end_time 的备选参数
+        # 仿真配置只支持 start_time, time_step, end_time
         self.end_time = config['end_time']
         self.time_step = config.get('time_step', 1.0)
         self.t = self.start_time
@@ -510,12 +510,12 @@ class EnhancedSimulationHarness:
                         component.step(action_with_inflow, time_step)
                     else:
                         # 对于其他组件，使用原来的调用方式
-                        component.step(dt, total_inflow, **control_action)
+                        component.step(time_step, total_inflow, **control_action)
                 except Exception as e:
                     print(f"组件 {component_id} 步进错误: {e}")
                     # 尝试备用调用方式
                     try:
-                        component.step(dt)
+                        component.step(time_step)
                     except:
                         pass
             

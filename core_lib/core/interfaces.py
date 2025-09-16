@@ -23,13 +23,13 @@ class Simulatable(ABC):
     """
 
     @abstractmethod
-    def step(self, action: Any, dt: float) -> State:
+    def step(self, action: Any, time_step: float) -> State:
         """
         Advance the simulation of the component by one time step.
 
         Args:
             action: The control action applied to the component during this step.
-            dt: The time duration of the simulation step (e.g., in seconds).
+            time_step: The time duration of the simulation step (e.g., in seconds).
 
         Returns:
             The new state of the component after the step.
@@ -130,7 +130,7 @@ class Controller(ABC):
     """
 
     @abstractmethod
-    def compute_control_action(self, observation: State, dt: float) -> Any:
+    def compute_control_action(self, observation: State, time_step: float) -> Any:
         """
         Compute the next control action based on the current system observation.
 
