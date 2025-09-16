@@ -98,7 +98,10 @@ class YamlSimulationLoader(BaseYamlLoader):
 
             # Agents & Controllers
             "PIDController": "core_lib.local_agents.control.pid_controller.PIDController",
-            "LocalControlAgent": "core_lib.local_agents.control.local_control_agent.LocalControlAgent",
+            "GateControlAgent": "core_lib.local_agents.control.gate_control_agent.GateControlAgent",
+            "PumpControlAgent": "core_lib.local_agents.control.pump_control_agent.PumpControlAgent",
+            "ValveControlAgent": "core_lib.local_agents.control.valve_control_agent.ValveControlAgent",
+            "WaterTurbineControlAgent": "core_lib.local_agents.control.water_turbine_control_agent.WaterTurbineControlAgent",
             "DigitalTwinAgent": "core_lib.local_agents.perception.digital_twin_agent.DigitalTwinAgent",
             "ParameterIdentificationAgent": "core_lib.identification.identification_agent.ParameterIdentificationAgent",
             "CentralDispatcherAgent": "core_lib.central_coordination.dispatch.central_dispatcher.CentralDispatcherAgent",

@@ -16,7 +16,7 @@ class MPCController(Controller):
         """
         Initializes the MIMO MPC controller.
         """
-        self.time_step= dt
+        self.time_step= time_step
         self.horizon = horizon
         self.model_config = model_config
         self.objective_config = objective_config
