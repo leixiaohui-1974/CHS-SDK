@@ -4,7 +4,7 @@ Simulation model for a Valve.
 import math
 import numpy as np
 from core_lib.core.interfaces import PhysicalObjectInterface, State, Parameters, Identifiable
-from core_lib.central_coordination.communication.message_bus import MessageBus, Message
+from core_lib.core.event_bus import get_global_event_bus
 from core_lib.config.parameter_manager import get_parameter_manager
 from core_lib.config.constants import PhysicalConstants, MathematicalConstants, HydraulicConstants
 from typing import Dict, Any, Optional
@@ -15,7 +15,7 @@ class Valve(PhysicalObjectInterface, Identifiable):
     """
 
     def __init__(self, name: str, initial_state: State, parameters: Parameters,
-                 message_bus: Optional[MessageBus] = None, action_topic: Optional[str] = None):
+                 message_bus=None, action_topic: Optional[str] = None):
         super().__init__(name, initial_state, parameters)
         
         # 获取参数管理器
@@ -135,7 +135,7 @@ class Valve(PhysicalObjectInterface, Identifiable):
         return self.get_parameters()
 
 
-    def handle_action_message(self, message: Message):
+    def handle_action_message(self, message: Dict[str, Any]):
         """Callback to handle incoming action messages from the bus."""
         new_target = message.get('control_signal')
         print(f"[{self.name}] Received action message: {message}")
@@ -216,3 +216,74 @@ class ValveStation(PhysicalObjectInterface):
     @property
     def is_stateful(self) -> bool:
         return False
+    
+    # 数值求解器支持 - 从ValveNode整合
+    def __init_solver_attributes(self):
+        """初始化求解器相关属性"""
+        if not hasattr(self, 'upstream_obj'):
+            self.upstream_obj = None
+            self.downstream_obj = None
+            self.upstream_idx = -1
+            self.downstream_idx = 0
+            self.g = 9.81  # 重力加速度
+    
+    def link_to_reaches(self, up_obj, down_obj):
+        """连接到上下游对象（数值求解器使用）"""
+        self.__init_solver_attributes()
+        self.upstream_obj = up_obj
+        self.downstream_obj = down_obj
+    
+    def get_equations(self, time_step: float, theta: float) -> list:
+        """
+        返回阀门的线性化方程（数值求解器使用）
+        
+        整合自ValveNode的实现，支持NetworkSolver
+        """
+        self.__init_solver_attributes()
+        
+        if not self.upstream_obj or not self.downstream_obj:
+            return []  # 未连接时返回空方程组
+        
+        # 获取当前状态
+        H_up = self.upstream_obj.H[self.upstream_idx]
+        Q_up = self.upstream_obj.Q[self.upstream_idx]
+        H_down = self.downstream_obj.H[self.downstream_idx]
+        Q_down = self.downstream_obj.Q[self.downstream_idx]
+        
+        # 计算有效流通面积
+        opening = self._state.get('opening', 1.0)  # 开度（0-1）
+        diameter = self._params.get('diameter', self.DEFAULT_DIAMETER)
+        max_flow_area = self.PI * (diameter / 2)**2
+        flow_area = max_flow_area * opening
+        discharge_coeff = self._params.get('discharge_coefficient', self.DEFAULT_DISCHARGE_COEFFICIENT)
+        
+        # 方程1: 连续性方程 Q_up = Q_down
+        eq1 = {
+            (self.upstream_obj, 'Q', self.upstream_idx): 1.0,
+            (self.downstream_obj, 'Q', self.downstream_idx): -1.0,
+            'RHS': -(Q_up - Q_down)
+        }
+        
+        # 方程2: 孔口流动水力学方程
+        head_diff = H_up - H_down
+        if head_diff <= 0 or flow_area < 1e-6:
+            # 无流动或阀门关闭
+            eq2 = {
+                (self.upstream_obj, 'Q', self.upstream_idx): 1.0,
+                'RHS': -Q_up
+            }
+        else:
+            sqrt_term = np.sqrt(2 * self.g * head_diff)
+            Q_calc = flow_area * discharge_coeff * sqrt_term
+            
+            common_term = flow_area * discharge_coeff * np.sqrt(2 * self.g)
+            dF_dHead = common_term * 0.5 / np.sqrt(head_diff)
+            
+            eq2 = {
+                (self.upstream_obj, 'Q', self.upstream_idx): 1.0,
+                (self.upstream_obj, 'H', self.upstream_idx): -dF_dHead,
+                (self.downstream_obj, 'H', self.downstream_idx): dF_dHead,
+                'RHS': -(Q_up - Q_calc)
+            }
+        
+        return [eq1, eq2]

@@ -15,7 +15,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core_lib.core.event_bus import get_global_event_bus
 from core_lib.core.registry import register_all_agents, create_agent_from_config
-from core_lib.core.config_schema import load_config_from_file, SystemConfig
+from core_lib.core.config_schema import SystemConfig
 
 def demo_basic_functionality():
     """演示基础功能"""

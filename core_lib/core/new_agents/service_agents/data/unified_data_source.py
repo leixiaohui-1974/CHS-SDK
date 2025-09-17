@@ -1,4 +1,5 @@
 """
+"""
 统一数据源Agent实现
 
 收敛所有数据源类型：CSV、数据库、API、实时流
@@ -30,7 +31,16 @@ class UnifiedDataSourceAgent(DataSourceAgent):
     - Mock数据
     """
     
-    def __init__(self, agent_id: str, source_type: DataSourceType, config: Optional[Config] = None):
+    def __init__(self, agent_id: str, source_type: Union[DataSourceType, str] = None, config: Optional[Config] = None):
+        # 处理source_type参数
+        if isinstance(source_type, str):
+            try:
+                source_type = DataSourceType(source_type)
+            except ValueError:
+                source_type = DataSourceType.MOCK  # 默认值
+        elif source_type is None:
+            source_type = DataSourceType(config.get('source_type', 'mock')) if config else DataSourceType.MOCK
+        
         super().__init__(agent_id, source_type, config)
         
         # 基础配置
@@ -446,50 +456,3 @@ class UnifiedDataSourceAgent(DataSourceAgent):
                 break
         
         self._log("info", "Stream worker stopped")
-
-# 适配器：为旧类提供兼容性
-class CsvReaderAgentAdapter(UnifiedDataSourceAgent):
-    """CsvReaderAgent适配器"""
-    
-    def __init__(self, csv_file_path: str, time_column: str = 'time', 
-                 data_column: str = 'value', **kwargs):
-        config = {
-            'csv_file_path': csv_file_path,
-            'time_column': time_column,
-            'data_columns': [data_column],
-            **kwargs
-        }
-        
-        agent_id = kwargs.get('agent_id', f'csv_reader_{Path(csv_file_path).stem}')
-        super().__init__(agent_id, DataSourceType.CSV, config)
-        
-        import warnings
-        warnings.warn(
-            "CsvReaderAgent is deprecated. Use UnifiedDataSourceAgent with DataSourceType.CSV instead.",
-            DeprecationWarning,
-            stacklevel=2
-        )
-
-class CsvInflowAgentAdapter(UnifiedDataSourceAgent):
-    """CsvInflowAgent适配器"""
-    
-    def __init__(self, csv_file_path: str, time_column: str, data_column: str, 
-                 inflow_topic: str, target_component: str = None, **kwargs):
-        config = {
-            'csv_file_path': csv_file_path,
-            'time_column': time_column,
-            'data_columns': [data_column],
-            'publish_topic': inflow_topic,
-            'target_component': target_component,
-            **kwargs
-        }
-        
-        agent_id = kwargs.get('agent_id', f'csv_inflow_{Path(csv_file_path).stem}')
-        super().__init__(agent_id, DataSourceType.CSV, config)
-        
-        import warnings
-        warnings.warn(
-            "CsvInflowAgent is deprecated. Use UnifiedDataSourceAgent with DataSourceType.CSV instead.",
-            DeprecationWarning,
-            stacklevel=2
-        )

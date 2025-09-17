@@ -5,7 +5,7 @@ import logging
 from typing import Dict, Any
 
 from core_lib.core_engine.testing.simulation_harness import SimulationHarness
-from core_lib.central_coordination.collaboration.message_bus import MessageBus
+from core_lib.core.event_bus import get_global_event_bus
 from core_lib.io.object_factory import ObjectFactory
 from core_lib.models.api_models import SimulationRequest
 from core_lib.models.physical_models import ReservoirModel, GateModel, PipeModel, UnifiedCanalModel
@@ -28,7 +28,7 @@ class SimulationBuilderFromModels:
         self.sim_config = sim_config
 
         self.harness: SimulationHarness = None
-        self.message_bus: MessageBus = None
+        self.message_bus=None = None
         self.component_instances: Dict[str, Any] = {}
         self.object_factory: ObjectFactory = None
         logging.info("SimulationBuilderFromModels initialized.")
@@ -50,7 +50,7 @@ class SimulationBuilderFromModels:
     def _setup_infrastructure(self):
         """Initializes the message bus, simulation harness, and object factory."""
         logging.info("Setting up simulation infrastructure...")
-        self.message_bus = MessageBus()
+        self.message_bus = get_global_event_bus()
         self.harness = SimulationHarness(config=self.sim_config)
 
         context = {

@@ -1,5 +1,5 @@
 from core_lib.core.interfaces import PhysicalObjectInterface, State
-from core_lib.central_coordination.communication.message_bus import MessageBus, Message
+from core_lib.core.event_bus import get_global_event_bus
 from typing import Optional, Dict, Any
 
 class WaterTurbine(PhysicalObjectInterface):
@@ -20,7 +20,7 @@ class WaterTurbine(PhysicalObjectInterface):
     """
 
     def __init__(self, name: str, initial_state: State, parameters: dict,
-                 message_bus: Optional[MessageBus] = None, action_topic: Optional[str] = None,
+                 message_bus=None, action_topic: Optional[str] = None,
                  action_key: str = 'target_outflow'):
         super().__init__(name, initial_state, parameters)
         self.efficiency = self._params['efficiency']
@@ -41,7 +41,7 @@ class WaterTurbine(PhysicalObjectInterface):
             self.bus.subscribe(self.action_topic, self.handle_action_message)
             print(f"Turbine '{self.name}' subscribed to action topic '{self.action_topic}'.")
 
-    def handle_action_message(self, message: Message):
+    def handle_action_message(self, message: Dict[str, Any]):
         """Callback to handle incoming action messages from the bus."""
         if self.action_key in message:
             self.target_outflow = message[self.action_key]
@@ -70,3 +70,60 @@ class WaterTurbine(PhysicalObjectInterface):
         self._state['power'] = power_watts
 
         return self.get_state()
+    
+    @property
+    def is_stateful(self) -> bool:
+        return False
+    
+    # 数值求解器支持 - 从TurbineNode整合
+    def __init_solver_attributes(self):
+        """初始化求解器相关属性"""
+        if not hasattr(self, 'upstream_obj'):
+            self.upstream_obj = None
+            self.downstream_obj = None
+            self.upstream_idx = -1
+            self.downstream_idx = 0
+    
+    def link_to_reaches(self, up_obj, down_obj):
+        """连接到上下游对象（数值求解器使用）"""
+        self.__init_solver_attributes()
+        self.upstream_obj = up_obj
+        self.downstream_obj = down_obj
+    
+    def get_equations(self, time_step: float, theta: float) -> list:
+        """
+        返回水轮机的线性化方程（数值求解器使用）
+        
+        简化实现：主要处理连续性和水头损失
+        """
+        self.__init_solver_attributes()
+        
+        if not self.upstream_obj or not self.downstream_obj:
+            return []  # 未连接时返回空方程组
+        
+        # 获取当前状态
+        H_up = self.upstream_obj.H[self.upstream_idx]
+        Q_up = self.upstream_obj.Q[self.upstream_idx]
+        H_down = self.downstream_obj.H[self.downstream_idx]
+        Q_down = self.downstream_obj.Q[self.downstream_idx]
+        
+        # 方程1: 连续性方程 Q_up = Q_down
+        eq1 = {
+            (self.upstream_obj, 'Q', self.upstream_idx): 1.0,
+            (self.downstream_obj, 'Q', self.downstream_idx): -1.0,
+            'RHS': -(Q_up - Q_down)
+        }
+        
+        # 方程2: 水轮机水头关系（简化）
+        # 考虑水轮机的水头损失
+        head_loss_coeff = 0.1  # 简化的水头损失系数
+        head_loss = head_loss_coeff * Q_up * abs(Q_up)  # 二次阻力损失
+        
+        eq2 = {
+            (self.downstream_obj, 'H', self.downstream_idx): 1.0,
+            (self.upstream_obj, 'H', self.upstream_idx): -1.0,
+            (self.upstream_obj, 'Q', self.upstream_idx): 2 * head_loss_coeff * abs(Q_up),
+            'RHS': -(H_down - H_up + head_loss)
+        }
+        
+        return [eq1, eq2]

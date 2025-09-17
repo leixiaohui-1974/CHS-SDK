@@ -4,7 +4,7 @@
 收敛所有本地控制类型：闸门、泵、阀门、水轮机等
 替代：GateControlAgent、PumpControlAgent、ValveControlAgent等
 """
-from typing import Dict, Any, Optional, Union
+from typing import Dict, Any, Optional, Union, List
 import time
 import threading
 
@@ -13,7 +13,6 @@ from core_lib.core.new_interfaces import (
 )
 from core_lib.core.event_bus import get_global_event_bus
 from core_lib.core.factories import get_global_controller_factory
-from core_lib.core.config_schema import LocalControlAgentConfig
 
 class UnifiedLocalControlAgent(LocalControlAgent):
     """
@@ -570,78 +569,3 @@ class UnifiedLocalControlAgent(LocalControlAgent):
         self.control_metrics['average_response_time'] = (total_time + response_time) / self.control_metrics['total_actions']
         
         self.control_metrics['last_action_time'] = time.time()
-
-# 适配器：为旧类提供兼容性
-
-class GateControlAgentAdapter(UnifiedLocalControlAgent):
-    """GateControlAgent适配器"""
-    
-    def __init__(self, agent_id: str, message_bus, time_step: float, 
-                 controller=None, observation_topic=None, observation_key='value',
-                 action_topic=None, command_topic=None, feedback_topic=None, **kwargs):
-        
-        config = {
-            'observation_topic': observation_topic,
-            'observation_key': observation_key,
-            'action_topic': action_topic,
-            'command_topic': command_topic,
-            'feedback_topic': feedback_topic,
-            'controller_config': kwargs.get('controller_config', {}),
-            **kwargs
-        }
-        
-        # 推断控制策略
-        if controller:
-            if hasattr(controller, 'kp'):  # PID控制器
-                strategy = ControlStrategy.PID
-                config['controller_config'] = {
-                    'kp': getattr(controller, 'kp', 1.0),
-                    'ki': getattr(controller, 'ki', 0.0),
-                    'kd': getattr(controller, 'kd', 0.0),
-                    'setpoint': getattr(controller, 'setpoint', 0.0)
-                }
-            else:
-                strategy = ControlStrategy.RULE_BASED
-        else:
-            strategy = ControlStrategy.RULE_BASED
-        
-        super().__init__(agent_id, DeviceType.GATE, strategy, config)
-        
-        import warnings
-        warnings.warn(
-            "GateControlAgent is deprecated. Use UnifiedLocalControlAgent with DeviceType.GATE instead.",
-            DeprecationWarning,
-            stacklevel=2
-        )
-
-class PumpControlAgentAdapter(UnifiedLocalControlAgent):
-    """PumpControlAgent适配器"""
-    
-    def __init__(self, agent_id: str, **kwargs):
-        config = kwargs
-        strategy = ControlStrategy.PID if 'controller_config' in kwargs else ControlStrategy.RULE_BASED
-        
-        super().__init__(agent_id, DeviceType.PUMP, strategy, config)
-        
-        import warnings
-        warnings.warn(
-            "PumpControlAgent is deprecated. Use UnifiedLocalControlAgent with DeviceType.PUMP instead.",
-            DeprecationWarning,
-            stacklevel=2
-        )
-
-class ValveControlAgentAdapter(UnifiedLocalControlAgent):
-    """ValveControlAgent适配器"""
-    
-    def __init__(self, agent_id: str, **kwargs):
-        config = kwargs
-        strategy = ControlStrategy.PID if 'controller_config' in kwargs else ControlStrategy.RULE_BASED
-        
-        super().__init__(agent_id, DeviceType.VALVE, strategy, config)
-        
-        import warnings
-        warnings.warn(
-            "ValveControlAgent is deprecated. Use UnifiedLocalControlAgent with DeviceType.VALVE instead.",
-            DeprecationWarning,
-            stacklevel=2
-        )

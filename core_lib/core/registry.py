@@ -16,6 +16,8 @@ def register_all_agents():
     controller_factory = get_global_controller_factory()
     datasource_factory = get_global_datasource_factory()
     
+    registration_results = {}
+    
     # 注册数据源Agent
     try:
         from core_lib.core.new_agents.service_agents.data.unified_data_source import UnifiedDataSourceAgent
@@ -23,15 +25,14 @@ def register_all_agents():
         agent_factory.register_agent_type('DataSourceAgent', UnifiedDataSourceAgent)
         
         # 注册到数据源工厂
-        datasource_factory.register_datasource_type(DataSourceType.CSV, UnifiedDataSourceAgent)
-        datasource_factory.register_datasource_type(DataSourceType.DATABASE, UnifiedDataSourceAgent)
-        datasource_factory.register_datasource_type(DataSourceType.API, UnifiedDataSourceAgent)
-        datasource_factory.register_datasource_type(DataSourceType.REALTIME, UnifiedDataSourceAgent)
-        datasource_factory.register_datasource_type(DataSourceType.MOCK, UnifiedDataSourceAgent)
+        for ds_type in [DataSourceType.CSV, DataSourceType.DATABASE, DataSourceType.API, DataSourceType.REALTIME, DataSourceType.MOCK]:
+            datasource_factory.register_datasource_type(ds_type, UnifiedDataSourceAgent)
         
-        print("[Registry] Registered UnifiedDataSourceAgent")
+        registration_results['UnifiedDataSourceAgent'] = True
+        print("[Registry] ✓ Registered UnifiedDataSourceAgent")
     except ImportError as e:
-        print(f"[Registry] Failed to register UnifiedDataSourceAgent: {e}")
+        registration_results['UnifiedDataSourceAgent'] = False
+        print(f"[Registry] ✗ Failed to register UnifiedDataSourceAgent: {e}")
     
     # 注册本地控制Agent
     try:
@@ -83,12 +84,6 @@ def register_all_agents():
     except ImportError as e:
         print(f"[Registry] Failed to register UnifiedIdentificationAgent: {e}")
     
-    # 注册适配器（向后兼容）
-    _register_adapters(agent_factory)
-    
-    print(f"[Registry] Registration complete. Total agent types: {len(agent_factory.get_supported_types())}")
-
-def _register_adapters(agent_factory):
     """注册适配器类型"""
     try:
         # 数据源适配器

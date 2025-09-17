@@ -2,7 +2,8 @@ import numpy as np
 from scipy.sparse import lil_matrix
 from scipy.sparse.linalg import spsolve
 from core_lib.physical_objects.unified_canal import UnifiedCanal
-from core_lib.hydro_nodes.base_node import HydroNode
+# 兼容性导入 - hydro_nodes功能已整合到physical_objects
+from core_lib.core.interfaces import PhysicalObjectInterface
 
 class NetworkSolver:
     """
@@ -31,13 +32,14 @@ class NetworkSolver:
         # Check if component is a UnifiedCanal with st_venant model
         if isinstance(component, UnifiedCanal) and getattr(component, 'model_type', None) == 'st_venant':
             self.reaches.append(component)
-        elif isinstance(component, HydroNode):
+        elif hasattr(component, 'get_equations') and hasattr(component, 'link_to_reaches'):
+            # 支持具有数值求解功能的物理组件（从hydro_nodes迁移）
             self.nodes.append(component)
         else:
             # We can either raise an error or just ignore other types
             # For now, let's be strict.
             raise TypeError(
-                "NetworkSolver only supports 'st_venant' UnifiedCanal and HydroNode components, "
+                "NetworkSolver only supports 'st_venant' UnifiedCanal and components with numerical solver support, "
                 f"not {type(component)}"
             )
 

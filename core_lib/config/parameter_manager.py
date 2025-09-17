@@ -70,6 +70,9 @@ class ParameterManager:
         # 初始化参数分类
         self._initialize_parameter_categories()
         
+        # 添加physical_objects参数
+        self._add_physical_objects_parameters()
+        
         # 加载配置
         if config_file and os.path.exists(config_file):
             self.load_config(config_file)
@@ -126,11 +129,17 @@ class ParameterManager:
                     'default_water_level': DefaultConfigParameters.DEFAULT_WATER_LEVEL,
                     'default_inflow': DefaultConfigParameters.DEFAULT_INFLOW,
                     'default_outflow': DefaultConfigParameters.DEFAULT_OUTFLOW,
+                    # 从各物理对象发现的魔数
+                    'seconds_per_hour': 3600,  # 来自reservoir.py
+                    'default_min_opening': 0.0,  # 来自valve.py
+                    'default_max_opening': 1.0,  # 来自gate.py和valve.py
                 },
                 validation_rules={
                     'default_diameter': ValidationConstants.VALID_DIAMETER_RANGE,
                     'default_surface_area': ValidationConstants.VALID_SURFACE_AREA_RANGE,
                     'default_water_level': ValidationConstants.VALID_WATER_LEVEL_RANGE,
+                    'default_min_opening': (0.0, 1.0),
+                    'default_max_opening': (0.0, 1.0),
                 }
             ),
             'pump_parameters': ParameterCategory(
@@ -143,12 +152,24 @@ class ParameterManager:
                     'optimal_flow_ratio': DefaultConfigParameters.DEFAULT_OPTIMAL_FLOW_RATIO,
                     'min_efficiency': DefaultConfigParameters.DEFAULT_MIN_EFFICIENCY,
                     'max_efficiency_loss': DefaultConfigParameters.DEFAULT_MAX_EFFICIENCY_LOSS,
+                    # 从pump.py发现的魔数
+                    'default_min_flow_ratio': 0.1,
+                    'default_optimal_flow_ratio': 0.7,
+                    'default_min_efficiency': 0.3,
+                    'default_max_efficiency_loss': 0.3,
+                    'default_upstream_level': 25.0,
+                    'default_downstream_level': 8.0,
+                    'default_rated_power': 50.0,
+                    'default_pump_efficiency': 0.8,
                 },
                 validation_rules={
                     'default_efficiency': ValidationConstants.VALID_EFFICIENCY_RANGE,
                     'min_flow_ratio': (0.0, 1.0),
                     'optimal_flow_ratio': (0.0, 1.0),
                     'min_efficiency': ValidationConstants.VALID_EFFICIENCY_RANGE,
+                    'default_upstream_level': (0.0, 100.0),
+                    'default_downstream_level': (0.0, 100.0),
+                    'default_rated_power': (1.0, 10000.0),
                 }
             ),
             'valve_parameters': ParameterCategory(
@@ -159,12 +180,20 @@ class ParameterManager:
                     'min_opening': HydraulicConstants.MIN_OPENING,
                     'max_opening': HydraulicConstants.MAX_OPENING,
                     'full_opening_percent': HydraulicConstants.FULL_OPENING_PERCENT,
+                    # 从valve.py发现的魔数
+                    'diameter_factor': 2,
+                    'sqrt_factor': 2,
+                    'power_exponent': 0.5,
+                    'percentage_factor': 100,
                 },
                 validation_rules={
                     'default_discharge_coefficient': (HydraulicConstants.MIN_DISCHARGE_COEFFICIENT, 
                                                      HydraulicConstants.MAX_DISCHARGE_COEFFICIENT),
                     'min_opening': (0.0, 1.0),
                     'max_opening': (0.0, 1.0),
+                    'diameter_factor': (1, 10),
+                    'sqrt_factor': (1, 5),
+                    'power_exponent': (0.1, 2.0),
                 }
             ),
             'canal_parameters': ParameterCategory(
@@ -264,10 +293,11 @@ class ParameterManager:
         for category_name, category_data in config_data.items():
             if category_name in self.parameter_categories:
                 # 验证参数
-                if self.parameter_categories[category_name].validation_rules:
+                validation_rules = self.parameter_categories[category_name].validation_rules
+                if validation_rules is not None:
                     for param_name, value in category_data.items():
-                        if param_name in self.parameter_categories[category_name].validation_rules:
-                            min_val, max_val = self.parameter_categories[category_name].validation_rules[param_name]
+                        if param_name in validation_rules:
+                            min_val, max_val = validation_rules[param_name]
                             validate_parameter_range(value, param_name, min_val, max_val)
                 
                 # 合并参数
@@ -275,6 +305,9 @@ class ParameterManager:
                 self.config[category_name].update(category_data)
             else:
                 logger.warning(f"未知的配置分类: {category_name}")
+            
+            # 添加新发现的参数分类
+            self._add_physical_objects_parameters()
     
     def get_parameter(self, category: str, parameter: str, 
                      default_value: Optional[Any] = None) -> Any:
@@ -317,10 +350,12 @@ class ParameterManager:
         """
         try:
             # 验证参数
-            if (category in self.parameter_categories and 
-                self.parameter_categories[category].validation_rules and
-                parameter in self.parameter_categories[category].validation_rules):
-                min_val, max_val = self.parameter_categories[category].validation_rules[parameter]
+            validation_rules = None
+            if category in self.parameter_categories:
+                validation_rules = self.parameter_categories[category].validation_rules
+            
+            if (validation_rules is not None and parameter in validation_rules):
+                min_val, max_val = validation_rules[parameter]
                 validate_parameter_range(value, parameter, min_val, max_val)
             
             # 设置参数
@@ -366,7 +401,8 @@ class ParameterManager:
             
             # 验证每个分类的参数
             for category_name, category in self.parameter_categories.items():
-                if category_name in self.config and category.validation_rules:
+                if (category_name in self.config and 
+                    category.validation_rules is not None):
                     for param_name, (min_val, max_val) in category.validation_rules.items():
                         if param_name in self.config[category_name]:
                             validate_parameter_range(
@@ -384,6 +420,95 @@ class ParameterManager:
             logger.error(f"配置验证失败: {e}")
             return False
     
+    def _add_physical_objects_parameters(self):
+        """添加从physical_objects中发现的魔数参数"""
+        # 添加闸门参数
+        if 'gate_parameters' not in self.parameter_categories:
+            self.parameter_categories['gate_parameters'] = ParameterCategory(
+                name='闸门参数',
+                description='闸门物理模型参数',
+                parameters={
+                    'default_gate_width': 2.0,
+                    'default_max_opening': 1.0,
+                    'default_head_diff': 1.0,
+                    'default_max_rate_of_change': 0.05,
+                },
+                validation_rules={
+                    'default_gate_width': (0.1, 50.0),
+                    'default_max_opening': (0.0, 1.0),
+                    'default_head_diff': (0.0, 100.0),
+                    'default_max_rate_of_change': (0.001, 1.0),
+                }
+            )
+            
+        # 添加管道参数
+        if 'pipe_parameters' not in self.parameter_categories:
+            self.parameter_categories['pipe_parameters'] = ParameterCategory(
+                name='管道参数',
+                description='管道物理模型参数',
+                parameters={
+                    'quarter_constant': 0.25,
+                    'manning_exponent_2_3': 2.0/3.0,
+                    'manning_exponent_1_2': 0.5,
+                    'darcy_exponent': 2,
+                    'hydraulic_radius_factor': 4,
+                },
+                validation_rules={
+                    'quarter_constant': (0.2, 0.3),
+                    'manning_exponent_2_3': (0.6, 0.7),
+                    'manning_exponent_1_2': (0.4, 0.6),
+                    'darcy_exponent': (1, 3),
+                    'hydraulic_radius_factor': (3, 5),
+                }
+            )
+            
+        # 添加水轮机参数
+        if 'turbine_parameters' not in self.parameter_categories:
+            self.parameter_categories['turbine_parameters'] = ParameterCategory(
+                name='水轮机参数',
+                description='水轮机物理模型参数',
+                parameters={
+                    'default_head_loss_coefficient': 0.1,
+                },
+                validation_rules={
+                    'default_head_loss_coefficient': (0.0, 1.0),
+                }
+            )
+            
+        # 添加水库参数
+        if 'reservoir_parameters' not in self.parameter_categories:
+            self.parameter_categories['reservoir_parameters'] = ParameterCategory(
+                name='水库参数',
+                description='水库物理模型参数',
+                parameters={
+                    'default_storage_constant': 0.0001,  # 来自river_channel.py
+                },
+                validation_rules={
+                    'default_storage_constant': (1e-6, 0.1),
+                }
+            )
+            
+        # 添加St-Venant方程参数
+        if 'st_venant_parameters' not in self.parameter_categories:
+            self.parameter_categories['st_venant_parameters'] = ParameterCategory(
+                name='圣维南方程参数',
+                description='圣维南方程数值计算参数',
+                parameters={
+                    'manning_power_4_3': 4.0/3.0,
+                    'manning_power_2': 2,
+                    'default_theta': 0.6,
+                    'minimum_area_threshold': 1e-6,
+                    'minimum_radius_threshold': 1e-6,
+                },
+                validation_rules={
+                    'manning_power_4_3': (1.3, 1.4),
+                    'manning_power_2': (1, 3),
+                    'default_theta': (0.5, 1.0),
+                    'minimum_area_threshold': (1e-8, 1e-3),
+                    'minimum_radius_threshold': (1e-8, 1e-3),
+                }
+            )
+
     def _validate_time_step(self):
         """验证时间步长参数"""
         if 'simulation' in self.config:
@@ -452,6 +577,62 @@ class ParameterManager:
         if category in self.parameter_categories:
             return self.parameter_categories[category].parameters.get(parameter)
         return None
+    
+    def get_physical_objects_constant(self, constant_name: str) -> Any:
+        """获取物理对象常量"""
+        physical_constants_map = {
+            # 物理常量
+            'GRAVITY_ACCELERATION': PhysicalConstants.GRAVITY_ACCELERATION,
+            'WATER_DENSITY': PhysicalConstants.WATER_DENSITY,
+            'PI': MathematicalConstants.PI,
+            
+            # 闸门常量
+            'DEFAULT_GATE_WIDTH': self.get_parameter('gate_parameters', 'default_gate_width', 2.0),
+            'DEFAULT_MAX_OPENING': self.get_parameter('gate_parameters', 'default_max_opening', 1.0),
+            'DEFAULT_HEAD_DIFF': self.get_parameter('gate_parameters', 'default_head_diff', 1.0),
+            'DEFAULT_MAX_RATE_OF_CHANGE': self.get_parameter('gate_parameters', 'default_max_rate_of_change', 0.05),
+            
+            # 泵常量
+            'DEFAULT_MIN_FLOW_RATIO': self.get_parameter('pump_parameters', 'default_min_flow_ratio', 0.1),
+            'DEFAULT_OPTIMAL_FLOW_RATIO': self.get_parameter('pump_parameters', 'default_optimal_flow_ratio', 0.7),
+            'DEFAULT_MIN_EFFICIENCY': self.get_parameter('pump_parameters', 'default_min_efficiency', 0.3),
+            'DEFAULT_MAX_EFFICIENCY_LOSS': self.get_parameter('pump_parameters', 'default_max_efficiency_loss', 0.3),
+            'DEFAULT_UPSTREAM_LEVEL': self.get_parameter('pump_parameters', 'default_upstream_level', 25.0),
+            'DEFAULT_DOWNSTREAM_LEVEL': self.get_parameter('pump_parameters', 'default_downstream_level', 8.0),
+            'DEFAULT_RATED_POWER': self.get_parameter('pump_parameters', 'default_rated_power', 50.0),
+            'DEFAULT_PUMP_EFFICIENCY': self.get_parameter('pump_parameters', 'default_pump_efficiency', 0.8),
+            
+            # 阀门常量
+            'DIAMETER_FACTOR': self.get_parameter('valve_parameters', 'diameter_factor', 2),
+            'SQRT_FACTOR': self.get_parameter('valve_parameters', 'sqrt_factor', 2),
+            'POWER_EXPONENT': self.get_parameter('valve_parameters', 'power_exponent', 0.5),
+            'PERCENTAGE_FACTOR': self.get_parameter('valve_parameters', 'percentage_factor', 100),
+            
+            # 管道常量
+            'QUARTER_CONSTANT': self.get_parameter('pipe_parameters', 'quarter_constant', 0.25),
+            'MANNING_EXPONENT_2_3': self.get_parameter('pipe_parameters', 'manning_exponent_2_3', 2.0/3.0),
+            'MANNING_EXPONENT_1_2': self.get_parameter('pipe_parameters', 'manning_exponent_1_2', 0.5),
+            'DARCY_EXPONENT': self.get_parameter('pipe_parameters', 'darcy_exponent', 2),
+            'HYDRAULIC_RADIUS_FACTOR': self.get_parameter('pipe_parameters', 'hydraulic_radius_factor', 4),
+            
+            # 水轮机常量
+            'DEFAULT_HEAD_LOSS_COEFFICIENT': self.get_parameter('turbine_parameters', 'default_head_loss_coefficient', 0.1),
+            
+            # 时间相关常量
+            'SECONDS_PER_HOUR': self.get_parameter('physical_objects', 'seconds_per_hour', 3600),
+            
+            # 水库常量
+            'DEFAULT_STORAGE_CONSTANT': self.get_parameter('reservoir_parameters', 'default_storage_constant', 0.0001),
+            
+            # St-Venant方程常量
+            'MANNING_POWER_4_3': self.get_parameter('st_venant_parameters', 'manning_power_4_3', 4.0/3.0),
+            'MANNING_POWER_2': self.get_parameter('st_venant_parameters', 'manning_power_2', 2),
+            'DEFAULT_THETA': self.get_parameter('st_venant_parameters', 'default_theta', 0.6),
+            'MINIMUM_AREA_THRESHOLD': self.get_parameter('st_venant_parameters', 'minimum_area_threshold', 1e-6),
+            'MINIMUM_RADIUS_THRESHOLD': self.get_parameter('st_venant_parameters', 'minimum_radius_threshold', 1e-6),
+        }
+        
+        return physical_constants_map.get(constant_name)
     
     def list_categories(self) -> List[str]:
         """列出所有参数分类"""
@@ -524,6 +705,10 @@ def get_default_parameter(category: str, parameter: str) -> Any:
     """获取默认参数的便利函数"""
     return get_parameter_manager().get_default_parameter(category, parameter)
 
+def get_physical_objects_constant(constant_name: str) -> Any:
+    """获取物理对象常量的便利函数"""
+    return get_parameter_manager().get_physical_objects_constant(constant_name)
+
 
 # =============================================================================
 # 模块初始化
@@ -538,5 +723,6 @@ __all__ = [
     'get_param',
     'set_param',
     'get_physical_constant',
-    'get_default_parameter'
+    'get_default_parameter',
+    'get_physical_objects_constant'
 ]

@@ -47,7 +47,7 @@ class BasicSimulationEngine(SimulationEngine):
 
         # 运行简单仿真，生成历史
         self._harness.is_running = True
-        self._harness.sort_components_topologically()
+        self._harness._topological_sort()  # 修复：使用正确的私有方法名
         self._harness.run_simulation()
         self._history = list(self._harness.history)
 

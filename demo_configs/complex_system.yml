@@ -1,0 +1,59 @@
+additional_components:
+- component_id: emergency_gate_station
+  component_type: gate
+  control_topic: emergency.gate_control
+  level: station
+  parameters:
+    device_count: 4
+    max_flow_rate: 60.0
+- component_id: monitoring_reservoir
+  component_type: reservoir
+  parameters:
+    surface_area: 300000
+    water_level: 12.0
+metadata:
+  description: A comprehensive water management system with multiple stations and
+    controls
+  name: Complex Water Management System
+  version: '1.0'
+systems:
+- name: primary_water_supply
+  pump_station:
+    device_count: 6
+    max_flow_rate: 20.0
+    max_head: 35.0
+    power_consumption: 75.0
+  source_reservoir:
+    surface_area: 2000000
+    water_level: 25.0
+  target_reservoir:
+    surface_area: 1500000
+    water_level: 45.0
+  type: pump_station_system
+- downstream_reservoir:
+    surface_area: 800000
+    water_level: 30.0
+  hydropower_station:
+    device_count: 4
+    efficiency: 0.92
+    max_flow_rate: 200.0
+  name: renewable_energy_plant
+  type: hydropower_system
+  upstream_reservoir:
+    surface_area: 500000
+    water_level: 150.0
+- downstream_canal:
+    model_type: linear_reservoir
+    storage_constant: 1500.0
+    water_level: 3.2
+  gate:
+    control_topic: irrigation.gate_control
+    max_flow_rate: 80.0
+    opening: 0.7
+  name: irrigation_control
+  type: canal_gate_system
+  upstream_canal:
+    delay: 240.0
+    gain: 0.003
+    model_type: integral_delay
+    water_level: 4.0

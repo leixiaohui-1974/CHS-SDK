@@ -2,7 +2,7 @@
 A component that represents a point of water withdrawal or external inflow.
 """
 from core_lib.core.interfaces import PhysicalObjectInterface, State, Parameters
-from core_lib.central_coordination.communication.message_bus import MessageBus, Message
+from core_lib.core.event_bus import get_global_event_bus
 from typing import Optional
 import numpy as np
 
@@ -16,7 +16,7 @@ class DisturbanceNode(PhysicalObjectInterface):
     """
 
     def __init__(self, name: str, initial_state: State, parameters: Parameters,
-                 message_bus: Optional[MessageBus] = None, action_topic: Optional[str] = None,
+                 message_bus=None, action_topic: Optional[str] = None,
                  action_key: str = 'outflow'):
         super().__init__(name, initial_state, parameters)
         self._state['outflow'] = initial_state.get('outflow', 0.0)
@@ -29,7 +29,7 @@ class DisturbanceNode(PhysicalObjectInterface):
             self.bus.subscribe(self.action_topic, self.handle_action_message)
             print(f"DisturbanceNode '{self.name}' subscribed to action topic '{self.action_topic}'.")
 
-    def handle_action_message(self, message: Message):
+    def handle_action_message(self, message: Dict[str, Any]):
         """Callback to handle incoming action messages from the bus."""
         if self.action_key in message:
             new_value = message.get(self.action_key)

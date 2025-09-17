@@ -1,0 +1,34 @@
+{
+  "components": [
+    {
+      "component_id": "main_supply_reservoir",
+      "component_type": "reservoir",
+      "parameters": {
+        "water_level": 18.0,
+        "surface_area": 1200000,
+        "volume": 21600000
+      }
+    },
+    {
+      "component_id": "primary_control_gate",
+      "component_type": "gate",
+      "parameters": {
+        "opening": 0.8,
+        "max_flow_rate": 150.0
+      },
+      "control_topic": "primary.gate_control"
+    },
+    {
+      "component_id": "backup_pump_station",
+      "component_type": "pump",
+      "level": "station",
+      "parameters": {
+        "device_count": 3,
+        "max_flow_rate": 18.0,
+        "max_head": 28.0,
+        "power_consumption": 65.0
+      },
+      "control_topic": "backup.pump_control"
+    }
+  ]
+}

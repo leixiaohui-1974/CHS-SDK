@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 增强的消息总线，支持网络延迟扰动
-在原有MessageBus基础上添加延迟消息传递功能
+基于SimpleEventBus添加延迟消息传递功能
 """
 
 import time
@@ -11,7 +11,8 @@ import queue
 import random
 import logging
 from typing import Callable, Dict, Any, List, Optional, Tuple
-from core_lib.central_coordination.collaboration.message_bus import MessageBus, Message, Listener
+from core_lib.core.event_bus import SimpleEventBus
+from core_lib.core.new_interfaces import Message
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +37,7 @@ class NetworkDisturbanceConfig:
         self.affected_topics = set()  # 受影响的主题
         self.affected_agents = set()  # 受影响的代理
         
-class EnhancedMessageBus(MessageBus):
+class EnhancedMessageBus(SimpleEventBus):
     """增强的消息总线，支持网络延迟扰动"""
     
     def __init__(self):

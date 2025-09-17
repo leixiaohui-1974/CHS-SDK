@@ -4,7 +4,7 @@
 import numpy as np
 from scipy.optimize import minimize
 from core_lib.core.interfaces import PhysicalObjectInterface, State, Parameters
-from core_lib.central_coordination.communication.message_bus import MessageBus, Message
+from core_lib.core.event_bus import get_global_event_bus
 from typing import Dict, Any, Optional, List
 
 class Reservoir(PhysicalObjectInterface):
@@ -16,7 +16,7 @@ class Reservoir(PhysicalObjectInterface):
     """
 
     def __init__(self, name: str, initial_state: State, parameters: Parameters,
-                 message_bus: Optional[MessageBus] = None, inflow_topic: Optional[str] = None, **kwargs):
+                 message_bus = None, inflow_topic: Optional[str] = None, **kwargs):
         super().__init__(name, initial_state, parameters)
         self._initial_state = initial_state.copy()
 
@@ -149,7 +149,7 @@ class Reservoir(PhysicalObjectInterface):
             storage[topic] = 0.0
             # Use a closure to capture topic-specific variables correctly for the handler
             def create_handler(topic_name, msg_key, storage_dict):
-                def handler(message: Message):
+                def handler(message: Dict[str, Any]):
                     value = message.get(msg_key, 0.0)
                     if isinstance(value, (int, float)):
                         storage_dict[topic_name] = value
@@ -158,7 +158,7 @@ class Reservoir(PhysicalObjectInterface):
             self.bus.subscribe(topic, create_handler(topic, key, storage))
             print(f"Reservoir '{self.name}' subscribed to {config_key.replace('_', ' ')} '{topic}' with key '{key}'.")
 
-    def handle_inflow_message(self, message: Message):
+    def handle_inflow_message(self, message: Dict[str, Any]):
         """处理数据驱动入流消息的回调函数。"""
         inflow_value = message.get('control_signal') or message.get('inflow_rate')
         if isinstance(inflow_value, (int, float)):
@@ -179,7 +179,7 @@ class Reservoir(PhysicalObjectInterface):
 
         # Calculate water balance
         current_volume = self._state.get('volume', 0)
-        delta_volume = (total_inflow - total_outflow) * dt
+        delta_volume = (total_inflow - total_outflow) * time_step
         new_volume = max(0, current_volume + delta_volume)
 
         # Update state
@@ -255,7 +255,7 @@ class Reservoir(PhysicalObjectInterface):
             simulated_volumes[0] = initial_volume
 
             for i in range(1, len(inflows)):
-                delta_v = (inflows[i-1] - outflows[i-1]) * dt
+                delta_v = (inflows[i-1] - outflows[i-1]) * time_step
                 simulated_volumes[i] = simulated_volumes[i-1] + delta_v
 
             # 使用候选曲线将模拟库容转换为水位

@@ -5,7 +5,7 @@ import yaml
 from pathlib import Path
 import logging
 from core_lib.core_engine.testing.simulation_harness import SimulationHarness
-from core_lib.central_coordination.collaboration.message_bus import MessageBus
+from core_lib.core.event_bus import get_global_event_bus
 from core_lib.io.object_factory import ObjectFactory
 
 class BaseYamlLoader:
@@ -73,7 +73,7 @@ class YamlSimulationLoader(BaseYamlLoader):
     def _setup_infrastructure(self):
         """Initializes the message bus, simulation harness and object factory."""
         logging.info("Setting up simulation infrastructure...")
-        self.message_bus = MessageBus()
+        self.message_bus = get_global_event_bus()
         sim_config = self.config.get('simulation', {})
         self.harness = SimulationHarness(config=sim_config)
 

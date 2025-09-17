@@ -42,12 +42,28 @@ class SimpleAgentFactory(AgentFactory):
         # 准备构造参数
         constructor_args = {'agent_id': agent_id}
         
-        # 从配置中提取构造参数
+        # 从配置中提取构造参数 - 修复类型安全问题
         for param in params:
-            if param in config:
-                constructor_args[param] = config[param]
-            elif param == 'config':
+            if param == 'config':
                 constructor_args[param] = config
+            elif param in config and isinstance(config.get(param), (str, int, float, bool)):
+                constructor_args[param] = config[param]
+            elif param == 'device_type' and 'device_type' in config:
+                # 特殊处理枚举类型
+                from core_lib.core.new_interfaces import DeviceType
+                device_type_str = config['device_type']
+                if isinstance(device_type_str, str):
+                    constructor_args[param] = DeviceType(device_type_str)
+                else:
+                    constructor_args[param] = device_type_str
+            elif param == 'control_strategy' and 'control_strategy' in config:
+                # 特殊处理枚举类型
+                from core_lib.core.new_interfaces import ControlStrategy
+                strategy_str = config['control_strategy']
+                if isinstance(strategy_str, str):
+                    constructor_args[param] = ControlStrategy(strategy_str)
+                else:
+                    constructor_args[param] = strategy_str
         
         try:
             agent = agent_class(**constructor_args)
@@ -69,19 +85,9 @@ class SimpleControllerFactory(ControllerFactory):
     
     def _register_builtin_controllers(self):
         """注册内置控制器类型"""
-        # PID控制器
-        try:
-            from core_lib.core_engine.solver.pid_controller import PIDController
-            self._controller_registry[ControlStrategy.PID] = PIDController
-        except ImportError:
-            print("[ControllerFactory] PIDController not available")
-        
-        # MPC控制器
-        try:
-            from core_lib.central_agents.control.mpc_agent import MPCController
-            self._controller_registry[ControlStrategy.MPC] = MPCController
-        except ImportError:
-            print("[ControllerFactory] MPCController not available")
+        # 暂时跳过具体控制器注册，避免导入错误
+        # TODO: 在具体控制器实现后再注册
+        print("[ControllerFactory] Controller registration deferred until implementations are available")
     
     def register_controller_type(self, strategy: ControlStrategy, controller_class: Type):
         """注册控制器类型"""
@@ -148,7 +154,7 @@ class SimpleDataSourceFactory(DataSourceFactory):
             # 准备构造参数
             constructor_args = {'source_type': source_type}
             for param in params:
-                if param in config:
+                if param in config and param not in ['source_type', 'config']:
                     constructor_args[param] = config[param]
                 elif param == 'config':
                     constructor_args[param] = config

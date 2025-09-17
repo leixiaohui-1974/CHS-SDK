@@ -5,11 +5,13 @@ import threading
 import copy
 from collections import deque
 from core_lib.core.interfaces import Simulatable, Agent, Controller
-from core_lib.central_coordination.collaboration.message_bus import MessageBus
+from core_lib.core.event_bus import get_global_event_bus
 from core_lib.physical_objects.gate import Gate
 from core_lib.physical_objects.reservoir import Reservoir
-from core_lib.disturbances.disturbance_framework import DisturbanceManager, BaseDisturbance
-from typing import List, Dict, Any, NamedTuple
+# 使用新架构的扰动系统（暂时禁用，等待实现）
+# from core_lib.core.new_agents.service_agents.disturbance.unified_disturbance import UnifiedDisturbanceAgent
+from core_lib.core.factories import get_global_agent_factory
+from typing import List, Dict, Any, NamedTuple, Optional
 
 class ControllerSpec(NamedTuple):
     """Defines the wiring for a controller in a simple simulation."""
@@ -25,9 +27,10 @@ class SimulationHarness:
 
     def __init__(self, config: Dict[str, Any]):
         self.config = config
-        self.start_time = config["start_time"]
-        self.end_time = config['end_time']
-        self.time_step = config['time_step']
+        # 提供默认值，避免配置缺失导致的KeyError
+        self.start_time = config.get("start_time", 0)
+        self.end_time = config['end_time']  # 必需参数
+        self.time_step = config.get('time_step', 1.0)
         self.t = self.start_time
 
         self.history = []
@@ -41,12 +44,13 @@ class SimulationHarness:
         self.inverse_topology: Dict[str, List[str]] = {}
         self.sorted_components: List[str] = []
 
-        self.message_bus = MessageBus()
+        self.message_bus = get_global_event_bus()
         self._is_paused = threading.Event()
         self.is_running = False
         
-        # 扰动管理器
-        self.disturbance_manager = DisturbanceManager()
+        # 扰动系统（暂时禁用，等待新架构实现）
+        # self.disturbance_agents: Dict[str, UnifiedDisturbanceAgent] = {}
+        # self.agent_factory = get_global_agent_factory()
         
         # 常量定义，避免魔数
         self.DEFAULT_OBSERVATION_VALUE = 0.0  # 默认观测值
@@ -88,23 +92,25 @@ class SimulationHarness:
         self.controllers[controller_id] = spec
         print(f"Controller '{controller_id}' associated with component '{controlled_id}'.")
     
-    def add_disturbance(self, disturbance: BaseDisturbance):
-        """添加扰动到仿真中"""
-        self.disturbance_manager.register_disturbance(disturbance)
-        print(f"扰动 {disturbance.config.disturbance_id} 已添加到仿真中")
+    def add_disturbance(self, disturbance_config: Dict[str, Any]):
+        """添加扰动到仿真中 - 新架构版本"""
+        # TODO: 集成新架构的UnifiedDisturbanceAgent
+        print(f"扰动配置已收到，等待新架构实现: {disturbance_config}")
     
     def remove_disturbance(self, disturbance_id: str):
-        """从仿真中移除扰动"""
-        self.disturbance_manager.remove_disturbance(disturbance_id)
-        print(f"扰动 {disturbance_id} 已从仿真中移除")
+        """从仿真中移除扰动 - 新架构版本"""
+        # TODO: 集成新架构的UnifiedDisturbanceAgent
+        print(f"扰动 {disturbance_id} 移除请求已收到，等待新架构实现")
     
     def get_active_disturbances(self) -> List[str]:
-        """获取当前活跃的扰动列表"""
-        return self.disturbance_manager.get_active_disturbances()
+        """获取当前活跃的扰动列表 - 新架构版本"""
+        # TODO: 集成新架构的UnifiedDisturbanceAgent
+        return []
     
     def get_disturbance_history(self) -> List[Dict[str, Any]]:
-        """获取扰动历史"""
-        return self.disturbance_manager.get_disturbance_history()
+        """获取扰动历史 - 新架构版本"""
+        # TODO: 集成新架构的UnifiedDisturbanceAgent
+        return []
 
     def _topological_sort(self):
         """
@@ -177,7 +183,7 @@ class SimulationHarness:
             if hasattr(agent, 'get_state'):
                 # A bit of safety here in case agent doesn't have a state method
                 try:
-                    step_history[agent.agent_id] = agent.get_state()
+                    step_history[agent.agent_id] = getattr(agent, 'get_state')()
                 except Exception as e:
                     print(f"Could not get state from agent {agent.agent_id}: {e}")
         self.history.append(step_history)
@@ -248,25 +254,24 @@ class SimulationHarness:
         print(f"Simple simulation completed at time {self.t:.2f}s")
         print(f"Generated {len(self.history)} steps of history data.")
 
-    def _step_physical_models(self, time_step: float, controller_actions: Dict[str, Any] = None):
+    def _step_physical_models(self, time_step: float, controller_actions: Optional[Dict[str, Any]] = None):
         if controller_actions is None:
             controller_actions = {}
 
-        # 更新扰动状态
-        disturbance_effects = self.disturbance_manager.update(self.t, time_step, self.components)
+        # 更新扰动状态（暂时禁用，等待新架构实现）
+        disturbance_effects = {}  # 空的扰动效果字典
         
         new_states = {}
         current_step_outflows = {}
         
         # 记录哪些组件受到扰动影响，避免自动入流覆盖
         disturbed_components = set()
-        for disturbance_id, effect in disturbance_effects.items():
-            if 'applied_inflow' in effect:
-                # 找到对应的扰动配置
-                for dist_id, disturbance in self.disturbance_manager.active_disturbances.items():
-                    if dist_id == disturbance_id:
-                        disturbed_components.add(disturbance.config.target_component_id)
-                        break
+        # 注意：扰动管理器暂时禁用，等待新架构实现
+        # TODO: 集成新架构的UnifiedDisturbanceAgent后，重新实现扰动组件追踪
+        # for disturbance_id, effect in disturbance_effects.items():
+        #     if 'applied_inflow' in effect:
+        #         # 找到对应的扰动配置
+        #         disturbed_components.add(effect.get('target_component_id'))
 
         for component_id in self.sorted_components:
             component = self.components[component_id]
@@ -279,12 +284,16 @@ class SimulationHarness:
             # 只有在组件没有受到入流扰动影响时才设置自动计算的入流
             # 并且避免重复设置相同的值
             if component_id not in disturbed_components:
-                if hasattr(component, '_inflow') and component._inflow != total_inflow:
-                    component.set_inflow(total_inflow)
-                elif not hasattr(component, '_inflow'):
-                    component.set_inflow(total_inflow)
+                if hasattr(component, 'set_inflow'):
+                    try:
+                        # 使用getattr安全访问属性
+                        current_inflow = getattr(component, '_inflow', None)
+                        if current_inflow is None or current_inflow != total_inflow:
+                            getattr(component, 'set_inflow')(total_inflow)
+                    except Exception as e:
+                        print(f"Warning: Failed to set inflow for component {component_id}: {e}")
 
-            if hasattr(component, 'is_stateful') and component.is_stateful:
+            if hasattr(component, 'is_stateful') and getattr(component, 'is_stateful', False):
                 total_outflow = self.DEFAULT_OUTFLOW_VALUE
                 for downstream_id in self.topology.get(component_id, []):  # 遍历下游
                     downstream_comp = self.components[downstream_id]
@@ -335,9 +344,10 @@ class SimulationHarness:
         output_path = Path(output_dir)
         output_path.mkdir(exist_ok=True)
         
-        print(f"Exporting {len(self._output_configs)} output files to '{output_dir}'...")
+        output_configs = getattr(self, '_output_configs', [])
+        print(f"Exporting {len(output_configs)} output files to '{output_dir}'...")
         
-        for output_config in self._output_configs:
+        for output_config in output_configs:
             topic = output_config['topic']
             file_name = output_config['file']
             agent_id = output_config['agent_id']
@@ -358,7 +368,7 @@ class SimulationHarness:
             
             # Get message history from the TopicLoggerAgent
             if hasattr(logger_agent, 'get_message_history'):
-                message_history = logger_agent.get_message_history()
+                message_history = getattr(logger_agent, 'get_message_history')()
                 
                 for entry in message_history:
                     time_val = entry.get('time', self.DEFAULT_TIME_VALUE)
@@ -389,8 +399,11 @@ class SimulationHarness:
             else:
                 print(f"Warning: No data found for topic '{topic}', creating empty file '{file_name}'")
                 # Create empty CSV with just headers
-                df = pd.DataFrame(columns=['time'])
-                file_path = output_path / file_name
-                df.to_csv(file_path, index=False)
+                try:
+                    df = pd.DataFrame({'time': []})  # 创建包含空time列的DataFrame
+                    file_path = output_path / file_name
+                    df.to_csv(file_path, index=False)
+                except Exception as e:
+                    print(f"Error creating empty CSV file '{file_name}': {e}")
                 
         print("CSV export completed.")

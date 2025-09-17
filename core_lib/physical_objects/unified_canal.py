@@ -3,8 +3,10 @@ import numpy as np
 from collections import deque
 import warnings
 from core_lib.core.interfaces import PhysicalObjectInterface, State, Parameters
+from core_lib.core.event_bus import get_global_event_bus
 from core_lib.config.parameter_manager import get_parameter_manager
 from core_lib.config.constants import PhysicalConstants
+from typing import Dict, Any, Optional
 
 class UnifiedCanal(PhysicalObjectInterface):
     """
@@ -12,8 +14,10 @@ class UnifiedCanal(PhysicalObjectInterface):
     simplified models based on a `model_type` parameter.
     """
 
-    def __init__(self, name: str, initial_state: State, parameters: Parameters, **kwargs):
+    def __init__(self, name: str, initial_state: State, parameters: Parameters,
+                 message_bus=None, inflow_topic: Optional[str] = None, **kwargs):
         super().__init__(name, initial_state, parameters)
+        self._initial_state = initial_state.copy()
 
         # 获取参数管理器
         self.param_manager = get_parameter_manager()
@@ -48,6 +52,32 @@ class UnifiedCanal(PhysicalObjectInterface):
         self._state['water_level'] = initial_state.get('water_level', self.DEFAULT_WATER_LEVEL)
         self._state['inflow'] = initial_state.get('inflow', self.DEFAULT_INFLOW)
         self._state['outflow'] = initial_state.get('outflow', self.DEFAULT_OUTFLOW)
+
+        # 消息总线和主题订阅功能（参照水库实现）
+        self.bus = message_bus
+        self.inflow_topic = inflow_topic or self._params.get('inflow_topic')
+        self.data_inflow = 0.0
+        
+        # 灵活的主题订阅功能
+        self.topic_inflows = {}
+        self.topic_outflows = {}
+
+        if self.bus:
+            # 从参数配置中订阅主题
+            self._subscribe_from_config('inflow_topics', self.topic_inflows)
+            self._subscribe_from_config('outflow_topics', self.topic_outflows)
+
+        if self.bus and self.inflow_topic:
+            self.bus.subscribe(self.inflow_topic, self.handle_inflow_message)
+            print(f"渠道 '{self.name}' 已订阅数据入流主题 '{self.inflow_topic}'.")
+
+        # 处理从配置中传入的入流参数
+        if 'inflow' in kwargs:
+            self._inflow = kwargs['inflow']
+            print(f"渠道 '{self.name}' 从配置中设置初始入流为 {self._inflow} m³/s")
+        elif 'inflow' in self._params:
+            self._inflow = self._params['inflow']
+            print(f"渠道 '{self.name}' 从参数中设置初始入流为 {self._inflow} m³/s")
 
         # Model-specific parameter handling - 验证必需参数
         if self.model_type == 'integral':
@@ -102,10 +132,29 @@ class UnifiedCanal(PhysicalObjectInterface):
         self.inflow_history = None
         self.history_size = 0
 
-    def step(self, action: any, time_step: float) -> State:
+        print(f"统一渠道 '{self.name}' 已创建 (模型类型: {self.model_type})，初始状态为 {self._state}.")
+
+    def step(self, action: Dict[str, Any], time_step: float) -> State:
+        """模拟渠道在单个时间步内的状态变化。"""
         if time_step <= 0:
             return self.get_state()
 
+        # 处理入流：物理入流 + 数据驱动入流 + 主题入流（参照水库实现）
+        physical_inflow = self._inflow
+        legacy_data_inflow = self.data_inflow
+        topic_based_inflow = sum(self.topic_inflows.values())
+        total_inflow = physical_inflow + legacy_data_inflow + topic_based_inflow
+
+        # 处理出流：来自action的出流 + 主题出流
+        action_outflow = action.get('outflow', 0) if isinstance(action, dict) else 0
+        topic_based_outflow = sum(self.topic_outflows.values())
+        total_external_outflow = action_outflow + topic_based_outflow
+
+        # 更新入流状态供模型计算使用
+        self._inflow = total_inflow
+        self._state['inflow'] = total_inflow
+
+        # 根据模型类型执行步进计算
         if self.model_type == 'integral':
             self._step_integral(time_step)
         elif self.model_type == 'integral_delay':
@@ -119,6 +168,17 @@ class UnifiedCanal(PhysicalObjectInterface):
         else:
             raise ValueError(f"Unknown canal model type: {self.model_type}")
 
+        # 将外部出流加到模型计算的出流上
+        if total_external_outflow > 0:
+            self._state['outflow'] = self._state.get('outflow', 0) + total_external_outflow
+
+        # 为下一个时间步重置数据驱动的流量
+        self.data_inflow = 0.0
+        for topic in self.topic_inflows:
+            self.topic_inflows[topic] = 0.0
+        for topic in self.topic_outflows:
+            self.topic_outflows[topic] = 0.0
+
         return self.get_state()
 
     def _initialize_history(self, time_step):
@@ -129,46 +189,104 @@ class UnifiedCanal(PhysicalObjectInterface):
 
     def _step_integral(self, time_step: float):
         inflow = self._inflow
-        self._state['inflow'] = inflow
+        # inflow已经在step函数中设置了self._state['inflow']
 
         # Outflow is a function of water level (like a reservoir)
-        self._state['outflow'] = self.outlet_coefficient * np.sqrt(max(0, self._state['water_level']))
+        calculated_outflow = self.outlet_coefficient * np.sqrt(max(0, self._state['water_level']))
+        self._state['outflow'] = calculated_outflow
 
-        self._state['water_level'] += (inflow - self._state['outflow']) / self.surface_area * time_step
+        # 水位变化基于水量平衡
+        water_balance = inflow - calculated_outflow
+        self._state['water_level'] += water_balance / self.surface_area * time_step
         self._state['water_level'] = max(0, self._state['water_level'])
 
     def _step_integral_delay(self, time_step: float):
         self._initialize_history(time_step)
         inflow = self._inflow
-        self._state['inflow'] = inflow
+        # inflow已经在step函数中设置了self._state['inflow']
+        
         self.inflow_history.append(inflow)
         delayed_inflow = self.inflow_history[0]
         self._state['outflow'] = delayed_inflow
-        self._state['water_level'] += self.gain * (inflow - delayed_inflow) * time_step
+        
+        # 水位变化考虑延迟效应
+        level_change = self.gain * (inflow - delayed_inflow) * time_step
+        self._state['water_level'] += level_change
         self._state['water_level'] = max(0, self._state['water_level'])
 
     def _step_integral_delay_zero(self, time_step: float):
         self._initialize_history(time_step)
         inflow = self._inflow
-        self._state['inflow'] = inflow
+        # inflow已经在step函数中设置了self._state['inflow']
+        
         self.inflow_history.append(inflow)
         q_in_delayed = self.inflow_history[1]
         q_in_delayed_previous = self.inflow_history[0]
+        
+        # 计算导数项和出流
         derivative_term = (q_in_delayed - q_in_delayed_previous) / time_step
-        self._state['outflow'] = q_in_delayed + self.zero_time_constant * derivative_term
-        self._state['water_level'] += self.gain * (inflow - self._state['outflow']) * time_step
+        calculated_outflow = q_in_delayed + self.zero_time_constant * derivative_term
+        self._state['outflow'] = calculated_outflow
+        
+        # 水位变化包含延迟和零点效应
+        level_change = self.gain * (inflow - calculated_outflow) * time_step
+        self._state['water_level'] += level_change
         self._state['water_level'] = max(0, self._state['water_level'])
 
     def _step_linear_reservoir(self, time_step: float):
         inflow = self._inflow
-        self._state['inflow'] = inflow
-        outflow_old = self._state['outflow']
+        # inflow已经在step函数中设置了self._state['inflow']
+        
+        # 线性水库模型：一阶系统响应
+        outflow_old = self._state.get('outflow', 0)
         outflow_new = (self.storage_constant * outflow_old + time_step * inflow) / (self.storage_constant + time_step)
         self._state['outflow'] = outflow_new
+        
+        # 更新蓄水量和水位
         storage_change = (inflow - outflow_new) * time_step
         self.storage += storage_change
         self._state['water_level'] = self.storage * self.level_storage_ratio
         self._state['water_level'] = max(0, self._state['water_level'])
+
+    def _subscribe_from_config(self, config_key: str, storage: Dict[str, float]):
+        """从参数配置中读取主题配置并订阅处理器（参照水库实现）。"""
+        topic_configs = self._params.get(config_key, [])
+        if not isinstance(topic_configs, list):
+            print(f"警告: 渠道 '{self.name}' 期望 '{config_key}' 是一个列表.")
+            return
+
+        for config in topic_configs:
+            topic = config.get('topic')
+            key = config.get('key', 'value')
+            if not topic:
+                continue
+
+            storage[topic] = 0.0
+            # 使用闭包正确捕获主题特定变量
+            def create_handler(topic_name, msg_key, storage_dict):
+                def handler(message: Dict[str, Any]):
+                    value = message.get(msg_key, 0.0)
+                    if isinstance(value, (int, float)):
+                        storage_dict[topic_name] = value
+                return handler
+
+            self.bus.subscribe(topic, create_handler(topic, key, storage))
+            print(f"渠道 '{self.name}' 已订阅 {config_key.replace('_', ' ')} '{topic}' (键: '{key}').")
+
+    def handle_inflow_message(self, message: Dict[str, Any]):
+        """处理数据驱动入流消息的回调函数。"""
+        inflow_value = message.get('control_signal') or message.get('inflow_rate') or message.get('flow')
+        if isinstance(inflow_value, (int, float)):
+            self.data_inflow += inflow_value
+
+    def set_inflow(self, inflow: float):
+        """设置渠道的入流量。
+        
+        Args:
+            inflow: 新的入流量 (m³/s)
+        """
+        self._inflow = inflow
+        print(f"渠道 '{self.name}' 入流已设置为 {inflow} m³/s")
 
     @property
     def is_stateful(self) -> bool:

@@ -976,36 +976,3 @@ class UnifiedIdentificationAgent(IdentificationAgent):
             
         except Exception as e:
             self._log("error", f"Identification request handling failed: {e}")
-
-# 适配器：为旧类提供兼容性
-
-class IdentificationAgentAdapter(UnifiedIdentificationAgent):
-    """IdentificationAgent适配器"""
-    
-    def __init__(self, agent_id: str, **kwargs):
-        config = kwargs
-        super().__init__(agent_id, config)
-        
-        import warnings
-        warnings.warn(
-            "IdentificationAgent is deprecated. Use UnifiedIdentificationAgent instead.",
-            DeprecationWarning,
-            stacklevel=2
-        )
-
-class ModelUpdaterAgentAdapter(UnifiedIdentificationAgent):
-    """ModelUpdaterAgent适配器"""
-    
-    def __init__(self, agent_id: str, **kwargs):
-        config = {
-            'identification_method': 'online',
-            **kwargs
-        }
-        super().__init__(agent_id, config)
-        
-        import warnings
-        warnings.warn(
-            "ModelUpdaterAgent is deprecated. Use UnifiedIdentificationAgent with identification_method='online' instead.",
-            DeprecationWarning,
-            stacklevel=2
-        )

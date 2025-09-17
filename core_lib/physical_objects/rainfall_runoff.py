@@ -4,7 +4,7 @@ Simulation model for a Rainfall-Runoff process.
 import numpy as np
 from scipy.optimize import minimize
 from core_lib.core.interfaces import PhysicalObjectInterface, State, Parameters
-from core_lib.central_coordination.communication.message_bus import MessageBus, Message
+from core_lib.core.event_bus import get_global_event_bus
 from typing import Dict, Any, Optional
 
 class RainfallRunoff(PhysicalObjectInterface):
@@ -18,7 +18,7 @@ class RainfallRunoff(PhysicalObjectInterface):
     """
 
     def __init__(self, name: str, parameters: Parameters,
-                 message_bus: Optional[MessageBus] = None, rainfall_topic: Optional[str] = None):
+                 message_bus=None, rainfall_topic: Optional[str] = None):
         """
         Initializes the RainfallRunoff model.
 
@@ -42,7 +42,7 @@ class RainfallRunoff(PhysicalObjectInterface):
             self.bus.subscribe(self.rainfall_topic, self.handle_rainfall_message)
             print(f"RainfallRunoff model '{self.name}' subscribed to rainfall topic '{self.rainfall_topic}'.")
 
-    def handle_rainfall_message(self, message: Message):
+    def handle_rainfall_message(self, message: Dict[str, Any]):
         """Callback to handle incoming rainfall data messages."""
         intensity = message.get('rainfall_intensity')
         if isinstance(intensity, (int, float)):

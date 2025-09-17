@@ -64,7 +64,7 @@ class AgentMetrics:
     total_execution_time: float = 0.0
     average_execution_time: float = 0.0
     error_count: int = 0
-    last_execution_time: Optional[datetime] = None
+    last_execution_time: Optional[float] = None  # 使用float时间戳而不是datetime
 
 class EventBus(ABC):
     """轻量级事件总线接口"""

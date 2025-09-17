@@ -12,7 +12,7 @@ import seaborn as sns
 from matplotlib.figure import Figure
 from matplotlib.artist import Artist
 from matplotlib.animation import FuncAnimation
-from typing import List as ArtistList
+from typing import List, Dict, Any, Optional, Union, Tuple
 import pandas as pd
 import numpy as np
 from pathlib import Path
@@ -519,7 +519,7 @@ class EnhancedSimulationPlotter:
         try:
             fig, ax = plt.subplots(figsize=kwargs.get('figsize', (10, 8)))
             
-            def animate(frame_idx: int) -> ArtistList:
+            def animate(frame_idx: int) -> List[Artist]:
                 ax.clear()
                 frame_data = data_frames[frame_idx]
                 

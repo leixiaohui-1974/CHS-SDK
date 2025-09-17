@@ -8,7 +8,7 @@ Simulation model for a Pump.
 4. 提供完整的物理特性计算
 """
 from core_lib.core.interfaces import PhysicalObjectInterface, State, Parameters
-from core_lib.central_coordination.communication.message_bus import MessageBus, Message
+from core_lib.core.event_bus import get_global_event_bus
 from core_lib.config.parameter_manager import get_parameter_manager
 from core_lib.config.constants import PhysicalConstants, StatusConstants
 from typing import Dict, Any, Optional
@@ -25,7 +25,7 @@ class Pump(PhysicalObjectInterface):
     """
 
     def __init__(self, name: str, initial_state: State, parameters: Parameters,
-                 message_bus: Optional[MessageBus] = None, action_topic: Optional[str] = None):
+                 message_bus=None, action_topic: Optional[str] = None):
         super().__init__(name, initial_state, parameters)
         
         # 获取参数管理器
@@ -133,7 +133,7 @@ class Pump(PhysicalObjectInterface):
         else:
             return 1.0 - max_efficiency_loss * ((flow_ratio - optimal_flow_ratio) / (1.0 - optimal_flow_ratio))
 
-    def handle_action_message(self, message: Message):
+    def handle_action_message(self, message: Dict[str, Any]):
         """处理控制消息 - 只更新目标状态，不包含控制逻辑"""
         new_target = message.get('control_signal')
         if new_target in [0, 1]:
@@ -234,3 +234,56 @@ class PumpStation(PhysicalObjectInterface):
     @property
     def is_stateful(self) -> bool:
         return False
+    
+    # 数值求解器支持 - 从PumpNode整合
+    def __init_solver_attributes(self):
+        """初始化求解器相关属性"""
+        if not hasattr(self, 'upstream_obj'):
+            self.upstream_obj = None
+            self.downstream_obj = None
+            self.upstream_idx = -1
+            self.downstream_idx = 0
+    
+    def link_to_reaches(self, up_obj, down_obj):
+        """连接到上下游对象（数值求解器使用）"""
+        self.__init_solver_attributes()
+        self.upstream_obj = up_obj
+        self.downstream_obj = down_obj
+    
+    def get_equations(self, time_step: float, theta: float) -> list:
+        """
+        返回水泵的线性化方程（数值求解器使用）
+        
+        简化实现：主要处理连续性和扬程特性
+        """
+        self.__init_solver_attributes()
+        
+        if not self.upstream_obj or not self.downstream_obj:
+            return []  # 未连接时返回空方程组
+        
+        # 获取当前状态
+        H_up = self.upstream_obj.H[self.upstream_idx]
+        Q_up = self.upstream_obj.Q[self.upstream_idx]
+        H_down = self.downstream_obj.H[self.downstream_idx]
+        Q_down = self.downstream_obj.Q[self.downstream_idx]
+        
+        # 方程1: 连续性方程 Q_up = Q_down
+        eq1 = {
+            (self.upstream_obj, 'Q', self.upstream_idx): 1.0,
+            (self.downstream_obj, 'Q', self.downstream_idx): -1.0,
+            'RHS': -(Q_up - Q_down)
+        }
+        
+        # 方程2: 水泵扬程特性（简化为线性关系）
+        # H_down = H_up + pump_head
+        pump_head = self._params.get('rated_head', 10.0)  # 额定扬程
+        speed_ratio = self._state.get('speed', 1.0)  # 转速比
+        effective_head = pump_head * speed_ratio
+        
+        eq2 = {
+            (self.downstream_obj, 'H', self.downstream_idx): 1.0,
+            (self.upstream_obj, 'H', self.upstream_idx): -1.0,
+            'RHS': -(H_down - H_up - effective_head)
+        }
+        
+        return [eq1, eq2]

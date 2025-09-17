@@ -144,6 +144,8 @@ class HydraulicConstants:
     DIAMETER_FACTOR = 2.0  # 直径到半径的转换
     CIRCULAR_AREA_FACTOR = math.pi / 4.0  # 圆形面积系数
     HYDRAULIC_RADIUS_FACTOR = 4.0  # 满管圆形管道水力半径系数
+    SQRT_FACTOR = 2.0  # 孔口流动公式中的平方根因子
+    POWER_EXPONENT = 0.5  # 功率指数
     
     # 流量系数范围
     MIN_DISCHARGE_COEFFICIENT = 0.1

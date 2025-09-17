@@ -151,6 +151,8 @@ class PhysicalObjectInterface(Simulatable, Identifiable, ABC):
     This combines the `Simulatable` and `Identifiable` interfaces and adds
     a `name` property, as all physical components must have a unique identifier
     within the simulation harness.
+    
+    Extended to support both discrete simulation and numerical solver modes.
     """
 
     def __init__(self, name: str, initial_state: State, parameters: Parameters):
@@ -217,6 +219,37 @@ class PhysicalObjectInterface(Simulatable, Identifiable, ABC):
         by their inflow and internal properties.
         """
         return False  # Default to False for components like valves, pipes, etc.
+    
+    # 数值求解器支持（可选实现）
+    def get_equations(self, time_step: float, theta: float) -> list:
+        """
+        Returns the linearized hydraulic equations for this component.
+        
+        Used by numerical solvers (like NetworkSolver) to build the global
+        system of equations. Components that don't support numerical solving
+        can return an empty list.
+        
+        Args:
+            time_step: The time step for the numerical integration.
+            theta: The implicit/explicit weighting factor (0.0 to 1.0).
+            
+        Returns:
+            A list of equation dictionaries for the numerical solver.
+        """
+        return []  # Default: no equations (not used in numerical solving)
+    
+    def link_to_reaches(self, up_obj, down_obj):
+        """
+        Links this component to upstream and downstream objects.
+        
+        Used by numerical solvers to establish connectivity in the network.
+        Components that don't support numerical solving can ignore this.
+        
+        Args:
+            up_obj: The upstream object/reach.
+            down_obj: The downstream object/reach.
+        """
+        pass  # Default: no linking (not used in numerical solving)
 
 
 class Disturbance(ABC):
