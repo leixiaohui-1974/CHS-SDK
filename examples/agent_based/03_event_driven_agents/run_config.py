@@ -311,8 +311,8 @@ def main():
     
     print("\n=== Multi-Agent System Example Complete ===")
     print(f"Configuration: {config_path}")
-    print(f"Simulation duration: {config['simulation']['duration']} seconds")
-    print(f"Time step: {config['simulation']['dt']} seconds")
+    print(f"Simulation end time: {config['simulation']['end_time']} seconds")
+    print(f"Time step: {config['simulation']['time_step']} seconds")
     
 if __name__ == "__main__":
     main()
