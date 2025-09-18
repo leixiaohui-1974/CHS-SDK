@@ -23,7 +23,10 @@ class Gate(PhysicalObjectInterface):
         self.action_topic = action_topic
         self.action_key = action_key
         self.target_opening = self._state.get('opening', 0)
-        self.last_head_diff = 1 # 存储上一次的水头差，用于反向计算
+        self.last_head_diff = 1.0 # 存储上一次的水头差，用于反向计算 (m)
+        
+        # 验证必要的物理参数
+        self._validate_physical_parameters()
 
         if self.bus and self.action_topic:
             self.bus.subscribe(self.action_topic, self.handle_action_message)
@@ -31,21 +34,71 @@ class Gate(PhysicalObjectInterface):
 
         print(f"闸门 '{self.name}' 已创建，初始状态为 {self._state}.")
 
+    def _validate_physical_parameters(self):
+        """验证物理参数的合理性。"""
+        width = self._params.get('width', 2.0)
+        if width <= 0:
+            raise ValueError(f"闸门宽度必须大于0，当前值: {width}")
+        
+        max_opening = self._params.get('max_opening', 1.0)
+        if max_opening <= 0:
+            raise ValueError(f"最大开度必须大于0，当前值: {max_opening}")
+        
+        discharge_coeff = self._params.get('discharge_coefficient', 0.6)
+        if not 0.4 <= discharge_coeff <= 0.8:
+            print(f"警告: 流量系数 {discharge_coeff} 超出典型范围 [0.4, 0.8]")
+        
+        max_roc = self._params.get('max_rate_of_change', 0.05)
+        if max_roc <= 0:
+            raise ValueError(f"最大变化速率必须大于0，当前值: {max_roc}")
+
     def _calculate_outflow(self, upstream_level: float, opening: float, downstream_level: float = 0, C: Optional[float] = None) -> float:
         """
-        使用孔口出流公式计算通过闸门的流量。
-        Q = C * A * sqrt(2 * g * h)
+        使用改进的闸门出流公式计算通过闸门的流量。
+        考虑自由出流和淹没出流两种情况：
+        - 自由出流: Q = Cc * Cv * b * a * sqrt(2 * g * H)
+        - 淹没出流: Q = Cc * Cv * b * a * sqrt(2 * g * (H1 - H2))
+        
+        其中：
+        Cc: 收缩系数 (通常为0.61)
+        Cv: 流速系数 (通常为0.98)
+        b: 闸门宽度 (m)
+        a: 闸门开度 (m)
+        H: 上游水头 (m)
+        H1, H2: 上下游水位 (m)
         """
         if C is None:
+            # 综合流量系数 = 收缩系数 × 流速系数
             C = self._params.get('discharge_coefficient', 0.6)
-        width = self._params.get('width', 2.0)
-        g = 9.81
-        area = opening * width
-        head = upstream_level - downstream_level
-        self.last_head_diff = head
-        if head <= 0:
+        
+        width = self._params.get('width', 2.0)  # 闸门宽度 (m)
+        g = 9.81  # 重力加速度 (m/s²)
+        
+        # 物理边界检查
+        max_opening = self._params.get('max_opening', 1.0)
+        opening = max(0.0, min(opening, max_opening))
+        
+        area = opening * width  # 过流面积 (m²)
+        head_diff = upstream_level - downstream_level  # 水头差 (m)
+        self.last_head_diff = head_diff
+        
+        if head_diff <= 0:
             return 0
-        return C * area * math.sqrt(2 * g * head)
+        
+        # 判断自由出流还是淹没出流
+        # 当下游水位低于闸底+0.67倍开度时为自由出流，否则为淹没出流
+        gate_bottom = self._params.get('gate_bottom_elevation', 0.0)
+        critical_downstream_level = gate_bottom + 0.67 * opening
+        
+        if downstream_level <= critical_downstream_level:
+            # 自由出流：只考虑上游水头
+            effective_head = upstream_level - gate_bottom
+            if effective_head <= 0:
+                return 0
+            return C * area * math.sqrt(2 * g * effective_head)
+        else:
+            # 淹没出流：考虑上下游水位差
+            return C * area * math.sqrt(2 * g * head_diff)
 
     def calculate_outflow(self, upstream_level: float, opening: float, downstream_level: float = 0, C: Optional[float] = None) -> float:
         """
@@ -139,7 +192,7 @@ class Gate(PhysicalObjectInterface):
             _simulation_error,
             initial_guess,
             method='Nelder-Mead', # 适用于简单的单变量优化
-            bounds=[(0.1, 1.0)] # C值的物理边界
+            bounds=[(0.4, 0.8)] # 更合理的C值物理边界：收缩系数0.61×流速系数0.98≈0.6
         )
 
         if result.success:
