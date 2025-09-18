@@ -97,10 +97,10 @@ class Lake(PhysicalObjectInterface):
         evaporation_volume_per_second = self.evaporation_rate_m_per_s * surface_area
 
         outflow = action.get('outflow', 0)
-        max_possible_outflow = current_volume / dt if dt > 0 else 0
+        max_possible_outflow = current_volume / time_step if time_step > 0 else 0
         outflow = min(outflow, max_possible_outflow)
 
-        delta_volume = (inflow - outflow - evaporation_volume_per_second) * dt
+        delta_volume = (inflow - outflow - evaporation_volume_per_second) * time_step
         new_volume = max(0, current_volume + delta_volume)
 
         self._state['volume'] = new_volume
@@ -121,7 +121,7 @@ class Lake(PhysicalObjectInterface):
         inflows = data['inflows']
         outflows = data['outflows']
         observed_levels = data['levels']
-        time_step= 3600  # Assume hourly data for now
+        time_step = 3600  # Assume hourly data for now
 
         def _simulation_error(level_params: np.ndarray) -> float:
             candidate_curve = np.column_stack((self._volumes, level_params))
@@ -136,7 +136,7 @@ class Lake(PhysicalObjectInterface):
             for i in range(1, len(inflows)):
                 # Evaporation is ignored in this offline identification for simplicity,
                 # assuming it's a minor component compared to inflows/outflows or handled in preprocessing.
-                delta_v = (inflows[i-1] - outflows[i-1]) * dt
+                delta_v = (inflows[i-1] - outflows[i-1]) * time_step
                 simulated_volumes[i] = simulated_volumes[i-1] + delta_v
 
             simulated_levels = np.interp(simulated_volumes, candidate_volumes, candidate_levels)

@@ -32,7 +32,7 @@ class RiverChannel(PhysicalObjectInterface):
         self._state['outflow'] = outflow
 
         # Water balance equation
-        delta_volume = (inflow - outflow) * dt
+        delta_volume = (inflow - outflow) * time_step
         new_volume = current_volume + delta_volume
         self._state['volume'] = new_volume
 
