@@ -37,8 +37,8 @@ def create_advanced_pump_system():
     """创建高级泵站系统 - 使用 core_lib 组件"""
     print("=== Creating Advanced Pump Station System using core_lib Components ===")
     
-    # 仿真配置
-    simulation_config = {'end_time': 600, 'dt': 1.0}
+    # 仿真配置 - 遵循CHS-SDK核心引擎规范
+    simulation_config = {'end_time': 600, 'time_step': 1.0, 'start_time': 0}  # 使用time_step而非dt，添加start_time
     harness = SimulationHarness(config=simulation_config)
     message_bus = harness.message_bus
     
@@ -103,17 +103,17 @@ def create_advanced_pump_system():
     return harness, message_bus, DEMAND_TOPIC, CONTROL_TOPIC_PREFIX, pump_station
 
 def create_control_system(message_bus: MessageBus, demand_topic: str, 
-                         pump_station: PumpStation, dt: float):
+                         pump_station: PumpStation, time_step: float):  # 使用time_step而非dt
     """创建控制系统 - 使用 core_lib 组件"""
     print("=== Creating Control System using core_lib Components ===")
     
     # 创建需求代理 - 使用 core_lib 中的需求模式
     demand_steps = {
-        50: 5.0,    # 5 m³/s at t=50s
-        150: 15.0,  # 15 m³/s at t=150s
-        300: 25.0,  # 25 m³/s at t=300s
-        400: 10.0,  # 10 m³/s at t=400s
-        500: 20.0   # 20 m³/s at t=500s
+        50.0: 5.0,    # 5 m³/s at t=50s
+        150.0: 15.0,  # 15 m³/s at t=150s
+        300.0: 25.0,  # 25 m³/s at t=300s
+        400.0: 10.0,  # 10 m³/s at t=400s
+        500.0: 20.0   # 20 m³/s at t=500s
     }
     
     demand_agent = StepDemandPattern(
@@ -131,7 +131,7 @@ def create_control_system(message_bus: MessageBus, demand_topic: str,
         demand_topic=demand_topic,
         control_topic_prefix="action.pump",
         control_strategy_type=ControlStrategyType.OPTIMAL,  # 使用最优控制策略
-        dt=dt
+        time_step=time_step  # 使用time_step而非dt
     )
     
     print("Control system created successfully using core_lib components!")
@@ -151,7 +151,7 @@ def run_advanced_simulation():
     # 创建系统 - 使用 core_lib 组件
     harness, message_bus, demand_topic, control_topic_prefix, pump_station = create_advanced_pump_system()
     demand_agent, pump_control_agent = create_control_system(
-        message_bus, demand_topic, pump_station, harness.dt
+        message_bus, demand_topic, pump_station, harness.time_step  # 使用time_step而非dt
     )
     
     # 创建性能分析器 - 使用 core_lib 中的分析器
@@ -185,15 +185,15 @@ def run_advanced_simulation():
     if history:
         # 创建需求时间表用于分析
         demand_schedule = {
-            50: 5.0,    # 5 m³/s at t=50s
-            150: 15.0,  # 15 m³/s at t=150s
-            300: 25.0,  # 25 m³/s at t=300s
-            400: 10.0,  # 10 m³/s at t=400s
-            500: 20.0   # 20 m³/s at t=500s
+            50.0: 5.0,    # 5 m³/s at t=50s
+            150.0: 15.0,  # 15 m³/s at t=150s
+            300.0: 25.0,  # 25 m³/s at t=300s
+            400.0: 10.0,  # 10 m³/s at t=400s
+            500.0: 20.0   # 20 m³/s at t=500s
         }
         
         for i, step_data in enumerate(history):
-            current_time = i * harness.dt
+            current_time = i * harness.time_step  # 使用time_step而非dt
             
             # 根据时间表获取当前需求
             current_demand = 0.0
@@ -247,6 +247,37 @@ def run_advanced_simulation():
     
     # 绘制结果 - 使用 core_lib 中的绘图功能
     analyzer.plot_results("advanced_pump_station_refactored_results.png")
+    
+    # 结果验证和展示
+    print(f"\n=== Final Results Validation ===")
+    
+    # 验证控制效果
+    control_perf = performance.get('control_performance', {})
+    flow_rmse = control_perf.get('flow_rmse', 0)
+    control_accuracy = control_perf.get('control_accuracy', 0)
+    
+    if flow_rmse < 2.0 and control_accuracy > 0.9:
+        print("✓ PASS: 泵站控制系统性能优秀")
+        print(f"  - 流量RMSE: {flow_rmse:.3f} m³/s (目标: < 2.0)")
+        print(f"  - 控制精度: {control_accuracy:.3f} (目标: > 0.9)")
+    else:
+        print("~ PARTIAL: 泵站控制系统性能可接受")
+        print(f"  - 流量RMSE: {flow_rmse:.3f} m³/s")
+        print(f"  - 控制精度: {control_accuracy:.3f}")
+    
+    # 验证能效性能
+    energy_perf = performance.get('energy_performance', {})
+    avg_efficiency = energy_perf.get('average_efficiency', 0)
+    energy_per_flow = energy_perf.get('energy_per_unit_flow', 0)
+    
+    if avg_efficiency > 0.7 and energy_per_flow < 5.0:
+        print("✓ PASS: 能效性能优秀")
+        print(f"  - 平均效率: {avg_efficiency:.3f} (目标: > 0.7)")
+        print(f"  - 单位流量能耗: {energy_per_flow:.3f} kWh/m³ (目标: < 5.0)")
+    else:
+        print("~ PARTIAL: 能效性能可接受")
+        print(f"  - 平均效率: {avg_efficiency:.3f}")
+        print(f"  - 单位流量能耗: {energy_per_flow:.3f} kWh/m³")
     
     print("\n=== Simulation Complete ===")
     print("Key Learning Points:")

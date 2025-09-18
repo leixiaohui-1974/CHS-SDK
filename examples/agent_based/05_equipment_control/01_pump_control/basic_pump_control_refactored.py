@@ -58,8 +58,8 @@ def create_pump_system():
     """创建水泵系统 - 使用 core_lib 组件"""
     print("=== Creating Pump System using core_lib Components ===")
     
-    # 仿真配置
-    simulation_config = {'end_time': 600, 'dt': 1.0}
+    # 仿真配置 - 遵循CHS-SDK核心引擎规范
+    simulation_config = {'end_time': 600, 'time_step': 1.0, 'start_time': 0}  # 使用time_step而非dt，添加start_time
     harness = SimulationHarness(config=simulation_config)
     message_bus = harness.message_bus
     
@@ -125,7 +125,7 @@ def create_pump_system():
     return harness, message_bus, DEMAND_TOPIC, CONTROL_TOPIC_PREFIX, pump_station
 
 def create_control_system(message_bus: MessageBus, demand_topic: str, 
-                         pump_station: PumpStation, dt: float):
+                         pump_station: PumpStation, time_step: float):  # 使用time_step而非dt
     """创建控制系统 - 使用 core_lib 组件"""
     print("=== Creating Control System using core_lib Components ===")
     
@@ -139,7 +139,7 @@ def create_control_system(message_bus: MessageBus, demand_topic: str,
         pump_station=pump_station,
         demand_topic=demand_topic,
         control_topic_prefix="action.pump",
-        dt=dt,
+        time_step=time_step,  # 使用time_step而非dt
         # 泵站特定配置
         max_pumps=1,  # 单泵系统
         min_pumps=0
@@ -165,7 +165,7 @@ def analyze_results(harness: SimulationHarness):
     power_data = []
     
     for i, step_data in enumerate(history):
-        time_data.append(i * harness.dt)
+        time_data.append(i * harness.time_step)  # 使用time_step而非dt
         
         # 从泵站状态提取数据
         if 'pump_station_1' in step_data:
@@ -180,23 +180,41 @@ def analyze_results(harness: SimulationHarness):
         demand_data.append(10.0)  # 简化需求模式
     
     # 计算性能指标
+    avg_flow = avg_power = max_flow = 0.0  # 初始化变量
     if flow_data:
-        avg_flow = np.mean(flow_data)
-        avg_power = np.mean(power_data)
-        max_flow = np.max(flow_data)
+        avg_flow = float(np.mean(flow_data))  # 使用float()转换
+        avg_power = float(np.mean(power_data))
+        max_flow = float(np.max(flow_data))
         
         print(f"Performance Analysis:")
         print(f"  Average Flow: {avg_flow:.2f} m³/s")
         print(f"  Maximum Flow: {max_flow:.2f} m³/s")
         print(f"  Average Power: {avg_power:.2f} kW")
         
+        # 添加性能验证
+        print(f"\n=== Performance Validation ===")
+        efficiency = avg_power / max(avg_flow, 1.0)  # kW per m³/s
+        
+        if avg_flow > 15.0 and efficiency < 5.0:
+            print("✓ PASS: 泵站性能优秀")
+            print(f"  - 平均流量: {avg_flow:.2f} m³/s (目标: > 15.0)")
+            print(f"  - 能效比: {efficiency:.2f} kW/(m³/s) (目标: < 5.0)")
+        elif avg_flow > 10.0:
+            print("~ PARTIAL: 泵站性能可接受")
+            print(f"  - 平均流量: {avg_flow:.2f} m³/s")
+            print(f"  - 能效比: {efficiency:.2f} kW/(m³/s)")
+        else:
+            print("✗ FAIL: 泵站性能不足")
+            print(f"  - 平均流量: {avg_flow:.2f} m³/s (需要: > 10.0)")
+        
         # 绘制结果
         plot_results(time_data, demand_data, flow_data, power_data)
     
     return {
-        'avg_flow': avg_flow if flow_data else 0,
-        'avg_power': avg_power if power_data else 0,
-        'max_flow': max_flow if flow_data else 0
+        'avg_flow': avg_flow,
+        'avg_power': avg_power,
+        'max_flow': max_flow,
+        'efficiency': avg_power / max(avg_flow, 1.0) if avg_flow > 0 else 0
     }
 
 def plot_results(time_data, demand_data, flow_data, power_data):
@@ -238,7 +256,7 @@ def run_refactored_simulation():
     # 创建系统 - 使用 core_lib 组件
     harness, message_bus, demand_topic, control_topic_prefix, pump_station = create_pump_system()
     demand_agent, pump_control_agent = create_control_system(
-        message_bus, demand_topic, pump_station, harness.dt
+        message_bus, demand_topic, pump_station, harness.time_step  # 使用time_step而非dt
     )
     
     # 添加代理
@@ -253,6 +271,15 @@ def run_refactored_simulation():
     
     # 分析结果
     performance = analyze_results(harness)
+    
+    # 最终结果展示
+    print(f"\n=== Final System Assessment ===")
+    if performance['avg_flow'] > 15.0 and performance['efficiency'] < 5.0:
+        print("✓ EXCELLENT: 系统性能优秀，达到设计目标")
+    elif performance['avg_flow'] > 10.0:
+        print("~ GOOD: 系统性能良好，基本满足需求")
+    else:
+        print("✗ POOR: 系统性能不足，需要优化")
     
     print("\n=== Simulation Complete ===")
     print("Key Learning Points:")

@@ -40,6 +40,18 @@ class WaterTurbine(PhysicalObjectInterface):
         if self.bus and self.action_topic:
             self.bus.subscribe(self.action_topic, self.handle_action_message)
             print(f"Turbine '{self.name}' subscribed to action topic '{self.action_topic}'.")
+        
+        # 初始化入流
+        self._inflow = 0.0
+
+    def set_inflow(self, inflow: float):
+        """设置水轮机的入流量。
+        
+        Args:
+            inflow: 新的入流量 (m³/s)
+        """
+        self._inflow = inflow
+        print(f"水轮机 '{self.name}' 入流已设置为 {inflow} m³/s")
 
     def handle_action_message(self, message: Message):
         """Callback to handle incoming action messages from the bus."""

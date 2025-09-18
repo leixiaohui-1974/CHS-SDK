@@ -36,6 +36,9 @@ class Gate(PhysicalObjectInterface):
         self.target_opening = self._state.get('opening', 0)
         self.last_head_diff = 1.0 # 存储上一次的水头差，用于反向计算 (m)
         
+        # 初始化入流
+        self._inflow = 0.0
+        
         # 将默认参数值设置为实例属性
         self.default_width = default_width
         self.default_max_opening = default_max_opening
@@ -57,6 +60,15 @@ class Gate(PhysicalObjectInterface):
             print(f"闸门 '{self.name}' 已订阅动作主题 '{self.action_topic}'.")
 
         print(f"闸门 '{self.name}' 已创建，初始状态为 {self._state}.")
+
+    def set_inflow(self, inflow: float):
+        """设置闸门的入流量。
+        
+        Args:
+            inflow: 新的入流量 (m³/s)
+        """
+        self._inflow = inflow
+        print(f"闸门 '{self.name}' 入流已设置为 {inflow} m³/s")
 
     def _validate_physical_parameters(self):
         """验证物理参数的合理性。"""
