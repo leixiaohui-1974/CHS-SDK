@@ -1,0 +1,56 @@
+# Agent definitions for the Complex Fault Scenario Example
+agents:
+  - id: physical_io_agent
+    class: core_lib.local_agents.io.physical_io_agent.PhysicalIOAgent
+    config:
+      sensors_config:
+        canal_1_water_level_sensor:
+          obj_id: Channel_1
+          state_key: water_level
+          topic: 'sensor/Channel_1/water_level'
+          noise_std: 0.05
+        canal_2_water_level_sensor:
+          obj_id: Channel_2
+          state_key: water_level
+          topic: 'sensor/Channel_2/water_level'
+          noise_std: 0.05
+        canal_3_water_level_sensor:
+          obj_id: Channel_3
+          state_key: water_level
+          topic: 'sensor/Channel_3/water_level'
+          noise_std: 0.05
+      actuators_config:
+        gate_1_actuator:
+          obj_id: Gate_1
+          target_attr: opening
+          topic: 'actuator/gate_1/opening'
+          control_key: 'value'
+
+  - id: scenario_agent
+    class: core_lib.mission.scenario_agent.ScenarioAgent
+    config:
+      scenario_script:
+        - time: 3600 # 1 hour in - Increase diversion demand
+          topic: 'disturbance/diversion_1'
+          message:
+            outflow: 5.0
+        - time: 5400 # 1.5 hours in - Further increase diversion demand
+          topic: 'disturbance/diversion_1'
+          message:
+            outflow: 8.0
+      
+
+  - id: gate1_dd_controller
+    class: core_lib.local_agents.control.structured_control_agent.StructuredControlAgent
+    config:
+      controlled_element_id: 'gate_1'
+      actuator_topic: 'actuator/gate_1/opening'
+      observation_topic: 'sensor/Channel_1/water_level'
+      control_mode: 'dd'
+      controller_config:
+        Kp: 0.5
+        Ki: 0.05
+        Kd: 0.1
+        setpoint: 5.0
+        min_output: 0.0
+        max_output: 1.0

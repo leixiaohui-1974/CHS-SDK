@@ -1,0 +1,42 @@
+# 分布式数字孪生与优化控制仿真案例 - 系统拓扑配置
+# 定义物理组件之间的连接关系
+
+topology:
+  # 系统连接关系
+  connections:
+    # 上游水库 -> 明渠段1
+    - upstream: Upstream_Reservoir
+      downstream: Channel_1
+      connection_type: "reservoir_to_channel"
+    
+    # 明渠段1 -> 分水口1
+    - upstream: Channel_1
+      downstream: Diversion_1
+      connection_type: "channel_to_diversion"
+    
+    # 分水口1 -> 明渠段2
+    - upstream: Diversion_1
+      downstream: Channel_2
+      connection_type: "diversion_to_channel"
+    
+    # 明渠段2 -> 倒虹吸1
+    - upstream: Channel_2
+      downstream: Pipe_1
+      connection_type: "channel_to_pipe"
+    
+    # 倒虹吸1 -> 节制闸1
+    - upstream: Pipe_1
+      downstream: Gate_1
+      connection_type: "pipe_to_gate"
+    
+    # 节制闸1 -> 明渠段3
+    - upstream: Gate_1
+      downstream: Channel_3
+      connection_type: "gate_to_channel"
+    
+    # 明渠段3 -> 下游水库
+    - upstream: Channel_3
+      downstream: Downstream_Reservoir
+      connection_type: "channel_to_reservoir"
+
+  

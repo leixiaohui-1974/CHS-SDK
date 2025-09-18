@@ -1,0 +1,411 @@
+components:
+  # 上游水库   水库、湖泊等都属于节点，因此用王老师的节点参数和这里的上游水库参数进行对比，差异如下。
+  - id: Upstream_Reservoir
+    class: Reservoir
+    initial_state:
+      water_level: 62.82 # 初始水位 (m)     /////////  （）
+      volume: 15000   # 初始库容 (m³)//////////  
+    parameters:
+      area: 500      # 水面面积 (m²)     Amin: 500.0  #节点最小蓄水面积（王老师）
+      storage_curve:     # 库容曲线 [[volume_m3, level_m], ...]   curve_V: null #水位库容曲线（王老师）
+        - [0, 0]
+        - [500, 80]  #////////
+      inflow: 100.0      # 恒定入流 (m³/s)////////
+      x: 620195.6978933726 # 上游水库x坐标（王老师）
+      y: 4342056.579136748 # 上游水库y坐标（王老师）
+      zb: 57.492  # 底高程（王老师）
+      nodeType: 2 #节点类型：0-内部节点，1-水位边界节点，2-流量边界节点（王老师）
+      curve_QZ: null #水位流量曲线（王老师）
+      inflow_timeSeries:    #上游流量边界时间序列-入流 （王老师）
+        - [0, 25.03644066]
+        - [7200, 25.47312345]
+        - [14400, 25.81578613]
+        - [21600, 26.03192703]
+        - [28800, 26.2733379]
+        - [36000, 26.36223905]
+        - [43200, 26.91650872]
+        - [50400, 27.30499056]
+        - [57600, 27.14405641]
+        - [64800, 27.05228809]
+        - [72000, 27.33818208]
+        - [79200, 27.4005032]
+        - [86400, 27.01533118]
+        - [93600, 26.72624946]
+        - [100800, 27.02185755]
+        - [108000, 27.17377433]
+        - [115200, 27.32761631]
+        - [122400, 27.28746967]
+        - [129600, 27.30777959]
+        - [136800, 27.48544713]
+        - [144000, 27.22947375]
+        - [151200, 27.22494501]
+        - [158400, 27.28972974]
+        - [165600, 27.19936787]
+        - [172800, 27.1768293]
+        - [180000, 26.76140118]
+        - [187200, 26.36774348]
+        - [194400, 25.31338928]
+        - [201600, 25.01298253]
+        - [208800, 24.70267474]
+        - [216000, 25.7927721]
+        - [223200, 26.43158454]
+        - [230400, 26.83318921]
+        - [237600, 26.67814811]
+        - [244800, 26.6992841]
+        - [252000, 26.955078]
+        - [259200, 27.08834488]
+      outflow_timeSeries:    #出流时间序列
+      water_level_timeSeries:    #水位时间序列
+
+  # 明渠段1 
+  - id: Channel_1
+    class: UnifiedCanal
+    initial_state:  
+      water_level: 61.90   # 初始水位 (m)
+      volume: 800000     # 初始水量 (m³)   /////////
+      inflow: 25.0       # 初始入流 (m³/s) - 必需字段
+      outflow: 25.0      # 初始出流 (m³/s) - 必需字段
+    parameters:
+      model_type: integral_delay         ### 特有参数    根据 `model_type` 不同而变化：integral、integral_delay、integral_delay_zero、linear_reservoir、st_venant
+      length: 2911      # 渠道长度 (必需)       model_type= st_venant时必填。
+      num_points: 2          #计算点数（必需）   一段渠道则填2，两段渠道则填3，以此类推，点数越多，模拟精度通常越高，但计算复杂度也会增加。  model_type= st_venant时必填。
+      bottom_width: 15       #底部宽度 当渠道为梯形断面时用，需同时填写side_slope_z边坡系数。（必需）    model_type= st_venant时必填。
+      side_slope_z: 0      #边坡系数（必需）     model_type= st_venant时必填。
+      manning_n: 0.015        # 曼宁系数（必需）       nc: 0.015 （王老师） model_type= st_venant时必填。
+      initial_H: [61.90, 61.90]       # 初始水位数组（根据计算节点划分的渠段数填写，长度须和num_points保持一致。）   model_type= st_venant时选填。
+      initial_Q: [10.0, 10.0]           # 初始流量数组（根据计算节点划分的渠段数填写，长度须和num_points保持一致.）    model_type= st_venant时选填。
+      gain: 0.001                   #增益，默认 0.001    model_type= integral_delay、integral_delay_zero时必填。
+      delay: 300                 #延迟，默认 300        model_type= integral_delay、integral_delay_zero时必填。
+      zero_time_constant:       #零点时间常数，默认 50       model_type= integral_delay_zero时必填。
+      surface_area: 10000.0            #表面面积，默认 10000.0      model_type= integral时必填。
+      outlet_coefficient: 5   #出口系数，默认 5.0      model_type= integral时必填。
+      slope: 0.001              #坡度    model_type= st_venant时必填。
+      storage_constant:         #存储常数，默认 1200    model_type=linear_reservoir时必填。
+      level_storage_ratio:      #水位存储比，默认 0.005  model_type=linear_reservoir必填。
+
+      # 监测点噪声配置
+      water_level_noise_std: 0.05  # 水位监测噪声 (m)  /////////
+      flow_noise_std: 2.0          # 流量监测噪声 (m³/s) ///////
+      points:        #渠道折点（王老师）
+      - [625534.0086323563, 4355758.551078638]
+      - [625538.4701840682, 4356065.1568172695]
+      - [625540.7745782401, 4356496.524326502]
+      - [625546.1100241797, 4356739.680591202]
+      - [625552.7956616177, 4357013.838296431]
+      - [625555.4419261485, 4357194.114337629]
+      - [625584.0947974927, 4357482.924669897]
+      - [625608.424726388, 4357695.408101715]
+      - [625649.9879696051, 4358101.19668533]
+      - [625686.9963563756, 4358444.953086391]
+      - [625705.3433479181, 4358569.167899733]
+      - [625765.6544526044, 4358729.806249601]
+      - [625798.3727736196, 4358810.490400314]
+      sec_names:      #断面名称  （王老师）
+      - [ CH657-1, CH657-2]   
+
+  # 分水口1
+  - id: Diversion_1
+    class: core_lib.physical_objects.disturbance_node.DisturbanceNode
+    initial_state:
+      outflow: 0      # 初始分水流量 (m³/s)     序列一直是0
+    parameters:
+      action_topic: 'disturbance/diversion_1'   #干扰
+      action_key: 'outflow'
+      # 流量监测噪声
+      flow_noise_std: 1.0     #////////
+      location: 10  # 分水口1位置，相对于拓扑起点的距离（王老师）
+      timeSeries:    # （王老师）
+      - [0, 0.0]
+      - [7200, 0.0]
+      - [14400, 0.0]
+      - [21600, 0.0]
+      - [28800, 0.0]
+      - [36000, 0.0]
+      - [43200, 0.0]
+      - [50400, 0.0]
+      - [57600, 0.0]
+      - [64800, 0.0]
+      - [72000, 0.0]
+      - [79200, 0.0]
+      - [86400, 0.0]
+      - [93600, 0.0]
+      - [100800, 0.0]
+      - [108000, 0.0]
+      - [115200, 0.0]
+      - [122400, 0.0]
+      - [129600, 0.0]
+      - [136800, 0.0]
+      - [144000, 0.0]
+      - [151200, 0.0]
+      - [158400, 0.0]
+      - [165600, 0.0]
+      - [172800, 0.0]
+      - [180000, 0.0]
+      - [187200, 0.0]
+      - [194400, 0.0]
+      - [201600, 0.0]
+      - [208800, 0.0]
+      - [216000, 0.0]
+      - [223200, 0.0]
+      - [230400, 0.0]
+      - [237600, 0.0]
+      - [244800, 0.0]
+      - [252000, 0.0]
+      - [259200, 0.0]
+
+
+    # 明渠段2 
+  
+  - id: Channel_2
+    class: UnifiedCanal
+    initial_state:  
+      water_level: 62.83   # 初始水位 (m)
+      volume: 800000     # 初始水量 (m³)   /////////
+      inflow: 25.0       # 初始入流 (m³/s) - 必需字段
+      outflow: 25.0      # 初始出流 (m³/s) - 必需字段
+    parameters:
+      model_type: integral_delay         ### 特有参数    根据 `model_type` 不同而变化：integral、integral_delay、integral_delay_zero、linear_reservoir、st_venant
+      length: 178      # 渠道长度 (必需)       model_type= st_venant时必填。
+      num_points: 2          #计算点数（必需）   一段渠道则填2，两段渠道则填3，以此类推，点数越多，模拟精度通常越高，但计算复杂度也会增加。  model_type= st_venant时必填。
+      bottom_width: 20       #底部宽度 当渠道为梯形断面时用，需同时填写side_slope_z边坡系数。（必需）    model_type= st_venant时必填。
+      side_slope_z: 0      #边坡系数（必需）     model_type= st_venant时必填。
+      manning_n: 0.015        # 曼宁系数（必需）       nc: 0.015 （王老师） model_type= st_venant时必填。
+      initial_H: [62.83,62.83]        # 初始水位数组（根据计算节点划分的渠段数填写，若计算点数为2，则只有一条渠道，只填一个数。）   model_type= st_venant时选填。
+      initial_Q: [10.0,10.0]             # 初始流量数组（根据计算节点划分的渠段数填写，若计算点数为2，则只有一条渠道，只填一个数。）    model_type= st_venant时选填。
+      gain: 0.001                   #增益，默认 0.001    model_type= integral_delay、integral_delay_zero时必填。
+      delay: 300                  #延迟，默认 300        model_type= integral_delay、integral_delay_zero时必填。
+      zero_time_constant:       #零点时间常数，默认 50       model_type= integral_delay_zero时必填。
+      surface_area:    10000.0        #表面面积，默认 10000.0      model_type= integral时必填。
+      outlet_coefficient: 5      #出口系数，默认 5.0      model_type= integral时必填。
+      slope: 0.001              #坡度    model_type= st_venant时必填。l
+      storage_constant:         #存储常数，默认 1200    model_type=linear_reservoir时必填。
+      level_storage_ratio:      #水位存储比，默认 0.005  model_type=linear_reservoir必填。
+
+      # 监测点噪声配置
+      water_level_noise_std: 0.05  # 水位监测噪声 (m)  /////////
+      flow_noise_std: 2.0          # 流量监测噪声 (m³/s) ///////
+      points:       #渠道折点（王老师）
+      - [625534.0086323563, 4355758.551078638]
+      - [625538.4701840682, 4356065.1568172695]
+      - [625540.7745782401, 4356496.524326502]
+      - [625546.1100241797, 4356739.680591202]
+      - [625552.7956616177, 4357013.838296431]
+      - [625555.4419261485, 4357194.114337629]
+      - [625584.0947974927, 4357482.924669897]
+      - [625608.424726388, 4357695.408101715]
+      - [625649.9879696051, 4358101.19668533]
+      - [625686.9963563756, 4358444.953086391]
+      - [625705.3433479181, 4358569.167899733]
+      - [625765.6544526044, 4358729.806249601]
+      - [625798.3727736196, 4358810.490400314]
+      sec_names:      #断面名称  （王老师）
+       - [ CH659-1, CH659-2]   
+
+    #倒虹吸1
+  
+  - id: Pipe_1
+    class: Pipe
+    initial_state:
+      outflow: 10       # 初始流量 (m³/s)，可选，默认为0
+      head_loss: 0     # 初始水头损失 (m)，可选，默认为0
+    parameters:
+      calculation_method: darcy_weisbach  # 计算方法，可选'darcy_weisbach'或'manning'，默认'darcy_weisbach'
+      length: 490    # 管道长度 (m)     l_orifice: 490.0 （王老师）
+      diameter: 7.778    # 管道直径 (m)
+      friction_factor: 0.02  # 摩擦系数，当使用darcy_weisbach方法时必需
+      manning_n: 0.015 # # 曼宁系数，当使用manning方法时必需    /////////  nc: 0.015  （王老师）
+      flow_noise_std: 1.0     # 流量监测噪声////////
+      inlet_zb: 55.674    #进口底高程  （王老师）
+      inlet_b: 11.0       #进口底宽  （王老师）
+      inlet_m: 0.0        #进口边坡系数  （王老师）
+      outlet_zb: 55.764   #出口底高程  （王老师）
+      outlet_b: 11.0      #出口底宽  （王老师）
+      outlet_m: 0.0       #出口边坡系数  （王老师）
+      n_orifice: 2.0      #孔数  （王老师）
+      b_orifice: 5.5      #单孔宽度  （王老师）
+      h_orifice: 5.5      #单孔高度  （王老师）
+      
+      loss_coeff: 1.0     #损失系数  （王老师）  雷老师  head_loss 默认0。
+      loc_x: 625870.2395257393  # 经度  （王老师）
+      loc_y: 4358942.71982015     # 纬度  （王老师）
+                     
+  # 节制闸1 (2孔闸门)
+  - id: Gate_1
+    class: Gate
+    initial_state:
+      opening: 0.5       # 初始开度 (0-1)   单位不同，雷老师是百分比，需要补充闸门高度；王老师是闸门高度，单位m，会超1
+    parameters:
+      max_rate_of_change: 0.1    # 最大开度变化率 (0-1)  ////////
+      max_opening: 1.0          # 最大开度 (0-1)  ////////
+      width: 11        # 闸门总宽度 (m)   b: 5.5  #单孔闸门底宽  （王老师） 注意：王老师b为单孔底宽，雷老师width为总宽度
+      discharge_coefficient: 0.7919242  # 流量系数  c3: 0.7919242 （王老师）
+      number_of_gates: 2 # 2个独立闸孔
+
+      # 执行器干扰配置
+      actuator_delay: 2.0     # 执行器延迟 (s)  /////////
+      actuator_noise_std: 0.02 # 执行器噪声标准差 /////////
+      mechanical_aging: 0.95   # 机械老化系数    /////////
+
+      zb: 55.764    #底高程     （王老师） 
+      type: 2       #闸门模拟类型：1）离散流态分段系数法 2）连续动态拟合系数法 3）无量纲普适公式法   (王老师)
+      c1: 0.0      #当type=1时，c1为自由孔流;当type=2时，c1为一次项系数；当type=3时，c1为开度线性影响系数。(王老师)
+      c2: 0.0      #当type=1时，c2为自由堰流;当type=2时，c2为二次项系数；当type=3时，c2为基准流量系数。(王老师)
+      c3: 0.7919242   #当type=1时，c3为淹没孔流;当type=2时，c3为常数项；当type=3时，无c3。(王老师)
+      c4: 0.0      #当type=1时，c4为淹没堰流;当type=2时，无c4；当type=3时，无c4。(王老师)
+      down_zb: 0.0    #下游断面底高程  （王老师）
+      down_b: 0.0     #下游断面底宽  （王老师）
+      down_m: 0.0     #下游断面边坡系数  （王老师）
+      loc_x: 625974.277169082  # 经度  （王老师）
+      loc_y: 4359258.965897897      # 纬度  （王老师）
+
+  # 明渠段3
+  - id: Channel_3
+    class: UnifiedCanal
+    initial_state:  
+      water_level: 61.443   # 初始水位 (m)
+      volume: 800000     # 初始水量 (m³)   /////////
+      inflow: 25.0       # 初始入流 (m³/s) - 必需字段
+      outflow: 25.0      # 初始出流 (m³/s) - 必需字段
+    parameters:
+      model_type: integral_delay         ### 特有参数    根据 `model_type` 不同而变化：integral、integral_delay、integral_delay_zero、linear_reservoir、st_venant
+      length: 387      # 渠道长度 (必需)       model_type= st_venant时必填。
+      num_points: 2          #计算点数（必需）   一段渠道则填2，两段渠道则填3，以此类推，点数越多，模拟精度通常越高，但计算复杂度也会增加。  model_type= st_venant时必填。
+      bottom_width: 18       #底部宽度 当渠道为梯形断面时用，需同时填写side_slope_z边坡系数。（必需）    model_type= st_venant时必填。
+      side_slope_z: 0      #边坡系数（必需）     model_type= st_venant时必填。
+      manning_n: 0.015        # 曼宁系数（必需）       nc: 0.015 （王老师） model_type= st_venant时必填。
+      initial_H: [62.83,62.83]        # 初始水位数组（根据计算节点划分的渠段数填写，若计算点数为2，则只有一条渠道，只填一个数。）   model_type= st_venant时选填。
+      initial_Q: [10.0, 10.0]             # 初始流量数组（根据计算节点划分的渠段数填写，若计算点数为2，则只有一条渠道，只填一个数。）    model_type= st_venant时选填。
+      gain: 0.001                  #增益，默认 0.001    model_type= integral_delay、integral_delay_zero时必填。
+      delay: 300                  #延迟，默认 300        model_type= integral_delay、integral_delay_zero时必填。
+      zero_time_constant:       #零点时间常数，默认 50       model_type= integral_delay_zero时必填。
+      surface_area: 10000.0           #表面面积，默认 10000.0      model_type= integral时必填。
+      outlet_coefficient: 5.0      #出口系数，默认 5.0      model_type= integral时必填。
+      slope: 0.001              #坡度    model_type= st_venant时必填。
+      storage_constant:         #存储常数，默认 1200    model_type=linear_reservoir时必填。
+      level_storage_ratio:      #水位存储比，默认 0.005  model_type=linear_reservoir必填。
+      # 监测点噪声配置  
+      water_level_noise_std: 0.04  # 水位监测噪声 (m)  /////////
+      flow_noise_std: 1.8          # 流量监测噪声 (m³/s) ///////
+      points:        #渠道折点（王老师）
+      - [625974.277169082, 4359258.965897897]
+      - [626039.5168039337, 4359400.6390968785]
+      - [626119.0801370743, 4359513.93145293]
+      - [626161.414861518, 4359583.709358479]
+      sec_names:      #断面名称  （王老师）
+      - [ CH660-1, CH660-2] 
+
+  # 下游水库
+  - id: Downstream_Reservoir
+    class: Reservoir
+    initial_state:
+      water_level: 61.443   # 初始水位 (m)  /////////
+      volume: 1200   # 初始库容 (m³)  /////////
+    parameters:
+      area: 500      # 水面面积 (m²)/////////  Amin: 500.0  #节点最小蓄水面积（王老师）
+      storage_curve:       # 库容曲线 [[volume_m3, level_m], ...]    curve_V: null #水位库容曲线（王老师）
+        - [0, 0]
+        - [500, 80]
+      outflow: 80.0      # 恒定出流 (m³/s)  /////////
+      x: 626161.414861518 # 下游水库x坐标（王老师）
+      y: 4359583.709358479 # 下游水库y坐标（王老师）
+      zb: 55.556  # 底高程（王老师）
+      nodeType: 0 #节点类型：0-内部节点，1-水位边界节点，2-流量边界节点（王老师）
+      curve_QZ: null #水位流量曲线（王老师）
+      inflow_timeSeries:    #入流时间序列
+      outflow_timeSeries:    #出流时间序列
+      water_level_timeSeries:    #下游水位边界时间序列 （王老师）
+      - [0, 61.44291145]
+      - [7200, 61.44700911]
+      - [14400, 61.45828034]
+      - [21600, 61.47085286]
+      - [28800, 61.48435666]
+      - [36000, 61.49768123]
+      - [43200, 61.51617268]
+      - [50400, 61.53658595]
+      - [57600, 61.53642133]
+      - [64800, 61.54320599]
+      - [72000, 61.556108]
+      - [79200, 61.56369598]
+      - [86400, 61.57399639]
+      - [93600, 61.57237356]
+      - [100800, 61.57382146]
+      - [108000, 61.57882042]
+      - [115200, 61.58564021]
+      - [122400, 61.59284216]
+      - [129600, 61.59630983]
+      - [136800, 61.60245441]
+      - [144000, 61.60260999]
+      - [151200, 61.60094729]
+      - [158400, 61.6017624]
+      - [165600, 61.60365544]
+      - [172800, 61.60236863]
+      - [180000, 61.59775029]
+      - [187200, 61.59503303]
+      - [194400, 61.5804652]
+      - [201600, 61.55603776]
+      - [208800, 61.53173143]
+      - [216000, 61.52114747]
+      - [223200, 61.52785368]
+      - [230400, 61.53807311]
+      - [237600, 61.54692566]
+      - [244800, 61.55157653]
+      - [252000, 61.55947148]
+      - [259200, 61.56754004]
+
+
+  # - id: CH647-1
+  #   class: sections  # 断面类  雷老师缺失，王老师模型需要 （王老师）
+  #   initial_state:     # 初始状态，目前无
+  #   parameters:
+   
+  #     x1: 620125.4047232243,   # 断面起点x坐标       （王老师）
+  #     y1: 4342035.342122041,   # 断面起点y坐标       （王老师）
+  #     x2: 620271.2512572788,   # 断面终点x坐标       （王老师）
+  #     y2: 4342075.708222423,   # 断面终点y坐标       （王老师）
+  #     yz:     #断面形态，测点数据（x，y）       （王老师）
+  #     - [0.0, 62.992]
+  #     - [0.0, 57.492]
+  #     - [10.0, 57.492]
+  #     - [10.0, 62.992]
+  #     num_interp: 13  #间差断面数 （王老师）
+  #     location: 0   #距离。  和分水口一致，若分水口的距离从整个模型的起点开始算 则这里也从模型起点开始；若分水口的距离是相对于某河道的距离 则断面也是相对于某河道 （王老师）
+               
+
+# # 监测点配置 - 为所有关键位置添加传感器噪声    #噪声未添加
+# monitoring_points:
+#   # 水位监测点
+#   water_level_sensors:
+#     - component: Gate_1
+#       locations: ["upstream", "downstream"]
+#       noise_std: 0.03
+#     - component: Gate_2
+#       locations: ["upstream", "downstream"]
+#       noise_std: 0.025
+#     - component: Gate_3
+#       locations: ["upstream", "downstream"]
+#       noise_std: 0.02
+  
+#   # 流量监测点        #噪声未添加
+#   flow_sensors:
+#     - component: Gate_1
+#       measurement: "total_flow"
+#       noise_std: 3.0
+#     - component: Gate_2
+#       measurement: "flow"
+#       noise_std: 2.0
+#     - component: Gate_3
+#       measurement: "flow"
+#       noise_std: 1.5
+#     - component: Diversion_1
+#       measurement: "outflow"
+#       noise_std: 1.0
+#     - component: Diversion_2
+#       measurement: "outflow"
+#       noise_std: 0.8
+  
+#   # 雨量监测点          #噪声未添加
+#   rainfall_sensors:
+#     - component: Channel_1
+#       noise_std: 0.5  # mm/h
+#     - component: Channel_2
+#       noise_std: 0.4  # mm/h
