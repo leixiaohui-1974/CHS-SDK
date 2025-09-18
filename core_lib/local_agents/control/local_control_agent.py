@@ -63,7 +63,7 @@ class LocalControlAgent(Agent):
         Args:
             agent_id: The unique ID for this agent.
             message_bus: The system's message bus for communication.
-            dt: The simulation time step.
+            time_step: The simulation time step.
             target_component: The physical component this agent controls.
             control_type: The type of control (e.g., 'gate_control').
             data_sources: Dictionary of data source topics.

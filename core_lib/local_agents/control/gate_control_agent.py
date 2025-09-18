@@ -50,7 +50,7 @@ class GateControlAgent(LocalControlAgent):
             observation_topic: Topic to listen for observations
             observation_key: Key in observation message to use as process variable
             action_topic: Topic to publish control actions
-            dt: Simulation time step
+            time_step: Simulation time step
             command_topic: Topic for receiving high-level commands
             feedback_topic: Topic for receiving feedback
             **kwargs: Additional configuration parameters for gate-specific features
@@ -63,7 +63,7 @@ class GateControlAgent(LocalControlAgent):
             observation_topic=observation_topic,
             observation_key=observation_key,
             action_topic=action_topic,
-            time_step=dt,
+            time_step=time_step,
             command_topic=command_topic,
             feedback_topic=feedback_topic
         )

@@ -80,8 +80,8 @@ components:
       surface_area: 10000.0            #表面面积，默认 10000.0      model_type= integral时必填。
       outlet_coefficient: 5   #出口系数，默认 5.0      model_type= integral时必填。
       slope: 0.001              #坡度    model_type= st_venant时必填。
-      storage_constant:         #存储常数，默认 1200    model_type=linear_reservoir时必填。
-      level_storage_ratio:      #水位存储比，默认 0.005  model_type=linear_reservoir必填。
+      storage_constant: 1200         #存储常数，默认 1200    model_type=linear_reservoir时必填。
+      level_storage_ratio: 0.005      #水位存储比，默认 0.005  model_type=linear_reservoir必填。
 
       # 监测点噪声配置
       water_level_noise_std: 0.05  # 水位监测噪声 (m)  /////////
@@ -174,7 +174,7 @@ components:
       initial_Q: [10.0,10.0]             # 初始流量数组（根据计算节点划分的渠段数填写，若计算点数为2，则只有一条渠道，只填一个数。）    model_type= st_venant时选填。
       gain: 0.001                   #增益，默认 0.001    model_type= integral_delay、integral_delay_zero时必填。
       delay: 300                  #延迟，默认 300        model_type= integral_delay、integral_delay_zero时必填。
-      zero_time_constant:       #零点时间常数，默认 50       model_type= integral_delay_zero时必填。
+      zero_time_constant: 50       #零点时间常数，默认 50       model_type= integral_delay_zero时必填。
       surface_area:    10000.0        #表面面积，默认 10000.0      model_type= integral时必填。
       outlet_coefficient: 5      #出口系数，默认 5.0      model_type= integral时必填。
       slope: 0.001              #坡度    model_type= st_venant时必填。l
@@ -277,7 +277,7 @@ components:
       initial_Q: [10.0, 10.0]             # 初始流量数组（根据计算节点划分的渠段数填写，若计算点数为2，则只有一条渠道，只填一个数。）    model_type= st_venant时选填。
       gain: 0.001                  #增益，默认 0.001    model_type= integral_delay、integral_delay_zero时必填。
       delay: 300                  #延迟，默认 300        model_type= integral_delay、integral_delay_zero时必填。
-      zero_time_constant:       #零点时间常数，默认 50       model_type= integral_delay_zero时必填。
+      zero_time_constant: 50      #零点时间常数，默认 50       model_type= integral_delay_zero时必填。
       surface_area: 10000.0           #表面面积，默认 10000.0      model_type= integral时必填。
       outlet_coefficient: 5.0      #出口系数，默认 5.0      model_type= integral时必填。
       slope: 0.001              #坡度    model_type= st_venant时必填。

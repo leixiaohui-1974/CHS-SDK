@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 from collections import deque
-import warnings
 from core_lib.core.interfaces import PhysicalObjectInterface, State, Parameters
 from typing import Dict, Any, Optional
 

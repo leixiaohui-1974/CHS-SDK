@@ -142,7 +142,7 @@ def create_agents(config, components, message_bus):
                 observation_topic=topics['reservoir_state'],
                 observation_key='water_level',
                 action_topic=topics['gate_action'],
-                dt=config['simulation']['dt'],
+                time_step=config['simulation']['time_step'],
                 target_component='gate_1',
                 control_type='water_level_control'
             )
