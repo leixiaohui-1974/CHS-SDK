@@ -1,3 +1,4 @@
+from typing import Optional
 import logging
 from .base_control_agent import BaseControlAgent
 from .pid_controller import PIDController
@@ -19,10 +20,11 @@ class StructuredControlAgent(BaseControlAgent):
             controller_config (dict): Can contain a `setpoint_topic` for dynamic updates.
             ...
         """
-        super().__init__(agent_id, message_bus, dt)
+        super().__init__(agent_id, message_bus, time_step)
         self.controlled_element_id = controlled_element_id
         self.control_mode = control_mode.lower()
         self.logger = logging.getLogger(self.__class__.__name__)
+        self.time_step = time_step
 
         self.action_topic = f"actuator/{self.controlled_element_id}/opening"
         self.observation_topic, self.observation_key = self._determine_observation_info(
@@ -51,7 +53,7 @@ class StructuredControlAgent(BaseControlAgent):
             self.message_bus.subscribe(self.setpoint_topic, self._handle_setpoint_update)
             self.logger.info(f"Agent {self.agent_id} subscribed to dynamic setpoint topic: {self.setpoint_topic}")
 
-    def _determine_observation_info(self, explicit_topic: str = None):
+    def _determine_observation_info(self, explicit_topic: Optional[str] = None):
         """
         Determines the topic and key for observation.
         Uses an explicitly provided topic if available, otherwise infers from control mode.
@@ -93,14 +95,16 @@ class StructuredControlAgent(BaseControlAgent):
         """
         # The physical_io_agent sends a message where the key is the state_key.
         # e.g. {'water_level': 5.0, 'timestamp': ...}
-        process_variable = message.get(self.observation_key)
+        process_variable = None
+        if self.observation_key:
+            process_variable = message.get(self.observation_key)
         if process_variable is None:
             # The central_mpc_agent sends a message like {'value': 5.0}
             process_variable = message.get('value')
 
         if process_variable is not None:
             observation_for_pid = {'process_variable': process_variable}
-            control_action = self.controller.compute_control_action(observation_for_pid, time_step=self.dt)
+            control_action = self.controller.compute_control_action(observation_for_pid, time_step=self.time_step)
             payload = {'value': control_action}
             self.message_bus.publish(self.action_topic, payload)
         else:
