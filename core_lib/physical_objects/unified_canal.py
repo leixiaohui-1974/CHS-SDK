@@ -95,6 +95,7 @@ class UnifiedCanal(PhysicalObjectInterface):
                 raise ValueError(f"Canal '{name}': 'level_storage_ratio' parameter is required for linear_reservoir model")
             self.storage_constant = self._params['storage_constant']
             self.level_storage_ratio = self._params['level_storage_ratio']
+            # level_storage_ratio 表示 水位/储水量 的比率
             self.storage = self._state['water_level'] / self.level_storage_ratio
             
         elif self.model_type == 'st_venant':
@@ -106,6 +107,10 @@ class UnifiedCanal(PhysicalObjectInterface):
                 
             self.length = self._params['length']
             self.num_points = self._params['num_points']
+            # 修正：明确空间离散化，假设nom_points是网格点数
+            # 那么有num_points-1个网格单元，每个单元长度为dx
+            if self.num_points < 2:
+                raise ValueError(f"Canal '{name}': num_points must be at least 2 for st_venant model")
             self.dx = self.length / (self.num_points - 1)
 
             self.bottom_width = self._params['bottom_width']
@@ -124,6 +129,10 @@ class UnifiedCanal(PhysicalObjectInterface):
 
             self.H = np.array(initial_H, dtype=float)
             self.Q = np.array(initial_Q, dtype=float)
+            
+            # 重要注意：在这里 H 表示水深（depth）而非水位（elevation）
+            # 这是为了与几何计算函数（_area, _wetted_perimeter等）保持一致
+            # Q 表示流量（discharge）
 
             if len(self.H) != self.num_points or len(self.Q) != self.num_points:
                 raise ValueError("Length of initial_H and initial_Q must match num_points.")
@@ -209,7 +218,9 @@ class UnifiedCanal(PhysicalObjectInterface):
         inflow = self._inflow
         # inflow已经在step函数中设置了self._state['inflow']
 
-        # Outflow is a function of water level (like a reservoir)
+        # 简化的出流公式：Q = C * √h
+        # 注意：这是一个经验性的简化公式，不一定遵循严格的物理定律
+        # outlet_coefficient 已经包含了所有必要的系数和单位转换
         calculated_outflow = self.outlet_coefficient * np.sqrt(max(0, self._state['water_level']))
         self._state['outflow'] = calculated_outflow
 
@@ -236,6 +247,7 @@ class UnifiedCanal(PhysicalObjectInterface):
         self._state['outflow'] = delayed_inflow
         
         # 水位变化考虑延迟效应
+        # 注意：gain的单位应为 [m/(m³/s·s)] = [s/m²]，表示水位对流量差值的响应系数
         level_change = self.gain * (inflow - delayed_inflow) * time_step
         self._state['water_level'] += level_change
         self._state['water_level'] = max(0, self._state['water_level'])
@@ -254,6 +266,9 @@ class UnifiedCanal(PhysicalObjectInterface):
         assert self.inflow_history is not None
         
         self.inflow_history.append(inflow)
+        # 延迟零点模型需要两个连续的延迟值来计算导数
+        # q_in_delayed: 当前时刻的延迟入流（较新的延迟值）
+        # q_in_delayed_previous: 前一时刻的延迟入流（较旧的延迟值）
         q_in_delayed = self.inflow_history[1] if len(self.inflow_history) > 1 else self.inflow_history[0]
         q_in_delayed_previous = self.inflow_history[0]
         
@@ -263,6 +278,7 @@ class UnifiedCanal(PhysicalObjectInterface):
         self._state['outflow'] = calculated_outflow
         
         # 水位变化包含延迟和零点效应
+        # 注意：gain的单位应为 [m/(m³/s·s)] = [s/m²]，表示水位对流量差值的响应系数
         level_change = self.gain * (inflow - calculated_outflow) * time_step
         self._state['water_level'] += level_change
         self._state['water_level'] = max(0, self._state['water_level'])
@@ -281,6 +297,7 @@ class UnifiedCanal(PhysicalObjectInterface):
         # 更新蓄水量和水位
         storage_change = (inflow - outflow_new) * time_step
         self.storage += storage_change
+        # level_storage_ratio 表示 水位/储水量 的比率，所以 水位 = 储水量 × level_storage_ratio
         self._state['water_level'] = self.storage * self.level_storage_ratio
         self._state['water_level'] = max(0, self._state['water_level'])
 
@@ -299,6 +316,8 @@ class UnifiedCanal(PhysicalObjectInterface):
     # --- St. Venant Model Methods ---
 
     def _area(self, h):
+        # 梯形断面面积公式：A = (b + z*h) * h
+        # 其中b为底宽，z为边坡系数（水平:1，垂直:z），h为水深
         return (self.bottom_width + self.side_slope_z * h) * h
 
     def _top_width(self, h):
@@ -310,6 +329,7 @@ class UnifiedCanal(PhysicalObjectInterface):
     def _friction_slope(self, Q, A, R):
         if A < 1e-6 or R < 1e-6:
             return 0
+        # 修正：使用Q的绝对值的平方乘以Q的符号，确保摩擦坡度方向正确
         return (self.manning_n**2 * Q * abs(Q)) / (A**2 * R**(4/3))
 
     def get_equations(self, time_step: float, theta: float):
@@ -348,7 +368,12 @@ class UnifiedCanal(PhysicalObjectInterface):
             M4 = self.dx / (2 * time_step)
 
             if R_avg > 1e-6 and A_avg > 1e-6:
-                dSf_dQ = 2 * self.manning_n**2 * abs(Q_avg) / (A_avg**2 * R_avg**(4/3))
+                # 摩擦坡度对流量的偏导数：dSf/dQ = (2 * n² * Q) / (A² * R^(4/3))
+                # 注意：这里直接使用Q而不是|Q|，因为d(Q*|Q|)/dQ = 2*Q
+                if abs(Q_avg) > 1e-6:
+                    dSf_dQ = 2 * self.manning_n**2 * Q_avg / (A_avg**2 * R_avg**(4/3))
+                else:
+                    dSf_dQ = 0
                 M2 += self.g * A_avg * self.dx * dSf_dQ * theta
                 M4 += self.g * A_avg * self.dx * dSf_dQ * theta
 
