@@ -293,24 +293,6 @@ class SimulationHarness:
             if upstream_components:  # 有上游组件，自动计算入流
                 total_inflow = self.DEFAULT_INFLOW_VALUE
                 for upstream_id in upstream_components:
-<<<<<<< HEAD
-                    upstream_outflow = current_step_outflows.get(upstream_id, self.DEFAULT_INFLOW_VALUE)
-                    total_inflow += upstream_outflow
-                    print(f"[DEBUG] 组件 {component_id} 的上游组件 {upstream_id} 出流: {upstream_outflow}")
-                
-                print(f"[DEBUG] 组件 {component_id} 计算的总入流: {total_inflow}")
-                
-                # 只有在组件没有受到入流扰动影响时才设置自动计算的入流
-                if component_id not in disturbed_components:
-                    if hasattr(component, '_inflow') and component._inflow != total_inflow:
-                        print(f"[DEBUG] 组件 {component_id} 当前入流 {component._inflow} != 计算入流 {total_inflow}，调用 set_inflow")
-                        component.set_inflow(total_inflow)
-                    elif not hasattr(component, '_inflow'):
-                        print(f"[DEBUG] 组件 {component_id} 没有 _inflow 属性，调用 set_inflow")
-                        component.set_inflow(total_inflow)
-                    else:
-                        print(f"[DEBUG] 组件 {component_id} 当前入流 {component._inflow} == 计算入流 {total_inflow}，跳过 set_inflow")
-=======
                     # 修复：使用上游组件的当前状态而不是可能为空的current_step_outflows
                     upstream_component = self.components[upstream_id]
                     upstream_state = upstream_component.get_state()
@@ -318,17 +300,18 @@ class SimulationHarness:
                     total_inflow += upstream_outflow
                     
                     # 调试信息：显示流量传递
-                    if component_id in ['Channel_2', 'Gate_1', 'Channel_3'] or upstream_id in ['Diversion_1', 'Pipe_1', 'Gate_1']:
+                    if component_id in ['Channel_2', 'Gate_1', 'Channel_3', 'hydropower_station'] or upstream_id in ['Diversion_1', 'Pipe_1', 'Gate_1', 'upstream_reservoir']:
                         print(f"流量传递: {upstream_id}(出流={upstream_outflow:.3f}) -> {component_id}(累积入流={total_inflow:.3f})")
+                
+                print(f"[DEBUG] 组件 {component_id} 计算的总入流: {total_inflow}")
                 
                 # 只有在组件没有受到入流扰动影响时才设置自动计算的入流
                 if component_id not in disturbed_components:
                     if hasattr(component, 'set_inflow'):
                         component.set_inflow(total_inflow)
                         # 调试信息
-                        if component_id in ['Channel_2', 'Gate_1', 'Channel_3']:
+                        if component_id in ['Channel_2', 'Gate_1', 'Channel_3', 'hydropower_station']:
                             print(f"设置组件 {component_id} 入流为: {total_inflow:.3f} m3/s")
->>>>>>> 17803cd38df077ac98b8d7202d14f2d18f511a2a
             # 否则，边界组件（如上游水库）保持其原有入流设置
 
             # 为所有组件设置water head信息（无论是否stateful）
