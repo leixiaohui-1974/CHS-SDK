@@ -15,7 +15,10 @@ import numpy as np
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 sys.path.insert(0, project_root)
 
-from core_lib.core_engine.testing.simulation_builder import HardcodedYamlSimulationLoader
+from core_lib.core_engine.testing.simulation_harness import SimulationHarness
+from core_lib.central_coordination.collaboration.message_bus import MessageBus
+from core_lib.physical_objects.reservoir import Reservoir
+from core_lib.physical_objects.gate import Gate
 from core_lib.local_agents.control.pid_controller import PIDController
 from core_lib.local_agents.control.unified_gate_control_agent import UnifiedGateControlAgent
 from core_lib.local_agents.perception.digital_twin_agent import DigitalTwinAgent
@@ -23,14 +26,14 @@ from core_lib.central_coordination.dispatch.central_dispatcher import CentralDis
 
 def create_hierarchical_control_system():
     """
-    Creates a hierarchical control system using YamlSimulationLoader.
+    Creates a hierarchical control system using direct SimulationHarness setup.
     
     Returns:
-        YamlSimulationLoader: Configured simulation builder
+        SimulationHarness: Configured simulation harness
     """
-    # Initialize builder with simulation configuration
-    config = {'end_time': 5000, 'dt': 1.0}  # 使用1秒时间步长
-    builder = YamlSimulationLoader(config)
+    # Initialize simulation harness with proper configuration
+    config = {'end_time': 5000, 'time_step': 1.0, 'start_time': 0}  # 使用time_step而不是dt
+    harness = SimulationHarness(config)
     
     # Communication topics
     RESERVOIR_STATE_TOPIC = "state.reservoir.level"
@@ -38,16 +41,21 @@ def create_hierarchical_control_system():
     GATE_ACTION_TOPIC = "action.gate.opening"
     GATE_COMMAND_TOPIC = "command.gate1.setpoint"
     
-    # Add physical components using builder methods
-    builder.add_reservoir(
-        component_id="reservoir_1",
-        water_level=19.0,
-        surface_area=1.5e6,
-        volume=28.5e6
+    # Add physical components
+    reservoir = Reservoir(
+        name="reservoir_1",
+        initial_state={'volume': 28.5e6, 'water_level': 19.0},
+        parameters={'surface_area': 1.5e6, 'storage_curve': [[0, 0], [50e6, 33]]}
+    )
+    
+    # 添加下游水库以提供完整的下游边界条件
+    downstream_reservoir = Reservoir(
+        name="downstream_reservoir",
+        initial_state={'volume': 15e6, 'water_level': 8.0},
+        parameters={'surface_area': 1.2e6, 'storage_curve': [[0, 0], [25e6, 18]]}
     )
     
     # 直接创建闸门对象，设置正确的物理参数
-    from core_lib.physical_objects.gate import Gate
     gate = Gate(
         name="gate_1",
         initial_state={'opening': 0.1},
@@ -57,27 +65,31 @@ def create_hierarchical_control_system():
             'max_opening': 2.0,
             'max_rate_of_change': 2.0
         },
-        message_bus=builder.harness.message_bus,
-        action_topic=GATE_ACTION_TOPIC,
-        action_key='control_signal'
+        message_bus=harness.message_bus,
+        action_topic=GATE_ACTION_TOPIC
     )
-    builder.harness.add_component("gate_1", gate)
+    
+    # Add components to harness
+    harness.add_component("reservoir_1", reservoir)
+    harness.add_component("gate_1", gate)
+    harness.add_component("downstream_reservoir", downstream_reservoir)
     
     # Connect components
-    builder.connect_components([("reservoir_1", "gate_1")])
+    harness.add_connection("reservoir_1", "gate_1")
+    harness.add_connection("gate_1", "downstream_reservoir")
     
     # Add digital twin agents
     reservoir_twin = DigitalTwinAgent(
         agent_id="twin_reservoir_1",
-        simulated_object=builder.harness.components["reservoir_1"],
-        message_bus=builder.harness.message_bus,
+        simulated_object=reservoir,
+        message_bus=harness.message_bus,
         state_topic=RESERVOIR_STATE_TOPIC
     )
     
     gate_twin = DigitalTwinAgent(
         agent_id="twin_gate_1",
-        simulated_object=builder.harness.components["gate_1"],
-        message_bus=builder.harness.message_bus,
+        simulated_object=gate,
+        message_bus=harness.message_bus,
         state_topic=GATE_STATE_TOPIC
     )
     
@@ -92,21 +104,22 @@ def create_hierarchical_control_system():
     lca = UnifiedGateControlAgent(
         agent_id="lca_gate_1",
         controller=pid,
-        message_bus=builder.harness.message_bus,
+        message_bus=harness.message_bus,
         observation_topic=RESERVOIR_STATE_TOPIC,
         observation_key='water_level',
         action_topic=GATE_ACTION_TOPIC,
-        dt=config['dt'],
+        time_step=config['time_step'],  # 修复: 使用time_step而不是dt
         command_topic=GATE_COMMAND_TOPIC,
         feedback_topic=GATE_STATE_TOPIC,
         target_component='gate_1',
         control_type='gate_control'
     )
     
-    # Add central dispatcher
+    # Add central dispatcher - 修复参数传递方式
     dispatcher = CentralDispatcherAgent(
         agent_id="dispatcher_1",
-        message_bus=builder.harness.message_bus,
+        message_bus=harness.message_bus,
+        # 将所有配置参数作为关键字参数传递
         mode="rule",
         subscribed_topic=RESERVOIR_STATE_TOPIC,
         observation_key="water_level",
@@ -115,26 +128,26 @@ def create_hierarchical_control_system():
             "low_level": 12.0,
             "high_level": 18.0,
             "low_setpoint": 15.0,
-            "high_setpoint": 10.0  # 降低防洪目标水位
+            "high_setpoint": 10.0
         }
     )
     
-    # Add all agents to the builder
-    builder.add_agent(reservoir_twin)
-    builder.add_agent(gate_twin)
-    builder.add_agent(lca)
-    builder.add_agent(dispatcher)
+    # Add all agents to the harness
+    harness.add_agent(reservoir_twin)
+    harness.add_agent(gate_twin)
+    harness.add_agent(lca)
+    harness.add_agent(dispatcher)
     
-    return builder
+    return harness
 
-def analyze_and_visualize_results(builder, config):
+def analyze_and_visualize_results(harness, config):
     """
     分析和可视化分层控制系统的结果
     """
     print("\n--- Analyzing Hierarchical Control Results ---")
     
     # 获取历史数据
-    history = builder.get_history()
+    history = harness.history  # 直接使用harness.history而不是builder.get_history()
     if not history:
         print("No simulation history available")
         return None
@@ -146,7 +159,7 @@ def analyze_and_visualize_results(builder, config):
     setpoints = []
     
     for i, step_data in enumerate(history):
-        time_data.append(i * config['dt'])
+        time_data.append(i * config['time_step'])
         
         if 'reservoir_1' in step_data:
             water_levels.append(step_data['reservoir_1']['water_level'])
@@ -273,21 +286,22 @@ def run_hierarchical_simulation():
     print("\n--- Setting up Hierarchical Control Simulation (Refactored) ---")
     
     # Create the simulation system
-    config = {'end_time': 50000, 'dt': 1.0}  # 使用合理的时间步长
-    builder = create_hierarchical_control_system()
+    config = {'end_time': 50000, 'time_step': 1.0, 'start_time': 0}  # 使用合理的时间步长
+    harness = create_hierarchical_control_system()
     
     # Build and run the simulation
-    builder.build()
+    harness.build()
     
     print("\n--- Running Hierarchical Simulation ---")
-    builder.run_mas_simulation()
+    harness.run_mas_simulation()
     print("\n--- Simulation Complete ---")
     
-    # Print final results
-    builder.print_final_states()
+    # Print final results - 修复方法调用
+    print(f"\nFinal results summary:")
+    print(f"Simulation completed with {len(harness.history)} steps")
     
     # Get specific final values
-    history = builder.get_history()
+    history = harness.history  # 修复：直接使用harness.history
     if history:
         final_level = history[-1]['reservoir_1']['water_level']
         final_opening = history[-1]['gate_1']['opening']
@@ -295,7 +309,7 @@ def run_hierarchical_simulation():
         print(f"Final gate opening: {final_opening:.2f} m")
     
     # 分析和可视化结果
-    results = analyze_and_visualize_results(builder, config)
+    results = analyze_and_visualize_results(harness, config)  # 传递harness而不是builder
     
     # 验证控制正确性
     if results:
