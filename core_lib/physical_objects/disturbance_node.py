@@ -19,7 +19,8 @@ class DisturbanceNode(PhysicalObjectInterface):
                  message_bus: Optional[MessageBus] = None, action_topic: Optional[str] = None,
                  action_key: str = 'outflow'):
         super().__init__(name, initial_state, parameters)
-        self._state['outflow'] = initial_state.get('outflow', 0.0)
+        self._diversion_flow = initial_state.get('outflow', 0.0)  # 存储分流量在属性中
+        self._state['outflow'] = 0.0  # outflow字段用于存储通过流量
         self._state['passthrough_flow'] = 0.0
         self.bus = message_bus
         self.action_topic = action_topic
@@ -34,28 +35,40 @@ class DisturbanceNode(PhysicalObjectInterface):
         if self.action_key in message:
             new_value = message.get(self.action_key)
             if new_value is not None:
-                self._state['outflow'] = float(new_value)
+                self._diversion_flow = float(new_value)
 
     def step(self, action: any, time_step: float) -> State:
         """
         Updates the node's state. The primary control is via the message bus,
         but this can also handle direct actions if needed.
         """
+        # 调试信息：查看Diversion_1接收到的action内容
+        if hasattr(self, 'name') and self.name == 'Diversion_1':
+            print(f"\n=== Diversion_1 调试信息 ===")
+            print(f"接收到的action: {action}")
+            print(f"当前入流 _inflow: {getattr(self, '_inflow', 'None')}")
+            print(f"当前状态 outflow: {self._state.get('outflow', 'None')}")
+            print(f"action_key: {self.action_key}")
+            print(f"action中是否包含{self.action_key}: {self.action_key in action if isinstance(action, dict) else False}")
+        
         # Direct action can override message bus for testing/simplicity
         if isinstance(action, dict) and self.action_key in action:
-            self._state['outflow'] = float(action[self.action_key])
+            old_outflow = getattr(self, '_diversion_flow', 0.0)
+            self._diversion_flow = float(action[self.action_key])
+            if hasattr(self, 'name') and self.name == 'Diversion_1':
+                print(f"通过action设置分流量: {old_outflow} -> {self._diversion_flow}")
 
-        # 计算通过流量
-        passthrough_flow = max(0, self._inflow - self._state.get('outflow', 0.0))
+        # 计算通过流量：使用存储的分流量而不是当前的outflow
+        diversion_flow = getattr(self, '_diversion_flow', 0.0)  # 从属性中获取分流量
+        passthrough_flow = max(0, self._inflow - diversion_flow)
         self._state['passthrough_flow'] = passthrough_flow
         
-        # 关键修复：更新outflow字段为实际的输出流量（通过流量）
-        # 这样SimulationHarness从状态中获取outflow时就是正确的通过流量
-        actual_outflow = passthrough_flow  # 实际输出给下游的流量
-        # 保留原始分流量在separate字段中
-        self._state['diversion_flow'] = self._state.get('outflow', 0.0)
-        # 更新outflow为实际输出流量
-        self._state['outflow'] = actual_outflow
+        # 更新状态：存储分流量和通过流量
+        self._state['diversion_flow'] = diversion_flow
+        self._state['outflow'] = passthrough_flow  # outflow字段存储实际输出给下游的流量
+        
+        if hasattr(self, 'name') and self.name == 'Diversion_1':
+            print(f"Diversion_1 -> 入流: {getattr(self, '_inflow', 0):.3f}, 分流: {diversion_flow:.3f}, 通过: {passthrough_flow:.3f}")
 
         return self.get_state()
 

@@ -2,8 +2,51 @@
   {
     "time": 0.0,
     "Upstream_Reservoir": {
-      "water_level": 80.0,
-      "volume": 15000.0,
+      "water_level": 62.82,
+      "volume": 392.625,
+      "outflow": 0
+    },
+    "Channel_1": {
+      "water_level": 61.9,
+      "volume": 800000,
+      "inflow": 25.0,
+      "outflow": 25.0
+    },
+    "Diversion_1": {
+      "outflow": 0.0,
+      "passthrough_flow": 0.0
+    },
+    "Channel_2": {
+      "water_level": 62.83,
+      "volume": 800000,
+      "inflow": 25.0,
+      "outflow": 25.0
+    },
+    "Pipe_1": {
+      "outflow": 10,
+      "head_loss": 0
+    },
+    "Gate_1": {
+      "opening": 0.5,
+      "outflow": 0
+    },
+    "Channel_3": {
+      "water_level": 61.443,
+      "volume": 800000,
+      "inflow": 25.0,
+      "outflow": 25.0
+    },
+    "Downstream_Reservoir": {
+      "water_level": 61.443,
+      "volume": 500.0,
+      "outflow": 0
+    }
+  },
+  {
+    "time": 0.0,
+    "Upstream_Reservoir": {
+      "water_level": 62.82,
+      "volume": 392.625,
       "outflow": 25.0,
       "inflow": 25.0
     },
@@ -23,11 +66,11 @@
       "water_level": 62.83,
       "volume": 800000,
       "inflow": 25.0,
-      "outflow": 1511.2084353649086
+      "outflow": 25.0
     },
     "Pipe_1": {
-      "outflow": 1486.2084353649086,
-      "head_loss": 62.83
+      "outflow": 25.0,
+      "head_loss": 1.3870000000000005
     },
     "Gate_1": {
       "opening": 0.5,
@@ -40,17 +83,17 @@
       "outflow": 22.721345002506727
     },
     "Downstream_Reservoir": {
-      "water_level": 80.0,
-      "volume": 21649.210502256054,
-      "outflow": 0.0,
+      "water_level": 61.915394504349855,
+      "volume": 699.210502256054,
+      "outflow": 22.5,
       "inflow": 22.721345002506727
     }
   },
   {
     "time": 900.0,
     "Upstream_Reservoir": {
-      "water_level": 80.0,
-      "volume": 15000.0,
+      "water_level": 62.82,
+      "volume": 392.625,
       "outflow": 25.0,
       "inflow": 25.0
     },
@@ -61,43 +104,43 @@
       "outflow": 25.0
     },
     "Diversion_1": {
-      "outflow": 0,
-      "passthrough_flow": 0,
+      "outflow": 25.0,
+      "passthrough_flow": 25.0,
       "inflow": 25.0,
-      "diversion_flow": 25.0
+      "diversion_flow": 0
     },
     "Channel_2": {
-      "water_level": 40.33,
+      "water_level": 62.83,
       "volume": 800000,
-      "inflow": 0.0,
-      "outflow": 1511.2084353649086
+      "inflow": 25.0,
+      "outflow": 25.0
     },
     "Pipe_1": {
-      "outflow": 1190.7217951047774,
-      "head_loss": 40.33
+      "outflow": 25.0,
+      "head_loss": 1.3870000000000005
     },
     "Gate_1": {
       "opening": 0.5,
-      "outflow": 0
+      "outflow": 22.721345002506727
     },
     "Channel_3": {
-      "water_level": 40.99378949774395,
+      "water_level": 61.443,
       "volume": 800000,
-      "inflow": 0.0,
+      "inflow": 22.721345002506727,
       "outflow": 22.721345002506727
     },
     "Downstream_Reservoir": {
-      "water_level": 80.0,
-      "volume": 42098.42100451211,
-      "outflow": 0.0,
+      "water_level": 62.38778900869971,
+      "volume": 898.4210045121081,
+      "outflow": 22.5,
       "inflow": 22.721345002506727
     }
   },
   {
     "time": 1800.0,
     "Upstream_Reservoir": {
-      "water_level": 80.0,
-      "volume": 15000.0,
+      "water_level": 62.82,
+      "volume": 392.625,
       "outflow": 25.0,
       "inflow": 25.0
     },
@@ -105,46 +148,46 @@
       "water_level": 61.9,
       "volume": 800000,
       "inflow": 25.0,
-      "outflow": 50.0
+      "outflow": 25.0
     },
     "Diversion_1": {
-      "outflow": 50.0,
-      "passthrough_flow": 50.0,
-      "inflow": 50.0,
+      "outflow": 25.0,
+      "passthrough_flow": 25.0,
+      "inflow": 25.0,
       "diversion_flow": 0
     },
     "Channel_2": {
-      "water_level": 85.33,
+      "water_level": 62.83,
       "volume": 800000,
-      "inflow": 50.0,
-      "outflow": 1190.7217951047774
+      "inflow": 25.0,
+      "outflow": 25.0
     },
     "Pipe_1": {
-      "outflow": 1731.9967186349045,
-      "head_loss": 85.33
+      "outflow": 25.0,
+      "head_loss": 1.3870000000000005
     },
     "Gate_1": {
       "opening": 0.5,
-      "outflow": 104.90401054271902
+      "outflow": 22.721345002506727
     },
     "Channel_3": {
-      "water_level": 135.40739898619108,
+      "water_level": 61.443,
       "volume": 800000,
-      "inflow": 104.90401054271902,
-      "outflow": 0.0
+      "inflow": 22.721345002506727,
+      "outflow": 22.721345002506727
     },
     "Downstream_Reservoir": {
-      "water_level": 80.0,
-      "volume": 42098.42100451211,
-      "outflow": 0.0,
-      "inflow": 0.0
+      "water_level": 62.86018351304957,
+      "volume": 1097.6315067681621,
+      "outflow": 22.5,
+      "inflow": 22.721345002506727
     }
   },
   {
     "time": 2700.0,
     "Upstream_Reservoir": {
-      "water_level": 80.0,
-      "volume": 15000.0,
+      "water_level": 62.82,
+      "volume": 392.625,
       "outflow": 25.0,
       "inflow": 25.0
     },
@@ -155,43 +198,43 @@
       "outflow": 25.0
     },
     "Diversion_1": {
-      "outflow": 0,
-      "passthrough_flow": 0,
+      "outflow": 25.0,
+      "passthrough_flow": 25.0,
       "inflow": 25.0,
-      "diversion_flow": 50.0
+      "diversion_flow": 0
     },
     "Channel_2": {
-      "water_level": 40.33,
+      "water_level": 62.83,
       "volume": 800000,
-      "inflow": 0.0,
-      "outflow": 1781.9967186349045
+      "inflow": 25.0,
+      "outflow": 25.0
     },
     "Pipe_1": {
-      "outflow": 1190.7217951047774,
-      "head_loss": 40.33
+      "outflow": 25.0,
+      "head_loss": 1.3870000000000005
     },
     "Gate_1": {
       "opening": 0.5,
-      "outflow": 0
+      "outflow": 22.721345002506727
     },
     "Channel_3": {
-      "water_level": 40.99378949774396,
+      "water_level": 61.443,
       "volume": 800000,
-      "inflow": 0.0,
-      "outflow": 104.90401054271902
+      "inflow": 22.721345002506727,
+      "outflow": 22.721345002506727
     },
     "Downstream_Reservoir": {
-      "water_level": 80.0,
-      "volume": 136512.03049295922,
-      "outflow": 0.0,
-      "inflow": 104.90401054271902
+      "water_level": 63.33257801739942,
+      "volume": 1296.8420090242162,
+      "outflow": 22.5,
+      "inflow": 22.721345002506727
     }
   },
   {
     "time": 3600.0,
     "Upstream_Reservoir": {
-      "water_level": 80.0,
-      "volume": 15000.0,
+      "water_level": 62.82,
+      "volume": 392.625,
       "outflow": 25.0,
       "inflow": 25.0
     },
@@ -199,46 +242,46 @@
       "water_level": 61.9,
       "volume": 800000,
       "inflow": 25.0,
-      "outflow": 50.0
+      "outflow": 25.0
     },
     "Diversion_1": {
-      "outflow": 50.0,
-      "passthrough_flow": 50.0,
-      "inflow": 50.0,
+      "outflow": 25.0,
+      "passthrough_flow": 25.0,
+      "inflow": 25.0,
       "diversion_flow": 0
     },
     "Channel_2": {
-      "water_level": 85.33,
+      "water_level": 62.83,
       "volume": 800000,
-      "inflow": 50.0,
-      "outflow": 1190.7217951047774
+      "inflow": 25.0,
+      "outflow": 25.0
     },
     "Pipe_1": {
-      "outflow": 1731.9967186349045,
-      "head_loss": 85.33
+      "outflow": 25.0,
+      "head_loss": 1.3870000000000005
     },
     "Gate_1": {
       "opening": 0.5,
-      "outflow": 104.90401054271902
+      "outflow": 22.721345002506727
     },
     "Channel_3": {
-      "water_level": 135.40739898619108,
+      "water_level": 61.443,
       "volume": 800000,
-      "inflow": 104.90401054271902,
-      "outflow": 0.0
+      "inflow": 22.721345002506727,
+      "outflow": 22.721345002506727
     },
     "Downstream_Reservoir": {
-      "water_level": 80.0,
-      "volume": 136512.03049295922,
-      "outflow": 0.0,
-      "inflow": 0.0
+      "water_level": 63.80497252174928,
+      "volume": 1496.0525112802702,
+      "outflow": 22.5,
+      "inflow": 22.721345002506727
     }
   },
   {
     "time": 4500.0,
     "Upstream_Reservoir": {
-      "water_level": 80.0,
-      "volume": 15000.0,
+      "water_level": 62.82,
+      "volume": 392.625,
       "outflow": 25.0,
       "inflow": 25.0
     },
@@ -249,90 +292,43 @@
       "outflow": 25.0
     },
     "Diversion_1": {
-      "outflow": 0,
-      "passthrough_flow": 0,
+      "outflow": 25.0,
+      "passthrough_flow": 25.0,
       "inflow": 25.0,
-      "diversion_flow": 50.0
+      "diversion_flow": 0
     },
     "Channel_2": {
-      "water_level": 40.33,
+      "water_level": 62.83,
       "volume": 800000,
-      "inflow": 0.0,
-      "outflow": 1781.9967186349045
+      "inflow": 25.0,
+      "outflow": 25.0
     },
     "Pipe_1": {
-      "outflow": 1190.7217951047774,
-      "head_loss": 40.33
+      "outflow": 25.0,
+      "head_loss": 1.3870000000000005
     },
     "Gate_1": {
       "opening": 0.5,
-      "outflow": 0
+      "outflow": 22.721345002506727
     },
     "Channel_3": {
-      "water_level": 40.99378949774396,
+      "water_level": 61.443,
       "volume": 800000,
-      "inflow": 0.0,
-      "outflow": 104.90401054271902
+      "inflow": 22.721345002506727,
+      "outflow": 22.721345002506727
     },
     "Downstream_Reservoir": {
-      "water_level": 80.0,
-      "volume": 230925.63998140633,
-      "outflow": 0.0,
-      "inflow": 104.90401054271902
+      "water_level": 64.27736702609914,
+      "volume": 1695.2630135363243,
+      "outflow": 22.5,
+      "inflow": 22.721345002506727
     }
   },
   {
     "time": 5400.0,
     "Upstream_Reservoir": {
-      "water_level": 80.0,
-      "volume": 15000.0,
-      "outflow": 25.0,
-      "inflow": 25.0
-    },
-    "Channel_1": {
-      "water_level": 61.9,
-      "volume": 800000,
-      "inflow": 25.0,
-      "outflow": 50.0
-    },
-    "Diversion_1": {
-      "outflow": 50.0,
-      "passthrough_flow": 50.0,
-      "inflow": 50.0,
-      "diversion_flow": 0
-    },
-    "Channel_2": {
-      "water_level": 85.33,
-      "volume": 800000,
-      "inflow": 50.0,
-      "outflow": 1190.7217951047774
-    },
-    "Pipe_1": {
-      "outflow": 1731.9967186349045,
-      "head_loss": 85.33
-    },
-    "Gate_1": {
-      "opening": 0.5,
-      "outflow": 104.90401054271902
-    },
-    "Channel_3": {
-      "water_level": 135.40739898619108,
-      "volume": 800000,
-      "inflow": 104.90401054271902,
-      "outflow": 0.0
-    },
-    "Downstream_Reservoir": {
-      "water_level": 80.0,
-      "volume": 230925.63998140633,
-      "outflow": 0.0,
-      "inflow": 0.0
-    }
-  },
-  {
-    "time": 6300.0,
-    "Upstream_Reservoir": {
-      "water_level": 80.0,
-      "volume": 15000.0,
+      "water_level": 62.82,
+      "volume": 392.625,
       "outflow": 25.0,
       "inflow": 25.0
     },
@@ -343,36 +339,83 @@
       "outflow": 25.0
     },
     "Diversion_1": {
-      "outflow": 0,
-      "passthrough_flow": 0,
+      "outflow": 25.0,
+      "passthrough_flow": 25.0,
       "inflow": 25.0,
-      "diversion_flow": 50.0
+      "diversion_flow": 0
     },
     "Channel_2": {
-      "water_level": 40.33,
+      "water_level": 62.83,
       "volume": 800000,
-      "inflow": 0.0,
-      "outflow": 1781.9967186349045
+      "inflow": 25.0,
+      "outflow": 25.0
     },
     "Pipe_1": {
-      "outflow": 1190.7217951047774,
-      "head_loss": 40.33
+      "outflow": 25.0,
+      "head_loss": 1.3870000000000005
     },
     "Gate_1": {
       "opening": 0.5,
-      "outflow": 0
+      "outflow": 22.721345002506727
     },
     "Channel_3": {
-      "water_level": 40.99378949774396,
+      "water_level": 61.443,
       "volume": 800000,
-      "inflow": 0.0,
-      "outflow": 104.90401054271902
+      "inflow": 22.721345002506727,
+      "outflow": 22.721345002506727
     },
     "Downstream_Reservoir": {
-      "water_level": 80.0,
-      "volume": 325339.2494698535,
-      "outflow": 0.0,
-      "inflow": 104.90401054271902
+      "water_level": 64.74976153044899,
+      "volume": 1894.4735157923783,
+      "outflow": 22.5,
+      "inflow": 22.721345002506727
+    }
+  },
+  {
+    "time": 6300.0,
+    "Upstream_Reservoir": {
+      "water_level": 62.82,
+      "volume": 392.625,
+      "outflow": 25.0,
+      "inflow": 25.0
+    },
+    "Channel_1": {
+      "water_level": 61.9,
+      "volume": 800000,
+      "inflow": 25.0,
+      "outflow": 25.0
+    },
+    "Diversion_1": {
+      "outflow": 25.0,
+      "passthrough_flow": 25.0,
+      "inflow": 25.0,
+      "diversion_flow": 0
+    },
+    "Channel_2": {
+      "water_level": 62.83,
+      "volume": 800000,
+      "inflow": 25.0,
+      "outflow": 25.0
+    },
+    "Pipe_1": {
+      "outflow": 25.0,
+      "head_loss": 1.3870000000000005
+    },
+    "Gate_1": {
+      "opening": 0.5,
+      "outflow": 22.721345002506727
+    },
+    "Channel_3": {
+      "water_level": 61.443,
+      "volume": 800000,
+      "inflow": 22.721345002506727,
+      "outflow": 22.721345002506727
+    },
+    "Downstream_Reservoir": {
+      "water_level": 65.15614003008072,
+      "volume": 2093.6840180484323,
+      "outflow": 22.5,
+      "inflow": 22.721345002506727
     }
   }
 ]

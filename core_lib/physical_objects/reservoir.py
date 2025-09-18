@@ -62,7 +62,32 @@ class Reservoir(PhysicalObjectInterface):
         has_level = 'water_level' in self._state
         has_volume = 'volume' in self._state
         
-        if has_level and not has_volume:
+        if has_level and has_volume:
+            # 同时有水位和库容，需要检查一致性
+            provided_level = self._state['water_level']
+            provided_volume = self._state['volume']
+            
+            # 根据水位计算应有的库容
+            expected_volume = self._get_volume_from_level(provided_level)
+            
+            # 检查是否一致（允许小量误差）
+            volume_diff = abs(provided_volume - expected_volume)
+            tolerance = max(10.0, expected_volume * 0.1)  # 10m³或10%的误差
+            
+            if volume_diff > tolerance:
+                print(f"警告：水库 '{self.name}' 初始状态不一致！")
+                print(f"  配置的水位 {provided_level:.3f}m 对应的库容应为 {expected_volume:.3f}m³")
+                print(f"  但配置的库容是 {provided_volume:.3f}m³，相差 {volume_diff:.3f}m³")
+                print(f"  将优先使用水位值，并重新计算库容")
+                
+                # 优先使用水位，重新计算库容
+                self._state['volume'] = expected_volume
+                self._initial_state['volume'] = expected_volume
+                print(f"  修正后：水位 {provided_level:.3f}m，库容 {expected_volume:.3f}m³")
+            else:
+                print(f"水库 '{self.name}' 初始状态一致：水位 {provided_level:.3f}m，库容 {provided_volume:.3f}m³")
+                
+        elif has_level and not has_volume:
             # 根据 water_level 计算 volume
             if hasattr(self, 'storage_curve_np'):
                 # 使用库容曲线
@@ -86,7 +111,7 @@ class Reservoir(PhysicalObjectInterface):
             self._state['volume'] = 0.0
             self._initial_state['water_level'] = 0.0
             self._initial_state['volume'] = 0.0
-            print("警告：初始状态中既没有水位也没有体积，设置为默认值 0")
+            print(f"警告：水库 '{self.name}' 初始状态中既没有水位也没有体积，设置为默认值 0")
 
     def _validate_and_prepare_storage_curve(self):
         """验证库容曲线并为其准备插值计算。"""
@@ -105,7 +130,30 @@ class Reservoir(PhysicalObjectInterface):
     def _get_level_from_volume(self, volume: float) -> float:
         """Calculates water level from volume, using storage curve if available, otherwise assuming a linear relationship."""
         if hasattr(self, 'storage_curve_np'):
-            return np.interp(volume, self._volumes, self._levels)
+            # 检查是否超出库容曲线范围
+            max_volume = self._volumes[-1]
+            min_volume = self._volumes[0]
+            
+            if volume > max_volume:
+                # 超出最大库容，警告并使用线性外推
+                max_level = self._levels[-1]
+                # 使用最后两点的斜率进行线性外推
+                if len(self._volumes) >= 2:
+                    volume_diff = self._volumes[-1] - self._volumes[-2]
+                    level_diff = self._levels[-1] - self._levels[-2]
+                    if volume_diff > 0:
+                        slope = level_diff / volume_diff
+                        extrapolated_level = max_level + (volume - max_volume) * slope
+                        print(f"警告：水库 '{self.name}' 库容 {volume:.1f}m³ 超出曲线范围（最大 {max_volume:.1f}m³）")
+                        print(f"  使用线性外推：水位 {extrapolated_level:.3f}m")
+                        return extrapolated_level
+                return max_level
+            elif volume < min_volume:
+                # 低于最小库容，返回最小水位
+                return self._levels[0]
+            else:
+                # 正常范围内，使用插值
+                return np.interp(volume, self._volumes, self._levels)
         else:
             area = self._params.get('surface_area', self._params.get('area', 1.0))
             if area <= 0:
@@ -166,7 +214,10 @@ class Reservoir(PhysicalObjectInterface):
 
     def step(self, action: Dict[str, Any], time_step: float) -> State:
         """模拟水库在单个时间步内的状态变化。"""
-
+        
+        # 获取当前仿真时间（从action中传递）
+        current_time = action.get('current_time', 0.0)
+        
         physical_inflow = self._inflow
         legacy_data_inflow = self.data_inflow
         topic_based_inflow = sum(self.topic_inflows.values())
@@ -175,16 +226,51 @@ class Reservoir(PhysicalObjectInterface):
         # 处理出流：action中的出流是可选的，可以为0
         action_outflow = action.get('outflow', 0)  # 这里允许默认为0，因为水库可以没有外部出流
         topic_based_outflow = sum(self.topic_outflows.values())
-        total_outflow = action_outflow + topic_based_outflow
+        
+        # 检查是否有固定出流参数（边界条件）
+        fixed_outflow = self._params.get('outflow', 0.0)
+        
+        # 如果有出流时间序列，则按时间序列设置
+        outflow_timeseries = self._params.get('outflow_timeSeries')
+        if outflow_timeseries:
+            prescribed_outflow = self._interpolate_timeseries(outflow_timeseries, current_time)
+            total_outflow = prescribed_outflow + topic_based_outflow
+            print(f"水库 '{self.name}' - 出流边界条件：时间 {current_time}s，出流 {prescribed_outflow:.3f}m³/s")
+        elif fixed_outflow > 0:
+            # 使用固定出流参数
+            total_outflow = fixed_outflow + topic_based_outflow
+            print(f"水库 '{self.name}' - 固定出流：{fixed_outflow:.3f}m³/s")
+        else:
+            # 使用action中的出流
+            total_outflow = action_outflow + topic_based_outflow
 
-        # Calculate water balance
-        current_volume = self._state.get('volume', 0)
-        delta_volume = (total_inflow - total_outflow) * time_step
-        new_volume = max(0, current_volume + delta_volume)
-
-        # Update state
-        self._state['volume'] = new_volume
-        self._state['water_level'] = self._get_level_from_volume(new_volume)
+        # 检查边界条件类型（根据nodeType参数决定）
+        node_type = self._params.get('nodeType', 0)  # 0-内部节点，1-水位边界节点，2-流量边界节点
+        water_level_timeseries = self._params.get('water_level_timeSeries')
+        
+        # 只有当明确指定为水位边界节点时，才强制按水位时间序列设置
+        if node_type == 1 and water_level_timeseries:
+            # 水位边界条件：根据时间序列设置水位，库容也需要相应调整
+            prescribed_level = self._interpolate_timeseries(water_level_timeseries, current_time)
+            self._state['water_level'] = prescribed_level
+            # 根据新水位计算相应的库容
+            self._state['volume'] = self._get_volume_from_level(prescribed_level)
+            
+            print(f"水库 '{self.name}' - 水位边界条件：时间 {current_time}s，水位 {prescribed_level:.3f}m，库容 {self._state['volume']:.3f}m³")
+        else:
+            # 正常水量平衡计算（包括内部节点和流量边界节点）
+            current_volume = self._state.get('volume', 0)
+            delta_volume = (total_inflow - total_outflow) * time_step
+            new_volume = max(0, current_volume + delta_volume)
+            
+            # 更新状态
+            self._state['volume'] = new_volume
+            self._state['water_level'] = self._get_level_from_volume(new_volume)
+            
+            # 调试信息：显示水量平衡计算
+            if abs(delta_volume) > 0.001:  # 只有在有显著变化时才打印
+                print(f"水库 '{self.name}' - 水量平衡：入流{total_inflow:.3f} - 出流{total_outflow:.3f} = 净流量{total_inflow-total_outflow:.3f}m³/s")
+                print(f"  时间步{time_step}s，体积变化{delta_volume:.3f}m³，新体积{new_volume:.3f}m³，新水位{self._state['water_level']:.3f}m")
 
         self._state['outflow'] = total_outflow
         self._state['inflow'] = total_inflow # 将总入流添加到状态中，供感知智能体使用
@@ -197,6 +283,32 @@ class Reservoir(PhysicalObjectInterface):
             self.topic_outflows[topic] = 0.0
 
         return self._state
+    
+    def _interpolate_timeseries(self, timeseries: List[List[float]], current_time: float) -> float:
+        """对时间序列数据进行线性插值"""
+        if not timeseries or len(timeseries) == 0:
+            return 0.0
+            
+        # 时间序列格式：[[time, value], [time, value], ...]
+        times = [point[0] for point in timeseries]
+        values = [point[1] for point in timeseries]
+        
+        # 如果当前时间在范围之外，返回边界值
+        if current_time <= times[0]:
+            return values[0]
+        if current_time >= times[-1]:
+            return values[-1]
+            
+        # 线性插值
+        for i in range(len(times) - 1):
+            if times[i] <= current_time <= times[i + 1]:
+                # 线性插值公式
+                t1, t2 = times[i], times[i + 1]
+                v1, v2 = values[i], values[i + 1]
+                interpolated_value = v1 + (v2 - v1) * (current_time - t1) / (t2 - t1)
+                return interpolated_value
+                
+        return values[0]  # 默认返回第一个值
 
     def set_inflow(self, inflow: float):
         """设置水库的入流量。

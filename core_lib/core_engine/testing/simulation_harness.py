@@ -189,6 +189,19 @@ class SimulationHarness:
         """运行多智能体系统仿真"""
         print(f"Starting MAS simulation from {self.start_time} to {self.end_time} with time_step={self.time_step}")
         
+        # 在开始仿真前记录初始状态
+        initial_history = {'time': self.t}
+        for cid in self.sorted_components:
+            component_state = self.components[cid].get_state()
+            initial_history[cid] = component_state if component_state is not None else {}
+        for agent in self.agents:
+            if hasattr(agent, 'get_state'):
+                try:
+                    initial_history[agent.agent_id] = agent.get_state()
+                except Exception as e:
+                    print(f"Could not get state from agent {agent.agent_id}: {e}")
+        self.history.append(initial_history)
+        
         while self.t < self.end_time and self.is_running:
             # 检查是否暂停
             if self._is_paused.is_set():
@@ -271,6 +284,9 @@ class SimulationHarness:
         for component_id in self.sorted_components:
             component = self.components[component_id]
             action = {'control_signal': controller_actions.get(component_id)}
+            
+            # 为所有组件传递当前时间
+            action['current_time'] = self.t
 
             # 处理入流设置：只有非边界组件才自动计算入流
             upstream_components = self.inverse_topology.get(component_id, [])
@@ -317,14 +333,34 @@ class SimulationHarness:
             if self.topology.get(component_id):
                 down_id = self.topology[component_id][self.FIRST_COMPONENT_INDEX]
                 down_state = self.components[down_id].get_state()
-                action['downstream_head'] = down_state.get('water_level', self.DEFAULT_WATER_LEVEL) if down_state else self.DEFAULT_WATER_LEVEL
+                
+                # 特殊处理：如果下游组件没有water_level（如Gate），则向前查找有water_level的组件
+                if down_state and 'water_level' in down_state:
+                    action['downstream_head'] = down_state['water_level']
+                elif self.topology.get(down_id):  # 向前查找一级
+                    down_down_id = self.topology[down_id][self.FIRST_COMPONENT_INDEX]
+                    down_down_state = self.components[down_down_id].get_state()
+                    action['downstream_head'] = down_down_state.get('water_level', self.DEFAULT_WATER_LEVEL) if down_down_state else self.DEFAULT_WATER_LEVEL
+                    if component_id == 'Pipe_1':  # 调试信息
+                        print(f"Pipe_1下游查找: {down_id}(无water_level) -> {down_down_id}(water_level={action['downstream_head']:.3f}m)")
+                else:
+                    action['downstream_head'] = self.DEFAULT_WATER_LEVEL
+                    if component_id == 'Pipe_1':  # 调试信息
+                        print(f"Pipe_1下游查找: {down_id}(无water_level，且无下级) -> 使用默认值{self.DEFAULT_WATER_LEVEL}m")
 
-            if hasattr(component, 'is_stateful') and component.is_stateful:
-                # Stateful组件：根据下游需求计算出流
+            # 修复：选择性启用stateful组件处理
+            # 仅对边界组件（如上游水库）启用，以避免中间组件的反馈循环
+            # 边界组件：没有上游的组件
+            is_boundary_component = component_id not in self.inverse_topology or len(self.inverse_topology.get(component_id, [])) == 0
+            
+            if hasattr(component, 'is_stateful') and component.is_stateful and is_boundary_component:
+                # 仅对边界状态组件（如上游水库）：根据下游需求计算出流
                 total_outflow = self.DEFAULT_OUTFLOW_VALUE
                 for downstream_id in self.topology.get(component_id, []):  # 遍历下游
                     downstream_comp = self.components[downstream_id]
-                    downstream_action = {}
+                    # 确保临时调用的action与正式调用保持一致
+                    downstream_action = {'control_signal': controller_actions.get(downstream_id)}
+                    downstream_action['current_time'] = self.t  # 添加时间信息
                     component_state = component.get_state()
                     downstream_action['upstream_head'] = component_state.get('water_level', self.DEFAULT_WATER_LEVEL) if component_state else self.DEFAULT_WATER_LEVEL
 
@@ -340,6 +376,8 @@ class SimulationHarness:
                     total_outflow += temp_next_state.get('outflow', self.DEFAULT_OUTFLOW_VALUE)  # 计算下游的出流
 
                 action['outflow'] = total_outflow  # 计算当前步骤的出流
+                if component_id == 'Upstream_Reservoir':  # 调试信息
+                    print(f"上游水库按需求计算出流: {total_outflow:.3f} m3/s")
 
             new_states[component_id] = component.step(action, time_step)
             current_step_outflows[component_id] = new_states[component_id].get('outflow', self.DEFAULT_OUTFLOW_VALUE)
