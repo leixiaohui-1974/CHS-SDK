@@ -153,7 +153,7 @@ class PerformanceOptimizedDisturbanceManager:
             self._last_cleanup_time = current_time
         
         # 更新组件缓存（仅在需要时）
-        if abs(current_time - self._last_update_time) > dt or not self._component_cache:
+        if abs(current_time - self._last_update_time) > time_step or not self._component_cache:
             self._update_component_cache(components)
         
         disturbance_effects = {}
@@ -191,7 +191,7 @@ class PerformanceOptimizedDisturbanceManager:
             
             # 应用活跃的扰动
             if disturbance_id in self.active_disturbances:
-                effect = disturbance.apply(component, current_time, dt)
+                effect = disturbance.apply(component, current_time, time_step)
                 if effect:
                     disturbance_effects[disturbance_id] = effect
         

@@ -46,10 +46,10 @@ class NetworkDelayDisturbance:
                    f"抖动={self.jitter_range*1000:.1f}ms, "
                    f"丢包率={self.packet_loss_rate:.3f}")
     
-    def activate(self, start_time: float, duration: float):
+    def activate(self, start_time: float, time_end: float):
         """激活扰动"""
         self.start_time = start_time
-        self.end_time = start_time + duration
+        self.end_time = start_time + time_end
         self.is_active = True
         
         # 启用消息总线的网络扰动
@@ -61,7 +61,7 @@ class NetworkDelayDisturbance:
             affected_agents=self.affected_agents
         )
         
-        logger.info(f"网络延迟扰动 {self.disturbance_id} 已激活，持续时间: {duration}s")
+        logger.info(f"网络延迟扰动 {self.disturbance_id} 已激活，持续时间: {time_end}s")
     
     def deactivate(self):
         """停用扰动"""
@@ -157,10 +157,10 @@ class PacketLossDisturbance:
                    f"丢包率={self.packet_loss_rate:.3f}, "
                    f"突发丢包概率={self.burst_loss_probability:.3f}")
     
-    def activate(self, start_time: float, duration: float):
+    def activate(self, start_time: float, time_end: float):
         """激活扰动"""
         self.start_time = start_time
-        self.end_time = start_time + duration
+        self.end_time = start_time + time_end
         self.is_active = True
         
         # 启用消息总线的网络扰动（主要是丢包）
@@ -172,7 +172,7 @@ class PacketLossDisturbance:
             affected_agents=self.affected_agents
         )
         
-        logger.info(f"数据包丢失扰动 {self.disturbance_id} 已激活，持续时间: {duration}s")
+        logger.info(f"数据包丢失扰动 {self.disturbance_id} 已激活，持续时间: {time_end}s")
     
     def deactivate(self):
         """停用扰动"""
@@ -245,18 +245,18 @@ class NetworkDisturbanceManager:
         self.active_disturbances[disturbance_id] = disturbance
         return disturbance
     
-    def activate_disturbance(self, disturbance_id: str, start_time: float, duration: float):
+    def activate_disturbance(self, disturbance_id: str, start_time: float, time_end: float):
         """激活扰动"""
         if disturbance_id in self.active_disturbances:
             disturbance = self.active_disturbances[disturbance_id]
-            disturbance.activate(start_time, duration)
+            disturbance.activate(start_time, time_end)
             
             # 记录到历史
             self.disturbance_history.append({
                 'disturbance_id': disturbance_id,
                 'type': type(disturbance).__name__,
                 'start_time': start_time,
-                'duration': duration,
+                'time_end': time_end,
                 'activated_at': time.time()
             })
         else:

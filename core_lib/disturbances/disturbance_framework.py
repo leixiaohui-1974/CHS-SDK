@@ -57,7 +57,7 @@ class BaseDisturbance(abc.ABC):
         Args:
             component: 目标组件
             current_time: 当前仿真时间
-            dt: 时间步长
+            time_step: 时间步长
             
         Returns:
             Dict[str, Any]: 扰动效果（如修改的参数值）
@@ -188,11 +188,11 @@ class ActuatorFailureDisturbance(BaseDisturbance):
         
         # 根据故障类型应用不同的故障模式
         if self.failure_type == 'delay':
-            return self._apply_delay_failure(component, current_time, dt)
+            return self._apply_delay_failure(component, current_time, time_step)
         elif self.failure_type == 'partial':
-            return self._apply_partial_failure(component, current_time, dt)
+            return self._apply_partial_failure(component, current_time, time_step)
         elif self.failure_type == 'complete':
-            return self._apply_complete_failure(component, current_time, dt)
+            return self._apply_complete_failure(component, current_time, time_step)
         else:
             return {}
     
@@ -328,7 +328,7 @@ class DisturbanceManager:
         
         Args:
             current_time: 当前仿真时间
-            dt: 时间步长
+            time_step: 时间步长
             components: 仿真组件字典
             
         Returns:
@@ -351,7 +351,7 @@ class DisturbanceManager:
                     self.activate_disturbance(disturbance_id, component)
                 
                 # 应用扰动
-                effect = disturbance.apply(component, current_time, dt)
+                effect = disturbance.apply(component, current_time, time_step)
                 if effect:
                     disturbance_effects[disturbance_id] = effect
             
@@ -431,8 +431,8 @@ def create_disturbance(config: DisturbanceConfig, enhanced_message_bus=None) -> 
             
             def apply(self, component):
                 """应用扰动到组件"""
-                self.network_disturbance.activate(self.config.start_time, 
-                                                 self.config.end_time - self.config.start_time)
+                time_end = self.config.end_time - self.config.start_time
+                self.network_disturbance.activate(self.config.start_time, time_end)
                 self.is_active = True
             
             def remove(self, component):
