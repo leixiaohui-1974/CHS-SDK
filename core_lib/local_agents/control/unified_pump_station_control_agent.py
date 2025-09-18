@@ -44,7 +44,7 @@ class UnifiedPumpStationControlAgent(UnifiedLocalControlAgent):
             demand_topic: 需求主题
             control_topic_prefix: 控制主题前缀
             control_strategy_type: 控制策略类型
-            dt: 时间步长
+            time_step: 时间步长
             **kwargs: 其他配置参数
         """
         # 泵站特定属性（在父类初始化前设置）
@@ -57,7 +57,7 @@ class UnifiedPumpStationControlAgent(UnifiedLocalControlAgent):
         super().__init__(
             agent_id=agent_id,
             message_bus=message_bus,
-            time_step=dt,
+            time_step=time_step,
             control_strategy=ControlStrategyEnum.MULTI_ACTUATOR,
             observation_topic=demand_topic,
             observation_key='value',
