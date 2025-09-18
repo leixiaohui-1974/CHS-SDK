@@ -49,6 +49,28 @@ class Pipe(PhysicalObjectInterface):
         if head_difference <= 0:
             return 0
 
+        # 特殊处理：如果是倒虹吸（有孔口参数），使用孔口过流公式
+        if 'n_orifice' in self._params and 'b_orifice' in self._params and 'h_orifice' in self._params:
+            # 孔口过流公式：Q = Cd * A * sqrt(2 * g * h)
+            n_orifice = self._params['n_orifice']
+            b_orifice = self._params['b_orifice']
+            h_orifice = self._params['h_orifice']
+            orifice_area = n_orifice * b_orifice * h_orifice  # 总过流面积
+            
+            # 孔口流量系数，从损失系数计算得出
+            loss_coeff = self._params.get('loss_coeff', 1.0)
+            discharge_coeff = 1.0 / math.sqrt(1.0 + loss_coeff)  # Cd = 1/sqrt(1+k)
+            
+            g = self.default_gravity
+            flow = discharge_coeff * orifice_area * math.sqrt(2 * g * head_difference)
+            
+            if hasattr(self, 'name') and self.name == 'Pipe_1':
+                print(f"  倒虹吸孔口计算: {n_orifice}个孔，每孔{b_orifice}x{h_orifice}m")
+                print(f"  过流面积: {orifice_area:.3f}m2, 流量系数: {discharge_coeff:.3f}")
+            
+            return flow
+        
+        # 原有的满管流Darcy-Weisbach公式
         g = self.default_gravity
         friction_factor = f if f is not None else self._params['friction_factor']
         length = self._params['length']
@@ -136,11 +158,33 @@ class Pipe(PhysicalObjectInterface):
             upstream_head = action['upstream_head']
             downstream_head = action['downstream_head']
             head_difference = upstream_head - downstream_head
+            
+            # 调试信息：Pipe_1的水头差和流量计算
+            if hasattr(self, 'name') and self.name == 'Pipe_1':
+                print(f"\n=== Pipe_1 调试信息 ===")
+                print(f"上游水头: {upstream_head:.3f}m")
+                print(f"下游水头: {downstream_head:.3f}m")
+                print(f"水头差: {head_difference:.3f}m")
+                print(f"计算方法: {self.method}")
+                print(f"管道参数: L={self._params['length']}m, D={self._params['diameter']}m")
+                if self.method == 'darcy_weisbach':
+                    print(f"摩擦系数 f: {self._params['friction_factor']}")
+                else:
+                    print(f"曼宁系数 n: {self._params.get('manning_n', 0.015)}")
 
             if self.method == 'darcy_weisbach':
-                outflow = self._calculate_flow_darcy_weisbach(head_difference)
+                theoretical_flow = self._calculate_flow_darcy_weisbach(head_difference)
             else: # manning
-                outflow = self._calculate_flow_manning(head_difference)
+                theoretical_flow = self._calculate_flow_manning(head_difference)
+                
+            # 关键修复：实际出流不能超过实际入流
+            actual_inflow = getattr(self, '_inflow', 0.0)
+            outflow = min(theoretical_flow, actual_inflow) if actual_inflow > 0 else theoretical_flow
+                
+            if hasattr(self, 'name') and self.name == 'Pipe_1':
+                print(f"  理论通过能力: {theoretical_flow:.3f} m3/s")
+                print(f"  实际入流: {actual_inflow:.3f} m3/s")
+                print(f"  最终出流: {outflow:.3f} m3/s")
 
             self._state['head_loss'] = head_difference if head_difference > 0 else 0
             self._state['outflow'] = outflow

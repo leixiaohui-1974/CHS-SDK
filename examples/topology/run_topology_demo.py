@@ -40,7 +40,7 @@ def load_configuration():
     for name, file_path in config_files.items():
         if not file_path.exists():
             raise FileNotFoundError(f"配置文件不存在: {file_path}")
-        print(f"✓ {name}: {file_path}")
+        print(f"[OK] {name}: {file_path}")
     
     return str(config_dir)
 
@@ -51,24 +51,24 @@ def create_simulation_components(scenario_path):
     try:
         # 创建YAML仿真加载器
         loader = YamlSimulationLoader(scenario_path)
-        print("✓ YAML仿真加载器创建完成")
+        print("[OK] YAML仿真加载器创建完成")
         
         # 加载完整仿真
         harness = loader.load()
-        print("✓ 仿真加载完成")
+        print("[OK] 仿真加载完成")
         
         # 获取组件信息
         components = getattr(loader, 'component_instances', {})
         message_bus = getattr(loader, 'message_bus', None)
         
-        print(f"✓ 成功加载 {len(components)} 个组件:")
+        print(f"[OK] 成功加载 {len(components)} 个组件:")
         for name, component in components.items():
             print(f"  - {name}: {component.__class__.__name__}")
         
         return harness, components, message_bus
         
     except Exception as e:
-        print(f"✗ 创建仿真组件失败: {e}")
+        print(f"[ERROR] 创建仿真组件失败: {e}")
         import traceback
         traceback.print_exc()
         raise
@@ -82,16 +82,16 @@ def run_simulation(harness):
         print("正在运行多智能体仿真...")
         harness.run_mas_simulation()
         
-        print("✓ 仿真运行完成")
+        print("[OK] 仿真运行完成")
         
         # 获取仿真历史数据
         history = getattr(harness, 'history', [])
-        print(f"✓ 仿真历史包含 {len(history)} 个时间步")
+        print(f"[OK] 仿真历史包含 {len(history)} 个时间步")
         
         return history
         
     except Exception as e:
-        print(f"✗ 仿真运行失败: {e}")
+        print(f"[ERROR] 仿真运行失败: {e}")
         import traceback
         traceback.print_exc()
         raise
@@ -136,7 +136,7 @@ def analyze_results(results):
                 
                 # 显示流量信息
                 if 'outflow' in state:
-                    print(f"    出流: {state['outflow']:.3f} m³/s")
+                    print(f"    出流: {state['outflow']:.3f} m3/s")
                 
                 # 显示闸门开度
                 if 'opening' in state:
@@ -192,19 +192,19 @@ def save_results(results, output_dir=None):
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(converted_results, f, indent=2, ensure_ascii=False)
         
-        print(f"✓ JSON结果已保存到: {output_file}")
+        print(f"[OK] JSON结果已保存到: {output_file}")
         
         # 创建详细的Excel报告
         import datetime
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
         excel_file = output_dir / f"topology_simulation_detailed_results_{timestamp}.xlsx"
         create_detailed_excel_report(results, excel_file)
-        print(f"✓ 详细Excel报告已保存到: {excel_file}")
+        print(f"[OK] 详细Excel报告已保存到: {excel_file}")
         
         # 创建简单的CSV报告（保留兼容性）
         csv_file = output_dir / "key_metrics.csv"
         create_csv_report(results, csv_file)
-        print(f"✓ 关键指标CSV已保存到: {csv_file}")
+        print(f"[OK] 关键指标CSV已保存到: {csv_file}")
         
     except Exception as e:
         print(f"⚠ 保存结果时出错: {e}")
@@ -493,7 +493,7 @@ def create_detailed_excel_report(results, excel_file):
     
     # 保存Excel文件
     wb.save(excel_file)
-    print(f"✓ Excel报告包含{len(wb.sheetnames)}个工作表: {", ".join(wb.sheetnames)}")
+    print(f"[OK] Excel报告包含{len(wb.sheetnames)}个工作表: {", ".join(wb.sheetnames)}")
 
 def create_csv_report(results, csv_file):
     """创建CSV格式的关键指标报告"""
@@ -587,10 +587,10 @@ def main():
         save_results(results)
         
         print("\n" + "=" * 50)
-        print("✓ 仿真演示完成！")
+        print("[OK] 仿真演示完成！")
         
     except Exception as e:
-        print(f"\n✗ 仿真演示失败: {e}")
+        print(f"\n[ERROR] 仿真演示失败: {e}")
         import traceback
         traceback.print_exc()
         return 1
