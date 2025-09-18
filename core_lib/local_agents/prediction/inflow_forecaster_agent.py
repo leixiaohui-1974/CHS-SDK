@@ -27,7 +27,7 @@ class InflowForecasterAgent(Agent):
                 - disturbance_duration: 扰动事件的持续时间（秒）。
                 - disturbance_inflow_rate: 扰动期间的入流率 (m^3/s)。
                 - prediction_horizon: 预测未来多少个时间步。
-                - dt: 仿真的时间步长（秒）。
+                - time_step: 仿真的时间步长（秒）。
         """
         super().__init__(agent_id)
         self.bus = message_bus
@@ -36,7 +36,7 @@ class InflowForecasterAgent(Agent):
         self.disturbance_end_time = config["disturbance_end_time"]
         self.inflow_rate = config["disturbance_inflow_rate"]
         self.horizon = config["prediction_horizon"]
-        self.time_step= config["dt"]
+        self.time_step = config["time_step"]
         self.end_time = self.disturbance_end_time
 
         print(f"InflowForecasterAgent '{self.agent_id}' created. Will publish perfect forecasts to '{self.forecast_topic}'.")
@@ -50,7 +50,7 @@ class InflowForecasterAgent(Agent):
 
         # 根据当前时间填充预测序列
         for i in range(self.horizon):
-            future_time = current_time + (i * self.dt)
+            future_time = current_time + (i * self.time_step)
             if self.start_time <= future_time < self.end_time:
                 forecast_sequence[i] = self.inflow_rate
 

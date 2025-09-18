@@ -70,7 +70,7 @@ class ForecastingAgent(Agent):
             forecast_message = {
                 "trend": current_trend,
                 "current_value": latest_value,
-                "window_size_s": self.window_size * self.bus.dt # Assuming harness dt is on bus
+                "window_size_s": self.window_size * self.bus.time_step # Assuming harness time_step is on bus
             }
             self.bus.publish(self.forecast_topic, forecast_message)
             self.last_forecasted_trend = current_trend
