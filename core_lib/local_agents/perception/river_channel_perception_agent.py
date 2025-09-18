@@ -38,6 +38,9 @@ class RiverChannelPerceptionAgent(DigitalTwinAgent):
         if self.prediction_config:
             # This could be expanded to include a dedicated forecaster for inflows
             self.prediction_horizon = self.prediction_config.get('horizon_steps', 12) # e.g., 12 steps of 5 mins = 1 hour
+        
+        # 4. Time step for prediction calculations
+        self.time_step = config.get('time_step', kwargs.get('time_step', 1.0))  # Default to 1.0 seconds
 
     def _on_input_data(self, topic: str, data: any):
         """Override to clean data before processing."""
@@ -93,13 +96,13 @@ class RiverChannelPerceptionAgent(DigitalTwinAgent):
         predicted_flows = []
         
         for _ in range(self.prediction_horizon):
-            prediction_model.step(last_inflow, self.dt)
+            prediction_model.step(last_inflow, self.time_step)
             predicted_levels.append(prediction_model.water_level)
             predicted_flows.append(prediction_model.outflow)
 
         prediction_output = {
             'water_levels': predicted_levels,
             'outflows': predicted_flows,
-            'horizon_seconds': self.prediction_horizon * self.dt
+            'horizon_seconds': self.prediction_horizon * self.time_step
         }
         self._publish(f'agent.{self.name}.prediction', prediction_output)
