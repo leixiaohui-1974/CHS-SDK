@@ -28,9 +28,9 @@ def run_mas_simulation():
     print("--- Setting up Tutorial 3: Event-Driven Agents Simulation ---")
 
     # 1. --- Simulation Harness and Message Bus Setup ---
-    # 调整仿真时长为60000秒以给系统足够时间达到稳定状态
+    # 调整仿真时长为3000秒以合理观察控制效果
     # 使用较小的时间步长0.5秒提高控制精度
-    simulation_config = {'end_time': 60000, 'dt': 0.5,"start_time":0}  # 使用end_time而不是duration
+    simulation_config = {'end_time': 3000, 'time_step': 0.5, 'start_time': 0}  # 使用end_time和time_step
     harness = SimulationHarness(config=simulation_config)
     message_bus = harness.message_bus
 
@@ -41,9 +41,17 @@ def run_mas_simulation():
     # 3. --- Physical Components ---
     reservoir = Reservoir(
         name="reservoir_1",
-        initial_state={'volume': 21e6, 'water_level': 14.0},
+        initial_state={'volume': 18e6, 'water_level': 12.5},  # 调整初始水位更接近目标值
         parameters={'surface_area': 1.5e6, 'storage_curve': [[0, 0], [30e6, 20]]}
     )
+    
+    # 添加下游水库以提供完整的下游边界条件
+    downstream_reservoir = Reservoir(
+        name="downstream_reservoir",
+        initial_state={'volume': 15e6, 'water_level': 8.0},
+        parameters={'surface_area': 1.2e6, 'storage_curve': [[0, 0], [25e6, 18]]}
+    )
+    
     gate_params = {
         'max_rate_of_change': 0.5,  # 增加闸门最大变化速率，提高控制响应速度
         'discharge_coefficient': 0.6,
@@ -53,7 +61,7 @@ def run_mas_simulation():
     # The Gate is made message-aware by passing the bus and an action topic
     gate = Gate(
         name="gate_1",
-        initial_state={'opening': 0.1},
+        initial_state={'opening': 0.2},  # 调整初始开度与初始状态匹配
         parameters=gate_params,
         message_bus=message_bus,
         action_topic=GATE_ACTION_TOPIC
@@ -69,11 +77,15 @@ def run_mas_simulation():
     )
 
     # PID Controller (the "brain" of the control agent)
-    # 对于水库水位控制，PID输出应该直接对应闸门开度
-    # 当水位高于目标时，需要增加闸门开度来排水
-    # 当水位低于目标时，需要减少闸门开度来蓄水
+    # 根据系统特性进行深度优化：
+    # 1. 进一步降低比例增益避免输出饱和
+    # 2. 增加积分增益快速消除稳态误差
+    # 3. 适度增加微分增益抑制超调
+    # 4. 考虑到系统输出限制，采用更保守的参数
     pid_controller = PIDController(
-        Kp=5.0, Ki=0.5, Kd=0.0,  # 调整参数，避免过大的输出
+        Kp=0.1,     # 进一步降低比例增益（误差2m时输出0.2）
+        Ki=0.02,    # 适度积分增益，避免积分饱和
+        Kd=0.05,    # 微分增益提供预测和阻尼
         setpoint=12.0,
         min_output=0.0,  # 闸门开度不能为负
         max_output=gate_params['max_opening']
@@ -87,7 +99,7 @@ def run_mas_simulation():
         observation_topic=RESERVOIR_STATE_TOPIC,
         observation_key='water_level',
         action_topic=GATE_ACTION_TOPIC,
-        dt=harness.dt,
+        time_step=harness.time_step,
         target_component="gate_1",
         control_type="gate_control"
     )
@@ -101,13 +113,15 @@ def run_mas_simulation():
     print(f"- Target water level: {pid_controller.setpoint:.2f} m")
     print(f"- Gate initial opening: {gate._state['opening']:.2f}")
     print(f"- Simulation duration: {simulation_config['end_time']} s")
-    print(f"- Time step: {simulation_config['dt']} s")
+    print(f"- Time step: {simulation_config['time_step']} s")
     print(f"---------------------------------------")
     harness.add_component("reservoir_1", reservoir)
     harness.add_component("gate_1", gate)
+    harness.add_component("downstream_reservoir", downstream_reservoir)
     harness.add_agent(twin_agent)
     harness.add_agent(control_agent)
     harness.add_connection("reservoir_1", "gate_1")
+    harness.add_connection("gate_1", "downstream_reservoir")
     harness.build()
 
     # 6. --- Run Simulation ---
@@ -169,7 +183,7 @@ def run_mas_simulation():
             consecutive_stable_steps = 0
         
         if consecutive_stable_steps == required_consecutive_steps:
-            settling_time = (i - required_consecutive_steps + 1) * simulation_config['dt']
+            settling_time = (i - required_consecutive_steps + 1) * simulation_config['time_step']
             break
     
     # 7. Control signal statistics
