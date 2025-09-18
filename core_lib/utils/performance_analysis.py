@@ -79,12 +79,12 @@ class PerformanceAnalyzer:
         初始化性能分析器
         
         Args:
-            dt: 采样时间间隔
+            time_step: 采样时间间隔
         """
-        self.time_step= dt
+        self.time_step = time_step
         self.results = {}
         
-        logger.info(f"性能分析器初始化完成 (time_step={dt})")
+        logger.info(f"性能分析器初始化完成 (time_step={time_step})")
     
     def calculate_control_metrics(self, 
                                 setpoint: Union[float, np.ndarray],
@@ -104,7 +104,7 @@ class PerformanceAnalyzer:
             ControlMetrics: 控制性能指标
         """
         if time is None:
-            time = np.arange(len(actual)) * self.dt
+            time = np.arange(len(actual)) * self.time_step
         
         # 处理设定值
         if isinstance(setpoint, (int, float)):
@@ -195,7 +195,7 @@ class PerformanceAnalyzer:
         
         # 能耗计算
         if energy_data is not None:
-            energy_consumption = np.trapz(energy_data, dx=self.dt)
+            energy_consumption = np.trapz(energy_data, dx=self.time_step)
         else:
             energy_consumption = 0.0
         
@@ -256,18 +256,18 @@ class PerformanceAnalyzer:
             nperseg = min(256, len(input_signal) // 4)
         
         # 计算功率谱密度
-        f_in, psd_in = signal.welch(input_signal, fs=1/self.dt, nperseg=nperseg)
-        f_out, psd_out = signal.welch(output_signal, fs=1/self.dt, nperseg=nperseg)
+        f_in, psd_in = signal.welch(input_signal, fs=1/self.time_step, nperseg=nperseg)
+        f_out, psd_out = signal.welch(output_signal, fs=1/self.time_step, nperseg=nperseg)
         
         # 计算传递函数
-        f_tf, tf = signal.csd(input_signal, output_signal, fs=1/self.dt, nperseg=nperseg)
-        f_auto, auto = signal.csd(input_signal, input_signal, fs=1/self.dt, nperseg=nperseg)
+        f_tf, tf = signal.csd(input_signal, output_signal, fs=1/self.time_step, nperseg=nperseg)
+        f_auto, auto = signal.csd(input_signal, input_signal, fs=1/self.time_step, nperseg=nperseg)
         
         transfer_function = tf / auto
         
         # 计算相干性
         f_coh, coherence = signal.coherence(input_signal, output_signal, 
-                                          fs=1/self.dt, nperseg=nperseg)
+                                          fs=1/self.time_step, nperseg=nperseg)
         
         # 带宽计算
         magnitude = np.abs(transfer_function)
@@ -318,7 +318,7 @@ class PerformanceAnalyzer:
         # 计算振荡频率
         if len(peaks) > 0:
             # 主要振荡周期
-            main_period = (peaks[0] + 1) * self.dt
+            main_period = (peaks[0] + 1) * self.time_step
             oscillation_freq = 1 / main_period
             
             # 振荡强度
@@ -412,7 +412,7 @@ class PerformanceAnalyzer:
         """
         report = {
             'timestamp': pd.Timestamp.now().isoformat(),
-            'sampling_time': self.dt
+            'sampling_time': self.time_step
         }
         
         if control_metrics:
@@ -543,7 +543,7 @@ class PerformanceAnalyzer:
         correlation = np.correlate(output_data[output_key], input_data[input_key], mode='full')
         delay_samples = np.argmax(correlation) - len(input_data[input_key]) + 1
         
-        return abs(delay_samples) * self.dt
+        return abs(delay_samples) * self.time_step
     
     def _calculate_reliability(self, output_data: Dict[str, np.ndarray]) -> float:
         """计算可靠性"""
@@ -638,12 +638,12 @@ def quick_analysis(data: np.ndarray,
     Args:
         data: 数据数组
         setpoint: 设定值
-        dt: 采样时间
+        time_step: 采样时间
         
     Returns:
         Dict[str, Any]: 分析结果
     """
-    analyzer = PerformanceAnalyzer(dt)
+    analyzer = PerformanceAnalyzer(time_step)
     
     results = {}
     
@@ -658,7 +658,7 @@ def quick_analysis(data: np.ndarray,
     
     # 控制分析（如果有设定值）
     if setpoint is not None:
-        time = np.arange(len(data)) * dt
+        time = np.arange(len(data)) * time_step
         results['control'] = analyzer.calculate_control_metrics(setpoint, data, time=time)
     
     return results
@@ -673,12 +673,12 @@ def compare_performance(data1: np.ndarray, data2: np.ndarray,
         data1: 第一组数据
         data2: 第二组数据
         labels: 标签列表
-        dt: 采样时间
+        time_step: 采样时间
         
     Returns:
         Dict[str, Any]: 比较结果
     """
-    analyzer = PerformanceAnalyzer(dt)
+    analyzer = PerformanceAnalyzer(time_step)
     
     # 分别分析
     stats1 = analyzer.calculate_statistical_metrics(data1)
