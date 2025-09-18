@@ -30,10 +30,13 @@ components:
     class: UnifiedCanal
     initial_state:
       water_level: 5.0
+      inflow: 0.0
+      outflow: 0.0
     parameters:
       model_type: 'integral_delay'
       gain: 0.001
       delay: 300
+      inflow: 0.0
     action_topic: canal_1_state # For perception
 
   - id: diversion_before_gate2
