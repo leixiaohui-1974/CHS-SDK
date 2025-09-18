@@ -98,7 +98,7 @@ class SmartPIDController(Controller):
         p_term = self.Kp * error
 
         # 积分项（带积分分离）
-        integral_increment = error * dt
+        integral_increment = error * time_step
         if abs(integral_increment) > self.integral_windup_limit:
             integral_increment = self.integral_windup_limit * (1 if integral_increment > 0 else -1)
         
@@ -111,8 +111,8 @@ class SmartPIDController(Controller):
         i_term = self.Ki * self._integral
 
         # 微分项（带滤波）
-        raw_derivative = (error - self._previous_error) / dt
-        alpha = dt / (self.filter_time_constant + dt)
+        raw_derivative = (error - self._previous_error) / time_step
+        alpha = time_step / (self.filter_time_constant + time_step)
         self._filtered_derivative = alpha * raw_derivative + (1 - alpha) * self._filtered_derivative
         d_term = self.Kd * self._filtered_derivative
 
@@ -131,7 +131,7 @@ class SmartPIDController(Controller):
         """
         计算智能控制动作。
         """
-        if dt <= 0:
+        if time_step <= 0:
             return self._previous_output if hasattr(self, '_previous_output') else self.min_output
 
         process_variable = observation.get('process_variable')
@@ -142,7 +142,7 @@ class SmartPIDController(Controller):
         self.control_cycle_count += 1
         
         # 自适应增益调整
-        self._adaptive_gain_adjustment(error, dt)
+        self._adaptive_gain_adjustment(error, time_step)
 
         # 根据误差大小选择控制策略
         if abs(error) > self.bang_bang_threshold:
@@ -151,11 +151,11 @@ class SmartPIDController(Controller):
             control_type = "Bang-Bang"
         elif abs(error) > self.pid_threshold:
             # 中等误差：使用PID控制
-            control_signal = self._pid_control(error, dt)
+            control_signal = self._pid_control(error, time_step)
             control_type = "PID"
         else:
             # 小误差：使用精细PID控制
-            control_signal = self._pid_control(error, dt)
+            control_signal = self._pid_control(error, time_step)
             control_type = "Fine PID"
 
         # 限制控制信号

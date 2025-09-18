@@ -68,7 +68,7 @@ class CsvInflowAgent(Agent):
             return
 
         # Find the data point for the current time.
-        # We use interpolation for cases where the simulation timestep (dt)
+        # We use interpolation for cases where the simulation timestep (time_step)
         # is smaller than the data's timestep.
         try:
             # Find the closest index before or at the current time
