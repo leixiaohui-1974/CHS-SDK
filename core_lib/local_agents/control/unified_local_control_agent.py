@@ -72,7 +72,7 @@ class UnifiedLocalControlAgent(Agent):
         Args:
             agent_id: 代理唯一标识
             message_bus: 消息总线
-            dt: 仿真时间步长
+            time_step: 仿真时间步长
             control_strategy: 控制策略类型
             observation_topic: 观测主题
             observation_key: 观测数据键
@@ -88,7 +88,7 @@ class UnifiedLocalControlAgent(Agent):
         
         # 基础属性
         self.bus = message_bus
-        self.time_step= dt
+        self.time_step = time_step
         self.control_strategy = control_strategy
         
         # 主题配置
@@ -155,14 +155,16 @@ class UnifiedLocalControlAgent(Agent):
             return
         
         # 提取过程变量
-        process_variable = message.get(self.observation_key)
+        process_variable = None
+        if self.observation_key:
+            process_variable = message.get(self.observation_key)
         if process_variable is None:
             print(f"[{self.agent_id}] Warning: Process variable '{self.observation_key}' not found")
             return
         
         # 计算控制动作
         observation_for_controller = {'process_variable': process_variable}
-        control_signal = self.controller.compute_control_action(observation_for_controller, self.dt)
+        control_signal = self.controller.compute_control_action(observation_for_controller, self.time_step)
         
         # 发布控制动作
         self.publish_action(control_signal)

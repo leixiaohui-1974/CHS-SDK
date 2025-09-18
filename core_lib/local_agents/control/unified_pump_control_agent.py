@@ -41,14 +41,14 @@ class UnifiedPumpControlAgent(UnifiedLocalControlAgent):
             pump_station: 泵站对象
             demand_topic: 需求主题
             control_topic_prefix: 控制主题前缀
-            dt: 时间步长
+            time_step: 时间步长
             **kwargs: 泵站特定配置
         """
         # 调用父类构造函数，使用离散控制策略
         super().__init__(
             agent_id=agent_id,
             message_bus=message_bus,
-            time_step=dt,
+            time_step=time_step,
             control_strategy=ControlStrategy.DISCRETE,
             observation_topic=demand_topic,  # 需求作为观测
             observation_key='value',  # 需求值
