@@ -129,12 +129,12 @@ class CentralMPCAgent(Agent):
             # Upstream canal
             inflow_upstream = forecast[i]
             outflow_upstream = self.outflow_coeff * openings[0] * np.sqrt(2 * g * clamped_levels[0])
-            level_change_upstream = (inflow_upstream - outflow_upstream) * self.dt / self.canal_areas[0]
+            level_change_upstream = (inflow_upstream - outflow_upstream) * self.time_step / self.canal_areas[0]
 
             # Downstream canal
             inflow_downstream = outflow_upstream
             outflow_downstream = self.outflow_coeff * openings[1] * np.sqrt(2 * g * clamped_levels[1])
-            level_change_downstream = (inflow_downstream - outflow_downstream) * self.dt / self.canal_areas[1]
+            level_change_downstream = (inflow_downstream - outflow_downstream) * self.time_step / self.canal_areas[1]
 
             predicted_levels += np.array([level_change_upstream, level_change_downstream])
 
