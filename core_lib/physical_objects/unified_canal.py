@@ -24,6 +24,7 @@ class UnifiedCanal(PhysicalObjectInterface):
 
         # 物理常量定义（从常量类获取）
         self.GRAVITY_ACCELERATION = PhysicalConstants.GRAVITY_ACCELERATION
+        self.g = self.GRAVITY_ACCELERATION  # Saint-Venant方程中需要使用的重力加速度
         
         # 默认值常量（从参数管理器获取）
         self.DEFAULT_WATER_LEVEL = self.param_manager.get_parameter('physical_objects', 'default_water_level', 0.0)
@@ -70,8 +71,11 @@ class UnifiedCanal(PhysicalObjectInterface):
         if self.bus and self.inflow_topic:
             self.bus.subscribe(self.inflow_topic, self.handle_inflow_message)
             print(f"渠道 '{self.name}' 已订阅数据入流主题 '{self.inflow_topic}'.")
+        elif self.inflow_topic and not self.bus:
+            print(f"警告: 渠道 '{self.name}' 配置了入流主题 '{self.inflow_topic}' 但消息总线未初始化.")
 
-        # 处理从配置中传入的入流参数
+        # 处理从配置中传入的入流参数 - 修复初始化问题
+        self._inflow = 0.0  # 确保_inflow属性被初始化
         if 'inflow' in kwargs:
             self._inflow = kwargs['inflow']
             print(f"渠道 '{self.name}' 从配置中设置初始入流为 {self._inflow} m³/s")
@@ -139,6 +143,10 @@ class UnifiedCanal(PhysicalObjectInterface):
         if time_step <= 0:
             return self.get_state()
 
+        # 确保_inflow属性存在
+        if not hasattr(self, '_inflow'):
+            self._inflow = 0.0
+
         # 处理入流：物理入流 + 数据驱动入流 + 主题入流（参照水库实现）
         physical_inflow = self._inflow
         legacy_data_inflow = self.data_inflow
@@ -182,6 +190,7 @@ class UnifiedCanal(PhysicalObjectInterface):
         return self.get_state()
 
     def _initialize_history(self, time_step):
+        """初始化历史缓冲区，确保不为None"""
         if self.inflow_history is None:
             self.history_size = int(self.delay / time_step) + 2 if self.delay else 2
             initial_inflow = self._state.get('inflow', 0.0)
@@ -201,9 +210,17 @@ class UnifiedCanal(PhysicalObjectInterface):
         self._state['water_level'] = max(0, self._state['water_level'])
 
     def _step_integral_delay(self, time_step: float):
+        """积分延迟模型步进计算"""
         self._initialize_history(time_step)
         inflow = self._inflow
         # inflow已经在step函数中设置了self._state['inflow']
+        
+        # 确保历史缓冲区已初始化（二次检查）
+        if self.inflow_history is None:
+            self._initialize_history(time_step)
+        
+        # 现在inflow_history绝对不为None
+        assert self.inflow_history is not None
         
         self.inflow_history.append(inflow)
         delayed_inflow = self.inflow_history[0]
@@ -215,12 +232,20 @@ class UnifiedCanal(PhysicalObjectInterface):
         self._state['water_level'] = max(0, self._state['water_level'])
 
     def _step_integral_delay_zero(self, time_step: float):
+        """积分延迟零点模型步进计算"""
         self._initialize_history(time_step)
         inflow = self._inflow
         # inflow已经在step函数中设置了self._state['inflow']
         
+        # 确保历史缓冲区已初始化（二次检查）
+        if self.inflow_history is None:
+            self._initialize_history(time_step)
+        
+        # 现在inflow_history绝对不为None
+        assert self.inflow_history is not None
+        
         self.inflow_history.append(inflow)
-        q_in_delayed = self.inflow_history[1]
+        q_in_delayed = self.inflow_history[1] if len(self.inflow_history) > 1 else self.inflow_history[0]
         q_in_delayed_previous = self.inflow_history[0]
         
         # 计算导数项和出流
@@ -270,8 +295,12 @@ class UnifiedCanal(PhysicalObjectInterface):
                         storage_dict[topic_name] = value
                 return handler
 
-            self.bus.subscribe(topic, create_handler(topic, key, storage))
-            print(f"渠道 '{self.name}' 已订阅 {config_key.replace('_', ' ')} '{topic}' (键: '{key}').")
+            # 检查消息总线是否存在
+            if self.bus is not None:
+                self.bus.subscribe(topic, create_handler(topic, key, storage))
+                print(f"渠道 '{self.name}' 已订阅 {config_key.replace('_', ' ')} '{topic}' (键: '{key}').")
+            else:
+                print(f"警告: 渠道 '{self.name}' 消息总线未初始化，跳过主题 '{topic}' 订阅.")
 
     def handle_inflow_message(self, message: Dict[str, Any]):
         """处理数据驱动入流消息的回调函数。"""
@@ -285,6 +314,8 @@ class UnifiedCanal(PhysicalObjectInterface):
         Args:
             inflow: 新的入流量 (m³/s)
         """
+        if not hasattr(self, '_inflow'):
+            self._inflow = 0.0  # 确保属性存在
         self._inflow = inflow
         print(f"渠道 '{self.name}' 入流已设置为 {inflow} m³/s")
 

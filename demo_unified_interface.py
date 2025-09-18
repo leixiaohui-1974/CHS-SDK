@@ -102,7 +102,7 @@ def demo_business_logic_clarity():
         component_id="gate_001",
         component_type=ComponentType.GATE,
         level=DeviceLevel.DEVICE,
-        parameters={'opening': 0.5}
+        parameters={'opening': 0.5, 'max_flow_rate': 100.0}
     )
     gate_device = factory.create_component(gate_config)
     harness.add_component("gate_001", gate_device)

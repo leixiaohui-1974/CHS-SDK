@@ -40,7 +40,7 @@ class SimpleAgentFactory(AgentFactory):
         params = list(sig.parameters.keys())[1:]  # 排除self
         
         # 准备构造参数
-        constructor_args = {'agent_id': agent_id}
+        constructor_args: Dict[str, Any] = {'agent_id': agent_id}
         
         # 从配置中提取构造参数 - 修复类型安全问题
         for param in params:
@@ -65,12 +65,11 @@ class SimpleAgentFactory(AgentFactory):
                 else:
                     constructor_args[param] = strategy_str
         
-        try:
-            agent = agent_class(**constructor_args)
-            print(f"[AgentFactory] Created agent: {agent_type}({agent_id})")
-            return agent
-        except Exception as e:
-            raise RuntimeError(f"Failed to create agent {agent_type}({agent_id}): {e}")
+
+        agent = agent_class(**constructor_args)
+        print(f"[AgentFactory] Created agent: {agent_type}({agent_id})")
+        return agent
+
     
     def get_supported_types(self) -> List[str]:
         """获取支持的Agent类型"""
@@ -107,7 +106,7 @@ class SimpleControllerFactory(ControllerFactory):
             params = list(sig.parameters.keys())[1:]  # 排除self
             
             # 准备构造参数
-            constructor_args = {}
+            constructor_args: Dict[str, Any] = {}
             for param in params:
                 if param in config:
                     constructor_args[param] = config[param]
@@ -152,7 +151,7 @@ class SimpleDataSourceFactory(DataSourceFactory):
             params = list(sig.parameters.keys())[1:]  # 排除self
             
             # 准备构造参数
-            constructor_args = {'source_type': source_type}
+            constructor_args: Dict[str, Any] = {'source_type': source_type}
             for param in params:
                 if param in config and param not in ['source_type', 'config']:
                     constructor_args[param] = config[param]

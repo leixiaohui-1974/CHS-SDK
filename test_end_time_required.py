@@ -17,11 +17,11 @@ def test_simulation_harness_without_end_time():
     """Test that SimulationHarness raises error when end_time is missing"""
     print("Testing SimulationHarness without end_time...")
     try:
-        config = {'dt': 1.0}  # Missing end_time
+        config = {'time_step': 1.0}  # Missing end_time
         harness = SimulationHarness(config=config)
-        print("❌ ERROR: Should have raised ValueError!")
+        print("❌ ERROR: Should have raised KeyError!")
         return False
-    except ValueError as e:
+    except KeyError as e:
         if "end_time" in str(e):
             print("✅ PASS: SimulationHarness correctly requires end_time")
             return True
