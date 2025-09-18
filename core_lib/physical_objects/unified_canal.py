@@ -161,8 +161,8 @@ class UnifiedCanal(PhysicalObjectInterface):
         topic_based_inflow = sum(getattr(self, 'topic_inflows', {}).values())
         total_inflow = physical_inflow + legacy_data_inflow + topic_based_inflow
 
-        # 处理出流：来自action的出流
-        action_outflow = action.get('outflow', 0) if isinstance(action, dict) else 0
+        # 处理出流：渠道可以没有外部出流，默认为0
+        action_outflow = action.get('outflow', 0) if isinstance(action, dict) else 0  # 渠道允许没有外部出流
         topic_based_outflow = sum(getattr(self, 'topic_outflows', {}).values())
         total_external_outflow = action_outflow + topic_based_outflow
 

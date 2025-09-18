@@ -132,8 +132,13 @@ class Valve(PhysicalObjectInterface, Identifiable):
             else:
                 outflow = 0
         else:
-            upstream_level = action.get('upstream_head', 0)
-            downstream_level = action.get('downstream_head', 0)
+            if 'upstream_head' not in action:
+                raise KeyError(f"Valve '{self.name}': 'upstream_head' is required in action but not provided")
+            if 'downstream_head' not in action:
+                raise KeyError(f"Valve '{self.name}': 'downstream_head' is required in action but not provided")
+                
+            upstream_level = action['upstream_head']
+            downstream_level = action['downstream_head']
             outflow = self._calculate_flow(upstream_level, downstream_level)
 
         self._state['outflow'] = outflow

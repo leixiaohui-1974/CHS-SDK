@@ -178,8 +178,14 @@ class Gate(PhysicalObjectInterface):
             new_opening = max(current_opening - max_roc * time_step, self.target_opening)
         max_opening = self._params.get('max_opening', self.default_max_opening)
         self._state['opening'] = max(0.0, min(new_opening, max_opening))
-        upstream_level = action.get('upstream_head', 0)
-        downstream_level = action.get('downstream_head', 0)
+        
+        if 'upstream_head' not in action:
+            raise KeyError(f"Gate '{self.name}': 'upstream_head' is required in action but not provided")
+        if 'downstream_head' not in action:
+            raise KeyError(f"Gate '{self.name}': 'downstream_head' is required in action but not provided")
+            
+        upstream_level = action['upstream_head']
+        downstream_level = action['downstream_head']
         self._state['outflow'] = self._calculate_outflow(upstream_level, self._state['opening'], downstream_level)
         return self.get_state()
 

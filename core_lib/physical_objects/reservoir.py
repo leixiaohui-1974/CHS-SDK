@@ -172,8 +172,8 @@ class Reservoir(PhysicalObjectInterface):
         topic_based_inflow = sum(self.topic_inflows.values())
         total_inflow = physical_inflow + legacy_data_inflow + topic_based_inflow
 
-        # Sum outflows from all sources
-        action_outflow = action.get('outflow', 0)
+        # 处理出流：action中的出流是可选的，可以为0
+        action_outflow = action.get('outflow', 0)  # 这里允许默认为0，因为水库可以没有外部出流
         topic_based_outflow = sum(self.topic_outflows.values())
         total_outflow = action_outflow + topic_based_outflow
 
