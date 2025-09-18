@@ -67,6 +67,7 @@ components:
       outflow: 25.0      # 初始出流 (m³/s) - 必需字段
     parameters:
       model_type: integral_delay         ### 特有参数    根据 `model_type` 不同而变化：integral、integral_delay、integral_delay_zero、linear_reservoir、st_venant
+      inflow: 25.0       # 入流参数 (m³/s) - UnifiedCanal类要求必须在parameters中提供
       length: 2911      # 渠道长度 (必需)       model_type= st_venant时必填。
       num_points: 2          #计算点数（必需）   一段渠道则填2，两段渠道则填3，以此类推，点数越多，模拟精度通常越高，但计算复杂度也会增加。  model_type= st_venant时必填。
       bottom_width: 15       #底部宽度 当渠道为梯形断面时用，需同时填写side_slope_z边坡系数。（必需）    model_type= st_venant时必填。
@@ -165,6 +166,7 @@ components:
       outflow: 25.0      # 初始出流 (m³/s) - 必需字段
     parameters:
       model_type: integral_delay         ### 特有参数    根据 `model_type` 不同而变化：integral、integral_delay、integral_delay_zero、linear_reservoir、st_venant
+      inflow: 25.0       # 入流参数 (m³/s) - UnifiedCanal类要求必须在parameters中提供
       length: 178      # 渠道长度 (必需)       model_type= st_venant时必填。
       num_points: 2          #计算点数（必需）   一段渠道则填2，两段渠道则填3，以此类推，点数越多，模拟精度通常越高，但计算复杂度也会增加。  model_type= st_venant时必填。
       bottom_width: 20       #底部宽度 当渠道为梯形断面时用，需同时填写side_slope_z边坡系数。（必需）    model_type= st_venant时必填。
@@ -268,6 +270,7 @@ components:
       outflow: 25.0      # 初始出流 (m³/s) - 必需字段
     parameters:
       model_type: integral_delay         ### 特有参数    根据 `model_type` 不同而变化：integral、integral_delay、integral_delay_zero、linear_reservoir、st_venant
+      inflow: 25.0       # 入流参数 (m³/s) - UnifiedCanal类要求必须在parameters中提供
       length: 387      # 渠道长度 (必需)       model_type= st_venant时必填。
       num_points: 2          #计算点数（必需）   一段渠道则填2，两段渠道则填3，以此类推，点数越多，模拟精度通常越高，但计算复杂度也会增加。  model_type= st_venant时必填。
       bottom_width: 18       #底部宽度 当渠道为梯形断面时用，需同时填写side_slope_z边坡系数。（必需）    model_type= st_venant时必填。
