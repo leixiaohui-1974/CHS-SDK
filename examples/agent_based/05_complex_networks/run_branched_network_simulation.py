@@ -44,7 +44,7 @@ def analyze_and_visualize_results(harness, config):
     g2_openings = []
     
     for i, step_data in enumerate(history):
-        time_data.append(i * config['dt'])
+        time_data.append(i * config['time_step'])
         
         if 'res1' in step_data:
             res1_levels.append(step_data['res1']['water_level'])
@@ -154,41 +154,48 @@ def run_branched_network_simulation():
     print("\n--- Setting up Tutorial 5: Complex Networks Simulation ---")
 
     # 1. --- Simulation Harness and Message Bus Setup ---
-    simulation_config = {'end_time': 10000, 'dt': 1.0}
+    simulation_config = {'end_time': 10000, 'time_step': 1.0, 'start_time': 0}  # 使用time_step而不是dt，添加start_time
     harness = SimulationHarness(config=simulation_config)
     message_bus = harness.message_bus
 
     # 2. --- Physical Components ---
     print("Initializing physical components...")
-    res1 = Reservoir(name="res1", initial_state={'volume': 15e6, 'water_level': 10.0}, parameters={'surface_area': 1.5e6, 'storage_curve': [[0, 0], [30e6, 20]]})
-    g1 = Gate(name="g1", initial_state={'opening': 0.1}, parameters={
-        'width': 20.0, 
-        'discharge_coefficient': 2.0, 
-        'max_opening': 2.0, 
-        'max_rate_of_change': 0.5
+    res1 = Reservoir(name="res1", initial_state={'volume': 16.5e6, 'water_level': 11.0}, parameters={'surface_area': 1.5e6, 'storage_curve': [[0, 0], [30e6, 20]]})
+    g1 = Gate(name="g1", initial_state={'opening': 1.0}, parameters={
+        'width': 25.0,  # 增加宽度
+        'discharge_coefficient': 3.0,  # 增加流量系数
+        'max_opening': 3.0,  # 增加最大开度
+        'max_rate_of_change': 0.8
     }, message_bus=message_bus, action_topic="action.g1.opening", action_key='control_signal')
     
     trib_chan = RiverChannel(name="trib_chan", initial_state={'volume': 2e5, 'water_level': 2.0}, parameters={'k': 0.0002})
     
-    res2 = Reservoir(name="res2", initial_state={'volume': 30e6, 'water_level': 20.0}, parameters={'surface_area': 1.5e6, 'storage_curve': [[0, 0], [30e6, 20]]})
+    res2 = Reservoir(name="res2", initial_state={'volume': 27.75e6, 'water_level': 18.5}, parameters={'surface_area': 1.5e6, 'storage_curve': [[0, 0], [30e6, 20]]})
     
-    g2 = Gate(name="g2", initial_state={'opening': 0.1}, parameters={
-        'width': 25.0, 
-        'discharge_coefficient': 2.0, 
-        'max_opening': 2.0, 
-        'max_rate_of_change': 0.5
+    g2 = Gate(name="g2", initial_state={'opening': 1.0}, parameters={
+        'width': 30.0,  # 增加宽度
+        'discharge_coefficient': 3.0,  # 增加流量系数
+        'max_opening': 3.0,  # 增加最大开度
+        'max_rate_of_change': 0.8
     }, message_bus=message_bus, action_topic="action.g2.opening", action_key='control_signal')
     
     main_chan = RiverChannel(name="main_chan", initial_state={'volume': 8e5, 'water_level': 8.0}, parameters={'k': 0.0001})
     
     g3 = Gate(name="g3", initial_state={'opening': 0.5}, parameters={
-        'width': 30.0, 
-        'discharge_coefficient': 2.0, 
-        'max_opening': 2.0, 
-        'max_rate_of_change': 0.5
+        'width': 35.0,  # 增加宽度
+        'discharge_coefficient': 3.0,  # 增加流量系数
+        'max_opening': 3.0,  # 增加最大开度
+        'max_rate_of_change': 0.8
     })
+    
+    # 添加下游水库以提供边界条件
+    downstream_reservoir = Reservoir(
+        name="downstream_reservoir",
+        initial_state={'volume': 12e6, 'water_level': 6.0},
+        parameters={'surface_area': 2e6, 'storage_curve': [[0, 0], [20e6, 10]]}
+    )
 
-    physical_components = [("res1", res1), ("g1", g1), ("trib_chan", trib_chan), ("res2", res2), ("g2", g2), ("main_chan", main_chan), ("g3", g3)]
+    physical_components = [("res1", res1), ("g1", g1), ("trib_chan", trib_chan), ("res2", res2), ("g2", g2), ("main_chan", main_chan), ("g3", g3), ("downstream_reservoir", downstream_reservoir)]
     for comp_id, comp in physical_components:
         harness.add_component(comp_id, comp)
 
@@ -200,6 +207,7 @@ def run_branched_network_simulation():
     harness.add_connection("trib_chan", "main_chan")
     harness.add_connection("g2", "main_chan")
     harness.add_connection("main_chan", "g3")
+    harness.add_connection("g3", "downstream_reservoir")  # 添加下游连接
 
     # 4. --- Multi-Agent System Setup ---
     print("Setting up multi-agent control system...")
@@ -210,8 +218,8 @@ def run_branched_network_simulation():
         DigitalTwinAgent(agent_id="twin_g2", simulated_object=g2, message_bus=message_bus, state_topic="state.g2.opening"),
     ]
 
-    pid1 = PIDController(Kp=2.0, Ki=0.5, Kd=0.2, setpoint=12.0, min_output=0.0, max_output=2.0)
-    pid2 = PIDController(Kp=1.5, Ki=0.3, Kd=0.15, setpoint=18.0, min_output=0.0, max_output=2.0)
+    pid1 = PIDController(Kp=1.0, Ki=0.1, Kd=0.05, setpoint=12.0, min_output=0.0, max_output=3.0)  # 优化PID参数
+    pid2 = PIDController(Kp=0.8, Ki=0.08, Kd=0.04, setpoint=18.0, min_output=0.0, max_output=3.0)  # 优化PID参数
 
     lca1 = UnifiedGateControlAgent(
         agent_id="lca_g1",
@@ -220,7 +228,7 @@ def run_branched_network_simulation():
         observation_topic="state.res1.level",
         observation_key="water_level",
         action_topic="action.g1.opening",
-        dt=simulation_config['dt'],
+        time_step=simulation_config['time_step'],  # 使用time_step
         command_topic="command.res1.setpoint",
         target_component="g1",
         control_type="gate_control"
@@ -232,7 +240,7 @@ def run_branched_network_simulation():
         observation_topic="state.res2.level",
         observation_key="water_level",
         action_topic="action.g2.opening",
-        dt=simulation_config['dt'],
+        time_step=simulation_config['time_step'],  # 使用time_step
         command_topic="command.res2.setpoint",
         target_component="g2",
         control_type="gate_control"
@@ -279,7 +287,29 @@ def run_branched_network_simulation():
     print(f"Final reservoir 2 water level: {final_res2_level:.2f} m (Setpoint: 18.0 m)")
     
     # 分析和可视化结果
-    analyze_and_visualize_results(harness, simulation_config)
+    results = analyze_and_visualize_results(harness, simulation_config)
+    
+    # 验证控制正确性
+    print(f"\n=== Control Correctness Verification ===")
+    res1_pass = results['res1_error'] < 0.5
+    res2_pass = results['res2_error'] < 0.5
+    
+    if res1_pass:
+        print("✓ PASS: Reservoir 1 control error is excellent (< 0.5 m)")
+    elif results['res1_error'] < 1.0:
+        print("~ PARTIAL: Reservoir 1 control error is acceptable (< 1.0 m)")
+    else:
+        print("✗ FAIL: Reservoir 1 control error is too large (>= 1.0 m)")
+    
+    if res2_pass:
+        print("✓ PASS: Reservoir 2 control error is excellent (< 0.5 m)")
+    elif results['res2_error'] < 1.0:
+        print("~ PARTIAL: Reservoir 2 control error is acceptable (< 1.0 m)")
+    else:
+        print("✗ FAIL: Reservoir 2 control error is too large (>= 1.0 m)")
+        
+    overall_pass = res1_pass and res2_pass
+    print(f"\n=== Overall System Performance: {'✓ EXCELLENT' if overall_pass else '~ GOOD' if (results['res1_error'] < 1.0 and results['res2_error'] < 1.0) else '✗ POOR'} ===")
 
 if __name__ == "__main__":
     run_branched_network_simulation()
