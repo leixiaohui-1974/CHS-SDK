@@ -50,12 +50,12 @@ class PIDController(Controller):
 
         Args:
             observation: The current state, must contain the key 'process_variable'.
-            dt: The time step duration in seconds.
+            time_step: The time step duration in seconds.
 
         Returns:
             The computed and clamped control action.
         """
-        if dt <= 0:
+        if time_step <= 0:
             return self._previous_output if hasattr(self, '_previous_output') else self.min_output
 
         process_variable = observation.get('process_variable')
@@ -70,7 +70,7 @@ class PIDController(Controller):
         p_term = self.Kp * error
 
         # Integral term with anti-windup
-        integral_increment = error * dt
+        integral_increment = error * time_step
         if abs(integral_increment) > self.integral_windup_limit:
             integral_increment = self.integral_windup_limit * (1 if integral_increment > 0 else -1)
         
@@ -78,9 +78,9 @@ class PIDController(Controller):
         i_term = self.Ki * self._integral
 
         # Derivative term with filtering
-        raw_derivative = (error - self._previous_error) / dt
+        raw_derivative = (error - self._previous_error) / time_step
         # 应用一阶低通滤波器
-        alpha = dt / (self.filter_time_constant + dt)
+        alpha = time_step / (self.filter_time_constant + time_step)
         self._filtered_derivative = alpha * raw_derivative + (1 - alpha) * self._filtered_derivative
         d_term = self.Kd * self._filtered_derivative
 

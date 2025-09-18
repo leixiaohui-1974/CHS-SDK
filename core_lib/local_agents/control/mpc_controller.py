@@ -16,7 +16,7 @@ class MPCController(Controller):
         """
         Initializes the MIMO MPC controller.
         """
-        self.time_step= dt
+        self.time_step = time_step
         self.horizon = horizon
         self.model_config = model_config
         self.objective_config = objective_config
@@ -40,13 +40,12 @@ class MPCController(Controller):
 
         for i in range(self.horizon):
             q_in, q_out = q1_sequence[i], q2_sequence[i]
-            predicted_level += (q_in - q_out) * self.dt / canal_area
+            predicted_level += (q_in - q_out) * self.time_step / canal_area
             cost += q_weight * ((predicted_level - target_level) ** 2)
             cost += r_weight * (q_in**2 + q_out**2)
         return cost
 
     def compute_control_action(self, observation: State, time_step: float) -> Any:
-        self.time_step= dt
         current_level = observation.get("process_variable")
         if current_level is None:
             raise ValueError("Observation must contain 'process_variable'.")

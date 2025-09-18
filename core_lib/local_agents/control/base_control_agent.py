@@ -15,11 +15,11 @@ class BaseControlAgent(Agent):
         Args:
             agent_id (str): The unique identifier for the agent.
             message_bus: The message bus instance for communication.
-            dt (int): The simulation time step in seconds.
+            time_step (int): The simulation time step in seconds.
         """
         super().__init__(agent_id)
         self.message_bus = message_bus
-        self.time_step= dt
+        self.time_step = time_step
         self._subscribed_topics = []
 
     @abstractmethod
