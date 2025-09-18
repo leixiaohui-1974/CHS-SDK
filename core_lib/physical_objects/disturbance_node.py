@@ -45,15 +45,25 @@ class DisturbanceNode(PhysicalObjectInterface):
         if isinstance(action, dict) and self.action_key in action:
             self._state['outflow'] = float(action[self.action_key])
 
-        passthrough_flow = max(0, self._inflow - self._state['outflow'])
+        # 计算通过流量
+        passthrough_flow = max(0, self._inflow - self._state.get('outflow', 0.0))
         self._state['passthrough_flow'] = passthrough_flow
+        
+        # 关键修复：更新outflow字段为实际的输出流量（通过流量）
+        # 这样SimulationHarness从状态中获取outflow时就是正确的通过流量
+        actual_outflow = passthrough_flow  # 实际输出给下游的流量
+        # 保留原始分流量在separate字段中
+        self._state['diversion_flow'] = self._state.get('outflow', 0.0)
+        # 更新outflow为实际输出流量
+        self._state['outflow'] = actual_outflow
 
         return self.get_state()
 
     @property
     def outflow(self):
         """The outflow passed to the next component in the network."""
-        return self._state['passthrough_flow']
+        # 返回实际输出给下游的流量（现在存储在outflow字段中）
+        return self._state.get('outflow', 0.0)
 
     def set_inflow(self, inflow: float):
         """Sets the inflow for the current time step. Called by the harness."""

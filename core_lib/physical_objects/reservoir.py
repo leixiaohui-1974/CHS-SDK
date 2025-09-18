@@ -50,10 +50,10 @@ class Reservoir(PhysicalObjectInterface):
         # 处理从components.yml传入的inflow参数
         if 'inflow' in kwargs:
             self._inflow = kwargs['inflow']
-            print(f"水库 '{self.name}' 从配置中设置初始入流为 {self._inflow} m³/s")
+            print(f"水库 '{self.name}' 从配置中设置初始入流为 {self._inflow} m3/s")
         elif 'inflow' in self._params:
             self._inflow = self._params['inflow']
-            print(f"水库 '{self.name}' 从参数中设置初始入流为 {self._inflow} m³/s")
+            print(f"水库 '{self.name}' 从参数中设置初始入流为 {self._inflow} m3/s")
 
         print(f"水库 '{self.name}' 已创建，初始状态为 {self._state}.")
 
@@ -205,7 +205,7 @@ class Reservoir(PhysicalObjectInterface):
             inflow: 新的入流量 (m³/s)
         """
         self._inflow = inflow
-        print(f"水库 '{self.name}' 入流已设置为 {inflow} m³/s")
+        print(f"水库 '{self.name}' 入流已设置为 {inflow} m3/s")
 
     @property
     def is_stateful(self) -> bool:

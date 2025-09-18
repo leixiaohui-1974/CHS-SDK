@@ -277,21 +277,43 @@ class SimulationHarness:
             if upstream_components:  # 有上游组件，自动计算入流
                 total_inflow = self.DEFAULT_INFLOW_VALUE
                 for upstream_id in upstream_components:
-                    total_inflow += current_step_outflows.get(upstream_id, self.DEFAULT_INFLOW_VALUE)
+                    # 修复：使用上游组件的当前状态而不是可能为空的current_step_outflows
+                    upstream_component = self.components[upstream_id]
+                    upstream_state = upstream_component.get_state()
+                    upstream_outflow = upstream_state.get('outflow', self.DEFAULT_OUTFLOW_VALUE) if upstream_state else self.DEFAULT_OUTFLOW_VALUE
+                    total_inflow += upstream_outflow
+                    
+                    # 调试信息：显示流量传递
+                    if component_id in ['Channel_2', 'Gate_1', 'Channel_3'] or upstream_id in ['Diversion_1', 'Pipe_1', 'Gate_1']:
+                        print(f"流量传递: {upstream_id}(出流={upstream_outflow:.3f}) -> {component_id}(累积入流={total_inflow:.3f})")
                 
                 # 只有在组件没有受到入流扰动影响时才设置自动计算的入流
                 if component_id not in disturbed_components:
-                    if hasattr(component, '_inflow') and component._inflow != total_inflow:
+                    if hasattr(component, 'set_inflow'):
                         component.set_inflow(total_inflow)
-                    elif not hasattr(component, '_inflow'):
-                        component.set_inflow(total_inflow)
+                        # 调试信息
+                        if component_id in ['Channel_2', 'Gate_1', 'Channel_3']:
+                            print(f"设置组件 {component_id} 入流为: {total_inflow:.3f} m3/s")
             # 否则，边界组件（如上游水库）保持其原有入流设置
 
             # 为所有组件设置water head信息（无论是否stateful）
             if self.inverse_topology.get(component_id):
                 up_id = self.inverse_topology[component_id][self.FIRST_COMPONENT_INDEX]
                 up_state = self.components[up_id].get_state()
-                action['upstream_head'] = up_state.get('water_level', self.DEFAULT_WATER_LEVEL) if up_state else self.DEFAULT_WATER_LEVEL
+                
+                # 特殊处理：如果上游组件没有water_level（如Pipe），则向上查找有water_level的组件
+                if up_state and 'water_level' in up_state:
+                    action['upstream_head'] = up_state['water_level']
+                elif self.inverse_topology.get(up_id):  # 向上查找一级
+                    up_up_id = self.inverse_topology[up_id][self.FIRST_COMPONENT_INDEX]
+                    up_up_state = self.components[up_up_id].get_state()
+                    action['upstream_head'] = up_up_state.get('water_level', self.DEFAULT_WATER_LEVEL) if up_up_state else self.DEFAULT_WATER_LEVEL
+                    if component_id == 'Gate_1':  # 调试信息
+                        print(f"Gate_1上游查找: {up_id}(无water_level) -> {up_up_id}(water_level={action['upstream_head']:.3f}m)")
+                else:
+                    action['upstream_head'] = self.DEFAULT_WATER_LEVEL
+                    if component_id == 'Gate_1':  # 调试信息
+                        print(f"Gate_1上游查找: {up_id}(无water_level，且无上级) -> 使用默认值{self.DEFAULT_WATER_LEVEL}m")
             if self.topology.get(component_id):
                 down_id = self.topology[component_id][self.FIRST_COMPONENT_INDEX]
                 down_state = self.components[down_id].get_state()

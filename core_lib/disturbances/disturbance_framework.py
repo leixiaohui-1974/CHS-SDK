@@ -101,7 +101,7 @@ class InflowDisturbance(BaseDisturbance):
             self.is_active = True
             
             self.logger.info(f"应用入流扰动到组件 {self.config.target_component_id}: "
-                           f"设置入流为 {self.disturbance_inflow} m³/s")
+                           f"设置入流为 {self.disturbance_inflow} m3/s")
             
             return {
                 'applied_inflow': self.disturbance_inflow,
@@ -118,7 +118,7 @@ class InflowDisturbance(BaseDisturbance):
             self.is_active = False
             
             self.logger.info(f"移除入流扰动从组件 {self.config.target_component_id}: "
-                           f"恢复入流为 {self.original_inflow} m³/s")
+                           f"恢复入流为 {self.original_inflow} m3/s")
 
 class SensorNoiseDisturbance(BaseDisturbance):
     """传感器噪声扰动"""

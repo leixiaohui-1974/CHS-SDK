@@ -38,6 +38,10 @@ class YamlSimulationLoader(BaseYamlLoader):
         Initializes the loader with the path to the scenario directory.
         """
         super().__init__(scenario_path)
+        
+        # 设置日志级别为INFO以显示调试信息
+        logging.basicConfig(level=logging.INFO, format='%(levelname)s:%(name)s:%(message)s')
+        
         self.config = self._load_yaml('config.yml')
         self.components_config = self._load_yaml('components.yml')
         self.topology_config = self._load_yaml('topology.yml')
@@ -53,21 +57,44 @@ class YamlSimulationLoader(BaseYamlLoader):
         """
         Loads, instantiates, and wires up the full simulation.
         """
+        print(f"\n=== LOAD方法开始 ===")
         if not all([self.config, self.components_config, self.topology_config]):
             raise ValueError("Core configuration files (config, components, topology) are missing.")
 
+        print(f"\n调试: 开始加载仿真，topology_config内容预览: {str(self.topology_config)[:200]}...")
+        
+        print("\n1. 调用 _setup_infrastructure()...")
         self._setup_infrastructure()
+        print("1. _setup_infrastructure() 完成")
+        
+        print("\n2. 调用 _load_components()...")
         self._load_components()
-        self._load_topology()
+        print("2. _load_components() 完成")
+        
+        print(f"\n3. 准备加载拓扑连接... 调用 _load_topology()")
+        try:
+            self._load_topology()
+            print("3. _load_topology() 成功完成")
+        except Exception as e:
+            print(f"3. _load_topology() 异常: {e}")
+            import traceback
+            traceback.print_exc()
+            raise
 
         if self.agents_config:
+            print("\n4. 加载智能体和控制器...")
             self._load_agents_and_controllers()
+            print("4. 智能体和控制器加载完成")
         else:
             logging.warning("Agents file not found or is empty. Running a non-agent simulation.")
 
+        print("\n5. 构建 harness...")
         logging.info("Simulation loaded successfully. Building harness...")
         self.harness.build()
         logging.info("Harness built. Loader is ready.")
+        print("5. harness 构建完成")
+        
+        print("\n=== LOAD方法完成 ===")
         return self.harness
 
     def _setup_infrastructure(self):
@@ -138,30 +165,59 @@ class YamlSimulationLoader(BaseYamlLoader):
 
     def _load_topology(self):
         """Loads and defines the connections between components."""
+        print("\n======== 拓扑连接加载开始 ========")
         logging.info("Loading topology...")
-        print(f"调试: topology_config = {self.topology_config}")  # 调试信息
-        topology_for_bus = {}
-        connections = self.topology_config.get('topology', {}).get('connections', [])
-        if not connections:
-            # 如果在topology字段下没有找到，尝试直接在根级别查找
-            connections = self.topology_config.get('connections', [])
-        print(f"调试: 找到 {len(connections)} 个连接")  # 调试信息
-        for conn_conf in connections:
+        
+        # 获取连接信息
+        if 'topology' in self.topology_config and 'connections' in self.topology_config['topology']:
+            connections = self.topology_config['topology']['connections']
+        elif 'connections' in self.topology_config:
+            connections = self.topology_config['connections']
+        else:
+            connections = []
+            print("警告: 未找到拓扑连接配置")
+            return
+        
+        print(f"找到 {len(connections)} 个连接")
+        
+        # 逐个加载连接
+        for i, conn_conf in enumerate(connections):
             upstream_id = conn_conf['upstream']
             downstream_id = conn_conf['downstream']
-
-            logging.info(f"  - Connecting '{upstream_id}' -> '{downstream_id}'")
-            print(f"调试: 正在连接 '{upstream_id}' -> '{downstream_id}'")
+            print(f"连接 {i+1}: {upstream_id} -> {downstream_id}")
+            
+            # 检查组件是否存在
+            if upstream_id not in self.component_instances:
+                print(f"错误: 上游组件 '{upstream_id}' 不存在")
+                continue
+            if downstream_id not in self.component_instances:
+                print(f"错误: 下游组件 '{downstream_id}' 不存在")
+                continue
+                
+            # 添加连接
             self.harness.add_connection(upstream_id, downstream_id)
+            print(f"成功添加连接: {upstream_id} -> {downstream_id}")
 
-            if upstream_id not in topology_for_bus:
-                topology_for_bus[upstream_id] = {}
-            if downstream_id not in topology_for_bus:
-                topology_for_bus[downstream_id] = {}
-
-            topology_for_bus[upstream_id]['downstream'] = downstream_id
-            topology_for_bus[downstream_id]['upstream'] = upstream_id
-
+        # 验证结果
+        print(f"\n拓扑验证:")
+        print(f"- 组件数: {len(self.harness.components)}")
+        print(f"- 连接数: {sum(len(v) for v in self.harness.topology.values())}")
+        print(f"- topology: {dict(self.harness.topology)}")
+        print(f"- inverse_topology: {dict(self.harness.inverse_topology)}")
+        print("======== 拓扑连接加载完成 ========\n")
+        
+        # 设置消息总线拓扑（简化）
+        topology_for_bus = {}
+        for upstream_id in self.harness.topology:
+            if self.harness.topology[upstream_id]:  # 有下游连接
+                downstream_id = self.harness.topology[upstream_id][0]  # 取第一个下游
+                if upstream_id not in topology_for_bus:
+                    topology_for_bus[upstream_id] = {}
+                if downstream_id not in topology_for_bus:
+                    topology_for_bus[downstream_id] = {}
+                topology_for_bus[upstream_id]['downstream'] = downstream_id
+                topology_for_bus[downstream_id]['upstream'] = upstream_id
+        
         self.message_bus.set_component_topology(topology_for_bus)
         logging.info("Topology loaded.")
 

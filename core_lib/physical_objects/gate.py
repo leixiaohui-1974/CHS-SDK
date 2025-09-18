@@ -30,6 +30,12 @@ class Gate(PhysicalObjectInterface):
                  identification_bounds_max: float = 0.8):
         super().__init__(name, initial_state, parameters)
         self._state.setdefault('outflow', 0)
+        
+        # 参数映射：将配置文件中的参数名映射为内部使用的标准参数名
+        if 'zb' in parameters and 'gate_bottom_elevation' not in parameters:
+            self._params['gate_bottom_elevation'] = parameters['zb']
+            print(f"闸门 '{self.name}' 映射参数: zb={parameters['zb']} -> gate_bottom_elevation")
+        
         self.bus = message_bus
         self.action_topic = action_topic
         self.action_key = action_key
@@ -114,15 +120,30 @@ class Gate(PhysicalObjectInterface):
         gate_bottom = self._params.get('gate_bottom_elevation', self.default_gate_bottom_elevation)
         critical_downstream_level = gate_bottom + self.free_flow_ratio * opening
         
+        # 调试信息：计算过程
+        is_gate1_debug = hasattr(self, 'name') and self.name == 'Gate_1'
+        if is_gate1_debug:
+            print(f"  计算过程: area={area:.3f}m2, head_diff={head_diff:.3f}m")
+            print(f"  gate_bottom={gate_bottom:.3f}m, critical_downstream_level={critical_downstream_level:.3f}m")
+            print(f"  流态判断: downstream_level({downstream_level:.3f}) <= critical({critical_downstream_level:.3f}) ? {downstream_level <= critical_downstream_level}")
+        
         if downstream_level <= critical_downstream_level:
             # 自由出流：只考虑上游水头
             effective_head = upstream_level - gate_bottom
             if effective_head <= 0:
+                if is_gate1_debug:
+                    print(f"  自由出流: effective_head={effective_head:.3f}m <= 0, 返回 0")
                 return 0
-            return C * area * math.sqrt(2 * g * effective_head)
+            result = C * area * math.sqrt(2 * g * effective_head)
+            if is_gate1_debug:
+                print(f"  自由出流: effective_head={effective_head:.3f}m, 计算结果={result:.3f}m3/s")
+            return result
         else:
             # 淹没出流：考虑上下游水位差
-            return C * area * math.sqrt(2 * g * head_diff)
+            result = C * area * math.sqrt(2 * g * head_diff)
+            if is_gate1_debug:
+                print(f"  淹没出流: head_diff={head_diff:.3f}m, 计算结果={result:.3f}m3/s")
+            return result
 
     def calculate_outflow(self, upstream_level: float, opening: float, downstream_level: float = 0, C: Optional[float] = None) -> float:
         """
@@ -186,6 +207,18 @@ class Gate(PhysicalObjectInterface):
             
         upstream_level = action['upstream_head']
         downstream_level = action['downstream_head']
+        
+        # 调试信息：输出闸门的关键参数
+        gate_bottom = self._params.get('gate_bottom_elevation', self.default_gate_bottom_elevation)
+        if self.name == 'Gate_1':  # 只为特定闸门输出调试信息
+            print(f"\n=== Gate_1 调试信息 ===")
+            print(f"upstream_level: {upstream_level:.3f}m")
+            print(f"downstream_level: {downstream_level:.3f}m")
+            print(f"gate_bottom_elevation: {gate_bottom:.3f}m")
+            print(f"opening: {self._state['opening']:.3f}")
+            print(f"width: {self._params.get('width', self.default_width):.3f}m")
+            print(f"discharge_coefficient: {self._params.get('discharge_coefficient', self.default_discharge_coefficient):.6f}")
+        
         self._state['outflow'] = self._calculate_outflow(upstream_level, self._state['opening'], downstream_level)
         return self.get_state()
 
