@@ -98,7 +98,7 @@ class JointPIDController(Controller):
 
         Args:
             observation: The current state, must contain the key 'process_variable'.
-            dt: The time step duration in seconds.
+            time_step: The time step duration in seconds.
 
         Returns:
             A dictionary where keys are topic names and values are the control signals.
