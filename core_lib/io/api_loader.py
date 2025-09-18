@@ -55,7 +55,7 @@ class SimulationBuilderFromModels:
 
         context = {
             'message_bus': self.message_bus,
-            'dt': self.harness.config.get('dt')
+            'time_step': self.harness.config.get('time_step')
         }
         self.object_factory = ObjectFactory(context)
 
