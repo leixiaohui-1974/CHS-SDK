@@ -1,0 +1,29 @@
+# Agent Configuration for PID Control Comparison Example
+# This example demonstrates PID control on canal water levels
+
+controllers:
+  # PID controller for gate_1 controlling canal_1 water level
+  - id: gate_1_pid_controller
+    class: PIDController
+    controlled_id: gate_1
+    observed_id: canal_1
+    observation_key: water_level
+    Kp: 0.5
+    Ki: 0.01
+    Kd: 0.1
+    setpoint: 5.0
+    min_output: 0.1
+    max_output: 1.0
+
+  # PID controller for gate_2 controlling canal_2 water level
+  - id: gate_2_pid_controller
+    class: PIDController
+    controlled_id: gate_2
+    observed_id: canal_2
+    observation_key: water_level
+    Kp: 0.5
+    Ki: 0.01
+    Kd: 0.1
+    setpoint: 4.5
+    min_output: 0.1
+    max_output: 1.0
