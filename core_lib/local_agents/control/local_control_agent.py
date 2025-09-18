@@ -79,7 +79,7 @@ class LocalControlAgent(Agent):
         """
         super().__init__(agent_id)
         self.bus = message_bus
-        self.time_step= dt
+        self.time_step = time_step
         self.target_component = target_component
         self.control_type = control_type
         self.data_sources = data_sources
@@ -192,7 +192,7 @@ class LocalControlAgent(Agent):
             print(f"[{self.agent_id}] Warning: No controller available")
             return 0.0
         
-        return self.controller.compute_control_action(observation, self.dt)
+        return self.controller.compute_control_action(observation, self.time_step)
 
     def publish_action(self, control_signal: any):
         """
