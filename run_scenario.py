@@ -8,12 +8,17 @@ that is defined by a directory of YAML configuration files.
 """
 import logging
 import sys
+import os
 import argparse
 from pathlib import Path
 
 # Add the project root to the Python path to allow imports from core_lib
 project_root = Path(__file__).resolve().parent
 sys.path.insert(0, str(project_root))
+
+# 设置环境变量确保UTF-8编码 (修复Windows GBK编码问题)
+os.environ['PYTHONIOENCODING'] = 'utf-8'
+os.environ['PYTHONUTF8'] = '1'
 
 from core_lib.io.yaml_loader import YamlSimulationLoader
 from core_lib.io.yaml_writer import save_history_to_yaml

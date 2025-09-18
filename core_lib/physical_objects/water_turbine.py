@@ -59,8 +59,13 @@ class WaterTurbine(PhysicalObjectInterface):
         self._state['outflow'] = outflow
 
         # The harness provides head levels from adjacent components
-        upstream_head = action.get('upstream_head', 0)
-        downstream_head = action.get('downstream_head', 0)
+        if 'upstream_head' not in action:
+            raise KeyError(f"WaterTurbine '{self.name}': 'upstream_head' is required in action but not provided")
+        if 'downstream_head' not in action:
+            raise KeyError(f"WaterTurbine '{self.name}': 'downstream_head' is required in action but not provided")
+            
+        upstream_head = action['upstream_head']
+        downstream_head = action['downstream_head']
 
         # Head difference must be positive for power generation
         head = max(0, upstream_head - downstream_head)

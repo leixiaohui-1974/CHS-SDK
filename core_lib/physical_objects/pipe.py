@@ -13,10 +13,30 @@ class Pipe(PhysicalObjectInterface):
     该模型可以根据 'calculation_method' 参数使用 Darcy-Weisbach 或 Manning 公式来计算流量。
     """
 
-    def __init__(self, name: str, initial_state: State, parameters: Parameters):
+    def __init__(self, name: str, initial_state: State, parameters: Parameters,
+                 default_gravity: float = 9.81,
+                 default_manning_n: float = 0.013,
+                 default_pi_factor: float = 0.25,
+                 default_hydraulic_radius_factor: float = 0.25,
+                 default_exponent_two_thirds: float = 2/3,
+                 identification_bounds_manning_min: float = 0.001,
+                 identification_bounds_manning_max: float = 0.1,
+                 identification_bounds_friction_min: float = 0.001,
+                 identification_bounds_friction_max: float = 0.5):
         super().__init__(name, initial_state, parameters)
         self._state.setdefault('outflow', 0)
         self._state.setdefault('head_loss', 0)
+
+        # 将默认参数值设置为实例属性
+        self.default_gravity = default_gravity
+        self.default_manning_n = default_manning_n
+        self.default_pi_factor = default_pi_factor
+        self.default_hydraulic_radius_factor = default_hydraulic_radius_factor
+        self.default_exponent_two_thirds = default_exponent_two_thirds
+        self.identification_bounds_manning_min = identification_bounds_manning_min
+        self.identification_bounds_manning_max = identification_bounds_manning_max
+        self.identification_bounds_friction_min = identification_bounds_friction_min
+        self.identification_bounds_friction_max = identification_bounds_friction_max
 
         self.method = self._params.get('calculation_method', 'darcy_weisbach')
         if self.method not in ['darcy_weisbach', 'manning']:
@@ -29,11 +49,11 @@ class Pipe(PhysicalObjectInterface):
         if head_difference <= 0:
             return 0
 
-        g = 9.81
+        g = self.default_gravity
         friction_factor = f if f is not None else self._params['friction_factor']
         length = self._params['length']
         diameter = self._params['diameter']
-        area = (math.pi / 4) * (diameter ** 2)
+        area = math.pi * self.default_pi_factor * (diameter ** 2)
 
         # Q = A * sqrt(2 * g * h_L * D / (f * L))
         if friction_factor * length == 0: return 0
@@ -45,7 +65,7 @@ class Pipe(PhysicalObjectInterface):
         if head_difference <= 0:
             return 0
 
-        manning_n = n if n is not None else self._params['manning_n']
+        manning_n = n if n is not None else self._params.get('manning_n', self.default_manning_n)
         if manning_n == 0: return float('inf')
 
         length = self._params['length']
@@ -53,12 +73,12 @@ class Pipe(PhysicalObjectInterface):
 
         diameter = self._params['diameter']
 
-        area = (math.pi / 4) * (diameter ** 2)
-        hydraulic_radius = diameter / 4 # 满管圆形管道的水力半径
+        area = math.pi * self.default_pi_factor * (diameter ** 2)
+        hydraulic_radius = diameter * self.default_hydraulic_radius_factor # 满管圆形管道的水力半径
         slope = head_difference / length
 
         # Q = (1.0/n) * A * R_h^(2/3) * S^(1/2) --- 国际单位制
-        flow = (1.0 / manning_n) * area * (hydraulic_radius ** (2/3)) * math.sqrt(slope)
+        flow = (1.0 / manning_n) * area * (hydraulic_radius ** self.default_exponent_two_thirds) * math.sqrt(slope)
         return flow
 
     def _calculate_head_loss_darcy_weisbach(self, flow: float) -> float:
@@ -66,11 +86,11 @@ class Pipe(PhysicalObjectInterface):
         if flow <= 0:
             return 0
 
-        g = 9.81
+        g = self.default_gravity
         friction_factor = self._params['friction_factor']
         length = self._params['length']
         diameter = self._params['diameter']
-        area = (math.pi / 4) * (diameter ** 2)
+        area = math.pi * self.default_pi_factor * (diameter ** 2)
 
         if diameter == 0 or area == 0:
             return float('inf')
@@ -95,21 +115,26 @@ class Pipe(PhysicalObjectInterface):
                 # This is a simplified inversion for the example. A proper implementation might need a solver.
                 # For now, we'll use a simplified approach assuming we can rearrange the formula.
                 # Q = (1/n) * A * R_h^(2/3) * (h_L/L)^(1/2) => h_L = L * (Q*n / (A*R_h^(2/3)))^2
-                manning_n = self._params.get('manning_n', 0.013)
+                manning_n = self._params.get('manning_n', self.default_manning_n)
                 diameter = self._params['diameter']
-                area = (math.pi / 4) * (diameter ** 2)
-                hydraulic_radius = diameter / 4
+                area = math.pi * self.default_pi_factor * (diameter ** 2)
+                hydraulic_radius = diameter * self.default_hydraulic_radius_factor
                 length = self._params['length']
                 if area > 0 and hydraulic_radius > 0:
-                    head_loss = length * (outflow * manning_n / (area * hydraulic_radius**(2/3)))**2
+                    head_loss = length * (outflow * manning_n / (area * hydraulic_radius**self.default_exponent_two_thirds))**2
                 else:
                     head_loss = 0
             self._state['head_loss'] = head_loss
             self._state['outflow'] = outflow
         else:
             # Mode 1: Calculate flow from heads
-            upstream_head = action.get('upstream_head', 0)
-            downstream_head = action.get('downstream_head', 0)
+            if 'upstream_head' not in action:
+                raise KeyError(f"Pipe '{self.name}': 'upstream_head' is required in action but not provided")
+            if 'downstream_head' not in action:
+                raise KeyError(f"Pipe '{self.name}': 'downstream_head' is required in action but not provided")
+                
+            upstream_head = action['upstream_head']
+            downstream_head = action['downstream_head']
             head_difference = upstream_head - downstream_head
 
             if self.method == 'darcy_weisbach':
@@ -136,13 +161,13 @@ class Pipe(PhysicalObjectInterface):
         if self.method == 'manning':
             param_key = 'manning_n'
             calc_func = self._calculate_flow_manning
-            initial_guess = self._params.get(param_key, 0.013)
-            bounds = [(0.001, 0.1)] # 曼宁 n 的物理边界
+            initial_guess = self._params.get(param_key, self.default_manning_n)
+            bounds = [(self.identification_bounds_manning_min, self.identification_bounds_manning_max)] # 曼宁 n 的物理边界
         else: # darcy_weisbach
             param_key = 'friction_factor'
             calc_func = self._calculate_flow_darcy_weisbach
             initial_guess = self._params.get(param_key, 0.02)
-            bounds = [(0.001, 0.5)] # f 的物理边界
+            bounds = [(self.identification_bounds_friction_min, self.identification_bounds_friction_max)] # f 的物理边界
 
         def _simulation_error(param_to_id: np.ndarray) -> float:
             """优化器的目标函数。"""

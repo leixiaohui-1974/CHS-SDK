@@ -23,8 +23,14 @@ class Pump(PhysicalObjectInterface):
     """
 
     def __init__(self, name: str, initial_state: State, parameters: Parameters,
-                 message_bus: Optional[MessageBus] = None, action_topic: Optional[str] = None):
+                 message_bus: Optional[MessageBus] = None, action_topic: Optional[str] = None,
+                 default_upstream_level: float = 25.0,
+                 default_downstream_level: float = 8.0):
         super().__init__(name, initial_state, parameters)
+        
+        # 将默认水位值设置为实例属性
+        self.default_upstream_level = default_upstream_level
+        self.default_downstream_level = default_downstream_level
         
         # 物理状态
         self._state.setdefault('outflow', 0.0)
@@ -110,8 +116,17 @@ class Pump(PhysicalObjectInterface):
             print(f"Pump '{self.name}' status changed to: {self.target_status}")
 
         # 计算物理量（需要上下游水位信息）
-        upstream_level = action.get('upstream_level', 25.0)  # 默认上游水位
-        downstream_level = action.get('downstream_level', 8.0)  # 默认下游水位
+        if 'upstream_level' not in action:
+            # 使用构造函数中设置的默认值
+            upstream_level = self.default_upstream_level
+        else:
+            upstream_level = action['upstream_level']
+            
+        if 'downstream_level' not in action:
+            # 使用构造函数中设置的默认值
+            downstream_level = self.default_downstream_level
+        else:
+            downstream_level = action['downstream_level']
         
         # 计算流量
         flow = self._calculate_flow(upstream_level, downstream_level)

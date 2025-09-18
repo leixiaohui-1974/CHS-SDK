@@ -11,7 +11,6 @@ from .pump import Pump
 from .valve import Valve
 from .river_channel import RiverChannel
 from .hydropower_station import HydropowerStation
-from .lake import Lake
 from .water_turbine import WaterTurbine
 from .rainfall_runoff import RainfallRunoff
 # from .integral_delay_canal import IntegralDelayCanal
@@ -25,7 +24,6 @@ __all__ = [
     'Pump',
     'Valve',
     'HydropowerStation',
-    'Lake',
     'WaterTurbine',
     'RainfallRunoff',
     'RiverChannel',
