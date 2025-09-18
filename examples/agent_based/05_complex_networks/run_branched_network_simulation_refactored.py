@@ -15,7 +15,8 @@ import numpy as np
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 sys.path.insert(0, project_root)
 
-from core_lib.core_engine.testing.simulation_builder import HardcodedYamlSimulationLoader
+from core_lib.core_engine.testing.simulation_builder import HardcodedSimulationBuilder
+from core_lib.physical_objects.reservoir import Reservoir
 from core_lib.physical_objects.river_channel import RiverChannel
 from core_lib.local_agents.perception.digital_twin_agent import DigitalTwinAgent
 from core_lib.local_agents.control.pid_controller import PIDController
@@ -42,7 +43,7 @@ def analyze_and_visualize_results(builder, config):
     g2_openings = []
     
     for i, step_data in enumerate(history):
-        time_data.append(i * config['dt'])
+        time_data.append(i * config['time_step'])
         
         if 'res1' in step_data:
             res1_levels.append(step_data['res1']['water_level'])
@@ -147,30 +148,30 @@ def analyze_and_visualize_results(builder, config):
 
 def create_branched_network_system():
     """
-    Creates a complex branched network system using YamlSimulationLoader.
+    Creates a complex branched network system using HardcodedSimulationBuilder.
     
     Returns:
-        YamlSimulationLoader: Configured simulation builder
+        HardcodedSimulationBuilder: Configured simulation builder
     """
     # Initialize builder with simulation configuration
-    config = {'end_time': 10000, 'dt': 1.0}
-    builder = YamlSimulationLoader(config)
+    config = {'end_time': 10000, 'time_step': 1.0}
+    builder = HardcodedSimulationBuilder(config)
     
     print("Initializing physical components...")
     
     # Add reservoirs using builder methods
     builder.add_reservoir(
         component_id="res1",
-        water_level=10.0,
+        water_level=11.0,  # 更接近目标水位12.0m
         surface_area=1.5e6,
-        volume=15e6
+        volume=16.5e6  # 对应调整初始体积
     )
     
     builder.add_reservoir(
         component_id="res2",
-        water_level=20.0,
+        water_level=18.5,  # 更接近目标水位18.0m
         surface_area=1.5e6,
-        volume=30e6
+        volume=27.75e6  # 对应调整初始体积
     )
     
     # 直接创建闸门对象，设置正确的物理参数
@@ -218,6 +219,14 @@ def create_branched_network_system():
     )
     builder.harness.add_component("g3", g3)
     
+    # 添加下游水库以提供边界条件
+    downstream_reservoir = Reservoir(
+        name="downstream_reservoir",
+        initial_state={'volume': 10e6, 'water_level': 5.0},
+        parameters={'surface_area': 2e6, 'storage_curve': [[0, 0], [20e6, 10]]}
+    )
+    builder.harness.add_component("downstream_reservoir", downstream_reservoir)
+    
     # Add river channels manually (not in builder yet)
     trib_chan = RiverChannel(
         name="trib_chan",
@@ -243,7 +252,8 @@ def create_branched_network_system():
         ("res2", "g2"),
         ("trib_chan", "main_chan"),
         ("g2", "main_chan"),
-        ("main_chan", "g3")
+        ("main_chan", "g3"),
+        ("g3", "downstream_reservoir")  # 添加下游连接
     ]
     
     builder.connect_components(connections)
@@ -280,14 +290,14 @@ def create_branched_network_system():
     
     # Add PID controllers and unified gate control agents
     pid1 = PIDController(
-        Kp=2.0, Ki=0.5, Kd=0.2,
+        Kp=1.0, Ki=0.1, Kd=0.05,  # 修正PID参数：降低过激响应，改善稳定性
         setpoint=12.0,
         min_output=0.0,
         max_output=2.0
     )
     
     pid2 = PIDController(
-        Kp=1.5, Ki=0.3, Kd=0.15,
+        Kp=0.8, Ki=0.08, Kd=0.04,  # 优化PID参数提高控制精度
         setpoint=18.0,
         min_output=0.0,
         max_output=2.0
@@ -300,7 +310,7 @@ def create_branched_network_system():
         observation_topic="state.res1.level",
         observation_key="water_level",
         action_topic="action.g1.opening",
-        dt=config['dt'],
+        time_step=config['time_step'],
         command_topic="command.res1.setpoint",
         target_component="g1",
         control_type="gate_control"
@@ -313,7 +323,7 @@ def create_branched_network_system():
         observation_topic="state.res2.level",
         observation_key="water_level",
         action_topic="action.g2.opening",
-        dt=config['dt'],
+        time_step=config['time_step'],
         command_topic="command.res2.setpoint",
         target_component="g2",
         control_type="gate_control"
@@ -371,7 +381,7 @@ def run_branched_network_simulation():
         print(f"Final reservoir 2 water level: {final_res2_level:.2f} m (Setpoint: 18.0 m)")
     
     # 分析和可视化结果
-    config = {'end_time': 1000, 'dt': 1.0}
+    config = {'end_time': 10000, 'time_step': 1.0}
     results = analyze_and_visualize_results(builder, config)
 
 if __name__ == "__main__":

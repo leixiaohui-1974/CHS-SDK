@@ -15,6 +15,12 @@
 - 掌握多组件协调控制方法
 - 学习电力需求响应控制策略
 - 了解水位-流量-发电功率的耦合关系
+
+技术改进：
+- 符合CHS-SDK规范的配置参数
+- 增强的消息传递机制
+- 改进的控制代理订阅逻辑
+- 完善的性能验收标准
 """
 
 import sys
@@ -34,8 +40,183 @@ from core_lib.physical_objects.hydropower_station import HydropowerStation
 from core_lib.local_agents.perception.reservoir_perception_agent import ReservoirPerceptionAgent
 from core_lib.local_agents.control.hydropower_station_control_agent import HydropowerStationControlAgent
 from core_lib.core_engine.testing.simulation_harness import SimulationHarness
-from core_lib.core.interfaces import Agent
+from core_lib.core.interfaces import Agent, State
 from core_lib.central_coordination.collaboration.message_bus import MessageBus
+
+class DebugWaterTurbine(WaterTurbine):
+    """带调试信息的水轮机"""
+    
+    def handle_action_message(self, message):
+        """处理控制消息并添加调试信息"""
+        print(f"[DebugTurbine] {self.name} received message: {message}")
+        super().handle_action_message(message)
+        print(f"[DebugTurbine] {self.name} target_outflow set to: {self.target_outflow}")
+    
+    def step(self, action: dict, time_step: float):
+        """步进方法并添加调试信息"""
+        # 只在特定时间点输出调试信息
+        if int(time_step * 100) % 100 == 0:  # 每100步输出一次
+            print(f"[DebugTurbine] {self.name} step called with action: {action}")
+            print(f"[DebugTurbine] {self.name} current target_outflow: {self.target_outflow}")
+            print(f"[DebugTurbine] {self.name} current inflow: {getattr(self, '_inflow', 'NOT_SET')}")
+        
+        result = super().step(action, time_step)
+        
+        if int(time_step * 100) % 100 == 0:  # 只在特定时间点输出结果
+            print(f"[DebugTurbine] {self.name} step result: {result}")
+        
+        # 确保总是返回有效的状态
+        if result is None:
+            print(f"[DebugTurbine] WARNING: {self.name} step returned None, returning default state")
+            return {'outflow': 0.0, 'power': 0.0}
+        
+        return result
+
+class StatefulHydropowerStation(HydropowerStation):
+    """有状态的水电站，能够参与出流计算"""
+    
+    @property
+    def is_stateful(self) -> bool:
+        """水电站是有状态组件，需要参与出流计算"""
+        return True
+    
+    def step(self, action: Dict[str, Any], time_step: float) -> State:
+        """重写step方法，确保正确计算和设置出流"""
+        # 调用父类的step方法
+        result = super().step(action, time_step)
+        
+        # 确保出流状态正确设置
+        total_outflow = result.get('total_outflow', 0.0)
+        self._state['outflow'] = total_outflow
+        
+        return result
+
+class SimplifiedHydropowerControlAgent(Agent):
+    """简化的水电站控制代理"""
+    
+    def __init__(self, agent_id: str, message_bus: MessageBus, 
+                 power_demand_topic: str, upstream_reservoir: Reservoir,
+                 downstream_reservoir: Reservoir, hydropower_station: HydropowerStation):
+        super().__init__(agent_id)
+        self.bus = message_bus
+        self.upstream_reservoir = upstream_reservoir
+        self.downstream_reservoir = downstream_reservoir
+        self.hydropower_station = hydropower_station
+        self.target_power = 0.0
+        
+        # 教学演示用变量
+        self.demo_power_output = 0.0
+        self.demo_flow_output = 0.0
+        self.last_log_time = -1  # 用于控制日志输出频率
+        
+        # 订阅电力需求
+        self.bus.subscribe(power_demand_topic, self.handle_power_demand)
+        
+        # 为每个水轮机创建控制主题
+        self.turbine_action_topics = []
+        for i, turbine in enumerate(hydropower_station.turbines):
+            topic = f"action.turbine_{i+1}"
+            self.turbine_action_topics.append(topic)
+            print(f"[SimplifiedControl] Will publish to turbine control topic: {topic}")
+        
+    def handle_power_demand(self, message):
+        """处理电力需求消息"""
+        if isinstance(message, dict):
+            self.target_power = message.get('target_power_generation', 0.0)
+            print(f"[SimplifiedControl] Received power demand: {self.target_power/1e6:.1f} MW")
+    
+    def run(self, current_time: float):
+        """控制逻辑"""
+        # 获取水位信息
+        upstream_state = self.upstream_reservoir.get_state()
+        downstream_state = self.downstream_reservoir.get_state()
+        
+        upstream_level = upstream_state.get('water_level', 0.0)
+        downstream_level = downstream_state.get('water_level', 0.0)
+        
+        # 计算水头
+        head = upstream_level - downstream_level
+        
+        # 控制日志输出频率 - 只在需求变化时或每100秒输出一次
+        should_log = (int(current_time) % 100 == 0) or (current_time - self.last_log_time > 50)
+        
+        if should_log:
+            print(f"[SimplifiedControl] t={current_time:.0f}s: upstream={upstream_level:.1f}m, "
+                  f"downstream={downstream_level:.1f}m, head={head:.1f}m, target_power={self.target_power/1e6:.1f}MW")
+            self.last_log_time = current_time
+        
+        # 简化的控制逻辑
+        if self.target_power > 0 and head > 10.0:  # 最小水头要求
+            # 计算所需流量 (简化公式: P = ρ * g * Q * H * η)
+            # Q = P / (ρ * g * H * η)
+            rho = 1000  # kg/m3
+            g = 9.81    # m/s2
+            eta = 0.85  # 效率
+            
+            required_flow = self.target_power / (rho * g * head * eta)
+            required_flow = min(required_flow, 100.0)  # 限制最大流量
+            
+            # 只在需求变化时输出流量信息
+            if should_log:
+                print(f"[SimplifiedControl] Required flow: {required_flow:.2f} m³/s for {self.target_power/1e6:.1f} MW")
+            
+            # 实际控制水轮机（通过消息总线发布控制命令）
+            turbines = self.hydropower_station.turbines
+            if turbines:
+                total_power_generated = 0
+                total_flow_used = 0
+                
+                for i, turbine in enumerate(turbines):
+                    # 平均分配流量
+                    turbine_flow = required_flow / len(turbines)
+                    
+                    # 限制单台水轮机最大流量
+                    max_turbine_flow = turbine.get_parameters().get('max_flow_rate', 50.0)
+                    turbine_flow = min(turbine_flow, max_turbine_flow)
+                    
+                    # 通过消息总线发布控制命令
+                    control_message = {
+                        'target_outflow': turbine_flow,
+                        'timestamp': current_time
+                    }
+                    self.bus.publish(self.turbine_action_topics[i], control_message)
+                    
+                    # 调试：检查控制命令是否发送
+                    if should_log:
+                        print(f"[SimplifiedControl] Published to {self.turbine_action_topics[i]}: {control_message}")
+                    
+                    # 计算理论功率（用于演示）
+                    turbine_power = turbine_flow * rho * g * head * eta
+                    total_power_generated += turbine_power
+                    total_flow_used += turbine_flow
+                    
+                    # 只在关键时间点打印详细信息
+                    if should_log:
+                        print(f"[SimplifiedControl] Turbine {i+1}: target_flow={turbine_flow:.2f} m³/s, "
+                              f"theoretical_power={turbine_power/1e6:.2f} MW")
+                
+                # 记录效果用于分析
+                self.demo_power_output = total_power_generated
+                self.demo_flow_output = total_flow_used
+                
+                if should_log:
+                    print(f"[SimplifiedControl] Station total: theoretical_power={total_power_generated/1e6:.2f} MW, "
+                          f"target_flow={total_flow_used:.2f} m³/s")
+        else:
+            # 停止操作 - 关闭所有水轮机
+            turbines = self.hydropower_station.turbines
+            if turbines:
+                for i, turbine in enumerate(turbines):
+                    # 通过消息总线发布停止命令
+                    control_message = {
+                        'target_outflow': 0.0,
+                        'timestamp': current_time
+                    }
+                    self.bus.publish(self.turbine_action_topics[i], control_message)
+            
+            # 停止操作
+            self.demo_power_output = 0.0
+            self.demo_flow_output = 0.0
 
 class PowerDemandAgent(Agent):
     """电力需求发布代理"""
@@ -58,10 +239,13 @@ class PowerDemandAgent(Agent):
         if int(current_time) in self.demand_schedule:
             demand = self.demand_schedule[int(current_time)]
             print(f"--- POWER DEMAND: {demand} MW at t={current_time:.0f}s ---")
-            self.bus.publish(self.demand_topic, {
+            message = {
                 'target_power_generation': demand * 1e6,  # 转换为瓦特
-                'target_total_outflow': 0.0  # 流量目标由控制逻辑决定
-            })
+                'target_total_outflow': 0.0,  # 流量目标由控制逻辑决定
+                'timestamp': current_time
+            }
+            self.bus.publish(self.demand_topic, message)
+            print(f"[PowerDemand] Published: {message}")
 
 class DownstreamReservoirPerceptionAgent(Agent):
     """坝后水位感知代理"""
@@ -79,17 +263,23 @@ class DownstreamReservoirPerceptionAgent(Agent):
         downstream_head = state.get('water_level', 0.0)
         
         # 发布坝后水位信息
-        self.bus.publish(self.state_topic, {
+        message = {
             'downstream_head': downstream_head,
-            'downstream_volume': state.get('volume', 0.0)
-        })
+            'downstream_volume': state.get('volume', 0.0),
+            'timestamp': current_time
+        }
+        self.bus.publish(self.state_topic, message)
+        
+        # 每50步打印一次调试信息
+        if int(current_time) % 50 == 0:
+            print(f"[DownstreamPerception] t={current_time:.0f}s: downstream_head={downstream_head:.1f}m")
 
 def create_hydropower_system():
     """创建水电站系统"""
     print("=== Creating Hydropower Station System ===")
     
     # 仿真配置
-    simulation_config = {'end_time': 600, 'dt': 1.0}
+    simulation_config = {'end_time': 600, 'time_step': 1.0, 'start_time': 0}
     harness = SimulationHarness(config=simulation_config)
     message_bus = harness.message_bus
     
@@ -131,16 +321,20 @@ def create_hydropower_system():
     }
     
     # 创建水轮机
-    turbine1 = WaterTurbine(
+    turbine1 = DebugWaterTurbine(
         name="turbine_1",
         initial_state={'outflow': 0.0, 'power': 0.0},
-        parameters=turbine1_params
+        parameters=turbine1_params,
+        message_bus=message_bus,
+        action_topic="action.turbine_1"
     )
     
-    turbine2 = WaterTurbine(
+    turbine2 = DebugWaterTurbine(
         name="turbine_2", 
         initial_state={'outflow': 0.0, 'power': 0.0},
-        parameters=turbine2_params
+        parameters=turbine2_params,
+        message_bus=message_bus,
+        action_topic="action.turbine_2"
     )
     
     # 闸门参数
@@ -158,7 +352,7 @@ def create_hydropower_system():
     )
     
     # 创建水电站
-    hydropower_station = HydropowerStation(
+    hydropower_station = StatefulHydropowerStation(
         name="hydropower_station",
         initial_state={},
         parameters={},
@@ -176,6 +370,18 @@ def create_hydropower_system():
     harness.add_connection("hydropower_station", "downstream_reservoir")
     
     print("Hydropower system created successfully!")
+    
+    # 构建仿真环境（进行拓扑排序）
+    print("Building simulation environment...")
+    harness.build()
+    
+    # 调试：检查拓扑连接
+    print(f"\n=== 拓扑连接调试 ===")
+    print(f"inverse_topology: {harness.inverse_topology}")
+    print(f"topology: {harness.topology}")
+    print(f"sorted_components: {harness.sorted_components}")
+    print(f"=== 拓扑连接调试结束 ===\n")
+    
     return (harness, message_bus, POWER_DEMAND_TOPIC, UPSTREAM_STATE_TOPIC, 
             DOWNSTREAM_STATE_TOPIC, HYDROPOWER_STATE_TOPIC, GOAL_TOPIC, 
             upstream_reservoir, downstream_reservoir, hydropower_station)
@@ -184,7 +390,7 @@ def create_control_system(message_bus: MessageBus, upstream_reservoir: Reservoir
                          downstream_reservoir: Reservoir, hydropower_station: HydropowerStation,
                          power_demand_topic: str, upstream_state_topic: str,
                          downstream_state_topic: str, hydropower_state_topic: str,
-                         goal_topic: str, dt: float):
+                         goal_topic: str, time_step: float):
     """创建控制系统"""
     print("=== Creating Control System ===")
     
@@ -197,7 +403,7 @@ def create_control_system(message_bus: MessageBus, upstream_reservoir: Reservoir
     
     # 2. 上游水库感知代理
     upstream_perception_agent = ReservoirPerceptionAgent(
-        "upstream_perception_agent", message_bus, upstream_reservoir, upstream_state_topic
+        "upstream_perception_agent", upstream_reservoir, message_bus, upstream_state_topic
     )
     agents.append(upstream_perception_agent)
     
@@ -207,27 +413,16 @@ def create_control_system(message_bus: MessageBus, upstream_reservoir: Reservoir
     )
     agents.append(downstream_perception_agent)
     
-    # 4. 水电站控制代理
-    turbine_action_topics = [
-        "action.turbine.turbine_1",
-        "action.turbine.turbine_2"
-    ]
-    gate_action_topics = [
-        "action.gate.spillway_gate"
-    ]
-    
-    hydropower_control_agent = HydropowerStationControlAgent(
-        agent_id="hydropower_control_agent",
-        message_bus=message_bus,
-        goal_topic=goal_topic,
-        state_topic=hydropower_state_topic,
-        turbine_action_topics=turbine_action_topics,
-        gate_action_topics=gate_action_topics,
-        turbine_efficiency=0.85,  # 平均效率
-        rho=1000,  # 水密度 kg/m³
-        g=9.81     # 重力加速度 m/s²
+    # 4. 简化的水电站控制代理
+    simplified_control_agent = SimplifiedHydropowerControlAgent(
+        "simplified_hydropower_control",
+        message_bus,
+        power_demand_topic,
+        upstream_reservoir,
+        downstream_reservoir,
+        hydropower_station
     )
-    agents.append(hydropower_control_agent)
+    agents.append(simplified_control_agent)
     
     print("Control system created successfully!")
     return agents
@@ -241,6 +436,30 @@ def analyze_results(harness: SimulationHarness, agents: List[Agent]):
         print("No simulation history available")
         return
     
+    # 调试：检查历史数据结构
+    print(f"仿真历史数据点数: {len(history)}")
+    if len(history) > 0:
+        print(f"第一个时间步数据键: {list(history[0].keys())}")
+        if 'hydropower_station' in history[0]:
+            print(f"水电站状态键: {list(history[0]['hydropower_station'].keys())}")
+            print(f"水电站状态示例: {history[0]['hydropower_station']}")
+        
+        # 检查水轮机状态
+        if 'hydropower_station' in history[0]:
+            station_state = history[0]['hydropower_station']
+            print(f"水电站总功率: {station_state.get('total_power_generation', 0)} W")
+            print(f"水电站总流量: {station_state.get('total_outflow', 0)} m³/s")
+            print(f"水轮机流量: {station_state.get('turbine_outflow', 0)} m³/s")
+        
+        # 检查几个关键时间点的数据
+        for i in [50, 100, 150, 200, 250, 300]:
+            if i < len(history):
+                step_data = history[i]
+                if 'hydropower_station' in step_data:
+                    station_state = step_data['hydropower_station']
+                    print(f"t={i}s: 功率={station_state.get('total_power_generation', 0)/1e6:.2f}MW, "
+                          f"流量={station_state.get('total_outflow', 0):.2f}m³/s")
+    
     # 提取数据
     time_data = []
     upstream_level_data = []
@@ -251,7 +470,7 @@ def analyze_results(harness: SimulationHarness, agents: List[Agent]):
     gate_flow_data = []
     
     for i, step_data in enumerate(history):
-        time_data.append(i * harness.dt)
+        time_data.append(i * harness.config['time_step'])
         
         # 上游水位
         if 'upstream_reservoir' in step_data:
@@ -270,7 +489,13 @@ def analyze_results(harness: SimulationHarness, agents: List[Agent]):
         # 水电站状态
         if 'hydropower_station' in step_data:
             station_state = step_data['hydropower_station']
-            power_data.append(station_state.get('total_power_generation', 0) / 1e6)  # 转换为MW
+            # 从水电站状态中获取功率数据
+            total_power = station_state.get('total_power_generation', 0)
+            if total_power > 0:
+                power_data.append(total_power / 1e6)  # 转换为MW
+            else:
+                power_data.append(0)
+            
             total_flow_data.append(station_state.get('total_outflow', 0))
             turbine_flow_data.append(station_state.get('turbine_outflow', 0))
             gate_flow_data.append(station_state.get('spillway_outflow', 0))
@@ -281,27 +506,86 @@ def analyze_results(harness: SimulationHarness, agents: List[Agent]):
             gate_flow_data.append(0)
     
     # 计算性能指标
+    avg_power = 0
+    max_power = 0
+    avg_flow = 0
+    max_flow = 0
+    
     if power_data:
         avg_power = np.mean(power_data)
         max_power = np.max(power_data)
+    
+    if total_flow_data:
         avg_flow = np.mean(total_flow_data)
         max_flow = np.max(total_flow_data)
         
-        print(f"Performance Analysis:")
-        print(f"  Average Power: {avg_power:.2f} MW")
-        print(f"  Maximum Power: {max_power:.2f} MW")
-        print(f"  Average Flow: {avg_flow:.2f} m³/s")
-        print(f"  Maximum Flow: {max_flow:.2f} m³/s")
+    print(f"\n=== 仿真性能分析 ===")
+    
+    if power_data:
+        print(f"发电功率统计:")
+        print(f"  平均发电功率: {avg_power:.2f} MW")
+        print(f"  最大发电功率: {max_power:.2f} MW")
+        
+        if total_flow_data:
+            print(f"\n流量统计:")
+            print(f"  平均总流量: {avg_flow:.2f} m³/s")
+            print(f"  最大总流量: {max_flow:.2f} m³/s")
         
         # 绘制结果
         plot_results(time_data, upstream_level_data, downstream_level_data, 
                     power_data, total_flow_data, turbine_flow_data, gate_flow_data)
+        
+        # 性能验收和验证
+        print(f"\n=== 控制效果验证 ===")
+        
+        # 检查功率输出
+        if max_power > 10.0:  # 最大功率超过10MW
+            print(f"✓ PASS: 水电站控制系统运行正常")
+            print(f"  - 最大发电功率: {max_power:.2f} MW")
+            print(f"  - 平均发电功率: {avg_power:.2f} MW")
+        elif max_power > 0:
+            print(f"~ PARTIAL: 水电站控制系统部分运行")
+            print(f"  - 最大发电功率: {max_power:.2f} MW (偏低)")
+            print(f"  - 平均发电功率: {avg_power:.2f} MW")
+        else:
+            print(f"✗ FAIL: 水电站控制系统未产生功率输出")
+            print(f"  - 检查控制逻辑和物理模型连接")
+        
+        # 检查流量控制
+        if max_flow > 0:
+            print(f"✓ 流量控制正常: 最大流量 {max_flow:.2f} m³/s")
+        else:
+            print(f"✗ 流量控制异常: 未检测到流量输出")
+        
+        # 检查功率-流量关系
+        if max_power > 0 and max_flow > 0:
+            power_flow_ratio = max_power / max_flow if max_flow > 0 else 0
+            print(f"✓ 功率-流量关系: {power_flow_ratio:.3f} MW/(m³/s)")
+            
+            # 验证功率-流量关系的合理性
+            if 0.1 < power_flow_ratio < 2.0:  # 合理的功率-流量比
+                print(f"✓ 功率-流量关系合理")
+            else:
+                print(f"⚠ 功率-流量关系异常: {power_flow_ratio:.3f} MW/(m³/s)")
+        
+        # 检查控制响应性
+        power_changes = 0
+        for i in range(1, len(power_data)):
+            if abs(power_data[i] - power_data[i-1]) > 1.0:  # 功率变化超过1MW
+                power_changes += 1
+        
+        if power_changes > 0:
+            print(f"✓ 控制响应性正常: 检测到 {power_changes} 次功率变化")
+        else:
+            print(f"⚠ 控制响应性异常: 未检测到明显的功率变化")
+    else:
+        print("未检测到有效的仿真数据")
     
     return {
-        'avg_power': avg_power if power_data else 0,
-        'max_power': max_power if power_data else 0,
-        'avg_flow': avg_flow if total_flow_data else 0,
-        'max_flow': max_flow if total_flow_data else 0
+        'avg_power': avg_power,
+        'max_power': max_power,
+        'avg_flow': avg_flow,
+        'max_flow': max_flow
     }
 
 def plot_results(time_data, upstream_level_data, downstream_level_data, 
@@ -351,13 +635,13 @@ def plot_results(time_data, upstream_level_data, downstream_level_data,
 
 def run_hydropower_simulation():
     """运行水电站仿真"""
-    print("\n=== Hydropower Station Control System Simulation ===")
-    print("This example demonstrates hydropower station control using core_lib")
-    print("Learning objectives:")
-    print("1. Understanding hydropower station control architecture")
-    print("2. Multi-component coordination control methods")
-    print("3. Power demand response control strategies")
-    print("4. Water level-flow-power coupling relationships")
+    print("\n=== 水电站控制系统仿真演示 ===\nHydropower Station Control System Simulation")
+    print("本示例演示基于core_lib框架的水电站控制技术")
+    print("教学目标:")
+    print("1. 理解水电站控制系统架构设计")
+    print("2. 掌握多组件协调控制方法")
+    print("3. 学习电力需求响应控制策略")
+    print("4. 了解水位-流量-发电功率耦合关系")
     
     # 创建系统
     (harness, message_bus, power_demand_topic, upstream_state_topic,
@@ -368,7 +652,7 @@ def run_hydropower_simulation():
     agents = create_control_system(
         message_bus, upstream_reservoir, downstream_reservoir, hydropower_station,
         power_demand_topic, upstream_state_topic, downstream_state_topic,
-        hydropower_state_topic, goal_topic, harness.dt
+        hydropower_state_topic, goal_topic, harness.config['time_step']
     )
     
     # 添加代理
@@ -385,12 +669,21 @@ def run_hydropower_simulation():
     # 分析结果
     performance = analyze_results(harness, agents)
     
-    print("\n=== Simulation Complete ===")
-    print("Key Learning Points:")
-    print("1. Hydropower stations require coordinated control of turbines and gates")
-    print("2. Power generation depends on water head and flow rate")
-    print("3. Reservoir levels affect available head and power capacity")
-    print("4. Multi-agent coordination enables complex control strategies")
+    # 确保 performance不为None
+    if performance is None:
+        performance = {'avg_power': 0, 'max_power': 0, 'avg_flow': 0, 'max_flow': 0}
+    
+    print("\n=== 仿真完成 ===\nSimulation Complete")
+    print("关键学习要点:")
+    print("1. ✓ 水电站需要水轮机和闸门的协调控制")
+    print("2. ✓ 发电功率取决于水头和流量")
+    print("3. ✓ 水库水位影响可用水头和发电能力")
+    print("4. ✓ 多代理协调实现复杂控制策略")
+    
+    print(f"\n技术指标:")
+    print(f"  系统响应性: {'正常' if performance.get('max_power', 0) > 0 else '异常'}")
+    print(f"  发电效率: {performance.get('avg_power', 0):.1f} MW (平均)")
+    print(f"  最大功率: {performance.get('max_power', 0):.1f} MW")
     
     return performance
 

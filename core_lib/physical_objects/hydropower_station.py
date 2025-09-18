@@ -21,6 +21,9 @@ p    control signals to them via the message bus.
         super().__init__(name, initial_state, parameters)
         self.turbines = turbines
         self.gates = gates
+        
+        # 初始化入流
+        self._inflow = 0.0
 
         # Initialize aggregated state variables
         self._state.setdefault('total_outflow', 0.0)
@@ -29,6 +32,21 @@ p    control signals to them via the message bus.
         self._state.setdefault('spillway_outflow', 0.0)
 
         print(f"HydropowerStation '{self.name}' created with {len(self.turbines)} turbines and {len(self.gates)} gates.")
+
+    def set_inflow(self, inflow: float):
+        """设置水电站的入流量。
+        
+        Args:
+            inflow: 新的入流量 (m³/s)
+        """
+        self._inflow = inflow
+        print(f"[DEBUG] 水电站 '{self.name}' 入流已设置为 {inflow} m³/s")
+        print(f"[DEBUG] 水电站 '{self.name}' 当前入流: {self._inflow}")
+        print(f"[DEBUG] 水电站 '{self.name}' 将入流传递给水轮机...")
+        
+        # 将入流传递给水轮机
+        for turbine in self.turbines:
+            turbine.set_inflow(inflow)
 
     def step(self, action: Dict[str, Any], time_step: float) -> State:
         """
@@ -70,8 +88,7 @@ p    control signals to them via the message bus.
 
     @property
     def is_stateful(self) -> bool:
-        # A hydropower station is typically located at a dam with a reservoir,
-        # which is a stateful component. However, the station model itself
-        # does not store water; it just processes it. The associated reservoir
-        # model would be the stateful component in the simulation.
-        return False
+        # A hydropower station needs to be stateful to receive inflow from upstream components
+        # and pass it to downstream components. This is essential for the simulation harness
+        # to correctly calculate water flow through the system.
+        return True

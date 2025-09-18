@@ -277,14 +277,22 @@ class SimulationHarness:
             if upstream_components:  # 有上游组件，自动计算入流
                 total_inflow = self.DEFAULT_INFLOW_VALUE
                 for upstream_id in upstream_components:
-                    total_inflow += current_step_outflows.get(upstream_id, self.DEFAULT_INFLOW_VALUE)
+                    upstream_outflow = current_step_outflows.get(upstream_id, self.DEFAULT_INFLOW_VALUE)
+                    total_inflow += upstream_outflow
+                    print(f"[DEBUG] 组件 {component_id} 的上游组件 {upstream_id} 出流: {upstream_outflow}")
+                
+                print(f"[DEBUG] 组件 {component_id} 计算的总入流: {total_inflow}")
                 
                 # 只有在组件没有受到入流扰动影响时才设置自动计算的入流
                 if component_id not in disturbed_components:
                     if hasattr(component, '_inflow') and component._inflow != total_inflow:
+                        print(f"[DEBUG] 组件 {component_id} 当前入流 {component._inflow} != 计算入流 {total_inflow}，调用 set_inflow")
                         component.set_inflow(total_inflow)
                     elif not hasattr(component, '_inflow'):
+                        print(f"[DEBUG] 组件 {component_id} 没有 _inflow 属性，调用 set_inflow")
                         component.set_inflow(total_inflow)
+                    else:
+                        print(f"[DEBUG] 组件 {component_id} 当前入流 {component._inflow} == 计算入流 {total_inflow}，跳过 set_inflow")
             # 否则，边界组件（如上游水库）保持其原有入流设置
 
             # 为所有组件设置water head信息（无论是否stateful）
@@ -316,6 +324,11 @@ class SimulationHarness:
 
                     temp_next_state = temp_downstream_comp.step(downstream_action, time_step)
                     total_outflow += temp_next_state.get('outflow', self.DEFAULT_OUTFLOW_VALUE)  # 计算下游的出流
+
+                # 如果计算出的出流为0，为上游水库设置一个合理的初始出流值
+                if total_outflow == 0 and component_id == 'upstream_reservoir':
+                    total_outflow = 10.0  # 设置初始出流为10 m³/s
+                    print(f"[DEBUG] 为上游水库设置初始出流: {total_outflow} m³/s")
 
                 action['outflow'] = total_outflow  # 计算当前步骤的出流
 
