@@ -234,7 +234,6 @@ def create_detailed_excel_report(results, excel_file):
     
     for step in results:
         current_time = step.get('time', 0)  # 修正：使用'time'而不是'current_time'
-        states = step.get('component_states', {})
         
         # 初始化行数据
         row_data = {
@@ -242,7 +241,7 @@ def create_detailed_excel_report(results, excel_file):
             '时间(h)': round(current_time / 3600, 3),
         }
         
-        # 闸门数据
+        # 闸门数据 - 直接从step中获取
         if 'Gate_1' in step:
             gate_state = step['Gate_1']
             row_data.update({
@@ -297,6 +296,7 @@ def create_detailed_excel_report(results, excel_file):
                 '上游水库水位(m)': up_res_state.get('water_level', 0),
                 '上游水库库容(m³)': up_res_state.get('volume', 0),
                 '上游水库出流(m³/s)': up_res_state.get('outflow', 0),
+                '上游水库入流(m³/s)': up_res_state.get('inflow', 0),
             })
         
         if 'Downstream_Reservoir' in step:
@@ -305,6 +305,7 @@ def create_detailed_excel_report(results, excel_file):
                 '下游水库水位(m)': down_res_state.get('water_level', 0),
                 '下游水库库容(m³)': down_res_state.get('volume', 0),
                 '下游水库出流(m³/s)': down_res_state.get('outflow', 0),
+                '下游水库入流(m³/s)': down_res_state.get('inflow', 0),
             })
         
         # 分水口数据
@@ -312,6 +313,8 @@ def create_detailed_excel_report(results, excel_file):
             div_state = step['Diversion_1']
             row_data.update({
                 '分水口1出流(m³/s)': div_state.get('outflow', 0),
+                '分水口1入流(m³/s)': div_state.get('inflow', 0),
+                '分水口1过流(m³/s)': div_state.get('passthrough_flow', 0),
             })
         
         data_rows.append(row_data)
@@ -353,16 +356,15 @@ def create_detailed_excel_report(results, excel_file):
     gate_data = []
     for step in results:
         current_time = step.get('time', 0)  # 修正：使用'time'而不是'current_time'
-        states = step.get('component_states', {})
-        if 'Gate_1' in states:
-            gate_state = states['Gate_1']
+        if 'Gate_1' in step:
+            gate_state = step['Gate_1']
             gate_data.append({
                 '时间(s)': current_time,
                 '时间(h)': round(current_time / 3600, 3),
                 '闸门开度': gate_state.get('opening', 0),
                 '闸门过流流量(m³/s)': gate_state.get('outflow', 0),
-                '闸前水位(m)': states.get('Channel_1', {}).get('water_level', 0),
-                '闸后水位(m)': states.get('Channel_3', {}).get('water_level', 0),
+                '闸前水位(m)': step.get('Channel_1', {}).get('water_level', 0),
+                '闸后水位(m)': step.get('Channel_3', {}).get('water_level', 0),
             })
     
     df_gate = pd.DataFrame(gate_data)
@@ -380,7 +382,6 @@ def create_detailed_excel_report(results, excel_file):
     channel_data = []
     for step in results:
         current_time = step.get('time', 0)  # 修正：使用'time'而不是'current_time'
-        states = step.get('component_states', {})
         
         row = {
             '时间(s)': current_time,
@@ -388,8 +389,8 @@ def create_detailed_excel_report(results, excel_file):
         }
         
         for ch_name, ch_label in [('Channel_1', '渠道1'), ('Channel_2', '渠道2'), ('Channel_3', '渠道3')]:
-            if ch_name in states:
-                ch_state = states[ch_name]
+            if ch_name in step:
+                ch_state = step[ch_name]
                 row.update({
                     f'{ch_label}水位(m)': ch_state.get('water_level', 0),
                     f'{ch_label}入流(m³/s)': ch_state.get('inflow', 0),
@@ -414,16 +415,15 @@ def create_detailed_excel_report(results, excel_file):
     pipe_data = []
     for step in results:
         current_time = step.get('time', 0)  # 修正：使用'time'而不是'current_time'
-        states = step.get('component_states', {})
-        if 'Pipe_1' in states:
-            pipe_state = states['Pipe_1']
+        if 'Pipe_1' in step:
+            pipe_state = step['Pipe_1']
             pipe_data.append({
                 '时间(s)': current_time,
                 '时间(h)': round(current_time / 3600, 3),
                 '倒虹吸流量(m³/s)': pipe_state.get('outflow', 0),
                 '倒虹吸水头损失(m)': pipe_state.get('head_loss', 0),
-                '进口水深(m)': states.get('Channel_2', {}).get('water_level', 0),
-                '出口水深(m)': states.get('Channel_3', {}).get('water_level', 0),
+                '进口水深(m)': step.get('Channel_2', {}).get('water_level', 0),
+                '出口水深(m)': step.get('Channel_3', {}).get('water_level', 0),
             })
     
     df_pipe = pd.DataFrame(pipe_data)
@@ -441,27 +441,28 @@ def create_detailed_excel_report(results, excel_file):
     reservoir_data = []
     for step in results:
         current_time = step.get('time', 0)  # 修正：使用'time'而不是'current_time'
-        states = step.get('component_states', {})
         
         row = {
             '时间(s)': current_time,
             '时间(h)': round(current_time / 3600, 3),
         }
         
-        if 'Upstream_Reservoir' in states:
-            up_state = states['Upstream_Reservoir']
+        if 'Upstream_Reservoir' in step:
+            up_state = step['Upstream_Reservoir']
             row.update({
                 '上游水库水位(m)': up_state.get('water_level', 0),
                 '上游水库库容(m³)': up_state.get('volume', 0),
                 '上游水库出流(m³/s)': up_state.get('outflow', 0),
+                '上游水库入流(m³/s)': up_state.get('inflow', 0),
             })
         
-        if 'Downstream_Reservoir' in states:
-            down_state = states['Downstream_Reservoir']
+        if 'Downstream_Reservoir' in step:
+            down_state = step['Downstream_Reservoir']
             row.update({
                 '下游水库水位(m)': down_state.get('water_level', 0),
                 '下游水库库容(m³)': down_state.get('volume', 0),
                 '下游水库出流(m³/s)': down_state.get('outflow', 0),
+                '下游水库入流(m³/s)': down_state.get('inflow', 0),
             })
         
         reservoir_data.append(row)
@@ -542,24 +543,23 @@ def create_csv_report(results, csv_file):
         
         # 写入数据行
         for step in results:
-            current_time = step.get('time', 0)  # 修正：使用'time'而不是'current_time'
-            states = step.get('component_states', {})
+            current_time = step.get('time', 0)  # 使用'time'而不是'current_time'
             
             row = [current_time]
             
-            # 提取关键指标
+            # 提取关键指标 - 直接从步骤中获取
             components = ['Upstream_Reservoir', 'Channel_1', 'Gate_1', 'Channel_3', 'Downstream_Reservoir']
             metrics = ['water_level', 'water_level', 'opening', 'water_level', 'water_level']
             
             for comp, metric in zip(components, metrics):
-                if comp in states and metric in states[comp]:
-                    row.append(states[comp][metric])
+                if comp in step and metric in step[comp]:
+                    row.append(step[comp][metric])
                 else:
                     row.append('')
             
             # 添加闸门流量
-            if 'Gate_1' in states and 'outflow' in states['Gate_1']:
-                row.append(states['Gate_1']['outflow'])
+            if 'Gate_1' in step and 'outflow' in step['Gate_1']:
+                row.append(step['Gate_1']['outflow'])
             else:
                 row.append('')
             

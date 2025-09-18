@@ -272,19 +272,33 @@ class SimulationHarness:
             component = self.components[component_id]
             action = {'control_signal': controller_actions.get(component_id)}
 
-            total_inflow = self.DEFAULT_INFLOW_VALUE
-            for upstream_id in self.inverse_topology.get(component_id, []):
-                total_inflow += current_step_outflows.get(upstream_id, self.DEFAULT_INFLOW_VALUE)  # 遍历上游，如果没有上游，入流就设置为默认值，导致入流边界不起效果
+            # 处理入流设置：只有非边界组件才自动计算入流
+            upstream_components = self.inverse_topology.get(component_id, [])
+            if upstream_components:  # 有上游组件，自动计算入流
+                total_inflow = self.DEFAULT_INFLOW_VALUE
+                for upstream_id in upstream_components:
+                    total_inflow += current_step_outflows.get(upstream_id, self.DEFAULT_INFLOW_VALUE)
+                
+                # 只有在组件没有受到入流扰动影响时才设置自动计算的入流
+                if component_id not in disturbed_components:
+                    if hasattr(component, '_inflow') and component._inflow != total_inflow:
+                        component.set_inflow(total_inflow)
+                    elif not hasattr(component, '_inflow'):
+                        component.set_inflow(total_inflow)
+            # 否则，边界组件（如上游水库）保持其原有入流设置
 
-            # 只有在组件没有受到入流扰动影响时才设置自动计算的入流
-            # 并且避免重复设置相同的值
-            if component_id not in disturbed_components:
-                if hasattr(component, '_inflow') and component._inflow != total_inflow:
-                    component.set_inflow(total_inflow)
-                elif not hasattr(component, '_inflow'):
-                    component.set_inflow(total_inflow)
+            # 为所有组件设置water head信息（无论是否stateful）
+            if self.inverse_topology.get(component_id):
+                up_id = self.inverse_topology[component_id][self.FIRST_COMPONENT_INDEX]
+                up_state = self.components[up_id].get_state()
+                action['upstream_head'] = up_state.get('water_level', self.DEFAULT_WATER_LEVEL) if up_state else self.DEFAULT_WATER_LEVEL
+            if self.topology.get(component_id):
+                down_id = self.topology[component_id][self.FIRST_COMPONENT_INDEX]
+                down_state = self.components[down_id].get_state()
+                action['downstream_head'] = down_state.get('water_level', self.DEFAULT_WATER_LEVEL) if down_state else self.DEFAULT_WATER_LEVEL
 
             if hasattr(component, 'is_stateful') and component.is_stateful:
+                # Stateful组件：根据下游需求计算出流
                 total_outflow = self.DEFAULT_OUTFLOW_VALUE
                 for downstream_id in self.topology.get(component_id, []):  # 遍历下游
                     downstream_comp = self.components[downstream_id]
@@ -304,16 +318,6 @@ class SimulationHarness:
                     total_outflow += temp_next_state.get('outflow', self.DEFAULT_OUTFLOW_VALUE)  # 计算下游的出流
 
                 action['outflow'] = total_outflow  # 计算当前步骤的出流
-
-            else:
-                if self.inverse_topology.get(component_id):
-                    up_id = self.inverse_topology[component_id][self.FIRST_COMPONENT_INDEX]
-                    up_state = self.components[up_id].get_state()
-                    action['upstream_head'] = up_state.get('water_level', self.DEFAULT_WATER_LEVEL) if up_state else self.DEFAULT_WATER_LEVEL
-                if self.topology.get(component_id):
-                    down_id = self.topology[component_id][self.FIRST_COMPONENT_INDEX]
-                    down_state = self.components[down_id].get_state()
-                    action['downstream_head'] = down_state.get('water_level', self.DEFAULT_WATER_LEVEL) if down_state else self.DEFAULT_WATER_LEVEL
 
             new_states[component_id] = component.step(action, time_step)
             current_step_outflows[component_id] = new_states[component_id].get('outflow', self.DEFAULT_OUTFLOW_VALUE)
