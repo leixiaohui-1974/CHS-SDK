@@ -40,10 +40,10 @@ class ControlPerformanceAnalyzer(PerformanceAnalyzer):
         errors = [abs(flow - demand) for flow, demand in zip(flows, demands)]
         
         return {
-            'mean_flow_error': np.mean(errors),
-            'max_flow_error': np.max(errors),
-            'flow_rmse': np.sqrt(np.mean([e**2 for e in errors])),
-            'control_accuracy': 1.0 - (np.mean(errors) / np.mean(demands)) if np.mean(demands) > 0 else 0
+            'mean_flow_error': float(np.mean(errors)),
+            'max_flow_error': float(np.max(errors)),
+            'flow_rmse': float(np.sqrt(np.mean([e**2 for e in errors]))),
+            'control_accuracy': float(1.0 - (np.mean(errors) / np.mean(demands))) if np.mean(demands) > 0 else 0.0
         }
 
 class EnergyPerformanceAnalyzer(PerformanceAnalyzer):
@@ -60,10 +60,10 @@ class EnergyPerformanceAnalyzer(PerformanceAnalyzer):
         efficiencies = [h['efficiency'] for h in self.history]
         
         return {
-            'average_power': np.mean(powers),
-            'total_energy': np.sum(powers) * (self.history[-1]['timestamp'] - self.history[0]['timestamp']),
-            'average_efficiency': np.mean(efficiencies),
-            'energy_per_unit_flow': np.mean(powers) / np.mean(flows) if np.mean(flows) > 0 else 0
+            'average_power': float(np.mean(powers)),
+            'total_energy': float(np.sum(powers) * (self.history[-1]['timestamp'] - self.history[0]['timestamp'])),
+            'average_efficiency': float(np.mean(efficiencies)),
+            'energy_per_unit_flow': float(np.mean(powers) / np.mean(flows)) if np.mean(flows) > 0 else 0.0
         }
 
 class UtilizationAnalyzer(PerformanceAnalyzer):
@@ -79,9 +79,9 @@ class UtilizationAnalyzer(PerformanceAnalyzer):
         total_pumps = data.get('total_pumps', 1)
         
         return {
-            'pump_utilization': np.mean(running_pumps) / total_pumps,
-            'max_utilization': np.max(running_pumps) / total_pumps,
-            'utilization_variance': np.var(running_pumps) / total_pumps
+            'pump_utilization': float(np.mean(running_pumps) / total_pumps),
+            'max_utilization': float(np.max(running_pumps) / total_pumps),
+            'utilization_variance': float(np.var(running_pumps) / total_pumps)
         }
 
 class ComprehensiveAnalyzer:
