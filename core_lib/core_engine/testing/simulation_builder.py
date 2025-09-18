@@ -38,7 +38,7 @@ class HardcodedSimulationBuilder:
         
         default_config = {
             'start_time': 0,
-            'dt': 1.0
+            'time_step': 1.0
         }
         
         # Update with provided config

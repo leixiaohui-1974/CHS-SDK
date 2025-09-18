@@ -36,12 +36,12 @@ class DynamicDisturbanceManager:
         self.message_bus = message_bus
         self.active_disturbances = {}
         
-    def register_disturbance(self, disturbance_id: str, disturbance_config: Dict[str, Any], start_time: float, duration: float):
+    def register_disturbance(self, disturbance_id: str, disturbance_config: Dict[str, Any], start_time: float, time_end: float):
         """注册动态扰动"""
         self.active_disturbances[disturbance_id] = {
             'config': disturbance_config,
             'start_time': start_time,
-            'duration': duration,
+            'time_end': time_end,
             'is_active': False
         }
         
@@ -49,9 +49,9 @@ class DynamicDisturbanceManager:
         """更新动态扰动"""
         for disturbance_id, disturbance in self.active_disturbances.items():
             start_time = disturbance['start_time']
-            duration = disturbance['duration']
+            time_end = disturbance['time_end']
             
-            if start_time <= current_time <= start_time + duration:
+            if start_time <= current_time <= time_end:
                 if not disturbance['is_active']:
                     disturbance['is_active'] = True
                     print(f"动态扰动 {disturbance_id} 已激活")
@@ -195,23 +195,31 @@ class EnhancedSimulationHarness:
         print(f"网络扰动 {disturbance_id} ({disturbance_type}) 已添加到仿真中")
         return disturbance
     
-    def activate_network_disturbance(self, disturbance_id: str, start_time: float, duration: float):
+    def activate_network_disturbance(self, disturbance_id: str, start_time: float, time_end: float):
         """激活网络扰动"""
         if not self.network_disturbance_manager:
             raise ValueError("网络扰动管理器未初始化")
         
+        # 计算持续时间以兼容网络扰动管理器的接口
+        duration = time_end - start_time
         self.network_disturbance_manager.activate_disturbance(disturbance_id, start_time, duration)
-        print(f"网络扰动 {disturbance_id} 已激活，开始时间: {start_time}, 持续时间: {duration}")
+        print(f"网络扰动 {disturbance_id} 已激活，开始时间: {start_time}, 结束时间: {time_end}")
     
     def add_dynamic_disturbance(self, disturbance_config: Dict[str, Any]):
         """添加动态扰动（传感器、执行器等）"""
         disturbance_id = disturbance_config.get('disturbance_id', 'unknown')
         start_time = disturbance_config['start_time']
-        duration = disturbance_config.get('duration', 10.0)
-        self.dynamic_disturbance_manager.register_disturbance(disturbance_id, disturbance_config, start_time, duration)
+        # 兼容原有的duration配置，但优先使用time_end
+        if 'time_end' in disturbance_config:
+            time_end = disturbance_config['time_end']
+        else:
+            # 从duration计算time_end以保持向后兼容
+            duration = disturbance_config.get('duration', 10.0)
+            time_end = start_time + duration
+        self.dynamic_disturbance_manager.register_disturbance(disturbance_id, disturbance_config, start_time, time_end)
         print(f"动态扰动 {disturbance_config['disturbance_id']} 已添加")
     
-    def activate_dynamic_disturbance(self, disturbance_id: str, target_component: str, start_time: float, duration: float):
+    def activate_dynamic_disturbance(self, disturbance_id: str, target_component: str, start_time: float, time_end: float):
         """激活动态扰动"""
         disturbance_config = {
             'disturbance_id': disturbance_id,
@@ -223,7 +231,7 @@ class EnhancedSimulationHarness:
             }
         }
         self.dynamic_disturbance_manager.register_disturbance(
-            disturbance_id, disturbance_config, start_time, duration
+            disturbance_id, disturbance_config, start_time, time_end
         )
         print(f"动态扰动 {disturbance_id} 已在组件 {target_component} 上激活")
     
