@@ -7,6 +7,7 @@
 from core_lib.core.interfaces import Agent
 from core_lib.central_coordination.collaboration.message_bus import MessageBus
 from typing import Dict, Any, Callable, Optional
+import numpy as np
 
 class DemandAgent(Agent):
     """通用需求代理"""
