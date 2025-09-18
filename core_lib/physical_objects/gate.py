@@ -16,7 +16,18 @@ class Gate(PhysicalObjectInterface):
 
     def __init__(self, name: str, initial_state: State, parameters: Parameters,
                  message_bus: Optional[MessageBus] = None, action_topic: Optional[str] = None,
-                 action_key: str = 'opening'):
+                 action_key: str = 'opening',
+                 default_width: float = 2.0,
+                 default_max_opening: float = 1.0,
+                 default_discharge_coefficient: float = 0.6,
+                 default_max_rate_of_change: float = 0.05,
+                 default_gate_bottom_elevation: float = 0.0,
+                 discharge_coeff_min_range: float = 0.4,
+                 discharge_coeff_max_range: float = 0.8,
+                 free_flow_ratio: float = 0.67,
+                 optimization_timeout: int = 3600,
+                 identification_bounds_min: float = 0.4,
+                 identification_bounds_max: float = 0.8):
         super().__init__(name, initial_state, parameters)
         self._state.setdefault('outflow', 0)
         self.bus = message_bus
@@ -24,6 +35,19 @@ class Gate(PhysicalObjectInterface):
         self.action_key = action_key
         self.target_opening = self._state.get('opening', 0)
         self.last_head_diff = 1.0 # 存储上一次的水头差，用于反向计算 (m)
+        
+        # 将默认参数值设置为实例属性
+        self.default_width = default_width
+        self.default_max_opening = default_max_opening
+        self.default_discharge_coefficient = default_discharge_coefficient
+        self.default_max_rate_of_change = default_max_rate_of_change
+        self.default_gate_bottom_elevation = default_gate_bottom_elevation
+        self.discharge_coeff_min_range = discharge_coeff_min_range
+        self.discharge_coeff_max_range = discharge_coeff_max_range
+        self.free_flow_ratio = free_flow_ratio
+        self.optimization_timeout = optimization_timeout
+        self.identification_bounds_min = identification_bounds_min
+        self.identification_bounds_max = identification_bounds_max
         
         # 验证必要的物理参数
         self._validate_physical_parameters()
@@ -36,19 +60,19 @@ class Gate(PhysicalObjectInterface):
 
     def _validate_physical_parameters(self):
         """验证物理参数的合理性。"""
-        width = self._params.get('width', 2.0)
+        width = self._params.get('width', self.default_width)
         if width <= 0:
             raise ValueError(f"闸门宽度必须大于0，当前值: {width}")
         
-        max_opening = self._params.get('max_opening', 1.0)
+        max_opening = self._params.get('max_opening', self.default_max_opening)
         if max_opening <= 0:
             raise ValueError(f"最大开度必须大于0，当前值: {max_opening}")
         
-        discharge_coeff = self._params.get('discharge_coefficient', 0.6)
-        if not 0.4 <= discharge_coeff <= 0.8:
-            print(f"警告: 流量系数 {discharge_coeff} 超出典型范围 [0.4, 0.8]")
+        discharge_coeff = self._params.get('discharge_coefficient', self.default_discharge_coefficient)
+        if not self.discharge_coeff_min_range <= discharge_coeff <= self.discharge_coeff_max_range:
+            print(f"警告: 流量系数 {discharge_coeff} 超出典型范围 [{self.discharge_coeff_min_range}, {self.discharge_coeff_max_range}]")
         
-        max_roc = self._params.get('max_rate_of_change', 0.05)
+        max_roc = self._params.get('max_rate_of_change', self.default_max_rate_of_change)
         if max_roc <= 0:
             raise ValueError(f"最大变化速率必须大于0，当前值: {max_roc}")
 
@@ -69,13 +93,13 @@ class Gate(PhysicalObjectInterface):
         """
         if C is None:
             # 综合流量系数 = 收缩系数 × 流速系数
-            C = self._params.get('discharge_coefficient', 0.6)
+            C = self._params.get('discharge_coefficient', self.default_discharge_coefficient)
         
-        width = self._params.get('width', 2.0)  # 闸门宽度 (m)
+        width = self._params.get('width', self.default_width)  # 闸门宽度 (m)
         g = 9.81  # 重力加速度 (m/s²)
         
         # 物理边界检查
-        max_opening = self._params.get('max_opening', 1.0)
+        max_opening = self._params.get('max_opening', self.default_max_opening)
         opening = max(0.0, min(opening, max_opening))
         
         area = opening * width  # 过流面积 (m²)
@@ -86,9 +110,9 @@ class Gate(PhysicalObjectInterface):
             return 0
         
         # 判断自由出流还是淹没出流
-        # 当下游水位低于闸底+0.67倍开度时为自由出流，否则为淹没出流
-        gate_bottom = self._params.get('gate_bottom_elevation', 0.0)
-        critical_downstream_level = gate_bottom + 0.67 * opening
+        # 当下游水位低于闸底+自由出流比例×开度时为自由出流，否则为淹没出流
+        gate_bottom = self._params.get('gate_bottom_elevation', self.default_gate_bottom_elevation)
+        critical_downstream_level = gate_bottom + self.free_flow_ratio * opening
         
         if downstream_level <= critical_downstream_level:
             # 自由出流：只考虑上游水头
@@ -109,14 +133,14 @@ class Gate(PhysicalObjectInterface):
 
     def _calculate_opening_for_flow(self, target_flow: float) -> float:
         """孔口公式的反向计算，用于根据目标流量计算所需的闸门开度。"""
-        C = self._params.get('discharge_coefficient', 0.6)
-        width = self._params.get('width', 2.0)
+        C = self._params.get('discharge_coefficient', self.default_discharge_coefficient)
+        width = self._params.get('width', self.default_width)
         g = 9.81
         if self.last_head_diff <= 0:
             return 0 # 没有水头差则无法实现流动
         denominator = C * width * math.sqrt(2 * g * self.last_head_diff)
         if denominator == 0:
-            return self._params.get('max_opening', 1.0) # 无法计算，如果需要流量则全开
+            return self._params.get('max_opening', self.default_max_opening) # 无法计算，如果需要流量则全开
         return target_flow / denominator
 
     def handle_action_message(self, message: Message):
@@ -146,13 +170,13 @@ class Gate(PhysicalObjectInterface):
             raise TypeError(f"Gate.step(action, time_step) 需要 dict，收到 {type(action).__name__}")
         if 'control_signal' in action and action['control_signal'] is not None:
             self.target_opening = action['control_signal']
-        max_roc = self._params.get('max_rate_of_change', 0.05) # 最大变化速率
+        max_roc = self._params.get('max_rate_of_change', self.default_max_rate_of_change) # 最大变化速率
         current_opening = self._state.get('opening', 0)
         if self.target_opening > current_opening:
             new_opening = min(current_opening + max_roc * time_step, self.target_opening)
         else:
             new_opening = max(current_opening - max_roc * time_step, self.target_opening)
-        max_opening = self._params.get('max_opening', 1.0)
+        max_opening = self._params.get('max_opening', self.default_max_opening)
         self._state['opening'] = max(0.0, min(new_opening, max_opening))
         upstream_level = action.get('upstream_head', 0)
         downstream_level = action.get('downstream_head', 0)
@@ -187,12 +211,12 @@ class Gate(PhysicalObjectInterface):
             rmse = np.sqrt(np.mean((simulated_flows - obs_flows)**2))
             return rmse
 
-        initial_guess = np.array([self._params.get('discharge_coefficient', 0.6)])
+        initial_guess = np.array([self._params.get('discharge_coefficient', self.default_discharge_coefficient)])
         result = minimize(
             _simulation_error,
             initial_guess,
             method='Nelder-Mead', # 适用于简单的单变量优化
-            bounds=[(0.4, 0.8)] # 更合理的C值物理边界：收缩系数0.61×流速系数0.98≈0.6
+            bounds=[(self.identification_bounds_min, self.identification_bounds_max)] # 更合理的C值物理边界：收缩系数0.61×流速系数0.98≈0.6
         )
 
         if result.success:
