@@ -2,7 +2,7 @@
 """
 This module contains the SignalAggregatorAgent.
 """
-from typing import List
+from typing import List, Dict
 from core_lib.core.interfaces import Agent
 from core_lib.central_coordination.collaboration.message_bus import MessageBus, Message
 
