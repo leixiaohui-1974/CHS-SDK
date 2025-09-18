@@ -136,7 +136,7 @@ class Controller(ABC):
 
         Args:
             observation: The current state or observation of the system to be controlled.
-            dt: The time step duration in seconds.
+            time_step: The time step duration in seconds.
 
         Returns:
             The computed control action to be sent to the actuator.
