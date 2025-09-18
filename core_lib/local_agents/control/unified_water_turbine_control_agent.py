@@ -45,7 +45,7 @@ class UnifiedWaterTurbineControlAgent(UnifiedLocalControlAgent):
             observation_topic: 观测主题
             observation_key: 观测键
             action_topic: 动作主题
-            dt: 时间步长
+            time_step: 时间步长
             command_topic: 命令主题
             feedback_topic: 反馈主题
             **kwargs: 水轮机特定配置
@@ -54,7 +54,7 @@ class UnifiedWaterTurbineControlAgent(UnifiedLocalControlAgent):
         super().__init__(
             agent_id=agent_id,
             message_bus=message_bus,
-            time_step=dt,
+            time_step=time_step,
             control_strategy=ControlStrategy.CONTINUOUS,
             observation_topic=observation_topic,
             observation_key=observation_key,

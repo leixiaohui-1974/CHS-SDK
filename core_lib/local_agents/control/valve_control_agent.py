@@ -36,7 +36,7 @@ class ValveControlAgent(LocalControlAgent):
             observation_topic: The topic for valve state updates.
             observation_key: The specific key in the state to use (e.g., 'outflow').
             action_topic: The topic to publish valve control commands to.
-            dt: The simulation time step.
+            time_step: The simulation time step.
             command_topic: Optional topic for receiving high-level commands (e.g., new setpoint).
             feedback_topic: Optional topic for receiving state feedback from the valve.
         """
@@ -47,7 +47,7 @@ class ValveControlAgent(LocalControlAgent):
             observation_topic=observation_topic,
             observation_key=observation_key,
             action_topic=action_topic,
-            time_step=dt,
+            time_step=time_step,
             command_topic=command_topic,
             feedback_topic=feedback_topic
         )
