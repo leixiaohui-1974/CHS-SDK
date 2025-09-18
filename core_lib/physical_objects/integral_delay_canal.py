@@ -51,10 +51,10 @@ class IntegralDelayCanal(PhysicalObjectInterface):
         """
         Advances the canal simulation for one time step.
         """
-        # Initialize history buffer on the first call to step, when dt is known
+        # Initialize history buffer on the first call to step, when time_step is known
         if self.inflow_history is None:
-            if dt > 0:
-                self.history_size = int(self.delay / dt) + 2
+            if time_step > 0:
+                self.history_size = int(self.delay / time_step) + 2
             else:
                 self.history_size = 2 # Avoid division by zero, have at least one delay slot
             self.inflow_history = collections.deque(
@@ -72,7 +72,7 @@ class IntegralDelayCanal(PhysicalObjectInterface):
         delayed_inflow = self.inflow_history[0]
 
         # Update water level using the discrete-time version of the model
-        self._state['water_level'] += self.gain * delayed_inflow * dt
+        self._state['water_level'] += self.gain * delayed_inflow * time_step
         self._state['water_level'] = max(0, self._state['water_level']) # Water level cannot be negative
 
         # The outflow of this canal reach is the delayed inflow

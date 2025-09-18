@@ -179,7 +179,7 @@ class Reservoir(PhysicalObjectInterface):
 
         # Calculate water balance
         current_volume = self._state.get('volume', 0)
-        delta_volume = (total_inflow - total_outflow) * dt
+        delta_volume = (total_inflow - total_outflow) * time_step
         new_volume = max(0, current_volume + delta_volume)
 
         # Update state
@@ -235,9 +235,9 @@ class Reservoir(PhysicalObjectInterface):
         outflows = data['outflows']
         observed_levels = data['levels']
 
-        # 假设dt是恒定的，从数据点数量推断（例如，一天的数据）。
+        # 假设time_step是恒定的，从数据点数量推断（例如，一天的数据）。
         # 理想情况下，这个值应该由数据提供。这里我们假设步长是每小时。
-        time_step= 3600 # 秒
+        time_step = 3600 # 秒
 
         def _simulation_error(level_params: np.ndarray) -> float:
             """优化器的目标函数。"""
@@ -255,7 +255,7 @@ class Reservoir(PhysicalObjectInterface):
             simulated_volumes[0] = initial_volume
 
             for i in range(1, len(inflows)):
-                delta_v = (inflows[i-1] - outflows[i-1]) * dt
+                delta_v = (inflows[i-1] - outflows[i-1]) * time_step
                 simulated_volumes[i] = simulated_volumes[i-1] + delta_v
 
             # 使用候选曲线将模拟库容转换为水位

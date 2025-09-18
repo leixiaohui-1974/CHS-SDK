@@ -96,9 +96,9 @@ class Gate(PhysicalObjectInterface):
         max_roc = self._params.get('max_rate_of_change', 0.05) # 最大变化速率
         current_opening = self._state.get('opening', 0)
         if self.target_opening > current_opening:
-            new_opening = min(current_opening + max_roc * dt, self.target_opening)
+            new_opening = min(current_opening + max_roc * time_step, self.target_opening)
         else:
-            new_opening = max(current_opening - max_roc * dt, self.target_opening)
+            new_opening = max(current_opening - max_roc * time_step, self.target_opening)
         max_opening = self._params.get('max_opening', 1.0)
         self._state['opening'] = max(0.0, min(new_opening, max_opening))
         upstream_level = action.get('upstream_head', 0)
