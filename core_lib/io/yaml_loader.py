@@ -139,12 +139,19 @@ class YamlSimulationLoader(BaseYamlLoader):
     def _load_topology(self):
         """Loads and defines the connections between components."""
         logging.info("Loading topology...")
+        print(f"调试: topology_config = {self.topology_config}")  # 调试信息
         topology_for_bus = {}
-        for conn_conf in self.topology_config.get('connections', []):
+        connections = self.topology_config.get('topology', {}).get('connections', [])
+        if not connections:
+            # 如果在topology字段下没有找到，尝试直接在根级别查找
+            connections = self.topology_config.get('connections', [])
+        print(f"调试: 找到 {len(connections)} 个连接")  # 调试信息
+        for conn_conf in connections:
             upstream_id = conn_conf['upstream']
             downstream_id = conn_conf['downstream']
 
             logging.info(f"  - Connecting '{upstream_id}' -> '{downstream_id}'")
+            print(f"调试: 正在连接 '{upstream_id}' -> '{downstream_id}'")
             self.harness.add_connection(upstream_id, downstream_id)
 
             if upstream_id not in topology_for_bus:
