@@ -247,6 +247,21 @@ class Gate(PhysicalObjectInterface):
         openings = data['openings']
         obs_flows = data['observed_flows']
 
+        # 验证输入数据的有效性
+        valid_indices = (up_levels > down_levels) & (openings > 0) & (obs_flows >= 0)
+        if not np.any(valid_indices):
+            print(f"警告: 闸门 '{self.name}' 没有有效的辨识数据点（需要上游水位>下游水位且开度>0）。")
+            return {}
+
+        # 使用有效数据点
+        up_levels = up_levels[valid_indices]
+        down_levels = down_levels[valid_indices]
+        openings = openings[valid_indices]
+        obs_flows = obs_flows[valid_indices]
+
+        if len(up_levels) < 5:
+            print(f"警告: 闸门 '{self.name}' 有效数据点太少 ({len(up_levels)} < 5)，可能影响辨识精度。")
+
         def _simulation_error(c_param: np.ndarray) -> float:
             """优化器的目标函数。"""
             C = c_param[0]
@@ -263,11 +278,14 @@ class Gate(PhysicalObjectInterface):
             return rmse
 
         initial_guess = np.array([self._params.get('discharge_coefficient', self.default_discharge_coefficient)])
+        
+        # 使用支持边界约束的优化器
         result = minimize(
             _simulation_error,
             initial_guess,
-            method='Nelder-Mead', # 适用于简单的单变量优化
-            bounds=[(self.identification_bounds_min, self.identification_bounds_max)] # 更合理的C值物理边界：收缩系数0.61×流速系数0.98≈0.6
+            method='L-BFGS-B',  # 支持边界约束的优化器
+            bounds=[(self.identification_bounds_min, self.identification_bounds_max)],  # 物理合理的流量系数范围
+            options={'maxiter': 1000, 'ftol': 1e-9}  # 增加最大迭代次数和精度
         )
 
         if result.success:

@@ -139,6 +139,50 @@ class SimulationHarness:
         self.is_running = True
         print("Simulation harness build complete and ready to run.")
 
+    def _get_reference_head(self, component_id: str, direction: str) -> float:
+        """
+        为未连接的组件查找合理的参考head值。
+        通用解决方案：查找同类型已连接组件的head值作为参考。
+        
+        Args:
+            component_id: 组件ID
+            direction: 'upstream' 或 'downstream'
+            
+        Returns:
+            参考head值
+        """
+        component = self.components[component_id]
+        component_type = component.__class__.__name__
+        
+        # 查找同类型的已连接组件作为参考
+        for other_id, other_component in self.components.items():
+            if (other_component.__class__.__name__ == component_type and 
+                other_id != component_id):
+                
+                if direction == 'upstream':
+                    # 查找有上游连接的同类型组件
+                    if self.inverse_topology.get(other_id):
+                        up_id = self.inverse_topology[other_id][self.FIRST_COMPONENT_INDEX]
+                        up_state = self.components[up_id].get_state()
+                        if up_state and 'water_level' in up_state:
+                            return up_state['water_level']
+                elif direction == 'downstream':
+                    # 查找有下游连接的同类型组件
+                    if self.topology.get(other_id):
+                        down_id = self.topology[other_id][self.FIRST_COMPONENT_INDEX]
+                        down_state = self.components[down_id].get_state()
+                        if down_state and 'water_level' in down_state:
+                            return down_state['water_level']
+        
+        # 如果找不到同类型参考，查找任意有water_level的组件
+        for other_id, other_component in self.components.items():
+            state = other_component.get_state()
+            if state and 'water_level' in state:
+                return state['water_level']
+        
+        # 最后备选：返回默认值
+        return self.DEFAULT_WATER_LEVEL
+
     def pause(self):
         """Pauses the simulation."""
         self._is_paused.set()
@@ -315,6 +359,7 @@ class SimulationHarness:
             # 否则，边界组件（如上游水库）保持其原有入流设置
 
             # 为所有组件设置water head信息（无论是否stateful）
+            # 通用处理：确保所有需要head信息的组件都能获得合理的值
             if self.inverse_topology.get(component_id):
                 up_id = self.inverse_topology[component_id][self.FIRST_COMPONENT_INDEX]
                 up_state = self.components[up_id].get_state()
@@ -326,12 +371,12 @@ class SimulationHarness:
                     up_up_id = self.inverse_topology[up_id][self.FIRST_COMPONENT_INDEX]
                     up_up_state = self.components[up_up_id].get_state()
                     action['upstream_head'] = up_up_state.get('water_level', self.DEFAULT_WATER_LEVEL) if up_up_state else self.DEFAULT_WATER_LEVEL
-                    if component_id == 'Gate_1':  # 调试信息
-                        print(f"Gate_1上游查找: {up_id}(无water_level) -> {up_up_id}(water_level={action['upstream_head']:.3f}m)")
                 else:
                     action['upstream_head'] = self.DEFAULT_WATER_LEVEL
-                    if component_id == 'Gate_1':  # 调试信息
-                        print(f"Gate_1上游查找: {up_id}(无water_level，且无上级) -> 使用默认值{self.DEFAULT_WATER_LEVEL}m")
+            else:
+                # 通用解决方案：为未连接的组件查找同类型的连接组件作为参考
+                action['upstream_head'] = self._get_reference_head(component_id, 'upstream')
+                
             if self.topology.get(component_id):
                 down_id = self.topology[component_id][self.FIRST_COMPONENT_INDEX]
                 down_state = self.components[down_id].get_state()
@@ -343,12 +388,11 @@ class SimulationHarness:
                     down_down_id = self.topology[down_id][self.FIRST_COMPONENT_INDEX]
                     down_down_state = self.components[down_down_id].get_state()
                     action['downstream_head'] = down_down_state.get('water_level', self.DEFAULT_WATER_LEVEL) if down_down_state else self.DEFAULT_WATER_LEVEL
-                    if component_id == 'Pipe_1':  # 调试信息
-                        print(f"Pipe_1下游查找: {down_id}(无water_level) -> {down_down_id}(water_level={action['downstream_head']:.3f}m)")
                 else:
                     action['downstream_head'] = self.DEFAULT_WATER_LEVEL
-                    if component_id == 'Pipe_1':  # 调试信息
-                        print(f"Pipe_1下游查找: {down_id}(无water_level，且无下级) -> 使用默认值{self.DEFAULT_WATER_LEVEL}m")
+            else:
+                # 通用解决方案：为未连接的组件查找同类型的连接组件作为参考
+                action['downstream_head'] = self._get_reference_head(component_id, 'downstream')
 
             # 修复：选择性启用stateful组件处理
             # 仅对边界组件（如上游水库）启用，以避免中间组件的反馈循环

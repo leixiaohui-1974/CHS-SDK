@@ -202,6 +202,19 @@ class Pipe(PhysicalObjectInterface):
         obs_flows = data['observed_flows']
         head_diffs = up_levels - down_levels
 
+        # 验证输入数据的有效性
+        valid_indices = (head_diffs > 0) & (obs_flows >= 0)
+        if not np.any(valid_indices):
+            print(f"警告: 管道 '{self.name}' 没有有效的辨识数据点（需要水头差>0且流量>=0）。")
+            return {}
+
+        # 使用有效数据点
+        head_diffs = head_diffs[valid_indices]
+        obs_flows = obs_flows[valid_indices]
+
+        if len(head_diffs) < 5:
+            print(f"警告: 管道 '{self.name}' 有效数据点太少 ({len(head_diffs)} < 5)，可能影响辨识精度。")
+
         if self.method == 'manning':
             param_key = 'manning_n'
             calc_func = self._calculate_flow_manning
@@ -223,8 +236,9 @@ class Pipe(PhysicalObjectInterface):
         result = minimize(
             _simulation_error,
             np.array([initial_guess]),
-            method='L-BFGS-B', # 该方法支持边界
-            bounds=bounds
+            method='L-BFGS-B',  # 该方法支持边界
+            bounds=bounds,
+            options={'maxiter': 1000, 'ftol': 1e-12}  # 增加最大迭代次数和精度
         )
 
         if result.success:

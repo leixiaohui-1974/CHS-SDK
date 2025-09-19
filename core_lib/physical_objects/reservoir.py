@@ -323,7 +323,7 @@ class Reservoir(PhysicalObjectInterface):
     def is_stateful(self) -> bool:
         return True
 
-    def identify_parameters(self, data: Dict[str, np.ndarray], method: str = 'offline') -> Parameters:
+    def identify_parameters(self, data: Dict[str, np.ndarray], method: str = 'offline', time_step: Optional[float] = None) -> Parameters:
         """
         使用历史数据辨识库容曲线参数。
 
@@ -332,7 +332,9 @@ class Reservoir(PhysicalObjectInterface):
                   - 'inflows': 总入流的时间序列数据。
                   - 'outflows': 总出流的时间序列数据。
                   - 'levels': 观测水位的时间序列数据。
+                  - 'time_step' (可选): 数据时间步长，单位为秒。
             method: 辨识方法（目前仅支持 'offline'）。
+            time_step: 数据时间步长（秒），如果为None，将尝试从data中获取或使用默认值。
 
         Returns:
             一个包含新辨识出的 'storage_curve' 的字典。
@@ -347,9 +349,21 @@ class Reservoir(PhysicalObjectInterface):
         outflows = data['outflows']
         observed_levels = data['levels']
 
-        # 假设time_step是恒定的，从数据点数量推断（例如，一天的数据）。
-        # 理想情况下，这个值应该由数据提供。这里我们假设步长是每小时。
-        time_step = 3600 # 秒
+        # 获取时间步长：优先级顺序为 time_step参数 > data字典中的time_step > 默认值
+        if time_step is not None:
+            dt = time_step
+        elif 'time_step' in data:
+            dt = float(data['time_step'])
+        else:
+            # 默认值：根据数据特征推断
+            # 如果数据点少于100个，假设为小时级数据；否则假设为分钟级数据
+            data_length = len(inflows)
+            if data_length < 100:
+                dt = 3600.0  # 1小时（秒）
+                print(f"警告: 未提供时间步长，根据数据长度 {data_length} 推断为小时级数据，使用 {dt} 秒")
+            else:
+                dt = 60.0    # 1分钟（秒）
+                print(f"警告: 未提供时间步长，根据数据长度 {data_length} 推断为分钟级数据，使用 {dt} 秒")
 
         def _simulation_error(level_params: np.ndarray) -> float:
             """优化器的目标函数。"""
@@ -367,7 +381,7 @@ class Reservoir(PhysicalObjectInterface):
             simulated_volumes[0] = initial_volume
 
             for i in range(1, len(inflows)):
-                delta_v = (inflows[i-1] - outflows[i-1]) * time_step
+                delta_v = (inflows[i-1] - outflows[i-1]) * dt
                 simulated_volumes[i] = simulated_volumes[i-1] + delta_v
 
             # 使用候选曲线将模拟库容转换为水位

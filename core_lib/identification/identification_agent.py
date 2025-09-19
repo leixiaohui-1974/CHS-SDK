@@ -24,6 +24,7 @@ class ParameterIdentificationAgent(Agent):
                 - identification_data_map: 一个字典，将模型的 identify_parameters 方法所需的
                                            键（例如 'rainfall', 'observed_runoff'）映射到
                                            它们对应的主题。
+                - simulation_time_step: 仿真时间步长（秒），用于传递给辨识算法。
         """
         super().__init__(agent_id)
         self.target_model = target_model
@@ -32,6 +33,7 @@ class ParameterIdentificationAgent(Agent):
         # 配置
         self.id_interval = kwargs.get("identification_interval", 100)
         self.data_map = kwargs["identification_data_map"]
+        self.simulation_time_step = kwargs.get("simulation_time_step", None)  # 仿真时间步长
 
         # 内部状态
         self.data_history: Dict[str, List[float]] = {key: [] for key in self.data_map.keys()}
@@ -55,6 +57,8 @@ class ParameterIdentificationAgent(Agent):
             # 仅对一个数据流递增计数器，以确保同步
             if model_key == list(self.data_map.keys())[0]:
                 self.new_data_count += 1
+            # 添加调试信息，显示数据收集情况
+            print(f"  [{self.agent_id}] 收集数据: {model_key}={value:.3f}, 总数据点数: {self.new_data_count}")
 
     def run(self, current_time: float):
         """
@@ -76,8 +80,22 @@ class ParameterIdentificationAgent(Agent):
             # 将所有数据流截断到最小长度
             data_for_model = {key: np.array(values[:min_len]) for key, values in self.data_history.items()}
 
+            # 准备传递给辨识算法的数据，包括时间步长信息
+            # 如果有配置的时间步长，则添加到数据中
+            if self.simulation_time_step is not None:
+                data_for_model['time_step'] = self.simulation_time_step
+
             # 触发辨识并获取结果
-            new_params = self.target_model.identify_parameters(data_for_model)
+            # 传递时间步长参数（如果可用）
+            if hasattr(self.target_model, 'identify_parameters'):
+                import inspect
+                sig = inspect.signature(self.target_model.identify_parameters)
+                if 'time_step' in sig.parameters:
+                    new_params = self.target_model.identify_parameters(data_for_model, time_step=self.simulation_time_step)
+                else:
+                    new_params = self.target_model.identify_parameters(data_for_model)
+            else:
+                new_params = self.target_model.identify_parameters(data_for_model)
 
             # 发布新参数以供 ModelUpdaterAgent 使用
             if new_params:

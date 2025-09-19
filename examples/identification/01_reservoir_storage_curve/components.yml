@@ -7,12 +7,13 @@ true_reservoir:
   parameters:
     inflow_topic: "data/inflow"
     storage_curve:
-      - [0, 100.0]
-      - [1000000, 105.0]
-      - [2000000, 110.0]
-      - [4000000, 120.0]
+      - [0, 100.0]           # 零库容时的最低水位
+      - [10000000, 102.0]    # 1000万立方米时的水位
+      - [50000000, 105.0]    # 5000万立方米时的水位
+      - [100000000, 110.0]   # 1亿立方米时的水位
+      - [200000000, 120.0]   # 2亿立方米时的水位（设计最大库容）
   initial_state:
-    volume: 1500000
+    volume: 15000000  # 初始库容设置为1500万立方米，在曲线中间范围
 
 # The digital twin reservoir. It also listens to the same inflow topic.
 # It starts with an incorrect guess for the storage curve.
@@ -21,9 +22,10 @@ twin_reservoir:
   parameters:
     inflow_topic: "data/inflow"
     storage_curve:
-      - [0, 98.0]
-      - [1000000, 106.0]
-      - [2000000, 109.0]
-      - [4000000, 122.0]
+      - [0, 98.0]           # 初始不准确的猜测值（比真实值低2米）
+      - [10000000, 103.5]   # 初始不准确的猜测值
+      - [50000000, 106.0]   # 初始不准确的猜测值（比真实值高1米）
+      - [100000000, 109.0]  # 初始不准确的猜测值（比真实值低1米）
+      - [200000000, 122.0]  # 初始不准确的猜测值（比真实值高2米）
   initial_state:
-    volume: 1500000
+    volume: 15000000  # 与真实水库保持相同的初始状态

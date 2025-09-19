@@ -27,6 +27,7 @@ identification_agent:
   parameters:
     target_model: "twin_pipe"
     identification_interval: 100
+    simulation_time_step: 100  # 仿真时间步长（秒），与config.yml中的time_step保持一致
     identification_data_map:
       # Data needed by Pipe.identify_parameters()
       upstream_levels:
@@ -36,8 +37,8 @@ identification_agent:
         topic: "state/downstream_reservoir/water_level"
         key: "water_level"
       observed_flows:
-        topic: "state/true_pipe/flow"
-        key: "flow"
+        topic: "state/true_pipe/outflow"
+        key: "outflow"
 
 # Agent to apply the identified parameters back to the twin pipe
 model_updater:
