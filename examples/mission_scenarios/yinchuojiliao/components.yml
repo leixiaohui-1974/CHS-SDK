@@ -31,7 +31,11 @@ components:
     class: Gate
     initial_state:
       opening: 0.6
-    parameters: {}
+    parameters:
+      width: 10.0  # 闸门宽度（米）
+      discharge_coefficient: 0.6  # 流量系数
+      max_opening: 2.0  # 最大开度（米）
+      max_rate_of_change: 0.1  # 最大变化率（米/秒）
 
   - id: tunnel_2
     class: UnifiedCanal
@@ -49,7 +53,11 @@ components:
     class: Gate
     initial_state:
       opening: 0.6
-    parameters: {}
+    parameters:
+      width: 10.0  # 闸门宽度（米）
+      discharge_coefficient: 0.6  # 流量系数
+      max_opening: 2.0  # 最大开度（米）
+      max_rate_of_change: 0.1  # 最大变化率（米/秒）
 
   - id: tunnel_3
     class: UnifiedCanal
@@ -84,7 +92,10 @@ components:
     class: Valve
     initial_state:
       setting: 0.7
-    parameters: {}
+    parameters:
+      max_flow_capacity: 100.0  # 最大流量能力（m³/s）
+      cv_coefficient: 10.0  # 流量系数
+      valve_type: "butterfly"  # 阀门类型
 
   - id: pipe_2
     class: Pipe
@@ -100,7 +111,10 @@ components:
     class: Valve
     initial_state:
       setting: 0.5
-    parameters: {}
+    parameters:
+      max_flow_capacity: 100.0  # 最大流量能力（m³/s）
+      cv_coefficient: 10.0  # 流量系数
+      valve_type: "gate"  # 阀门类型
 
   - id: terminal_pool
     class: Reservoir

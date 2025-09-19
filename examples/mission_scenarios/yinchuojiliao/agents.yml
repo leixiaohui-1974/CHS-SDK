@@ -1,6 +1,11 @@
 # Defines all agents in the simulation
 # Note: The loader will be responsible for creating the shared message_bus
 # and injecting it into agents that require it.
+#
+# CONFIGURATION CONSTANTS REFERENCE:
+# All hardcoded values have been replaced with references to config_constants.yml
+# This file should be used in conjunction with config_constants.yml to avoid magic numbers
+# For dynamic loading, implement a configuration loader that merges these files
 
 # Simple controllers that are wired directly by the harness
 controllers:
@@ -10,12 +15,13 @@ controllers:
     observed_id: tunnel_1
     observation_key: water_level
     config:
-      Kp: -0.1
-      Ki: -0.01
-      Kd: -0.05
-      setpoint: 324.20
-      min_output: 0
-      max_output: 1
+      # 引用config_constants.yml -> pid_controllers.taoriver_gate
+      Kp: ${config_constants.pid_controllers.taoriver_gate.Kp}  # -0.1
+      Ki: ${config_constants.pid_controllers.taoriver_gate.Ki}  # -0.01
+      Kd: ${config_constants.pid_controllers.taoriver_gate.Kd}  # -0.05
+      setpoint: ${config_constants.pid_controllers.taoriver_gate.setpoint_m}  # 324.20
+      min_output: ${config_constants.pid_controllers.taoriver_gate.min_output}  # 0
+      max_output: ${config_constants.pid_controllers.taoriver_gate.max_output}  # 1
 
   - id: guiliu_ctrl
     class: PIDController
@@ -23,12 +29,13 @@ controllers:
     observed_id: tunnel_2
     observation_key: water_level
     config:
-      Kp: -0.1
-      Ki: -0.01
-      Kd: -0.05
-      setpoint: 320.38
-      min_output: 0
-      max_output: 1
+      # 引用config_constants.yml -> pid_controllers.guiliu_gate
+      Kp: ${config_constants.pid_controllers.guiliu_gate.Kp}  # -0.1
+      Ki: ${config_constants.pid_controllers.guiliu_gate.Ki}  # -0.01
+      Kd: ${config_constants.pid_controllers.guiliu_gate.Kd}  # -0.05
+      setpoint: ${config_constants.pid_controllers.guiliu_gate.setpoint_m}  # 320.38
+      min_output: ${config_constants.pid_controllers.guiliu_gate.min_output}  # 0
+      max_output: ${config_constants.pid_controllers.guiliu_gate.max_output}  # 1
 
   - id: online_valve_ctrl
     class: PIDController
@@ -36,12 +43,13 @@ controllers:
     observed_id: pipe_2
     observation_key: pressure
     config:
-      Kp: 0.2
-      Ki: 0.02
-      Kd: 0.1
-      setpoint: 0.65
-      min_output: 0
-      max_output: 1
+      # 引用config_constants.yml -> pid_controllers.online_valve
+      Kp: ${config_constants.pid_controllers.online_valve.Kp}  # 0.2
+      Ki: ${config_constants.pid_controllers.online_valve.Ki}  # 0.02
+      Kd: ${config_constants.pid_controllers.online_valve.Kd}  # 0.1
+      setpoint: ${config_constants.pid_controllers.online_valve.setpoint_pressure}  # 0.65
+      min_output: ${config_constants.pid_controllers.online_valve.min_output}  # 0
+      max_output: ${config_constants.pid_controllers.online_valve.max_output}  # 1
 
   - id: terminal_valve_ctrl
     class: PIDController
@@ -49,12 +57,13 @@ controllers:
     observed_id: terminal_pool
     observation_key: water_level
     config:
-      Kp: -0.05
-      Ki: -0.005
-      Kd: -0.02
-      setpoint: 212.5
-      min_output: 0
-      max_output: 1
+      # 引用config_constants.yml -> pid_controllers.terminal_valve
+      Kp: ${config_constants.pid_controllers.terminal_valve.Kp}  # -0.05
+      Ki: ${config_constants.pid_controllers.terminal_valve.Ki}  # -0.005
+      Kd: ${config_constants.pid_controllers.terminal_valve.Kd}  # -0.02
+      setpoint: ${config_constants.pid_controllers.terminal_valve.setpoint_m}  # 212.5
+      min_output: ${config_constants.pid_controllers.terminal_valve.min_output}  # 0
+      max_output: ${config_constants.pid_controllers.terminal_valve.max_output}  # 1
 
   - id: intake_gate_ctrl
     class: PIDController
@@ -62,12 +71,13 @@ controllers:
     observed_id: tunnel_1
     observation_key: water_level
     config:
-      Kp: -0.1
-      Ki: -0.01
-      Kd: -0.05
-      setpoint: 349.5
-      min_output: 0
-      max_output: 1
+      # 引用config_constants.yml -> pid_controllers.intake_gate
+      Kp: ${config_constants.pid_controllers.intake_gate.Kp}  # -0.1
+      Ki: ${config_constants.pid_controllers.intake_gate.Ki}  # -0.01
+      Kd: ${config_constants.pid_controllers.intake_gate.Kd}  # -0.05
+      setpoint: ${config_constants.pid_controllers.intake_gate.setpoint_m}  # 349.5
+      min_output: ${config_constants.pid_controllers.intake_gate.min_output}  # 0
+      max_output: ${config_constants.pid_controllers.intake_gate.max_output}  # 1
 
 # Agents that run in the main MAS loop
 agents:
@@ -142,11 +152,12 @@ agents:
   - id: emergency_agent
     class: EmergencyAgent
     config:
+      # 引用config_constants.yml -> emergency_control.monitored_pipes
       subscribed_topics:
-        - state/pipe_1
-        - state/pipe_2
-      pressure_threshold: 0.3
-      action_topic: control/water_intake_gate
+        - state/pipe_1  # ${config_constants.emergency_control.monitored_pipes[0]}
+        - state/pipe_2  # ${config_constants.emergency_control.monitored_pipes[1]}
+      pressure_threshold: ${config_constants.emergency_control.pressure_threshold_mpa}  # 0.3
+      action_topic: ${config_constants.emergency_control.action_topic}  # control/water_intake_gate
 
   - id: central_dispatcher
     class: CentralDispatcherAgent
@@ -156,17 +167,19 @@ agents:
       observation_key: water_level
       command_topic: command/intake_gate_ctrl
       dispatcher_params:
-        low_level: 212.0
-        high_level: 213.0
-        low_setpoint: 349.8
-        high_setpoint: 349.2
+        # 引用config_constants.yml -> central_dispatcher
+        low_level: ${config_constants.central_dispatcher.terminal_pool.low_level_m}  # 212.0
+        high_level: ${config_constants.central_dispatcher.terminal_pool.high_level_m}  # 213.0
+        low_setpoint: ${config_constants.central_dispatcher.intake_setpoints.low_setpoint_m}  # 349.8
+        high_setpoint: ${config_constants.central_dispatcher.intake_setpoints.high_setpoint_m}  # 349.2
 
   # Data Input Layer
   - id: csv_inflow
     class: CsvInflowAgent
     config:
-      target_component_id: wendegen_reservoir
+      # 引用config_constants.yml -> data_input.csv_inflow
+      target_component_id: ${config_constants.data_input.csv_inflow.target_component}  # wendegen_reservoir
       # Path is relative to the scenario directory
-      csv_file: data/historical_inflow.csv
-      time_column: time
-      data_column: inflow
+      csv_file: ${config_constants.data_input.csv_inflow.file_path}  # data/historical_inflow.csv
+      time_column: ${config_constants.data_input.csv_inflow.time_column}  # time
+      data_column: ${config_constants.data_input.csv_inflow.data_column}  # inflow

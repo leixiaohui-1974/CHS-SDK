@@ -11,6 +11,12 @@ documentation.
 import logging
 import pandas as pd
 import matplotlib.pyplot as plt
+import sys
+from pathlib import Path
+
+# 添加项目根目录到Python路径，遵循项目结构约定
+project_root = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(project_root))
 
 # Physical Components
 from core_lib.physical_objects.reservoir import Reservoir
@@ -27,9 +33,61 @@ from core_lib.core.interfaces import Agent
 # Agent Components
 from core_lib.local_agents.perception.digital_twin_agent import DigitalTwinAgent
 from core_lib.local_agents.control.pid_controller import PIDController
-from mission.agents.emergency_agent import EmergencyAgent
-from mission.agents.central_dispatcher_agent import CentralDispatcherAgent
-from mission.agents.csv_inflow_agent import CsvInflowAgent
+# TODO: 创建通用的emergency_agent和central_dispatcher_agent
+# from mission.agents.emergency_agent import EmergencyAgent
+# from mission.agents.central_dispatcher_agent import CentralDispatcherAgent
+# from mission.agents.csv_inflow_agent import CsvInflowAgent
+
+# 配置参数常量 - 避免魔数和硬编码
+class SimulationConstants:
+    """仿真系统常量配置类"""
+    
+    # 时间参数
+    SIMULATION_DURATION_HOURS = 168.0  # 7天仿真时长
+    TIME_STEP_HOURS = 1.0  # 1小时时间步长
+    PIPE_BURST_TIME_HOURS = 100.0  # 管道爆裂测试时间点
+    
+    # 物理参数 - 压力阈值（单位：MPa）
+    EMERGENCY_PRESSURE_THRESHOLD_MPA = 0.3
+    
+    # 物理参数 - 水位阈值（单位：m）
+    TERMINAL_POOL_LOW_LEVEL_M = 212.0
+    TERMINAL_POOL_HIGH_LEVEL_M = 213.0
+    INTAKE_SETPOINT_LOW_M = 349.8
+    INTAKE_SETPOINT_HIGH_M = 349.2
+    
+    # PID控制器参数
+    class PIDControllerParams:
+        # 渠道闸门控制参数
+        TAORIVER_KP = -0.1
+        TAORIVER_KI = -0.01
+        TAORIVER_KD = -0.05
+        TAORIVER_SETPOINT_M = 324.20
+        
+        GUILIU_KP = -0.1
+        GUILIU_KI = -0.01
+        GUILIU_KD = -0.05
+        GUILIU_SETPOINT_M = 320.38
+        
+        # 阀门控制参数
+        ONLINE_VALVE_KP = 0.2
+        ONLINE_VALVE_KI = 0.02
+        ONLINE_VALVE_KD = 0.1
+        ONLINE_VALVE_SETPOINT = 0.65
+        
+        TERMINAL_VALVE_KP = -0.05
+        TERMINAL_VALVE_KI = -0.005
+        TERMINAL_VALVE_KD = -0.02
+        TERMINAL_VALVE_SETPOINT_M = 212.5
+        
+        INTAKE_GATE_KP = -0.1
+        INTAKE_GATE_KI = -0.01
+        INTAKE_GATE_KD = -0.05
+        INTAKE_GATE_SETPOINT_M = 349.5
+        
+        # 输出限制
+        MIN_OUTPUT = 0.0
+        MAX_OUTPUT = 1.0
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -42,7 +100,11 @@ def run_simulation():
     logging.info("Initializing the Yin Chuo Ji Liao Project simulation...")
 
     # --- Core Infrastructure ---
-    harness = SimulationHarness(config={'duration': 168, 'dt': 1.0}) # 1 week simulation
+    harness = SimulationHarness(config={
+        'end_time': SimulationConstants.SIMULATION_DURATION_HOURS,
+        'time_step': SimulationConstants.TIME_STEP_HOURS,
+        'start_time': 0.0
+    })
     message_bus = MessageBus()
 
     # --- 1. Define and Add Physical Components ---
@@ -74,28 +136,205 @@ def run_simulation():
     for comp in components:
         agents.append(DigitalTwinAgent(f"twin_{comp.name}", comp, message_bus, f"state/{comp.name}"))
 
-    # 2.2 Local Control Layer
-    pid_taoriver = PIDController(Kp=-0.1, Ki=-0.01, Kd=-0.05, setpoint=324.20, min_output=0, max_output=1)
+    # 2.2 Local Control Layer - 使用配置常量避免硬编码
+    pid_taoriver = PIDController(
+        Kp=SimulationConstants.PIDControllerParams.TAORIVER_KP,
+        Ki=SimulationConstants.PIDControllerParams.TAORIVER_KI,
+        Kd=SimulationConstants.PIDControllerParams.TAORIVER_KD,
+        setpoint=SimulationConstants.PIDControllerParams.TAORIVER_SETPOINT_M,
+        min_output=SimulationConstants.PIDControllerParams.MIN_OUTPUT,
+        max_output=SimulationConstants.PIDControllerParams.MAX_OUTPUT
+    )
     harness.add_controller('taoriver_ctrl', pid_taoriver, 'taoriver_gate', 'tunnel_1', 'water_level')
-    pid_guiliu = PIDController(Kp=-0.1, Ki=-0.01, Kd=-0.05, setpoint=320.38, min_output=0, max_output=1)
+    
+    pid_guiliu = PIDController(
+        Kp=SimulationConstants.PIDControllerParams.GUILIU_KP,
+        Ki=SimulationConstants.PIDControllerParams.GUILIU_KI,
+        Kd=SimulationConstants.PIDControllerParams.GUILIU_KD,
+        setpoint=SimulationConstants.PIDControllerParams.GUILIU_SETPOINT_M,
+        min_output=SimulationConstants.PIDControllerParams.MIN_OUTPUT,
+        max_output=SimulationConstants.PIDControllerParams.MAX_OUTPUT
+    )
     harness.add_controller('guiliu_ctrl', pid_guiliu, 'guiliu_gate', 'tunnel_2', 'water_level')
-    pid_online_valve = PIDController(Kp=0.2, Ki=0.02, Kd=0.1, setpoint=0.65, min_output=0, max_output=1)
+    
+    pid_online_valve = PIDController(
+        Kp=SimulationConstants.PIDControllerParams.ONLINE_VALVE_KP,
+        Ki=SimulationConstants.PIDControllerParams.ONLINE_VALVE_KI,
+        Kd=SimulationConstants.PIDControllerParams.ONLINE_VALVE_KD,
+        setpoint=SimulationConstants.PIDControllerParams.ONLINE_VALVE_SETPOINT,
+        min_output=SimulationConstants.PIDControllerParams.MIN_OUTPUT,
+        max_output=SimulationConstants.PIDControllerParams.MAX_OUTPUT
+    )
     harness.add_controller('online_valve_ctrl', pid_online_valve, 'online_valve', 'pipe_2', 'pressure')
-    pid_terminal_valve = PIDController(Kp=-0.05, Ki=-0.005, Kd=-0.02, setpoint=212.5, min_output=0, max_output=1)
+    
+    pid_terminal_valve = PIDController(
+        Kp=SimulationConstants.PIDControllerParams.TERMINAL_VALVE_KP,
+        Ki=SimulationConstants.PIDControllerParams.TERMINAL_VALVE_KI,
+        Kd=SimulationConstants.PIDControllerParams.TERMINAL_VALVE_KD,
+        setpoint=SimulationConstants.PIDControllerParams.TERMINAL_VALVE_SETPOINT_M,
+        min_output=SimulationConstants.PIDControllerParams.MIN_OUTPUT,
+        max_output=SimulationConstants.PIDControllerParams.MAX_OUTPUT
+    )
     harness.add_controller('terminal_valve_ctrl', pid_terminal_valve, 'terminal_valve', 'terminal_pool', 'water_level')
-    pid_intake_gate = PIDController(Kp=-0.1, Ki=-0.01, Kd=-0.05, setpoint=349.5, min_output=0, max_output=1)
+    
+    pid_intake_gate = PIDController(
+        Kp=SimulationConstants.PIDControllerParams.INTAKE_GATE_KP,
+        Ki=SimulationConstants.PIDControllerParams.INTAKE_GATE_KI,
+        Kd=SimulationConstants.PIDControllerParams.INTAKE_GATE_KD,
+        setpoint=SimulationConstants.PIDControllerParams.INTAKE_GATE_SETPOINT_M,
+        min_output=SimulationConstants.PIDControllerParams.MIN_OUTPUT,
+        max_output=SimulationConstants.PIDControllerParams.MAX_OUTPUT
+    )
     harness.add_controller('intake_gate_ctrl', pid_intake_gate, 'water_intake_gate', 'tunnel_1', 'water_level')
 
-    # 2.3 Supervisory and Emergency Layer
-    agents.append(EmergencyAgent('emergency_agent', message_bus, ['state/pipe_1', 'state/pipe_2'], 0.3, 'control/water_intake_gate'))
-    dispatcher_config = {'low_level': 212.0, 'high_level': 213.0, 'low_setpoint': 349.8, 'high_setpoint': 349.2}
-    agents.append(CentralDispatcherAgent('central_dispatcher', message_bus, 'state/terminal_pool', 'water_level', 'command/intake_gate_ctrl', dispatcher_config))
+    # 2.3 Supervisory and Emergency Layer - 创建简化的应急处理智能体
+    class SimpleEmergencyAgent(Agent):
+        """简化的应急处理智能体"""
+        def __init__(self, agent_id: str, message_bus: MessageBus, 
+                     monitored_topics: list, pressure_threshold: float, action_topic: str):
+            super().__init__(agent_id)
+            self.bus = message_bus
+            self.pressure_threshold = pressure_threshold
+            self.action_topic = action_topic
+            self.emergency_triggered = False
+            
+            for topic in monitored_topics:
+                self.bus.subscribe(topic, self.handle_pressure_message)
+        
+        def handle_pressure_message(self, message):
+            if 'pressure' not in message:
+                return
+            pressure = message['pressure']
+            if pressure < self.pressure_threshold and not self.emergency_triggered:
+                logging.warning(f"Emergency triggered! Pressure {pressure} below threshold {self.pressure_threshold}")
+                self.bus.publish(self.action_topic, {'control_signal': 0.0})  # 关闭闸门
+                self.emergency_triggered = True
+        
+        def run(self, current_time: float):
+            pass  # 事件驱动，无需在run中处理
+    
+    # 2.3.1 应急处理智能体
+    emergency_agent = SimpleEmergencyAgent(
+        'emergency_agent', 
+        message_bus, 
+        ['state/pipe_1', 'state/pipe_2'], 
+        SimulationConstants.EMERGENCY_PRESSURE_THRESHOLD_MPA, 
+        'control/water_intake_gate'
+    )
+    agents.append(emergency_agent)
+    
+    # 2.3.2 中央调度智能体 - 简化实现
+    class SimpleCentralDispatcherAgent(Agent):
+        """简化的中央调度智能体"""
+        def __init__(self, agent_id: str, message_bus: MessageBus, monitored_topic: str, 
+                     observation_key: str, command_topic: str, dispatch_config: dict):
+            super().__init__(agent_id)
+            self.bus = message_bus
+            self.command_topic = command_topic
+            self.config = dispatch_config
+            self.observation_key = observation_key
+            
+            self.bus.subscribe(monitored_topic, self.handle_water_level_message)
+        
+        def handle_water_level_message(self, message):
+            if self.observation_key not in message:
+                return
+            
+            water_level = message[self.observation_key]
+            
+            if water_level < self.config['low_level']:
+                new_setpoint = self.config['low_setpoint']
+                self.bus.publish(self.command_topic, {'new_setpoint': new_setpoint})
+                logging.info(f"Low level detected: {water_level}m, setting intake to {new_setpoint}m")
+            elif water_level > self.config['high_level']:
+                new_setpoint = self.config['high_setpoint']
+                self.bus.publish(self.command_topic, {'new_setpoint': new_setpoint})
+                logging.info(f"High level detected: {water_level}m, setting intake to {new_setpoint}m")
+        
+        def run(self, current_time: float):
+            pass  # 事件驱动，无需在run中处理
+    
+    dispatcher_config = {
+        'low_level': SimulationConstants.TERMINAL_POOL_LOW_LEVEL_M,
+        'high_level': SimulationConstants.TERMINAL_POOL_HIGH_LEVEL_M,
+        'low_setpoint': SimulationConstants.INTAKE_SETPOINT_LOW_M,
+        'high_setpoint': SimulationConstants.INTAKE_SETPOINT_HIGH_M
+    }
+    
+    central_dispatcher = SimpleCentralDispatcherAgent(
+        'central_dispatcher', 
+        message_bus, 
+        'state/terminal_pool', 
+        'water_level', 
+        'command/intake_gate_ctrl', 
+        dispatcher_config
+    )
+    agents.append(central_dispatcher)
+    
     def intake_setpoint_updater(message):
-        pid_intake_gate.set_setpoint(message.get('new_setpoint', pid_intake_gate.setpoint))
+        if 'new_setpoint' not in message:
+            raise KeyError("新设定点参数'new_setpoint'是必需的")
+        pid_intake_gate.set_setpoint(message['new_setpoint'])
+    
     message_bus.subscribe('command/intake_gate_ctrl', intake_setpoint_updater)
 
-    # 2.4 Data Input Layer
-    agents.append(CsvInflowAgent('csv_inflow', comp_map['wendegen_reservoir'], 'data/historical_inflow.csv', 'time', 'inflow'))
+    # 2.4 Data Input Layer - 创建简化的CSV入流智能体
+    class SimpleCsvInflowAgent(Agent):
+        """简化的CSV入流智能体"""
+        def __init__(self, agent_id: str, target_component, csv_file: str, time_column: str, data_column: str):
+            super().__init__(agent_id)
+            self.target_component = target_component
+            self.csv_file = csv_file
+            self.time_column = time_column
+            self.data_column = data_column
+            self.data = None
+            self.current_index = 0
+            self._load_data()
+        
+        def _load_data(self):
+            """加载CSV数据"""
+            try:
+                import pandas as pd
+                file_path = Path(__file__).parent / self.csv_file
+                if file_path.exists():
+                    self.data = pd.read_csv(file_path)
+                    logging.info(f"Loaded {len(self.data)} inflow data points from {file_path}")
+                else:
+                    logging.warning(f"CSV file not found: {file_path}, using default inflow")
+                    # 创建默认数据
+                    self.data = pd.DataFrame({
+                        self.time_column: list(range(0, int(SimulationConstants.SIMULATION_DURATION_HOURS) + 1)),
+                        self.data_column: [50.0] * (int(SimulationConstants.SIMULATION_DURATION_HOURS) + 1)
+                    })
+            except Exception as e:
+                logging.error(f"Failed to load CSV data: {e}, using default inflow")
+                # 创建默认数据
+                self.data = pd.DataFrame({
+                    self.time_column: list(range(0, int(SimulationConstants.SIMULATION_DURATION_HOURS) + 1)),
+                    self.data_column: [50.0] * (int(SimulationConstants.SIMULATION_DURATION_HOURS) + 1)
+                })
+        
+        def run(self, current_time: float):
+            """更新入流数据"""
+            if self.data is None or len(self.data) == 0:
+                return
+            
+            # 找到对应时间的入流数据
+            time_mask = self.data[self.time_column] <= current_time
+            if time_mask.any():
+                latest_row = self.data[time_mask].iloc[-1]
+                inflow_value = latest_row[self.data_column]
+                if hasattr(self.target_component, 'set_inflow'):
+                    self.target_component.set_inflow(inflow_value)
+    
+    csv_inflow_agent = SimpleCsvInflowAgent(
+        'csv_inflow', 
+        comp_map['wendegen_reservoir'], 
+        'data/historical_inflow.csv', 
+        'time', 
+        'inflow'
+    )
+    agents.append(csv_inflow_agent)
 
     for agent in agents:
         harness.add_agent(agent)
@@ -110,14 +349,32 @@ def run_simulation():
     logging.info("Building and running simulation...")
     harness.build()
 
-    # Manually simulate a pipe burst to test emergency response
-    def simulate_burst(current_time):
-        if int(current_time) == 100:
-            logging.warning(f"!!! Manually simulating pipe burst at time {current_time} !!!")
-            comp_map['pipe_1'].pressure = 0.1
-
-    # The MAS run method will call agent.run() which includes our custom burst simulation agent logic
-    harness.add_agent(BurstAgent("burst_agent", comp_map))
+    # 创建管道爆裂测试智能体 - 使用配置常量而非硬编码
+    class PipeBurstTestAgent(Agent):
+        """管道爆裂测试智能体，用于测试应急响应系统"""
+        def __init__(self, agent_id: str, component_map: dict, burst_time: float, target_pipe: str):
+            super().__init__(agent_id)
+            self.comp_map = component_map
+            self.burst_time = burst_time
+            self.target_pipe = target_pipe
+            self.burst_triggered = False
+        
+        def run(self, current_time: float):
+            if not self.burst_triggered and abs(current_time - self.burst_time) < 0.5:
+                logging.warning(f"!!! Simulating pipe burst at time {current_time} for testing emergency response !!!")
+                if self.target_pipe in self.comp_map:
+                    # 设置低压力触发应急响应
+                    if hasattr(self.comp_map[self.target_pipe], 'pressure'):
+                        self.comp_map[self.target_pipe].pressure = 0.1  # 0.1 MPa，低于阈值
+                self.burst_triggered = True
+    
+    burst_agent = PipeBurstTestAgent(
+        "pipe_burst_test_agent", 
+        comp_map, 
+        SimulationConstants.PIPE_BURST_TIME_HOURS, 
+        'pipe_1'
+    )
+    harness.add_agent(burst_agent)
 
     harness.run_mas_simulation()
     logging.info("Simulation complete.")
@@ -162,16 +419,7 @@ def run_simulation():
     logging.info(f"Saved plot to {output_filename}")
 
 
-# Helper agent to inject the pipe burst event
-class BurstAgent(Agent):
-    def __init__(self, agent_id: str, component_map: dict):
-        super().__init__(agent_id)
-        self.comp_map = component_map
-
-    def run(self, current_time: float):
-        if int(current_time) == 100:
-            logging.warning(f"!!! Manually simulating pipe burst at time {current_time} !!!")
-            self.comp_map['pipe_1'].pressure = 0.1
+# 已移至主函数内部，使用配置化的PipeBurstTestAgent
 
 if __name__ == "__main__":
     run_simulation()

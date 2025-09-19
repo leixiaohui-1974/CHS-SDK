@@ -78,9 +78,53 @@ def run_simulation(harness):
     print("\n=== 开始仿真 ===")
     
     try:
+        # 添加仿真前的组件状态检查
+        print("\n--- 仿真前组件状态检查 ---")
+        components = getattr(harness, 'components', {})
+        channel1 = components.get('Channel_1')
+        if channel1:
+            print(f"渠道1类型: {type(channel1).__name__}")
+            if hasattr(channel1, '_inflow'):
+                print(f"渠道1初始物理入流: {channel1._inflow}")
+            if hasattr(channel1, 'model_type'):
+                print(f"渠道1模型类型: {channel1.model_type}")
+            if hasattr(channel1, '_state'):
+                print(f"渠道1初始状态: {channel1._state}")
+        
+        # 添加实时监控钩子
+        original_step_method = None
+        if channel1 and hasattr(channel1, 'step'):
+            original_step_method = channel1.step
+            step_counter = [0]  # 使用列表以便在闭包中修改
+            
+            def monitored_step(*args, **kwargs):
+                step_counter[0] += 1
+                result = original_step_method(*args, **kwargs)
+                
+                # 每10步输出一次调试信息
+                if step_counter[0] <= 50 or step_counter[0] % 20 == 0:
+                    state = channel1.get_state() if hasattr(channel1, 'get_state') else {}
+                    current_inflow = state.get('inflow', 0)
+                    current_outflow = state.get('outflow', 0) 
+                    current_water_level = state.get('water_level', 0)
+                    
+                    # 获取组件内部详细信息
+                    physical_inflow = getattr(channel1, '_inflow', 0) if hasattr(channel1, '_inflow') else 0
+                    data_inflow = getattr(channel1, 'data_inflow', 0) if hasattr(channel1, 'data_inflow') else 0
+                    
+                    print(f"[步骤{step_counter[0]}] 渠道1: 入流={current_inflow:.6f} (物理={physical_inflow:.6f}, 数据={data_inflow:.6f}), 出流={current_outflow:.6f}, 水位={current_water_level:.3f}")
+                
+                return result
+            
+            channel1.step = monitored_step
+        
         # 运行MAS仿真
         print("正在运行多智能体仿真...")
         harness.run_mas_simulation()
+        
+        # 恢复原始方法
+        if original_step_method:
+            channel1.step = original_step_method
         
         print("[OK] 仿真运行完成")
         
@@ -159,7 +203,7 @@ def analyze_results(results):
         if other_components:
             print(f"其他组件: {other_components}")
 
-def save_results(results, output_dir=None):
+def save_results(results, harness=None, components=None, output_dir=None):
     """保存仿真结果"""
     print("\n=== 保存仿真结果 ===")
     
@@ -194,6 +238,11 @@ def save_results(results, output_dir=None):
         
         print(f"[OK] JSON结果已保存到: {output_file}")
         
+        # 创建渠道1入流详细分析报告
+        channel1_csv_file = output_dir / "channel1_inflow_detailed_analysis.csv"
+        create_channel1_inflow_analysis(results, harness, components, channel1_csv_file)
+        print(f"[OK] 渠道1入流详细分析已保存到: {channel1_csv_file}")
+        
         # 创建详细的Excel报告
         import datetime
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -208,6 +257,158 @@ def save_results(results, output_dir=None):
         
     except Exception as e:
         print(f"⚠ 保存结果时出错: {e}")
+        import traceback
+        traceback.print_exc()
+
+def create_channel1_inflow_analysis(results, harness=None, components=None, csv_file=None):
+    """创建渠道1入流的详细分析CSV报告"""
+    import csv
+    
+    print("\n=== 分析渠道1入流构成 ===")
+    
+    try:
+        with open(csv_file, 'w', newline='', encoding='utf-8') as f:
+            writer = csv.writer(f)
+            
+            # 写入表头
+            headers = [
+                '时间(s)', '时间(h)',
+                '渠道1总入流(m³/s)',
+                '渠道1记录的入流(m³/s)', 
+                '上游水库出流(m³/s)',
+                '默认入流值(m³/s)',
+                '物理入流(m³/s)',
+                '数据入流(m³/s)',
+                '话题入流(m³/s)',
+                '入流差异(m³/s)',
+                '上游水库水位(m)',
+                '上游水库库容(m³)',
+                '渠道1水位(m)',
+                '渠道1库容(m³)',
+                '渠道1出流(m³/s)',
+                '计算逻辑备注'
+            ]
+            writer.writerow(headers)
+            
+            # 获取Channel_1组件实例（如果可用）
+            channel1_component = None
+            upstream_reservoir_component = None
+            default_inflow = 0
+            
+            if components:
+                channel1_component = components.get('Channel_1')
+                upstream_reservoir_component = components.get('Upstream_Reservoir')
+            
+            # 尝试从harness获取默认入流值
+            if harness and hasattr(harness, 'DEFAULT_INFLOW_VALUE'):
+                default_inflow = harness.DEFAULT_INFLOW_VALUE
+            
+            print(f"Channel_1组件: {type(channel1_component).__name__ if channel1_component else 'None'}")
+            print(f"Upstream_Reservoir组件: {type(upstream_reservoir_component).__name__ if upstream_reservoir_component else 'None'}")
+            print(f"默认入流值: {default_inflow}")
+            
+            # 分析每个时间步的数据
+            for step_idx, step in enumerate(results):
+                current_time = step.get('time', step_idx)
+                current_time_h = current_time / 3600
+                
+                # 获取基本数据
+                channel1_data = step.get('Channel_1', {})
+                upstream_res_data = step.get('Upstream_Reservoir', {})
+                
+                channel1_total_inflow = channel1_data.get('inflow', 0)
+                upstream_outflow = upstream_res_data.get('outflow', 0)
+                channel1_water_level = channel1_data.get('water_level', 0)
+                channel1_volume = channel1_data.get('volume', 0)
+                channel1_outflow = channel1_data.get('outflow', 0)
+                upstream_water_level = upstream_res_data.get('water_level', 0)
+                upstream_volume = upstream_res_data.get('volume', 0)
+                
+                # 尝试获取组件内部详细信息
+                physical_inflow = 0
+                data_inflow = 0
+                topic_inflow = 0
+                inflow_difference = 0
+                calculation_notes = []
+                
+                if channel1_component:
+                    try:
+                        # 获取物理入流（_inflow属性）
+                        if hasattr(channel1_component, '_inflow'):
+                            physical_inflow = getattr(channel1_component, '_inflow', 0)
+                        
+                        # 获取数据入流
+                        if hasattr(channel1_component, 'data_inflow'):
+                            data_inflow = getattr(channel1_component, 'data_inflow', 0)
+                        
+                        # 获取话题入流
+                        if hasattr(channel1_component, 'topic_inflows'):
+                            topic_inflows_dict = getattr(channel1_component, 'topic_inflows', {})
+                            topic_inflow = sum(topic_inflows_dict.values()) if topic_inflows_dict else 0
+                        
+                        # 检查时滞历史缓存
+                        if hasattr(channel1_component, 'inflow_history'):
+                            history = getattr(channel1_component, 'inflow_history', None)
+                            if history is not None:
+                                calculation_notes.append(f"时滞缓存长度:{len(history) if hasattr(history, '__len__') else 'N/A'}")
+                        
+                        # 检查模型类型
+                        if hasattr(channel1_component, 'model_type'):
+                            model_type = getattr(channel1_component, 'model_type', 'unknown')
+                            calculation_notes.append(f"模型类型:{model_type}")
+                        
+                        # 检查是否有订阅话题
+                        if hasattr(channel1_component, 'bus') and channel1_component.bus:
+                            if hasattr(channel1_component.bus, '_subscriptions'):
+                                subscriptions = getattr(channel1_component.bus, '_subscriptions', {})
+                                if subscriptions:
+                                    calculation_notes.append(f"订阅话题数:{len(subscriptions)}")
+                    
+                    except Exception as e:
+                        calculation_notes.append(f"获取组件信息失败:{str(e)[:50]}")
+                
+                # 计算期望入流 (默认值 + 上游出流)
+                expected_inflow = default_inflow + upstream_outflow
+                
+                # 计算入流差异
+                inflow_difference = channel1_total_inflow - expected_inflow
+                
+                # 添加计算逻辑说明
+                if abs(inflow_difference) > 0.001:
+                    calculation_notes.append(f"入流异常:期望{expected_inflow:.3f}实际{channel1_total_inflow:.3f}")
+                
+                if channel1_total_inflow != (physical_inflow + data_inflow + topic_inflow) and (physical_inflow + data_inflow + topic_inflow) > 0:
+                    calculation_notes.append(f"组件内部不一致:总计{physical_inflow + data_inflow + topic_inflow:.3f}")
+                
+                # 写入数据行
+                row = [
+                    f"{current_time:.1f}",
+                    f"{current_time_h:.4f}",
+                    f"{channel1_total_inflow:.6f}",
+                    f"{channel1_data.get('inflow', 0):.6f}",
+                    f"{upstream_outflow:.6f}",
+                    f"{default_inflow:.6f}",
+                    f"{physical_inflow:.6f}",
+                    f"{data_inflow:.6f}",
+                    f"{topic_inflow:.6f}",
+                    f"{inflow_difference:.6f}",
+                    f"{upstream_water_level:.3f}",
+                    f"{upstream_volume:.1f}",
+                    f"{channel1_water_level:.3f}",
+                    f"{channel1_volume:.1f}",
+                    f"{channel1_outflow:.6f}",
+                    "; ".join(calculation_notes) if calculation_notes else "正常"
+                ]
+                writer.writerow(row)
+                
+                # 输出前几步的调试信息
+                if step_idx < 5:
+                    print(f"时间 {current_time}s: 渠道1入流={channel1_total_inflow:.6f}, 上游出流={upstream_outflow:.6f}, 差异={inflow_difference:.6f}")
+        
+        print(f"[OK] 渠道1入流详细分析包含 {len(results)} 个时间步的数据")
+        
+    except Exception as e:
+        print(f"[ERROR] 创建渠道1入流分析失败: {e}")
         import traceback
         traceback.print_exc()
 
@@ -530,40 +731,6 @@ def create_csv_report(results, csv_file):
                 row.append('')
             
             writer.writerow(row)
-    """创建CSV格式的关键指标报告"""
-    import csv
-    
-    with open(csv_file, 'w', newline='', encoding='utf-8') as f:
-        writer = csv.writer(f)
-        
-        # 写入标题行
-        headers = ['时间(s)', '上游水库水位(m)', '渠道1水位(m)', '闸门1开度', 
-                  '渠道3水位(m)', '下游水库水位(m)', '闸门1流量(m³/s)']
-        writer.writerow(headers)
-        
-        # 写入数据行
-        for step in results:
-            current_time = step.get('time', 0)  # 使用'time'而不是'current_time'
-            
-            row = [current_time]
-            
-            # 提取关键指标 - 直接从步骤中获取
-            components = ['Upstream_Reservoir', 'Channel_1', 'Gate_1', 'Channel_3', 'Downstream_Reservoir']
-            metrics = ['water_level', 'water_level', 'opening', 'water_level', 'water_level']
-            
-            for comp, metric in zip(components, metrics):
-                if comp in step and metric in step[comp]:
-                    row.append(step[comp][metric])
-                else:
-                    row.append('')
-            
-            # 添加闸门流量
-            if 'Gate_1' in step and 'outflow' in step['Gate_1']:
-                row.append(step['Gate_1']['outflow'])
-            else:
-                row.append('')
-            
-            writer.writerow(row)
 
 def main():
     """主函数"""
@@ -584,7 +751,7 @@ def main():
         analyze_results(results)
         
         # 5. 保存结果
-        save_results(results)
+        save_results(results, harness, components)
         
         print("\n" + "=" * 50)
         print("[OK] 仿真演示完成！")
