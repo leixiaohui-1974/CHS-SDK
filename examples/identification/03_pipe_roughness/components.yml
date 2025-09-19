@@ -6,9 +6,9 @@ upstream_reservoir:
   parameters:
     storage_curve:
       - [0, 150.0]
-      - [10000000, 160.0]
+      - [15000000, 160.0]  # 扩大上游水库容量，确保稳定的高水位
   initial_state:
-    volume: 8000000
+    volume: 10000000  # 增加初始库容，保证稳定的上游水位
 
 # A downstream reservoir to provide a downstream water level with a lower head
 downstream_reservoir:
@@ -16,18 +16,18 @@ downstream_reservoir:
   parameters:
     storage_curve:
       - [0, 90.0]
-      - [10000000, 100.0]
+      - [12000000, 100.0]  # 适度扩大下游水库容量，保证稳定的低水位
   initial_state:
-    volume: 1000000
+    volume: 2000000  # 适度增加初始库容，保证稳定的下游水位
 
 # The "true" pipe with the correct roughness coefficient
 true_pipe:
   type: Pipe
   parameters:
     calculation_method: manning
-    length: 1000.0 # meters
-    diameter: 1.0   # meters
-    manning_n: 0.012 # The "true" value we want to identify
+    length: 1000.0 # meters - 管道长度
+    diameter: 1.0   # meters - 管道直径
+    manning_n: 0.012 # 有物理基础的“真实”值，对应光滑混凝土管道的典型值
   initial_state:
     flow: 0
 
@@ -36,8 +36,8 @@ twin_pipe:
   type: Pipe
   parameters:
     calculation_method: manning
-    length: 1000.0
-    diameter: 1.0
-    manning_n: 0.018 # The initial incorrect guess
+    length: 1000.0  # 与真实管道相同的长度
+    diameter: 1.0    # 与真实管道相同的直径
+    manning_n: 0.018 # 初始不准确的猜测值，对应粗糙管道的典型值，但在合理范围内
   initial_state:
     flow: 0

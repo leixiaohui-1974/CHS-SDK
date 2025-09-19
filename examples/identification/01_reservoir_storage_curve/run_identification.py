@@ -3,7 +3,8 @@ from pathlib import Path
 import yaml
 import numpy as np
 
-# 将项目根目录添加到Python路径，以允许从core_lib导入
+# 使用标准导入机制（需要根据项目结构配置PYTHONPATH或使用setuptools开发模式）
+# TODO: 替换为标准包导入方式，避免手动路径操作
 project_root = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(project_root))
 
@@ -70,11 +71,11 @@ def main():
     scenario_path = Path(__file__).parent
 
     # --- 1. 从YAML文件加载配置 ---
-    with open(scenario_path / 'config.yml', 'r') as f:
+    with open(scenario_path / 'config.yml', 'r', encoding='utf-8') as f:
         config = yaml.safe_load(f)
-    with open(scenario_path / 'components.yml', 'r') as f:
+    with open(scenario_path / 'components.yml', 'r', encoding='utf-8') as f:
         components_config = yaml.safe_load(f)
-    with open(scenario_path / 'agents.yml', 'r') as f:
+    with open(scenario_path / 'agents.yml', 'r', encoding='utf-8') as f:
         agents_config = yaml.safe_load(f)
 
     # --- 2. 手动实例化所有对象 ---
@@ -130,6 +131,10 @@ def main():
     id_agent_conf = agents_config['identification_agent']['parameters'].copy()
     # Remove target_model from config since we pass it explicitly
     id_agent_conf.pop('target_model', None)
+    # 从仿真配置中获取时间步长，确保一致性
+    simulation_time_step = config['simulation'].get('time_step', 3600)
+    id_agent_conf['simulation_time_step'] = simulation_time_step
+    
     identification_agent = ParameterIdentificationAgent(
         agent_id='identification_agent',
         target_model=twin_reservoir,
@@ -154,7 +159,7 @@ def main():
     # --- 4. 初始化并运行仿真平台 ---
     print("\n正在初始化仿真平台...")
     harness = SimulationHarness(config=config['simulation'])
-    harness.message_bus = bus # 确保所有对象共享同一个消息总线
+    harness.message_bus = bus  # 确保所有对象共享同一个消息总线
 
     # 向仿真平台添加组件和智能体
     for comp in components:

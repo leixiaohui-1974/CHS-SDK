@@ -6,9 +6,9 @@ upstream_reservoir:
   parameters:
     storage_curve:
       - [0, 100.0]
-      - [10000000, 110.0] # Large reservoir, so level is nearly constant
+      - [20000000, 110.0] # 大型水库，水位基本保持恒定，但参数更加合理
   initial_state:
-    volume: 5000000
+    volume: 8000000  # 初始库容设置为800万立方米，保证稳定的上游水位
 
 # A downstream reservoir to provide a downstream water level
 downstream_reservoir:
@@ -16,26 +16,28 @@ downstream_reservoir:
   parameters:
     storage_curve:
       - [0, 90.0]
-      - [10000000, 100.0]
+      - [15000000, 100.0]  # 适度扩大下游水库容量，提供更稳定的水位
   initial_state:
-    volume: 1000000
+    volume: 3000000  # 适度增加初始库容，保证稳定的下游水位
 
 # The "true" gate with the correct discharge coefficient
 true_gate:
   type: Gate
   parameters:
-    discharge_coefficient: 0.8 # The "true" value we want to identify
-    width: 2.0 # meters
-    height: 2.0 # meters
+    discharge_coefficient: 0.8 # 有理论基础的“真实”值，在典型闸门流量系数范围内
+    width: 2.0 # meters - 闸门宽度
+    max_opening: 2.0 # meters - 最大开度
+    max_rate_of_change: 0.1 # 最大变化率（米/秒）
   initial_state:
-    opening: 0.5 # Start half open
+    opening: 0.5 # 初始开度（米）
 
 # The "twin" gate with an incorrect initial guess
 twin_gate:
   type: Gate
   parameters:
-    discharge_coefficient: 0.6 # The initial incorrect guess
-    width: 2.0
-    height: 2.0
+    discharge_coefficient: 0.6 # 初始不准确的猜测值，但在合理范围内
+    width: 2.0 # meters - 与真实闸门相同的宽度
+    max_opening: 2.0 # meters - 与真实闸门相同的最大开度
+    max_rate_of_change: 0.1 # 与真实闸门相同的最大变化率
   initial_state:
-    opening: 0.5
+    opening: 0.5 # 与真实闸门相同的初始开度

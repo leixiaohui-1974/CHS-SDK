@@ -27,6 +27,7 @@ identification_agent:
   parameters:
     target_model: "twin_gate"
     identification_interval: 50 # Run identification more frequently
+    simulation_time_step: 100  # 仿真时间步长（秒），与config.yml中的time_step保持一致
     identification_data_map:
       # Data needed by Gate.identify_parameters()
       upstream_levels:

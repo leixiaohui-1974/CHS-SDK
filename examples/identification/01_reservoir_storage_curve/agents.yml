@@ -30,6 +30,7 @@ identification_agent:
   parameters:
     target_model: "twin_reservoir"
     identification_interval: 100
+    simulation_time_step: 3600  # 仿真时间步长（秒），与config.yml中的time_step保持一致
     identification_data_map:
       # Data now comes from the perception agents
       inflows:
