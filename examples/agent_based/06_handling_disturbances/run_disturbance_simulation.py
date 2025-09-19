@@ -15,6 +15,7 @@ sys.path.insert(0, project_root)
 
 from core_lib.physical_objects.reservoir import Reservoir
 from core_lib.physical_objects.gate import Gate
+from core_lib.physical_objects.pipe import Pipe
 from core_lib.local_agents.control.pid_controller import PIDController
 from core_lib.local_agents.control.unified_gate_control_agent import UnifiedGateControlAgent
 from core_lib.local_agents.perception.digital_twin_agent import DigitalTwinAgent
@@ -30,7 +31,7 @@ def setup_control_system(harness, inflow_topic=None):
     print("--- Initializing components for Control System ---")
 
     message_bus = harness.message_bus
-    simulation_dt = harness.dt
+    simulation_dt = harness.time_step
 
     # --- Communication Topics ---
     RESERVOIR_STATE_TOPIC = "state.reservoir.level"
@@ -61,6 +62,28 @@ def setup_control_system(harness, inflow_topic=None):
         action_topic=GATE_ACTION_TOPIC,
         action_key='control_signal'
     )
+    
+    # Add a downstream pipe as receiver to provide downstream_head
+    downstream_pipe = Pipe(
+        name="downstream_pipe",
+        initial_state={'flow': 0.0},
+        parameters={
+            'length': 100.0,
+            'diameter': 2.0,
+            'roughness': 0.012,
+            'elevation_start': 0.0,
+            'elevation_end': -1.0,
+            'friction_factor': 0.02
+        }
+    )
+    
+    # Add a downstream reservoir to provide boundary condition
+    downstream_reservoir = Reservoir(
+        name="downstream_reservoir",
+        initial_state={'volume': 5e6, 'water_level': 5.0},
+        parameters={'surface_area': 1e6, 'storage_curve': [[0, 0], [15e6, 15]]},
+        message_bus=message_bus
+    )
 
     # --- Agent Components ---
     reservoir_twin = DigitalTwinAgent(
@@ -82,49 +105,40 @@ def setup_control_system(harness, inflow_topic=None):
         observation_topic=RESERVOIR_STATE_TOPIC,
         observation_key='water_level',
         action_topic=GATE_ACTION_TOPIC,
-        dt=simulation_dt,
+        time_step=simulation_dt,
         command_topic=GATE_COMMAND_TOPIC,
         target_component="gate_1",
         control_type="gate_control"
     )
 
-    dispatcher_rules = {
-        "profiles": {
-            "flood_control": {
-                "condition": lambda states: states.get('reservoir_level', {}).get('water_level', 0) > 13.0,
-                "commands": {
-                    "gate1_command": {'new_setpoint': 11.0}
-                }
-            },
-            "normal_operation": {
-                "condition": lambda states: True,
-                "commands": {
-                    "gate1_command": {'new_setpoint': 12.0}
-                }
-            }
-        }
-    }
+    # Remove unused dispatcher_rules and create dispatcher with correct configuration
     dispatcher = CentralDispatcherAgent(
         agent_id="dispatcher_1",
         message_bus=message_bus,
-        mode="rule",
-        subscribed_topic=RESERVOIR_STATE_TOPIC,
-        observation_key="water_level",
-        command_topic=GATE_COMMAND_TOPIC,
-        dispatcher_params={
-            "low_level": 10.0,
-            "high_level": 13.0,
-            "low_setpoint": 15.0,
-            "high_setpoint": 12.0
+        **{
+            "mode": "rule",
+            "subscribed_topic": RESERVOIR_STATE_TOPIC,
+            "observation_key": "water_level",
+            "command_topic": GATE_COMMAND_TOPIC,
+            "dispatcher_params": {
+                "low_level": 10.0,
+                "high_level": 13.0,
+                "low_setpoint": 15.0,
+                "high_setpoint": 12.0
+            }
         }
     )
 
     harness.add_component("reservoir_1", reservoir)
     harness.add_component("gate_1", gate)
+    harness.add_component("downstream_pipe", downstream_pipe)
+    harness.add_component("downstream_reservoir", downstream_reservoir)
     harness.add_agent(reservoir_twin)
     harness.add_agent(lca)
     harness.add_agent(dispatcher)
     harness.add_connection("reservoir_1", "gate_1")
+    harness.add_connection("gate_1", "downstream_pipe")
+    harness.add_connection("downstream_pipe", "downstream_reservoir")
 
 def run_disturbance_simulation():
     """
@@ -132,7 +146,7 @@ def run_disturbance_simulation():
     """
     print("\n--- Setting up Tutorial 5: Handling Disturbances Simulation ---")
 
-    simulation_config = {'end_time': 8000, 'dt': 1.0}
+    simulation_config = {'start_time': 0, 'end_time': 8000, 'time_step': 1.0}
     harness = SimulationHarness(config=simulation_config)
 
     RAINFALL_TOPIC = "disturbance.rainfall.inflow"
