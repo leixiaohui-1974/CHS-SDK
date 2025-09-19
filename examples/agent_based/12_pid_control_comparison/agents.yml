@@ -1,86 +1,91 @@
 # Agents configuration for PID control comparison
+# Following three core principles:
+# 1. No magic numbers, hardcoding, or implicit defaults  
+# 2. Physical model rationality
+# 3. Generic solutions rather than case-specific implementations
+
 agents:
-  # Strategy 1: Local Control
+  # Strategy 1: Local Control - 使用适合的闸门控制代理
   - id: gate1_local_controller
-    class: core_lib.local_agents.control.unified_local_control_agent.UnifiedLocalControlAgent
+    class: core_lib.local_agents.control.unified_gate_control_agent.UnifiedGateControlAgent
     config:
-      time_step: 10
-      target_component: gate_1
-      control_type: pid
-      data_sources:
-        observation_topic: canal_1/water_level
-      control_targets:
-        action_topic: gate_1/opening
-      allocation_config:
-        method: direct
-      controller_config:
+      # 必需的位置参数映射为关键字参数
+      time_step: 10.0
+      observation_topic: canal_1/water_level
+      observation_key: water_level
+      action_topic: gate_1/opening
+      command_topic: gate_1/command
+      feedback_topic: gate_1/feedback
+      # 控制器配置
+      controller:
         class: PIDController
         config:
-          Kp: 0.5
-          Ki: 0.05
-          Kd: 0.1
-          setpoint: 5.0
-          min_output: 0.0
-          max_output: 1.0
+          Kp: 0.5      # 比例增益
+          Ki: 0.05     # 积分增益
+          Kd: 0.1      # 微分增益
+          setpoint: 5.0  # 设定点(m)
+          min_output: 0.0  # 最小输出
+          max_output: 1.0  # 最大输出
+      # 设备特定配置
+      target_component: gate_1
+      control_variable: water_level
+      target_location: downstream  # 监控下游水位
 
   - id: gate2_local_controller
-    class: core_lib.local_agents.control.unified_local_control_agent.UnifiedLocalControlAgent
+    class: core_lib.local_agents.control.unified_gate_control_agent.UnifiedGateControlAgent
     config:
-      time_step: 10
-      target_component: gate_2
-      control_type: pid
-      data_sources:
-        observation_topic: canal_2/water_level
-      control_targets:
-        action_topic: gate_2/opening
-      allocation_config:
-        method: direct
-      controller_config:
+      time_step: 10.0
+      observation_topic: canal_2/water_level
+      observation_key: water_level
+      action_topic: gate_2/opening
+      command_topic: gate_2/command
+      feedback_topic: gate_2/feedback
+      controller:
         class: PIDController
         config:
           Kp: 0.5
           Ki: 0.05
           Kd: 0.1
-          setpoint: 4.5
+          setpoint: 4.5  # 设定点(m)
           min_output: 0.0
           max_output: 1.0
+      target_component: gate_2
+      control_variable: water_level
+      target_location: downstream
 
-  # Strategy 2: Distant Downstream Control
+  # Strategy 2: Distant Downstream Control - 远程下游控制
   - id: gate1_distant_controller
-    class: core_lib.local_agents.control.unified_local_control_agent.UnifiedLocalControlAgent
+    class: core_lib.local_agents.control.unified_gate_control_agent.UnifiedGateControlAgent
     config:
-      time_step: 10
-      target_component: gate_1
-      control_type: pid
-      data_sources:
-        observation_topic: canal_2/water_level
-      control_targets:
-        action_topic: gate_1/opening
-      allocation_config:
-        method: direct
-      controller_config:
+      time_step: 10.0
+      observation_topic: canal_2/water_level
+      observation_key: water_level
+      action_topic: gate_1/opening
+      command_topic: gate_1/command
+      feedback_topic: gate_1/feedback
+      controller:
         class: PIDController
         config:
-          Kp: 0.4
-          Ki: 0.02
+          Kp: 0.4      # 较低的比例增益，提高稳定性
+          Ki: 0.02     # 较低的积分增益
           Kd: 0.1
           setpoint: 4.5
           min_output: 0.0
           max_output: 1.0
+      target_component: gate_1
+      control_variable: water_level
+      target_location: distant_downstream  # 监控远程下游
 
   - id: gate2_distant_controller
-    class: core_lib.local_agents.control.unified_local_control_agent.UnifiedLocalControlAgent
+    class: core_lib.local_agents.control.unified_gate_control_agent.UnifiedGateControlAgent
     config:
-      time_step: 10
-      target_component: gate_2
-      control_type: pid
-      data_sources:
-        observation_topic: canal_3/water_level
-      control_targets:
-        action_topic: gate_2/opening
-      allocation_config:
-        method: direct
-      controller_config:
+      time_step: 10.0
+      observation_topic: canal_3/water_level
+      observation_key: water_level
+      action_topic: gate_2/opening
+      command_topic: gate_2/command
+      feedback_topic: gate_2/feedback
+      controller:
         class: PIDController
         config:
           Kp: 0.4
@@ -89,21 +94,21 @@ agents:
           setpoint: 4.0
           min_output: 0.0
           max_output: 1.0
+      target_component: gate_2
+      control_variable: water_level
+      target_location: distant_downstream
 
-  # Strategy 3: Mixed Control
+  # Strategy 3: Mixed Control - 混合控制策略
   - id: gate1_mixed_controller
-    class: core_lib.local_agents.control.unified_local_control_agent.UnifiedLocalControlAgent
+    class: core_lib.local_agents.control.unified_gate_control_agent.UnifiedGateControlAgent
     config:
-      time_step: 10
-      target_component: gate_1
-      control_type: pid
-      data_sources:
-        observation_topic: canal_1/water_level
-      control_targets:
-        action_topic: gate_1/opening
-      allocation_config:
-        method: direct
-      controller_config:
+      time_step: 10.0
+      observation_topic: canal_1/water_level
+      observation_key: water_level
+      action_topic: gate_1/opening
+      command_topic: gate_1/command
+      feedback_topic: gate_1/feedback
+      controller:
         class: PIDController
         config:
           Kp: 0.5
@@ -112,20 +117,20 @@ agents:
           setpoint: 5.0
           min_output: 0.0
           max_output: 1.0
+      target_component: gate_1
+      control_variable: water_level
+      target_location: downstream  # 本地控制
 
   - id: gate2_mixed_controller
-    class: core_lib.local_agents.control.unified_local_control_agent.UnifiedLocalControlAgent
+    class: core_lib.local_agents.control.unified_gate_control_agent.UnifiedGateControlAgent
     config:
-      time_step: 10
-      target_component: gate_2
-      control_type: pid
-      data_sources:
-        observation_topic: canal_3/water_level
-      control_targets:
-        action_topic: gate_2/opening
-      allocation_config:
-        method: direct
-      controller_config:
+      time_step: 10.0
+      observation_topic: canal_3/water_level
+      observation_key: water_level
+      action_topic: gate_2/opening
+      command_topic: gate_2/command
+      feedback_topic: gate_2/feedback
+      controller:
         class: PIDController
         config:
           Kp: 0.4
@@ -134,3 +139,6 @@ agents:
           setpoint: 4.0
           min_output: 0.0
           max_output: 1.0
+      target_component: gate_2
+      control_variable: water_level
+      target_location: distant_downstream  # 远程控制
