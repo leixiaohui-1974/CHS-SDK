@@ -4,38 +4,32 @@ components:
   initial_state:
     water_level: 10.0
   parameters:
-    area: 10000.0
-    inflow: 50.0
+    surface_area: 10000.0
+    constant_inflow: 18.0
 - class: Gate
   id: gate_1
   initial_state:
     opening: 0.5
   parameters:
-    discharge_coefficient: 0.8
-    width: 5.0
-- class: UnifiedCanal
+    max_flow: 36.0
+- class: StoragePool
   id: canal_1
   initial_state:
     water_level: 5.0
   parameters:
-    delay: 300
-    gain: 0.001
-    model_type: integral_delay
-- class: UnifiedCanal
-  id: canal_2
-  initial_state:
-    water_level: 4.5
-  parameters:
-    delay: 600
-    gain: 0.001
-    model_type: integral_delay
+    storage_area: 5500.0
 - class: Gate
   id: gate_2
   initial_state:
     opening: 0.5
   parameters:
-    discharge_coefficient: 0.8
-    width: 5.0
+    max_flow: 36.0
+- class: StoragePool
+  id: canal_2
+  initial_state:
+    water_level: 4.5
+  parameters:
+    storage_area: 4800.0
 metadata:
   category: canal_model
   description: 统一配置文件，用于 canal_model/canal_pid_control 示例
