@@ -6,6 +6,25 @@ from core_lib.core.interfaces import Agent, Controller, State
 from core_lib.central_coordination.collaboration.message_bus import MessageBus, Message
 from typing import Optional
 
+
+def _resolve_logging_flag(value: Optional[bool]) -> bool:
+    """Normalize optional truthy values to a boolean."""
+
+    if isinstance(value, bool):
+        return value
+
+    if isinstance(value, str):
+        lowered = value.strip().lower()
+        if lowered in {"1", "true", "yes", "y", "on"}:
+            return True
+        if lowered in {"0", "false", "no", "n", "off"}:
+            return False
+
+    if isinstance(value, (int, float)):
+        return bool(value)
+
+    return False
+
 class LocalControlAgent(Agent):
     """
     A Control Agent that operates at a local level (e.g., controlling one gate).
@@ -53,11 +72,24 @@ class LocalControlAgent(Agent):
         self.controller_config = controller_config
         
         # Set up topics from configuration
-        self.observation_topic = observation_topic or data_sources.get('primary_data')
+        primary_observation_topic = (
+            data_sources.get('primary_data')
+            or data_sources.get('primary_observation')
+            or data_sources.get('observation_topic')
+        )
+        self.observation_topic = observation_topic or primary_observation_topic
         self.observation_key = observation_key or 'value'
-        self.action_topic = action_topic or f'control.{target_component}.action'
+        primary_action_topic = (
+            control_targets.get('primary_target')
+            or control_targets.get('action_topic')
+            or control_targets.get('primary_action')
+        )
+        self.action_topic = action_topic or primary_action_topic or f'control.{target_component}.action'
         self.command_topic = command_topic
         self.feedback_topic = feedback_topic
+        self.log_observations = _resolve_logging_flag(
+            kwargs.get('log_observations', kwargs.get('verbose', kwargs.get('debug', False)))
+        )
         
         # Initialize controller if provided, otherwise create from config
         if controller:
@@ -69,7 +101,7 @@ class LocalControlAgent(Agent):
         self.latest_feedback: State = {}
 
         self.bus.subscribe(self.observation_topic, self.handle_observation)
-        print(f"LocalControlAgent '{self.agent_id}' created. Subscribed to observation topic '{observation_topic}'.")
+        print(f"LocalControlAgent '{self.agent_id}' created. Subscribed to observation topic '{self.observation_topic}'.")
 
         if command_topic:
             self.bus.subscribe(command_topic, self.handle_command_message)
@@ -114,7 +146,8 @@ class LocalControlAgent(Agent):
         if observation_for_controller is not None:
             # Compute the control action using the encapsulated controller
             control_signal = self.controller.compute_control_action(observation_for_controller, self.dt)
-            print(f"[{self.agent_id}] Observation: {observation_for_controller}, Control Signal: {control_signal}")
+            if self.log_observations:
+                print(f"[{self.agent_id}] Observation: {observation_for_controller}, Control Signal: {control_signal}")
             # Publish the computed action to the action topic(s)
             self.publish_action(control_signal)
 

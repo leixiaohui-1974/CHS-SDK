@@ -1,0 +1,26 @@
+# Physical components for Hierarchical Control example
+components:
+  reservoir_1:
+    type: Reservoir
+    initial_state:
+      volume: 1520000
+      water_level: 19.0
+    parameters:
+      surface_area: 80000
+      storage_curve:
+        - [0, 0]
+        - [2000000, 22]
+
+  gate_1:
+    type: Gate
+    initial_state:
+      opening: 0.1
+    parameters:
+      max_rate_of_change: 0.75
+      discharge_coefficient: 0.75
+      width: 12
+      max_opening: 5.0
+    message_bus:
+      enabled: true
+      action_topic: "action.gate.opening"
+      action_key: "control_signal"

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-Configuration-driven multi-agent system (MAS) simulation script.
+Configuration-driven hierarchical control simulation script.
 
-This script demonstrates the multi-agent system architecture loaded from
-a YAML configuration file, where components are fully decoupled and
-communicate only via a MessageBus.
+This script loads the multi-agent hierarchical control scenario from YAML
+configuration files, builds the system, executes the MAS simulation, and
+performs automated validation and visualization.
 """
 
 import sys
@@ -14,12 +14,10 @@ from pathlib import Path
 
 import yaml
 import matplotlib.pyplot as plt
-import numpy as np
 
 
 def _to_bool(value, default=False):
     """Best-effort conversion of configuration values to boolean."""
-
     if value is None:
         return default
     if isinstance(value, bool):
@@ -43,24 +41,26 @@ from core_lib.physical_objects.gate import Gate
 from core_lib.local_agents.control.pid_controller import PIDController
 from core_lib.local_agents.control.local_control_agent import LocalControlAgent
 from core_lib.local_agents.perception.digital_twin_agent import DigitalTwinAgent
+from core_lib.central_coordination.dispatch.central_dispatcher import CentralDispatcherAgent
 from core_lib.core_engine.testing.simulation_harness import SimulationHarness
-from core_lib.central_coordination.collaboration.message_bus import MessageBus
+
 
 def load_config(config_path):
     """Load configuration from YAML file."""
     with open(config_path, 'r', encoding='utf-8') as file:
         return yaml.safe_load(file)
 
+
 def create_components(config, message_bus):
     """Create components based on configuration."""
     components = {}
     topics = config['communication']['topics']
-    
+
     for name, comp_config in config['components'].items():
         comp_type = comp_config['type']
         initial_state = comp_config.get('initial_state', {})
         parameters = comp_config.get('parameters', {})
-        
+
         if comp_type == 'Reservoir':
             components[name] = Reservoir(
                 name=name,
@@ -68,16 +68,17 @@ def create_components(config, message_bus):
                 parameters=parameters
             )
         elif comp_type == 'Gate':
-            # Check if message bus is enabled for this component
             mb_config = comp_config.get('message_bus', {})
             if mb_config.get('enabled', False):
                 action_topic = mb_config.get('action_topic', topics['gate_action'])
+                action_key = mb_config.get('action_key', 'control_signal')
                 components[name] = Gate(
                     name=name,
                     initial_state=initial_state,
                     parameters=parameters,
                     message_bus=message_bus,
-                    action_topic=action_topic
+                    action_topic=action_topic,
+                    action_key=action_key
                 )
             else:
                 components[name] = Gate(
@@ -87,14 +88,15 @@ def create_components(config, message_bus):
                 )
         else:
             raise ValueError(f"Unknown component type: {comp_type}")
-    
+
     return components
+
 
 def create_agents(config, components, message_bus):
     """Create agents based on configuration."""
     agents = []
     topics = config['communication']['topics']
-    
+
     for agent_name, agent_config in config['agents'].items():
         agent_type = agent_config['type']
         agent_id = agent_config['agent_id']
@@ -103,7 +105,7 @@ def create_agents(config, components, message_bus):
             simulated_object_name = agent_config['simulated_object']
             simulated_object = components[simulated_object_name]
             state_topic = agent_config['message_bus']['state_topic']
-            
+
             agent = DigitalTwinAgent(
                 agent_id=agent_id,
                 simulated_object=simulated_object,
@@ -111,7 +113,7 @@ def create_agents(config, components, message_bus):
                 state_topic=state_topic
             )
             agents.append(agent)
-            
+
         elif agent_type == 'LocalControlAgent':
             controller_config = agent_config.get('controller', {})
             controller_type = controller_config.get('type')
@@ -151,7 +153,7 @@ def create_agents(config, components, message_bus):
                     raise ValueError("LocalControlAgent requires at least one action topic defined.")
                 control_targets = {'primary_target': primary_action}
 
-            allocation_config = agent_config.get('allocation_config') or agent_config.get('allocation') or {}
+            allocation_config = agent_config.get('allocation') or agent_config.get('allocation_config') or {}
 
             resolved_controller_config = agent_config.get('controller_config') or {
                 'type': controller_type,
@@ -187,10 +189,23 @@ def create_agents(config, components, message_bus):
             )
             agents.append(agent)
 
+        elif agent_type == 'CentralDispatcherAgent':
+            dispatcher = CentralDispatcherAgent(
+                agent_id=agent_id,
+                message_bus=message_bus,
+                mode=agent_config['mode'],
+                subscribed_topic=agent_config['subscribed_topic'],
+                observation_key=agent_config['observation_key'],
+                command_topic=agent_config['command_topic'],
+                dispatcher_params=agent_config['dispatcher_params']
+            )
+            agents.append(dispatcher)
+
         else:
             raise ValueError(f"Unknown agent type: {agent_type}")
 
     return agents
+
 
 def extract_simulation_data(history):
     """Extract data from simulation history for analysis."""
@@ -198,25 +213,24 @@ def extract_simulation_data(history):
     reservoir_water_level = []
     reservoir_volume = []
     gate_opening = []
-    
+
     for i, step_data in enumerate(history):
         time_data.append(i)  # Time step index
-        
-        # Extract reservoir data
+
         if 'reservoir_1' in step_data:
             reservoir_water_level.append(step_data['reservoir_1']['water_level'])
             reservoir_volume.append(step_data['reservoir_1']['volume'])
-        
-        # Extract gate data
+
         if 'gate_1' in step_data:
             gate_opening.append(step_data['gate_1']['opening'])
-    
+
     return {
         'time': time_data,
         'reservoir_water_level': reservoir_water_level,
         'reservoir_volume': reservoir_volume,
         'gate_opening': gate_opening
     }
+
 
 def analyze_results(config, data):
     """Analyze simulation results and compute validation metrics."""
@@ -234,7 +248,7 @@ def analyze_results(config, data):
         final_volume = data['reservoir_volume'][-1] if data['reservoir_volume'] else None
         final_opening = data['gate_opening'][-1] if data['gate_opening'] else None
 
-        print(f"\n=== Multi-Agent System Performance Analysis ===")
+        print("\n=== Hierarchical Control Performance Analysis ===")
         if target_level is not None:
             print(f"Target water level: {target_level:.2f} m")
         if final_level is not None:
@@ -242,15 +256,11 @@ def analyze_results(config, data):
         if final_volume is not None:
             print(f"Final reservoir volume: {final_volume:.0f} m³")
         if final_opening is not None:
-            print(f"Final gate opening: {final_opening:.3f}")
+            print(f"Final gate opening: {final_opening:.3f} m")
 
-        # Calculate steady-state error
+        steady_state_error = None
         if target_level is not None and final_level is not None:
             steady_state_error = abs(final_level - target_level)
-        else:
-            steady_state_error = None
-
-        if steady_state_error is not None:
             print(f"Steady-state error: {steady_state_error:.3f} m")
 
         min_level = min(data['reservoir_water_level']) if data['reservoir_water_level'] else None
@@ -268,9 +278,9 @@ def analyze_results(config, data):
             'max_level': max_level,
         }
 
-        print("\n=== Control Performance Validation ===")
+        print("\n=== Supervisory Control Validation ===")
         if steady_state_error is not None and steady_state_error <= tolerance:
-            print("✓ PASS: Steady-state error is acceptable (≤ tolerance)")
+            print("✓ PASS: Steady-state error is within tolerance")
             score = 1.0
         else:
             print("✗ FAIL: Steady-state error exceeds tolerance")
@@ -315,9 +325,9 @@ def generate_markdown_report(config, data, metrics, output_path):
     timestamp = datetime.now().astimezone().isoformat(timespec='seconds')
 
     lines = [
-        "# 事件驱动智能体示例自动验证报告",
+        "# 分层控制示例自动验证报告",
         "",
-        "本报告由 `run_config.py` 自动生成，用于记录 `agent_based/03_event_driven_agents` 示例的仿真验证结果。",
+        "本报告由 `run_config.py` 自动生成，用于记录 `agent_based/04_hierarchical_control` 示例的仿真验证结果。",
         "",
         "## 仿真配置",
         f"- 仿真时长：{duration} s" if duration is not None else "- 仿真时长：未配置",
@@ -333,7 +343,7 @@ def generate_markdown_report(config, data, metrics, output_path):
         f"| 最终水位 | {final_level:.3f} m |" if final_level is not None else "| 最终水位 | 未记录 |",
         f"| 稳态误差 | {steady_state_error:.3f} m |" if steady_state_error is not None else "| 稳态误差 | 未计算 |",
         f"| 水位范围 | {min_level:.3f} m – {max_level:.3f} m |" if min_level is not None and max_level is not None else "| 水位范围 | 未记录 |",
-        f"| 闸门开度范围 | {min_gate:.3f} – {max_gate:.3f} |" if min_gate is not None and max_gate is not None else "| 闸门开度范围 | 未记录 |",
+        f"| 闸门开度范围 | {min_gate:.3f} m – {max_gate:.3f} m |" if min_gate is not None and max_gate is not None else "| 闸门开度范围 | 未记录 |",
         "",
         "## 验证与评分",
     ]
@@ -356,111 +366,108 @@ def generate_markdown_report(config, data, metrics, output_path):
     output_path.write_text("\n".join(lines), encoding='utf-8')
     print(f"Markdown report saved to '{output_path}'")
 
+
 def generate_plots(config, data):
     """Generate visualization plots."""
     if not config['visualization']['enabled']:
         return
-    
+
     viz_config = config['visualization']
     plots_config = viz_config['plots']
-    
-    # Create subplots
+
     fig, axes = plt.subplots(len(plots_config), 1, figsize=(12, 4 * len(plots_config)))
     if len(plots_config) == 1:
         axes = [axes]
-    
+
     for i, plot_config in enumerate(plots_config):
         x_data = data[plot_config['x_data']]
         y_data = data[plot_config['y_data']]
-        
+
         axes[i].plot(x_data, y_data, 'b-', linewidth=2, label='Actual')
-        
-        # Add target line if specified
+
         if 'target_line' in plot_config:
             target_value = plot_config['target_line']
             axes[i].axhline(y=target_value, color='r', linestyle='--', linewidth=2, label=f'Target ({target_value})')
             axes[i].legend()
-        
+
         axes[i].set_title(plot_config['title'], fontsize=14, fontweight='bold')
         axes[i].set_xlabel('Time Steps', fontsize=12)
         axes[i].set_ylabel(plot_config['ylabel'], fontsize=12)
         axes[i].grid(True, alpha=0.3)
         axes[i].tick_params(axis='both', which='major', labelsize=10)
-    
+
     plt.tight_layout()
-    
-    # Save plot
-    save_path = viz_config['save_path']
+
+    save_path = Path(viz_config['save_path'])
+    if not save_path.is_absolute():
+        save_path = Path(__file__).parent / save_path
+    save_path.parent.mkdir(parents=True, exist_ok=True)
+
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
     print(f"\nResults plot saved as '{save_path}'")
-    
+
     plt.close()
+
 
 def run_simulation(config):
     """Run the multi-agent system simulation."""
-    print("--- Setting up Multi-Agent System Simulation ---")
-    
-    # Create simulation harness
+    print("\n--- Building Hierarchical Control System from Configuration ---")
+
+    sim_conf = config['simulation']
     simulation_config = {
-        'start_time': config['simulation'].get('start_time', 0),
-        'end_time': config['simulation']['duration'],
-        'dt': config['simulation']['dt']
+        'start_time': sim_conf.get('start_time', 0),
+        'end_time': sim_conf.get('duration', sim_conf.get('end_time', 500)),
+        'dt': sim_conf.get('dt', sim_conf.get('time_step', 1.0))
     }
+
     harness = SimulationHarness(config=simulation_config)
     message_bus = harness.message_bus
-    
-    # Create components
+
     components = create_components(config, message_bus)
-    
-    # Create agents
-    agents = create_agents(config, components, message_bus)
-    
-    # Add components to harness
+
     for name, component in components.items():
         harness.add_component(name, component)
-    
-    # Add agents to harness
+
+    for connection in config.get('connections', []):
+        harness.add_connection(connection['from'], connection['to'])
+
+    agents = create_agents(config, components, message_bus)
     for agent in agents:
         harness.add_agent(agent)
-    
-    # Add connections
-    for connection in config['connections']:
-        harness.add_connection(connection['from'], connection['to'])
-    
-    # Build and run simulation
+
     harness.build()
-    
-    print("\n--- Running MAS Simulation ---")
+
+    print("\n--- Running Hierarchical Control Simulation ---")
     harness.run_mas_simulation()
+
     print("\n--- Simulation Complete ---")
-    
     return harness
 
+
 def main():
-    """Main function."""
-    # Load configuration
-    config_path = os.path.join(os.path.dirname(__file__), 'config.yml')
+    script_dir = Path(__file__).parent
+    config_path = script_dir / 'config.yml'
+
+    if not config_path.exists():
+        raise FileNotFoundError(f"Configuration file not found: {config_path}")
+
     config = load_config(config_path)
-    
-    # Run simulation
     harness = run_simulation(config)
-    
-    # Extract and analyze data
-    data = extract_simulation_data(harness.history)
+
+    history = harness.history
+    data = extract_simulation_data(history)
+
     metrics = analyze_results(config, data)
 
-    # Generate visualization
-    generate_plots(config, data)
-
     analysis_config = config.get('analysis', {})
-    report_filename = analysis_config.get('report_filename', 'event_driven_agents_report.md')
-    report_path = Path(__file__).with_name(report_filename)
-    generate_markdown_report(config, data, metrics, report_path)
+    report_filename = analysis_config.get('report_filename', 'hierarchical_control_report.md')
+    generate_markdown_report(config, data, metrics, script_dir / report_filename)
 
-    print("\n=== Multi-Agent System Example Complete ===")
-    print(f"Configuration: {config_path}")
-    print(f"Simulation duration: {config['simulation']['duration']} seconds")
-    print(f"Time step: {config['simulation']['dt']} seconds")
-    
-if __name__ == "__main__":
+    if config.get('visualization', {}).get('enabled'):
+        generate_plots(config, data)
+
+    return metrics
+
+
+if __name__ == '__main__':
     main()
