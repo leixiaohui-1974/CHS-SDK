@@ -216,16 +216,21 @@ class Reservoir(PhysicalObjectInterface):
         super().set_inflow(inflow, preserve_base=preserve_base)
 
         # 当入流发生显著变化时才打印日志，避免在长时间仿真中刷屏
+        report_tolerance = self._params.get('inflow_report_tolerance', 1e-1)
+
         should_report = False
         if self._last_reported_inflow is None:
             should_report = True
         else:
             delta = abs(self._last_reported_inflow - inflow)
             # 设定一个容差，防止浮点微小抖动导致频繁打印
-            should_report = delta >= 1e-6
+            should_report = delta >= report_tolerance
 
         if should_report:
             print(f"水库 '{self.name}' 入流已设置为 {inflow} m³/s")
+            self._last_reported_inflow = inflow
+        else:
+            # 即便不打印日志，也需要更新参考值以防止小变化累计后导致下一次阈值误判
             self._last_reported_inflow = inflow
 
     @property

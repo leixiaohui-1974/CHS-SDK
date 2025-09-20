@@ -81,10 +81,12 @@ class UnifiedCanal(PhysicalObjectInterface):
         return self.get_state()
 
     def _initialize_history(self, dt):
-        if self.inflow_history is None:
-            self.history_size = int(self.delay / dt) + 2 if self.delay else 2
+        if self.inflow_history is None or getattr(self, '_history_dt', None) != dt:
+            self.delay_steps = max(int(round(self.delay / dt)), 0) if self.delay else 0
+            history_size = self.delay_steps + 2
             initial_inflow = self._state.get('inflow', 0.0)
-            self.inflow_history = deque([initial_inflow] * self.history_size, maxlen=self.history_size)
+            self.inflow_history = deque([initial_inflow] * history_size, maxlen=history_size)
+            self._history_dt = dt
 
     def _step_integral(self, dt: float):
         inflow = self._inflow
@@ -101,7 +103,9 @@ class UnifiedCanal(PhysicalObjectInterface):
         inflow = self._inflow
         self._state['inflow'] = inflow
         self.inflow_history.append(inflow)
-        delayed_inflow = self.inflow_history[0]
+        delayed_index = len(self.inflow_history) - self.delay_steps - 1
+        delayed_index = max(0, delayed_index)
+        delayed_inflow = self.inflow_history[delayed_index]
         self._state['outflow'] = delayed_inflow
         self._state['water_level'] += self.gain * (inflow - delayed_inflow) * dt
         self._state['water_level'] = max(0, self._state['water_level'])
@@ -111,10 +115,14 @@ class UnifiedCanal(PhysicalObjectInterface):
         inflow = self._inflow
         self._state['inflow'] = inflow
         self.inflow_history.append(inflow)
-        q_in_delayed = self.inflow_history[1]
-        q_in_delayed_previous = self.inflow_history[0]
-        derivative_term = (q_in_delayed - q_in_delayed_previous) / dt
-        self._state['outflow'] = q_in_delayed + self.zero_time_constant * derivative_term
+        delayed_index = len(self.inflow_history) - self.delay_steps - 1
+        delayed_index = max(0, delayed_index)
+        prev_index = max(0, delayed_index - 1)
+        q_in_delayed = self.inflow_history[delayed_index]
+        q_in_delayed_previous = self.inflow_history[prev_index]
+        derivative_term = (q_in_delayed - q_in_delayed_previous) / dt if dt else 0.0
+        outflow_estimate = q_in_delayed + self.zero_time_constant * derivative_term
+        self._state['outflow'] = max(0.0, outflow_estimate)
         self._state['water_level'] += self.gain * (inflow - self._state['outflow']) * dt
         self._state['water_level'] = max(0, self._state['water_level'])
 
