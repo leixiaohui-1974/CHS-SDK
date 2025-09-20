@@ -5,20 +5,20 @@ components:
   reservoir_1:
     type: Reservoir
     initial_state:
-      volume: 21000000      # m³ (21e6)
+      volume: 210000        # m³ (2.1e5)
       water_level: 14.0     # m
     parameters:
-      surface_area: 1500000 # m² (1.5e6)
+      surface_area: 15000   # m² (1.5e4)
       storage_curve:
         - [0, 0]
-        - [30000000, 20]      # [30e6, 20]
+        - [300000, 20]
 
   gate_1:
     type: Gate
     initial_state:
       opening: 0.1          # Initial opening (0-1)
     parameters:
-      max_rate_of_change: 0.1
+      max_rate_of_change: 0.2
       discharge_coefficient: 0.6
       width: 10             # m
       max_opening: 1.0
