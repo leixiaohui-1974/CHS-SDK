@@ -41,6 +41,7 @@ from core_lib.physical_objects.disturbance_node import DisturbanceNode
 from core_lib.local_agents.io.physical_io_agent import PhysicalIOAgent
 from core_lib.local_agents.control.local_control_agent import LocalControlAgent
 from core_lib.local_agents.control.pid_controller import PIDController
+from core_lib.local_agents.control.custom_controllers import DirectGateController
 from core_lib.local_agents.perception.digital_twin_agent import DigitalTwinAgent
 from core_lib.central_agents.central_mpc_agent import CentralMPCAgent
 from core_lib.central_coordination.dispatch.central_dispatcher import CentralDispatcherAgent
@@ -147,12 +148,6 @@ def create_components_from_config(config: Dict[str, Any],
                     initial_state=comp_config.get('initial_state', {}),
                     parameters=parameters
                 )
-            elif 'river_channel.RiverChannel' in comp_class or 'RiverChannel' in comp_class:
-                components[comp_id] = RiverChannel(
-                    name=comp_config.get('name', comp_id),
-                    initial_state=comp_config.get('initial_state', {}),
-                    parameters=comp_config.get('parameters', {})
-                )
             elif 'IntegralDelayCanal' in comp_class:
                 # IntegralDelayCanal已弃用，映射到UnifiedCanal
                 components[comp_id] = UnifiedCanal(
@@ -227,12 +222,6 @@ def create_components_from_config(config: Dict[str, Any],
                     initial_state=comp_config.get('initial_state', {}),
                     parameters=parameters
                 )
-            elif comp_type == 'RiverChannel':
-                components[comp_name] = RiverChannel(
-                    name=comp_config.get('name', comp_name),
-                    initial_state=comp_config.get('initial_state', {}),
-                    parameters=comp_config.get('parameters', {})
-                )
             elif comp_type == 'IntegralDelayCanal':
                 # IntegralDelayCanal已弃用，映射到UnifiedCanal
                 components[comp_name] = UnifiedCanal(
@@ -290,52 +279,20 @@ def create_agents_from_config(config: Dict[str, Any], components: Dict[str, Any]
     
     # 处理列表格式的agents配置（universal_config格式）
     if isinstance(agents_config, list):
+        normalized_agents: Dict[str, Dict[str, Any]] = {}
         for agent_config in agents_config:
-            agent_class = agent_config.get('class', '')
             agent_id = agent_config.get('id')
-            
             if not agent_id:
                 logger.warning("智能体配置缺少id字段，跳过")
                 continue
-            
-            try:
-                if agent_class == 'PIDControlAgent':
-                    # 将PIDControlAgent映射到LocalControlAgent + PIDController
-                    # 提取PID参数
-                    params = agent_config.get('parameters', {})
-                    observation_topic = agent_config.get('observation_topic', '')
-                    action_topic = agent_config.get('action_topic', '')
-                    
-                    # 创建PID控制器配置
-                    controller_config = {
-                        'class': 'PIDController',
-                        'config': {
-                            'Kp': params.get('kp', 1.0),
-                            'Ki': params.get('ki', 0.1),
-                            'Kd': params.get('kd', 0.05),
-                            'setpoint': params.get('setpoint', 0.0),
-                            'min_output': params.get('output_limits', [0.0, 1.0])[0],
-                            'max_output': params.get('output_limits', [0.0, 1.0])[1]
-                        }
-                    }
-                    
-                    # 创建LocalControlAgent
-                    agents[agent_id] = LocalControlAgent(
-                        agent_id=agent_id,
-                        message_bus=message_bus,
-                        dt=1.0,  # 默认时间步长
-                        target_component='',  # 将从observation_topic推断
-                        control_type='pid',
-                        data_sources={'observation_topic': observation_topic},
-                        control_targets={'action_topic': action_topic},
-                        allocation_config={},
-                        controller_config=controller_config
-                    )
-                else:
-                    logger.warning(f"未知的智能体类型: {agent_class}，跳过智能体 {agent_id}")
-            except Exception as e:
-                logger.error(f"创建智能体 {agent_id} 失败: {e}")
-        return agents
+
+            config_block = agent_config.get('config', {}).copy()
+            config_block['type'] = agent_config.get('type') or agent_config.get('class')
+            config_block['agent_id'] = agent_id
+            normalized_agents[agent_id] = config_block
+
+        agents_config = normalized_agents
+
     
     # 处理字典格式的agents配置（传统格式）
     for agent_name, agent_config in agents_config.items():
@@ -400,6 +357,10 @@ def create_agents_from_config(config: Dict[str, Any], components: Dict[str, Any]
                         )
                         if controller_config is None:
                             controller_config = {'type': 'PIDController', 'parameters': params}
+                    elif ctrl_type == 'DirectGateController':
+                        controller = DirectGateController(**params)
+                        if controller_config is None:
+                            controller_config = {'type': 'DirectGateController', 'parameters': params}
                     else:
                         logger.warning(f"未知的控制器类型: {ctrl_type}，智能体 {agent_name} 将不创建控制器")
 
