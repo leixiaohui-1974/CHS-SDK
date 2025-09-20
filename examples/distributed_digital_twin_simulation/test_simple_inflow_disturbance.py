@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """简单的入流扰动测试，验证扰动在被施加的同时水位仍保持在高精度范围内。"""
-
 from __future__ import annotations
 
+import json
 import os
 import sys
 from typing import List
@@ -90,7 +90,8 @@ def test_simple_inflow_disturbance() -> None:
     print(f"- 最终水位: {final_level:.6f} m")
 
     max_inflow = max(inflow_history) if inflow_history else upstream_reservoir._inflow
-    if max_inflow < DISTURBANCE_INFLOW - 1e-3:
+    disturbance_applied = max_inflow >= DISTURBANCE_INFLOW - 1e-3
+    if not disturbance_applied:
         raise AssertionError(
             "未能成功施加预期的入流扰动。"
             f"观察到的最大入流仅为 {max_inflow:.3f} m³/s。"
@@ -104,7 +105,8 @@ def test_simple_inflow_disturbance() -> None:
     print(f"- 最大水位偏差: {max_deviation:.6f} m")
     print(f"- 控制精度容限: ±{CONTROL_TOLERANCE:.6f} m")
 
-    if max_deviation > CONTROL_TOLERANCE:
+    control_within_bounds = max_deviation <= CONTROL_TOLERANCE
+    if not control_within_bounds:
         raise AssertionError(
             "入流扰动期间水位偏差超出控制精度要求："
             f"最大偏差 {max_deviation:.6f} m (> {CONTROL_TOLERANCE:.6f} m)。"
@@ -126,6 +128,30 @@ def test_simple_inflow_disturbance() -> None:
                 f"{last_step.get('water_level', float('nan')):.6f} m"
             )
 
+    control_score = 1.0 if control_within_bounds else 0.0
+    identification_score = 1.0 if disturbance_applied else 0.0
+    reason_score = 1.0 if control_score == 1.0 and identification_score == 1.0 else 0.0
+    performance_summary = {
+        "control_accuracy_score": control_score,
+        "disturbance_identification_score": identification_score,
+        "reasonableness": {
+            "score": reason_score,
+            "details": {
+                "max_level_deviation": max_deviation,
+                "tolerance": CONTROL_TOLERANCE,
+                "max_observed_inflow": max_inflow,
+                "expected_inflow": DISTURBANCE_INFLOW,
+            },
+        },
+    }
+
+    print("\n性能评价指标:")
+    print(f"- 控制精度得分: {control_score:.3f}")
+    print(f"- 扰动识别得分: {identification_score:.3f}")
+    print(f"- 合理性得分: {reason_score:.3f}")
+    print(f"__PERFORMANCE_SUMMARY__={json.dumps(performance_summary, ensure_ascii=False)}")
+
+    return performance_summary
 
 if __name__ == "__main__":
     test_simple_inflow_disturbance()

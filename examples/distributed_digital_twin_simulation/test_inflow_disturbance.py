@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 import sys
 from typing import List
@@ -41,8 +42,9 @@ def test_inflow_disturbance() -> None:
         raise RuntimeError("未找到 Upstream_Reservoir 组件，无法执行扰动测试。")
 
     initial_state = upstream_reservoir.get_state().copy()
+    initial_inflow = upstream_reservoir._inflow
     print("\n初始状态:")
-    print(f"- 上游水库初始入流: {upstream_reservoir._inflow} m³/s")
+    print(f"- 上游水库初始入流: {initial_inflow} m³/s")
     print(f"- 上游水库初始水位: {initial_state['water_level']} m")
 
     message_bus = MessageBus()
@@ -104,12 +106,13 @@ def test_inflow_disturbance() -> None:
     initial_level = initial_state["water_level"]
     deviations = [abs(level - initial_level) for level in level_history]
     max_deviation = max(deviations)
+    control_within_bounds = max_deviation <= CONTROL_TOLERANCE
 
     print("\n扰动效果评估:")
     print(f"- 观测最大水位偏差: {max_deviation:.6f} m")
     print(f"- 控制精度容限: ±{CONTROL_TOLERANCE:.6f} m")
 
-    if max_deviation > CONTROL_TOLERANCE:
+    if not control_within_bounds:
         raise AssertionError(
             "水位对入流扰动的控制误差超过容限："
             f"最大偏差 {max_deviation:.6f} m (> {CONTROL_TOLERANCE:.6f} m)。"
@@ -124,6 +127,33 @@ def test_inflow_disturbance() -> None:
     print(f"   最大水位偏差: {max_deviation:.6f} m")
     print(f"   扰动激活状态: {disturbance_was_active}")
 
+    observed_peak_inflow = max(inflow_history)
+    expected_peak = initial_inflow + DISTURBANCE_MAGNITUDE
+    identification_score = 1.0 if disturbance_was_active else 0.0
+    control_score = 1.0 if control_within_bounds else 0.0
+    reason_score = 1.0 if control_score == 1.0 and identification_score == 1.0 else 0.0
+    performance_summary = {
+        "control_accuracy_score": control_score,
+        "disturbance_identification_score": identification_score,
+        "reasonableness": {
+            "score": reason_score,
+            "details": {
+                "max_level_deviation": max_deviation,
+                "tolerance": CONTROL_TOLERANCE,
+                "observed_peak_inflow": observed_peak_inflow,
+                "expected_peak_inflow": expected_peak,
+                "disturbance_active": disturbance_was_active,
+            },
+        },
+    }
+
+    print("\n性能评价指标:")
+    print(f"- 控制精度得分: {control_score:.3f}")
+    print(f"- 扰动识别得分: {identification_score:.3f}")
+    print(f"- 合理性得分: {reason_score:.3f}")
+    print(f"__PERFORMANCE_SUMMARY__={json.dumps(performance_summary, ensure_ascii=False)}")
+
+    return performance_summary
 
 if __name__ == "__main__":
     test_inflow_disturbance()

@@ -8,6 +8,7 @@
 import sys
 import os
 import time
+import json
 import logging
 import threading
 from typing import Dict, Any, List
@@ -399,9 +400,33 @@ def main():
         logger.info(f"丢包扰动测试 - 实际丢包率: {loss_results['actual_loss_rate']:.3f}")
         logger.info(f"组合扰动测试 - 延迟消息: {combined_results['delayed_messages']}, "
                    f"平均延迟: {combined_results['avg_delay']:.3f}s")
-        
+
+        delay_score = 1.0 if delay_results['delayed_messages'] > 0 and delay_results['avg_delay'] > 0 else 0.0
+        loss_score = 1.0 if 0.05 <= loss_results['actual_loss_rate'] <= 0.6 else 0.0
+        combined_score = 1.0 if combined_results['delayed_messages'] > 0 else 0.0
+        reason_score = 1.0 if all(score == 1.0 for score in (delay_score, loss_score, combined_score)) else 0.0
+
+        performance_summary = {
+            "delay_resilience_score": delay_score,
+            "packet_loss_resilience_score": loss_score,
+            "combined_resilience_score": combined_score,
+            "reasonableness": {
+                "score": reason_score,
+                "details": {
+                    "delay_avg": delay_results['avg_delay'],
+                    "delay_messages": delay_results['delayed_messages'],
+                    "loss_rate": loss_results['actual_loss_rate'],
+                    "combined_delay_messages": combined_results['delayed_messages'],
+                },
+            },
+        }
+
         logger.info("网络扰动测试完成")
-        
+        logger.info("性能评价得分: %s", performance_summary)
+        print(f"__PERFORMANCE_SUMMARY__={json.dumps(performance_summary, ensure_ascii=False)}")
+
+        return performance_summary
+
     except Exception as e:
         logger.error(f"测试过程中发生错误: {e}")
         import traceback
