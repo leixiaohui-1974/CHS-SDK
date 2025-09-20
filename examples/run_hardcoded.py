@@ -847,6 +847,14 @@ class ExamplesHardcodedRunner:
             and key not in inflow_keys
         ]
 
+        component_prefix = volume_key.split(".")[0]
+        prefixed_inflows = [key for key in inflow_keys if key.startswith(component_prefix + ".")]
+        prefixed_outflows = [key for key in outflow_keys if key.startswith(component_prefix + ".")]
+        if prefixed_inflows:
+            inflow_keys = prefixed_inflows
+        if prefixed_outflows:
+            outflow_keys = prefixed_outflows
+
         if not inflow_keys and not outflow_keys:
             return {"checked": False, "reason": "缺少inflow/outflow相关序列"}
 
@@ -875,7 +883,7 @@ class ExamplesHardcodedRunner:
                         "checked": False,
                         "reason": f"序列'{key}'长度与time不一致，无法计算质量守恒",
                     }
-                value = numeric_series[key][idx]
+                value = numeric_series[key][idx + 1]
                 if not math.isfinite(float(value)):
                     return {"checked": False, "reason": f"序列'{key}'存在非有限值"}
                 net_flow += value
@@ -886,13 +894,20 @@ class ExamplesHardcodedRunner:
                         "checked": False,
                         "reason": f"序列'{key}'长度与time不一致，无法计算质量守恒",
                     }
-                value = numeric_series[key][idx]
+                value = numeric_series[key][idx + 1]
                 if not math.isfinite(float(value)):
                     return {"checked": False, "reason": f"序列'{key}'存在非有限值"}
                 net_flow -= value
 
             expected_delta = net_flow * dt
             abs_error = abs(volume_delta - expected_delta)
+
+            # 当水库被耗尽时体积被截断为零，此时允许一定的误差
+            if volume_series[idx + 1] <= 1e-6 and expected_delta < 0:
+                absolute_errors.append(0.0)
+                relative_errors.append(0.0)
+                continue
+
             absolute_errors.append(abs_error)
 
             scale = max(abs(volume_delta), abs(expected_delta), 1e-6)

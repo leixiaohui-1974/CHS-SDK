@@ -3,6 +3,8 @@ A testing and simulation harness for running the Smart Water Platform.
 """
 import threading
 import copy
+import math
+import numbers
 from collections import deque
 from core_lib.core.interfaces import Simulatable, Agent, Controller
 from core_lib.central_coordination.collaboration.message_bus import MessageBus
@@ -202,14 +204,33 @@ class SimulationHarness:
 
     def run_simulation(self):
         """运行简单仿真（非智能体模式）"""
+        # Ensure previous state does not leak between independent runs
+        self.history = []
+        self.t = self.start_time
+
+        # Automatically build the topology if the caller forgot to do so
+        if not self.sorted_components:
+            self.build()
+        else:
+            self.is_running = True
+
+        # Capture the initial state snapshot before stepping the system so we
+        # obtain a time-aligned history (t = start_time represents the initial
+        # condition, subsequent entries correspond to the end of each interval).
+        initial_snapshot = {"time": float(self.t)}
+        for component_id in self.sorted_components:
+            state = self.components[component_id].get_state()
+            initial_snapshot[component_id] = copy.deepcopy(state) if isinstance(state, dict) else {}
+        self.history.append(initial_snapshot)
+
         print(f"Starting simple simulation from {self.start_time} to {self.end_time} with dt={self.dt}")
-        
+
         while self.t < self.end_time and self.is_running:
             # 检查是否暂停
             if self._is_paused.is_set():
                 self._is_paused.wait()
                 continue
-            
+
             # Phase 1: 计算控制器动作
             controller_actions = {}
             for controller_id, spec in self.controllers.items():
@@ -217,28 +238,73 @@ class SimulationHarness:
                     # 获取观测值
                     observed_component = self.components[spec.observed_id]
                     observation = observed_component.get_state().get(spec.observation_key, 0)
-                    
+
                     # 计算控制动作
                     action = spec.controller.compute_control_action({'process_variable': observation}, self.dt)
                     controller_actions[spec.controlled_id] = action
-                    
+
                 except Exception as e:
                     print(f"Error in controller {controller_id}: {e}")
-            
+
             # Phase 2: 步进物理模型
             self._step_physical_models(self.dt, controller_actions)
-            
-            # Phase 3: 记录历史
-            step_history = {'time': self.t}
-            for cid in self.sorted_components:
-                step_history[cid] = self.components[cid].get_state()
-            self.history.append(step_history)
-            
-            # 更新时间
+
+            # 更新时间至区间末端后记录状态
             self.t += self.dt
-        
+
+            # Phase 3: 记录历史
+            step_history = {'time': float(self.t)}
+            for cid in self.sorted_components:
+                state = self.components[cid].get_state()
+                step_history[cid] = copy.deepcopy(state) if isinstance(state, dict) else {}
+            self.history.append(step_history)
+
         print(f"Simple simulation completed at time {self.t:.2f}s")
         print(f"Generated {len(self.history)} steps of history data.")
+
+        # Mark the harness as stopped so follow-up runs can restart cleanly
+        self.is_running = False
+
+        # Convert the recorded history into columnar time series for downstream
+        # validation utilities. Each component state dictionary is flattened
+        # into "component.variable" keys.
+        results: Dict[str, List[float]] = {"time": []}
+        series_cache: Dict[str, List[float]] = {}
+
+        for entry in self.history:
+            results["time"].append(float(entry.get("time", 0.0)))
+            current_index = len(results["time"]) - 1
+
+            for component_id, state in entry.items():
+                if component_id == "time" or not isinstance(state, dict):
+                    continue
+
+                for key, value in state.items():
+                    if not isinstance(value, numbers.Real):
+                        continue
+
+                    numeric_value = float(value)
+                    if not math.isfinite(numeric_value):
+                        continue
+
+                    series_key = f"{component_id}.{key}"
+                    if series_key not in series_cache:
+                        # Pad the new series so it aligns with previously recorded timestamps
+                        series_cache[series_key] = [0.0] * current_index
+
+                    series_cache[series_key].append(numeric_value)
+
+            # 对于本次时间步未更新的序列，重复上一时刻的值以保持长度一致
+            for series_key, values in series_cache.items():
+                if len(values) < len(results["time"]):
+                    fill_value = values[-1] if values else 0.0
+                    values.append(fill_value)
+
+        # 追加整理后的序列
+        for key, values in series_cache.items():
+            results[key] = values
+
+        return results
 
     def _step_physical_models(self, dt: float, controller_actions: Dict[str, Any] = None):
         if controller_actions is None:
