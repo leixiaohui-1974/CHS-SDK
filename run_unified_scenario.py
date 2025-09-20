@@ -65,50 +65,87 @@ def load_simulation_config(config_path: str) -> Dict[str, Any]:
     with open(config_file, 'r', encoding='utf-8') as f:
         return yaml.safe_load(f)
 
-def create_components_from_config(config: Dict[str, Any]) -> Dict[str, Any]:
+def create_components_from_config(config: Dict[str, Any],
+                                  message_bus: Optional[MessageBus] = None) -> Dict[str, Any]:
     """根据配置创建物理组件"""
     components = {}
-    
+
     if 'components' not in config:
         return components
-    
+
     components_config = config['components']
-    
+
+    def _merge_bus_parameters(params: Dict[str, Any], bus_cfg: Dict[str, Any]) -> Dict[str, Any]:
+        if not bus_cfg:
+            return params
+        merged = deepcopy(params)
+        for key in ('inflow_topics', 'outflow_topics', 'disturbance_topics'):
+            if key in bus_cfg and key not in merged:
+                merged[key] = deepcopy(bus_cfg[key])
+        return merged
+
     # 处理列表格式的components配置（universal_config格式）
     if isinstance(components_config, list):
         for comp_config in components_config:
             comp_id = comp_config.get('id')
             comp_class = comp_config.get('class', '')
-            
+
             if not comp_id:
                 logger.warning("组件配置缺少id字段，跳过")
                 continue
-            
+
+            parameters = _merge_bus_parameters(
+                comp_config.get('parameters', {}),
+                comp_config.get('message_bus', {})
+            )
+
+            bus_cfg = comp_config.get('message_bus', {})
+            bus_enabled = bool(bus_cfg.get('enabled')) and message_bus is not None
+
+            gate_kwargs: Dict[str, Any] = {}
+            reservoir_kwargs: Dict[str, Any] = {}
+
+            if bus_enabled:
+                gate_kwargs['message_bus'] = message_bus
+                gate_kwargs['action_topic'] = bus_cfg.get('action_topic')
+                gate_kwargs['action_key'] = bus_cfg.get('action_key', 'control_signal')
+
+                reservoir_kwargs['message_bus'] = message_bus
+                reservoir_kwargs['inflow_topic'] = bus_cfg.get('inflow_topic') or bus_cfg.get('topic')
+
             # 根据class字段确定组件类型
             if 'unified_canal.UnifiedCanal' in comp_class or 'UnifiedCanal' in comp_class:
                 components[comp_id] = UnifiedCanal(
                     name=comp_config.get('name', comp_id),
                     initial_state=comp_config.get('initial_state', {}),
-                    model_type=comp_config.get('parameters', {}).get('model_type', 'canal'),
-                    parameters=comp_config.get('parameters', {})
+                    model_type=parameters.get('model_type', 'canal'),
+                    parameters=parameters
                 )
             elif 'gate.Gate' in comp_class or 'Gate' in comp_class:
                 components[comp_id] = Gate(
                     name=comp_config.get('name', comp_id),
                     initial_state=comp_config.get('initial_state', {}),
-                    parameters=comp_config.get('parameters', {})
+                    parameters=parameters,
+                    **{k: v for k, v in gate_kwargs.items() if v is not None}
                 )
             elif 'water_turbine.WaterTurbine' in comp_class or 'WaterTurbine' in comp_class:
                 components[comp_id] = WaterTurbine(
                     name=comp_config.get('name', comp_id),
                     initial_state=comp_config.get('initial_state', {}),
-                    parameters=comp_config.get('parameters', {})
+                    parameters=parameters
                 )
             elif 'reservoir.Reservoir' in comp_class or 'Reservoir' in comp_class:
                 components[comp_id] = Reservoir(
                     name=comp_config.get('name', comp_id),
                     initial_state=comp_config.get('initial_state', {}),
-                    parameters=comp_config.get('parameters', {})
+                    parameters=parameters,
+                    **{k: v for k, v in reservoir_kwargs.items() if v is not None}
+                )
+            elif 'river_channel.RiverChannel' in comp_class or 'RiverChannel' in comp_class:
+                components[comp_id] = RiverChannel(
+                    name=comp_config.get('name', comp_id),
+                    initial_state=comp_config.get('initial_state', {}),
+                    parameters=parameters
                 )
             elif 'river_channel.RiverChannel' in comp_class or 'RiverChannel' in comp_class:
                 components[comp_id] = RiverChannel(
@@ -121,47 +158,74 @@ def create_components_from_config(config: Dict[str, Any]) -> Dict[str, Any]:
                 components[comp_id] = UnifiedCanal(
                     name=comp_config.get('name', comp_id),
                     initial_state=comp_config.get('initial_state', {}),
-                    model_type='integral_delay',
-                    parameters=comp_config.get('parameters', {})
+                    model_type=parameters.get('model_type', 'integral_delay'),
+                    parameters=parameters
                 )
             elif 'disturbance_node.DisturbanceNode' in comp_class or 'DisturbanceNode' in comp_class:
                 components[comp_id] = DisturbanceNode(
                     name=comp_config.get('name', comp_id),
                     initial_state=comp_config.get('initial_state', {}),
-                    parameters=comp_config.get('parameters', {})
+                    parameters=parameters
                 )
             else:
                 logger.warning(f"未知的组件类型: {comp_class}，跳过组件 {comp_id}")
-    
+
     # 处理字典格式的components配置（传统格式）
     elif isinstance(components_config, dict):
         for comp_name, comp_config in components_config.items():
             comp_type = comp_config.get('type')
-            
+
+            parameters = _merge_bus_parameters(
+                comp_config.get('parameters', {}),
+                comp_config.get('message_bus', {})
+            )
+
+            bus_cfg = comp_config.get('message_bus', {})
+            bus_enabled = bool(bus_cfg.get('enabled')) and message_bus is not None
+
+            gate_kwargs: Dict[str, Any] = {}
+            reservoir_kwargs: Dict[str, Any] = {}
+
+            if bus_enabled:
+                gate_kwargs['message_bus'] = message_bus
+                gate_kwargs['action_topic'] = bus_cfg.get('action_topic')
+                gate_kwargs['action_key'] = bus_cfg.get('action_key', 'control_signal')
+
+                reservoir_kwargs['message_bus'] = message_bus
+                reservoir_kwargs['inflow_topic'] = bus_cfg.get('inflow_topic') or bus_cfg.get('topic')
+
             if comp_type == 'UnifiedCanal':
                 components[comp_name] = UnifiedCanal(
                     name=comp_config.get('name', comp_name),
                     initial_state=comp_config.get('initial_state', {}),
-                    model_type=comp_config.get('model_type', 'canal'),
-                    parameters=comp_config.get('parameters', {})
+                    model_type=parameters.get('model_type', 'canal'),
+                    parameters=parameters
                 )
             elif comp_type == 'Gate':
                 components[comp_name] = Gate(
                     name=comp_config.get('name', comp_name),
                     initial_state=comp_config.get('initial_state', {}),
-                    parameters=comp_config.get('parameters', {})
+                    parameters=parameters,
+                    **{k: v for k, v in gate_kwargs.items() if v is not None}
                 )
             elif comp_type == 'WaterTurbine':
                 components[comp_name] = WaterTurbine(
                     name=comp_config.get('name', comp_name),
                     initial_state=comp_config.get('initial_state', {}),
-                    parameters=comp_config.get('parameters', {})
+                    parameters=parameters
                 )
             elif comp_type == 'Reservoir':
                 components[comp_name] = Reservoir(
                     name=comp_config.get('name', comp_name),
                     initial_state=comp_config.get('initial_state', {}),
-                    parameters=comp_config.get('parameters', {})
+                    parameters=parameters,
+                    **{k: v for k, v in reservoir_kwargs.items() if v is not None}
+                )
+            elif comp_type == 'RiverChannel':
+                components[comp_name] = RiverChannel(
+                    name=comp_config.get('name', comp_name),
+                    initial_state=comp_config.get('initial_state', {}),
+                    parameters=parameters
                 )
             elif comp_type == 'RiverChannel':
                 components[comp_name] = RiverChannel(
@@ -174,18 +238,18 @@ def create_components_from_config(config: Dict[str, Any]) -> Dict[str, Any]:
                 components[comp_name] = UnifiedCanal(
                     name=comp_config.get('name', comp_name),
                     initial_state=comp_config.get('initial_state', {}),
-                    model_type='integral_delay',
-                    parameters=comp_config.get('parameters', {})
+                    model_type=parameters.get('model_type', 'integral_delay'),
+                    parameters=parameters
                 )
             elif comp_type == 'DisturbanceNode':
                 components[comp_name] = DisturbanceNode(
                     name=comp_config.get('name', comp_name),
                     initial_state=comp_config.get('initial_state', {}),
-                    parameters=comp_config.get('parameters', {})
+                    parameters=parameters
                 )
             else:
                 logger.warning(f"未知的组件类型: {comp_type}，跳过组件 {comp_name}")
-    
+
     return components
 
 def _coerce_bool(value: Any, default: bool = False) -> bool:
@@ -519,13 +583,13 @@ def run_simulation_from_config(config_path: str, show_progress: bool = True,
             print(f"⏱️  仿真时长: {duration}秒 (时间步长: {time_step}秒)")
         
         # 设置基础设施
-        message_bus = MessageBus()
         harness = SimulationHarness(config={'duration': duration, 'dt': time_step})
+        message_bus = harness.message_bus
         
         # 创建组件
         if show_progress:
             print(f"\n🔧 创建物理组件...")
-        components = create_components_from_config(config)
+        components = create_components_from_config(config, message_bus)
         
         for comp_name, component in components.items():
             harness.add_component(comp_name, component)
