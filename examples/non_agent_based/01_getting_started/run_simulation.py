@@ -211,10 +211,10 @@ def run_getting_started_simulation():
     failures = []
     for metric, threshold in performance_limits.items():
         value = evaluation[metric]
-        if value < threshold:
-            print(f"✓ PASS: {metric.replace('_', ' ').title()} = {value:.4f} < {threshold}")
+        if value <= threshold:
+            print(f"✓ PASS: {metric.replace('_', ' ').title()} = {value:.4f} ≤ {threshold}")
         else:
-            print(f"✗ FAIL: {metric.replace('_', ' ').title()} = {value:.4f} ≥ {threshold}")
+            print(f"✗ FAIL: {metric.replace('_', ' ').title()} = {value:.4f} > {threshold}")
             failures.append(f"{metric}={value:.4f}")
 
     if failures:

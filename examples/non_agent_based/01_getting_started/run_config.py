@@ -159,11 +159,11 @@ def analyze_results(harness, config):
     passed_tests = 0
     for metric, (value, threshold) in evaluations.items():
         label = metric.replace('_', ' ').title()
-        if value < threshold:
-            print(f"✓ PASS: {label} = {value:.4f} < {threshold}")
+        if value <= threshold:
+            print(f"✓ PASS: {label} = {value:.4f} ≤ {threshold}")
             passed_tests += 1
         else:
-            print(f"✗ FAIL: {label} = {value:.4f} ≥ {threshold}")
+            print(f"✗ FAIL: {label} = {value:.4f} > {threshold}")
 
     total_tests = len(evaluations)
     print(f"\n=== Overall Performance: {passed_tests}/{total_tests} tests passed ===")
