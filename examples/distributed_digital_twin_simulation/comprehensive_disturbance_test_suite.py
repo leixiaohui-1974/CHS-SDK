@@ -30,6 +30,7 @@ from core_lib.disturbances.disturbance_framework import (
 )
 from core_lib.physical_objects.reservoir import Reservoir
 from core_lib.physical_objects.gate import Gate
+from core_lib.local_agents.control.pid_controller import PIDController
 
 # 配置日志
 logging.basicConfig(
@@ -405,21 +406,48 @@ class ComprehensiveDisturbanceTestSuite:
         # 添加组件
         reservoir = Reservoir(
             name="combo_test_reservoir",
-            initial_state={'water_level': 100.0, 'volume': 5000.0, 'inflow': 0.0, 'outflow': 0.0},
-            parameters={'surface_area': 50.0, 'capacity': 1000.0, 'min_level': 0.0, 'max_level': 200.0}
+            initial_state={'water_level': 10.0, 'volume': 800000.0, 'inflow': 0.0, 'outflow': 0.0},
+            parameters={'surface_area': 80000.0, 'capacity': 1200000.0, 'min_level': 0.0, 'max_level': 20.0}
         )
         harness.add_component("combo_test_reservoir", reservoir)
-        
+
         gate = Gate(
             name="combo_test_gate",
-            initial_state={'opening': 0.5, 'flow_rate': 25.0},
-            parameters={'max_flow_rate': 100.0, 'response_time': 2.0}
+            initial_state={'opening': 0.6, 'flow_rate': 60.0},
+            parameters={
+                'max_flow_rate': 300.0,
+                'response_time': 0.5,
+                'max_rate_of_change': 1.5,
+                'max_opening': 2.0,
+                'width': 12.0,
+                'discharge_coefficient': 0.7
+            }
         )
         harness.add_component("combo_test_gate", gate)
-        
+
+        # 建立水力连接，确保闸门能够感知上游出流
+        harness.add_connection("combo_test_reservoir", "combo_test_gate")
+
         # 添加智能体
         agent = MockAgent("ComboTestAgent")
         harness.add_agent(agent)
+
+        # 配置 PID 控制器，稳定水库水位
+        pid_controller = PIDController(
+            Kp=0.12,
+            Ki=0.03,
+            Kd=0.015,
+            setpoint=10.0,
+            min_output=0.0,
+            max_output=2.0
+        )
+        harness.add_controller(
+            controller_id="combo_gate_pid",
+            controller=pid_controller,
+            controlled_id="combo_test_gate",
+            observed_id="combo_test_reservoir",
+            observation_key="water_level"
+        )
         
         # 构建仿真环境
         harness.build()
@@ -435,7 +463,7 @@ class ComprehensiveDisturbanceTestSuite:
                 start_time=5.0,
                 end_time=15.0,
                 intensity=1.0,
-                parameters={"target_inflow": 60.0}
+                parameters={"target_inflow": 90.0}
             )
             harness.add_disturbance(InflowDisturbance(inflow_config))
             disturbances_added += 1
@@ -447,9 +475,9 @@ class ComprehensiveDisturbanceTestSuite:
                 target_component_id="combo_test_reservoir",
                 start_time=8.0,
                 end_time=18.0,
-                intensity=0.6,
+                intensity=0.5,
                 parameters={
-                    "noise_level": 0.1,
+                    "noise_level": 0.04,
                     "affected_sensors": ["water_level"],
                     "noise_type": "gaussian"
                 }
@@ -481,16 +509,38 @@ class ComprehensiveDisturbanceTestSuite:
         
         # 分析结果
         simulation_steps = len(harness.history) if harness.history else 0
-        
+        reservoir_levels = [
+            step.get("combo_test_reservoir", {}).get('water_level', reservoir._state.get('water_level', 0.0))
+            for step in harness.history
+        ]
+        gate_openings = [
+            step.get("combo_test_gate", {}).get('opening', gate._state.get('opening', 0.0))
+            for step in harness.history
+        ]
+
+        target_level = pid_controller.setpoint
+        max_deviation = max((abs(level - target_level) for level in reservoir_levels), default=0.0)
+        tolerance = 0.02  # 2 cm 精度要求
+
+        if max_deviation > tolerance:
+            raise AssertionError(
+                f"水位偏差 {max_deviation:.4f} m 超出允许范围 ±{tolerance:.4f} m"
+            )
+
         # 关闭仿真
         harness.shutdown()
-        
+
         return {
             'disturbance_types': disturbance_types,
             'disturbances_added': disturbances_added,
             'simulation_steps': simulation_steps,
             'execution_time': execution_time,
-            'combination_effective': simulation_steps > 0 and disturbances_added > 1
+            'combination_effective': simulation_steps > 0 and disturbances_added > 1,
+            'target_level': target_level,
+            'max_level_deviation': max_deviation,
+            'tolerance': tolerance,
+            'final_level': reservoir_levels[-1] if reservoir_levels else reservoir._state.get('water_level', 0.0),
+            'max_gate_opening': max(gate_openings, default=gate._state.get('opening', 0.5))
         }
     
     def _test_cascade_failure_scenario(self) -> Dict[str, Any]:

@@ -1,9 +1,11 @@
 analysis:
   performance_metrics:
-    overshoot_threshold: 20
-    settling_time_threshold: 50
-    settling_tolerance: 0.02
-    steady_state_error_threshold: 0.1
+    overshoot_threshold: 10
+    settling_time_threshold: 300
+    settling_tolerance: 0.01
+    steady_state_error_threshold: 0.02
+    rmse_threshold: 0.05
+    max_deviation_threshold: 0.05
   visualization:
     enabled: true
     output_file: 01_getting_started_results.png
@@ -15,23 +17,23 @@ analysis:
 components:
   gate_1:
     initial_state:
-      opening: 0.5
+      opening: 0.35
     parameters:
       discharge_coefficient: 0.6
-      max_rate_of_change: 0.1
-      width: 10
+      max_rate_of_change: 0.25
+      width: 7
     type: Gate
   reservoir_1:
     initial_state:
-      volume: 21000000
+      volume: 140000
       water_level: 14.0
     parameters:
       storage_curve:
       - - 0
         - 0
-      - - 30000000
+      - - 200000
         - 20
-      surface_area: 1500000
+      surface_area: 10000
     type: Reservoir
 connections:
 - from: reservoir_1
@@ -42,9 +44,9 @@ controllers:
     observation_key: water_level
     observed_component: reservoir_1
     parameters:
-      Kd: -0.1
-      Ki: -0.01
-      Kp: -0.5
+      Kd: -0.12
+      Ki: -0.015
+      Kp: -1.0
       max_output: 1.0
       min_output: 0.0
       setpoint: 12.0
@@ -59,4 +61,5 @@ runtime:
   mode: simulation
 simulation:
   dt: 1.0
-  duration: 300
+  duration: 600
+  time_step: 1.0
