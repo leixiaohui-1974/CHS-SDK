@@ -9,7 +9,9 @@ import sys
 import os
 import threading
 import copy
+import inspect
 from collections import deque
+from collections.abc import Mapping
 from typing import List, Dict, Any, NamedTuple, Optional
 
 from core_lib.core.interfaces import Simulatable, Agent, Controller
@@ -118,7 +120,7 @@ class EnhancedSimulationHarness:
         
         # 动态扰动管理器（用于传感器、执行器等扰动）
         self.dynamic_disturbance_manager = DynamicDisturbanceManager(self.message_bus)
-        
+
         # 网络扰动管理器（仅在启用网络扰动时创建）
         self.network_disturbance_manager = None
         if self.enable_network_disturbance:
@@ -135,6 +137,7 @@ class EnhancedSimulationHarness:
                 print("使用标准网络扰动管理器")
 
         print("增强版仿真框架已创建")
+        self._step_method_cache: Dict[type, str] = {}
 
     def add_component(self, component_id: str, component: Simulatable):
         """向仿真中添加物理或逻辑组件"""
@@ -434,11 +437,14 @@ class EnhancedSimulationHarness:
                     # 获取观测值
                     observed_component = self.components[spec.observed_id]
                     observation = observed_component.get_state().get(spec.observation_key, 0)
-                    
+
                     # 计算控制动作
-                    action = spec.controller.compute_control_action({'process_variable': observation}, self.dt)
-                    controller_actions[spec.controlled_id] = action
-                    
+                    raw_action = spec.controller.compute_control_action({'process_variable': observation}, self.dt)
+                    if isinstance(raw_action, Mapping):
+                        controller_actions[spec.controlled_id] = dict(raw_action)
+                    else:
+                        controller_actions[spec.controlled_id] = {'control_signal': raw_action}
+
                 except Exception as e:
                     print(f"控制器 {controller_id} 错误: {e}")
             
@@ -495,29 +501,74 @@ class EnhancedSimulationHarness:
                         total_inflow += current_step_outflows[upstream_id]
             
             # 应用控制器动作
-            control_action = controller_actions.get(component_id, {})
-            
-            # 步进组件 - 根据组件类型调整参数顺序
+            control_action: Dict[str, Any]
+            raw_action = controller_actions.get(component_id, {})
+            if isinstance(raw_action, Mapping):
+                control_action = dict(raw_action)
+            elif raw_action is None:
+                control_action = {}
+            else:
+                control_action = {'control_signal': raw_action}
+
+            if component_id not in disturbed_components and total_inflow > 0 and 'inflow' not in control_action:
+                control_action['inflow'] = total_inflow
+
+            if isinstance(component, Gate):
+                upstream_levels = []
+                for upstream_id in self.inverse_topology.get(component_id, []):
+                    upstream_state = new_states.get(upstream_id)
+                    if upstream_state is None:
+                        upstream_state = self.components[upstream_id].get_state()
+                    level = upstream_state.get('water_level') or upstream_state.get('level')
+                    if level is not None:
+                        upstream_levels.append(level)
+                if upstream_levels and 'upstream_head' not in control_action:
+                    control_action['upstream_head'] = max(upstream_levels)
+
+                downstream_levels = []
+                for downstream_id in self.topology.get(component_id, []):
+                    downstream_state = self.components[downstream_id].get_state()
+                    level = downstream_state.get('water_level') or downstream_state.get('level')
+                    if level is not None:
+                        downstream_levels.append(level)
+                if downstream_levels and 'downstream_head' not in control_action:
+                    control_action['downstream_head'] = min(downstream_levels)
+
             if hasattr(component, 'step'):
-                try:
-                    # 对于Reservoir类，step方法签名是 step(action, dt)
-                    if component.__class__.__name__ == 'Reservoir':
-                        # 将total_inflow添加到control_action中
-                        action_with_inflow = control_action.copy()
-                        if total_inflow > 0:
-                            action_with_inflow['inflow'] = total_inflow
-                        component.step(action_with_inflow, dt)
+                call_mode = self._step_method_cache.get(type(component))
+                if call_mode is None:
+                    step_params = list(inspect.signature(component.step).parameters.values())
+                    if not step_params:
+                        call_mode = 'new'
                     else:
-                        # 对于其他组件，使用原来的调用方式
-                        component.step(dt, total_inflow, **control_action)
+                        first_param = step_params[0]
+                        first_name = first_param.name
+                        if first_name in {'action', 'control_action', 'inputs'}:
+                            call_mode = 'new'
+                        elif first_param.annotation in {Dict[str, Any], dict, Any}:
+                            call_mode = 'new'
+                        else:
+                            call_mode = 'legacy'
+                    self._step_method_cache[type(component)] = call_mode
+
+                try:
+                    if call_mode == 'legacy':
+                        legacy_kwargs = {
+                            key: value
+                            for key, value in control_action.items()
+                            if key not in {'control_signal', 'action'}
+                        }
+                        if component_id not in disturbed_components:
+                            default_inflow = total_inflow
+                        else:
+                            default_inflow = 0.0
+                        inflow_value = legacy_kwargs.pop('inflow', default_inflow)
+                        component.step(dt, inflow_value, **legacy_kwargs)
+                    else:
+                        component.step(control_action, dt)
                 except Exception as e:
                     print(f"组件 {component_id} 步进错误: {e}")
-                    # 尝试备用调用方式
-                    try:
-                        component.step(dt)
-                    except:
-                        pass
-            
+
             # 记录新状态和出流
             new_state = component.get_state()
             new_states[component_id] = new_state
