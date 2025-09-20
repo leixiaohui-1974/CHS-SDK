@@ -175,7 +175,12 @@ class SimulationBuilder:
                         pump_max_flow: float = 10.0,
                         pump_max_head: float = 20.0,
                         pump_power: float = 50.0,
-                        control_topic_prefix: Optional[str] = None) -> PumpStation:
+                        control_topic_prefix: Optional[str] = None,
+                        initial_state: Optional[Dict[str, Any]] = None,
+                        station_parameters: Optional[Dict[str, Any]] = None,
+                        pump_initial_state: Optional[Dict[str, Any]] = None,
+                        pump_parameters: Optional[Dict[str, Any]] = None,
+                        pump_overrides: Optional[List[Dict[str, Any]]] = None) -> PumpStation:
         """
         Add a pump station with multiple pumps to the simulation.
         
@@ -190,27 +195,50 @@ class SimulationBuilder:
         Returns:
             The created PumpStation object
         """
+        base_initial_state = pump_initial_state.copy() if pump_initial_state else {'status': 0}
+
         pump_params = {
             'max_flow_rate': pump_max_flow,
             'max_head': pump_max_head,
             'power_consumption_kw': pump_power
         }
-        
+
+        if pump_parameters:
+            pump_params.update(pump_parameters)
+
         pumps = []
         for i in range(1, num_pumps + 1):
-            pump_id = f"p{i}"
+            override = pump_overrides[i - 1] if pump_overrides and i - 1 < len(pump_overrides) else {}
+            pump_id = override.get('id') or f"p{i}"
+
+            pump_state = base_initial_state.copy()
+            pump_state.update(override.get('initial_state', {}))
+
+            overridden_params = pump_params.copy()
+            overridden_params.update(override.get('parameters', {}))
+
+            control_topic = None
             if control_topic_prefix:
                 control_topic = f"{control_topic_prefix}.{pump_id}"
-                pump = Pump(pump_id, {}, pump_params, 
+
+            bus_config = override.get('message_bus', {})
+            if bus_config.get('enabled'):
+                control_topic = bus_config.get('action_topic', control_topic)
+
+            if control_topic:
+                pump = Pump(pump_id, pump_state, overridden_params,
                            self.harness.message_bus, control_topic)
             else:
-                pump = Pump(pump_id, {}, pump_params)
+                pump = Pump(pump_id, pump_state, overridden_params)
             pumps.append(pump)
-        
-        pump_station = PumpStation(component_id, {}, {}, pumps)
+
+        station_state = initial_state.copy() if initial_state else {}
+        station_params = station_parameters.copy() if station_parameters else {}
+
+        pump_station = PumpStation(component_id, station_state, station_params, pumps)
         self.harness.add_component(component_id, pump_station)
         self.components[component_id] = pump_station
-        
+
         return pump_station
     
     def add_water_turbine(self,

@@ -29,6 +29,7 @@ class PumpControlAgent(Agent):
         # Subscribe to the demand topic
         self.bus.subscribe(self.demand_topic, self.handle_demand_message)
         self.current_demand = 0.0
+        self._last_commanded_pumps = None
         print(f"Agent '{self.agent_id}' created and subscribed to demand topic '{self.demand_topic}'.")
 
     def handle_demand_message(self, message: Message):
@@ -38,12 +39,9 @@ class PumpControlAgent(Agent):
             self.current_demand = demand
             print(f"[{self.agent_id}] Received new flow demand: {self.current_demand:.2f} m^3/s")
 
-    async def run(self):
-        """
-        The main loop for the agent. In a real-time system, this would run
-        continuously. For this simulation, we will call the logic manually.
-        """
-        pass
+    def run(self, current_time=None):
+        """Allow integration with synchronous agent loops."""
+        self.execute_control_logic()
 
     def execute_control_logic(self):
         """
@@ -60,7 +58,12 @@ class PumpControlAgent(Agent):
         # Ensure the number of pumps does not exceed the available pumps.
         num_pumps_needed = min(num_pumps_needed, len(self.pumps))
 
-        print(f"[{self.agent_id}] Demand is {self.current_demand:.2f} m^3/s. Activating {num_pumps_needed} of {len(self.pumps)} pumps.")
+        if num_pumps_needed != self._last_commanded_pumps:
+            print(
+                f"[{self.agent_id}] Demand is {self.current_demand:.2f} m^3/s. "
+                f"Activating {num_pumps_needed} of {len(self.pumps)} pumps."
+            )
+            self._last_commanded_pumps = num_pumps_needed
 
         # Publish control signals to each pump's specific topic.
         for i, pump in enumerate(self.pumps):

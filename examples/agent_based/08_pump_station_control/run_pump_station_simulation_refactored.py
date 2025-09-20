@@ -1,106 +1,98 @@
 #!/usr/bin/env python3
-"""
-Refactored pump station control simulation using SimulationBuilder.
+"""Refactored pump station simulation using SimulationBuilder."""
+from __future__ import annotations
 
-This demonstrates how the SimulationBuilder class reduces boilerplate code
-and makes simulation setup more concise and readable.
-"""
-
-import sys
 import os
-from pathlib import Path
+import sys
 
-# Add the project root to the Python path
-project_root = Path(__file__).resolve().parents[3]
-sys.path.append(str(project_root))
+# Ensure project root is available for imports
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
 
-from core_lib.core_engine.testing.simulation_builder import create_pump_station_system
+from core_lib.core_engine.testing.common_agents import DemandAgent, MonitoringAgent
+from core_lib.core_engine.testing.simulation_builder import SimulationBuilder
 from core_lib.local_agents.control.pump_control_agent import PumpControlAgent
-from core_lib.core.interfaces import Agent
 
-class DemandAgent(Agent):
-    """A simple agent to simulate changing flow demand."""
-    def __init__(self, agent_id, message_bus, demand_topic):
-        super().__init__(agent_id)
-        self.bus = message_bus
-        self.demand_topic = demand_topic
+from analysis_utils import evaluate_flow_tracking  # pylint: disable=wrong-import-position
+from scenario_settings import (  # pylint: disable=wrong-import-position
+    ACTION_TOPIC_PREFIX,
+    DEMAND_PROFILE,
+    DEMAND_TOPIC,
+    SIMULATION_CONFIG,
+    create_builder,
+)
 
-    def run(self, current_time):
-        # Simulate a step change in demand
-        if int(current_time) == 100:
-            demand = 25.0
-            print(f"--- DEMAND AGENT: New demand at t={current_time}s: {demand} m^3/s ---")
-            self.bus.publish(self.demand_topic, {'value': demand})
-        elif int(current_time) == 400:
-            demand = 8.0
-            print(f"--- DEMAND AGENT: New demand at t={current_time}s: {demand} m^3/s ---")
-            self.bus.publish(self.demand_topic, {'value': demand})
 
 def run_pump_station_simulation_refactored():
-    """
-    Refactored pump station simulation using SimulationBuilder.
-    """
-    print("--- Setting up Refactored Pump Station Control Simulation ---")
+    """Run the builder-based pump station simulation."""
+    print("=== Pump Station Control Simulation (SimulationBuilder version) ===")
 
-    # 1. Create simulation using builder pattern
-    simulation_config = {'end_time': 600, 'dt': 1.0}
-    builder = create_pump_station_system(simulation_config)
-    
-    # 2. Communication Topics
-    DEMAND_TOPIC = "demand.flow"
-    CONTROL_TOPIC_PREFIX = "action.pump"
+    builder: SimulationBuilder = create_builder()
 
-    # 3. Add agents
-    demand_agent = DemandAgent("demand_agent", builder.harness.message_bus, DEMAND_TOPIC)
+    demand_agent = DemandAgent(
+        agent_id="demand_agent",
+        message_bus=builder.harness.message_bus,
+        demand_topic=DEMAND_TOPIC,
+        demand_schedule=DEMAND_PROFILE,
+    )
     builder.add_agent(demand_agent)
-    
-    # Get the pump station component
+
+    monitoring_agent = MonitoringAgent(
+        agent_id="monitor",
+        components={
+            "source_res": builder.get_component("source_res"),
+            "downstream_res": builder.get_component("downstream_res"),
+            "ps1": builder.get_component("ps1"),
+        },
+        monitoring_interval=60.0,
+    )
+    builder.add_agent(monitoring_agent)
+
     pump_station = builder.get_component("ps1")
-    
-    pump_control_agent = PumpControlAgent(
+    pump_controller = PumpControlAgent(
         agent_id="pump_ctrl_agent",
         message_bus=builder.harness.message_bus,
         pump_station=pump_station,
         demand_topic=DEMAND_TOPIC,
-        control_topic_prefix=CONTROL_TOPIC_PREFIX
+        control_topic_prefix=ACTION_TOPIC_PREFIX,
     )
 
-    # 4. Build and run simulation
     builder.build()
-    
-    print("\n--- Running Refactored Simulation ---")
-    num_steps = int(simulation_config['end_time'] / simulation_config['dt'])
-    
-    for i in range(num_steps):
-        current_time = i * simulation_config['dt']
-        
-        # Run agents
-        demand_agent.run(current_time)
-        pump_control_agent.execute_control_logic()
-        
-        # Step physical models
-        builder.harness._step_physical_models(simulation_config['dt'])
-        
-        # Store history
-        step_history = {'time': current_time}
-        for cid in builder.harness.sorted_components:
-            step_history[cid] = builder.harness.components[cid].get_state()
-        builder.harness.history.append(step_history)
-        
-        # Print status every 100 steps
-        if i % 100 == 0:
-            station_state = pump_station.get_state()
-            print(f"Time {current_time:.0f}s: Active Pumps={station_state['active_pumps']}, "
-                  f"Total Outflow={station_state['total_outflow']:.2f} m^3/s")
 
-    # Print final results
-    print("\n--- Simulation Complete ---")
-    builder.print_final_states()
-    
-    final_station_state = pump_station.get_state()
-    print(f"\nFinal Pump Station Status:")
-    print(f"  Active Pumps: {final_station_state['active_pumps']}")
-    print(f"  Total Outflow: {final_station_state['total_outflow']:.2f} m^3/s")
+    dt = SIMULATION_CONFIG["dt"]
+    num_steps = int(SIMULATION_CONFIG["duration"] / dt)
+
+    for step in range(num_steps):
+        current_time = step * dt
+        for agent in builder.agents:
+            agent.run(current_time)
+        pump_controller.execute_control_logic()
+        builder.harness._step_physical_models(dt)  # pylint: disable=protected-access
+
+        step_history = {"time": current_time}
+        for component_id in builder.harness.sorted_components:
+            step_history[component_id] = builder.harness.components[component_id].get_state()
+        step_history["demand"] = pump_controller.current_demand
+        builder.harness.history.append(step_history)
+
+    results = evaluate_flow_tracking(builder.harness.history)
+
+    print("\n--- Builder Simulation Summary ---")
+    for segment in results["segments"]:
+        print(
+            f"Segment {segment['start']:5.0f}-{segment['end']:5.0f}s: "
+            f"target={segment['target']:5.1f} m³/s | "
+            f"avg_flow={segment['average_flow']:5.2f} m³/s | "
+            f"abs_error={segment['abs_error']:4.2f}"
+        )
+    print(f"Overall score: {results['score']:.3f}")
+
+    if results["score"] < 1.0:
+        raise SystemExit("Builder-based simulation failed validation.")
+
+    print("SimulationBuilder run achieved full score.")
+
 
 if __name__ == "__main__":
     run_pump_station_simulation_refactored()

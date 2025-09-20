@@ -23,7 +23,7 @@ import logging
 from copy import deepcopy
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 
 # 添加项目根目录到 Python 路径
 project_root = Path(__file__).resolve().parent
@@ -36,12 +36,14 @@ from core_lib.physical_objects.gate import Gate
 from core_lib.physical_objects.reservoir import Reservoir
 from core_lib.physical_objects.river_channel import RiverChannel
 from core_lib.physical_objects.water_turbine import WaterTurbine
+from core_lib.physical_objects.pump import Pump, PumpStation
 from core_lib.physical_objects.integral_delay_canal import IntegralDelayCanal
 from core_lib.physical_objects.disturbance_node import DisturbanceNode
 from core_lib.local_agents.io.physical_io_agent import PhysicalIOAgent
 from core_lib.local_agents.control.local_control_agent import LocalControlAgent
 from core_lib.local_agents.control.pid_controller import PIDController
 from core_lib.local_agents.control.custom_controllers import DirectGateController
+from core_lib.local_agents.control.pump_control_agent import PumpControlAgent
 from core_lib.local_agents.perception.digital_twin_agent import DigitalTwinAgent
 from core_lib.central_agents.central_mpc_agent import CentralMPCAgent
 from core_lib.central_coordination.dispatch.central_dispatcher import CentralDispatcherAgent
@@ -49,6 +51,7 @@ from core_lib.disturbances.rainfall_agent import RainfallAgent
 from core_lib.disturbances.water_use_agent import WaterUseAgent
 # from core_lib.disturbances.inflow_forecaster_agent import InflowForecasterAgent  # Module not found
 from core_lib.core_engine.testing.simulation_harness import SimulationHarness
+from core_lib.core_engine.testing.common_agents import DemandAgent, MonitoringAgent
 from core_lib.central_coordination.collaboration.message_bus import MessageBus
 from core_lib.debug.log_manager import get_log_manager, setup_logging
 from core_lib.debug.debug_collector import collect_debug_data, DataType
@@ -70,11 +73,107 @@ def create_components_from_config(config: Dict[str, Any],
                                   message_bus: Optional[MessageBus] = None) -> Dict[str, Any]:
     """根据配置创建物理组件"""
     components = {}
+    pump_registry: Dict[str, Pump] = {}
 
     if 'components' not in config:
         return components
 
     components_config = config['components']
+
+    def build_pump_from_definition(definition: Dict[str, Any],
+                                   default_prefix: Optional[str],
+                                   fallback_index: int,
+                                   parent_id: str) -> Pump:
+        reference_id = definition.get('obj_id') or definition.get('ref')
+        if reference_id:
+            pump_obj = pump_registry.get(reference_id)
+            if not pump_obj:
+                raise ValueError(f"PumpStation '{parent_id}' 引用了未定义的泵组件 '{reference_id}'。")
+            return pump_obj
+
+        pump_id = definition.get('id') or definition.get('name') or f"{parent_id}_pump_{fallback_index}"
+        pump_name = definition.get('name', pump_id)
+        initial_state = definition.get('initial_state', {}).copy()
+        parameters = definition.get('parameters', {}).copy()
+
+        bus_cfg = definition.get('message_bus', {})
+        action_topic = bus_cfg.get('action_topic')
+        if not action_topic and default_prefix:
+            action_topic = f"{default_prefix}.{pump_id}"
+
+        enabled = bus_cfg.get('enabled', bool(action_topic))
+        if enabled and action_topic and message_bus is not None:
+            pump_obj = Pump(
+                name=pump_name,
+                initial_state=initial_state,
+                parameters=parameters,
+                message_bus=message_bus,
+                action_topic=action_topic
+            )
+        else:
+            pump_obj = Pump(
+                name=pump_name,
+                initial_state=initial_state,
+                parameters=parameters
+            )
+
+        pump_registry[pump_id] = pump_obj
+        return pump_obj
+
+    def create_pump_station(component_id: str, comp_config: Dict[str, Any],
+                             comp_name: str) -> PumpStation:
+        station_initial = comp_config.get('initial_state', {}).copy()
+        station_params = comp_config.get('parameters', {}).copy()
+
+        bus_cfg = comp_config.get('message_bus', {}) or {}
+        default_prefix = (bus_cfg.get('control_topic_prefix') or
+                          bus_cfg.get('action_topic_prefix') or
+                          bus_cfg.get('action_topic') or
+                          bus_cfg.get('topic_prefix'))
+
+        pump_defaults = comp_config.get('pump_parameters', {}) or {}
+        default_initial = comp_config.get('pump_initial_state', {}) or {}
+
+        pump_definitions = comp_config.get('pumps') or []
+        if not pump_definitions:
+            num_pumps = (comp_config.get('num_pumps') or
+                         bus_cfg.get('num_pumps') or
+                         comp_config.get('parameters', {}).get('num_pumps'))
+            if not num_pumps:
+                num_pumps = 0
+            for index in range(1, int(num_pumps) + 1):
+                pump_definitions.append({
+                    'id': f"{component_id}_pump_{index}",
+                    'initial_state': default_initial.copy(),
+                    'parameters': pump_defaults.copy(),
+                })
+
+        pumps: List[Pump] = []
+        for idx, pump_def in enumerate(pump_definitions, start=1):
+            combined_def = {
+                'id': pump_def.get('id'),
+                'name': pump_def.get('name'),
+                'initial_state': default_initial.copy(),
+                'parameters': pump_defaults.copy(),
+                'message_bus': pump_def.get('message_bus', {}).copy(),
+            }
+
+            combined_def['initial_state'].update(pump_def.get('initial_state', {}))
+            combined_def['parameters'].update(pump_def.get('parameters', {}))
+
+            if 'obj_id' in pump_def:
+                combined_def['obj_id'] = pump_def['obj_id']
+            if 'ref' in pump_def:
+                combined_def['ref'] = pump_def['ref']
+
+            pumps.append(build_pump_from_definition(combined_def, default_prefix, idx, component_id))
+
+        return PumpStation(
+            name=comp_name,
+            initial_state=station_initial,
+            parameters=station_params,
+            pumps=pumps
+        )
 
     def _merge_bus_parameters(params: Dict[str, Any], bus_cfg: Dict[str, Any]) -> Dict[str, Any]:
         if not bus_cfg:
@@ -115,13 +214,35 @@ def create_components_from_config(config: Dict[str, Any],
                 reservoir_kwargs['inflow_topic'] = bus_cfg.get('inflow_topic') or bus_cfg.get('topic')
 
             # 根据class字段确定组件类型
-            if 'unified_canal.UnifiedCanal' in comp_class or 'UnifiedCanal' in comp_class:
+            if 'pump.PumpStation' in comp_class or 'PumpStation' in comp_class:
+                station = create_pump_station(
+                    comp_id,
+                    comp_config,
+                    comp_config.get('name', comp_id)
+                )
+                components[comp_id] = station
+            elif 'unified_canal.UnifiedCanal' in comp_class or 'UnifiedCanal' in comp_class:
                 components[comp_id] = UnifiedCanal(
                     name=comp_config.get('name', comp_id),
                     initial_state=comp_config.get('initial_state', {}),
                     model_type=parameters.get('model_type', 'canal'),
                     parameters=parameters
                 )
+            elif ('pump.Pump' in comp_class or
+                  (comp_class.endswith('Pump') and 'PumpStation' not in comp_class)):
+                pump_obj = build_pump_from_definition(
+                    {
+                        'id': comp_id,
+                        'name': comp_config.get('name', comp_id),
+                        'initial_state': comp_config.get('initial_state', {}),
+                        'parameters': parameters,
+                        'message_bus': comp_config.get('message_bus', {}),
+                    },
+                    comp_config.get('message_bus', {}).get('control_topic_prefix'),
+                    1,
+                    comp_id
+                )
+                components[comp_id] = pump_obj
             elif 'gate.Gate' in comp_class or 'Gate' in comp_class:
                 components[comp_id] = Gate(
                     name=comp_config.get('name', comp_id),
@@ -189,13 +310,34 @@ def create_components_from_config(config: Dict[str, Any],
                 reservoir_kwargs['message_bus'] = message_bus
                 reservoir_kwargs['inflow_topic'] = bus_cfg.get('inflow_topic') or bus_cfg.get('topic')
 
-            if comp_type == 'UnifiedCanal':
+            if comp_type == 'PumpStation':
+                station = create_pump_station(
+                    comp_name,
+                    comp_config,
+                    comp_config.get('name', comp_name)
+                )
+                components[comp_name] = station
+            elif comp_type == 'UnifiedCanal':
                 components[comp_name] = UnifiedCanal(
                     name=comp_config.get('name', comp_name),
                     initial_state=comp_config.get('initial_state', {}),
                     model_type=parameters.get('model_type', 'canal'),
                     parameters=parameters
                 )
+            elif comp_type == 'Pump':
+                pump_obj = build_pump_from_definition(
+                    {
+                        'id': comp_name,
+                        'name': comp_config.get('name', comp_name),
+                        'initial_state': comp_config.get('initial_state', {}),
+                        'parameters': parameters,
+                        'message_bus': comp_config.get('message_bus', {}),
+                    },
+                    comp_config.get('message_bus', {}).get('control_topic_prefix'),
+                    1,
+                    comp_name
+                )
+                components[comp_name] = pump_obj
             elif comp_type == 'Gate':
                 components[comp_name] = Gate(
                     name=comp_config.get('name', comp_name),
@@ -292,7 +434,6 @@ def create_agents_from_config(config: Dict[str, Any], components: Dict[str, Any]
             normalized_agents[agent_id] = config_block
 
         agents_config = normalized_agents
-
     
     # 处理字典格式的agents配置（传统格式）
     for agent_name, agent_config in agents_config.items():
@@ -431,6 +572,87 @@ def create_agents_from_config(config: Dict[str, Any], components: Dict[str, Any]
                     agent_id=agent_id,
                     message_bus=message_bus,
                     **config_data
+                )
+            elif normalized_type == 'DemandAgent':
+                config_data = _extract_agent_config(agent_config)
+                demand_topic = (
+                    config_data.pop('demand_topic', None)
+                    or agent_config.get('demand_topic')
+                    or config.get('communication', {}).get('topics', {}).get('demand')
+                )
+                schedule_raw = config_data.pop('demand_schedule', agent_config.get('demand_schedule', {}))
+                if schedule_raw is None:
+                    schedule_raw = {}
+                demand_schedule: Dict[float, float] = {}
+                for key, value in schedule_raw.items():
+                    try:
+                        time_key = float(key)
+                        demand_schedule[time_key] = float(value)
+                    except (TypeError, ValueError):
+                        logger.warning(f"DemandAgent {agent_name} 忽略无效的需求条目 {key}: {value}")
+                if not demand_topic:
+                    logger.warning(f"DemandAgent {agent_name} 缺少 demand_topic，跳过创建")
+                    continue
+                agents[agent_name] = DemandAgent(
+                    agent_id=agent_id,
+                    message_bus=message_bus,
+                    demand_topic=demand_topic,
+                    demand_schedule=demand_schedule,
+                )
+            elif normalized_type == 'MonitoringAgent':
+                config_data = _extract_agent_config(agent_config)
+                component_spec = config_data.pop('components', agent_config.get('components', {}))
+                monitored_components: Dict[str, Any] = {}
+                if isinstance(component_spec, dict):
+                    for alias, comp_id in component_spec.items():
+                        target_id = comp_id if isinstance(comp_id, str) else alias
+                        if target_id in components:
+                            monitored_components[alias] = components[target_id]
+                elif isinstance(component_spec, list):
+                    for comp_id in component_spec:
+                        if comp_id in components:
+                            monitored_components[comp_id] = components[comp_id]
+                else:
+                    logger.warning(f"MonitoringAgent {agent_name} 未提供有效的 components 配置，默认监控全部组件")
+                    monitored_components = components
+
+                monitoring_interval = config_data.pop('monitoring_interval', config_data.pop('interval', 60.0))
+                agents[agent_name] = MonitoringAgent(
+                    agent_id=agent_id,
+                    components=monitored_components,
+                    monitoring_interval=monitoring_interval,
+                )
+            elif normalized_type == 'PumpControlAgent':
+                config_data = _extract_agent_config(agent_config)
+                target_component = (
+                    config_data.pop('pump_station', None)
+                    or config_data.pop('target_component', None)
+                    or agent_config.get('pump_station')
+                    or agent_config.get('target_component')
+                )
+
+                if isinstance(target_component, dict):
+                    target_component = target_component.get('obj_id') or target_component.get('id')
+
+                pump_station = components.get(target_component)
+                if not pump_station:
+                    logger.warning(f"PumpControlAgent {agent_name} 的泵站 '{target_component}' 未找到，跳过创建")
+                    continue
+
+                demand_topic = config_data.pop('demand_topic', agent_config.get('demand_topic'))
+                if not demand_topic:
+                    demand_topic = config.get('communication', {}).get('topics', {}).get('demand')
+
+                control_prefix = config_data.pop('control_topic_prefix', agent_config.get('control_topic_prefix'))
+                if not control_prefix:
+                    control_prefix = config.get('communication', {}).get('topics', {}).get('pump_action_prefix')
+
+                agents[agent_name] = PumpControlAgent(
+                    agent_id=agent_id,
+                    message_bus=message_bus,
+                    pump_station=pump_station,
+                    demand_topic=demand_topic,
+                    control_topic_prefix=control_prefix,
                 )
             elif normalized_type == 'RainfallAgent':
                 agents[agent_name] = RainfallAgent(
