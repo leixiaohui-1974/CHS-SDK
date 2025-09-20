@@ -39,7 +39,14 @@ class SimulationHarness:
         else:
             self.end_time = self.start_time + 100
 
-        self.dt = config.get('dt', 1.0)
+        # Support both legacy 'dt' and more descriptive 'time_step' keys.
+        if 'dt' in config:
+            self.dt = config['dt']
+        else:
+            self.dt = config.get('time_step', 1.0)
+        if not isinstance(self.dt, numbers.Real):
+            raise ValueError("Simulation time step must be a real number.")
+        self.dt = float(self.dt)
         self.t = self.start_time
 
         self.history = []
