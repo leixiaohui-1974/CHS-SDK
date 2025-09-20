@@ -34,6 +34,7 @@ import yaml
 from core_lib.physical_objects.unified_canal import UnifiedCanal
 from core_lib.physical_objects.gate import Gate
 from core_lib.physical_objects.reservoir import Reservoir
+from core_lib.physical_objects.river_channel import RiverChannel
 from core_lib.physical_objects.water_turbine import WaterTurbine
 from core_lib.physical_objects.integral_delay_canal import IntegralDelayCanal
 from core_lib.physical_objects.disturbance_node import DisturbanceNode
@@ -109,6 +110,12 @@ def create_components_from_config(config: Dict[str, Any]) -> Dict[str, Any]:
                     initial_state=comp_config.get('initial_state', {}),
                     parameters=comp_config.get('parameters', {})
                 )
+            elif 'river_channel.RiverChannel' in comp_class or 'RiverChannel' in comp_class:
+                components[comp_id] = RiverChannel(
+                    name=comp_config.get('name', comp_id),
+                    initial_state=comp_config.get('initial_state', {}),
+                    parameters=comp_config.get('parameters', {})
+                )
             elif 'IntegralDelayCanal' in comp_class:
                 # IntegralDelayCanal已弃用，映射到UnifiedCanal
                 components[comp_id] = UnifiedCanal(
@@ -152,6 +159,12 @@ def create_components_from_config(config: Dict[str, Any]) -> Dict[str, Any]:
                 )
             elif comp_type == 'Reservoir':
                 components[comp_name] = Reservoir(
+                    name=comp_config.get('name', comp_name),
+                    initial_state=comp_config.get('initial_state', {}),
+                    parameters=comp_config.get('parameters', {})
+                )
+            elif comp_type == 'RiverChannel':
+                components[comp_name] = RiverChannel(
                     name=comp_config.get('name', comp_name),
                     initial_state=comp_config.get('initial_state', {}),
                     parameters=comp_config.get('parameters', {})

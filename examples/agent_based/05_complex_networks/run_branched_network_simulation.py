@@ -29,19 +29,75 @@ def run_branched_network_simulation():
     print("\n--- Setting up Tutorial 5: Complex Networks Simulation ---")
 
     # 1. --- Simulation Harness and Message Bus Setup ---
-    simulation_config = {'duration': 1000, 'dt': 1.0}
+    simulation_config = {'duration': 2400, 'dt': 1.0}
     harness = SimulationHarness(config=simulation_config)
     message_bus = harness.message_bus
 
     # 2. --- Physical Components ---
     print("Initializing physical components...")
-    res1 = Reservoir(name="res1", initial_state={'volume': 15e6, 'water_level': 10.0}, parameters={'surface_area': 1.5e6, 'storage_curve': [[0, 0], [30e6, 20]]})
-    g1 = Gate(name="g1", initial_state={'opening': 0.1}, parameters={'width': 10, 'max_rate_of_change': 0.1}, message_bus=message_bus, action_topic="action.g1.opening", action_key='control_signal')
-    trib_chan = RiverChannel(name="trib_chan", initial_state={'volume': 2e5, 'water_level': 2.0}, parameters={'k': 0.0002})
-    res2 = Reservoir(name="res2", initial_state={'volume': 30e6, 'water_level': 20.0}, parameters={'surface_area': 1.5e6, 'storage_curve': [[0, 0], [30e6, 20]]})
-    g2 = Gate(name="g2", initial_state={'opening': 0.1}, parameters={'width': 15, 'max_rate_of_change': 0.1}, message_bus=message_bus, action_topic="action.g2.opening", action_key='control_signal')
-    main_chan = RiverChannel(name="main_chan", initial_state={'volume': 8e5, 'water_level': 8.0}, parameters={'k': 0.0001})
-    g3 = Gate(name="g3", initial_state={'opening': 0.5}, parameters={'width': 20})
+    res1 = Reservoir(
+        name="res1",
+        initial_state={'volume': 1.104e6, 'water_level': 9.2},
+        parameters={
+            'surface_area': 1.2e5,
+            'storage_curve': [[0, 0], [1.2e6, 10.0]],
+        }
+    )
+    res1.set_base_inflow(5.0)
+
+    g1 = Gate(
+        name="g1",
+        initial_state={'opening': 0.12},
+        parameters={
+            'width': 9.5,
+            'max_rate_of_change': 0.25,
+            'discharge_coefficient': 0.62,
+        },
+        message_bus=message_bus,
+        action_topic="action.g1.opening",
+        action_key='control_signal'
+    )
+
+    trib_chan = RiverChannel(
+        name="trib_chan",
+        initial_state={'volume': 4.0e5, 'water_level': 3.2},
+        parameters={'k': 0.00032}
+    )
+
+    res2 = Reservoir(
+        name="res2",
+        initial_state={'volume': 1.45e6, 'water_level': 14.5},
+        parameters={
+            'surface_area': 1.0e5,
+            'storage_curve': [[0, 0], [1.6e6, 16.0]],
+        }
+    )
+    res2.set_base_inflow(8.0)
+
+    g2 = Gate(
+        name="g2",
+        initial_state={'opening': 0.12},
+        parameters={
+            'width': 11.5,
+            'max_rate_of_change': 0.22,
+            'discharge_coefficient': 0.6,
+        },
+        message_bus=message_bus,
+        action_topic="action.g2.opening",
+        action_key='control_signal'
+    )
+
+    main_chan = RiverChannel(
+        name="main_chan",
+        initial_state={'volume': 5.0e5, 'water_level': 6.0},
+        parameters={'k': 0.00026}
+    )
+
+    g3 = Gate(
+        name="g3",
+        initial_state={'opening': 0.45},
+        parameters={'width': 18.0, 'discharge_coefficient': 0.58}
+    )
 
     physical_components = [("res1", res1), ("g1", g1), ("trib_chan", trib_chan), ("res2", res2), ("g2", g2), ("main_chan", main_chan), ("g3", g3)]
     for comp_id, comp in physical_components:
@@ -65,8 +121,8 @@ def run_branched_network_simulation():
         DigitalTwinAgent(agent_id="twin_g2", simulated_object=g2, message_bus=message_bus, state_topic="state.g2.opening"),
     ]
 
-    pid1 = PIDController(Kp=-0.5, Ki=-0.05, Kd=-0.1, setpoint=12.0, min_output=0.0, max_output=1.0)
-    pid2 = PIDController(Kp=-0.4, Ki=-0.04, Kd=-0.1, setpoint=18.0, min_output=0.0, max_output=1.0)
+    pid1 = PIDController(Kp=-0.6, Ki=-0.07, Kd=-0.12, setpoint=8.0, min_output=0.0, max_output=1.0)
+    pid2 = PIDController(Kp=-0.55, Ki=-0.06, Kd=-0.11, setpoint=12.8, min_output=0.0, max_output=1.0)
 
     lca1 = LocalControlAgent(
         agent_id="lca_g1",
@@ -102,14 +158,6 @@ def run_branched_network_simulation():
     )
 
     # This dispatcher is for monitoring; its rules won't trigger in this scenario
-    dispatcher_rules = {
-        "profiles": {
-            "default": {
-                "condition": lambda states: True,
-                "commands": {}
-            }
-        }
-    }
     dispatcher = CentralDispatcherAgent(
         agent_id="central_dispatcher",
         message_bus=message_bus,
@@ -118,10 +166,10 @@ def run_branched_network_simulation():
         observation_key="water_level",
         command_topic="command.res1.setpoint",
         dispatcher_params={
-            "low_level": 8.0,
-            "high_level": 12.0,
-            "low_setpoint": 10.0,
-            "high_setpoint": 8.0
+            "low_level": 7.8,
+            "high_level": 8.6,
+            "low_setpoint": 8.1,
+            "high_setpoint": 7.9
         }
     )
 
@@ -138,8 +186,8 @@ def run_branched_network_simulation():
 
     final_res1_level = harness.history[-1]['res1']['water_level']
     final_res2_level = harness.history[-1]['res2']['water_level']
-    print(f"Final reservoir 1 water level: {final_res1_level:.2f} m (Setpoint: 12.0 m)")
-    print(f"Final reservoir 2 water level: {final_res2_level:.2f} m (Setpoint: 18.0 m)")
+    print(f"Final reservoir 1 water level: {final_res1_level:.2f} m (Setpoint: 8.0 m)")
+    print(f"Final reservoir 2 water level: {final_res2_level:.2f} m (Setpoint: 12.8 m)")
 
 if __name__ == "__main__":
     run_branched_network_simulation()
