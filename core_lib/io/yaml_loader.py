@@ -98,6 +98,7 @@ class SimulationBuilder(BaseYamlLoader):
 
             # Agents & Controllers
             "PIDController": "core_lib.local_agents.control.pid_controller.PIDController",
+            "DirectGateController": "core_lib.local_agents.control.custom_controllers.DirectGateController",
             "LocalControlAgent": "core_lib.local_agents.control.local_control_agent.LocalControlAgent",
             "DigitalTwinAgent": "core_lib.local_agents.perception.digital_twin_agent.DigitalTwinAgent",
             "ParameterIdentificationAgent": "core_lib.identification.identification_agent.ParameterIdentificationAgent",

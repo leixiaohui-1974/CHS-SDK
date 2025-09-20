@@ -1,9 +1,93 @@
-# Simulation Configuration
-metadata:
-  run_with: run_scenario.py
-  example_type: yaml_config
-  description: Centralized emergency override control example
+# Centralized emergency override MAS configuration
 
 simulation:
-  duration: 200  # Simulation total time in seconds
-  dt: 1.0        # Simulation time step in seconds
+  duration: 600
+  dt: 1.0
+
+communication:
+  topics:
+    reservoir_state: "state/reservoir/main"
+    gate_action: "action/gate/flood"
+    gate_command: "command/gate/flood"
+
+components:
+  main_reservoir:
+    type: Reservoir
+    initial_state:
+      water_level: 98.0
+      volume: 260000.0
+    parameters:
+      surface_area: 2200.0
+      storage_curve:
+        - [0.0, 90.0]
+        - [650000.0, 110.0]
+      inflow: 200.0
+  flood_gate:
+    type: Gate
+    initial_state:
+      opening: 0.12
+    parameters:
+      width: 6.0
+      discharge_coefficient: 0.78
+      max_opening: 1.0
+      max_rate_of_change: 0.3
+    message_bus:
+      enabled: true
+      action_topic: "action/gate/flood"
+      action_key: "opening"
+
+agents:
+  reservoir_twin:
+    type: DigitalTwinAgent
+    agent_id: "reservoir_twin"
+    simulated_object: "main_reservoir"
+    message_bus:
+      state_topic: "state/reservoir/main"
+
+  gate_follower:
+    type: LocalControlAgent
+    agent_id: "gate_follower"
+    target_component: "flood_gate"
+    control_type: "direct_gate_control"
+    data_sources:
+      primary_data: "state/reservoir/main"
+    control_targets:
+      primary_target: "action/gate/flood"
+    controller:
+      type: DirectGateController
+      parameters:
+        setpoint: 0.12
+    message_bus:
+      observation_topic: "state/reservoir/main"
+      observation_key: "water_level"
+      action_topic: "action/gate/flood"
+      command_topic: "command/gate/flood"
+    logging:
+      log_observations: false
+
+  central_dispatcher:
+    type: CentralDispatcherAgent
+    agent_id: "central_dispatcher"
+    mode: "rule"
+    subscribed_topic: "state/reservoir/main"
+    observation_key: "water_level"
+    command_topic: "command/gate/flood"
+    dispatcher_params:
+      low_level: 98.9
+      high_level: 99.1
+      high_setpoint: 0.12
+      low_setpoint: 1.0
+
+connections:
+  - from: "main_reservoir"
+    to: "flood_gate"
+
+analysis:
+  report_filename: "centralized_emergency_override_report.md"
+  target_safe_level: 99.0
+  tolerance: 0.1
+  override_deadline: 220.0
+  max_allowable_level: 99.2
+
+visualization:
+  enabled: false

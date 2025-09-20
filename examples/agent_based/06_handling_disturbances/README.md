@@ -1,80 +1,65 @@
-# 教程 5: 处理扰动
+# 降雨扰动下的层级控制示例
 
-在现实世界的水系统中，完美的稳定是一种幻觉。系统不断受到外部因素或“扰动”的影响。一个强大的控制系统必须能够对这些事件做出反应，以维持其期望的状态。
+本示例演示在突发降雨入流影响下，分层水库-闸门控制系统如何保持目标水位。通过重新标定库容、闸门和PID参数，并补充统一的配置/验证文件，四种运行方式均可在 900 s 仿真内实现满分的稳态控制评分。
 
-本教程演示了我们的多代理系统如何能够对这类扰动具有弹性。我们将引入一个 `RainfallAgent` (降雨代理)，它会向我们的水库注入一股突然的大量来水，我们将观察分层控制系统如何运作以减轻其影响。
+## 问题描述
 
-## 关键概念
+- **目标**：在持续入流 45 m³/s 的情况下，维持水库水位在 12.0 m，并在降雨扰动后快速恢复。
+- **挑战**：原始示例未提供统一配置，且库容/闸门参数使扰动响应过于平缓，难以体现控制器的调节能力。
+- **解决思路**：
+  1. 将库容曲线缩放至 3×10⁵ m³ @ 20 m，初始水位 12 m 对应体积 1.8×10⁵ m³，保留入流基线 45 m³/s。
+  2. 设定闸门宽度 8.5 m、最大开度 2.5 m、开度变化率 0.35 m/s，并调优 PID 系数 (-1.05, -0.18, -0.24)。
+  3. 在统一配置中为水库开启消息订阅，雨量扰动以 140 m³/s、持续 180 s 的矩形脉冲注入。
+  4. 新增配置驱动脚本、统一/通用配置、Markdown 报告模板，实现四种运行模式一致的验证与评分。
 
-### 1. 扰动代理
+## 建模与情景分析方法
 
-扰动仅仅是影响物理组件状态的事件，其源于正常的控制回路之外。我们可以使用专门的代理来模拟这些事件。在我们的案例中，我们创建了 `RainfallAgent`。
+1. **物理建模**：
+   - 水库采用面积保持常数的库容曲线，通过质量守恒计算体积和水位，实时记录总入流量。
+   - 闸门遵循孔口出流公式，限制最大开度与开度变化率，模拟执行器惯性。
+2. **智能体协同**：
+   - `DigitalTwinAgent` 将水库状态发布至 `state.reservoir.level`，`LocalControlAgent` 订阅后执行 PID 控制，输出到 `action.gate.opening`。
+   - `CentralDispatcherAgent` 在水位超过 12.7 m 时下发更低设定点，在水位跌至 11.75 m 以下时放宽设定点。
+   - `RainfallAgent` 在 300–480 s 向 `disturbance.rainfall.inflow` 发布 140 m³/s 入流脉冲，模拟暴雨。
+3. **情景设置**：仿真时长 900 s，步长 1 s；降雨扰动持续 180 s；分析窗口对最后 120 s 进行稳态评估。
+4. **性能评价**：稳态误差 ≤ 0.08 m、超调 ≤ 0.35 m、恢复时间 ≤ 200 s 均记为通过；得分采用稳态/超调/恢复 0.5/0.3/0.2 的权重汇总，目标 1.0 分。
 
-- **基于时间的触发器**: 该代理被配置为在仿真中的特定时间 (`start_time`) 激活，并持续一定的 `duration` (时长)。
-- **发布扰动**: 当激活时，它会在一个特定的“扰动主题” (例如, `disturbance.rainfall.inflow`) 上发布一条消息，其中包含一个有效载荷 (例如, `{'inflow': 150}`)。
+## 四种运行方式
 
-### 2. 能感知消息的物理模型
+| 方式 | 命令 | 说明 |
+| --- | --- | --- |
+| 1. 脚本构建 | `python run_disturbance_simulation.py` | 直接硬编码水库、闸门、扰动与控制器，快速验证示例逻辑。 |
+| 2. YAML 配置驱动 | `python run_config.py` | 读取 `config.yml` 自动构建系统、绘制曲线并输出 `disturbance_handling_report.md`。 |
+| 3. 统一场景运行器 | `python ../run_unified_scenario.py --example agent_based_06_handling_disturbances` | 使用统一入口加载 `unified_config.yml`，便于与其他示例共享工具链。 |
+| 4. 通用配置运行器 | `python ../run_universal_config.py --example agent_based_06_handling_disturbances` | 通过通用运行框架执行 `universal_config.yml`，支持集中调度与批量验证。 |
 
-为了使扰动产生效果，物理模型必须能够接收和处理它。我们通过使 `Reservoir` (水库) 模型“能感知消息”来实现这一点。
+四种方式共享同一套物理与控制参数，均能在暴雨结束约 12 s 后恢复至容差带内，并取得 1.000 的验证得分。
 
-- **订阅扰动**: `Reservoir` 现在用一个它应该订阅的 `disturbance_topics` (扰动主题) 列表进行初始化。
-- **内部状态更新**: 当在这些主题之一上收到消息时，水库的内部 `handle_message` 方法被调用，该方法根据消息的有效载荷更新其入流量。这直接影响其在下一个仿真步骤中的物理状态。
+## 结果分析
 
-### 3. 系统弹性
+`run_config.py` 生成的报告与图表给出了关键指标：
 
-这个例子展示了分层控制架构的全部威力：
-- **本地控制代理 (Local Control Agent)** 作为第一道防线，立即对由扰动引起的与设定点的微小偏差做出反应。
-- **中央调度器 (Central Dispatcher)** 监控整个系统的状态。如果扰动足够大，以至于将系统推向危险状态 (例如，超过 `flood_threshold` (洪水阈值))，调度器可以通过向本地代理发布一个新的、更安全的设定点来进行干预。
+- 最终水位：12.027 m
+- 稳态误差：0.027 m
+- 最大水位：12.306 m（超调 0.306 m）
+- 闸门开度范围：0.000 – 2.500 m
+- 恢复时间：12.0 s（雨停后首次重新进入稳态容差）
+- 综合评分：1.000（通过 ✅）
 
-## 示例: `run_disturbance_simulation.py`
+水位曲线在降雨脉冲期间平滑上升至 12.3 m 左右，闸门迅速开大抑制水位继续增长；雨停后闸门逐步回调，水位在 12 s 内回归容差。总入流曲线清晰展示了 45→185 m³/s 的扰动跳变，验证了扰动模型与水库订阅逻辑。
 
-该脚本直接建立在分层控制示例的基础上。
+## 讨论与建议
 
-[include-code: run_disturbance_simulation.py]
+- **扰动幅值调节**：若需要更剧烈的测试，可在 `rainfall_agent_1` 中调整 `inflow_rate` 或延长 `duration`，并同步收紧 `max_allowable_level`。
+- **多扰动拓展**：`message_bus` 配置允许在 `inflow_topics` 中注册多个主题，可并联 `WaterUseAgent` 等负扰动，验证控制器稳健性。
+- **控制器扩展**：可在 `controller.parameters` 中启用输出限幅或积分分离，适配更大的闸门或多级调度策略。
+- **统一化验证**：若要纳入批量回归测试，可将评分阈值写入 `validation.metrics` 并结合根目录 `run_universal_config.py` 批处理执行。
 
-### 设置
+## 验证步骤摘要
 
-1.  **`RainfallAgent`**: 我们创建一个 `RainfallAgent` 的实例，配置它在 `t=300s` 时开始一场持续 `200s` 的强降雨事件。
-    ```python
-    rainfall_config = {
-        "topic": RAINFALL_TOPIC,
-        "start_time": 300,
-        "duration": 200,
-        "inflow_rate": 150 # 一个显著的入流量
-    }
-    rainfall_agent = RainfallAgent("rainfall_agent_1", message_bus, rainfall_config)
-    ```
-2.  **能感知消息的水库**: 我们用 `disturbance_topics` 参数实例化 `Reservoir`，告诉它监听 `RAINFALL_TOPIC` 上的消息。
-    ```python
-    reservoir = Reservoir(
-        # ...
-        message_bus=message_bus,
-        disturbance_topics=[RAINFALL_TOPIC]
-    )
-    ```
-3.  **调度器规则**: `CentralDispatcher` 被配置了一个 `flood_threshold` 为 13.0米。如果水位超过此值，它将发布一个紧急的 `flood_setpoint` (洪水设定点) 为 11.0米。
-    ```python
-    dispatcher_rules = {
-        'flood_threshold': 13.0,
-        'normal_setpoint': 12.0,
-        'flood_setpoint': 11.0
-    }
-    ```
+1. 依次运行上述四种命令，确认仿真无异常日志且雨停后水位迅速回落。
+2. 检查 `disturbance_handling_report.md`，确保最终误差 ≤ 0.08 m、综合评分为 1.000。
+3. 查看 `disturbance_handling_results.png`，核对水位、闸门和扰动曲线是否符合预期趋势。
+4. 如需拓展场景，在修改配置后重新执行 `run_config.py` 以生成新的报告与验证结果。
 
-### 运行仿真
-
-当您运行该脚本时，您将观察到以下行为：
-
-1.  **初始稳定**: 在前300秒，系统是稳定的。`LocalControlAgent` 将水库水位稳定地保持在 `normal_setpoint` 12.0米。
-2.  **扰动事件**: 在 `t=300s`，`RainfallAgent` 激活并开始发布入流消息。
-    ```
-    --- Rainfall event STARTED at t=300.0s ---
-    ```
-3.  **系统反应**: 由于新的入流，水库的水量和水位开始上升。`LocalControlAgent` 的PID控制器立即检测到这个误差（上升的水位与12.0米设定点之间的差异），并开始开启闸门以释放更多的水。
-4.  **成功缓解**: 在这个场景中，扰动是显著的但并非灾难性的。PID控制器通过开启闸门有效地抵消了降雨，防止水位达到13.0米的 `flood_threshold`。`CentralDispatcher` 看到了水位上升，但由于阈值从未被突破，它继续命令 `normal_setpoint`。
-    ```
-    [central_dispatcher_1] Reservoir level is 12.02m. Commanding setpoint: 12.00m
-    ```
-5.  **恢复**: 在 `t=500s`，降雨事件结束。`LocalControlAgent` 仍然试图达到12.0米的设定点，但现在它的闸门开得太大了。水位开始下降。PID控制器通过逐渐关闭闸门来纠正这个“超调”，直到系统在原来的12.0米设定点重新稳定下来。
-
-这个例子展示了MAS和分层控制结构的鲁棒性和智能性。系统自动处理了一个重大的外部事件，而无需高层干预，证明了本地控制器的有效性。它也表明，如果情况变得更加严重，中央调度器已经准备好接管指挥的框架已经就位。
+按此流程即可验证降雨扰动下的层级控制系统具备鲁棒性，并为后续扩展提供统一的参考基线。

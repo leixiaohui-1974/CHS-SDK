@@ -39,19 +39,23 @@ def setup_control_system(harness, inflow_topic=None):
     GATE_COMMAND_TOPIC = "command.gate1.setpoint"
 
     # --- Physical Components ---
-    # Reservoir is now configured to listen for disturbance inflows.
+    # Reservoir is configured to listen for disturbance inflows.
     reservoir = Reservoir(
         name="reservoir_1",
-        initial_state={'volume': 18e6, 'water_level': 12.0},
-        parameters={'surface_area': 1.5e6, 'storage_curve': [[0, 0], [30e6, 20]]},
+        initial_state={'volume': 180000.0, 'water_level': 12.0},
+        parameters={
+            'surface_area': 15000.0,
+            'storage_curve': [[0, 0], [300000, 20.0]],
+            'inflow': 45.0,
+        },
         message_bus=message_bus,
         inflow_topic=inflow_topic
     )
     gate_params = {
-        'max_rate_of_change': 0.5,
-        'discharge_coefficient': 0.6,
-        'width': 10,
-        'max_opening': 5.0
+        'max_rate_of_change': 0.35,
+        'discharge_coefficient': 0.76,
+        'width': 8.5,
+        'max_opening': 2.5
     }
     gate = Gate(
         name="gate_1",
@@ -70,7 +74,7 @@ def setup_control_system(harness, inflow_topic=None):
         state_topic=RESERVOIR_STATE_TOPIC
     )
     pid = PIDController(
-        Kp=-0.8, Ki=-0.1, Kd=-0.2,
+        Kp=-1.05, Ki=-0.18, Kd=-0.24,
         setpoint=12.0,
         min_output=0.0,
         max_output=gate_params['max_opening']
@@ -92,22 +96,6 @@ def setup_control_system(harness, inflow_topic=None):
         command_topic=GATE_COMMAND_TOPIC
     )
 
-    dispatcher_rules = {
-        "profiles": {
-            "flood_control": {
-                "condition": lambda states: states.get('reservoir_level', {}).get('water_level', 0) > 13.0,
-                "commands": {
-                    "gate1_command": {'new_setpoint': 11.0}
-                }
-            },
-            "normal_operation": {
-                "condition": lambda states: True,
-                "commands": {
-                    "gate1_command": {'new_setpoint': 12.0}
-                }
-            }
-        }
-    }
     dispatcher = CentralDispatcherAgent(
         agent_id="dispatcher_1",
         message_bus=message_bus,
@@ -116,10 +104,10 @@ def setup_control_system(harness, inflow_topic=None):
         observation_key="water_level",
         command_topic=GATE_COMMAND_TOPIC,
         dispatcher_params={
-            "low_level": 10.0,
-            "high_level": 13.0,
-            "low_setpoint": 15.0,
-            "high_setpoint": 12.0
+            "low_level": 11.75,
+            "high_level": 12.7,
+            "low_setpoint": 12.4,
+            "high_setpoint": 11.9,
         }
     )
 
@@ -136,7 +124,7 @@ def run_disturbance_simulation():
     """
     print("\n--- Setting up Tutorial 5: Handling Disturbances Simulation ---")
 
-    simulation_config = {'duration': 800, 'dt': 1.0}
+    simulation_config = {'duration': 900, 'dt': 1.0}
     harness = SimulationHarness(config=simulation_config)
 
     RAINFALL_TOPIC = "disturbance.rainfall.inflow"
@@ -150,8 +138,8 @@ def run_disturbance_simulation():
         message_bus=harness.message_bus,
         topic=RAINFALL_TOPIC,
         start_time=300,
-        duration=200,
-        inflow_rate=150
+        duration=180,
+        inflow_rate=140
     )
     harness.add_agent(rainfall_agent)
 

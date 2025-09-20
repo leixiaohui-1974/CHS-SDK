@@ -1,35 +1,92 @@
-components:
-- class: Reservoir
-  id: main_reservoir
-  initial_state:
-    water_level: 98.0
-  parameters:
-    area: 1000.0
-    inflow: 100.0
-    storage_curve:
-    - - 0
-      - 0
-    - - 100000
-      - 100
-- class: Gate
-  id: flood_gate
-  initial_state:
-    opening: 0.1
-  parameters:
-    discharge_coefficient: 0.8
-    width: 5.0
 metadata:
   description: Centralized emergency override control example
-  example_type: yaml_config
-  run_with: run_scenario.py
+  example_type: agent_based
+  run_with: run_universal_config.py
+
 project:
-  category: agent_based
-  description: 通用配置文件，用于 agent_based/06_centralized_emergency_override 示例
   name: 06_centralized_emergency_override
-  version: '1.0'
-runtime:
-  logging_level: INFO
-  mode: simulation
+  category: agent_based
+  version: "1.0"
+
 simulation:
+  duration: 600
   dt: 1.0
-  duration: 200
+
+components:
+  - id: main_reservoir
+    class: Reservoir
+    initial_state:
+      water_level: 98.0
+      volume: 260000.0
+    parameters:
+      surface_area: 2200.0
+      storage_curve:
+        - [0.0, 90.0]
+        - [650000.0, 110.0]
+      inflow: 200.0
+  - id: flood_gate
+    class: Gate
+    initial_state:
+      opening: 0.12
+    parameters:
+      width: 6.0
+      discharge_coefficient: 0.78
+      max_opening: 1.0
+      max_rate_of_change: 0.3
+    message_bus:
+      enabled: true
+      action_topic: "action/gate/flood"
+      action_key: "opening"
+
+agents:
+  - id: reservoir_twin
+    class: DigitalTwinAgent
+    config:
+      simulated_object: main_reservoir
+      message_bus:
+        state_topic: "state/reservoir/main"
+
+  - id: gate_follower
+    class: LocalControlAgent
+    config:
+      agent_id: gate_follower
+      target_component: flood_gate
+      control_type: direct_gate_control
+      data_sources:
+        primary_data: "state/reservoir/main"
+      control_targets:
+        primary_target: "action/gate/flood"
+      controller:
+        type: DirectGateController
+        parameters:
+          setpoint: 0.12
+      message_bus:
+        observation_topic: "state/reservoir/main"
+        observation_key: water_level
+        action_topic: "action/gate/flood"
+        command_topic: "command/gate/flood"
+
+  - id: central_dispatcher
+    class: CentralDispatcherAgent
+    config:
+      mode: rule
+      subscribed_topic: "state/reservoir/main"
+      observation_key: water_level
+      command_topic: "command/gate/flood"
+      dispatcher_params:
+        low_level: 98.9
+        high_level: 99.1
+        high_setpoint: 0.12
+        low_setpoint: 1.0
+
+connections:
+  - upstream: main_reservoir
+    downstream: flood_gate
+    from: main_reservoir
+    to: flood_gate
+
+validation:
+  target_safe_level: 99.0
+  tolerance: 0.1
+  override_deadline: 220.0
+  max_allowable_level: 99.2

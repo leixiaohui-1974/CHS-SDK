@@ -13,6 +13,7 @@ from typing import Dict, Any, List, Optional, Tuple
 from core_lib.core_engine.testing.simulation_harness import SimulationHarness
 from core_lib.physical_objects.reservoir import Reservoir
 from core_lib.physical_objects.gate import Gate
+from core_lib.physical_objects.river_channel import RiverChannel
 from core_lib.physical_objects.pump import Pump, PumpStation
 from core_lib.physical_objects.water_turbine import WaterTurbine
 from core_lib.core.interfaces import Agent
@@ -46,11 +47,14 @@ class SimulationBuilder:
         self.components = {}
         self.agents = []
         
-    def add_reservoir(self, 
-                     component_id: str, 
-                     water_level: float = 10.0, 
+    def add_reservoir(self,
+                     component_id: str,
+                     water_level: float = 10.0,
                      surface_area: float = 1e6,
-                     volume: Optional[float] = None) -> Reservoir:
+                     volume: Optional[float] = None,
+                     storage_curve: Optional[List[List[float]]] = None,
+                     inflow: Optional[float] = None,
+                     additional_parameters: Optional[Dict[str, Any]] = None) -> Reservoir:
         """
         Add a reservoir component to the simulation.
         
@@ -73,18 +77,57 @@ class SimulationBuilder:
         }
         
         parameters = {'surface_area': surface_area}
-        
+
+        if storage_curve is not None:
+            parameters['storage_curve'] = storage_curve
+
+        if inflow is not None:
+            parameters['inflow'] = inflow
+
+        if additional_parameters:
+            parameters.update(additional_parameters)
+
         reservoir = Reservoir(component_id, initial_state, parameters)
         self.harness.add_component(component_id, reservoir)
         self.components[component_id] = reservoir
-        
+
         return reservoir
+
+    def add_river_channel(self,
+                          component_id: str,
+                          volume: float,
+                          water_level: float,
+                          k: float = 0.0001,
+                          additional_parameters: Optional[Dict[str, Any]] = None) -> 'RiverChannel':
+        """Add a river channel component to the simulation."""
+
+        initial_state = {
+            'volume': volume,
+            'water_level': water_level,
+            'outflow': 0
+        }
+
+        parameters = {'k': k}
+        if additional_parameters:
+            parameters.update(additional_parameters)
+
+        channel = RiverChannel(component_id, initial_state, parameters)
+        self.harness.add_component(component_id, channel)
+        self.components[component_id] = channel
+
+        return channel
     
-    def add_gate(self, 
+    def add_gate(self,
                  component_id: str,
                  opening: float = 0.5,
                  max_flow_rate: float = 100.0,
-                 control_topic: Optional[str] = None) -> Gate:
+                 max_rate_of_change: float = 0.2,
+                 discharge_coefficient: float = 0.6,
+                 width: float = 10.0,
+                 max_opening: float = 1.0,
+                 control_topic: Optional[str] = None,
+                 action_key: str = 'opening',
+                 additional_parameters: Optional[Dict[str, Any]] = None) -> Gate:
         """
         Add a gate component to the simulation.
         
@@ -98,11 +141,26 @@ class SimulationBuilder:
             The created Gate object
         """
         initial_state = {'opening': opening, 'outflow': 0}
-        parameters = {'max_flow_rate': max_flow_rate}
-        
+        parameters = {
+            'max_flow_rate': max_flow_rate,
+            'max_rate_of_change': max_rate_of_change,
+            'discharge_coefficient': discharge_coefficient,
+            'width': width,
+            'max_opening': max_opening,
+        }
+
+        if additional_parameters:
+            parameters.update(additional_parameters)
+
         if control_topic:
-            gate = Gate(component_id, initial_state, parameters, 
-                       self.harness.message_bus, control_topic)
+            gate = Gate(
+                component_id,
+                initial_state,
+                parameters,
+                self.harness.message_bus,
+                control_topic,
+                action_key=action_key,
+            )
         else:
             gate = Gate(component_id, initial_state, parameters)
             

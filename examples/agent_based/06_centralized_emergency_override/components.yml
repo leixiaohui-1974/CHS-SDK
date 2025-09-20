@@ -1,20 +1,26 @@
-# Physical Components Definition
+# Physical components for centralized emergency override
 components:
-  - id: main_reservoir
-    class: Reservoir
+  main_reservoir:
+    type: Reservoir
     initial_state:
-      water_level: 98.0  # meters
+      water_level: 98.0
+      volume: 260000.0
     parameters:
-      area: 1000.0      # m^2
+      surface_area: 2200.0
       storage_curve:
-        - [0, 0]
-        - [100000, 100]
-      inflow: 100.0       # Constant inflow in m^3/s to make the level rise
-
-  - id: flood_gate
-    class: Gate
+        - [0.0, 90.0]
+        - [650000.0, 110.0]
+      inflow: 200.0
+  flood_gate:
+    type: Gate
     initial_state:
-      opening: 0.1     # Initially 10% open
+      opening: 0.12
     parameters:
-      width: 5.0              # meters
-      discharge_coefficient: 0.8
+      width: 6.0
+      discharge_coefficient: 0.78
+      max_opening: 1.0
+      max_rate_of_change: 0.3
+    message_bus:
+      enabled: true
+      action_topic: "action/gate/flood"
+      action_key: "opening"
