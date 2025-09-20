@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 """批量运行并验证 examples 目录下的全部示例."""
 import argparse
-import io
 import json
 import os
 import statistics
@@ -16,11 +15,16 @@ from typing import Any, Dict, Iterable, List, Mapping, MutableMapping, Sequence,
 os.environ["PYTHONIOENCODING"] = "utf-8"
 os.environ["PYTHONUTF8"] = "1"
 
-# 设置标准输出/错误编码为UTF-8
-if hasattr(sys.stdout, "buffer"):
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
-if hasattr(sys.stderr, "buffer"):
-    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
+# 设置标准输出/错误编码为UTF-8（尽量不更换底层文件对象，以免影响测试框架捕获）
+for _stream_name in ("stdout", "stderr"):
+    _stream = getattr(sys, _stream_name, None)
+    if _stream is None:
+        continue
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")  # type: ignore[attr-defined]
+    except (AttributeError, ValueError):
+        # 某些类文件对象不支持 reconfigure（例如 StringIO 或已经关闭的流），忽略即可
+        pass
 
 # 添加项目根目录到Python路径
 project_root = Path(__file__).parent.parent

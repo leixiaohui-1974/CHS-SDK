@@ -9,6 +9,9 @@ communicate only via a MessageBus.
 
 import sys
 import os
+from datetime import datetime
+from pathlib import Path
+
 import yaml
 import matplotlib.pyplot as plt
 import numpy as np
@@ -77,7 +80,7 @@ def create_agents(config, components, message_bus):
     for agent_name, agent_config in config['agents'].items():
         agent_type = agent_config['type']
         agent_id = agent_config['agent_id']
-        
+
         if agent_type == 'DigitalTwinAgent':
             simulated_object_name = agent_config['simulated_object']
             simulated_object = components[simulated_object_name]
@@ -92,37 +95,77 @@ def create_agents(config, components, message_bus):
             agents.append(agent)
             
         elif agent_type == 'LocalControlAgent':
-            # Create controller
-            controller_config = agent_config['controller']
-            if controller_config['type'] == 'PIDController':
-                params = controller_config['parameters']
+            controller_config = agent_config.get('controller', {})
+            controller_type = controller_config.get('type')
+            controller_params = controller_config.get('parameters', {})
+
+            if controller_type == 'PIDController':
                 controller = PIDController(
-                    Kp=params['Kp'],
-                    Ki=params['Ki'],
-                    Kd=params['Kd'],
-                    setpoint=params['setpoint'],
-                    min_output=params['min_output'],
-                    max_output=params['max_output']
+                    Kp=controller_params['Kp'],
+                    Ki=controller_params['Ki'],
+                    Kd=controller_params['Kd'],
+                    setpoint=controller_params['setpoint'],
+                    min_output=controller_params['min_output'],
+                    max_output=controller_params['max_output']
                 )
             else:
-                raise ValueError(f"Unknown controller type: {controller_config['type']}")
-            
-            # Create control agent
-            mb_config = agent_config['message_bus']
+                raise ValueError(f"Unknown controller type: {controller_type}")
+
+            mb_config = agent_config.get('message_bus', {})
+
+            target_component = agent_config.get('target_component') or mb_config.get('target_component')
+            if not target_component:
+                raise ValueError("LocalControlAgent configuration requires 'target_component'.")
+
+            control_type = agent_config.get('control_type', 'local_control')
+
+            data_sources = agent_config.get('data_sources')
+            if not data_sources:
+                primary_observation = mb_config.get('observation_topic') or topics.get('reservoir_state')
+                if not primary_observation:
+                    raise ValueError("LocalControlAgent requires at least one observation topic defined.")
+                data_sources = {'primary_data': primary_observation}
+
+            control_targets = agent_config.get('control_targets')
+            if not control_targets:
+                primary_action = mb_config.get('action_topic') or topics.get('gate_action')
+                if not primary_action:
+                    raise ValueError("LocalControlAgent requires at least one action topic defined.")
+                control_targets = {'primary_target': primary_action}
+
+            allocation_config = agent_config.get('allocation_config') or agent_config.get('allocation') or {}
+
+            resolved_controller_config = agent_config.get('controller_config') or {
+                'type': controller_type,
+                'parameters': controller_params,
+            }
+
+            observation_topic = mb_config.get('observation_topic', data_sources.get('primary_data'))
+            observation_key = mb_config.get('observation_key')
+            action_topic = mb_config.get('action_topic', control_targets.get('primary_target'))
+
             agent = LocalControlAgent(
                 agent_id=agent_id,
-                controller=controller,
                 message_bus=message_bus,
-                observation_topic=mb_config['observation_topic'],
-                observation_key=mb_config['observation_key'],
-                action_topic=mb_config['action_topic'],
-                dt=config['simulation']['dt']
+                dt=config['simulation']['dt'],
+                target_component=target_component,
+                control_type=control_type,
+                data_sources=data_sources,
+                control_targets=control_targets,
+                allocation_config=allocation_config,
+                controller_config=resolved_controller_config,
+                controller=controller,
+                observation_topic=observation_topic,
+                observation_key=observation_key,
+                action_topic=action_topic,
+                command_topic=mb_config.get('command_topic'),
+                feedback_topic=mb_config.get('feedback_topic')
             )
             agents.append(agent)
-            
+
         else:
             raise ValueError(f"Unknown agent type: {agent_type}")
-    
+
     return agents
 
 def extract_simulation_data(history):
@@ -152,31 +195,142 @@ def extract_simulation_data(history):
     }
 
 def analyze_results(config, data):
-    """Analyze simulation results."""
+    """Analyze simulation results and compute validation metrics."""
     print("\n--- Analyzing Results ---")
-    
-    if config['analysis']['final_state_report']:
-        target_level = config['analysis']['target_water_level']
-        final_level = data['reservoir_water_level'][-1] if data['reservoir_water_level'] else 0
-        final_volume = data['reservoir_volume'][-1] if data['reservoir_volume'] else 0
-        final_opening = data['gate_opening'][-1] if data['gate_opening'] else 0
-        
+
+    metrics = {}
+    analysis_config = config.get('analysis', {})
+
+    if analysis_config.get('final_state_report'):
+        target_level = analysis_config.get('target_water_level')
+        tolerance = analysis_config.get('steady_state_tolerance', 0.5)
+
+        final_level = data['reservoir_water_level'][-1] if data['reservoir_water_level'] else None
+        initial_level = data['reservoir_water_level'][0] if data['reservoir_water_level'] else None
+        final_volume = data['reservoir_volume'][-1] if data['reservoir_volume'] else None
+        final_opening = data['gate_opening'][-1] if data['gate_opening'] else None
+
         print(f"\n=== Multi-Agent System Performance Analysis ===")
-        print(f"Target water level: {target_level:.2f} m")
-        print(f"Final water level: {final_level:.2f} m")
-        print(f"Final reservoir volume: {final_volume:.0f} m³")
-        print(f"Final gate opening: {final_opening:.3f}")
-        
+        if target_level is not None:
+            print(f"Target water level: {target_level:.2f} m")
+        if final_level is not None:
+            print(f"Final water level: {final_level:.2f} m")
+        if final_volume is not None:
+            print(f"Final reservoir volume: {final_volume:.0f} m³")
+        if final_opening is not None:
+            print(f"Final gate opening: {final_opening:.3f}")
+
         # Calculate steady-state error
-        steady_state_error = abs(final_level - target_level)
-        print(f"Steady-state error: {steady_state_error:.3f} m")
-        
-        # Performance validation
-        print("\n=== Control Performance Validation ===")
-        if steady_state_error < 0.5:
-            print("✓ PASS: Steady-state error is acceptable (< 0.5 m)")
+        if target_level is not None and final_level is not None:
+            steady_state_error = abs(final_level - target_level)
         else:
-            print("✗ FAIL: Steady-state error is too large (>= 0.5 m)")
+            steady_state_error = None
+
+        if steady_state_error is not None:
+            print(f"Steady-state error: {steady_state_error:.3f} m")
+
+        min_level = min(data['reservoir_water_level']) if data['reservoir_water_level'] else None
+        max_level = max(data['reservoir_water_level']) if data['reservoir_water_level'] else None
+
+        metrics = {
+            'target_level': target_level,
+            'final_level': final_level,
+            'initial_level': initial_level,
+            'final_volume': final_volume,
+            'final_opening': final_opening,
+            'steady_state_error': steady_state_error,
+            'tolerance': tolerance,
+            'min_level': min_level,
+            'max_level': max_level,
+        }
+
+        print("\n=== Control Performance Validation ===")
+        if steady_state_error is not None and steady_state_error <= tolerance:
+            print("✓ PASS: Steady-state error is acceptable (≤ tolerance)")
+            score = 1.0
+        else:
+            print("✗ FAIL: Steady-state error exceeds tolerance")
+            score = 0.0
+
+        metrics['score'] = score
+        metrics['status'] = 'PASS' if score >= 1.0 else 'FAIL'
+
+        if min_level is not None and max_level is not None:
+            print(f"Water level range during simulation: {min_level:.2f} m – {max_level:.2f} m")
+
+    return metrics
+
+
+def generate_markdown_report(config, data, metrics, output_path):
+    """Generate a Markdown report summarizing simulation validation results."""
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    analysis_config = config.get('analysis', {})
+    simulation_config = config.get('simulation', {})
+
+    duration = simulation_config.get('duration')
+    dt = simulation_config.get('dt')
+
+    water_levels = data.get('reservoir_water_level', [])
+    gate_openings = data.get('gate_opening', [])
+
+    initial_level = metrics.get('initial_level') if metrics else (water_levels[0] if water_levels else None)
+    final_level = metrics.get('final_level') if metrics else (water_levels[-1] if water_levels else None)
+    steady_state_error = metrics.get('steady_state_error') if metrics else None
+    target_level = metrics.get('target_level') if metrics else analysis_config.get('target_water_level')
+    tolerance = metrics.get('tolerance') if metrics else analysis_config.get('steady_state_tolerance', 0.5)
+    score = metrics.get('score') if metrics else None
+
+    min_level = metrics.get('min_level') if metrics else (min(water_levels) if water_levels else None)
+    max_level = metrics.get('max_level') if metrics else (max(water_levels) if water_levels else None)
+
+    min_gate = min(gate_openings) if gate_openings else None
+    max_gate = max(gate_openings) if gate_openings else None
+
+    timestamp = datetime.now().astimezone().isoformat(timespec='seconds')
+
+    lines = [
+        "# 事件驱动智能体示例自动验证报告",
+        "",
+        "本报告由 `run_config.py` 自动生成，用于记录 `agent_based/03_event_driven_agents` 示例的仿真验证结果。",
+        "",
+        "## 仿真配置",
+        f"- 仿真时长：{duration} s" if duration is not None else "- 仿真时长：未配置",
+        f"- 时间步长：{dt} s" if dt is not None else "- 时间步长：未配置",
+        f"- 观测主题：{analysis_config.get('observation_topic', 'state.reservoir.level')}",
+        f"- 动作主题：{analysis_config.get('action_topic', 'action.gate.opening')}",
+        "",
+        "## 核心结果",
+        "| 指标 | 数值 |",
+        "| --- | --- |",
+        f"| 初始水位 | {initial_level:.3f} m |" if initial_level is not None else "| 初始水位 | 未记录 |",
+        f"| 目标水位 | {target_level:.3f} m |" if target_level is not None else "| 目标水位 | 未设置 |",
+        f"| 最终水位 | {final_level:.3f} m |" if final_level is not None else "| 最终水位 | 未记录 |",
+        f"| 稳态误差 | {steady_state_error:.3f} m |" if steady_state_error is not None else "| 稳态误差 | 未计算 |",
+        f"| 水位范围 | {min_level:.3f} m – {max_level:.3f} m |" if min_level is not None and max_level is not None else "| 水位范围 | 未记录 |",
+        f"| 闸门开度范围 | {min_gate:.3f} – {max_gate:.3f} |" if min_gate is not None and max_gate is not None else "| 闸门开度范围 | 未记录 |",
+        "",
+        "## 验证与评分",
+    ]
+
+    if score is not None:
+        lines.extend([
+            f"- 稳态误差容差：{tolerance:.3f} m",
+            f"- 评分：{score:.3f} （1.000 表示完全通过）",
+            f"- 验证结论：{'通过 ✅' if score >= 1.0 else '未通过 ❌'}",
+        ])
+    else:
+        lines.append("- 未计算评分。")
+
+    lines.extend([
+        "",
+        "## 运行环境",
+        f"- 报告生成时间：{timestamp}",
+    ])
+
+    output_path.write_text("\n".join(lines), encoding='utf-8')
+    print(f"Markdown report saved to '{output_path}'")
 
 def generate_plots(config, data):
     """Generate visualization plots."""
@@ -224,7 +378,8 @@ def run_simulation(config):
     
     # Create simulation harness
     simulation_config = {
-        'duration': config['simulation']['duration'],
+        'start_time': config['simulation'].get('start_time', 0),
+        'end_time': config['simulation']['duration'],
         'dt': config['simulation']['dt']
     }
     harness = SimulationHarness(config=simulation_config)
@@ -268,11 +423,16 @@ def main():
     
     # Extract and analyze data
     data = extract_simulation_data(harness.history)
-    analyze_results(config, data)
-    
+    metrics = analyze_results(config, data)
+
     # Generate visualization
     generate_plots(config, data)
-    
+
+    analysis_config = config.get('analysis', {})
+    report_filename = analysis_config.get('report_filename', 'event_driven_agents_report.md')
+    report_path = Path(__file__).with_name(report_filename)
+    generate_markdown_report(config, data, metrics, report_path)
+
     print("\n=== Multi-Agent System Example Complete ===")
     print(f"Configuration: {config_path}")
     print(f"Simulation duration: {config['simulation']['duration']} seconds")

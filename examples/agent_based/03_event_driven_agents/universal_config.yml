@@ -1,9 +1,17 @@
 agents:
   control_agent_gate_1:
     agent_id: control_agent_gate_1
+    target_component: gate_1
+    control_type: gate_control
+    data_sources:
+      primary_data: state.reservoir.level
+    control_targets:
+      primary_target: action.gate.opening
+    allocation:
+      strategy: single_actuator
     controller:
       parameters:
-        Kd: -0.1
+        Kd: -0.3
         Ki: -0.01
         Kp: -0.5
         max_output: 1.0
@@ -14,6 +22,7 @@ agents:
       action_topic: action.gate.opening
       observation_key: water_level
       observation_topic: state.reservoir.level
+      target_component: gate_1
     type: LocalControlAgent
   twin_agent_reservoir_1:
     agent_id: twin_agent_reservoir_1
@@ -24,6 +33,10 @@ agents:
 analysis:
   final_state_report: true
   target_water_level: 12.0
+  steady_state_tolerance: 0.6
+  report_filename: event_driven_agents_report.md
+  observation_topic: state.reservoir.level
+  action_topic: action.gate.opening
 communication:
   topics:
     gate_action: action.gate.opening
@@ -38,7 +51,7 @@ components:
     parameters:
       discharge_coefficient: 0.6
       max_opening: 1.0
-      max_rate_of_change: 0.1
+      max_rate_of_change: 0.05
       width: 10
     type: Gate
   reservoir_1:
@@ -66,7 +79,7 @@ runtime:
   mode: simulation
 simulation:
   dt: 1.0
-  duration: 300
+  duration: 40000
 visualization:
   enabled: true
   plots:
