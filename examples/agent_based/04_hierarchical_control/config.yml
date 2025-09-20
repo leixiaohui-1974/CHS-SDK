@@ -1,0 +1,128 @@
+# Hierarchical Control MAS Simulation Configuration
+# Demonstrates supervisory rule-based control coordinating a local PID gate controller.
+
+simulation:
+  duration: 500        # seconds
+  dt: 1.0              # time step (s)
+  time_step: 1.0
+
+communication:
+  topics:
+    reservoir_state: "state.reservoir.level"
+    gate_state: "state.gate.gate_1"
+    gate_action: "action.gate.opening"
+    gate_command: "command.gate1.setpoint"
+
+components:
+  reservoir_1:
+    type: Reservoir
+    initial_state:
+      volume: 1520000        # m³ (1.52e6)
+      water_level: 19.0      # m
+    parameters:
+      surface_area: 80000    # m² (8.0e4)
+      storage_curve:
+        - [0, 0]
+        - [2000000, 22]
+
+  gate_1:
+    type: Gate
+    initial_state:
+      opening: 0.1           # Initial opening (m)
+    parameters:
+      max_rate_of_change: 0.75
+      discharge_coefficient: 0.75
+      width: 12              # m
+      max_opening: 5.0       # m
+    message_bus:
+      enabled: true
+      action_topic: "action.gate.opening"
+      action_key: "control_signal"
+
+agents:
+  twin_reservoir_1:
+    type: DigitalTwinAgent
+    agent_id: "twin_reservoir_1"
+    simulated_object: "reservoir_1"
+    message_bus:
+      state_topic: "state.reservoir.level"
+
+  twin_gate_1:
+    type: DigitalTwinAgent
+    agent_id: "twin_gate_1"
+    simulated_object: "gate_1"
+    message_bus:
+      state_topic: "state.gate.gate_1"
+
+  lca_gate_1:
+    type: LocalControlAgent
+    agent_id: "lca_gate_1"
+    target_component: "gate_1"
+    control_type: "gate_control"
+    data_sources:
+      primary_data: "state.reservoir.level"
+    control_targets:
+      primary_target: "action.gate.opening"
+    allocation:
+      strategy: "single_actuator"
+    controller:
+      type: PIDController
+      parameters:
+        Kp: -0.8
+        Ki: -0.1
+        Kd: -0.2
+        setpoint: 15.0
+        min_output: 0.0
+        max_output: 5.0
+    message_bus:
+      observation_topic: "state.reservoir.level"
+      observation_key: "water_level"
+      action_topic: "action.gate.opening"
+      command_topic: "command.gate1.setpoint"
+      feedback_topic: "state.gate.gate_1"
+      target_component: "gate_1"
+    logging:
+      log_observations: false
+
+  dispatcher_1:
+    type: CentralDispatcherAgent
+    agent_id: "dispatcher_1"
+    mode: "rule"
+    subscribed_topic: "state.reservoir.level"
+    observation_key: "water_level"
+    command_topic: "command.gate1.setpoint"
+    dispatcher_params:
+      low_level: 12.0
+      high_level: 18.0
+      low_setpoint: 15.0
+      high_setpoint: 12.0
+
+connections:
+  - from: "reservoir_1"
+    to: "gate_1"
+
+analysis:
+  final_state_report: true
+  target_water_level: 15.0
+  steady_state_tolerance: 0.1
+  observation_topic: "state.reservoir.level"
+  action_topic: "action.gate.opening"
+  report_filename: "hierarchical_control_report.md"
+
+visualization:
+  enabled: true
+  save_path: "04_hierarchical_results.png"
+  plots:
+    - title: "Reservoir Water Level vs Time"
+      x_data: "time"
+      y_data: "reservoir_water_level"
+      ylabel: "Water Level (m)"
+      target_line: 15.0
+    - title: "Gate Opening vs Time"
+      x_data: "time"
+      y_data: "gate_opening"
+      ylabel: "Gate Opening (m)"
+    - title: "Reservoir Volume vs Time"
+      x_data: "time"
+      y_data: "reservoir_volume"
+      ylabel: "Volume (m³)"

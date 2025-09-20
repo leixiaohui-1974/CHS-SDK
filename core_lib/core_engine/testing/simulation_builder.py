@@ -80,11 +80,17 @@ class SimulationBuilder:
         
         return reservoir
     
-    def add_gate(self, 
+    def add_gate(self,
                  component_id: str,
                  opening: float = 0.5,
                  max_flow_rate: float = 100.0,
-                 control_topic: Optional[str] = None) -> Gate:
+                 max_rate_of_change: float = 0.2,
+                 discharge_coefficient: float = 0.6,
+                 width: float = 10.0,
+                 max_opening: float = 1.0,
+                 control_topic: Optional[str] = None,
+                 action_key: str = 'opening',
+                 additional_parameters: Optional[Dict[str, Any]] = None) -> Gate:
         """
         Add a gate component to the simulation.
         
@@ -98,11 +104,26 @@ class SimulationBuilder:
             The created Gate object
         """
         initial_state = {'opening': opening, 'outflow': 0}
-        parameters = {'max_flow_rate': max_flow_rate}
-        
+        parameters = {
+            'max_flow_rate': max_flow_rate,
+            'max_rate_of_change': max_rate_of_change,
+            'discharge_coefficient': discharge_coefficient,
+            'width': width,
+            'max_opening': max_opening,
+        }
+
+        if additional_parameters:
+            parameters.update(additional_parameters)
+
         if control_topic:
-            gate = Gate(component_id, initial_state, parameters, 
-                       self.harness.message_bus, control_topic)
+            gate = Gate(
+                component_id,
+                initial_state,
+                parameters,
+                self.harness.message_bus,
+                control_topic,
+                action_key=action_key,
+            )
         else:
             gate = Gate(component_id, initial_state, parameters)
             
