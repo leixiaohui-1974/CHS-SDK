@@ -1,0 +1,29 @@
+components:
+  reservoir_1:
+    type: Reservoir
+    initial_state:
+      water_level: 12.0
+      volume: 180000.0
+    parameters:
+      surface_area: 15000.0
+      storage_curve:
+        - [0, 0]
+        - [300000, 20.0]
+      inflow: 45.0
+    message_bus:
+      enabled: true
+      inflow_topic: disturbance.rainfall.inflow
+
+  gate_1:
+    type: Gate
+    initial_state:
+      opening: 0.1
+    parameters:
+      max_rate_of_change: 0.35
+      discharge_coefficient: 0.76
+      width: 8.5
+      max_opening: 2.5
+    message_bus:
+      enabled: true
+      action_topic: action.gate.opening
+      action_key: control_signal

@@ -1,0 +1,214 @@
+project:
+  category: agent_based
+  name: 05_complex_networks
+  description: 通用运行器配置，多水库分支网络协同控制
+  version: '1.0'
+
+simulation:
+  dt: 1.0
+  duration: 2400
+  end_time: 2400
+  time_step: 1.0
+
+runtime:
+  mode: simulation
+  logging_level: INFO
+
+communication:
+  topics:
+    res1_state: state.res1.level
+    res2_state: state.res2.level
+    g1_state: state.g1.opening
+    g2_state: state.g2.opening
+    g1_action: action.g1.opening
+    g2_action: action.g2.opening
+    res1_command: command.res1.setpoint
+
+components:
+  res1:
+    type: Reservoir
+    initial_state:
+      water_level: 9.2
+      volume: 1104000
+    parameters:
+      surface_area: 120000
+      storage_curve:
+        - [0, 0]
+        - [1200000, 10.0]
+      inflow: 5.0
+
+  g1:
+    type: Gate
+    initial_state:
+      opening: 0.12
+    parameters:
+      max_rate_of_change: 0.25
+      discharge_coefficient: 0.62
+      width: 9.5
+      max_opening: 1.0
+    message_bus:
+      enabled: true
+      action_topic: action.g1.opening
+      action_key: control_signal
+
+  trib_chan:
+    type: RiverChannel
+    initial_state:
+      volume: 400000
+      water_level: 3.2
+    parameters:
+      k: 0.00032
+
+  res2:
+    type: Reservoir
+    initial_state:
+      water_level: 14.5
+      volume: 1450000
+    parameters:
+      surface_area: 100000
+      storage_curve:
+        - [0, 0]
+        - [1600000, 16.0]
+      inflow: 8.0
+
+  g2:
+    type: Gate
+    initial_state:
+      opening: 0.12
+    parameters:
+      max_rate_of_change: 0.22
+      discharge_coefficient: 0.60
+      width: 11.5
+      max_opening: 1.0
+    message_bus:
+      enabled: true
+      action_topic: action.g2.opening
+      action_key: control_signal
+
+  main_chan:
+    type: RiverChannel
+    initial_state:
+      volume: 500000
+      water_level: 6.0
+    parameters:
+      k: 0.00026
+
+  g3:
+    type: Gate
+    initial_state:
+      opening: 0.45
+    parameters:
+      discharge_coefficient: 0.58
+      width: 16.0
+
+connections:
+  - from: res1
+    to: g1
+  - from: g1
+    to: trib_chan
+  - from: res2
+    to: g2
+  - from: trib_chan
+    to: main_chan
+  - from: g2
+    to: main_chan
+  - from: main_chan
+    to: g3
+
+agents:
+  twin_res1:
+    type: DigitalTwinAgent
+    agent_id: twin_res1
+    simulated_object: res1
+    message_bus:
+      state_topic: state.res1.level
+
+  twin_res2:
+    type: DigitalTwinAgent
+    agent_id: twin_res2
+    simulated_object: res2
+    message_bus:
+      state_topic: state.res2.level
+
+  twin_g1:
+    type: DigitalTwinAgent
+    agent_id: twin_g1
+    simulated_object: g1
+    message_bus:
+      state_topic: state.g1.opening
+
+  twin_g2:
+    type: DigitalTwinAgent
+    agent_id: twin_g2
+    simulated_object: g2
+    message_bus:
+      state_topic: state.g2.opening
+
+  lca_g1:
+    type: LocalControlAgent
+    agent_id: lca_g1
+    target_component: g1
+    control_type: gate_control
+    data_sources:
+      primary_data: state.res1.level
+    control_targets:
+      primary_target: action.g1.opening
+    controller:
+      type: PIDController
+      parameters:
+        Kp: -0.6
+        Ki: -0.07
+        Kd: -0.12
+        setpoint: 8.0
+        min_output: 0.0
+        max_output: 1.0
+    message_bus:
+      observation_topic: state.res1.level
+      observation_key: water_level
+      action_topic: action.g1.opening
+      command_topic: command.res1.setpoint
+
+  lca_g2:
+    type: LocalControlAgent
+    agent_id: lca_g2
+    target_component: g2
+    control_type: gate_control
+    data_sources:
+      primary_data: state.res2.level
+    control_targets:
+      primary_target: action.g2.opening
+    controller:
+      type: PIDController
+      parameters:
+        Kp: -0.55
+        Ki: -0.06
+        Kd: -0.11
+        setpoint: 12.8
+        min_output: 0.0
+        max_output: 1.0
+    message_bus:
+      observation_topic: state.res2.level
+      observation_key: water_level
+      action_topic: action.g2.opening
+      command_topic: command.res2.setpoint
+
+  dispatcher:
+    type: CentralDispatcherAgent
+    agent_id: central_dispatcher
+    mode: rule
+    subscribed_topic: state.res1.level
+    observation_key: water_level
+    command_topic: command.res1.setpoint
+    dispatcher_params:
+      low_level: 7.8
+      high_level: 8.6
+      low_setpoint: 8.1
+      high_setpoint: 7.9
+
+analysis:
+  final_state_report: true
+  steady_state_tolerance: 0.15
+  target_levels:
+    res1: 8.0
+    res2: 12.8
+  report_filename: complex_networks_report.md

@@ -19,41 +19,47 @@ from core_lib.local_agents.control.local_control_agent import LocalControlAgent
 from core_lib.local_agents.perception.digital_twin_agent import DigitalTwinAgent
 from core_lib.central_coordination.dispatch.central_dispatcher import CentralDispatcherAgent
 
+
 def create_hierarchical_control_system():
     """
     Creates a hierarchical control system using SimulationBuilder.
-    
+
     Returns:
         SimulationBuilder: Configured simulation builder
     """
     # Initialize builder with simulation configuration
-    config = {'duration': 500, 'dt': 1.0}
+    config = {'duration': 500, 'end_time': 500, 'dt': 1.0}
     builder = SimulationBuilder(config)
-    
+
     # Communication topics
     RESERVOIR_STATE_TOPIC = "state.reservoir.level"
     GATE_STATE_TOPIC = "state.gate.gate_1"
     GATE_ACTION_TOPIC = "action.gate.opening"
     GATE_COMMAND_TOPIC = "command.gate1.setpoint"
-    
+
     # Add physical components using builder methods
     builder.add_reservoir(
         component_id="reservoir_1",
         water_level=19.0,
-        surface_area=1.5e6,
-        volume=28.5e6
+        surface_area=8.0e4,
+        volume=1.52e6
     )
-    
+
     builder.add_gate(
         component_id="gate_1",
         opening=0.1,
         max_flow_rate=100.0,
-        control_topic=GATE_ACTION_TOPIC
+        max_rate_of_change=0.75,
+        discharge_coefficient=0.75,
+        width=12.0,
+        max_opening=5.0,
+        control_topic=GATE_ACTION_TOPIC,
+        action_key='control_signal'
     )
-    
+
     # Connect components
     builder.connect_components([("reservoir_1", "gate_1")])
-    
+
     # Add digital twin agents
     reservoir_twin = DigitalTwinAgent(
         agent_id="twin_reservoir_1",
@@ -61,14 +67,14 @@ def create_hierarchical_control_system():
         message_bus=builder.harness.message_bus,
         state_topic=RESERVOIR_STATE_TOPIC
     )
-    
+
     gate_twin = DigitalTwinAgent(
         agent_id="twin_gate_1",
         simulated_object=builder.get_component("gate_1"),
         message_bus=builder.harness.message_bus,
         state_topic=GATE_STATE_TOPIC
     )
-    
+
     # Add PID controller and local control agent
     pid = PIDController(
         Kp=-0.8, Ki=-0.1, Kd=-0.2,
@@ -76,19 +82,28 @@ def create_hierarchical_control_system():
         min_output=0.0,
         max_output=5.0
     )
-    
+
     lca = LocalControlAgent(
         agent_id="lca_gate_1",
-        controller=pid,
         message_bus=builder.harness.message_bus,
+        dt=config['dt'],
+        target_component="gate_1",
+        control_type="gate_control",
+        data_sources={"primary_data": RESERVOIR_STATE_TOPIC},
+        control_targets={"primary_target": GATE_ACTION_TOPIC},
+        allocation_config={},
+        controller_config={
+            'type': 'PIDController',
+            'parameters': {'Kp': -0.8, 'Ki': -0.1, 'Kd': -0.2, 'setpoint': 15.0}
+        },
+        controller=pid,
         observation_topic=RESERVOIR_STATE_TOPIC,
         observation_key='water_level',
         action_topic=GATE_ACTION_TOPIC,
-        dt=config['dt'],
         command_topic=GATE_COMMAND_TOPIC,
         feedback_topic=GATE_STATE_TOPIC
     )
-    
+
     # Add central dispatcher
     dispatcher = CentralDispatcherAgent(
         agent_id="dispatcher_1",
@@ -104,34 +119,35 @@ def create_hierarchical_control_system():
             "high_setpoint": 12.0
         }
     )
-    
+
     # Add all agents to the builder
     builder.add_agent(reservoir_twin)
     builder.add_agent(gate_twin)
     builder.add_agent(lca)
     builder.add_agent(dispatcher)
-    
+
     return builder
+
 
 def run_hierarchical_simulation():
     """
     Sets up and runs the hierarchical control simulation.
     """
     print("\n--- Setting up Hierarchical Control Simulation (Refactored) ---")
-    
+
     # Create the simulation system
     builder = create_hierarchical_control_system()
-    
+
     # Build and run the simulation
     builder.build()
-    
+
     print("\n--- Running Hierarchical Simulation ---")
     builder.run_mas_simulation()
     print("\n--- Simulation Complete ---")
-    
+
     # Print final results
     builder.print_final_states()
-    
+
     # Get specific final values
     history = builder.get_history()
     if history:
@@ -139,6 +155,7 @@ def run_hierarchical_simulation():
         final_opening = history[-1]['gate_1']['opening']
         print(f"\nFinal reservoir water level: {final_level:.2f} m")
         print(f"Final gate opening: {final_opening:.2f} m")
+
 
 if __name__ == "__main__":
     run_hierarchical_simulation()

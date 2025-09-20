@@ -1,0 +1,72 @@
+components:
+  res1:
+    type: Reservoir
+    initial_state:
+      water_level: 9.2
+      volume: 1104000
+    parameters:
+      surface_area: 120000
+      storage_curve:
+        - [0, 0]
+        - [1200000, 10.0]
+      inflow: 5.0
+
+  g1:
+    type: Gate
+    initial_state:
+      opening: 0.12
+    parameters:
+      max_rate_of_change: 0.25
+      discharge_coefficient: 0.62
+      width: 9.5
+    message_bus:
+      enabled: true
+      action_topic: action.g1.opening
+
+  trib_chan:
+    type: RiverChannel
+    initial_state:
+      volume: 400000
+      water_level: 3.2
+    parameters:
+      k: 0.00032
+
+  res2:
+    type: Reservoir
+    initial_state:
+      water_level: 14.5
+      volume: 1450000
+    parameters:
+      surface_area: 100000
+      storage_curve:
+        - [0, 0]
+        - [1600000, 16.0]
+      inflow: 8.0
+
+  g2:
+    type: Gate
+    initial_state:
+      opening: 0.12
+    parameters:
+      max_rate_of_change: 0.22
+      discharge_coefficient: 0.60
+      width: 11.5
+    message_bus:
+      enabled: true
+      action_topic: action.g2.opening
+
+  main_chan:
+    type: RiverChannel
+    initial_state:
+      volume: 500000
+      water_level: 6.0
+    parameters:
+      k: 0.00026
+
+  g3:
+    type: Gate
+    initial_state:
+      opening: 0.45
+    parameters:
+      discharge_coefficient: 0.58
+      width: 16.0
