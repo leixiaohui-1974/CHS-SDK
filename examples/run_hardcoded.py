@@ -26,6 +26,7 @@ os.environ['PYTHONUTF8'] = '1'
 import sys
 import argparse
 import time
+import json
 import math
 import numbers
 import statistics
@@ -1098,12 +1099,32 @@ class ExamplesHardcodedRunner:
         
         return harness
     
+    def _extract_performance_summary(self, stdout: str):
+        """从标准输出中提取性能评估摘要。"""
+
+        marker = "__PERFORMANCE_SUMMARY__="
+        if not stdout:
+            return None
+
+        for line in reversed(stdout.splitlines()):
+            if marker in line:
+                payload = line.split(marker, 1)[1].strip()
+                if not payload:
+                    continue
+                try:
+                    summary = json.loads(payload)
+                except json.JSONDecodeError:
+                    continue
+                if isinstance(summary, dict):
+                    return summary
+        return None
+
     def run_distributed_digital_twin_example(self, example_key):
         """运行distributed_digital_twin_simulation系列示例"""
         import subprocess
         import sys
         from pathlib import Path
-        
+
         # 提取脚本名称
         script_name = example_key.split('/')[-1] + '.py'
         script_path = Path(__file__).parent / 'distributed_digital_twin_simulation' / script_name
@@ -1131,12 +1152,15 @@ class ExamplesHardcodedRunner:
                 timeout=timeout_seconds
             )
             
+            performance_summary = None
+
             if result.returncode == 0:
                 print("脚本执行成功")
                 if result.stdout:
                     print("输出:")
                     print(result.stdout)
-                return True
+                    performance_summary = self._extract_performance_summary(result.stdout)
+                return True, performance_summary
             else:
                 print(f"脚本执行失败，返回码: {result.returncode}")
                 if result.stderr:
@@ -1145,14 +1169,14 @@ class ExamplesHardcodedRunner:
                 if result.stdout:
                     print("输出:")
                     print(result.stdout)
-                return False
-                
+                return False, None
+
         except subprocess.TimeoutExpired:
             print("脚本执行超时")
-            return False
+            return False, None
         except Exception as e:
             print(f"运行脚本时发生异常: {e}")
-            return False
+            return False, None
     
     def run_example(self, example_key):
         """运行指定示例"""
@@ -1187,16 +1211,31 @@ class ExamplesHardcodedRunner:
                 harness = self.create_identification_simulation(example_key)
             elif example_key.startswith("distributed_digital_twin_simulation/"):
                 # 处理distributed_digital_twin_simulation系列示例
-                success = self.run_distributed_digital_twin_example(example_key)
+                success, performance_summary = self.run_distributed_digital_twin_example(example_key)
                 validation = {
                     "example": example_key,
-                    "validated": False,
+                    "validated": bool(performance_summary),
                     "valid": success,
-                    "issues": [
-                        "分布式数字孪生脚本示例通过子进程运行，当前无法自动检验输出数据，已跳过结果合理性检查"
-                    ],
-                    "metrics": {}
+                    "issues": [],
+                    "metrics": performance_summary or {}
                 }
+                if not performance_summary:
+                    validation["validated"] = False
+                    validation["issues"].append(
+                        "分布式数字孪生脚本示例通过子进程运行，当前无法自动检验输出数据，已跳过结果合理性检查"
+                    )
+                else:
+                    reason_metrics = performance_summary.get("reasonableness")
+                    if isinstance(reason_metrics, dict):
+                        score = reason_metrics.get("score")
+                        if isinstance(score, (int, float)) and float(score) < 0.8:
+                            validation["valid"] = False
+                            validation["issues"].append(
+                                f"合理性得分低于阈值: {float(score):.3f}"
+                            )
+                if validation["valid"] and not success:
+                    validation["issues"].append("脚本运行失败")
+
                 self.last_run_summary = {
                     "example": example_key,
                     "display_name": example.get("name", example_key),
@@ -1206,7 +1245,7 @@ class ExamplesHardcodedRunner:
                     "error": None
                 }
                 self.run_history.append(dict(self.last_run_summary))
-                if success:
+                if not validation["validated"]:
                     print("[验证] 分布式脚本示例暂不支持自动结果校验，请人工检查日志输出。")
                 return success
             else:

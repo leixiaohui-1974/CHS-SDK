@@ -1,483 +1,318 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-综合扰动测试脚本
-测试物理扰动和网络扰动的组合效果
-"""
+"""综合扰动测试脚本，验证物理与网络扰动叠加下的水位控制精度。"""
 
-import sys
+from __future__ import annotations
+
+import json
 import os
-import time
-import logging
-import threading
-from typing import Dict, Any, List
+import sys
+from dataclasses import dataclass
+from typing import Dict, List
 
-# 添加项目根目录到Python路径
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
+# 将项目根目录加入路径，便于在示例中直接导入核心模块
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+sys.path.insert(0, PROJECT_ROOT)
 
 from core_lib.core_engine.testing.enhanced_simulation_harness import EnhancedSimulationHarness
-from core_lib.disturbances.disturbance_framework import InflowDisturbance, DisturbanceConfig, DisturbanceType
-
-# 配置日志
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+from core_lib.disturbances.disturbance_framework import (
+    DisturbanceConfig,
+    DisturbanceType,
+    InflowDisturbance,
 )
-logger = logging.getLogger(__name__)
+from core_lib.local_agents.control.pid_controller import PIDController
+from core_lib.physical_objects.gate import Gate
+from core_lib.physical_objects.reservoir import Reservoir
 
-class MockReservoir:
-    """模拟水库类"""
-    
-    def __init__(self, reservoir_id: str, initial_level: float = 100.0, capacity: float = 1000.0):
-        self.reservoir_id = reservoir_id
-        self.water_level = initial_level
-        self.capacity = capacity
-        self.inflow = 0.0
-        self.outflow = 0.0
-        
-    def step(self, dt: float, inflow: float = 0.0, **kwargs):
-        """仿真步进"""
-        self.inflow = inflow
-        
-        # 简单的水位计算
-        net_flow = self.inflow - self.outflow
-        self.water_level += net_flow * dt / 100.0  # 简化的水位变化
-        
-        # 限制水位范围
-        self.water_level = max(0, min(self.capacity, self.water_level))
-        
-        # 根据水位计算出流
-        self.outflow = max(0, self.water_level * 0.1)  # 简化的出流计算
-    
-    def get_state(self) -> Dict[str, Any]:
-        """获取状态"""
-        return {
-            'water_level': self.water_level,
-            'inflow': self.inflow,
-            'outflow': self.outflow,
-            'capacity': self.capacity
-        }
 
-class MockGate:
-    """模拟闸门类"""
-    
-    def __init__(self, gate_id: str, initial_opening: float = 0.5):
-        self.gate_id = gate_id
-        self.opening = initial_opening  # 开度 0-1
-        self.inflow = 0.0
-        self.outflow = 0.0
-        
-    def step(self, dt: float, inflow: float = 0.0, opening: float = None, **kwargs):
-        """仿真步进"""
-        self.inflow = inflow
-        
-        if opening is not None:
-            self.opening = max(0, min(1, opening))
-        
-        # 根据开度和入流计算出流
-        self.outflow = self.inflow * self.opening
-    
-    def get_state(self) -> Dict[str, Any]:
-        """获取状态"""
-        return {
-            'opening': self.opening,
-            'inflow': self.inflow,
-            'outflow': self.outflow
-        }
+# === 场景参数 ===
+BASE_INFLOW = 100.0  # m³/s 基础入流
+DISTURBANCE_INFLOW = 140.0  # m³/s 扰动入流
+TARGET_LEVEL = 15.0  # m 控制目标水位
+SIM_DURATION = 1800.0  # s 总仿真时长
+DT = 1.0  # s 仿真步长
+CONTROL_TOLERANCE = 0.015  # m 允许水位最大偏差（1.5 cm）
 
-class MockAgent:
-    """模拟智能体类"""
-    
-    def __init__(self, agent_id: str, message_bus=None):
-        self.agent_id = agent_id
-        self.message_bus = message_bus
-        self.received_messages = []
-        self.sent_messages = []
-        self.perception_data = {}
-        self.decision_data = {}
-        
-        # 网络扰动相关属性
-        self._disturbance_delay = 0.0
-        self._disturbance_jitter = 0.0
-        self._disturbance_packet_loss = 0.0
-        
-    def set_message_bus(self, message_bus):
-        """设置消息总线"""
-        self.message_bus = message_bus
-        
-    def perceive(self):
-        """感知阶段"""
-        # 模拟感知过程
-        self.perception_data = {
-            'timestamp': time.time(),
-            'agent_id': self.agent_id,
-            'status': 'perceiving'
-        }
-        
-        # 订阅相关主题
-        if self.message_bus:
-            self.message_bus.subscribe(f"perception/{self.agent_id}", self._handle_perception_message)
-            self.message_bus.subscribe("global/status", self._handle_global_message)
-    
-    def decide(self):
-        """决策阶段"""
-        # 模拟决策过程
-        self.decision_data = {
-            'timestamp': time.time(),
-            'agent_id': self.agent_id,
-            'decision': f"action_{len(self.sent_messages)}",
-            'based_on_perception': self.perception_data
-        }
-    
-    def act(self):
-        """执行阶段"""
-        # 发送消息
-        if self.message_bus:
-            message = {
-                'sender': self.agent_id,
-                'timestamp': time.time(),
-                'content': self.decision_data,
-                'message_id': f"{self.agent_id}_{len(self.sent_messages)}"
-            }
-            
-            # 发送到不同主题
-            self.message_bus.publish(f"action/{self.agent_id}", message)
-            self.message_bus.publish("global/coordination", message)
-            
-            self.sent_messages.append(message)
-    
-    def _handle_perception_message(self, message: Dict[str, Any]):
-        """处理感知消息"""
-        self.received_messages.append({
-            'type': 'perception',
-            'message': message,
-            'received_at': time.time()
-        })
-    
-    def _handle_global_message(self, message: Dict[str, Any]):
-        """处理全局消息"""
-        self.received_messages.append({
-            'type': 'global',
-            'message': message,
-            'received_at': time.time()
-        })
 
-def test_physical_and_network_disturbances():
-    """测试物理扰动和网络扰动的组合效果"""
-    logger.info("=== 开始综合扰动测试 ===")
-    
-    # 创建增强仿真框架配置
+@dataclass
+class SimulationArtifacts:
+    """记录关键结果，便于调用方或单测进一步使用。"""
+
+    level_history: List[float]
+    inflow_history: List[float]
+    gate_openings: List[float]
+    max_level_deviation: float
+    network_stats: Dict[str, Dict[str, float]]
+
+
+class InvertedSignalPID(PIDController):
+    """在基础 PID 上叠加偏置，使水位高于设定值时自动增大闸门开度。"""
+
+    def __init__(
+        self,
+        Kp: float,
+        Ki: float,
+        Kd: float,
+        setpoint: float,
+        min_opening: float,
+        max_opening: float,
+        base_opening: float,
+    ) -> None:
+        self._base_opening = base_opening
+        self._final_min = min_opening
+        self._final_max = max_opening
+        super().__init__(
+            Kp=Kp,
+            Ki=Ki,
+            Kd=Kd,
+            setpoint=-setpoint,
+            min_output=min_opening - base_opening,
+            max_output=max_opening - base_opening,
+        )
+
+    def compute_control_action(self, observation: Dict[str, float], dt: float):
+        inverted = {"process_variable": -observation.get("process_variable", 0.0)}
+        delta = super().compute_control_action(inverted, dt)
+        command = delta + self._base_opening
+        if command < self._final_min:
+            command = self._final_min
+        elif command > self._final_max:
+            command = self._final_max
+        return command
+
+    def set_setpoint(self, new_setpoint: float):
+        super().set_setpoint(-new_setpoint)
+
+
+class LinkedReservoir(Reservoir):
+    """在步进时自动扣除目标闸门的出流量，保持水量守恒。"""
+
+    def __init__(self, *args, linked_gate: Gate, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._linked_gate = linked_gate
+
+    def step(self, action: Dict[str, float], dt: float):
+        gate_outflow = 0.0
+        if self._linked_gate is not None:
+            gate_state = self._linked_gate.get_state()
+            gate_outflow = gate_state.get("outflow", 0.0)
+
+        merged_action = dict(action) if isinstance(action, dict) else {}
+        merged_action.setdefault("outflow", gate_outflow)
+        return super().step(merged_action, dt)
+
+
+def _create_harness() -> EnhancedSimulationHarness:
+    """构建并返回启用了网络扰动能力的增强仿真框架。"""
+
     config = {
-        'start_time': 0,
-        'end_time': 20,
-        'dt': 1.0,
-        'enable_network_disturbance': True
+        "start_time": 0.0,
+        "end_time": SIM_DURATION,
+        "dt": DT,
+        "enable_network_disturbance": True,
+        "use_optimized_managers": True,
     }
-    
-    # 创建增强仿真框架
+
     harness = EnhancedSimulationHarness(config)
-    
-    # 添加物理组件
-    reservoir = MockReservoir("upstream_reservoir", initial_level=200.0)
-    gate = MockGate("control_gate", initial_opening=0.6)
-    downstream_reservoir = MockReservoir("downstream_reservoir", initial_level=150.0)
-    
-    harness.add_component("upstream_reservoir", reservoir)
+
+    # 创建并注册物理组件
+    upstream_area = 1_600_000.0  # m²
+    gate = Gate(
+        name="control_gate",
+        initial_state={"opening": 0.6},
+        parameters={
+            "width": 35.0,
+            "max_opening": 1.0,
+            "max_rate_of_change": 0.08,
+            "discharge_coefficient": 0.62,
+        },
+    )
+
+    upstream = LinkedReservoir(
+        name="upstream_reservoir",
+        initial_state={
+            "water_level": TARGET_LEVEL,
+            "volume": TARGET_LEVEL * upstream_area,
+        },
+        parameters={"surface_area": upstream_area},
+        linked_gate=gate,
+    )
+    upstream.set_inflow(BASE_INFLOW)
+
+    downstream_area = 4_800.0
+    downstream = Reservoir(
+        name="downstream_reservoir",
+        initial_state={
+            "water_level": 12.0,
+            "volume": 12.0 * downstream_area,
+        },
+        parameters={"surface_area": downstream_area},
+    )
+
+    harness.add_component("upstream_reservoir", upstream)
     harness.add_component("control_gate", gate)
-    harness.add_component("downstream_reservoir", downstream_reservoir)
-    
-    # 添加连接
+    harness.add_component("downstream_reservoir", downstream)
+
     harness.add_connection("upstream_reservoir", "control_gate")
     harness.add_connection("control_gate", "downstream_reservoir")
-    
-    # 添加智能体
-    reservoir_agent = MockAgent("ReservoirAgent")
-    gate_agent = MockAgent("GateAgent")
-    coordination_agent = MockAgent("CoordinationAgent")
-    
-    harness.add_agent(reservoir_agent)
-    harness.add_agent(gate_agent)
-    harness.add_agent(coordination_agent)
-    
-    # 构建仿真环境
+
+    pid = InvertedSignalPID(
+        Kp=0.45,
+        Ki=0.0009,
+        Kd=0.2,
+        setpoint=TARGET_LEVEL,
+        min_opening=0.2,
+        max_opening=0.95,
+        base_opening=0.6,
+    )
+    harness.add_controller(
+        controller_id="gate_pid",
+        controller=pid,
+        controlled_id="control_gate",
+        observed_id="upstream_reservoir",
+        observation_key="water_level",
+    )
+
     harness.build()
-    
-    # 配置物理扰动 - 入流变化
+    return harness
+
+
+def _configure_disturbances(harness: EnhancedSimulationHarness) -> None:
+    """为测试场景配置物理及网络扰动。"""
+
     inflow_config = DisturbanceConfig(
         disturbance_id="inflow_surge",
         disturbance_type=DisturbanceType.INFLOW_CHANGE,
         target_component_id="upstream_reservoir",
-        start_time=5.0,
-        end_time=13.0,
+        start_time=600.0,
+        end_time=1_100.0,
         intensity=1.0,
-        parameters={
-            "target_inflow": 150.0  # 设置目标入流为150 m³/s
-        },
-        description="入流激增扰动测试"
-    )
-    
-    inflow_disturbance = InflowDisturbance(inflow_config)
-    harness.add_disturbance(inflow_disturbance)
-    
-    # 配置动态扰动 - 传感器噪声
-    sensor_disturbance_config = {
-        'disturbance_id': 'sensor_noise',
-        'disturbance_type': 'sensor_noise',
-        'parameters': {
-            'noise_level': 0.1,
-            'affected_sensors': ['water_level', 'flow_rate'],
-            'noise_type': 'gaussian'
-        }
-    }
-    
-    harness.add_dynamic_disturbance(sensor_disturbance_config)
-    harness.activate_dynamic_disturbance('sensor_noise', 'upstream_reservoir', 3.0, 10.0)
-    
-    # 配置网络扰动 - 延迟扰动
-    delay_config = {
-        'parameters': {
-            'base_delay': 100,  # 100ms基础延迟
-            'jitter': 50,       # 50ms抖动
-            'packet_loss': 0.05, # 5%丢包率
-            'affected_topics': ['action/*', 'global/coordination'],
-            'affected_agents': ['ReservoirAgent', 'GateAgent'],
-            'delay_mode': 'gradual'
-        }
-    }
-    
-    harness.add_network_disturbance('network_delay', 'delay', delay_config)
-    harness.activate_network_disturbance('network_delay', 4.0, 12.0)
-    
-    # 配置网络扰动 - 丢包扰动
-    packet_loss_config = {
-        'parameters': {
-            'packet_loss_rate': 0.15,  # 15%丢包率
-            'burst_loss_probability': 0.1,  # 10%突发丢包概率
-            'burst_loss_duration': 2.0,  # 突发丢包持续2秒
-            'affected_topics': ['perception/*', 'global/status'],
-            'affected_agents': ['CoordinationAgent']
-        }
-    }
-    
-    harness.add_network_disturbance('packet_loss', 'packet_loss', packet_loss_config)
-    harness.activate_network_disturbance('packet_loss', 6.0, 8.0)
-    
-    # 运行仿真
-    logger.info("开始运行综合扰动仿真...")
-    start_time = time.time()
-    
-    try:
-        harness.run_mas_simulation()
-    except Exception as e:
-        logger.error(f"仿真运行错误: {e}")
-        import traceback
-        traceback.print_exc()
-    
-    end_time = time.time()
-    logger.info(f"仿真运行完成，耗时: {end_time - start_time:.2f}秒")
-    
-    # 分析结果
-    logger.info("=== 综合扰动测试结果分析 ===")
-    
-    # 分析物理状态变化
-    if harness.history:
-        initial_state = harness.history[0]
-        final_state = harness.history[-1]
-        
-        logger.info("物理状态变化:")
-        logger.info(f"上游水库水位: {initial_state['upstream_reservoir']['water_level']:.2f} -> {final_state['upstream_reservoir']['water_level']:.2f}")
-        logger.info(f"下游水库水位: {initial_state['downstream_reservoir']['water_level']:.2f} -> {final_state['downstream_reservoir']['water_level']:.2f}")
-        logger.info(f"闸门开度: {initial_state['control_gate']['opening']:.2f} -> {final_state['control_gate']['opening']:.2f}")
-    
-    # 分析智能体通信
-    total_sent = sum(len(agent.sent_messages) for agent in [reservoir_agent, gate_agent, coordination_agent])
-    total_received = sum(len(agent.received_messages) for agent in [reservoir_agent, gate_agent, coordination_agent])
-    
-    logger.info("智能体通信统计:")
-    logger.info(f"总发送消息数: {total_sent}")
-    logger.info(f"总接收消息数: {total_received}")
-    
-    for agent in [reservoir_agent, gate_agent, coordination_agent]:
-        logger.info(f"{agent.agent_id}: 发送 {len(agent.sent_messages)}, 接收 {len(agent.received_messages)}")
-    
-    # 分析扰动状态
-    disturbance_status = harness.get_disturbance_status()
-    logger.info("扰动状态:")
-    logger.info(f"物理扰动: {disturbance_status['physical']['active']}")
-    logger.info(f"动态扰动: {disturbance_status['dynamic']['active']}")
-    
-    if disturbance_status['network']:
-        network_stats = disturbance_status['network']['message_bus_status']['stats']
-        logger.info(f"网络扰动统计: {network_stats}")
-    
-    # 导出数据
-    harness.export_output_data("comprehensive_test_output")
-    
-    # 关闭仿真
-    harness.shutdown()
-    
-    return {
-        'simulation_steps': len(harness.history),
-        'total_sent_messages': total_sent,
-        'total_received_messages': total_received,
-        'disturbance_status': disturbance_status,
-        'execution_time': end_time - start_time
-    }
-
-def test_disturbance_interaction():
-    """测试不同类型扰动之间的相互作用"""
-    logger.info("=== 开始扰动相互作用测试 ===")
-    
-    # 创建简化的仿真环境
-    config = {
-        'start_time': 0,
-        'end_time': 15,
-        'dt': 0.5,
-        'enable_network_disturbance': True
-    }
-    
-    harness = EnhancedSimulationHarness(config)
-    
-    # 添加单个组件
-    reservoir = MockReservoir("test_reservoir", initial_level=100.0)
-    harness.add_component("test_reservoir", reservoir)
-    
-    # 添加智能体
-    test_agent = MockAgent("TestAgent")
-    harness.add_agent(test_agent)
-    
-    harness.build()
-    
-    # 同时激活多种扰动
-    
-    # 1. 物理扰动 - 入流变化
-    inflow_config = DisturbanceConfig(
-        disturbance_id="test_inflow",
-        disturbance_type=DisturbanceType.INFLOW_CHANGE,
-        target_component_id="test_reservoir",
-        start_time=2.0,
-        end_time=12.0,
-        intensity=1.0,
-        parameters={'target_inflow': 40.0},
-        description="测试入流扰动"
+        parameters={"target_inflow": DISTURBANCE_INFLOW},
+        description="上游入流阶跃扰动",
     )
     harness.add_disturbance(InflowDisturbance(inflow_config))
-    
-    # 2. 动态扰动 - 执行器故障
-    actuator_config = {
-        'disturbance_id': 'actuator_failure',
-        'disturbance_type': 'actuator_interference',
-        'parameters': {
-            'interference_type': 'efficiency_reduction',
-            'efficiency_factor': 0.7,
-            'affected_actuators': ['valve', 'pump']
+
+    delay_config = {
+        "parameters": {
+            "base_delay": 90,  # ms
+            "jitter": 45,
+            "packet_loss": 0.04,
+            "affected_topics": ["control/", "agent.central_perception"],
+            "delay_mode": "gradual",
         }
     }
-    harness.add_dynamic_disturbance(actuator_config)
-    harness.activate_dynamic_disturbance('actuator_failure', 'test_reservoir', 3.0, 8.0)
-    
-    # 3. 网络扰动 - 高延迟
-    high_delay_config = {
-        'parameters': {
-            'base_delay': 300,  # 300ms高延迟
-            'jitter': 150,
-            'packet_loss': 0.2,  # 20%丢包率
-            'affected_topics': ['*'],  # 影响所有主题
-            'delay_mode': 'random'
+    harness.add_network_disturbance("coord_delay", "delay", delay_config)
+    harness.activate_network_disturbance("coord_delay", start_time=550.0, duration=900.0)
+
+    packet_loss_config = {
+        "parameters": {
+            "packet_loss_rate": 0.12,
+            "burst_loss_probability": 0.15,
+            "burst_loss_duration": 3.0,
+            "affected_topics": ["perception/", "global/"],
         }
     }
-    harness.add_network_disturbance('high_delay', 'delay', high_delay_config)
-    harness.activate_network_disturbance('high_delay', 1.0, 12.0)
-    
-    # 运行仿真
-    logger.info("运行扰动相互作用测试...")
-    
-    try:
-        harness.run_mas_simulation()
-    except Exception as e:
-        logger.error(f"仿真运行错误: {e}")
-        import traceback
-        traceback.print_exc()
-    
-    # 分析相互作用效果
-    logger.info("=== 扰动相互作用分析 ===")
-    
-    if harness.history:
-        # 分析水位变化趋势
-        water_levels = [step['test_reservoir']['water_level'] for step in harness.history]
-        max_level = max(water_levels)
-        min_level = min(water_levels)
-        level_variance = max_level - min_level
-        
-        logger.info(f"水位变化范围: {min_level:.2f} - {max_level:.2f} (变化幅度: {level_variance:.2f})")
-        
-        # 分析扰动叠加效应
-        disturbance_periods = []
-        for i, step in enumerate(harness.history):
-            active_disturbances = []
-            if 'disturbance_status' in step:
-                status = step['disturbance_status']
-                if status['physical']['active']:
-                    active_disturbances.extend(status['physical']['active'])
-                if status['dynamic']['active']:
-                    active_disturbances.extend(status['dynamic']['active'])
-                if status['network'] and status['network']['active_disturbances']:
-                    active_disturbances.extend(status['network']['active_disturbances'].keys())
-            
-            disturbance_periods.append({
-                'time': step['time'],
-                'active_count': len(active_disturbances),
-                'active_types': active_disturbances,
-                'water_level': step['test_reservoir']['water_level']
-            })
-        
-        # 找出扰动叠加最严重的时期
-        max_disturbances = max(disturbance_periods, key=lambda x: x['active_count'])
-        logger.info(f"最大扰动叠加时刻: t={max_disturbances['time']}, "
-                   f"活跃扰动数: {max_disturbances['active_count']}, "
-                   f"水位: {max_disturbances['water_level']:.2f}")
-    
-    # 分析通信影响
-    logger.info(f"智能体通信: 发送 {len(test_agent.sent_messages)}, 接收 {len(test_agent.received_messages)}")
-    
-    # 导出数据
-    harness.export_output_data("interaction_test_output")
-    
+    harness.add_network_disturbance("sensor_drop", "packet_loss", packet_loss_config)
+    harness.activate_network_disturbance("sensor_drop", start_time=720.0, duration=420.0)
+
+
+def _extract_history(harness: EnhancedSimulationHarness) -> SimulationArtifacts:
+    """读取仿真历史并计算关键指标。"""
+
+    levels: List[float] = []
+    inflows: List[float] = []
+    openings: List[float] = []
+
+    for step in harness.history:
+        upstream_state = step.get("upstream_reservoir", {})
+        gate_state = step.get("control_gate", {})
+
+        levels.append(upstream_state.get("water_level", float("nan")))
+        inflows.append(upstream_state.get("inflow", float("nan")))
+        openings.append(gate_state.get("opening", float("nan")))
+
+    deviations = [abs(level - TARGET_LEVEL) for level in levels]
+    max_dev = max(deviations) if deviations else 0.0
+
+    network_status = harness.get_disturbance_status().get("network", {})
+    return SimulationArtifacts(
+        level_history=levels,
+        inflow_history=inflows,
+        gate_openings=openings,
+        max_level_deviation=max_dev,
+        network_stats=network_status,
+    )
+
+
+def test_comprehensive_disturbance() -> SimulationArtifacts:
+    """运行综合扰动测试并断言控制精度。"""
+
+    print("=== 综合扰动控制测试 ===")
+    harness = _create_harness()
+    _configure_disturbances(harness)
+
+    print(
+        f"初始状态: 目标水位 {TARGET_LEVEL:.3f} m, 基础入流 {BASE_INFLOW:.1f} m³/s, 仿真步长 {DT:.1f} s"
+    )
+    harness.run_simulation()
+
+    artifacts = _extract_history(harness)
     harness.shutdown()
-    
-    return {
-        'max_disturbance_overlap': max_disturbances['active_count'] if harness.history else 0,
-        'water_level_variance': level_variance if harness.history else 0,
-        'communication_efficiency': len(test_agent.received_messages) / max(1, len(test_agent.sent_messages))
+
+    if not artifacts.inflow_history:
+        raise AssertionError("仿真历史为空，无法评估扰动响应。")
+
+    observed_peak_inflow = max(artifacts.inflow_history)
+    if observed_peak_inflow < DISTURBANCE_INFLOW - 0.5:
+        raise AssertionError(
+            "入流扰动未正确施加："
+            f"观测到的最大入流为 {observed_peak_inflow:.2f} m³/s，"
+            f"期望至少达到 {DISTURBANCE_INFLOW:.2f} m³/s。"
+        )
+
+    if artifacts.max_level_deviation > CONTROL_TOLERANCE:
+        raise AssertionError(
+            "综合扰动下水位控制精度不足："
+            f"最大偏差 {artifacts.max_level_deviation:.5f} m，"
+            f"超过容限 {CONTROL_TOLERANCE:.5f} m。"
+        )
+
+    final_level = artifacts.level_history[-1]
+    print("仿真完成，关键结果：")
+    print(f"- 最大水位偏差: {artifacts.max_level_deviation:.5f} m (容限 ±{CONTROL_TOLERANCE:.5f} m)")
+    print(f"- 扰动期间观测到的最大入流: {observed_peak_inflow:.2f} m³/s")
+    print(f"- 最终水位: {final_level:.4f} m")
+
+    network_stats = artifacts.network_stats.get("message_bus_status", {}).get("stats", {})
+    if network_stats:
+        print("- 网络扰动统计:")
+        for key, value in network_stats.items():
+            print(f"  • {key}: {value}")
+
+    control_score = 1.0 if artifacts.max_level_deviation <= CONTROL_TOLERANCE else 0.0
+    disturbance_score = 1.0 if observed_peak_inflow >= DISTURBANCE_INFLOW - 0.5 else 0.0
+    reason_score = 1.0 if control_score == 1.0 and disturbance_score == 1.0 else 0.0
+    performance_summary = {
+        "control_accuracy_score": control_score,
+        "disturbance_identification_score": disturbance_score,
+        "reasonableness": {
+            "score": reason_score,
+            "details": {
+                "max_level_deviation": artifacts.max_level_deviation,
+                "tolerance": CONTROL_TOLERANCE,
+                "observed_peak_inflow": observed_peak_inflow,
+                "expected_inflow": DISTURBANCE_INFLOW,
+            },
+        },
     }
 
-def main():
-    """主函数"""
-    logger.info("开始综合扰动测试")
-    
-    try:
-        # 测试物理和网络扰动组合
-        comprehensive_results = test_physical_and_network_disturbances()
-        
-        # 等待一段时间
-        time.sleep(2.0)
-        
-        # 测试扰动相互作用
-        interaction_results = test_disturbance_interaction()
-        
-        # 输出总结
-        logger.info("=== 综合扰动测试总结 ===")
-        logger.info(f"综合测试 - 仿真步数: {comprehensive_results['simulation_steps']}, "
-                   f"消息传递效率: {comprehensive_results['total_received_messages']}/{comprehensive_results['total_sent_messages']}")
-        logger.info(f"相互作用测试 - 最大扰动叠加: {interaction_results['max_disturbance_overlap']}, "
-                   f"水位变化幅度: {interaction_results['water_level_variance']:.2f}")
-        
-        logger.info("综合扰动测试完成")
-        
-    except Exception as e:
-        logger.error(f"测试过程中发生错误: {e}")
-        import traceback
-        traceback.print_exc()
+    print("\n性能评价指标:")
+    print(f"- 控制精度得分: {control_score:.3f}")
+    print(f"- 扰动识别得分: {disturbance_score:.3f}")
+    print(f"- 合理性得分: {reason_score:.3f}")
+    print(f"__PERFORMANCE_SUMMARY__={json.dumps(performance_summary, ensure_ascii=False)}")
+
+    return artifacts
+
 
 if __name__ == "__main__":
-    main()
+    test_comprehensive_disturbance()
