@@ -28,7 +28,17 @@ class SimulationHarness:
     def __init__(self, config: Dict[str, Any]):
         self.config = config
         self.start_time = config.get('start_time', 0)
-        self.end_time = config.get('end_time', 100)
+
+        # 兼容旧版本示例中使用的 "duration" 字段，并确保与显式 "end_time"
+        # 设置保持一致。如果同时提供，则以 end_time 为准；否则根据
+        # duration 推导得到终止时间。
+        if 'end_time' in config:
+            self.end_time = config['end_time']
+        elif 'duration' in config:
+            self.end_time = self.start_time + config['duration']
+        else:
+            self.end_time = self.start_time + 100
+
         self.dt = config.get('dt', 1.0)
         self.t = self.start_time
 
