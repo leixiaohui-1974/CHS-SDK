@@ -20,7 +20,7 @@ import pytesseract
 import re
 from pathlib import Path
 import matplotlib.pyplot as plt
-import seaborn as sns
+from core_lib.utils import seaborn_support
 from sklearn.cluster import DBSCAN
 from scipy import ndimage
 import xml.etree.ElementTree as ET
@@ -154,6 +154,9 @@ class MultiModalParser:
             }
         }
         
+        seaborn_support.ensure_matplotlib_style('seaborn-v0_8')
+        seaborn_support.set_palette('husl')
+
         logger.info("多模态解析器初始化完成")
     
     def _initialize_ocr(self):

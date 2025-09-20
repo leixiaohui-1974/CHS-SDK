@@ -26,7 +26,11 @@ os.environ['PYTHONUTF8'] = '1'
 import sys
 import argparse
 import time
+import math
+import numbers
+import statistics
 from pathlib import Path
+from typing import Any, Dict, List
 
 # 添加项目根目录到Python路径
 project_root = Path(__file__).parent.parent
@@ -51,7 +55,7 @@ except ImportError as e:
 
 class ExamplesHardcodedRunner:
     """Examples目录硬编码运行器"""
-    
+
     def __init__(self):
         self.examples = {
             "getting_started": {
@@ -554,9 +558,376 @@ class ExamplesHardcodedRunner:
                 "path": "notebooks/07_centralized_setpoint_optimization"
             }
         }
-        
+        self.last_run_summary: Dict[str, Any] = {}
+        self.run_history: List[Dict[str, Any]] = []
         self.debug_mode = False
         self.performance_monitor = False
+
+    def reset_history(self) -> None:
+        """Clear accumulated run history and last summary."""
+        self.run_history.clear()
+        self.last_run_summary = {}
+
+    def get_run_history(self) -> List[Dict[str, Any]]:
+        """Return a shallow copy of the recorded run history."""
+        return list(self.run_history)
+
+    def get_example_metadata(self, key: str) -> Dict[str, Any]:
+        """Return a copy of the registered example metadata."""
+        example = self.examples.get(key)
+        if not example:
+            return {"key": key}
+        payload = dict(example)
+        payload.setdefault("key", key)
+        return payload
+
+    def get_all_examples_metadata(self) -> Dict[str, Dict[str, Any]]:
+        """Expose shallow copies of all available example definitions."""
+        return {key: self.get_example_metadata(key) for key in self.examples}
+
+    @staticmethod
+    def _is_numeric_value(value: Any) -> bool:
+        """Return True if value is a finite real number (excluding booleans)."""
+        if isinstance(value, bool):
+            return False
+        if isinstance(value, numbers.Real):
+            return math.isfinite(float(value))
+        return False
+
+    def _validate_simulation_results(self, example_key: str, results: Any) -> Dict[str, Any]:
+        """Perform basic reasonableness checks on simulation outputs."""
+        summary: Dict[str, Any] = {
+            "example": example_key,
+            "validated": True,
+            "valid": True,
+            "issues": [],
+            "metrics": {}
+        }
+
+        penalties: List[Dict[str, Any]] = []
+        score = 1.0
+        severity_penalty = {
+            "critical": 0.6,
+            "major": 0.3,
+            "minor": 0.1,
+            "info": 0.05,
+        }
+
+        def record_issue(message: str, *, severity: str = "major", code: str | None = None, context: Dict[str, Any] | None = None) -> None:
+            nonlocal score
+            summary["issues"].append(message)
+            penalty_entry: Dict[str, Any] = {
+                "message": message,
+                "severity": severity,
+            }
+            if code:
+                penalty_entry["code"] = code
+            if context:
+                penalty_entry["context"] = dict(context)
+            penalties.append(penalty_entry)
+            weight = severity_penalty.get(severity, severity_penalty["major"])
+            score = max(0.0, min(1.0, score - weight))
+
+        def finalize(metrics: Dict[str, Any] | None = None) -> Dict[str, Any]:
+            reason_metrics = {
+                "score": round(max(0.0, min(1.0, score)), 3),
+                "penalties": penalties,
+            }
+            payload = dict(metrics or {})
+            payload["reasonableness"] = reason_metrics
+            summary["metrics"] = payload
+            if summary["issues"]:
+                severe_penalty = any(
+                    entry.get("severity") in {"critical", "major"}
+                    for entry in penalties
+                )
+                minor_penalty = any(
+                    entry.get("severity") == "minor" for entry in penalties
+                )
+                if severe_penalty or (minor_penalty and summary.get("validated", True)):
+                    summary["valid"] = False
+            return summary
+
+        if results is None:
+            summary["validated"] = False
+            record_issue("仿真未返回任何结果 (None)", severity="critical", code="no_results")
+            summary["valid"] = False
+            return finalize()
+
+        if not isinstance(results, dict) or not results:
+            summary["validated"] = False
+            record_issue("仿真结果不是非空字典，无法解析数据结构", severity="critical", code="invalid_structure")
+            summary["valid"] = False
+            return finalize()
+
+        time_series = results.get("time")
+        if not isinstance(time_series, list) or not time_series:
+            summary["validated"] = False
+            record_issue("结果中未找到时间序列，已跳过自动合理性检查", severity="info", code="missing_time_series")
+            available = list(results.keys())
+            metrics = {"available_keys": available}
+            return finalize(metrics)
+
+        # 验证时间序列
+        prev_time = None
+        for idx, raw_time in enumerate(time_series):
+            if not self._is_numeric_value(raw_time):
+                record_issue(f"time序列第{idx}个值不是有限实数: {raw_time}", severity="critical", code="invalid_time_value", context={"index": idx})
+                summary["valid"] = False
+                return finalize({})
+            current_time = float(raw_time)
+            if prev_time is not None and current_time <= prev_time:
+                record_issue(
+                    f"time序列在索引{idx}处未严格递增: {prev_time} -> {current_time}",
+                    severity="major",
+                    code="non_monotonic_time",
+                    context={"index": idx, "previous": prev_time, "current": current_time},
+                )
+                summary["valid"] = False
+                break
+            prev_time = current_time
+
+        metrics: Dict[str, Any] = {
+            "time_steps": len(time_series),
+            "time_start": float(time_series[0]),
+            "time_end": float(time_series[-1]),
+            "variables_checked": 0,
+            "non_finite_values": 0,
+            "length_mismatches": 0,
+            "bounds_violations": 0,
+            "series_ranges": {}
+        }
+
+        lower_bound_keywords = {
+            "level": 0.0,
+            "volume": 0.0,
+            "storage": 0.0,
+            "depth": 0.0,
+            "height": 0.0
+        }
+
+        numeric_series_found = False
+        numeric_series_map: Dict[str, List[float]] = {}
+        for key, values in results.items():
+            if key == "time" or not isinstance(values, list) or not values:
+                continue
+
+            numeric_values: List[float] = []
+            non_finite_indices: List[int] = []
+            numeric_only = True
+            for idx, value in enumerate(values):
+                if isinstance(value, bool) or not isinstance(value, numbers.Real):
+                    numeric_only = False
+                    break
+                numeric_values.append(float(value))
+                if not math.isfinite(float(value)):
+                    non_finite_indices.append(idx)
+
+            if not numeric_only:
+                continue
+
+            numeric_series_found = True
+            metrics["variables_checked"] += 1
+
+            if len(numeric_values) != len(time_series):
+                metrics["length_mismatches"] += 1
+                record_issue(
+                    f"序列'{key}'长度({len(numeric_values)})与time步数({len(time_series)})不一致",
+                    severity="major",
+                    code="length_mismatch",
+                    context={"series": key, "series_length": len(numeric_values), "time_steps": len(time_series)},
+                )
+                summary["valid"] = False
+                continue
+
+            if non_finite_indices:
+                metrics["non_finite_values"] += len(non_finite_indices)
+                record_issue(
+                    f"序列'{key}'包含不可用的数值索引: {non_finite_indices}",
+                    severity="major",
+                    code="non_finite_values",
+                    context={"series": key, "indices": list(non_finite_indices)},
+                )
+
+            series_min = min(numeric_values)
+            series_max = max(numeric_values)
+            metrics["series_ranges"][key] = {"min": series_min, "max": series_max}
+
+            key_lower = key.lower()
+            for kw, minimum in lower_bound_keywords.items():
+                if kw in key_lower and series_min < minimum - 1e-6:
+                    metrics["bounds_violations"] += 1
+                    record_issue(
+                        f"序列'{key}'的最小值({series_min})低于物理下限{minimum}",
+                        severity="major",
+                        code="lower_bound_violation",
+                        context={"series": key, "min": series_min, "threshold": minimum},
+                    )
+                    break
+
+            if max(abs(series_min), abs(series_max)) > 1e9:
+                metrics["bounds_violations"] += 1
+                record_issue(
+                    f"序列'{key}'存在超过1e9的极端值，需人工复核",
+                    severity="minor",
+                    code="extreme_value",
+                    context={"series": key, "min": series_min, "max": series_max},
+                )
+
+            numeric_series_map[key] = numeric_values
+
+        if not numeric_series_found:
+            summary["validated"] = False
+            record_issue("未找到与time对齐的数值序列，已跳过自动合理性检查", severity="info", code="no_numeric_series")
+            metrics.pop("series_ranges", None)
+            return finalize(metrics)
+
+        mass_balance_metrics = self._evaluate_mass_balance(time_series, numeric_series_map)
+        if mass_balance_metrics:
+            metrics["mass_balance"] = mass_balance_metrics
+            if mass_balance_metrics.get("checked") and not mass_balance_metrics.get("pass", True):
+                issue_text = mass_balance_metrics.get("issue")
+                if issue_text:
+                    record_issue(
+                        issue_text,
+                        severity="critical",
+                        code="mass_balance_fail",
+                        context={
+                            "volume_series": mass_balance_metrics.get("volume_series"),
+                            "inflow_series": mass_balance_metrics.get("inflow_series"),
+                            "outflow_series": mass_balance_metrics.get("outflow_series"),
+                        },
+                    )
+                summary["valid"] = False
+            elif mass_balance_metrics and not mass_balance_metrics.get("checked"):
+                reason = mass_balance_metrics.get("reason")
+                if reason:
+                    penalties.append(
+                        {
+                            "message": reason,
+                            "severity": "info",
+                            "code": "mass_balance_skipped",
+                        }
+                    )
+                    score = max(0.0, min(1.0, score - severity_penalty["info"]))
+
+        return finalize(metrics)
+
+    @staticmethod
+    def _evaluate_mass_balance(time_series: List[Any], numeric_series: Dict[str, List[float]]) -> Dict[str, Any]:
+        """Evaluate approximate mass balance using available volume/storage and flow series."""
+
+        if len(time_series) < 2:
+            return {"checked": False, "reason": "时间序列长度不足以计算体积变化"}
+
+        volume_candidates = [
+            key for key in numeric_series
+            if any(token in key.lower() for token in ("volume", "storage"))
+        ]
+
+        if len(volume_candidates) != 1:
+            if not volume_candidates:
+                reason = "未找到包含volume/storage的序列"
+            else:
+                reason = f"检测到多个可能的体积序列: {', '.join(volume_candidates)}"
+            return {"checked": False, "reason": reason}
+
+        volume_key = volume_candidates[0]
+        volume_series = numeric_series[volume_key]
+        if not all(math.isfinite(float(v)) for v in volume_series):
+            return {"checked": False, "reason": f"体积序列'{volume_key}'存在非有限值"}
+
+        inflow_keys = [
+            key for key in numeric_series
+            if "inflow" in key.lower() or "in_flow" in key.lower()
+        ]
+        outflow_keys = [
+            key for key in numeric_series
+            if ("outflow" in key.lower() or "discharge" in key.lower() or "release" in key.lower())
+            and key not in inflow_keys
+        ]
+
+        if not inflow_keys and not outflow_keys:
+            return {"checked": False, "reason": "缺少inflow/outflow相关序列"}
+
+        steps = len(time_series)
+        if len(volume_series) != steps:
+            return {"checked": False, "reason": "体积序列长度与时间步数不一致"}
+
+        interval_count = steps - 1
+        absolute_errors: List[float] = []
+        relative_errors: List[float] = []
+
+        for idx in range(interval_count):
+            dt = float(time_series[idx + 1]) - float(time_series[idx])
+            if dt <= 0:
+                return {
+                    "checked": False,
+                    "reason": f"时间步长在索引{idx}处非正值: {dt}",
+                }
+
+            volume_delta = volume_series[idx + 1] - volume_series[idx]
+            net_flow = 0.0
+
+            for key in inflow_keys:
+                if len(numeric_series[key]) != steps:
+                    return {
+                        "checked": False,
+                        "reason": f"序列'{key}'长度与time不一致，无法计算质量守恒",
+                    }
+                value = numeric_series[key][idx]
+                if not math.isfinite(float(value)):
+                    return {"checked": False, "reason": f"序列'{key}'存在非有限值"}
+                net_flow += value
+
+            for key in outflow_keys:
+                if len(numeric_series[key]) != steps:
+                    return {
+                        "checked": False,
+                        "reason": f"序列'{key}'长度与time不一致，无法计算质量守恒",
+                    }
+                value = numeric_series[key][idx]
+                if not math.isfinite(float(value)):
+                    return {"checked": False, "reason": f"序列'{key}'存在非有限值"}
+                net_flow -= value
+
+            expected_delta = net_flow * dt
+            abs_error = abs(volume_delta - expected_delta)
+            absolute_errors.append(abs_error)
+
+            scale = max(abs(volume_delta), abs(expected_delta), 1e-6)
+            relative_errors.append(abs_error / scale)
+
+        if not absolute_errors:
+            return {"checked": False, "reason": "有效时间区间数量不足"}
+
+        max_relative_error = max(relative_errors)
+        mean_relative_error = statistics.fmean(relative_errors)
+        max_absolute_error = max(absolute_errors)
+        tolerance = 0.2  # 允许20%的相对误差
+        passed = max_relative_error <= tolerance
+
+        metrics = {
+            "checked": True,
+            "pass": passed,
+            "volume_series": volume_key,
+            "inflow_series": inflow_keys,
+            "outflow_series": outflow_keys,
+            "max_relative_error": max_relative_error,
+            "mean_relative_error": mean_relative_error,
+            "max_absolute_error": max_absolute_error,
+            "tolerance": tolerance,
+            "sample_size": interval_count,
+        }
+
+        if not passed:
+            metrics["issue"] = (
+                "质量守恒检查失败: 最大相对误差"
+                f" {max_relative_error:.2%} 超过阈值 {tolerance:.0%}"
+                f" (体积序列: {volume_key}, inflow: {inflow_keys or '无'}, outflow: {outflow_keys or '无'})"
+            )
+
+        return metrics
     
     def create_getting_started_simulation(self):
         """创建入门示例仿真"""
@@ -801,40 +1172,144 @@ class ExamplesHardcodedRunner:
                 harness = self.create_identification_simulation(example_key)
             elif example_key.startswith("distributed_digital_twin_simulation/"):
                 # 处理distributed_digital_twin_simulation系列示例
-                return self.run_distributed_digital_twin_example(example_key)
+                success = self.run_distributed_digital_twin_example(example_key)
+                validation = {
+                    "example": example_key,
+                    "validated": False,
+                    "valid": success,
+                    "issues": [
+                        "分布式数字孪生脚本示例通过子进程运行，当前无法自动检验输出数据，已跳过结果合理性检查"
+                    ],
+                    "metrics": {}
+                }
+                self.last_run_summary = {
+                    "example": example_key,
+                    "display_name": example.get("name", example_key),
+                    "success": success,
+                    "execution_time": None,
+                    "validation": validation,
+                    "error": None
+                }
+                self.run_history.append(dict(self.last_run_summary))
+                if success:
+                    print("[验证] 分布式脚本示例暂不支持自动结果校验，请人工检查日志输出。")
+                return success
             else:
                 # 其他示例的通用处理
                 harness = self.create_getting_started_simulation()
                 print(f"注意：示例 '{example_key}' 使用默认配置运行")
-            
+
             # 运行仿真
             print("\n开始仿真...")
             results = harness.run_simulation()
-            
+
             # 性能统计
             end_time = time.time()
             execution_time = end_time - start_time
-            
+
             print(f"\n=== 仿真完成 ===")
             print(f"执行时间：{execution_time:.2f}秒")
             if results:
                 print(f"仿真步数：{len(results.get('time', []))}")
             else:
                 print("仿真已完成，但未返回详细结果")
-            
+
             if self.performance_monitor and results:
                 self._show_performance_stats(results, execution_time)
-            
+
             if self.debug_mode and results:
                 self._show_debug_info(results)
-            
-            return True
-            
+
+            validation = self._validate_simulation_results(example_key, results)
+            success = True
+
+            if validation["validated"]:
+                if validation["valid"]:
+                    metrics = validation.get("metrics", {})
+                    print("[验证] 结果合理性检查通过")
+                    if metrics:
+                        checked = metrics.get("variables_checked")
+                        time_steps = metrics.get("time_steps")
+                        series_ranges = metrics.get("series_ranges") or {}
+                        print(
+                            f"    时间步数: {time_steps}, 校验变量数: {checked}, 观测范围: {len(series_ranges)}"
+                        )
+                        mass_balance = metrics.get("mass_balance")
+                        if mass_balance:
+                            if mass_balance.get("checked"):
+                                print(
+                                    "    质量守恒误差: 最大"
+                                    f"{mass_balance.get('max_relative_error', 0.0):.2%}, 平均"
+                                    f"{mass_balance.get('mean_relative_error', 0.0):.2%}"
+                                )
+                            elif mass_balance.get("reason"):
+                                print(f"    质量守恒检查跳过: {mass_balance['reason']}")
+                else:
+                    success = False
+                    print("[验证] 结果合理性检查失败，发现以下问题：")
+                    for issue in validation["issues"]:
+                        print(f"    - {issue}")
+            else:
+                print("[验证] 自动合理性检查被跳过：")
+                for issue in validation["issues"]:
+                    print(f"    - {issue}")
+
+            metrics = validation.get("metrics", {})
+            reason_metrics = metrics.get("reasonableness") or {}
+            if reason_metrics:
+                score = reason_metrics.get("score")
+                if isinstance(score, (int, float)):
+                    print(f"    合理性评分: {float(score):.3f}")
+                penalties = reason_metrics.get("penalties") or []
+                if penalties:
+                    print("    评分扣分项:")
+                    for penalty in penalties:
+                        severity = str(penalty.get("severity", "")).upper()
+                        message = penalty.get("message", "")
+                        code = penalty.get("code")
+                        descriptor_parts = []
+                        if severity:
+                            descriptor_parts.append(severity)
+                        if code:
+                            descriptor_parts.append(str(code))
+                        descriptor = ":".join(descriptor_parts)
+                        if descriptor:
+                            print(f"        - [{descriptor}] {message}")
+                        else:
+                            print(f"        - {message}")
+
+            self.last_run_summary = {
+                "example": example_key,
+                "display_name": example.get("name", example_key),
+                "success": success,
+                "execution_time": execution_time,
+                "validation": validation,
+                "error": None
+            }
+            self.run_history.append(dict(self.last_run_summary))
+
+            return success
+
         except Exception as e:
             import traceback
             print(f"错误：运行示例时发生异常: {e}")
             print("详细错误信息:")
             traceback.print_exc()
+            self.last_run_summary = {
+                "example": example_key,
+                "display_name": example.get("name", example_key),
+                "success": False,
+                "execution_time": None,
+                "validation": {
+                    "example": example_key,
+                    "validated": False,
+                    "valid": False,
+                    "issues": [str(e)],
+                    "metrics": {}
+                },
+                "error": str(e)
+            }
+            self.run_history.append(dict(self.last_run_summary))
             return False
     
     def _show_performance_stats(self, results, execution_time):

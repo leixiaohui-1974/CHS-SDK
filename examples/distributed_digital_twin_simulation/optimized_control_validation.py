@@ -5,10 +5,10 @@
 对比改进前后的控制性能和波动特性
 """
 
+import sys
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
 from pathlib import Path
 import json
 from datetime import datetime
@@ -17,10 +17,17 @@ from scipy.stats import describe
 import warnings
 warnings.filterwarnings('ignore')
 
+# Optional seaborn integration with graceful fallback
+REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from core_lib.utils import seaborn_support
+
 # 设置中文字体和样式
 plt.rcParams['font.sans-serif'] = ['SimHei', 'Microsoft YaHei']
 plt.rcParams['axes.unicode_minus'] = False
-sns.set_style("whitegrid")
+seaborn_support.set_style("whitegrid", fallback='seaborn-v0_8-whitegrid')
 
 class OptimizedControlValidator:
     """优化控制系统验证器"""

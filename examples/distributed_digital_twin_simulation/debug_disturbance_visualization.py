@@ -5,17 +5,25 @@
 解决无干扰数据显示问题
 """
 
+import sys
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
 from pathlib import Path
 import warnings
 warnings.filterwarnings('ignore')
 
+# 可选 seaborn 支持
+REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from core_lib.utils import seaborn_support
+
 # 设置中文字体
 plt.rcParams['font.sans-serif'] = ['SimHei', 'DejaVu Sans']
 plt.rcParams['axes.unicode_minus'] = False
+seaborn_support.set_style('whitegrid', fallback='seaborn-v0_8-whitegrid')
 
 class DebugDisturbanceVisualizer:
     def __init__(self, data_dir="experiment_results"):

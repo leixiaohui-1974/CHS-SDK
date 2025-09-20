@@ -30,7 +30,6 @@ from enum import Enum
 import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use('Agg')  # 使用非交互式后端
-import seaborn as sns
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 
@@ -41,6 +40,7 @@ from pathlib import Path
 
 # 导入LLM智能体
 from core_lib.llm_integration_agents.llm_data_analyst_agent import LLMDataAnalystAgent
+from core_lib.utils import seaborn_support
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/analysis", tags=["analysis"])
@@ -139,8 +139,8 @@ class AnalystAndReporterAgent:
         self.temp_dir.mkdir(exist_ok=True)
         
         # 设置matplotlib样式
-        plt.style.use('seaborn-v0_8')
-        sns.set_palette("husl")
+        seaborn_support.ensure_matplotlib_style('seaborn-v0_8')
+        seaborn_support.set_palette("husl")
     
     async def start_analysis(self, request: AnalysisRequest) -> AnalysisResponse:
         """
@@ -584,7 +584,8 @@ class AnalystAndReporterAgent:
             means = [df[col].mean() for col in numeric_cols[:8]]  # 最多8个柱子
             cols = numeric_cols[:8]
             
-            bars = ax.bar(cols, means, color=sns.color_palette("husl", len(cols)))
+            palette = seaborn_support.color_palette("husl", len(cols))
+            bars = ax.bar(cols, means, color=palette)
             
             ax.set_title('各变量平均值对比', fontsize=16, fontweight='bold')
             ax.set_ylabel('平均值', fontsize=12)
@@ -669,9 +670,11 @@ class AnalystAndReporterAgent:
             
             plot_cols = numeric_cols[:4]  # 最多4个直方图
             
+            palette = seaborn_support.color_palette("husl", len(plot_cols))
+
             for i, col in enumerate(plot_cols):
                 if i < len(axes):
-                    axes[i].hist(df[col], bins=30, alpha=0.7, color=sns.color_palette("husl", len(plot_cols))[i])
+                    axes[i].hist(df[col], bins=30, alpha=0.7, color=palette[i])
                     axes[i].set_title(f'{col} 分布', fontsize=12)
                     axes[i].set_xlabel(col)
                     axes[i].set_ylabel('频次')
@@ -717,8 +720,16 @@ class AnalystAndReporterAgent:
             
             fig, ax = plt.subplots(figsize=(10, 8))
             
-            sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', center=0,
-                       square=True, linewidths=0.5, cbar_kws={"shrink": .8})
+            seaborn_support.heatmap(
+                corr_matrix,
+                annot=True,
+                cmap='coolwarm',
+                center=0,
+                ax=ax,
+                square=True,
+                linewidths=0.5,
+                cbar_kws={"shrink": .8},
+            )
             
             ax.set_title('变量相关性热力图', fontsize=16, fontweight='bold')
             
@@ -764,7 +775,7 @@ class AnalystAndReporterAgent:
             box_plot = ax.boxplot(normalized_data, labels=plot_cols, patch_artist=True)
             
             # 设置颜色
-            colors = sns.color_palette("husl", len(plot_cols))
+            colors = seaborn_support.color_palette("husl", len(plot_cols))
             for patch, color in zip(box_plot['boxes'], colors):
                 patch.set_facecolor(color)
                 patch.set_alpha(0.7)

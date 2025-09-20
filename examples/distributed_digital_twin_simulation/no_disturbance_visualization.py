@@ -5,17 +5,25 @@
 专门展示Rule模式vs MPC模式在无传感器和执行器干扰条件下的性能差异
 """
 
+import sys
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
 from pathlib import Path
 import warnings
 warnings.filterwarnings('ignore')
 
+# 可选 seaborn 支持
+REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from core_lib.utils import seaborn_support
+
 # 设置中文字体
 plt.rcParams['font.sans-serif'] = ['SimHei', 'Microsoft YaHei']
 plt.rcParams['axes.unicode_minus'] = False
+seaborn_support.set_style('whitegrid', fallback='seaborn-v0_8-whitegrid')
 
 def load_data(file_path):
     """加载数据文件"""

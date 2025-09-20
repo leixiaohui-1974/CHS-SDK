@@ -74,11 +74,11 @@ except ImportError as e:
 import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use('Agg')  # 使用非交互式后端
-import seaborn as sns
 from matplotlib.backends.backend_pdf import PdfPages
 import base64
 import io
 from jinja2 import Template
+from core_lib.utils import seaborn_support
 try:
     import weasyprint  # 用于HTML到PDF转换
 except ImportError:
@@ -137,6 +137,9 @@ class EnhancedLLMResultAnalysisAgent:
         self.data_analyst = LLMDataAnalystAgent()
         self.visualizer = EnhancedSimulationPlotter()
         self.performance_analyzer = PerformanceAnalyzer()
+
+        seaborn_support.ensure_matplotlib_style('seaborn-v0_8')
+        seaborn_support.set_palette('husl')
         
         # 初始化新的报告模板系统
         template_dir = self.project_root / "core_lib" / "reporting" / "templates"

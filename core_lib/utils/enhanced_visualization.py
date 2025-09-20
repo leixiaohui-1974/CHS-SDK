@@ -8,13 +8,14 @@
 
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-import seaborn as sns
 import pandas as pd
 import numpy as np
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Union, Tuple
 from datetime import datetime
 import logging
+
+from core_lib.utils import seaborn_support
 
 # 设置中文字体支持
 plt.rcParams['font.sans-serif'] = ['SimHei', 'Microsoft YaHei', 'DejaVu Sans']
@@ -57,12 +58,12 @@ class EnhancedSimulationPlotter:
         """
         # 设置样式
         style = self.style_config.get('style', 'seaborn-v0_8')
-        try:
-            plt.style.use(style)
-        except OSError:
-            # 如果样式不存在，使用默认样式
-            plt.style.use('default')
-            logging.warning(f"Style '{style}' not found, using default")
+        applied_style = seaborn_support.ensure_matplotlib_style(style)
+        if applied_style != style:
+            logging.warning(f"Style '{style}' not found, using {applied_style}")
+
+        palette_name = self.style_config.get('palette', 'husl')
+        seaborn_support.set_palette(palette_name)
         
         # 设置DPI
         dpi = self.style_config.get('dpi', 300)

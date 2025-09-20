@@ -5,6 +5,7 @@
 分析传感器干扰和执行器干扰存在与否的各种组合情况下的系统性能差异
 """
 
+import sys
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -12,7 +13,14 @@ from scipy import signal
 from pathlib import Path
 import matplotlib
 from itertools import product
-import seaborn as sns
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from core_lib.utils import seaborn_support
+
+seaborn_support.set_style("whitegrid", fallback='seaborn-v0_8-whitegrid')
 
 # 设置中文字体
 matplotlib.rcParams['font.sans-serif'] = ['SimHei']
@@ -327,8 +335,14 @@ class DisturbanceCombinationAnalyzer:
                                         columns=metrics_names)
                 
                 ax = axes[mode_idx]
-                sns.heatmap(heatmap_df, annot=True, fmt='.4f', cmap='YlOrRd', 
-                           ax=ax, cbar_kws={'label': '性能指标值'})
+                seaborn_support.heatmap(
+                    heatmap_df,
+                    annot=True,
+                    fmt='.4f',
+                    cmap='YlOrRd',
+                    ax=ax,
+                    cbar_kws={'label': '性能指标值'},
+                )
                 ax.set_title(f'{mode.upper()}模式性能热力图')
                 ax.set_xlabel('性能指标')
                 ax.set_ylabel('干扰组合')
