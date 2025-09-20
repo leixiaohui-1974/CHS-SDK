@@ -155,6 +155,5 @@ def test_inflow_disturbance() -> None:
 
     return performance_summary
 
-
 if __name__ == "__main__":
     test_inflow_disturbance()
