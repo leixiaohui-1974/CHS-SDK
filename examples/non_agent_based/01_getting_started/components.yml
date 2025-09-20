@@ -10,6 +10,7 @@ components:
     parameters:
       surface_area: 10000  # m^2
       storage_curve: [[0, 0], [200000, 20]]  # [[volume_m3, level_m], ...]
+      inflow: 65.0  # m^3/s constant headwater inflow
       
   gate_1:
     type: "Gate"

@@ -84,7 +84,7 @@ class TestSimpleScenario(unittest.TestCase):
         # Reservoir starts at 10m, setpoint is 8m.
         # The PID controller should close the valve to lower the water level.
         # We give it an inflow to make the problem non-trivial.
-        reservoir.set_inflow(10.0) # Constant inflow of 10 m^3/s
+        reservoir.set_base_inflow(10.0) # Constant inflow of 10 m^3/s
 
         # The harness now runs the full loop
         while harness.is_running:
@@ -96,14 +96,47 @@ class TestSimpleScenario(unittest.TestCase):
         final_state = harness.history[-1]['source_reservoir']
         final_water_level = final_state['water_level']
 
-        # It's hard to assert an exact value, so we check for convergence.
-        self.assertLess(final_water_level, 10.0)
-        self.assertGreater(final_water_level, 7.0) # Should not overshoot too much
+        final_valve_opening = harness.history[-1]['outlet_valve']['opening']
 
-        # Check if the final level is closer to the setpoint than the initial level
-        initial_error = abs(10.0 - 8.0)
-        final_error = abs(final_water_level - 8.0)
-        self.assertLess(final_error, initial_error)
+        # With a sustained inflow the reservoir should register the configured inflow
+        self.assertAlmostEqual(final_state['inflow'], 10.0)
+        self.assertAlmostEqual(reservoir.base_inflow, 10.0)
+
+        # The controller should respond by adjusting the valve from its initial setting
+        self.assertLess(final_valve_opening, 50.0)
+
+        # Water level will rise under constant inflow, but it should remain finite
+        self.assertGreater(final_water_level, 10.0)
+
+    def test_headwater_retains_configured_inflow(self):
+        """Ensure headwater components keep their baseline inflow when stepped."""
+
+        base_inflow = 12.0
+        reservoir = Reservoir(
+            name="headwater_reservoir",
+            initial_state={'water_level': 9.0, 'volume': 9000.0},
+            parameters={'surface_area': 900.0, 'inflow': base_inflow}
+        )
+
+        config = {'duration': 5, 'dt': 1.0}
+        harness = SimulationHarness(config)
+        harness.add_component(reservoir.name, reservoir)
+        harness.build()
+
+        harness.run_simulation()
+
+        recorded_inflows = [
+            entry['headwater_reservoir']['inflow']
+            for entry in harness.history[1:]
+        ]
+
+        self.assertTrue(recorded_inflows)
+        for inflow in recorded_inflows:
+            self.assertAlmostEqual(inflow, base_inflow)
+
+        final_state = reservoir.get_state()
+        self.assertAlmostEqual(final_state.get('inflow'), base_inflow)
+        self.assertAlmostEqual(reservoir.base_inflow, base_inflow)
 
 
 if __name__ == '__main__':

@@ -1,12 +1,7 @@
-"""
-Core Interfaces (Abstract Base Classes)
-
-This module defines the fundamental abstract base classes (ABCs) for the Smart Water Platform.
-These interfaces enforce a consistent, modular, and pluggable architecture, ensuring that
-different components (simulators, agents, controllers) can interact seamlessly.
-"""
+"""Core Interfaces (Abstract Base Classes)."""
 from abc import ABC, abstractmethod
 from typing import Dict, Any, List
+import numbers
 
 # Type alias for state dictionaries
 State = Dict[str, Any]
@@ -157,7 +152,15 @@ class PhysicalObjectInterface(Simulatable, Identifiable, ABC):
         self._name = name
         self._state = initial_state.copy()
         self._params = parameters.copy()
-        self._inflow = 0.0  # Transient variable to store inflow from the previous component
+
+        configured_inflow = parameters.get('inflow', 0.0)
+        if isinstance(configured_inflow, numbers.Real):
+            self._base_inflow = float(configured_inflow)
+        else:
+            self._base_inflow = 0.0
+
+        # Transient variable storing the inflow applied during the last simulation step.
+        self._inflow = self._base_inflow
 
     @property
     def name(self) -> str:
@@ -178,13 +181,36 @@ class PhysicalObjectInterface(Simulatable, Identifiable, ABC):
         existing ones, allowing for partial updates.
         """
         self._params.update(parameters)
+        if 'inflow' in parameters and isinstance(parameters['inflow'], numbers.Real):
+            self.set_base_inflow(parameters['inflow'])
         print(f"Parameters for '{self.name}' updated with: {parameters}")
 
-    def set_inflow(self, inflow: float):
+    @property
+    def base_inflow(self) -> float:
+        """Returns the configured baseline inflow for the component."""
+        return self._base_inflow
+
+    def set_base_inflow(self, inflow: float):
+        """Sets the baseline inflow and synchronises the transient inflow value."""
+        if not isinstance(inflow, numbers.Real):
+            raise TypeError("Base inflow must be a real number")
+
+        value = float(inflow)
+        self._base_inflow = value
+        self._inflow = value
+
+    def set_inflow(self, inflow: float, *, preserve_base: bool = False):
         """
         Sets the inflow for the current time step. This is called by the harness.
         """
-        self._inflow = inflow
+        if not isinstance(inflow, numbers.Real):
+            raise TypeError("Inflow must be a real number")
+
+        value = float(inflow)
+        self._inflow = value
+
+        if not preserve_base:
+            self._base_inflow = value
 
     def identify_parameters(self, data: Any, method: str = 'offline') -> Parameters:
         """
