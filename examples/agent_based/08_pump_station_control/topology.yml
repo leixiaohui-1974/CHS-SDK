@@ -1,0 +1,7 @@
+# Component connections for the pump station scenario
+topology:
+  connections:
+    - upstream: source_res
+      downstream: ps1
+    - upstream: ps1
+      downstream: downstream_res

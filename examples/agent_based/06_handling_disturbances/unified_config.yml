@@ -1,0 +1,155 @@
+agents:
+  twin_reservoir_1:
+    type: DigitalTwinAgent
+    agent_id: twin_reservoir_1
+    simulated_object: reservoir_1
+    message_bus:
+      state_topic: state.reservoir.level
+
+  twin_gate_1:
+    type: DigitalTwinAgent
+    agent_id: twin_gate_1
+    simulated_object: gate_1
+    message_bus:
+      state_topic: state.gate.gate_1
+
+  lca_gate_1:
+    type: LocalControlAgent
+    agent_id: lca_gate_1
+    dt: 1.0
+    target_component: gate_1
+    control_type: gate_control
+    data_sources:
+      primary_data: state.reservoir.level
+    control_targets:
+      primary_target: action.gate.opening
+    controller:
+      type: PIDController
+      parameters:
+        Kp: -1.05
+        Ki: -0.18
+        Kd: -0.24
+        setpoint: 12.0
+        min_output: 0.0
+        max_output: 2.5
+    message_bus:
+      observation_topic: state.reservoir.level
+      observation_key: water_level
+      action_topic: action.gate.opening
+      command_topic: command.gate1.setpoint
+      feedback_topic: state.gate.gate_1
+      target_component: gate_1
+    logging:
+      log_observations: false
+
+  dispatcher_1:
+    type: CentralDispatcherAgent
+    agent_id: dispatcher_1
+    mode: rule
+    subscribed_topic: state.reservoir.level
+    observation_key: water_level
+    command_topic: command.gate1.setpoint
+    dispatcher_params:
+      low_level: 11.75
+      high_level: 12.7
+      low_setpoint: 12.4
+      high_setpoint: 11.9
+
+  rainfall_agent_1:
+    type: RainfallAgent
+    agent_id: rainfall_agent_1
+    config:
+      topic: disturbance.rainfall.inflow
+      start_time: 300
+      duration: 180
+      inflow_rate: 140
+
+analysis:
+  enable_validation: true
+  report_filename: disturbance_handling_report.md
+  observation_topic: state.reservoir.level
+  action_topic: action.gate.opening
+  setpoint: 12.0
+  steady_state_window: 120
+  steady_state_tolerance: 0.08
+  max_allowable_level: 12.4
+  score_weights:
+    steady_state: 0.5
+    overshoot: 0.3
+    recovery: 0.2
+
+communication:
+  topics:
+    reservoir_state: state.reservoir.level
+    gate_state: state.gate.gate_1
+    gate_action: action.gate.opening
+    gate_command: command.gate1.setpoint
+    rainfall_disturbance: disturbance.rainfall.inflow
+
+components:
+  reservoir_1:
+    type: Reservoir
+    initial_state:
+      water_level: 12.0
+      volume: 180000.0
+    parameters:
+      surface_area: 15000.0
+      storage_curve:
+        - [0, 0]
+        - [300000, 20.0]
+      inflow: 45.0
+    message_bus:
+      enabled: true
+      inflow_topic: disturbance.rainfall.inflow
+
+  gate_1:
+    type: Gate
+    initial_state:
+      opening: 0.1
+    parameters:
+      max_rate_of_change: 0.35
+      discharge_coefficient: 0.76
+      width: 8.5
+      max_opening: 2.5
+    message_bus:
+      enabled: true
+      action_topic: action.gate.opening
+      action_key: control_signal
+
+connections:
+  - from: reservoir_1
+    to: gate_1
+
+project:
+  category: agent_based
+  name: 06_handling_disturbances
+  version: '1.0'
+  description: Rainfall disturbance resilience scenario for hierarchical control
+
+runtime:
+  logging_level: INFO
+  mode: simulation
+
+simulation:
+  dt: 1.0
+  duration: 900
+  end_time: 900
+  time_step: 1.0
+
+visualization:
+  enabled: true
+  save_path: disturbance_handling_results.png
+  plots:
+    - title: Reservoir Water Level vs Time
+      x_data: time
+      y_data: reservoir_water_level
+      ylabel: Water Level (m)
+      target_line: 12.0
+    - title: Gate Opening vs Time
+      x_data: time
+      y_data: gate_opening
+      ylabel: Gate Opening (m)
+    - title: Rainfall Inflow vs Time
+      x_data: time
+      y_data: rainfall_inflow
+      ylabel: Inflow (m³/s)

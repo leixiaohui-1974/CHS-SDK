@@ -3,8 +3,9 @@
 # are fully decoupled and communicate only via a MessageBus
 
 simulation:
-  duration: 40000  # seconds
+  duration: 1200  # seconds
   dt: 1.0        # time step
+  time_step: 1.0
 
 # Communication topics for message bus
 communication:
@@ -16,20 +17,20 @@ components:
   reservoir_1:
     type: Reservoir
     initial_state:
-      volume: 21000000      # m³ (21e6)
+      volume: 210000        # m³ (2.1e5)
       water_level: 14.0     # m
     parameters:
-      surface_area: 1500000 # m² (1.5e6)
+      surface_area: 15000   # m² (1.5e4)
       storage_curve:
         - [0, 0]
-        - [30000000, 20]      # [30e6, 20]
+        - [300000, 20]
 
   gate_1:
     type: Gate
     initial_state:
       opening: 0.1          # Initial opening (0-1)
     parameters:
-      max_rate_of_change: 0.05
+      max_rate_of_change: 0.2
       discharge_coefficient: 0.6
       width: 10             # m
       max_opening: 1.0
@@ -62,7 +63,7 @@ agents:
       parameters:
         Kp: -0.5
         Ki: -0.01
-        Kd: -0.3
+        Kd: -0.1
         setpoint: 12.0        # Target water level (m)
         min_output: 0.0
         max_output: 1.0       # Same as gate max_opening
@@ -71,6 +72,8 @@ agents:
       observation_key: "water_level"
       action_topic: "action.gate.opening"
       target_component: "gate_1"
+    logging:
+      log_observations: false
 
 # Physical connections between components
 connections:
@@ -81,7 +84,7 @@ connections:
 analysis:
   final_state_report: true
   target_water_level: 12.0
-  steady_state_tolerance: 0.6
+  steady_state_tolerance: 0.15
   report_filename: "event_driven_agents_report.md"
   observation_topic: "state.reservoir.level"
   action_topic: "action.gate.opening"

@@ -16,6 +16,24 @@ import yaml
 import matplotlib.pyplot as plt
 import numpy as np
 
+
+def _to_bool(value, default=False):
+    """Best-effort conversion of configuration values to boolean."""
+
+    if value is None:
+        return default
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        lowered = value.strip().lower()
+        if lowered in {"true", "1", "yes", "y", "on"}:
+            return True
+        if lowered in {"false", "0", "no", "n", "off"}:
+            return False
+    if isinstance(value, (int, float)):
+        return bool(value)
+    return default
+
 # Add the project root to the Python path
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 sys.path.insert(0, project_root)
@@ -144,6 +162,11 @@ def create_agents(config, components, message_bus):
             observation_key = mb_config.get('observation_key')
             action_topic = mb_config.get('action_topic', control_targets.get('primary_target'))
 
+            logging_config = agent_config.get('logging', {})
+            log_observations = _to_bool(
+                logging_config.get('log_observations', agent_config.get('log_observations', False))
+            )
+
             agent = LocalControlAgent(
                 agent_id=agent_id,
                 message_bus=message_bus,
@@ -159,7 +182,8 @@ def create_agents(config, components, message_bus):
                 observation_key=observation_key,
                 action_topic=action_topic,
                 command_topic=mb_config.get('command_topic'),
-                feedback_topic=mb_config.get('feedback_topic')
+                feedback_topic=mb_config.get('feedback_topic'),
+                log_observations=log_observations
             )
             agents.append(agent)
 

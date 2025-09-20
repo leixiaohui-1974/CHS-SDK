@@ -1,0 +1,28 @@
+# Agent definitions for the pump station control scenario
+agents:
+  - id: demand_agent
+    class: DemandAgent
+    config:
+      demand_topic: "demand.pump.flow"
+      demand_schedule:
+        0: 12.5
+        200: 25.0
+        380: 37.5
+        520: 12.5
+
+  - id: monitor
+    class: MonitoringAgent
+    config:
+      components:
+        source: source_res
+        downstream: downstream_res
+        pump_station: ps1
+      monitoring_interval: 60.0
+
+  - id: pump_ctrl_agent
+    class: PumpControlAgent
+    config:
+      pump_station:
+        obj_id: ps1
+      demand_topic: "demand.pump.flow"
+      control_topic_prefix: "action.pump"
