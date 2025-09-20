@@ -34,6 +34,7 @@ components:
       - - 200000
         - 20
       surface_area: 10000
+      inflow: 65.0
     type: Reservoir
 connections:
 - from: reservoir_1

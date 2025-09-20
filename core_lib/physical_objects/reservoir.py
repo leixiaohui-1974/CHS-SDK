@@ -48,14 +48,18 @@ class Reservoir(PhysicalObjectInterface):
             print(f"水库 '{self.name}' 已订阅数据入流主题 '{self.inflow_topic}'.")
 
         # 处理从components.yml传入的inflow参数
+        configured_inflow: Optional[float] = None
         if 'inflow' in kwargs:
-            self._inflow = kwargs['inflow']
-            print(f"水库 '{self.name}' 从配置中设置初始入流为 {self._inflow} m³/s")
+            configured_inflow = kwargs['inflow']
+            print(f"水库 '{self.name}' 从配置中设置初始入流为 {configured_inflow} m³/s")
         elif 'inflow' in self._params:
-            self._inflow = self._params['inflow']
-            print(f"水库 '{self.name}' 从参数中设置初始入流为 {self._inflow} m³/s")
-        else:
-            self._inflow = 0.0
+            configured_inflow = self._params['inflow']
+            print(f"水库 '{self.name}' 从参数中设置初始入流为 {configured_inflow} m³/s")
+
+        if isinstance(configured_inflow, (int, float)):
+            self.set_base_inflow(configured_inflow)
+
+        # 如果未显式配置入流，则保持基类默认值
 
         # 记录最近一次已输出的入流值，避免在仿真过程中重复打印相同内容
         self._last_reported_inflow: Optional[float] = self._inflow
@@ -203,13 +207,13 @@ class Reservoir(PhysicalObjectInterface):
 
         return self._state
 
-    def set_inflow(self, inflow: float):
+    def set_inflow(self, inflow: float, *, preserve_base: bool = False):
         """设置水库的入流量。
-        
+
         Args:
             inflow: 新的入流量 (m³/s)
         """
-        self._inflow = inflow
+        super().set_inflow(inflow, preserve_base=preserve_base)
 
         # 当入流发生显著变化时才打印日志，避免在长时间仿真中刷屏
         should_report = False

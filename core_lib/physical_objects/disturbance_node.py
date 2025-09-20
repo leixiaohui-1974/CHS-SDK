@@ -55,7 +55,7 @@ class DisturbanceNode(PhysicalObjectInterface):
         """The outflow passed to the next component in the network."""
         return self._state['passthrough_flow']
 
-    def set_inflow(self, inflow: float):
+    def set_inflow(self, inflow: float, *, preserve_base: bool = False):
         """Sets the inflow for the current time step. Called by the harness."""
-        self._inflow = inflow
-        self._state['inflow'] = inflow
+        super().set_inflow(inflow, preserve_base=preserve_base)
+        self._state['inflow'] = self._inflow

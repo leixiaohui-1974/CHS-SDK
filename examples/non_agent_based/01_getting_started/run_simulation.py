@@ -31,7 +31,8 @@ def run_getting_started_simulation():
     # Reservoir Model
     reservoir_params = {
         'surface_area': 1.0e4,  # m^2, 缩小库容以提升控制灵敏度
-        'storage_curve': [[0, 0], [2e5, 20]]  # [[volume_m3, level_m], ...]
+        'storage_curve': [[0, 0], [2e5, 20]],  # [[volume_m3, level_m], ...]
+        'inflow': 65.0  # m^3/s，保持与教程文档一致的常数入流
     }
     reservoir_initial_state = {
         'volume': 1.4e5,  # m^3, equivalent to 14m * 1.0e4 m^2

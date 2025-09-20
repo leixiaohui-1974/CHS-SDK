@@ -24,6 +24,7 @@ class ValveControlAgent(LocalControlAgent):
                  observation_key: str,
                  action_topic: str,
                  dt: float,
+                 target_component: Optional[str] = None,
                  command_topic: Optional[str] = None,
                  feedback_topic: Optional[str] = None):
         """
@@ -37,17 +38,29 @@ class ValveControlAgent(LocalControlAgent):
             observation_key: The specific key in the state to use (e.g., 'outflow').
             action_topic: The topic to publish valve control commands to.
             dt: The simulation time step.
+            target_component: Optional identifier for the controlled component.
             command_topic: Optional topic for receiving high-level commands (e.g., new setpoint).
             feedback_topic: Optional topic for receiving state feedback from the valve.
         """
+        data_sources = {'primary_data': observation_topic}
+        control_targets = {'primary_action': action_topic}
+        allocation_config = {}
+        controller_config = {'type': controller.__class__.__name__ if controller else 'unknown'}
+
         super().__init__(
             agent_id=agent_id,
-            controller=controller,
             message_bus=message_bus,
+            dt=dt,
+            target_component=target_component or action_topic or 'valve',
+            control_type='valve_control',
+            data_sources=data_sources,
+            control_targets=control_targets,
+            allocation_config=allocation_config,
+            controller_config=controller_config,
+            controller=controller,
             observation_topic=observation_topic,
             observation_key=observation_key,
             action_topic=action_topic,
-            dt=dt,
             command_topic=command_topic,
             feedback_topic=feedback_topic
         )

@@ -340,13 +340,20 @@ class SimulationHarness:
             component = self.components[component_id]
             action = {'control_signal': controller_actions.get(component_id)}
 
-            total_inflow = 0
+            upstream_inflow = 0
             for upstream_id in self.inverse_topology.get(component_id, []):
-                total_inflow += current_step_outflows.get(upstream_id, 0)
+                upstream_inflow += current_step_outflows.get(upstream_id, 0)
 
             # 只有在组件没有受到入流扰动影响时才设置自动计算的入流
             if component_id not in disturbed_components:
-                component.set_inflow(total_inflow)
+                base_inflow = 0.0
+                if hasattr(component, 'base_inflow'):
+                    base_inflow = getattr(component, 'base_inflow')
+                elif hasattr(component, '_base_inflow'):
+                    base_inflow = getattr(component, '_base_inflow', 0.0)
+
+                combined_inflow = base_inflow + upstream_inflow
+                component.set_inflow(combined_inflow, preserve_base=True)
 
             if hasattr(component, 'is_stateful') and component.is_stateful:
                 total_outflow = 0
