@@ -88,6 +88,7 @@ class SimulationBuilder(BaseYamlLoader):
             "UnifiedCanal": "core_lib.physical_objects.unified_canal.UnifiedCanal",
             "Pipe": "core_lib.physical_objects.pipe.Pipe",
             "Pump": "core_lib.physical_objects.pump.Pump",
+            "PumpStation": "core_lib.physical_objects.pump.PumpStation",
             "Valve": "core_lib.physical_objects.valve.Valve",
             "HydropowerStation": "core_lib.physical_objects.hydropower_station.HydropowerStation",
             "Lake": "core_lib.physical_objects.lake.Lake",
@@ -98,6 +99,7 @@ class SimulationBuilder(BaseYamlLoader):
 
             # Agents & Controllers
             "PIDController": "core_lib.local_agents.control.pid_controller.PIDController",
+            "DirectGateController": "core_lib.local_agents.control.custom_controllers.DirectGateController",
             "LocalControlAgent": "core_lib.local_agents.control.local_control_agent.LocalControlAgent",
             "DigitalTwinAgent": "core_lib.local_agents.perception.digital_twin_agent.DigitalTwinAgent",
             "ParameterIdentificationAgent": "core_lib.identification.identification_agent.ParameterIdentificationAgent",
@@ -105,6 +107,9 @@ class SimulationBuilder(BaseYamlLoader):
             "CsvInflowAgent": "core_lib.data_access.csv_inflow_agent.CsvInflowAgent",
             "EmergencyAgent": "core_lib.local_agents.supervisory.emergency_agent.EmergencyAgent",
             "TopicLoggerAgent": "core_lib.local_agents.utility.topic_logger_agent.TopicLoggerAgent",
+            "DemandAgent": "core_lib.core_engine.testing.common_agents.DemandAgent",
+            "MonitoringAgent": "core_lib.core_engine.testing.common_agents.MonitoringAgent",
+            "PumpControlAgent": "core_lib.local_agents.control.pump_control_agent.PumpControlAgent",
         }
         self.object_factory = ObjectFactory(context, class_map=DEFAULT_CLASS_MAP)
 

@@ -27,7 +27,7 @@ class NoisyActuatorReservoir(Reservoir):
         self.actual_inflow = 0.0 # For logging
         print(f"NoisyActuatorReservoir '{self.name}' initialized with actuator noise (bias={self.bias}, std_dev={self.std_dev}).")
 
-    def set_inflow(self, commanded_inflow: float):
+    def set_inflow(self, commanded_inflow: float, *, preserve_base: bool = False):
         """
         重写 set_inflow 方法以模拟不精确的执行器。
         """
@@ -39,7 +39,7 @@ class NoisyActuatorReservoir(Reservoir):
             self.actual_inflow = 0
 
         # Call the parent's set_inflow with the 'actual' noisy value
-        super().set_inflow(self.actual_inflow)
+        super().set_inflow(self.actual_inflow, preserve_base=preserve_base)
 
     def get_state(self):
         """

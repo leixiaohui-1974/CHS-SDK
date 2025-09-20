@@ -17,7 +17,7 @@ import random
 from datetime import datetime
 from pathlib import Path
 import matplotlib.pyplot as plt
-import seaborn as sns
+from core_lib.utils import seaborn_support
 from scipy import stats
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from sklearn.model_selection import cross_val_score
@@ -100,6 +100,9 @@ class PrecisionTestingFramework:
     def __init__(self, output_dir: str = "test_results"):
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(exist_ok=True)
+
+        seaborn_support.ensure_matplotlib_style('seaborn-v0_8')
+        seaborn_support.set_palette('husl')
         
         self.test_suites = {}
         self.test_cases = {}
@@ -128,7 +131,7 @@ class PrecisionTestingFramework:
         
         # 初始化基准测试数据
         self._initialize_benchmark_data()
-        
+
         logger.info(f"精度测试框架初始化完成，输出目录: {self.output_dir}")
     
     def _initialize_benchmark_data(self):

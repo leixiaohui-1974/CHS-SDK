@@ -8,8 +8,10 @@
 import sys
 import os
 import time
+import json
 import logging
 import threading
+import random
 from typing import Dict, Any, List
 
 # 添加项目根目录到Python路径
@@ -24,6 +26,12 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+
+def _seed_rng(offset: int) -> None:
+    """为网络扰动测试设定可重复的随机数种子。"""
+
+    random.seed(20240920 + offset)
 
 class TestAgent:
     """测试代理类"""
@@ -86,6 +94,7 @@ class TestAgent:
 
 def test_network_delay_disturbance():
     """测试网络延迟扰动"""
+    _seed_rng(1)
     logger.info("=== 开始测试网络延迟扰动 ===")
     
     # 创建增强消息总线
@@ -156,14 +165,30 @@ def test_network_delay_disturbance():
     logger.info(f"Agent2 接收消息数: {len(agent2.received_messages)}")
     
     # 统计延迟消息
-    delayed_messages = [msg for msg in agent1.received_messages + agent2.received_messages 
+    delayed_messages = [msg for msg in agent1.received_messages + agent2.received_messages
                        if 'actual_delay' in msg]
-    logger.info(f"延迟消息数量: {len(delayed_messages)}")
-    
+    num_delayed = len(delayed_messages)
+    logger.info(f"延迟消息数量: {num_delayed}")
+
     if delayed_messages:
-        avg_delay = sum(msg['actual_delay'] for msg in delayed_messages) / len(delayed_messages)
+        avg_delay = sum(msg['actual_delay'] for msg in delayed_messages) / num_delayed
         logger.info(f"平均延迟: {avg_delay:.3f}s")
-    
+    else:
+        avg_delay = 0.0
+
+    # 验证延迟扰动是否生效且统计合理
+    expected_delay = delay_config['parameters']['base_delay'] / 1000.0
+    tolerance = max(0.05, delay_config['parameters']['jitter'] / 1000.0)
+    min_delayed_expected = 10
+    if num_delayed < min_delayed_expected:
+        raise AssertionError(
+            f"延迟消息数量不足，期望至少 {min_delayed_expected} 条，实际仅 {num_delayed} 条"
+        )
+    if not (expected_delay - tolerance <= avg_delay <= expected_delay + tolerance):
+        raise AssertionError(
+            f"平均延迟 {avg_delay:.3f}s 超出容差范围 [{expected_delay - tolerance:.3f}, {expected_delay + tolerance:.3f}]"
+        )
+
     # 获取扰动状态
     status = disturbance_manager.get_all_status()
     logger.info(f"消息统计: {status['message_bus_status']['stats']}")
@@ -176,13 +201,17 @@ def test_network_delay_disturbance():
         'agent1_sent': len(agent1.sent_messages),
         'agent1_received': len(agent1.received_messages),
         'agent2_received': len(agent2.received_messages),
-        'delayed_messages': len(delayed_messages),
-        'avg_delay': avg_delay if delayed_messages else 0,
-        'message_stats': status['message_bus_status']['stats']
+        'delayed_messages': num_delayed,
+        'avg_delay': avg_delay,
+        'message_stats': status['message_bus_status']['stats'],
+        'expected_avg_delay': expected_delay,
+        'avg_delay_tolerance': tolerance,
+        'min_expected_delayed_messages': min_delayed_expected,
     }
 
 def test_packet_loss_disturbance():
     """测试数据包丢失扰动"""
+    _seed_rng(2)
     logger.info("=== 开始测试数据包丢失扰动 ===")
     
     # 创建增强消息总线
@@ -242,7 +271,16 @@ def test_packet_loss_disturbance():
     total_received = len(agent1.received_messages) + len(agent2.received_messages)
     actual_loss_rate = 1 - (total_received / (total_sent * 2))  # 每条消息应该被两个代理接收
     logger.info(f"实际丢包率: {actual_loss_rate:.3f}")
-    
+
+    # 验证丢包扰动是否达到预期强度
+    expected_loss = loss_config['parameters']['packet_loss_rate']
+    lower_bound = max(0.0, expected_loss - 0.05)
+    upper_bound = min(0.95, expected_loss + 0.25)
+    if not (lower_bound <= actual_loss_rate <= upper_bound):
+        raise AssertionError(
+            f"实际丢包率 {actual_loss_rate:.3f} 未落入期望区间 [{lower_bound:.3f}, {upper_bound:.3f}]"
+        )
+
     # 获取扰动状态
     status = disturbance_manager.get_all_status()
     logger.info(f"消息统计: {status['message_bus_status']['stats']}")
@@ -255,11 +293,13 @@ def test_packet_loss_disturbance():
         'total_sent': total_sent,
         'total_received': total_received,
         'actual_loss_rate': actual_loss_rate,
-        'message_stats': status['message_bus_status']['stats']
+        'message_stats': status['message_bus_status']['stats'],
+        'expected_loss_bounds': (lower_bound, upper_bound),
     }
 
 def test_combined_network_disturbances():
     """测试组合网络扰动"""
+    _seed_rng(3)
     logger.info("=== 开始测试组合网络扰动 ===")
     
     # 创建增强消息总线
@@ -342,19 +382,36 @@ def test_combined_network_disturbances():
     
     delayed_messages = [msg for msg in all_received if 'actual_delay' in msg]
     normal_messages = [msg for msg in all_received if 'actual_delay' not in msg]
-    
-    logger.info(f"延迟消息数量: {len(delayed_messages)}")
+    num_delayed = len(delayed_messages)
+
+    logger.info(f"延迟消息数量: {num_delayed}")
     logger.info(f"正常消息数量: {len(normal_messages)}")
-    
+
     if delayed_messages:
-        avg_delay = sum(msg['actual_delay'] for msg in delayed_messages) / len(delayed_messages)
+        avg_delay = sum(msg['actual_delay'] for msg in delayed_messages) / num_delayed
         max_delay = max(msg['actual_delay'] for msg in delayed_messages)
         min_delay = min(msg['actual_delay'] for msg in delayed_messages)
-        
+
         logger.info(f"平均延迟: {avg_delay:.3f}s")
         logger.info(f"最大延迟: {max_delay:.3f}s")
         logger.info(f"最小延迟: {min_delay:.3f}s")
-    
+    else:
+        avg_delay = max_delay = min_delay = 0.0
+
+    # 验证组合扰动的延迟覆盖率与延迟统计
+    if num_delayed < total_sent * 0.6:
+        raise AssertionError(
+            f"组合扰动延迟消息占比不足，期望至少 {total_sent * 0.6:.0f} 条，实际 {num_delayed} 条"
+        )
+    if not (0.04 <= avg_delay <= 0.12):
+        raise AssertionError(
+            f"组合扰动平均延迟 {avg_delay:.3f}s 超出安全范围 [0.040, 0.120]"
+        )
+    if max_delay < 0.12:
+        raise AssertionError(
+            f"组合扰动最大延迟 {max_delay:.3f}s 低于预期，疑似未触发高延迟阶段"
+        )
+
     # 获取最终状态
     status = disturbance_manager.get_all_status()
     logger.info(f"最终消息统计: {status['message_bus_status']['stats']}")
@@ -366,10 +423,15 @@ def test_combined_network_disturbances():
     return {
         'total_sent': total_sent,
         'total_received': total_received,
-        'delayed_messages': len(delayed_messages),
+        'delayed_messages': num_delayed,
         'normal_messages': len(normal_messages),
         'avg_delay': avg_delay if delayed_messages else 0,
-        'message_stats': status['message_bus_status']['stats']
+        'message_stats': status['message_bus_status']['stats'],
+        'avg_delay_bounds': (0.04, 0.12),
+        'min_expected_delayed_messages': total_sent * 0.6,
+        'min_expected_max_delay': 0.12,
+        'max_delay': max_delay,
+        'min_delay': min_delay,
     }
 
 def main():
@@ -399,9 +461,55 @@ def main():
         logger.info(f"丢包扰动测试 - 实际丢包率: {loss_results['actual_loss_rate']:.3f}")
         logger.info(f"组合扰动测试 - 延迟消息: {combined_results['delayed_messages']}, "
                    f"平均延迟: {combined_results['avg_delay']:.3f}s")
-        
+
+        delay_score = 1.0 if (
+            delay_results['delayed_messages'] >= delay_results['min_expected_delayed_messages']
+            and delay_results['expected_avg_delay'] - delay_results['avg_delay_tolerance']
+            <= delay_results['avg_delay']
+            <= delay_results['expected_avg_delay'] + delay_results['avg_delay_tolerance']
+        ) else 0.0
+
+        lower_loss, upper_loss = loss_results['expected_loss_bounds']
+        loss_score = 1.0 if lower_loss <= loss_results['actual_loss_rate'] <= upper_loss else 0.0
+
+        combined_score = 1.0 if (
+            combined_results['delayed_messages'] >= combined_results['min_expected_delayed_messages']
+            and combined_results['avg_delay_bounds'][0] <= combined_results['avg_delay'] <= combined_results['avg_delay_bounds'][1]
+        ) else 0.0
+        reason_score = 1.0 if all(score == 1.0 for score in (delay_score, loss_score, combined_score)) else 0.0
+
+        performance_summary = {
+            "delay_resilience_score": delay_score,
+            "packet_loss_resilience_score": loss_score,
+            "combined_resilience_score": combined_score,
+            "reasonableness": {
+                "score": reason_score,
+                "details": {
+                    "delay_avg": delay_results['avg_delay'],
+                    "delay_messages": delay_results['delayed_messages'],
+                    "delay_bounds": [
+                        delay_results['expected_avg_delay'] - delay_results['avg_delay_tolerance'],
+                        delay_results['expected_avg_delay'] + delay_results['avg_delay_tolerance'],
+                    ],
+                    "loss_rate": loss_results['actual_loss_rate'],
+                    "loss_bounds": list(loss_results['expected_loss_bounds']),
+                    "combined_delay_messages": combined_results['delayed_messages'],
+                    "combined_delay_bounds": list(combined_results['avg_delay_bounds']),
+                    "combined_delay_avg": combined_results['avg_delay'],
+                    "combined_max_delay": combined_results['max_delay'],
+                },
+            },
+        }
+
         logger.info("网络扰动测试完成")
-        
+        logger.info("性能评价得分: %s", performance_summary)
+        if reason_score < 1.0:
+            raise AssertionError("网络扰动性能评分未达到满分，请检查扰动脚本配置")
+
+        print(f"__PERFORMANCE_SUMMARY__={json.dumps(performance_summary, ensure_ascii=False)}")
+
+        return performance_summary
+
     except Exception as e:
         logger.error(f"测试过程中发生错误: {e}")
         import traceback

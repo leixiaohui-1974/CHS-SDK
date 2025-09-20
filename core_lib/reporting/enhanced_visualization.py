@@ -14,7 +14,8 @@ import base64
 from typing import Dict, Any, List, Tuple
 import logging
 from matplotlib.gridspec import GridSpec
-import seaborn as sns
+
+from core_lib.utils import seaborn_support
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +23,8 @@ class EnhancedVisualization:
     """增强可视化类"""
     
     def __init__(self):
+        seaborn_support.ensure_matplotlib_style('seaborn-v0_8')
+        seaborn_support.set_palette('husl')
         self.setup_chinese_font()
         
     def setup_chinese_font(self):

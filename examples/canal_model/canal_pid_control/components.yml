@@ -1,44 +1,43 @@
-# Physical Components Definition for the PID Control Comparison Example
+# Physical components summary for the simplified PID comparison example
 components:
   - id: upstream_reservoir
     class: Reservoir
+    description: Steady inflow boundary feeding the canal system
     initial_state:
       water_level: 10.0
     parameters:
-      area: 10000.0
-      inflow: 50.0
+      surface_area: 10000.0
+      constant_inflow: 18.0
 
   - id: gate_1
     class: Gate
+    description: Linear化能力模型，最大流量 36 m³/s
     initial_state:
       opening: 0.5
     parameters:
-      width: 5.0
-      discharge_coefficient: 0.8
+      max_flow: 36.0
 
   - id: canal_1
-    class: UnifiedCanal
+    class: StoragePool
+    description: 主干渠等效库容，用于保持 5.0 m 的目标水位
     initial_state:
       water_level: 5.0
     parameters:
-      model_type: 'integral_delay'
-      gain: 0.001
-      delay: 300 # 5 minutes
-
-  - id: canal_2
-    class: UnifiedCanal
-    initial_state:
-      water_level: 4.5
-    parameters:
-      model_type: 'integral_delay'
-      gain: 0.001
-      delay: 600 # 10 minutes
+      storage_area: 5500.0
 
   - id: gate_2
     class: Gate
+    description: 向尾水池供水的调节闸门，最大流量 36 m³/s
     initial_state:
       opening: 0.5
     parameters:
-      width: 5.0
-      discharge_coefficient: 0.8
+      max_flow: 36.0
+
+  - id: canal_2
+    class: StoragePool
+    description: 尾水池等效库容，下游恒定需求 18 m³/s
+    initial_state:
+      water_level: 4.5
+    parameters:
+      storage_area: 4800.0
 

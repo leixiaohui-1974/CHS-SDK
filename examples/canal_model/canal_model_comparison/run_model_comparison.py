@@ -13,7 +13,6 @@ sys.path.insert(0, str(project_root))
 
 from core_lib.core_engine.testing.simulation_harness import SimulationHarness
 from core_lib.physical_objects.unified_canal import UnifiedCanal
-from core_lib.central_coordination.collaboration.message_bus import MessageBus
 from core_lib.mission.scenario_agent import ScenarioAgent
 from core_lib.physical_objects.reservoir import Reservoir
 from core_lib.physical_objects.gate import Gate
@@ -118,6 +117,45 @@ def plot_results(scenarios, config_path):
     plt.savefig(plot_path)
     print(f"比较图已保存至 {plot_path}")
 
+
+def summarise_results(scenarios, config_path):
+    """计算性能指标并打印摘要表。"""
+
+    summary_rows = []
+    for scenario_name in scenarios:
+        filepath = os.path.join(config_path, f"results_{scenario_name}.csv")
+        if not os.path.exists(filepath):
+            continue
+
+        df = pd.read_csv(filepath)
+        level = df['canal_water_level']
+        inflow = df['canal_inflow']
+        outflow = df['canal_outflow']
+
+        final_level = float(level.iloc[-1])
+        peak_level = float(level.max())
+        tolerance = 0.02 * abs(final_level) if final_level else 0.05
+        deviations = (level - final_level).abs()
+        if (deviations > tolerance).any():
+            settling_time = float(df.loc[deviations > tolerance, 'time'].max())
+        else:
+            settling_time = float(df['time'].iloc[0])
+
+        balance_error = float(inflow.iloc[-1] - outflow.iloc[-1])
+
+        summary_rows.append({
+            '模型': scenario_name,
+            '最终水位(m)': round(final_level, 3),
+            '峰值水位(m)': round(peak_level, 3),
+            '稳定时间(s)': round(settling_time, 1),
+            '入流-出流差值(m³/s)': round(balance_error, 3)
+        })
+
+    if summary_rows:
+        summary_df = pd.DataFrame(summary_rows)
+        print("\n性能指标汇总：")
+        print(summary_df.to_string(index=False))
+
 def main():
     config_path = os.path.dirname(__file__)
 
@@ -144,10 +182,12 @@ def main():
         "linear_reservoir": {'model_type': 'linear_reservoir', 'storage_constant': 1200, 'level_storage_ratio': 0.005}
     }
 
+    scenario_names = list(scenarios.keys())
     for name, params in scenarios.items():
         run_scenario(name, config, base_components, params, config_path)
 
-    plot_results(list(scenarios.keys()), config_path)
+    plot_results(scenario_names, config_path)
+    summarise_results(scenario_names, config_path)
     print("所有场景执行完毕，并已绘制结果。")
 
 if __name__ == "__main__":

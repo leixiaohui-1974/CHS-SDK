@@ -1,0 +1,100 @@
+# Configuration-driven pump station control scenario
+simulation:
+  duration: 720
+  dt: 1.0
+
+communication:
+  topics:
+    demand: "demand.pump.flow"
+    pump_action_prefix: "action.pump"
+
+components:
+  source_res:
+    type: Reservoir
+    initial_state:
+      water_level: 11.5
+    parameters:
+      surface_area: 180000.0
+      inflow: 32.0
+  downstream_res:
+    type: Reservoir
+    initial_state:
+      water_level: 24.0
+    parameters:
+      surface_area: 220000.0
+  pump_station:
+    type: PumpStation
+    initial_state:
+      total_outflow: 0.0
+      active_pumps: 0
+    pumps:
+      - id: p1
+        parameters:
+          max_flow_rate: 12.5
+          max_head: 22.0
+          power_consumption_kw: 45.0
+      - id: p2
+        parameters:
+          max_flow_rate: 12.5
+          max_head: 22.0
+          power_consumption_kw: 45.0
+      - id: p3
+        parameters:
+          max_flow_rate: 12.5
+          max_head: 22.0
+          power_consumption_kw: 45.0
+
+connections:
+  - from: source_res
+    to: pump_station
+  - from: pump_station
+    to: downstream_res
+
+agents:
+  demand_agent:
+    type: DemandAgent
+    agent_id: demand_agent
+    demand_topic: "demand.pump.flow"
+    demand_schedule:
+      0: 12.5
+      200: 25.0
+      380: 37.5
+      520: 12.5
+  monitoring_agent:
+    type: MonitoringAgent
+    agent_id: monitor
+    components:
+      source: source_res
+      downstream: downstream_res
+      pump_station: pump_station
+    monitoring_interval: 60.0
+  pump_controller:
+    type: PumpControlAgent
+    agent_id: pump_ctrl_agent
+    target_component: pump_station
+    demand_topic: "demand.pump.flow"
+    control_topic_prefix: "action.pump"
+
+analysis:
+  enable_validation: true
+  tolerance: 0.25
+  settling_time: 40.0
+  report_file: "pump_station_report.md"
+  score_target: 1.0
+  segments:
+    - start: 0
+      end: 200
+      target: 12.5
+    - start: 200
+      end: 380
+      target: 25.0
+    - start: 380
+      end: 520
+      target: 37.5
+    - start: 520
+      end: 720
+      target: 12.5
+
+visualization:
+  enabled: false
+  save_path: "08_pump_station_results.png"

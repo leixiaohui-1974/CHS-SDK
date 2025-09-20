@@ -13,7 +13,7 @@ class PIDController(Controller):
     """
 
     def __init__(self, Kp: float, Ki: float, Kd: float, setpoint: float,
-                 min_output: float, max_output: float):
+                 min_output: float, max_output: float, bias: float = 0.0):
         """
         Initializes the PID controller.
 
@@ -31,11 +31,23 @@ class PIDController(Controller):
         self.setpoint = setpoint
         self.min_output = min_output
         self.max_output = max_output
+        self.bias = bias
 
         self._integral = 0
         self._previous_error = 0
-        print(f"PIDController created with Kp={Kp}, Ki={Ki}, Kd={Kd}, Setpoint={setpoint}, "
-              f"OutputRange=[{min_output}, {max_output}].")
+        print(
+            "PIDController created with Kp={Kp}, Ki={Ki}, Kd={Kd}, Setpoint={setpoint}, "
+            "OutputRange=[{min_output}, {max_output}], Bias={bias}."
+            .format(
+                Kp=Kp,
+                Ki=Ki,
+                Kd=Kd,
+                setpoint=setpoint,
+                min_output=min_output,
+                max_output=max_output,
+                bias=bias,
+            )
+        )
 
     def compute_control_action(self, observation: State, dt: float) -> float:
         """
@@ -59,11 +71,15 @@ class PIDController(Controller):
 
         error = self.setpoint - process_variable
 
+        # Reset the integral term if the error crosses zero to prevent residual
+        # integral energy from driving the actuator past the setpoint.
+        if error * self._previous_error < 0:
+            self._integral = 0
+
         # Proportional term
         p_term = self.Kp * error
 
         # Integral term (with anti-windup logic handled during clamping)
-        # Note: The integral term is updated *after* checking for saturation
         i_term = self.Ki * self._integral
 
         # Derivative term
@@ -71,27 +87,42 @@ class PIDController(Controller):
         d_term = self.Kd * derivative
 
         # Compute raw, unclamped output
+        effective_min = self.min_output - self.bias
+        effective_max = self.max_output - self.bias
+
         output = p_term + i_term + d_term
 
-        # Clamp the output and apply anti-windup
-        if output > self.max_output:
-            clamped_output = self.max_output
-            # Anti-windup: Do not increase integral if output is maxed out and error is positive
-            if error > 0:
-                pass # Don't integrate
-            else:
-                self._integral += error * dt
-        elif output < self.min_output:
-            clamped_output = self.min_output
-            # Anti-windup: Do not decrease integral if output is minned out and error is negative
-            if error < 0:
-                pass # Don't integrate
-            else:
-                self._integral += error * dt
-        else:
-            clamped_output = output
-            # Only integrate if the output is not saturated
+        # Determine whether integrating the error would push the actuator further
+        # into saturation. This logic takes the sign of Ki into account so that
+        # controllers configured with inverted gains (e.g., valves that open when
+        # the error is negative) can still unwind the integral term.
+        should_integrate = True
+        control_effect = self.Ki * error
+
+        if output > effective_max and control_effect >= 0:
+            should_integrate = False
+        elif output < effective_min and control_effect <= 0:
+            should_integrate = False
+
+        # Clamp the preliminary output before updating the integral term. This
+        # allows the back-calculation step below to pull the integrator toward the
+        # saturated output when necessary.
+        clamped_delta = max(effective_min, min(output, effective_max))
+
+        if should_integrate:
             self._integral += error * dt
+        elif self.Ki != 0:
+            # Back-calculation anti-windup: adjust the integrator in the direction
+            # of the clamped output so that the stored integral energy reflects the
+            # actuator's actual operating point.
+            self._integral += (clamped_delta - output) / self.Ki
+
+        # Recompute the output using the (possibly) updated integral state and
+        # apply the actuator limits once more to obtain the final command.
+        i_term = self.Ki * self._integral
+        output = p_term + i_term + d_term
+        clamped_delta = max(effective_min, min(output, effective_max))
+        clamped_output = self.bias + clamped_delta
 
         # Update state for next iteration
         self._previous_error = error

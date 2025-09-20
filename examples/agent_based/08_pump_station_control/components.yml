@@ -1,0 +1,63 @@
+# Physical components for the pump station control scenario
+components:
+  - id: source_res
+    class: Reservoir
+    initial_state:
+      water_level: 11.5
+    parameters:
+      surface_area: 180000.0
+      inflow: 32.0
+
+  - id: p1
+    class: Pump
+    initial_state:
+      status: 0
+    parameters:
+      max_flow_rate: 12.5
+      max_head: 22.0
+      power_consumption_kw: 45.0
+    message_bus:
+      enabled: true
+      action_topic: "action.pump.p1"
+
+  - id: p2
+    class: Pump
+    initial_state:
+      status: 0
+    parameters:
+      max_flow_rate: 12.5
+      max_head: 22.0
+      power_consumption_kw: 45.0
+    message_bus:
+      enabled: true
+      action_topic: "action.pump.p2"
+
+  - id: p3
+    class: Pump
+    initial_state:
+      status: 0
+    parameters:
+      max_flow_rate: 12.5
+      max_head: 22.0
+      power_consumption_kw: 45.0
+    message_bus:
+      enabled: true
+      action_topic: "action.pump.p3"
+
+  - id: ps1
+    class: PumpStation
+    initial_state:
+      total_outflow: 0.0
+      active_pumps: 0
+    parameters: {}
+    pumps:
+      - obj_id: p1
+      - obj_id: p2
+      - obj_id: p3
+
+  - id: downstream_res
+    class: Reservoir
+    initial_state:
+      water_level: 24.0
+    parameters:
+      surface_area: 220000.0

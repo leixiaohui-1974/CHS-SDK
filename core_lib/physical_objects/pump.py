@@ -13,8 +13,8 @@ class Pump(PhysicalObjectInterface):
     def __init__(self, name: str, initial_state: State, parameters: Parameters,
                  message_bus: Optional[MessageBus] = None, action_topic: Optional[str] = None):
         super().__init__(name, initial_state, parameters)
-        self._state.setdefault('outflow', 0)
-        self._state.setdefault('power_draw_kw', 0)
+        self._state.setdefault('outflow', 0.0)
+        self._state.setdefault('power_draw_kw', 0.0)
         self.bus = message_bus
         self.action_topic = action_topic
         self.target_status = self._state.get('status', 0)
@@ -79,6 +79,7 @@ class PumpStation(PhysicalObjectInterface):
     def __init__(self, name: str, initial_state: State, parameters: Parameters, pumps: list[Pump]):
         super().__init__(name, initial_state, parameters)
         self.pumps = pumps
+        self._state.setdefault('outflow', 0.0)
         self._state.setdefault('total_outflow', 0.0)
         self._state.setdefault('active_pumps', 0)
         self._state.setdefault('total_power_draw_kw', 0.0)
@@ -102,6 +103,7 @@ class PumpStation(PhysicalObjectInterface):
             if pump_state.get('status', 0) == 1:
                 active_pumps += 1
 
+        self._state['outflow'] = total_outflow
         self._state['total_outflow'] = total_outflow
         self._state['active_pumps'] = active_pumps
         self._state['total_power_draw_kw'] = total_power

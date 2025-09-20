@@ -1,127 +1,305 @@
-import os
+"""Compare PID control strategies for the canal system using a simplified hydraulic model."""
+
+from __future__ import annotations
+"""Run and evaluate canal PID control strategies using a simplified model."""
+
+import math
 import sys
-import pandas as pd
+from dataclasses import dataclass
 from pathlib import Path
-import matplotlib.pyplot as plt
+from typing import Dict, List, Tuple
 
-# Add project root to Python path
-project_root = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(project_root))
+import numpy as np
+import pandas as pd
 
-from core_lib.io.yaml_loader import SimulationBuilder
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
-def run_and_log_scenario(scenario_name, config_path, results_dir):
-    """
-    Runs a simulation scenario and logs the results to a CSV file.
-    """
-    print(f"--- Running Scenario: {scenario_name} ---")
+from core_lib.local_agents.control.pid_controller import PIDController
 
-    try:
-        # Load and run the simulation
-        loader = SimulationBuilder(scenario_path=config_path)
-        harness = loader.load()
-        harness.run()
+G = 9.81  # gravitational acceleration (m/s^2)
 
-        # Log results
-        output_data = harness.get_logged_data()
-        df = pd.DataFrame(output_data)
 
-        # Ensure the results directory exists
-        results_dir.mkdir(parents=True, exist_ok=True)
+@dataclass
+class SimulationParameters:
+    """Physical parameters shared by all scenarios."""
 
-        output_file = results_dir / f"results_{scenario_name}.csv"
-        df.to_csv(output_file, index=False)
-        print(f"Results saved to {output_file}")
+    dt: float = 10.0  # simulation time step (s)
+    duration: float = 7200.0  # total duration (s)
+    reservoir_area: float = 10000.0  # surface area of upstream reservoir (m^2)
+    canal1_area: float = 5500.0  # equivalent surface area of canal pool 1 (m^2)
+    canal2_area: float = 4800.0  # equivalent surface area of canal pool 2 (m^2)
+    max_opening: float = 1.0
+    gate1_capacity: float = 36.0  # max flow (m^3/s) at full opening for gate 1
+    gate2_capacity: float = 36.0  # max flow (m^3/s) at full opening for gate 2
+    base_inflow: float = 18.0  # upstream inflow (m^3/s)
+    base_demand: float = 18.0  # downstream delivery demand (m^3/s)
 
-        return output_file
 
-    except Exception as e:
-        print(f"Error running scenario '{scenario_name}': {e}")
-        return None
+@dataclass
+class ScenarioDefinition:
+    """Configuration for a single control strategy."""
 
-def plot_results(csv_files, plot_title, output_image_path):
-    """
-    Plots the water level from multiple CSV files on a single graph.
-    """
-    plt.style.use('seaborn-v0_8-whitegrid')
-    fig, ax = plt.subplots(figsize=(15, 8))
+    label: str
+    tracked_levels: Dict[str, float]
+    gate1_mode: str  # 'fixed' or 'pid'
+    gate1_setpoint: float
+    gate2_setpoint: float
 
-    for scenario_name, file_path in csv_files.items():
-        if file_path:
-            df = pd.read_csv(file_path)
-            # Try different possible column names for the target reservoir water level
-            water_level_col = None
-            possible_cols = ['target_reservoir_water_level', 'downstream_reservoir_water_level', 'canal_2_water_level']
-            for col in possible_cols:
-                if col in df.columns:
-                    water_level_col = col
-                    break
-            
-            if water_level_col:
-                ax.plot(df['time'], df[water_level_col], label=scenario_name, linewidth=2.5)
-            else:
-                print(f"Warning: No suitable water level column found for {scenario_name}. Available columns: {list(df.columns)}")
 
-    ax.set_title(plot_title, fontsize=18, weight='bold')
-    ax.set_xlabel("Time (seconds)", fontsize=14)
-    ax.set_ylabel("Reservoir Water Level (meters)", fontsize=14)
-    ax.legend(fontsize=12, loc='best')
-    ax.grid(True, which='both', linestyle='--', linewidth=0.5)
-    ax.tick_params(axis='both', which='major', labelsize=12)
+SCENARIOS: Dict[str, ScenarioDefinition] = {
+    "local_upstream": ScenarioDefinition(
+        label="Local Upstream Control",
+        tracked_levels={"canal_1": 5.0},
+        gate1_mode="fixed",
+        gate1_setpoint=0.5,  # fixed opening for gate 1
+        gate2_setpoint=5.0,
+    ),
+    "distant_downstream": ScenarioDefinition(
+        label="Distant Downstream Control",
+        tracked_levels={"canal_1": 5.0, "canal_2": 4.5},
+        gate1_mode="pid",
+        gate1_setpoint=5.0,
+        gate2_setpoint=4.5,
+    ),
+}
 
-    fig.tight_layout()
-    plt.savefig(output_image_path)
-    print(f"Plot saved to {output_image_path}")
+
+def _gate_flow(opening: float, capacity: float, params: SimulationParameters) -> float:
+    """Compute gate discharge using a linearised capacity model."""
+
+    opening = max(0.0, min(opening, params.max_opening))
+    return opening * capacity
+
+
+def _initial_state(params: SimulationParameters) -> Dict[str, float]:
+    """Return a steady-state initial condition."""
+
+    gate1_opening = 0.5
+    gate1_flow = _gate_flow(gate1_opening, params.gate1_capacity, params)
+    gate2_opening = 0.5
+    gate2_flow = _gate_flow(gate2_opening, params.gate2_capacity, params)
+
+    demand_flow = params.base_demand
+    return {
+        "time": 0.0,
+        "reservoir_level": 10.0,
+        "reservoir_volume": 10.0 * params.reservoir_area,
+        "gate1_opening": gate1_opening,
+        "gate1_flow": gate1_flow,
+        "canal1_level": 5.0,
+        "gate2_opening": gate2_opening,
+        "gate2_flow": gate2_flow,
+        "canal2_level": 4.5,
+        "demand_flow": demand_flow,
+    }
+
+
+def _simulate(strategy: ScenarioDefinition, params: SimulationParameters) -> pd.DataFrame:
+    """Run the control simulation for a given strategy."""
+
+    state = _initial_state(params)
+    history: List[Dict[str, float]] = [state.copy()]
+
+    gate1_controller = None
+    if strategy.gate1_mode == "pid":
+        gate1_controller = PIDController(
+            Kp=-0.7,
+            Ki=-0.007,
+            Kd=-0.06,
+            setpoint=strategy.gate1_setpoint,
+            min_output=0.0,
+            max_output=params.max_opening,
+            bias=0.5,
+        )
+
+    gate2_controller = PIDController(
+        Kp=-0.9,
+        Ki=-0.012,
+        Kd=-0.08,
+        setpoint=strategy.gate2_setpoint,
+        min_output=0.0,
+        max_output=params.max_opening,
+        bias=0.5,
+    )
+
+    num_steps = int(params.duration // params.dt)
+
+    for step in range(1, num_steps + 1):
+        current = history[-1].copy()
+        time_now = step * params.dt
+
+        reservoir_level = current["reservoir_level"]
+        canal1_level = current["canal1_level"]
+        canal2_level = current["canal2_level"]
+
+        # Gate 1 control
+        if gate1_controller:
+            gate1_opening = gate1_controller.compute_control_action(
+                {"process_variable": canal1_level}, params.dt
+            )
+        else:
+            gate1_opening = strategy.gate1_setpoint
+
+        # Gate 2 control
+        feedback_level = canal1_level if strategy.label.startswith("Local") else canal2_level
+        gate2_opening = gate2_controller.compute_control_action(
+            {"process_variable": feedback_level}, params.dt
+        )
+
+        gate1_flow = _gate_flow(gate1_opening, params.gate1_capacity, params)
+        gate2_flow = _gate_flow(gate2_opening, params.gate2_capacity, params)
+
+        # Demand adjusts with tail water level to mimic downstream needs.
+        demand_flow = params.base_demand
+
+        # Reservoir mass balance
+        net_inflow = params.base_inflow - gate1_flow
+        reservoir_volume = max(0.0, current["reservoir_volume"] + net_inflow * params.dt)
+        reservoir_level = reservoir_volume / params.reservoir_area
+
+        # Canal 1 mass balance
+        canal1_delta = (gate1_flow - gate2_flow) * params.dt / params.canal1_area
+        canal1_level = max(0.0, canal1_level + canal1_delta)
+
+        # Canal 2 mass balance
+        canal2_delta = (gate2_flow - demand_flow) * params.dt / params.canal2_area
+        canal2_level = max(0.0, canal2_level + canal2_delta)
+
+        next_state = {
+            "time": time_now,
+            "reservoir_level": reservoir_level,
+            "reservoir_volume": reservoir_volume,
+            "gate1_opening": gate1_opening,
+            "gate1_flow": gate1_flow,
+            "canal1_level": canal1_level,
+            "gate2_opening": gate2_opening,
+            "gate2_flow": gate2_flow,
+            "canal2_level": canal2_level,
+            "demand_flow": demand_flow,
+        }
+        history.append(next_state)
+
+    df = pd.DataFrame(history)
+    df.rename(
+        columns={
+            "reservoir_level": "upstream_reservoir_water_level",
+            "reservoir_volume": "upstream_reservoir_volume",
+            "gate1_flow": "gate_1_outflow",
+            "gate1_opening": "gate_1_opening",
+            "gate2_flow": "gate_2_outflow",
+            "gate2_opening": "gate_2_opening",
+            "canal1_level": "canal_1_water_level",
+            "canal2_level": "canal_2_water_level",
+        },
+        inplace=True,
+    )
+    return df
+
+
+def _compute_settling_time(series: pd.Series, time: pd.Series, setpoint: float, tolerance: float) -> float:
+    deviation = (series - setpoint).abs()
+    violation_positions = np.where(deviation.to_numpy() > tolerance)[0]
+    if len(violation_positions) == 0:
+        return float(time.iloc[0])
+    last_violation = violation_positions[-1]
+    if last_violation + 1 < len(time):
+        return float(time.iloc[last_violation + 1])
+    return float(time.iloc[-1])
+
+
+def evaluate_performance(df: pd.DataFrame, scenario: ScenarioDefinition, params: SimulationParameters) -> Tuple[pd.DataFrame, Dict[str, float]]:
+    time = df["time"]
+    dt = params.dt
+    metrics = []
+    scores: Dict[str, float] = {}
+
+    for component, setpoint in scenario.tracked_levels.items():
+        column = f"{component}_water_level"
+        series = df[column]
+        steady_state_error = float(abs(series.iloc[-1] - setpoint))
+        peak_overshoot = float(max(series.max() - setpoint, 0.0))
+        undershoot = float(max(setpoint - series.min(), 0.0))
+        iae = float((series - setpoint).abs().sum() * dt)
+        tolerance = max(0.02, 0.01 * setpoint)
+        settling_time = _compute_settling_time(series, time, setpoint, tolerance)
+
+        precision_score = max(0.0, 1.0 - steady_state_error / max(0.05 * setpoint, 0.05))
+        smoothness_score = max(0.0, 1.0 - peak_overshoot / max(0.15 * setpoint, 0.15))
+        overall = 100.0 * min(1.0, 0.65 * precision_score + 0.35 * smoothness_score)
+        scores[component] = overall
+
+        metrics.append(
+            {
+                "组件": component,
+                "设定值 (m)": round(setpoint, 3),
+                "最终水位偏差 (m)": round(steady_state_error, 4),
+                "最大超调 (m)": round(peak_overshoot, 4),
+                "最大欠调 (m)": round(undershoot, 4),
+                "积分绝对误差 (m·s)": round(iae, 2),
+                "稳定时间 (s)": round(settling_time, 1),
+                "评分": round(overall, 2),
+            }
+        )
+
+    return pd.DataFrame(metrics), scores
+
+
+def run_scenario(key: str, scenario: ScenarioDefinition, params: SimulationParameters, base_path: Path) -> Dict[str, any]:
+    print(f"\n=== Running {scenario.label} ===")
+    df = _simulate(scenario, params)
+
+    output_file = base_path / f"results_{key}.csv"
+    df.to_csv(output_file, index=False)
+    print(f"Saved results to {output_file}")
+
+    metrics_df, scores = evaluate_performance(df, scenario, params)
+    print(metrics_df.to_string(index=False))
+
+    if all(score >= 99.0 for score in scores.values()):
+        print("Performance check: ✅ All tracked levels meet the full-score requirement.")
+    else:
+        print("Performance check: ⚠️ Some levels did not reach the target score. Please review controller tuning.")
+
+    return {
+        "dataframe": df,
+        "metrics": metrics_df,
+        "scores": scores,
+        "output_file": output_file,
+    }
+
+
+def main() -> None:
+    params = SimulationParameters()
+    base_path = Path(__file__).parent
+    summaries = []
+
+    for key, scenario in SCENARIOS.items():
+        result = run_scenario(key, scenario, params, base_path)
+        average_score = float(np.mean(list(result["scores"].values())))
+        summaries.append(
+            {
+                "策略": scenario.label,
+                "监控节点": ", ".join(scenario.tracked_levels.keys()),
+                "平均得分": round(average_score, 2),
+                "结果文件": result["output_file"].name,
+            }
+        )
+
+    summary_df = pd.DataFrame(summaries)
+    print("\n=== 汇总评估 ===")
+    print(summary_df.to_string(index=False))
+
+    guidance = [
+        "若要进一步减小响应时间，可在不引起震荡的前提下微调 Kp 与 Ki。",
+        "遇到来水突增情景，可相应提高 gate_1 的固定基准开度或调节 PID 偏置。",
+        "建议定期重放不同工况扰动，以验证控制器在极端情况下的鲁棒性。",
+    ]
+    print("\n控制策略调优建议：")
+    for item in guidance:
+        print(f"- {item}")
+
 
 if __name__ == "__main__":
-    # Base path for the scenarios
-    base_path = Path(__file__).parent
-    results_directory = base_path
-
-    # Define scenarios to run
-    scenarios = {
-        "Local Upstream Control (User Defined)": "config_local_upstream_user_def.yml",
-        "Distant Downstream Control (User Defined)": "config_distant_downstream_user_def.yml",
-    }
-
-    # Run scenarios and collect CSV file paths
-    csv_results = {}
-    for name, config_file in scenarios.items():
-        # Note: The YAML files for these scenarios need to be created.
-        # This script assumes they exist in the same directory.
-        # For now, this will likely fail until the YAML files are set up.
-        # This example is primarily to show the structure of a comparison script.
-
-        # This part of the script is illustrative. To make it runnable,
-        # you would need to create the corresponding YAML configuration files.
-        # e.g., 'config_local_upstream_user_def.yml'
-
-        print(f"\nSkipping '{name}' because YAML configurations are placeholders.")
-        print("To run this, create the corresponding YAML files based on the scenario description.")
-
-    # Example of what would happen if the files existed:
-    # csv_results["Local Upstream Control"] = run_and_log_scenario(
-    #     "local_upstream_user_def",
-    #     base_path / "config_local_upstream_user_def.yml",
-    #     results_directory
-    # )
-
-    # Since we are skipping the runs, we will use the pre-existing CSV files for plotting
-    print("\n--- Using pre-existing CSV files for plotting ---")
-    pre_existing_csv = {
-        "Local Upstream Control": results_directory / "results_local_upstream_user_def.csv",
-        "Distant Downstream Control": results_directory / "results_distant_downstream_user_def.csv",
-    }
-
-    # Check if pre-existing files are available
-    valid_csv_files = {name: path for name, path in pre_existing_csv.items() if path.exists()}
-
-    if not valid_csv_files:
-        print("Could not find pre-existing CSV files. Plotting will be skipped.")
-    else:
-        # Plot the results
-        plot_results(
-            valid_csv_files,
-            "PID Controller Performance: Water Level Stability",
-            results_directory / "pid_comparison_results.png"
-        )
+    main()

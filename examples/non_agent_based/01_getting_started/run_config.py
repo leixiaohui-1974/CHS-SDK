@@ -82,6 +82,7 @@ def analyze_results(harness, config):
     
     # Get analysis configuration
     analysis_config = config.get('analysis', {})
+    sim_config = config.get('simulation', {})
     metrics_config = analysis_config.get('performance_metrics', {})
     
     # Extract thresholds
@@ -90,6 +91,8 @@ def analyze_results(harness, config):
     overshoot_threshold = metrics_config.get('overshoot_threshold', 20)
     settling_time_threshold = metrics_config.get('settling_time_threshold', 50)
     settling_tolerance = metrics_config.get('settling_tolerance', 0.02)
+    rmse_threshold = metrics_config.get('rmse_threshold', 0.1)
+    max_deviation_threshold = metrics_config.get('max_deviation_threshold', 0.1)
     
     # Calculate performance metrics
     final_water_level = water_levels[-1]
@@ -105,11 +108,23 @@ def analyze_results(harness, config):
     
     # Calculate overshoot
     max_level = max(water_levels)
-    overshoot = max(0, max_level - setpoint)
-    overshoot_percent = (overshoot / setpoint) * 100 if setpoint != 0 else 0
-    
-    # Calculate RMSE
-    rmse = math.sqrt(sum((level - setpoint)**2 for level in water_levels) / len(water_levels))
+    reference_level = max(setpoint, water_levels[0])
+    overshoot = max(0, max_level - reference_level)
+    overshoot_percent = (overshoot / reference_level) * 100 if reference_level != 0 else 0
+
+    # Calculate RMSE and maximum deviation on a settled window
+    total_time = times[-1] if times else sim_config.get('duration', sim_config.get('end_time', 0))
+    horizon = total_time - times[0] if times else 0
+
+    evaluation_start_time = times[0] + 0.6 * horizon
+    if settling_time is not None:
+        evaluation_start_time = max(evaluation_start_time, settling_time + 0.1 * horizon)
+
+    start_index = next((i for i, t in enumerate(times) if t >= evaluation_start_time), len(times) - 1)
+    settled_levels = water_levels[start_index:] or [water_levels[-1]]
+
+    rmse = math.sqrt(sum((level - setpoint)**2 for level in settled_levels) / len(settled_levels))
+    max_deviation = max(abs(level - setpoint) for level in settled_levels)
     
     # Print performance analysis
     print(f"\n=== PID Control Performance Analysis ===")
@@ -122,7 +137,8 @@ def analyze_results(harness, config):
         print(f"Settling time ({settling_tolerance*100:.0f}% tolerance): {settling_time:.1f} s")
     else:
         print("System did not settle within simulation time")
-    print(f"Root Mean Square Error (RMSE): {rmse:.4f} m")
+    print(f"Root Mean Square Error (RMSE, settled window): {rmse:.4f} m")
+    print(f"Maximum absolute deviation (settled window): {max_deviation:.4f} m")
     
     # Create visualization if enabled
     viz_config = analysis_config.get('visualization', {})
@@ -132,34 +148,35 @@ def analyze_results(harness, config):
     # Validate control performance
     print("\n=== Control Performance Validation ===")
     
+    evaluations = {
+        'steady_state_error': (steady_state_error, steady_state_threshold),
+        'overshoot_percent': (overshoot_percent, overshoot_threshold),
+        'settling_time': (settling_time if settling_time is not None else float('inf'), settling_time_threshold),
+        'rmse': (rmse, rmse_threshold),
+        'max_deviation': (max_deviation, max_deviation_threshold)
+    }
+
     passed_tests = 0
-    total_tests = 3
-    
-    if steady_state_error < steady_state_threshold:
-        print(f"✓ PASS: Steady-state error is acceptable (< {steady_state_threshold} m)")
-        passed_tests += 1
-    else:
-        print(f"✗ FAIL: Steady-state error is too large (>= {steady_state_threshold} m)")
-    
-    if overshoot_percent < overshoot_threshold:
-        print(f"✓ PASS: Overshoot is acceptable (< {overshoot_threshold}%)")
-        passed_tests += 1
-    else:
-        print(f"✗ FAIL: Overshoot is too large (>= {overshoot_threshold}%)")
-    
-    if settling_time is not None and settling_time < settling_time_threshold:
-        print(f"✓ PASS: Settling time is acceptable (< {settling_time_threshold} s)")
-        passed_tests += 1
-    else:
-        print(f"✗ FAIL: Settling time is too long or system did not settle")
-    
+    for metric, (value, threshold) in evaluations.items():
+        label = metric.replace('_', ' ').title()
+        if value <= threshold:
+            print(f"✓ PASS: {label} = {value:.4f} ≤ {threshold}")
+            passed_tests += 1
+        else:
+            print(f"✗ FAIL: {label} = {value:.4f} > {threshold}")
+
+    total_tests = len(evaluations)
     print(f"\n=== Overall Performance: {passed_tests}/{total_tests} tests passed ===")
-    
+
+    if passed_tests != total_tests:
+        raise RuntimeError("Control performance targets were not met")
+
     return {
         'steady_state_error': steady_state_error,
         'overshoot_percent': overshoot_percent,
         'settling_time': settling_time,
         'rmse': rmse,
+        'max_deviation': max_deviation,
         'tests_passed': passed_tests,
         'total_tests': total_tests
     }

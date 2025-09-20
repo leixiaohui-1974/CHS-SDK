@@ -58,10 +58,15 @@ class DirectGateController(Controller):
         self.setpoint = setpoint
 
     def compute_control_action(self, obs, dt):
-        return {'opening': self.setpoint}
+        return float(self.setpoint)
 
     def update_setpoint(self, msg):
-        self.setpoint = msg.get('new_setpoint', self.setpoint)
+        if 'new_setpoint' in msg:
+            self.setpoint = msg['new_setpoint']
+        elif 'opening' in msg:
+            self.setpoint = msg['opening']
+        elif 'control_signal' in msg:
+            self.setpoint = msg['control_signal']
 
 
 class JointPIDController(Controller):

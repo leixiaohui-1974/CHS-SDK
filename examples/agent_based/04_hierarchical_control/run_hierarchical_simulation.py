@@ -40,13 +40,13 @@ def setup_hierarchical_control_system(harness):
     # --- Physical Components ---
     reservoir = Reservoir(
         name="reservoir_1",
-        initial_state={'volume': 28.5e6, 'water_level': 19.0},
-        parameters={'surface_area': 1.5e6, 'storage_curve': [[0, 0], [30e6, 20]]}
+        initial_state={'volume': 1.52e6, 'water_level': 19.0},
+        parameters={'surface_area': 8.0e4, 'storage_curve': [[0, 0], [2.0e6, 22]]}
     )
     gate_params = {
-        'max_rate_of_change': 0.5,
-        'discharge_coefficient': 0.6,
-        'width': 10,
+        'max_rate_of_change': 0.75,
+        'discharge_coefficient': 0.75,
+        'width': 12,
         'max_opening': 5.0
     }
     # The Gate needs to listen for the 'control_signal' key from the LocalControlAgent.

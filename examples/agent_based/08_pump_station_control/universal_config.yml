@@ -1,0 +1,126 @@
+project:
+  name: 08_pump_station_control
+  category: agent_based
+  description: 通用配置文件驱动的泵站协同控制示例
+  version: "1.0"
+
+simulation:
+  duration: 720
+  dt: 1.0
+  time_step: 1.0
+
+communication:
+  topics:
+    demand: demand.pump.flow
+    pump_action_prefix: action.pump
+
+components:
+  - id: source_res
+    class: core_lib.physical_objects.reservoir.Reservoir
+    initial_state:
+      water_level: 11.5
+    parameters:
+      surface_area: 180000.0
+      inflow: 32.0
+  - id: p1
+    class: core_lib.physical_objects.pump.Pump
+    initial_state:
+      status: 0
+    parameters:
+      max_flow_rate: 12.5
+      max_head: 22.0
+      power_consumption_kw: 45.0
+    message_bus:
+      enabled: true
+      action_topic: action.pump.p1
+  - id: p2
+    class: core_lib.physical_objects.pump.Pump
+    initial_state:
+      status: 0
+    parameters:
+      max_flow_rate: 12.5
+      max_head: 22.0
+      power_consumption_kw: 45.0
+    message_bus:
+      enabled: true
+      action_topic: action.pump.p2
+  - id: p3
+    class: core_lib.physical_objects.pump.Pump
+    initial_state:
+      status: 0
+    parameters:
+      max_flow_rate: 12.5
+      max_head: 22.0
+      power_consumption_kw: 45.0
+    message_bus:
+      enabled: true
+      action_topic: action.pump.p3
+  - id: ps1
+    class: core_lib.physical_objects.pump.PumpStation
+    initial_state:
+      total_outflow: 0.0
+      active_pumps: 0
+    pumps:
+      - obj_id: p1
+      - obj_id: p2
+      - obj_id: p3
+  - id: downstream_res
+    class: core_lib.physical_objects.reservoir.Reservoir
+    initial_state:
+      water_level: 24.0
+    parameters:
+      surface_area: 220000.0
+
+connections:
+  - from: source_res
+    to: ps1
+  - from: ps1
+    to: downstream_res
+
+agents:
+  - id: demand_agent
+    type: DemandAgent
+    config:
+      demand_topic: demand.pump.flow
+      demand_schedule:
+        0: 12.5
+        200: 25.0
+        380: 37.5
+        520: 12.5
+  - id: monitor
+    type: MonitoringAgent
+    config:
+      components:
+        source: source_res
+        downstream: downstream_res
+        pump_station: ps1
+      monitoring_interval: 60.0
+  - id: pump_ctrl_agent
+    type: PumpControlAgent
+    config:
+      pump_station:
+        obj_id: ps1
+      demand_topic: demand.pump.flow
+      control_topic_prefix: action.pump
+
+analysis:
+  enable_validation: true
+  tolerance: 0.25
+  settling_time: 40.0
+  score_target: 1.0
+  segments:
+    - start: 0
+      end: 200
+      target: 12.5
+    - start: 200
+      end: 380
+      target: 25.0
+    - start: 380
+      end: 520
+      target: 37.5
+    - start: 520
+      end: 720
+      target: 12.5
+
+visualization:
+  enabled: false

@@ -23,12 +23,13 @@ from openpyxl.styles import Font, PatternFill, Alignment
 from openpyxl.chart import LineChart, BarChart, ScatterChart, Reference
 from jinja2 import Template
 import matplotlib.pyplot as plt
-import seaborn as sns
 from reportlab.lib.pagesizes import letter, A4
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
 from reportlab.lib import colors
+
+from core_lib.utils import seaborn_support
 
 from sqlalchemy.orm import Session
 from api.database.database import get_db
@@ -113,9 +114,9 @@ class ResultExporter:
         # 确保导出目录存在
         os.makedirs(export_dir, exist_ok=True)
         
-        # 设置matplotlib样式
-        plt.style.use('seaborn-v0_8')
-        sns.set_palette("husl")
+        # 设置matplotlib/调色板样式（在缺少 seaborn 时也能正常工作）
+        seaborn_support.ensure_matplotlib_style('seaborn-v0_8')
+        seaborn_support.set_palette("husl")
         
         logger.info(f"结果导出器初始化完成，导出目录: {export_dir}")
     

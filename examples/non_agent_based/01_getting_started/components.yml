@@ -5,28 +5,29 @@ components:
   reservoir_1:
     type: "Reservoir"
     initial_state:
-      volume: 21000000  # m^3, equivalent to 14m * 1.5e6 m^2
+      volume: 140000  # m^3, equivalent to 14m * 1.0e4 m^2
       water_level: 14.0  # m, initial level above setpoint
     parameters:
-      surface_area: 1500000  # m^2
-      storage_curve: [[0, 0], [30000000, 20]]  # [[volume_m3, level_m], ...]
+      surface_area: 10000  # m^2
+      storage_curve: [[0, 0], [200000, 20]]  # [[volume_m3, level_m], ...]
+      inflow: 65.0  # m^3/s constant headwater inflow
       
   gate_1:
     type: "Gate"
     initial_state:
       opening: 0.5  # 50% open
     parameters:
-      max_rate_of_change: 0.1
+      max_rate_of_change: 0.25
       discharge_coefficient: 0.6
-      width: 10
+      width: 7
       
 controllers:
   pid_controller_1:
     type: "PIDController"
     parameters:
-      Kp: -0.5      # Negative for reverse-acting process
-      Ki: -0.01
-      Kd: -0.1
+      Kp: -1.0      # Negative for reverse-acting process
+      Ki: -0.015
+      Kd: -0.12
       setpoint: 12.0  # Target water level in meters
       min_output: 0.0
       max_output: 1.0  # Gate opening percentage
