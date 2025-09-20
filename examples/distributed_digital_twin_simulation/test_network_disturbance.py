@@ -503,7 +503,6 @@ def main():
 
         logger.info("网络扰动测试完成")
         logger.info("性能评价得分: %s", performance_summary)
-
         if reason_score < 1.0:
             raise AssertionError("网络扰动性能评分未达到满分，请检查扰动脚本配置")
 

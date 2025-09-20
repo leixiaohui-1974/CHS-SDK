@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """简单的入流扰动测试，验证扰动在被施加的同时水位仍保持在高精度范围内。"""
-
 from __future__ import annotations
 
 import json
@@ -153,7 +152,6 @@ def test_simple_inflow_disturbance() -> None:
     print(f"__PERFORMANCE_SUMMARY__={json.dumps(performance_summary, ensure_ascii=False)}")
 
     return performance_summary
-
 
 if __name__ == "__main__":
     test_simple_inflow_disturbance()
