@@ -142,7 +142,13 @@ class LocalControlAgent(Agent):
         else:
             # Single Action Mode: Publish a single control signal to the pre-configured topic
             if self.action_topic is not None:
-                action_message: Message = {'control_signal': control_signal, 'agent_id': self.agent_id}
+                action_message: Message = {
+                    'control_signal': control_signal,
+                    'agent_id': self.agent_id,
+                }
+                # 兼容期望特定键的物理组件，例如 Gate 需要 'opening'
+                action_message.setdefault('value', control_signal)
+                action_message.setdefault('opening', control_signal)
                 self.bus.publish(self.action_topic, action_message)
 
     def run(self, current_time: float):
