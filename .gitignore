@@ -87,3 +87,16 @@ venv.bak/
 /examples/generated_json/
 server.log
 test_pause_resume.py
+# Binary/media assets
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.bmp
+*.tif
+*.tiff
+*.ico
+
+# Front-end build artifacts
+node_modules/

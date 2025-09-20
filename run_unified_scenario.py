@@ -292,6 +292,7 @@ def create_agents_from_config(config: Dict[str, Any], components: Dict[str, Any]
             normalized_agents[agent_id] = config_block
 
         agents_config = normalized_agents
+
     
     # 处理字典格式的agents配置（传统格式）
     for agent_name, agent_config in agents_config.items():
