@@ -28,7 +28,7 @@ def run_mas_simulation():
     print("--- Setting up Tutorial 3: Event-Driven Agents Simulation ---")
 
     # 1. --- Simulation Harness and Message Bus Setup ---
-    simulation_config = {'duration': 300, 'dt': 1.0}
+    simulation_config = {'duration': 1200, 'dt': 1.0}
     harness = SimulationHarness(config=simulation_config)
     message_bus = harness.message_bus
 
@@ -39,11 +39,14 @@ def run_mas_simulation():
     # 3. --- Physical Components ---
     reservoir = Reservoir(
         name="reservoir_1",
-        initial_state={'volume': 21e6, 'water_level': 14.0},
-        parameters={'surface_area': 1.5e6, 'storage_curve': [[0, 0], [30e6, 20]]}
+        initial_state={'volume': 2.1e5, 'water_level': 14.0},
+        parameters={
+            'surface_area': 1.5e4,
+            'storage_curve': [[0, 0], [3.0e5, 20]]
+        }
     )
     gate_params = {
-        'max_rate_of_change': 0.1,
+        'max_rate_of_change': 0.2,
         'discharge_coefficient': 0.6,
         'width': 10,
         'max_opening': 1.0
@@ -88,7 +91,8 @@ def run_mas_simulation():
         controller=pid_controller,
         observation_topic=RESERVOIR_STATE_TOPIC,
         observation_key='water_level',
-        action_topic=GATE_ACTION_TOPIC
+        action_topic=GATE_ACTION_TOPIC,
+        log_observations=False
     )
 
     # 5. --- Harness Final Setup ---

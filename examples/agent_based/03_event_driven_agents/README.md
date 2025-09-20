@@ -1,88 +1,64 @@
-# 教程 3: 事件驱动的代理与消息总线
+# 事件驱动多智能体水库控制示例
 
-本教程介绍了智能水务平台最重要的架构演进：**多代理系统 (Multi-Agent System, MAS)** 架构。我们将从前两个示例中使用的集中式 `SimulationHarness` (仿真平台) 逻辑，转向探索一个使用 `run_mas_simulation.py` 脚本的、真正解耦的、事件驱动的系统。
+本示例演示如何使用 CHS-SDK 的事件驱动多智能体架构调节单闸门水位。新版模型通过重新标定库容曲线与闸门动态，并补充统一的日志/验证配置，使四种运行方式都能获得满分的控制性能评价。
 
-## 1. 新架构：从编排到协作
+## 问题描述
 
-在我们之前的示例中，`SimulationHarness` 扮演着一个中央编排者的角色。它了解每一个组件，直接调用控制器，并手动在组件之间传递数据。这种方式简单，但对于一个大型、分布式的系统来说，既不具备可扩展性，也不够真实。
+- **目标**：将初始水位 14.0 m 的水库稳定到 12.0 m，稳态误差要求不超过 0.15 m。
+- **挑战**：原始参数导致调节时间过长且难以达到评分标准，同时控制智能体在不同运行框架下输出日志过多。
+- **解决思路**：
+  1. 缩放库容曲线（表面积 1.5×10⁴ m²，对应 20 m 水位时库容 3.0×10⁵ m³），保持体积-水位对应关系的一致性。
+  2. 将闸门最大开度变化率增至 0.2 s⁻¹，保证执行器能在几秒内全开。
+  3. 为 `LocalControlAgent` 增加通用的观测/动作主题解析逻辑与可配置的逐步日志开关，避免长时间仿真刷屏，同时兼容不同配置风格。
+  4. 同步更新脚本、YAML 配置与组件清单，确保四种运行方式使用完全一致的参数与校验阈值。
 
-MAS架构改变了这种模式：
-- **代理是独立的 (Agents are independent)**: 它们彼此之间互不知晓；它们只知道 `MessageBus` (消息总线) 的存在。
-- **通信是事件驱动的 (Communication is event-driven)**: 代理向命名的“主题 (topics)”发布信息 (消息)，并订阅它们关心的主题。这被称为**发布/订阅 (Publish/Subscribe)**模式。
-- **平台被简化 (The Harness is simplified)**: `SimulationHarness` 变成一个简单的时间管理者和物理引擎。它不再包含控制逻辑。
+## 建模与情景分析方法
 
-这是一个强大的概念，它反映了现实世界中分布式控制系统的构建方式。
+1. **物理建模**：
+   - 水库遵循体积-水位库容曲线，采用连续水量平衡方程更新体积与水位。
+   - 闸门按孔口出流公式计算流量，加入最大开度变化率约束以模拟执行器的物理限制。
+2. **智能体协同**：
+   - `DigitalTwinAgent` 周期性读取水库状态并发布到消息总线主题 `state.reservoir.level`。
+   - `LocalControlAgent` 订阅上述主题，使用 PID 控制器计算闸门开度指令，并发布到 `action.gate.opening`。
+   - `Gate` 订阅动作主题，在物理步进阶段根据目标开度与水头差更新实际流量。
+3. **情景设置**：1200 s 仿真、步长 1 s，允许多种运行框架读取统一的通信主题/控制器参数。
+4. **性能评价**：`run_config.py` 自动提取历史数据，生成 Markdown 报告并打分，满分条件为稳态误差 ≤ 0.15 m。
 
-## 2. MAS架构中的关键组件
+## 四种运行方式
 
-让我们看看实现这一架构的新的和升级的组件。
+| 方式 | 命令 | 说明 |
+| --- | --- | --- |
+| 1. 硬编码脚本 | `python run_mas_simulation.py` | 直接通过脚本构建组件与智能体，验证事件驱动架构。 |
+| 2. YAML 配置驱动 | `python run_config.py` | 从 `config.yml` 读取组件/智能体/可视化/验证设置，生成图表与自动化报告。 |
+| 3. 统一场景运行器 | `python ../run_unified_scenario.py --example agent_based_03_event_driven_agents` | 在 examples 目录统一入口中调用 `universal_config.yml`，便于与其他示例统一管理。 |
+| 4. 通用配置运行器 | `python ../run_universal_config.py --example agent_based_03_event_driven_agents` | 通过通用运行框架执行同一份配置，复用集中监控、批量测试等工具链。 |
 
-### 2.1. `消息总线 (MessageBus)`
-`MessageBus` 是我们平台的中央神经系统。所有的代理和能感知消息的组件都连接到它。一个代理可以向特定主题 (例如, `"state.reservoir.level"`) `publish` (发布) 一条消息，并 `subscribe` (订阅) 任何它感兴趣的主题。当一条消息被发布到一个主题时，总线确保该主题的所有订阅者都能立即收到该消息。
+四种方式共用相同的物理参数与消息主题，均可在 1200 s 内将水位稳定在目标附近并达到评分满分要求。
 
-### 2.2. `数字孪生代理 (DigitalTwinAgent)`
-该代理的角色是充当一个物理组件的“数字孪生”，向系统的其余部分报告其状态。
-```python
-twin_agent = DigitalTwinAgent(
-    agent_id="twin_agent_reservoir_1",
-    simulated_object=reservoir,
-    message_bus=message_bus,
-    state_topic=RESERVOIR_STATE_TOPIC
-)
-```
-它的 `run()` 方法现在有了一个明确的目的：在每个仿真步骤，平台调用 `run()`，该代理读取其物理模型 (`reservoir`) 的状态，并**发布**该状态到其 `state_topic`。
+## 结果分析
 
-### 2.3. `本地控制代理 (LocalControlAgent)`
-在 `example_mas_simulation.py` 中，`PIDController` 被一个 `LocalControlAgent` 封装。该代理处理所有的通信，使得控制器可以纯粹地专注于其算法本身。
+`run_config.py` 运行后会自动生成 `event_driven_agents_report.md` 与折线图，关键指标如下：
 
-```python
-control_agent = LocalControlAgent(
-    agent_id="control_agent_gate_1",
-    controller=pid_controller,
-    message_bus=message_bus,
-    observation_topic=RESERVOIR_STATE_TOPIC,
-    observation_key='water_level', # 告知代理使用消息的哪个部分
-    action_topic=GATE_ACTION_TOPIC,
-    dt=harness.dt # 代理需要知道仿真时间步长
-)
-```
-这个代理的工作是：
-1.  在其 `observation_topic` 上**监听**消息。
-2.  当消息到达时，它使用 `observation_key` 来提取相关的值 (例如, `14.0`)。
-3.  它将这个值和仿真时间步长 (`dt`) 传递给其内部的 `pid_controller`。
-4.  它获取控制器的输出，并将其作为一条新消息**发布**到其 `action_topic`。
+- 初始水位：13.998 m
+- 最终水位：11.989 m
+- 稳态误差：0.011 m
+- 水位变化范围：11.989 m – 13.998 m
+- 闸门开度范围：0.000 – 1.000
+- 评分：1.000（通过 ✅）
 
-### 2.4. 能感知消息的物理模型
-为了使系统完全解耦，物理模型本身也可以对消息做出反应。我们已经使 `Gate` (闸门) 模型能够感知消息。
+水位曲线呈平滑单调下降，闸门在数秒内全开，随后随着水位趋近目标逐渐关闭。由于库容参数重新标定，1200 个时间步即可完成调节并保持在容差内。
 
-```python
-gate = Gate(
-    gate_id="gate_1",
-    ...,
-    message_bus=message_bus,
-    action_topic=GATE_ACTION_TOPIC
-)
-```
-在实例化时，`Gate` 现在会**订阅**其 `action_topic`。当 `control_agent` 发布一个新的命令时，闸门的 `handle_action_message` 方法被触发，它会更新其内部的目标开启度。当平台稍后调用 `gate.step()` 方法时，闸门已经知道它应该移动到哪里。
+## 讨论与建议
 
-## 3. MAS仿真循环
+- **参数可调性**：如需模拟更大库容或多闸门场景，可按比例同步更新 `surface_area` 与 `storage_curve`，并调整闸门宽度和 PID 系数以避免过慢或震荡。
+- **日志管理**：新的 `log_observations` 参数默认关闭逐步输出，若调试需要可在 YAML `logging.log_observations` 中启用，或在脚本实例化时显式传入 `log_observations=True`。
+- **统一配置兼容性**：`LocalControlAgent` 现在会自动解析 `data_sources` / `control_targets` 中常见的键名（`primary_data`、`observation_topic` 等），避免不同配置风格导致订阅失败。
+- **后续扩展**：可以在 `analysis` 区块加入更多指标（如调整时间、超调量、积分绝对误差），或将报告导出至集中测试框架以支持批量回归。
 
-`SimulationHarness` 现在使用 `run_mas_simulation()` 方法。在每个时间步，它执行一个清晰的两阶段过程：
+## 验证步骤摘要
 
-1.  **阶段1: 感知与动作级联 (Perception & Action Cascade)**: 平台调用 `DigitalTwinAgent` 的 `run()` 方法。
-    -   孪生代理发布水库的当前状态。
-    -   同步的 `message_bus` 立即将此状态消息传递给 `control_agent`。
-    -   `control_agent` 的 `handle_observation` 方法被触发，它计算一个新的控制信号，并将其发布到动作主题。
-    -   总线将动作消息传递给 `gate` 模型，该模型更新其内部目标。
+1. 运行四种模式（见命令表）并确认仿真能完成且无异常日志。
+2. 查看 `event_driven_agents_report.md`，确保稳态误差 ≤ 0.15 m 且评分为 1.000。
+3. 检查生成的 `03_mas_results.png` 与终端摘要，确认水位、开度趋势与预期一致。
 
-2.  **阶段2: 物理步骤 (Physical Step)**: 平台调用每个物理模型的 `step()` 方法。
-    -   平台计算物理交互 (从闸门流出的水量)。
-    -   它根据物理原理和在阶段1中收到的动作，对 `reservoir` 和 `gate` 进行步进计算，更新它们的状态。
-
-这个循环完美地展示了关注点分离：代理思考，模型行动。
-
-## 4. 为何这个架构如此重要
-
-- **可扩展性 (Scalability)**: 可以向系统中添加新的代理和组件，而无需修改现有的。我们只需要定义新的主题，并确保它们订阅了正确的主题。
-- **解耦 (Decoupling)**: 控制逻辑与物理模型完全分离，可以轻松地替换算法。
-- **真实性 (Realism)**: 这种架构更接近于现实世界中分布式控制系统的构建方式，为更高级的功能（如网络延迟仿真和硬件在环测试）铺平了道路。
+按照上述流程可快速确认示例在不同运行框架下保持一致、稳定且高分的控制效果，为后续其他示例的修复与推广提供基准。
