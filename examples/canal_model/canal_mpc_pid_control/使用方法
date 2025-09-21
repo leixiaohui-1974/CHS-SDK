@@ -1,0 +1,11 @@
+# 基本运行（MPC控制流量设定值）
+python run_config.py
+
+# 运行水位控制模式（用于对比分析）
+python run_config.py --agents agents_level_control.yml
+
+# 自定义输出文件
+python run_config.py --output my_results.yml --plot my_plot.png
+
+# 跳过可视化
+python run_config.py --no-plot

@@ -28,7 +28,10 @@ def run_scenario(scenario_name, config, base_components, canal_params, config_pa
     current_components = copy.deepcopy(base_components)
 
     canal_initial_state = {'water_level': 5.0, 'inflow': 25.0, 'outflow': 25.0} # Start in steady state
-    canal = UnifiedCanal(name='canal', initial_state=canal_initial_state, parameters=canal_params)
+    # Add inflow to parameters as required by UnifiedCanal
+    canal_params_with_inflow = canal_params.copy()
+    canal_params_with_inflow['inflow'] = 25.0
+    canal = UnifiedCanal(name='canal', initial_state=canal_initial_state, parameters=canal_params_with_inflow)
 
     all_components = current_components + [canal]
 
@@ -138,7 +141,7 @@ def main():
     ]
 
     scenarios = {
-        "integral": {'model_type': 'integral', 'surface_area': 10000},
+        "integral": {'model_type': 'integral', 'surface_area': 10000, 'outlet_coefficient': 0.8},
         "integral_delay": {'model_type': 'integral_delay', 'gain': 0.001, 'delay': 300},
         "integral_delay_zero": {'model_type': 'integral_delay_zero', 'gain': 0.001, 'delay': 300, 'zero_time_constant': 50},
         "linear_reservoir": {'model_type': 'linear_reservoir', 'storage_constant': 1200, 'level_storage_ratio': 0.005}
