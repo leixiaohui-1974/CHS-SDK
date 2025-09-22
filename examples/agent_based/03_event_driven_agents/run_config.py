@@ -263,6 +263,7 @@ def run_simulation(config):
         'time_step': config['simulation']['time_step'],
         'start_time': config['simulation']['start_time']
     }
+
     harness = SimulationHarness(config=simulation_config)
     message_bus = harness.message_bus
     

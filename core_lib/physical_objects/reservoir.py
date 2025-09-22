@@ -381,7 +381,7 @@ class Reservoir(PhysicalObjectInterface):
             simulated_volumes[0] = initial_volume
 
             for i in range(1, len(inflows)):
-                delta_v = (inflows[i-1] - outflows[i-1]) * dt
+                delta_v = (inflows[i-1] - outflows[i-1]) * time_step
                 simulated_volumes[i] = simulated_volumes[i-1] + delta_v
 
             # 使用候选曲线将模拟库容转换为水位

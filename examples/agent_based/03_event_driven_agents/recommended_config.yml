@@ -1,0 +1,160 @@
+# 推荐的配置文件结构 - 解决主题一致性问题
+# 通过统一在communication模块定义所有主题，其他地方引用这些定义
+
+# 仿真参数
+simulation:
+  start_time: 0.0
+  end_time: 3600.0
+  time_step: 30.0
+  real_time_factor: 1.0
+
+# 通信主题定义 - 集中管理所有消息主题
+# 这是系统中唯一定义主题名称的地方，其他地方都引用这里的键名
+communication:
+  topics:
+    # 水库状态主题：类比，把state.reservoir.level写入到数据库，字段名为reservoir_state
+    reservoir_state: "state.reservoir.level"
+    downstream_reservoir_state: "state.downstream_reservoir.level"
+    
+    # 闸门控制主题，类比，把action.gate.opening写入到数据库，字段名为gate_action
+    gate_action: "action.gate.opening"
+    
+    # 数字孪生主题，类比，把digital_twin.state写入到数据库，字段名为digital_twin_state
+    digital_twin_state: "state.digital_twin"
+    
+    # 控制命令主题，类比，把control.commands写入到数据库，字段名为control_commands
+    control_commands: "control.commands"
+    
+    # 传感器数据主题，类比，把sensor.data写入到数据库，字段名为sensor_data
+    sensor_data: "sensor.data"
+    
+    # 调试和日志主题，类比
+    debug_info: "debug.info"
+    control_log: "log.control"
+
+# 组件定义
+components:
+  reservoir_1:
+    type: Reservoir
+    initial_state:
+      volume: 21000000
+      water_level: 14.0
+    parameters:
+      surface_area: 1500000
+      storage_curve:
+        - [0, 0]
+        - [21000000, 14.0]
+        - [30000000, 20]
+  
+  downstream_reservoir:
+    type: Reservoir
+    initial_state:
+      volume: 15000000
+      water_level: 10.0
+    parameters:
+      surface_area: 1500000
+      storage_curve:
+        - [0, 0]
+        - [15000000, 10.0]
+        - [25000000, 16.0]
+        
+  gate_1:
+    type: Gate
+    initial_state:
+      opening: 0.1
+    parameters:
+      width: 10
+      discharge_coefficient: 0.6
+      max_opening: 1.0
+      max_rate_of_change: 0.5
+    # 组件的消息总线配置引用communication模块中的主题
+    message_bus:
+      enabled: true
+      # 注意：这里引用communication模块中定义的主题键名，而不是直接写主题路径
+      action_topic_key: "gate_action"
+
+# 组件连接关系
+connections:
+  - from: reservoir_1
+    to: gate_1
+  - from: gate_1
+    to: downstream_reservoir
+
+# 智能体定义
+agents:
+  # 数字孪生智能体 - 监控水库状态
+  twin_agent_reservoir_1:
+    type: DigitalTwinAgent
+    agent_id: twin_agent_reservoir_1
+    simulated_object: reservoir_1
+    # 引用communication模块中的主题键名
+    state_topic_key: "reservoir_state"
+  
+  # 控制智能体 - 控制闸门开度
+  control_agent_gate_1:
+    type: UnifiedGateControlAgent
+    agent_id: control_agent_gate_1
+    target_component: gate_1
+    control_type: water_level_control
+    time_step: 30.0
+    # 控制器参数
+    controller:
+      type: SmartPIDController
+      parameters:
+        Kp: 5.0
+        Ki: 0.5
+        Kd: 0.0
+        setpoint: 13.9
+        min_output: 0.0
+        max_output: 1.0
+        windup_limit: 0.5
+        filter_constant: 0.1
+    # 消息总线配置引用communication模块中的主题键名
+    message_bus:
+      observation_topic_key: "reservoir_state"
+      observation_key: "water_level"
+      action_topic_key: "gate_action"
+    
+    # 调试配置
+    debug:
+      enabled: true
+      log_interval: 5
+      control_log_topic_key: "control_log"
+
+# 分析配置
+analysis:
+  final_state_report: true
+  target_water_level: 13.9
+
+# 可视化配置
+visualization:
+  enabled: true
+  save_path: "03_mas_results.png"
+  plots:
+    - title: "Reservoir Water Level vs Time"
+      x_data: "time"
+      y_data: "reservoir_water_level"
+      ylabel: "Water Level (m)"
+      target_line: 13.9
+    - title: "Gate Opening vs Time"
+      x_data: "time"
+      y_data: "gate_opening"
+      ylabel: "Gate Opening (0-1)"
+    - title: "Reservoir Volume vs Time"
+      x_data: "time"
+      y_data: "reservoir_volume"
+      ylabel: "Volume (m³)"
+
+# 调试配置
+debug:
+  enabled: true
+  log_interval: 5
+
+# 输出配置
+output:
+  - topic_key: "reservoir_state"  # 引用主题键名而不是直接写主题路径
+    file: "reservoir_data.csv"
+  - topic_key: "gate_action"
+    file: "gate_data.csv"
+  - topic_key: "control_log"
+    file: "control_log.csv"
