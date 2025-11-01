@@ -41,12 +41,12 @@ class ModelUpdaterAgent(Agent):
 
         if model_name and new_params and model_name in self.models:
             target_model = self.models[model_name]
-            # Assuming the model has a 'set_parameters' method
-            if hasattr(target_model, 'set_parameters'):
-                target_model.set_parameters(new_params)
+            # The model must be Updatable (i.e. have an update_parameters method)
+            if hasattr(target_model, 'update_parameters'):
+                target_model.update_parameters(new_params)
                 print(f"[{self.agent_id}] Updated parameters for model '{model_name}': {new_params}")
             else:
-                print(f"[{self.agent_id}] Warning: Model '{model_name}' has no 'set_parameters' method.")
+                print(f"[{self.agent_id}] Warning: Model '{model_name}' is not updatable and has no 'update_parameters' method.")
         else:
             print(f"[{self.agent_id}] Warning: Invalid parameter update message received: {message}")
 
